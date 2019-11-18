@@ -1,19 +1,26 @@
 {
-  "updateTime": "2019-10-10T07:45:00.442627Z",
+  "updateTime": "2019-11-18T18:42:06.905715Z",
   "sources": [
     {
       "generator": {
         "name": "artman",
-        "version": "0.38.0",
-        "dockerImage": "googleapis/artman@sha256:0d2f8d429110aeb8d82df6550ef4ede59d40df9062d260a1580fce688b0512bf"
+        "version": "0.41.1",
+        "dockerImage": "googleapis/artman@sha256:545c758c76c3f779037aa259023ec3d1ef2d57d2c8cd00a222cb187d63ceac5e"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "10f91fa12f70e8e0209a45fc10807ed1f77c7e4e",
-        "internalRef": "273826591"
+        "sha": "d8dd7fe8d5304f7bd1c52207703d7f27d5328c5a",
+        "internalRef": "281088257"
+      }
+    },
+    {
+      "template": {
+        "name": "java_library",
+        "origin": "synthtool.gcp",
+        "version": "2019.10.17"
       }
     }
   ],
@@ -32,20 +39,20 @@
       "client": {
         "source": "googleapis",
         "apiName": "firestore",
-        "apiVersion": "v1beta1",
+        "apiVersion": "v1",
         "language": "java",
         "generator": "gapic",
-        "config": "google/firestore/artman_firestore.yaml"
+        "config": "google/firestore/artman_firestore_v1.yaml"
       }
     },
     {
       "client": {
         "source": "googleapis",
         "apiName": "firestore",
-        "apiVersion": "v1",
+        "apiVersion": "v1beta1",
         "language": "java",
         "generator": "gapic",
-        "config": "google/firestore/artman_firestore_v1.yaml"
+        "config": "google/firestore/artman_firestore.yaml"
       }
     }
   ]

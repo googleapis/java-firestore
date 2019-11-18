@@ -15,33 +15,23 @@
  */
 
 /**
- * A client to Google Cloud Firestore API.
+ * A client to Google Cloud Firestore Admin API.
  *
  * <p>The interfaces provided are listed below, along with usage samples.
  *
- * <p>=============== FirestoreClient ===============
+ * <p>==================== FirestoreAdminClient ====================
  *
- * <p>Service Description: The Cloud Firestore service.
+ * <p>Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
+ * service `google.longrunning.Operations`.
  *
- * <p>This service exposes several types of comparable timestamps:
- *
- * <p>&#42; `create_time` - The time at which a document was created. Changes only when a document
- * is deleted, then re-created. Increases in a strict monotonic fashion. &#42; `update_time` - The
- * time at which a document was last updated. Changes every time a document is modified. Does not
- * change when a write results in no modifications. Increases in a strict monotonic fashion. &#42;
- * `read_time` - The time at which a particular state was observed. Used to denote a consistent
- * snapshot of the database or the time at which a Document was observed to not exist. &#42;
- * `commit_time` - The time at which the writes in a transaction were committed. Any read with an
- * equal or greater `read_time` is guaranteed to see the effects of the transaction.
- *
- * <p>Sample for FirestoreClient:
+ * <p>Sample for FirestoreAdminClient:
  *
  * <pre>
  * <code>
- * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
- *   Document document = Document.newBuilder().build();
- *   DocumentMask updateMask = DocumentMask.newBuilder().build();
- *   Document response = firestoreClient.updateDocument(document, updateMask);
+ * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+ *   ParentName parent = ParentName.of("[PROJECT]", "[DATABASE]", "[COLLECTION_ID]");
+ *   Index index = Index.newBuilder().build();
+ *   Operation response = firestoreAdminClient.createIndex(parent, index);
  * }
  * </code>
  * </pre>
