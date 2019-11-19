@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface DocumentChangeOrBuilder extends
+public interface DocumentChangeOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.DocumentChange)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
@@ -32,6 +35,8 @@ public interface DocumentChangeOrBuilder extends
    */
   boolean hasDocument();
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
@@ -41,6 +46,8 @@ public interface DocumentChangeOrBuilder extends
    */
   com.google.firestore.v1.Document getDocument();
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
@@ -51,6 +58,8 @@ public interface DocumentChangeOrBuilder extends
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
@@ -59,6 +68,8 @@ public interface DocumentChangeOrBuilder extends
    */
   java.util.List<java.lang.Integer> getTargetIdsList();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
@@ -67,6 +78,8 @@ public interface DocumentChangeOrBuilder extends
    */
   int getTargetIdsCount();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
@@ -76,6 +89,8 @@ public interface DocumentChangeOrBuilder extends
   int getTargetIds(int index);
 
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>
@@ -84,6 +99,8 @@ public interface DocumentChangeOrBuilder extends
    */
   java.util.List<java.lang.Integer> getRemovedTargetIdsList();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>
@@ -92,6 +109,8 @@ public interface DocumentChangeOrBuilder extends
    */
   int getRemovedTargetIdsCount();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>

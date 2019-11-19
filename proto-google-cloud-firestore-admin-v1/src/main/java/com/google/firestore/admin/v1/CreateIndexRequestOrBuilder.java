@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface CreateIndexRequestOrBuilder extends
+public interface CreateIndexRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.CreateIndexRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -32,6 +35,8 @@ public interface CreateIndexRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -39,10 +44,11 @@ public interface CreateIndexRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * The composite index to create.
    * </pre>
@@ -51,6 +57,8 @@ public interface CreateIndexRequestOrBuilder extends
    */
   boolean hasIndex();
   /**
+   *
+   *
    * <pre>
    * The composite index to create.
    * </pre>
@@ -59,6 +67,8 @@ public interface CreateIndexRequestOrBuilder extends
    */
   com.google.firestore.admin.v1.Index getIndex();
   /**
+   *
+   *
    * <pre>
    * The composite index to create.
    * </pre>

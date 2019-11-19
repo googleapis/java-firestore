@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface RunQueryRequestOrBuilder extends
+public interface RunQueryRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.RunQueryRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -36,6 +39,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -47,10 +52,11 @@ public interface RunQueryRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
@@ -59,6 +65,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   boolean hasStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
@@ -67,6 +75,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   com.google.firestore.v1beta1.StructuredQuery getStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
@@ -76,6 +86,8 @@ public interface RunQueryRequestOrBuilder extends
   com.google.firestore.v1beta1.StructuredQueryOrBuilder getStructuredQueryOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Reads documents in a transaction.
    * </pre>
@@ -85,6 +97,8 @@ public interface RunQueryRequestOrBuilder extends
   com.google.protobuf.ByteString getTransaction();
 
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction and reads the documents.
    * Defaults to a read-only transaction.
@@ -96,6 +110,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   boolean hasNewTransaction();
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction and reads the documents.
    * Defaults to a read-only transaction.
@@ -107,6 +123,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   com.google.firestore.v1beta1.TransactionOptions getNewTransaction();
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction and reads the documents.
    * Defaults to a read-only transaction.
@@ -119,6 +137,8 @@ public interface RunQueryRequestOrBuilder extends
   com.google.firestore.v1beta1.TransactionOptionsOrBuilder getNewTransactionOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -128,6 +148,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -137,6 +159,8 @@ public interface RunQueryRequestOrBuilder extends
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -148,5 +172,6 @@ public interface RunQueryRequestOrBuilder extends
 
   public com.google.firestore.v1beta1.RunQueryRequest.QueryTypeCase getQueryTypeCase();
 
-  public com.google.firestore.v1beta1.RunQueryRequest.ConsistencySelectorCase getConsistencySelectorCase();
+  public com.google.firestore.v1beta1.RunQueryRequest.ConsistencySelectorCase
+      getConsistencySelectorCase();
 }

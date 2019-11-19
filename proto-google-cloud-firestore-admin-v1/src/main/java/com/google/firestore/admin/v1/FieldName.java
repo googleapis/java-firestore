@@ -16,20 +16,21 @@
 
 package com.google.firestore.admin.v1;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.api.pathtemplate.PathTemplate;
 import com.google.api.resourcenames.ResourceName;
-import java.util.Map;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS
 @javax.annotation.Generated("by GAPIC protoc plugin")
 public class FieldName implements ResourceName {
 
   private static final PathTemplate PATH_TEMPLATE =
-      PathTemplate.createWithoutUrlEncoding("projects/{project}/databases/{database}/collectionGroups/{collection_id}/fields/{field_id}");
+      PathTemplate.createWithoutUrlEncoding(
+          "projects/{project}/databases/{database}/collectionGroups/{collection_id}/fields/{field_id}");
 
   private volatile Map<String, String> fieldValuesMap;
 
@@ -71,21 +72,22 @@ public class FieldName implements ResourceName {
 
   public static FieldName of(String project, String database, String collectionId, String fieldId) {
     return newBuilder()
-      .setProject(project)
-      .setDatabase(database)
-      .setCollectionId(collectionId)
-      .setFieldId(fieldId)
-      .build();
+        .setProject(project)
+        .setDatabase(database)
+        .setCollectionId(collectionId)
+        .setFieldId(fieldId)
+        .build();
   }
 
-  public static String format(String project, String database, String collectionId, String fieldId) {
+  public static String format(
+      String project, String database, String collectionId, String fieldId) {
     return newBuilder()
-      .setProject(project)
-      .setDatabase(database)
-      .setCollectionId(collectionId)
-      .setFieldId(fieldId)
-      .build()
-      .toString();
+        .setProject(project)
+        .setDatabase(database)
+        .setCollectionId(collectionId)
+        .setFieldId(fieldId)
+        .build()
+        .toString();
   }
 
   public static FieldName parse(String formattedString) {
@@ -93,8 +95,13 @@ public class FieldName implements ResourceName {
       return null;
     }
     Map<String, String> matchMap =
-        PATH_TEMPLATE.validatedMatch(formattedString, "FieldName.parse: formattedString not in valid format");
-    return of(matchMap.get("project"), matchMap.get("database"), matchMap.get("collection_id"), matchMap.get("field_id"));
+        PATH_TEMPLATE.validatedMatch(
+            formattedString, "FieldName.parse: formattedString not in valid format");
+    return of(
+        matchMap.get("project"),
+        matchMap.get("database"),
+        matchMap.get("collection_id"),
+        matchMap.get("field_id"));
   }
 
   public static List<FieldName> parseList(List<String> formattedStrings) {
@@ -143,7 +150,15 @@ public class FieldName implements ResourceName {
 
   @Override
   public String toString() {
-    return PATH_TEMPLATE.instantiate("project", project, "database", database, "collection_id", collectionId, "field_id", fieldId);
+    return PATH_TEMPLATE.instantiate(
+        "project",
+        project,
+        "database",
+        database,
+        "collection_id",
+        collectionId,
+        "field_id",
+        fieldId);
   }
 
   /** Builder for FieldName. */
@@ -190,8 +205,7 @@ public class FieldName implements ResourceName {
       return this;
     }
 
-    private Builder() {
-    }
+    private Builder() {}
 
     private Builder(FieldName fieldName) {
       project = fieldName.project;
@@ -234,4 +248,3 @@ public class FieldName implements ResourceName {
     return h;
   }
 }
-

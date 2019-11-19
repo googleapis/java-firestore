@@ -18,20 +18,24 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ListIndexesResponseOrBuilder extends
+public interface ListIndexesResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ListIndexesResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The requested indexes.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
-  java.util.List<com.google.firestore.admin.v1.Index> 
-      getIndexesList();
+  java.util.List<com.google.firestore.admin.v1.Index> getIndexesList();
   /**
+   *
+   *
    * <pre>
    * The requested indexes.
    * </pre>
@@ -40,6 +44,8 @@ public interface ListIndexesResponseOrBuilder extends
    */
   com.google.firestore.admin.v1.Index getIndexes(int index);
   /**
+   *
+   *
    * <pre>
    * The requested indexes.
    * </pre>
@@ -48,25 +54,29 @@ public interface ListIndexesResponseOrBuilder extends
    */
   int getIndexesCount();
   /**
+   *
+   *
    * <pre>
    * The requested indexes.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
-  java.util.List<? extends com.google.firestore.admin.v1.IndexOrBuilder> 
-      getIndexesOrBuilderList();
+  java.util.List<? extends com.google.firestore.admin.v1.IndexOrBuilder> getIndexesOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The requested indexes.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
-  com.google.firestore.admin.v1.IndexOrBuilder getIndexesOrBuilder(
-      int index);
+  com.google.firestore.admin.v1.IndexOrBuilder getIndexesOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request another page of results. If blank,
    * this is the last page.
@@ -76,6 +86,8 @@ public interface ListIndexesResponseOrBuilder extends
    */
   java.lang.String getNextPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request another page of results. If blank,
    * this is the last page.
@@ -83,6 +95,5 @@ public interface ListIndexesResponseOrBuilder extends
    *
    * <code>string next_page_token = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getNextPageTokenBytes();
+  com.google.protobuf.ByteString getNextPageTokenBytes();
 }

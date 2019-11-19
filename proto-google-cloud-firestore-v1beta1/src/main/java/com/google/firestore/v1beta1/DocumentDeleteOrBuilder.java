@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface DocumentDeleteOrBuilder extends
+public interface DocumentDeleteOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.DocumentDelete)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The resource name of the [Document][google.firestore.v1beta1.Document] that was deleted.
    * </pre>
@@ -31,16 +34,19 @@ public interface DocumentDeleteOrBuilder extends
    */
   java.lang.String getDocument();
   /**
+   *
+   *
    * <pre>
    * The resource name of the [Document][google.firestore.v1beta1.Document] that was deleted.
    * </pre>
    *
    * <code>string document = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getDocumentBytes();
+  com.google.protobuf.ByteString getDocumentBytes();
 
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this entity.
    * </pre>
@@ -49,6 +55,8 @@ public interface DocumentDeleteOrBuilder extends
    */
   java.util.List<java.lang.Integer> getRemovedTargetIdsList();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this entity.
    * </pre>
@@ -57,6 +65,8 @@ public interface DocumentDeleteOrBuilder extends
    */
   int getRemovedTargetIdsCount();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this entity.
    * </pre>
@@ -66,6 +76,8 @@ public interface DocumentDeleteOrBuilder extends
   int getRemovedTargetIds(int index);
 
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the delete was observed.
    * Greater or equal to the `commit_time` of the delete.
@@ -75,6 +87,8 @@ public interface DocumentDeleteOrBuilder extends
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the delete was observed.
    * Greater or equal to the `commit_time` of the delete.
@@ -84,6 +98,8 @@ public interface DocumentDeleteOrBuilder extends
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the delete was observed.
    * Greater or equal to the `commit_time` of the delete.

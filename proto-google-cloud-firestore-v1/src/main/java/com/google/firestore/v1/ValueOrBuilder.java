@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface ValueOrBuilder extends
+public interface ValueOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.Value)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A null value.
    * </pre>
@@ -31,6 +34,8 @@ public interface ValueOrBuilder extends
    */
   int getNullValueValue();
   /**
+   *
+   *
    * <pre>
    * A null value.
    * </pre>
@@ -40,6 +45,8 @@ public interface ValueOrBuilder extends
   com.google.protobuf.NullValue getNullValue();
 
   /**
+   *
+   *
    * <pre>
    * A boolean value.
    * </pre>
@@ -49,6 +56,8 @@ public interface ValueOrBuilder extends
   boolean getBooleanValue();
 
   /**
+   *
+   *
    * <pre>
    * An integer value.
    * </pre>
@@ -58,6 +67,8 @@ public interface ValueOrBuilder extends
   long getIntegerValue();
 
   /**
+   *
+   *
    * <pre>
    * A double value.
    * </pre>
@@ -67,6 +78,8 @@ public interface ValueOrBuilder extends
   double getDoubleValue();
 
   /**
+   *
+   *
    * <pre>
    * A timestamp value.
    * Precise only to microseconds. When stored, any additional precision is
@@ -77,6 +90,8 @@ public interface ValueOrBuilder extends
    */
   boolean hasTimestampValue();
   /**
+   *
+   *
    * <pre>
    * A timestamp value.
    * Precise only to microseconds. When stored, any additional precision is
@@ -87,6 +102,8 @@ public interface ValueOrBuilder extends
    */
   com.google.protobuf.Timestamp getTimestampValue();
   /**
+   *
+   *
    * <pre>
    * A timestamp value.
    * Precise only to microseconds. When stored, any additional precision is
@@ -98,6 +115,8 @@ public interface ValueOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getTimestampValueOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A string value.
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
@@ -109,6 +128,8 @@ public interface ValueOrBuilder extends
    */
   java.lang.String getStringValue();
   /**
+   *
+   *
    * <pre>
    * A string value.
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
@@ -118,10 +139,11 @@ public interface ValueOrBuilder extends
    *
    * <code>string string_value = 17;</code>
    */
-  com.google.protobuf.ByteString
-      getStringValueBytes();
+  com.google.protobuf.ByteString getStringValueBytes();
 
   /**
+   *
+   *
    * <pre>
    * A bytes value.
    * Must not exceed 1 MiB - 89 bytes.
@@ -133,6 +155,8 @@ public interface ValueOrBuilder extends
   com.google.protobuf.ByteString getBytesValue();
 
   /**
+   *
+   *
    * <pre>
    * A reference to a document. For example:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -142,6 +166,8 @@ public interface ValueOrBuilder extends
    */
   java.lang.String getReferenceValue();
   /**
+   *
+   *
    * <pre>
    * A reference to a document. For example:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -149,10 +175,11 @@ public interface ValueOrBuilder extends
    *
    * <code>string reference_value = 5;</code>
    */
-  com.google.protobuf.ByteString
-      getReferenceValueBytes();
+  com.google.protobuf.ByteString getReferenceValueBytes();
 
   /**
+   *
+   *
    * <pre>
    * A geo point value representing a point on the surface of Earth.
    * </pre>
@@ -161,6 +188,8 @@ public interface ValueOrBuilder extends
    */
   boolean hasGeoPointValue();
   /**
+   *
+   *
    * <pre>
    * A geo point value representing a point on the surface of Earth.
    * </pre>
@@ -169,6 +198,8 @@ public interface ValueOrBuilder extends
    */
   com.google.type.LatLng getGeoPointValue();
   /**
+   *
+   *
    * <pre>
    * A geo point value representing a point on the surface of Earth.
    * </pre>
@@ -178,6 +209,8 @@ public interface ValueOrBuilder extends
   com.google.type.LatLngOrBuilder getGeoPointValueOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * An array value.
    * Cannot directly contain another array value, though can contain an
@@ -188,6 +221,8 @@ public interface ValueOrBuilder extends
    */
   boolean hasArrayValue();
   /**
+   *
+   *
    * <pre>
    * An array value.
    * Cannot directly contain another array value, though can contain an
@@ -198,6 +233,8 @@ public interface ValueOrBuilder extends
    */
   com.google.firestore.v1.ArrayValue getArrayValue();
   /**
+   *
+   *
    * <pre>
    * An array value.
    * Cannot directly contain another array value, though can contain an
@@ -209,6 +246,8 @@ public interface ValueOrBuilder extends
   com.google.firestore.v1.ArrayValueOrBuilder getArrayValueOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A map value.
    * </pre>
@@ -217,6 +256,8 @@ public interface ValueOrBuilder extends
    */
   boolean hasMapValue();
   /**
+   *
+   *
    * <pre>
    * A map value.
    * </pre>
@@ -225,6 +266,8 @@ public interface ValueOrBuilder extends
    */
   com.google.firestore.v1.MapValue getMapValue();
   /**
+   *
+   *
    * <pre>
    * A map value.
    * </pre>

@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface DeleteIndexRequestOrBuilder extends
+public interface DeleteIndexRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.DeleteIndexRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -32,6 +35,8 @@ public interface DeleteIndexRequestOrBuilder extends
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * A name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -39,6 +44,5 @@ public interface DeleteIndexRequestOrBuilder extends
    *
    * <code>string name = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 }

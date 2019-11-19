@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ProgressOrBuilder extends
+public interface ProgressOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Progress)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The amount of work estimated.
    * </pre>
@@ -32,6 +35,8 @@ public interface ProgressOrBuilder extends
   long getEstimatedWork();
 
   /**
+   *
+   *
    * <pre>
    * The amount of work completed.
    * </pre>

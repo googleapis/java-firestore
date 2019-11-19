@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface IndexOrBuilder extends
+public interface IndexOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Index)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Output only. A server defined name for this index.
    * The form of this name for composite indexes will be:
@@ -34,6 +37,8 @@ public interface IndexOrBuilder extends
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * Output only. A server defined name for this index.
    * The form of this name for composite indexes will be:
@@ -43,10 +48,11 @@ public interface IndexOrBuilder extends
    *
    * <code>string name = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
@@ -60,6 +66,8 @@ public interface IndexOrBuilder extends
    */
   int getQueryScopeValue();
   /**
+   *
+   *
    * <pre>
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
@@ -74,6 +82,8 @@ public interface IndexOrBuilder extends
   com.google.firestore.admin.v1.Index.QueryScope getQueryScope();
 
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -88,9 +98,10 @@ public interface IndexOrBuilder extends
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
-  java.util.List<com.google.firestore.admin.v1.Index.IndexField> 
-      getFieldsList();
+  java.util.List<com.google.firestore.admin.v1.Index.IndexField> getFieldsList();
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -107,6 +118,8 @@ public interface IndexOrBuilder extends
    */
   com.google.firestore.admin.v1.Index.IndexField getFields(int index);
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -123,6 +136,8 @@ public interface IndexOrBuilder extends
    */
   int getFieldsCount();
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -137,9 +152,11 @@ public interface IndexOrBuilder extends
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
-  java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder> 
+  java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
       getFieldsOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -154,10 +171,11 @@ public interface IndexOrBuilder extends
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
-  com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(
-      int index);
+  com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * Output only. The serving state of the index.
    * </pre>
@@ -166,6 +184,8 @@ public interface IndexOrBuilder extends
    */
   int getStateValue();
   /**
+   *
+   *
    * <pre>
    * Output only. The serving state of the index.
    * </pre>

@@ -19,31 +19,34 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * A transformation of a document.
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.DocumentTransform}
  */
-public  final class DocumentTransform extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class DocumentTransform extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.DocumentTransform)
     DocumentTransformOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use DocumentTransform.newBuilder() to construct.
   private DocumentTransform(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private DocumentTransform() {
     document_ = "";
     fieldTransforms_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private DocumentTransform(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -63,35 +66,40 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            document_ = s;
-            break;
-          }
-          case 18: {
-            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-              fieldTransforms_ = new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>();
-              mutable_bitField0_ |= 0x00000002;
+              document_ = s;
+              break;
             }
-            fieldTransforms_.add(
-                input.readMessage(com.google.firestore.v1.DocumentTransform.FieldTransform.parser(), extensionRegistry));
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+          case 18:
+            {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                fieldTransforms_ =
+                    new java.util.ArrayList<
+                        com.google.firestore.v1.DocumentTransform.FieldTransform>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              fieldTransforms_.add(
+                  input.readMessage(
+                      com.google.firestore.v1.DocumentTransform.FieldTransform.parser(),
+                      extensionRegistry));
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000002) != 0)) {
         fieldTransforms_ = java.util.Collections.unmodifiableList(fieldTransforms_);
@@ -100,24 +108,30 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.WriteProto
+        .internal_static_google_firestore_v1_DocumentTransform_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_fieldAccessorTable
+    return com.google.firestore.v1.WriteProto
+        .internal_static_google_firestore_v1_DocumentTransform_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.DocumentTransform.class, com.google.firestore.v1.DocumentTransform.Builder.class);
+            com.google.firestore.v1.DocumentTransform.class,
+            com.google.firestore.v1.DocumentTransform.Builder.class);
   }
 
-  public interface FieldTransformOrBuilder extends
+  public interface FieldTransformOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:google.firestore.v1.DocumentTransform.FieldTransform)
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     *
+     *
      * <pre>
      * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
      * reference.
@@ -127,6 +141,8 @@ private static final long serialVersionUID = 0L;
      */
     java.lang.String getFieldPath();
     /**
+     *
+     *
      * <pre>
      * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
      * reference.
@@ -134,27 +150,36 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string field_path = 1;</code>
      */
-    com.google.protobuf.ByteString
-        getFieldPathBytes();
+    com.google.protobuf.ByteString getFieldPathBytes();
 
     /**
+     *
+     *
      * <pre>
      * Sets the field to the given server value.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
      */
     int getSetToServerValueValue();
     /**
+     *
+     *
      * <pre>
      * Sets the field to the given server value.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
      */
     com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue getSetToServerValue();
 
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -171,6 +196,8 @@ private static final long serialVersionUID = 0L;
      */
     boolean hasIncrement();
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -187,6 +214,8 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.Value getIncrement();
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -204,6 +233,8 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.v1.ValueOrBuilder getIncrementOrBuilder();
 
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -222,6 +253,8 @@ private static final long serialVersionUID = 0L;
      */
     boolean hasMaximum();
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -240,6 +273,8 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.Value getMaximum();
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -259,6 +294,8 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.v1.ValueOrBuilder getMaximumOrBuilder();
 
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -277,6 +314,8 @@ private static final long serialVersionUID = 0L;
      */
     boolean hasMinimum();
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -295,6 +334,8 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.Value getMinimum();
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -314,6 +355,8 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.v1.ValueOrBuilder getMinimumOrBuilder();
 
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -331,6 +374,8 @@ private static final long serialVersionUID = 0L;
      */
     boolean hasAppendMissingElements();
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -348,6 +393,8 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.ArrayValue getAppendMissingElements();
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -366,6 +413,8 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.v1.ArrayValueOrBuilder getAppendMissingElementsOrBuilder();
 
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -381,6 +430,8 @@ private static final long serialVersionUID = 0L;
      */
     boolean hasRemoveAllFromArray();
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -396,6 +447,8 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.ArrayValue getRemoveAllFromArray();
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -411,33 +464,37 @@ private static final long serialVersionUID = 0L;
      */
     com.google.firestore.v1.ArrayValueOrBuilder getRemoveAllFromArrayOrBuilder();
 
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase getTransformTypeCase();
+    public com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase
+        getTransformTypeCase();
   }
   /**
+   *
+   *
    * <pre>
    * A transformation of a field of the document.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.DocumentTransform.FieldTransform}
    */
-  public  static final class FieldTransform extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FieldTransform extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:google.firestore.v1.DocumentTransform.FieldTransform)
       FieldTransformOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use FieldTransform.newBuilder() to construct.
     private FieldTransform(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private FieldTransform() {
       fieldPath_ = "";
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private FieldTransform(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -457,130 +514,144 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 10:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
 
-              fieldPath_ = s;
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              transformTypeCase_ = 2;
-              transformType_ = rawValue;
-              break;
-            }
-            case 26: {
-              com.google.firestore.v1.Value.Builder subBuilder = null;
-              if (transformTypeCase_ == 3) {
-                subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+                fieldPath_ = s;
+                break;
               }
-              transformType_ =
-                  input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
-                transformType_ = subBuilder.buildPartial();
+            case 16:
+              {
+                int rawValue = input.readEnum();
+                transformTypeCase_ = 2;
+                transformType_ = rawValue;
+                break;
               }
-              transformTypeCase_ = 3;
-              break;
-            }
-            case 34: {
-              com.google.firestore.v1.Value.Builder subBuilder = null;
-              if (transformTypeCase_ == 4) {
-                subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+            case 26:
+              {
+                com.google.firestore.v1.Value.Builder subBuilder = null;
+                if (transformTypeCase_ == 3) {
+                  subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+                }
+                transformType_ =
+                    input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
+                  transformType_ = subBuilder.buildPartial();
+                }
+                transformTypeCase_ = 3;
+                break;
               }
-              transformType_ =
-                  input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
-                transformType_ = subBuilder.buildPartial();
+            case 34:
+              {
+                com.google.firestore.v1.Value.Builder subBuilder = null;
+                if (transformTypeCase_ == 4) {
+                  subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+                }
+                transformType_ =
+                    input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
+                  transformType_ = subBuilder.buildPartial();
+                }
+                transformTypeCase_ = 4;
+                break;
               }
-              transformTypeCase_ = 4;
-              break;
-            }
-            case 42: {
-              com.google.firestore.v1.Value.Builder subBuilder = null;
-              if (transformTypeCase_ == 5) {
-                subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+            case 42:
+              {
+                com.google.firestore.v1.Value.Builder subBuilder = null;
+                if (transformTypeCase_ == 5) {
+                  subBuilder = ((com.google.firestore.v1.Value) transformType_).toBuilder();
+                }
+                transformType_ =
+                    input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
+                  transformType_ = subBuilder.buildPartial();
+                }
+                transformTypeCase_ = 5;
+                break;
               }
-              transformType_ =
-                  input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.Value) transformType_);
-                transformType_ = subBuilder.buildPartial();
+            case 50:
+              {
+                com.google.firestore.v1.ArrayValue.Builder subBuilder = null;
+                if (transformTypeCase_ == 6) {
+                  subBuilder = ((com.google.firestore.v1.ArrayValue) transformType_).toBuilder();
+                }
+                transformType_ =
+                    input.readMessage(
+                        com.google.firestore.v1.ArrayValue.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.google.firestore.v1.ArrayValue) transformType_);
+                  transformType_ = subBuilder.buildPartial();
+                }
+                transformTypeCase_ = 6;
+                break;
               }
-              transformTypeCase_ = 5;
-              break;
-            }
-            case 50: {
-              com.google.firestore.v1.ArrayValue.Builder subBuilder = null;
-              if (transformTypeCase_ == 6) {
-                subBuilder = ((com.google.firestore.v1.ArrayValue) transformType_).toBuilder();
+            case 58:
+              {
+                com.google.firestore.v1.ArrayValue.Builder subBuilder = null;
+                if (transformTypeCase_ == 7) {
+                  subBuilder = ((com.google.firestore.v1.ArrayValue) transformType_).toBuilder();
+                }
+                transformType_ =
+                    input.readMessage(
+                        com.google.firestore.v1.ArrayValue.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.google.firestore.v1.ArrayValue) transformType_);
+                  transformType_ = subBuilder.buildPartial();
+                }
+                transformTypeCase_ = 7;
+                break;
               }
-              transformType_ =
-                  input.readMessage(com.google.firestore.v1.ArrayValue.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.ArrayValue) transformType_);
-                transformType_ = subBuilder.buildPartial();
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              transformTypeCase_ = 6;
-              break;
-            }
-            case 58: {
-              com.google.firestore.v1.ArrayValue.Builder subBuilder = null;
-              if (transformTypeCase_ == 7) {
-                subBuilder = ((com.google.firestore.v1.ArrayValue) transformType_).toBuilder();
-              }
-              transformType_ =
-                  input.readMessage(com.google.firestore.v1.ArrayValue.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.ArrayValue) transformType_);
-                transformType_ = subBuilder.buildPartial();
-              }
-              transformTypeCase_ = 7;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_FieldTransform_fieldAccessorTable
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentTransform_FieldTransform_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.DocumentTransform.FieldTransform.class, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder.class);
+              com.google.firestore.v1.DocumentTransform.FieldTransform.class,
+              com.google.firestore.v1.DocumentTransform.FieldTransform.Builder.class);
     }
 
     /**
+     *
+     *
      * <pre>
      * A value that is calculated by the server.
      * </pre>
      *
      * Protobuf enum {@code google.firestore.v1.DocumentTransform.FieldTransform.ServerValue}
      */
-    public enum ServerValue
-        implements com.google.protobuf.ProtocolMessageEnum {
+    public enum ServerValue implements com.google.protobuf.ProtocolMessageEnum {
       /**
+       *
+       *
        * <pre>
        * Unspecified. This value must not be used.
        * </pre>
@@ -589,6 +660,8 @@ private static final long serialVersionUID = 0L;
        */
       SERVER_VALUE_UNSPECIFIED(0),
       /**
+       *
+       *
        * <pre>
        * The time at which the server processed the request, with millisecond
        * precision.
@@ -601,6 +674,8 @@ private static final long serialVersionUID = 0L;
       ;
 
       /**
+       *
+       *
        * <pre>
        * Unspecified. This value must not be used.
        * </pre>
@@ -609,6 +684,8 @@ private static final long serialVersionUID = 0L;
        */
       public static final int SERVER_VALUE_UNSPECIFIED_VALUE = 0;
       /**
+       *
+       *
        * <pre>
        * The time at which the server processed the request, with millisecond
        * precision.
@@ -618,7 +695,6 @@ private static final long serialVersionUID = 0L;
        */
       public static final int REQUEST_TIME_VALUE = 1;
 
-
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
           throw new java.lang.IllegalArgumentException(
@@ -627,9 +703,7 @@ private static final long serialVersionUID = 0L;
         return value;
       }
 
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
+      /** @deprecated Use {@link #forNumber(int)} instead. */
       @java.lang.Deprecated
       public static ServerValue valueOf(int value) {
         return forNumber(value);
@@ -637,44 +711,45 @@ private static final long serialVersionUID = 0L;
 
       public static ServerValue forNumber(int value) {
         switch (value) {
-          case 0: return SERVER_VALUE_UNSPECIFIED;
-          case 1: return REQUEST_TIME;
-          default: return null;
+          case 0:
+            return SERVER_VALUE_UNSPECIFIED;
+          case 1:
+            return REQUEST_TIME;
+          default:
+            return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<ServerValue>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<ServerValue> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          ServerValue> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<ServerValue>() {
-              public ServerValue findValueByNumber(int number) {
-                return ServerValue.forNumber(number);
-              }
-            };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      private static final com.google.protobuf.Internal.EnumLiteMap<ServerValue> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ServerValue>() {
+            public ServerValue findValueByNumber(int number) {
+              return ServerValue.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.google.firestore.v1.DocumentTransform.FieldTransform.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.google.firestore.v1.DocumentTransform.FieldTransform.getDescriptor()
+            .getEnumTypes()
+            .get(0);
       }
 
       private static final ServerValue[] VALUES = values();
 
-      public static ServerValue valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static ServerValue valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -693,8 +768,8 @@ private static final long serialVersionUID = 0L;
 
     private int transformTypeCase_ = 0;
     private java.lang.Object transformType_;
-    public enum TransformTypeCase
-        implements com.google.protobuf.Internal.EnumLite {
+
+    public enum TransformTypeCase implements com.google.protobuf.Internal.EnumLite {
       SET_TO_SERVER_VALUE(2),
       INCREMENT(3),
       MAXIMUM(4),
@@ -703,12 +778,11 @@ private static final long serialVersionUID = 0L;
       REMOVE_ALL_FROM_ARRAY(7),
       TRANSFORMTYPE_NOT_SET(0);
       private final int value;
+
       private TransformTypeCase(int value) {
         this.value = value;
       }
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
+      /** @deprecated Use {@link #forNumber(int)} instead. */
       @java.lang.Deprecated
       public static TransformTypeCase valueOf(int value) {
         return forNumber(value);
@@ -716,30 +790,39 @@ private static final long serialVersionUID = 0L;
 
       public static TransformTypeCase forNumber(int value) {
         switch (value) {
-          case 2: return SET_TO_SERVER_VALUE;
-          case 3: return INCREMENT;
-          case 4: return MAXIMUM;
-          case 5: return MINIMUM;
-          case 6: return APPEND_MISSING_ELEMENTS;
-          case 7: return REMOVE_ALL_FROM_ARRAY;
-          case 0: return TRANSFORMTYPE_NOT_SET;
-          default: return null;
+          case 2:
+            return SET_TO_SERVER_VALUE;
+          case 3:
+            return INCREMENT;
+          case 4:
+            return MAXIMUM;
+          case 5:
+            return MINIMUM;
+          case 6:
+            return APPEND_MISSING_ELEMENTS;
+          case 7:
+            return REMOVE_ALL_FROM_ARRAY;
+          case 0:
+            return TRANSFORMTYPE_NOT_SET;
+          default:
+            return null;
         }
       }
+
       public int getNumber() {
         return this.value;
       }
     };
 
-    public TransformTypeCase
-    getTransformTypeCase() {
-      return TransformTypeCase.forNumber(
-          transformTypeCase_);
+    public TransformTypeCase getTransformTypeCase() {
+      return TransformTypeCase.forNumber(transformTypeCase_);
     }
 
     public static final int FIELD_PATH_FIELD_NUMBER = 1;
     private volatile java.lang.Object fieldPath_;
     /**
+     *
+     *
      * <pre>
      * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
      * reference.
@@ -752,14 +835,15 @@ private static final long serialVersionUID = 0L;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         fieldPath_ = s;
         return s;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
      * reference.
@@ -767,13 +851,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string field_path = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getFieldPathBytes() {
+    public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         fieldPath_ = b;
         return b;
       } else {
@@ -783,11 +865,15 @@ private static final long serialVersionUID = 0L;
 
     public static final int SET_TO_SERVER_VALUE_FIELD_NUMBER = 2;
     /**
+     *
+     *
      * <pre>
      * Sets the field to the given server value.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
      */
     public int getSetToServerValueValue() {
       if (transformTypeCase_ == 2) {
@@ -796,24 +882,35 @@ private static final long serialVersionUID = 0L;
       return 0;
     }
     /**
+     *
+     *
      * <pre>
      * Sets the field to the given server value.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
      */
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue getSetToServerValue() {
+    public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
+        getSetToServerValue() {
       if (transformTypeCase_ == 2) {
         @SuppressWarnings("deprecation")
-        com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result = com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
-            (java.lang.Integer) transformType_);
-        return result == null ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED : result;
+        com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result =
+            com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
+                (java.lang.Integer) transformType_);
+        return result == null
+            ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED
+            : result;
       }
-      return com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.SERVER_VALUE_UNSPECIFIED;
+      return com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
+          .SERVER_VALUE_UNSPECIFIED;
     }
 
     public static final int INCREMENT_FIELD_NUMBER = 3;
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -832,6 +929,8 @@ private static final long serialVersionUID = 0L;
       return transformTypeCase_ == 3;
     }
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -848,11 +947,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.Value getIncrement() {
       if (transformTypeCase_ == 3) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Adds the given value to the field's current value.
      * This must be an integer or a double value.
@@ -869,13 +970,15 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ValueOrBuilder getIncrementOrBuilder() {
       if (transformTypeCase_ == 3) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
 
     public static final int MAXIMUM_FIELD_NUMBER = 4;
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -896,6 +999,8 @@ private static final long serialVersionUID = 0L;
       return transformTypeCase_ == 4;
     }
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -914,11 +1019,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.Value getMaximum() {
       if (transformTypeCase_ == 4) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
      * This must be an integer or a double value.
@@ -937,13 +1044,15 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ValueOrBuilder getMaximumOrBuilder() {
       if (transformTypeCase_ == 4) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
 
     public static final int MINIMUM_FIELD_NUMBER = 5;
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -964,6 +1073,8 @@ private static final long serialVersionUID = 0L;
       return transformTypeCase_ == 5;
     }
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -982,11 +1093,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.Value getMinimum() {
       if (transformTypeCase_ == 5) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
      * This must be an integer or a double value.
@@ -1005,13 +1118,15 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ValueOrBuilder getMinimumOrBuilder() {
       if (transformTypeCase_ == 5) {
-         return (com.google.firestore.v1.Value) transformType_;
+        return (com.google.firestore.v1.Value) transformType_;
       }
       return com.google.firestore.v1.Value.getDefaultInstance();
     }
 
     public static final int APPEND_MISSING_ELEMENTS_FIELD_NUMBER = 6;
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -1031,6 +1146,8 @@ private static final long serialVersionUID = 0L;
       return transformTypeCase_ == 6;
     }
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -1048,11 +1165,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ArrayValue getAppendMissingElements() {
       if (transformTypeCase_ == 6) {
-         return (com.google.firestore.v1.ArrayValue) transformType_;
+        return (com.google.firestore.v1.ArrayValue) transformType_;
       }
       return com.google.firestore.v1.ArrayValue.getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Append the given elements in order if they are not already present in
      * the current field value.
@@ -1070,13 +1189,15 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ArrayValueOrBuilder getAppendMissingElementsOrBuilder() {
       if (transformTypeCase_ == 6) {
-         return (com.google.firestore.v1.ArrayValue) transformType_;
+        return (com.google.firestore.v1.ArrayValue) transformType_;
       }
       return com.google.firestore.v1.ArrayValue.getDefaultInstance();
     }
 
     public static final int REMOVE_ALL_FROM_ARRAY_FIELD_NUMBER = 7;
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -1094,6 +1215,8 @@ private static final long serialVersionUID = 0L;
       return transformTypeCase_ == 7;
     }
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -1109,11 +1232,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ArrayValue getRemoveAllFromArray() {
       if (transformTypeCase_ == 7) {
-         return (com.google.firestore.v1.ArrayValue) transformType_;
+        return (com.google.firestore.v1.ArrayValue) transformType_;
       }
       return com.google.firestore.v1.ArrayValue.getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
@@ -1129,12 +1254,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.ArrayValueOrBuilder getRemoveAllFromArrayOrBuilder() {
       if (transformTypeCase_ == 7) {
-         return (com.google.firestore.v1.ArrayValue) transformType_;
+        return (com.google.firestore.v1.ArrayValue) transformType_;
       }
       return com.google.firestore.v1.ArrayValue.getDefaultInstance();
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1146,8 +1272,7 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (!getFieldPathBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, fieldPath_);
       }
@@ -1182,28 +1307,34 @@ private static final long serialVersionUID = 0L;
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, fieldPath_);
       }
       if (transformTypeCase_ == 2) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, ((java.lang.Integer) transformType_));
+        size +=
+            com.google.protobuf.CodedOutputStream.computeEnumSize(
+                2, ((java.lang.Integer) transformType_));
       }
       if (transformTypeCase_ == 3) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, (com.google.firestore.v1.Value) transformType_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                3, (com.google.firestore.v1.Value) transformType_);
       }
       if (transformTypeCase_ == 4) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, (com.google.firestore.v1.Value) transformType_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                4, (com.google.firestore.v1.Value) transformType_);
       }
       if (transformTypeCase_ == 5) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, (com.google.firestore.v1.Value) transformType_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                5, (com.google.firestore.v1.Value) transformType_);
       }
       if (transformTypeCase_ == 6) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, (com.google.firestore.v1.ArrayValue) transformType_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                6, (com.google.firestore.v1.ArrayValue) transformType_);
       }
       if (transformTypeCase_ == 7) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, (com.google.firestore.v1.ArrayValue) transformType_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                7, (com.google.firestore.v1.ArrayValue) transformType_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1213,40 +1344,34 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.google.firestore.v1.DocumentTransform.FieldTransform)) {
         return super.equals(obj);
       }
-      com.google.firestore.v1.DocumentTransform.FieldTransform other = (com.google.firestore.v1.DocumentTransform.FieldTransform) obj;
+      com.google.firestore.v1.DocumentTransform.FieldTransform other =
+          (com.google.firestore.v1.DocumentTransform.FieldTransform) obj;
 
-      if (!getFieldPath()
-          .equals(other.getFieldPath())) return false;
+      if (!getFieldPath().equals(other.getFieldPath())) return false;
       if (!getTransformTypeCase().equals(other.getTransformTypeCase())) return false;
       switch (transformTypeCase_) {
         case 2:
-          if (getSetToServerValueValue()
-              != other.getSetToServerValueValue()) return false;
+          if (getSetToServerValueValue() != other.getSetToServerValueValue()) return false;
           break;
         case 3:
-          if (!getIncrement()
-              .equals(other.getIncrement())) return false;
+          if (!getIncrement().equals(other.getIncrement())) return false;
           break;
         case 4:
-          if (!getMaximum()
-              .equals(other.getMaximum())) return false;
+          if (!getMaximum().equals(other.getMaximum())) return false;
           break;
         case 5:
-          if (!getMinimum()
-              .equals(other.getMinimum())) return false;
+          if (!getMinimum().equals(other.getMinimum())) return false;
           break;
         case 6:
-          if (!getAppendMissingElements()
-              .equals(other.getAppendMissingElements())) return false;
+          if (!getAppendMissingElements().equals(other.getAppendMissingElements())) return false;
           break;
         case 7:
-          if (!getRemoveAllFromArray()
-              .equals(other.getRemoveAllFromArray())) return false;
+          if (!getRemoveAllFromArray().equals(other.getRemoveAllFromArray())) return false;
           break;
         case 0:
         default:
@@ -1298,87 +1423,94 @@ private static final long serialVersionUID = 0L;
     }
 
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.google.firestore.v1.DocumentTransform.FieldTransform parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.google.firestore.v1.DocumentTransform.FieldTransform parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.google.firestore.v1.DocumentTransform.FieldTransform parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.google.firestore.v1.DocumentTransform.FieldTransform prototype) {
+
+    public static Builder newBuilder(
+        com.google.firestore.v1.DocumentTransform.FieldTransform prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1388,27 +1520,32 @@ private static final long serialVersionUID = 0L;
       return builder;
     }
     /**
+     *
+     *
      * <pre>
      * A transformation of a field of the document.
      * </pre>
      *
      * Protobuf type {@code google.firestore.v1.DocumentTransform.FieldTransform}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:google.firestore.v1.DocumentTransform.FieldTransform)
         com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.WriteProto
+            .internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_FieldTransform_fieldAccessorTable
+        return com.google.firestore.v1.WriteProto
+            .internal_static_google_firestore_v1_DocumentTransform_FieldTransform_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.DocumentTransform.FieldTransform.class, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder.class);
+                com.google.firestore.v1.DocumentTransform.FieldTransform.class,
+                com.google.firestore.v1.DocumentTransform.FieldTransform.Builder.class);
       }
 
       // Construct using com.google.firestore.v1.DocumentTransform.FieldTransform.newBuilder()
@@ -1416,16 +1553,15 @@ private static final long serialVersionUID = 0L;
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1437,9 +1573,9 @@ private static final long serialVersionUID = 0L;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.v1.WriteProto
+            .internal_static_google_firestore_v1_DocumentTransform_FieldTransform_descriptor;
       }
 
       @java.lang.Override
@@ -1458,7 +1594,8 @@ private static final long serialVersionUID = 0L;
 
       @java.lang.Override
       public com.google.firestore.v1.DocumentTransform.FieldTransform buildPartial() {
-        com.google.firestore.v1.DocumentTransform.FieldTransform result = new com.google.firestore.v1.DocumentTransform.FieldTransform(this);
+        com.google.firestore.v1.DocumentTransform.FieldTransform result =
+            new com.google.firestore.v1.DocumentTransform.FieldTransform(this);
         result.fieldPath_ = fieldPath_;
         if (transformTypeCase_ == 2) {
           result.transformType_ = transformType_;
@@ -1507,38 +1644,41 @@ private static final long serialVersionUID = 0L;
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.google.firestore.v1.DocumentTransform.FieldTransform) {
-          return mergeFrom((com.google.firestore.v1.DocumentTransform.FieldTransform)other);
+          return mergeFrom((com.google.firestore.v1.DocumentTransform.FieldTransform) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1546,39 +1686,47 @@ private static final long serialVersionUID = 0L;
       }
 
       public Builder mergeFrom(com.google.firestore.v1.DocumentTransform.FieldTransform other) {
-        if (other == com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance()) return this;
+        if (other == com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance())
+          return this;
         if (!other.getFieldPath().isEmpty()) {
           fieldPath_ = other.fieldPath_;
           onChanged();
         }
         switch (other.getTransformTypeCase()) {
-          case SET_TO_SERVER_VALUE: {
-            setSetToServerValueValue(other.getSetToServerValueValue());
-            break;
-          }
-          case INCREMENT: {
-            mergeIncrement(other.getIncrement());
-            break;
-          }
-          case MAXIMUM: {
-            mergeMaximum(other.getMaximum());
-            break;
-          }
-          case MINIMUM: {
-            mergeMinimum(other.getMinimum());
-            break;
-          }
-          case APPEND_MISSING_ELEMENTS: {
-            mergeAppendMissingElements(other.getAppendMissingElements());
-            break;
-          }
-          case REMOVE_ALL_FROM_ARRAY: {
-            mergeRemoveAllFromArray(other.getRemoveAllFromArray());
-            break;
-          }
-          case TRANSFORMTYPE_NOT_SET: {
-            break;
-          }
+          case SET_TO_SERVER_VALUE:
+            {
+              setSetToServerValueValue(other.getSetToServerValueValue());
+              break;
+            }
+          case INCREMENT:
+            {
+              mergeIncrement(other.getIncrement());
+              break;
+            }
+          case MAXIMUM:
+            {
+              mergeMaximum(other.getMaximum());
+              break;
+            }
+          case MINIMUM:
+            {
+              mergeMinimum(other.getMinimum());
+              break;
+            }
+          case APPEND_MISSING_ELEMENTS:
+            {
+              mergeAppendMissingElements(other.getAppendMissingElements());
+              break;
+            }
+          case REMOVE_ALL_FROM_ARRAY:
+            {
+              mergeRemoveAllFromArray(other.getRemoveAllFromArray());
+              break;
+            }
+          case TRANSFORMTYPE_NOT_SET:
+            {
+              break;
+            }
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1599,7 +1747,8 @@ private static final long serialVersionUID = 0L;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.google.firestore.v1.DocumentTransform.FieldTransform) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.google.firestore.v1.DocumentTransform.FieldTransform) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1608,12 +1757,12 @@ private static final long serialVersionUID = 0L;
         }
         return this;
       }
+
       private int transformTypeCase_ = 0;
       private java.lang.Object transformType_;
-      public TransformTypeCase
-          getTransformTypeCase() {
-        return TransformTypeCase.forNumber(
-            transformTypeCase_);
+
+      public TransformTypeCase getTransformTypeCase() {
+        return TransformTypeCase.forNumber(transformTypeCase_);
       }
 
       public Builder clearTransformType() {
@@ -1623,9 +1772,10 @@ private static final long serialVersionUID = 0L;
         return this;
       }
 
-
       private java.lang.Object fieldPath_ = "";
       /**
+       *
+       *
        * <pre>
        * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
        * reference.
@@ -1636,8 +1786,7 @@ private static final long serialVersionUID = 0L;
       public java.lang.String getFieldPath() {
         java.lang.Object ref = fieldPath_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           fieldPath_ = s;
           return s;
@@ -1646,6 +1795,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
        * reference.
@@ -1653,13 +1804,11 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public com.google.protobuf.ByteString
-          getFieldPathBytes() {
+      public com.google.protobuf.ByteString getFieldPathBytes() {
         java.lang.Object ref = fieldPath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           fieldPath_ = b;
           return b;
         } else {
@@ -1667,6 +1816,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
        * reference.
@@ -1674,17 +1825,18 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public Builder setFieldPath(
-          java.lang.String value) {
+      public Builder setFieldPath(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         fieldPath_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
        * reference.
@@ -1693,12 +1845,14 @@ private static final long serialVersionUID = 0L;
        * <code>string field_path = 1;</code>
        */
       public Builder clearFieldPath() {
-        
+
         fieldPath_ = getDefaultInstance().getFieldPath();
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
        * reference.
@@ -1706,24 +1860,27 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public Builder setFieldPathBytes(
-          com.google.protobuf.ByteString value) {
+      public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         fieldPath_ = value;
         onChanged();
         return this;
       }
 
       /**
+       *
+       *
        * <pre>
        * Sets the field to the given server value.
        * </pre>
        *
-       * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
        */
       public int getSetToServerValueValue() {
         if (transformTypeCase_ == 2) {
@@ -1732,11 +1889,15 @@ private static final long serialVersionUID = 0L;
         return 0;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the given server value.
        * </pre>
        *
-       * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
        */
       public Builder setSetToServerValueValue(int value) {
         transformTypeCase_ = 2;
@@ -1745,29 +1906,43 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the given server value.
        * </pre>
        *
-       * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
        */
-      public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue getSetToServerValue() {
+      public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
+          getSetToServerValue() {
         if (transformTypeCase_ == 2) {
           @SuppressWarnings("deprecation")
-          com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result = com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
-              (java.lang.Integer) transformType_);
-          return result == null ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED : result;
+          com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result =
+              com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
+                  (java.lang.Integer) transformType_);
+          return result == null
+              ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED
+              : result;
         }
-        return com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.SERVER_VALUE_UNSPECIFIED;
+        return com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
+            .SERVER_VALUE_UNSPECIFIED;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the given server value.
        * </pre>
        *
-       * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
        */
-      public Builder setSetToServerValue(com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue value) {
+      public Builder setSetToServerValue(
+          com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1777,11 +1952,15 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the given server value.
        * </pre>
        *
-       * <code>.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;</code>
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
        */
       public Builder clearSetToServerValue() {
         if (transformTypeCase_ == 2) {
@@ -1793,8 +1972,13 @@ private static final long serialVersionUID = 0L;
       }
 
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> incrementBuilder_;
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
+          incrementBuilder_;
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1813,6 +1997,8 @@ private static final long serialVersionUID = 0L;
         return transformTypeCase_ == 3;
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1841,6 +2027,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1869,6 +2057,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1883,8 +2073,7 @@ private static final long serialVersionUID = 0L;
        *
        * <code>.google.firestore.v1.Value increment = 3;</code>
        */
-      public Builder setIncrement(
-          com.google.firestore.v1.Value.Builder builderForValue) {
+      public Builder setIncrement(com.google.firestore.v1.Value.Builder builderForValue) {
         if (incrementBuilder_ == null) {
           transformType_ = builderForValue.build();
           onChanged();
@@ -1895,6 +2084,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1911,10 +2102,13 @@ private static final long serialVersionUID = 0L;
        */
       public Builder mergeIncrement(com.google.firestore.v1.Value value) {
         if (incrementBuilder_ == null) {
-          if (transformTypeCase_ == 3 &&
-              transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
-            transformType_ = com.google.firestore.v1.Value.newBuilder((com.google.firestore.v1.Value) transformType_)
-                .mergeFrom(value).buildPartial();
+          if (transformTypeCase_ == 3
+              && transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
+            transformType_ =
+                com.google.firestore.v1.Value.newBuilder(
+                        (com.google.firestore.v1.Value) transformType_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             transformType_ = value;
           }
@@ -1929,6 +2123,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1960,6 +2156,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -1978,6 +2176,8 @@ private static final long serialVersionUID = 0L;
         return getIncrementFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -2003,6 +2203,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Adds the given value to the field's current value.
        * This must be an integer or a double value.
@@ -2018,27 +2220,38 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.Value increment = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> 
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
           getIncrementFieldBuilder() {
         if (incrementBuilder_ == null) {
           if (!(transformTypeCase_ == 3)) {
             transformType_ = com.google.firestore.v1.Value.getDefaultInstance();
           }
-          incrementBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder>(
+          incrementBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.Value,
+                  com.google.firestore.v1.Value.Builder,
+                  com.google.firestore.v1.ValueOrBuilder>(
                   (com.google.firestore.v1.Value) transformType_,
                   getParentForChildren(),
                   isClean());
           transformType_ = null;
         }
         transformTypeCase_ = 3;
-        onChanged();;
+        onChanged();
+        ;
         return incrementBuilder_;
       }
 
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> maximumBuilder_;
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
+          maximumBuilder_;
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2059,6 +2272,8 @@ private static final long serialVersionUID = 0L;
         return transformTypeCase_ == 4;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2089,6 +2304,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2119,6 +2336,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2135,8 +2354,7 @@ private static final long serialVersionUID = 0L;
        *
        * <code>.google.firestore.v1.Value maximum = 4;</code>
        */
-      public Builder setMaximum(
-          com.google.firestore.v1.Value.Builder builderForValue) {
+      public Builder setMaximum(com.google.firestore.v1.Value.Builder builderForValue) {
         if (maximumBuilder_ == null) {
           transformType_ = builderForValue.build();
           onChanged();
@@ -2147,6 +2365,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2165,10 +2385,13 @@ private static final long serialVersionUID = 0L;
        */
       public Builder mergeMaximum(com.google.firestore.v1.Value value) {
         if (maximumBuilder_ == null) {
-          if (transformTypeCase_ == 4 &&
-              transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
-            transformType_ = com.google.firestore.v1.Value.newBuilder((com.google.firestore.v1.Value) transformType_)
-                .mergeFrom(value).buildPartial();
+          if (transformTypeCase_ == 4
+              && transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
+            transformType_ =
+                com.google.firestore.v1.Value.newBuilder(
+                        (com.google.firestore.v1.Value) transformType_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             transformType_ = value;
           }
@@ -2183,6 +2406,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2216,6 +2441,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2236,6 +2463,8 @@ private static final long serialVersionUID = 0L;
         return getMaximumFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2263,6 +2492,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2280,27 +2511,38 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.Value maximum = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> 
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
           getMaximumFieldBuilder() {
         if (maximumBuilder_ == null) {
           if (!(transformTypeCase_ == 4)) {
             transformType_ = com.google.firestore.v1.Value.getDefaultInstance();
           }
-          maximumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder>(
+          maximumBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.Value,
+                  com.google.firestore.v1.Value.Builder,
+                  com.google.firestore.v1.ValueOrBuilder>(
                   (com.google.firestore.v1.Value) transformType_,
                   getParentForChildren(),
                   isClean());
           transformType_ = null;
         }
         transformTypeCase_ = 4;
-        onChanged();;
+        onChanged();
+        ;
         return maximumBuilder_;
       }
 
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> minimumBuilder_;
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
+          minimumBuilder_;
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2321,6 +2563,8 @@ private static final long serialVersionUID = 0L;
         return transformTypeCase_ == 5;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2351,6 +2595,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2381,6 +2627,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2397,8 +2645,7 @@ private static final long serialVersionUID = 0L;
        *
        * <code>.google.firestore.v1.Value minimum = 5;</code>
        */
-      public Builder setMinimum(
-          com.google.firestore.v1.Value.Builder builderForValue) {
+      public Builder setMinimum(com.google.firestore.v1.Value.Builder builderForValue) {
         if (minimumBuilder_ == null) {
           transformType_ = builderForValue.build();
           onChanged();
@@ -2409,6 +2656,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2427,10 +2676,13 @@ private static final long serialVersionUID = 0L;
        */
       public Builder mergeMinimum(com.google.firestore.v1.Value value) {
         if (minimumBuilder_ == null) {
-          if (transformTypeCase_ == 5 &&
-              transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
-            transformType_ = com.google.firestore.v1.Value.newBuilder((com.google.firestore.v1.Value) transformType_)
-                .mergeFrom(value).buildPartial();
+          if (transformTypeCase_ == 5
+              && transformType_ != com.google.firestore.v1.Value.getDefaultInstance()) {
+            transformType_ =
+                com.google.firestore.v1.Value.newBuilder(
+                        (com.google.firestore.v1.Value) transformType_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             transformType_ = value;
           }
@@ -2445,6 +2697,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2478,6 +2732,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2498,6 +2754,8 @@ private static final long serialVersionUID = 0L;
         return getMinimumFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2525,6 +2783,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
        * This must be an integer or a double value.
@@ -2542,27 +2802,38 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.Value minimum = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder> 
+              com.google.firestore.v1.Value,
+              com.google.firestore.v1.Value.Builder,
+              com.google.firestore.v1.ValueOrBuilder>
           getMinimumFieldBuilder() {
         if (minimumBuilder_ == null) {
           if (!(transformTypeCase_ == 5)) {
             transformType_ = com.google.firestore.v1.Value.getDefaultInstance();
           }
-          minimumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.Value, com.google.firestore.v1.Value.Builder, com.google.firestore.v1.ValueOrBuilder>(
+          minimumBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.Value,
+                  com.google.firestore.v1.Value.Builder,
+                  com.google.firestore.v1.ValueOrBuilder>(
                   (com.google.firestore.v1.Value) transformType_,
                   getParentForChildren(),
                   isClean());
           transformType_ = null;
         }
         transformTypeCase_ = 5;
-        onChanged();;
+        onChanged();
+        ;
         return minimumBuilder_;
       }
 
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder> appendMissingElementsBuilder_;
+              com.google.firestore.v1.ArrayValue,
+              com.google.firestore.v1.ArrayValue.Builder,
+              com.google.firestore.v1.ArrayValueOrBuilder>
+          appendMissingElementsBuilder_;
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2582,6 +2853,8 @@ private static final long serialVersionUID = 0L;
         return transformTypeCase_ == 6;
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2611,6 +2884,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2640,6 +2915,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2667,6 +2944,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2684,10 +2963,13 @@ private static final long serialVersionUID = 0L;
        */
       public Builder mergeAppendMissingElements(com.google.firestore.v1.ArrayValue value) {
         if (appendMissingElementsBuilder_ == null) {
-          if (transformTypeCase_ == 6 &&
-              transformType_ != com.google.firestore.v1.ArrayValue.getDefaultInstance()) {
-            transformType_ = com.google.firestore.v1.ArrayValue.newBuilder((com.google.firestore.v1.ArrayValue) transformType_)
-                .mergeFrom(value).buildPartial();
+          if (transformTypeCase_ == 6
+              && transformType_ != com.google.firestore.v1.ArrayValue.getDefaultInstance()) {
+            transformType_ =
+                com.google.firestore.v1.ArrayValue.newBuilder(
+                        (com.google.firestore.v1.ArrayValue) transformType_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             transformType_ = value;
           }
@@ -2702,6 +2984,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2734,6 +3018,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2753,6 +3039,8 @@ private static final long serialVersionUID = 0L;
         return getAppendMissingElementsFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2779,6 +3067,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Append the given elements in order if they are not already present in
        * the current field value.
@@ -2795,27 +3085,38 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder> 
+              com.google.firestore.v1.ArrayValue,
+              com.google.firestore.v1.ArrayValue.Builder,
+              com.google.firestore.v1.ArrayValueOrBuilder>
           getAppendMissingElementsFieldBuilder() {
         if (appendMissingElementsBuilder_ == null) {
           if (!(transformTypeCase_ == 6)) {
             transformType_ = com.google.firestore.v1.ArrayValue.getDefaultInstance();
           }
-          appendMissingElementsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder>(
+          appendMissingElementsBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.ArrayValue,
+                  com.google.firestore.v1.ArrayValue.Builder,
+                  com.google.firestore.v1.ArrayValueOrBuilder>(
                   (com.google.firestore.v1.ArrayValue) transformType_,
                   getParentForChildren(),
                   isClean());
           transformType_ = null;
         }
         transformTypeCase_ = 6;
-        onChanged();;
+        onChanged();
+        ;
         return appendMissingElementsBuilder_;
       }
 
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder> removeAllFromArrayBuilder_;
+              com.google.firestore.v1.ArrayValue,
+              com.google.firestore.v1.ArrayValue.Builder,
+              com.google.firestore.v1.ArrayValueOrBuilder>
+          removeAllFromArrayBuilder_;
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2833,6 +3134,8 @@ private static final long serialVersionUID = 0L;
         return transformTypeCase_ == 7;
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2860,6 +3163,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2887,6 +3192,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2912,6 +3219,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2927,10 +3236,13 @@ private static final long serialVersionUID = 0L;
        */
       public Builder mergeRemoveAllFromArray(com.google.firestore.v1.ArrayValue value) {
         if (removeAllFromArrayBuilder_ == null) {
-          if (transformTypeCase_ == 7 &&
-              transformType_ != com.google.firestore.v1.ArrayValue.getDefaultInstance()) {
-            transformType_ = com.google.firestore.v1.ArrayValue.newBuilder((com.google.firestore.v1.ArrayValue) transformType_)
-                .mergeFrom(value).buildPartial();
+          if (transformTypeCase_ == 7
+              && transformType_ != com.google.firestore.v1.ArrayValue.getDefaultInstance()) {
+            transformType_ =
+                com.google.firestore.v1.ArrayValue.newBuilder(
+                        (com.google.firestore.v1.ArrayValue) transformType_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             transformType_ = value;
           }
@@ -2945,6 +3257,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2975,6 +3289,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -2992,6 +3308,8 @@ private static final long serialVersionUID = 0L;
         return getRemoveAllFromArrayFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -3016,6 +3334,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
@@ -3030,23 +3350,30 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder> 
+              com.google.firestore.v1.ArrayValue,
+              com.google.firestore.v1.ArrayValue.Builder,
+              com.google.firestore.v1.ArrayValueOrBuilder>
           getRemoveAllFromArrayFieldBuilder() {
         if (removeAllFromArrayBuilder_ == null) {
           if (!(transformTypeCase_ == 7)) {
             transformType_ = com.google.firestore.v1.ArrayValue.getDefaultInstance();
           }
-          removeAllFromArrayBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.ArrayValue, com.google.firestore.v1.ArrayValue.Builder, com.google.firestore.v1.ArrayValueOrBuilder>(
+          removeAllFromArrayBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.ArrayValue,
+                  com.google.firestore.v1.ArrayValue.Builder,
+                  com.google.firestore.v1.ArrayValueOrBuilder>(
                   (com.google.firestore.v1.ArrayValue) transformType_,
                   getParentForChildren(),
                   isClean());
           transformType_ = null;
         }
         transformTypeCase_ = 7;
-        onChanged();;
+        onChanged();
+        ;
         return removeAllFromArrayBuilder_;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -3059,12 +3386,12 @@ private static final long serialVersionUID = 0L;
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:google.firestore.v1.DocumentTransform.FieldTransform)
     }
 
     // @@protoc_insertion_point(class_scope:google.firestore.v1.DocumentTransform.FieldTransform)
     private static final com.google.firestore.v1.DocumentTransform.FieldTransform DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.google.firestore.v1.DocumentTransform.FieldTransform();
     }
@@ -3073,16 +3400,16 @@ private static final long serialVersionUID = 0L;
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<FieldTransform>
-        PARSER = new com.google.protobuf.AbstractParser<FieldTransform>() {
-      @java.lang.Override
-      public FieldTransform parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FieldTransform(input, extensionRegistry);
-      }
-    };
+    private static final com.google.protobuf.Parser<FieldTransform> PARSER =
+        new com.google.protobuf.AbstractParser<FieldTransform>() {
+          @java.lang.Override
+          public FieldTransform parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FieldTransform(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<FieldTransform> parser() {
       return PARSER;
@@ -3097,13 +3424,14 @@ private static final long serialVersionUID = 0L;
     public com.google.firestore.v1.DocumentTransform.FieldTransform getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
   private int bitField0_;
   public static final int DOCUMENT_FIELD_NUMBER = 1;
   private volatile java.lang.Object document_;
   /**
+   *
+   *
    * <pre>
    * The name of the document to transform.
    * </pre>
@@ -3115,27 +3443,26 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       document_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * The name of the document to transform.
    * </pre>
    *
    * <code>string document = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getDocumentBytes() {
+  public com.google.protobuf.ByteString getDocumentBytes() {
     java.lang.Object ref = document_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       document_ = b;
       return b;
     } else {
@@ -3146,69 +3473,86 @@ private static final long serialVersionUID = 0L;
   public static final int FIELD_TRANSFORMS_FIELD_NUMBER = 2;
   private java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform> fieldTransforms_;
   /**
+   *
+   *
    * <pre>
    * The list of transformations to apply to the fields of the document, in
    * order.
    * This must not be empty.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+   * </code>
    */
-  public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform> getFieldTransformsList() {
+  public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform>
+      getFieldTransformsList() {
     return fieldTransforms_;
   }
   /**
+   *
+   *
    * <pre>
    * The list of transformations to apply to the fields of the document, in
    * order.
    * This must not be empty.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+   * </code>
    */
-  public java.util.List<? extends com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder> 
+  public java.util.List<? extends com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>
       getFieldTransformsOrBuilderList() {
     return fieldTransforms_;
   }
   /**
+   *
+   *
    * <pre>
    * The list of transformations to apply to the fields of the document, in
    * order.
    * This must not be empty.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+   * </code>
    */
   public int getFieldTransformsCount() {
     return fieldTransforms_.size();
   }
   /**
+   *
+   *
    * <pre>
    * The list of transformations to apply to the fields of the document, in
    * order.
    * This must not be empty.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+   * </code>
    */
   public com.google.firestore.v1.DocumentTransform.FieldTransform getFieldTransforms(int index) {
     return fieldTransforms_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * The list of transformations to apply to the fields of the document, in
    * order.
    * This must not be empty.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+   * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+   * </code>
    */
-  public com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder getFieldTransformsOrBuilder(
-      int index) {
+  public com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder
+      getFieldTransformsOrBuilder(int index) {
     return fieldTransforms_.get(index);
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -3220,8 +3564,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getDocumentBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, document_);
     }
@@ -3241,8 +3584,7 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, document_);
     }
     for (int i = 0; i < fieldTransforms_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, fieldTransforms_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, fieldTransforms_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -3252,17 +3594,16 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.DocumentTransform)) {
       return super.equals(obj);
     }
-    com.google.firestore.v1.DocumentTransform other = (com.google.firestore.v1.DocumentTransform) obj;
+    com.google.firestore.v1.DocumentTransform other =
+        (com.google.firestore.v1.DocumentTransform) obj;
 
-    if (!getDocument()
-        .equals(other.getDocument())) return false;
-    if (!getFieldTransformsList()
-        .equals(other.getFieldTransformsList())) return false;
+    if (!getDocument().equals(other.getDocument())) return false;
+    if (!getFieldTransformsList().equals(other.getFieldTransformsList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -3285,118 +3626,127 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.DocumentTransform parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.DocumentTransform parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.v1.DocumentTransform parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.v1.DocumentTransform parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.v1.DocumentTransform parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.DocumentTransform parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.DocumentTransform prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * A transformation of a document.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.DocumentTransform}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.DocumentTransform)
       com.google.firestore.v1.DocumentTransformOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentTransform_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_fieldAccessorTable
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentTransform_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.DocumentTransform.class, com.google.firestore.v1.DocumentTransform.Builder.class);
+              com.google.firestore.v1.DocumentTransform.class,
+              com.google.firestore.v1.DocumentTransform.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.DocumentTransform.newBuilder()
@@ -3404,17 +3754,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getFieldTransformsFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -3430,9 +3780,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentTransform_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentTransform_descriptor;
     }
 
     @java.lang.Override
@@ -3451,7 +3801,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.DocumentTransform buildPartial() {
-      com.google.firestore.v1.DocumentTransform result = new com.google.firestore.v1.DocumentTransform(this);
+      com.google.firestore.v1.DocumentTransform result =
+          new com.google.firestore.v1.DocumentTransform(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       result.document_ = document_;
@@ -3473,38 +3824,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.DocumentTransform) {
-        return mergeFrom((com.google.firestore.v1.DocumentTransform)other);
+        return mergeFrom((com.google.firestore.v1.DocumentTransform) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -3535,9 +3887,10 @@ private static final long serialVersionUID = 0L;
             fieldTransformsBuilder_ = null;
             fieldTransforms_ = other.fieldTransforms_;
             bitField0_ = (bitField0_ & ~0x00000002);
-            fieldTransformsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getFieldTransformsFieldBuilder() : null;
+            fieldTransformsBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getFieldTransformsFieldBuilder()
+                    : null;
           } else {
             fieldTransformsBuilder_.addAllMessages(other.fieldTransforms_);
           }
@@ -3571,10 +3924,13 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.lang.Object document_ = "";
     /**
+     *
+     *
      * <pre>
      * The name of the document to transform.
      * </pre>
@@ -3584,8 +3940,7 @@ private static final long serialVersionUID = 0L;
     public java.lang.String getDocument() {
       java.lang.Object ref = document_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         document_ = s;
         return s;
@@ -3594,19 +3949,19 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The name of the document to transform.
      * </pre>
      *
      * <code>string document = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getDocumentBytes() {
+    public com.google.protobuf.ByteString getDocumentBytes() {
       java.lang.Object ref = document_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         document_ = b;
         return b;
       } else {
@@ -3614,23 +3969,26 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The name of the document to transform.
      * </pre>
      *
      * <code>string document = 1;</code>
      */
-    public Builder setDocument(
-        java.lang.String value) {
+    public Builder setDocument(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       document_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The name of the document to transform.
      * </pre>
@@ -3638,52 +3996,63 @@ private static final long serialVersionUID = 0L;
      * <code>string document = 1;</code>
      */
     public Builder clearDocument() {
-      
+
       document_ = getDefaultInstance().getDocument();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The name of the document to transform.
      * </pre>
      *
      * <code>string document = 1;</code>
      */
-    public Builder setDocumentBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setDocumentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       document_ = value;
       onChanged();
       return this;
     }
 
-    private java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform> fieldTransforms_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform>
+        fieldTransforms_ = java.util.Collections.emptyList();
+
     private void ensureFieldTransformsIsMutable() {
       if (!((bitField0_ & 0x00000002) != 0)) {
-        fieldTransforms_ = new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>(fieldTransforms_);
+        fieldTransforms_ =
+            new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>(
+                fieldTransforms_);
         bitField0_ |= 0x00000002;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.DocumentTransform.FieldTransform, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder, com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder> fieldTransformsBuilder_;
+            com.google.firestore.v1.DocumentTransform.FieldTransform,
+            com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
+            com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>
+        fieldTransformsBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform> getFieldTransformsList() {
+    public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform>
+        getFieldTransformsList() {
       if (fieldTransformsBuilder_ == null) {
         return java.util.Collections.unmodifiableList(fieldTransforms_);
       } else {
@@ -3691,13 +4060,16 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public int getFieldTransformsCount() {
       if (fieldTransformsBuilder_ == null) {
@@ -3707,13 +4079,16 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public com.google.firestore.v1.DocumentTransform.FieldTransform getFieldTransforms(int index) {
       if (fieldTransformsBuilder_ == null) {
@@ -3723,13 +4098,16 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder setFieldTransforms(
         int index, com.google.firestore.v1.DocumentTransform.FieldTransform value) {
@@ -3746,16 +4124,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder setFieldTransforms(
-        int index, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder builderForValue) {
+        int index,
+        com.google.firestore.v1.DocumentTransform.FieldTransform.Builder builderForValue) {
       if (fieldTransformsBuilder_ == null) {
         ensureFieldTransformsIsMutable();
         fieldTransforms_.set(index, builderForValue.build());
@@ -3766,15 +4148,19 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public Builder addFieldTransforms(com.google.firestore.v1.DocumentTransform.FieldTransform value) {
+    public Builder addFieldTransforms(
+        com.google.firestore.v1.DocumentTransform.FieldTransform value) {
       if (fieldTransformsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -3788,13 +4174,16 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder addFieldTransforms(
         int index, com.google.firestore.v1.DocumentTransform.FieldTransform value) {
@@ -3811,13 +4200,16 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder addFieldTransforms(
         com.google.firestore.v1.DocumentTransform.FieldTransform.Builder builderForValue) {
@@ -3831,16 +4223,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder addFieldTransforms(
-        int index, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder builderForValue) {
+        int index,
+        com.google.firestore.v1.DocumentTransform.FieldTransform.Builder builderForValue) {
       if (fieldTransformsBuilder_ == null) {
         ensureFieldTransformsIsMutable();
         fieldTransforms_.add(index, builderForValue.build());
@@ -3851,20 +4247,23 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder addAllFieldTransforms(
-        java.lang.Iterable<? extends com.google.firestore.v1.DocumentTransform.FieldTransform> values) {
+        java.lang.Iterable<? extends com.google.firestore.v1.DocumentTransform.FieldTransform>
+            values) {
       if (fieldTransformsBuilder_ == null) {
         ensureFieldTransformsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, fieldTransforms_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, fieldTransforms_);
         onChanged();
       } else {
         fieldTransformsBuilder_.addAllMessages(values);
@@ -3872,13 +4271,16 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder clearFieldTransforms() {
       if (fieldTransformsBuilder_ == null) {
@@ -3891,13 +4293,16 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
     public Builder removeFieldTransforms(int index) {
       if (fieldTransformsBuilder_ == null) {
@@ -3910,45 +4315,56 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder getFieldTransformsBuilder(
-        int index) {
+    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder
+        getFieldTransformsBuilder(int index) {
       return getFieldTransformsFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder getFieldTransformsOrBuilder(
-        int index) {
+    public com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder
+        getFieldTransformsOrBuilder(int index) {
       if (fieldTransformsBuilder_ == null) {
-        return fieldTransforms_.get(index);  } else {
+        return fieldTransforms_.get(index);
+      } else {
         return fieldTransformsBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public java.util.List<? extends com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder> 
-         getFieldTransformsOrBuilderList() {
+    public java.util.List<
+            ? extends com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>
+        getFieldTransformsOrBuilderList() {
       if (fieldTransformsBuilder_ != null) {
         return fieldTransformsBuilder_.getMessageOrBuilderList();
       } else {
@@ -3956,51 +4372,69 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder addFieldTransformsBuilder() {
-      return getFieldTransformsFieldBuilder().addBuilder(
-          com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance());
+    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder
+        addFieldTransformsBuilder() {
+      return getFieldTransformsFieldBuilder()
+          .addBuilder(
+              com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder addFieldTransformsBuilder(
-        int index) {
-      return getFieldTransformsFieldBuilder().addBuilder(
-          index, com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance());
+    public com.google.firestore.v1.DocumentTransform.FieldTransform.Builder
+        addFieldTransformsBuilder(int index) {
+      return getFieldTransformsFieldBuilder()
+          .addBuilder(
+              index, com.google.firestore.v1.DocumentTransform.FieldTransform.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The list of transformations to apply to the fields of the document, in
      * order.
      * This must not be empty.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;</code>
+     * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform field_transforms = 2;
+     * </code>
      */
-    public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform.Builder> 
-         getFieldTransformsBuilderList() {
+    public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform.Builder>
+        getFieldTransformsBuilderList() {
       return getFieldTransformsFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.DocumentTransform.FieldTransform, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder, com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder> 
+            com.google.firestore.v1.DocumentTransform.FieldTransform,
+            com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
+            com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>
         getFieldTransformsFieldBuilder() {
       if (fieldTransformsBuilder_ == null) {
-        fieldTransformsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.v1.DocumentTransform.FieldTransform, com.google.firestore.v1.DocumentTransform.FieldTransform.Builder, com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>(
+        fieldTransformsBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.v1.DocumentTransform.FieldTransform,
+                com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
+                com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>(
                 fieldTransforms_,
                 ((bitField0_ & 0x00000002) != 0),
                 getParentForChildren(),
@@ -4009,9 +4443,9 @@ private static final long serialVersionUID = 0L;
       }
       return fieldTransformsBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -4021,12 +4455,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.DocumentTransform)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.DocumentTransform)
   private static final com.google.firestore.v1.DocumentTransform DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.DocumentTransform();
   }
@@ -4035,16 +4469,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<DocumentTransform>
-      PARSER = new com.google.protobuf.AbstractParser<DocumentTransform>() {
-    @java.lang.Override
-    public DocumentTransform parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new DocumentTransform(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<DocumentTransform> PARSER =
+      new com.google.protobuf.AbstractParser<DocumentTransform>() {
+        @java.lang.Override
+        public DocumentTransform parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new DocumentTransform(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<DocumentTransform> parser() {
     return PARSER;
@@ -4059,6 +4493,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.DocumentTransform getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

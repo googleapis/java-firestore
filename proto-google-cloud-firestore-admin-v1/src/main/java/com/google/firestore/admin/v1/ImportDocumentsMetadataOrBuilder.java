@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ImportDocumentsMetadataOrBuilder extends
+public interface ImportDocumentsMetadataOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ImportDocumentsMetadata)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -31,6 +34,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   boolean hasStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -39,6 +44,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -48,6 +55,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -57,6 +66,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   boolean hasEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -66,6 +77,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -76,6 +89,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The state of the import operation.
    * </pre>
@@ -84,6 +99,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   int getOperationStateValue();
   /**
+   *
+   *
    * <pre>
    * The state of the import operation.
    * </pre>
@@ -93,6 +110,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
   com.google.firestore.admin.v1.OperationState getOperationState();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -101,6 +120,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   boolean hasProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -109,6 +130,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -118,6 +141,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
   com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -126,6 +151,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   boolean hasProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -134,6 +161,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -143,15 +172,18 @@ public interface ImportDocumentsMetadataOrBuilder extends
   com.google.firestore.admin.v1.ProgressOrBuilder getProgressBytesOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Which collection ids are being imported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
    */
-  java.util.List<java.lang.String>
-      getCollectionIdsList();
+  java.util.List<java.lang.String> getCollectionIdsList();
   /**
+   *
+   *
    * <pre>
    * Which collection ids are being imported.
    * </pre>
@@ -160,6 +192,8 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   int getCollectionIdsCount();
   /**
+   *
+   *
    * <pre>
    * Which collection ids are being imported.
    * </pre>
@@ -168,16 +202,19 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   java.lang.String getCollectionIds(int index);
   /**
+   *
+   *
    * <pre>
    * Which collection ids are being imported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
    */
-  com.google.protobuf.ByteString
-      getCollectionIdsBytes(int index);
+  com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
   /**
+   *
+   *
    * <pre>
    * The location of the documents being imported.
    * </pre>
@@ -186,12 +223,13 @@ public interface ImportDocumentsMetadataOrBuilder extends
    */
   java.lang.String getInputUriPrefix();
   /**
+   *
+   *
    * <pre>
    * The location of the documents being imported.
    * </pre>
    *
    * <code>string input_uri_prefix = 7;</code>
    */
-  com.google.protobuf.ByteString
-      getInputUriPrefixBytes();
+  com.google.protobuf.ByteString getInputUriPrefixBytes();
 }

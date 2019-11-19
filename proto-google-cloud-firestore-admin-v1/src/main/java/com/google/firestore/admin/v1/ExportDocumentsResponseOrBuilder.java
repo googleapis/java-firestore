@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ExportDocumentsResponseOrBuilder extends
+public interface ExportDocumentsResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ExportDocumentsResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Location of the output files. This can be used to begin an import
    * into Cloud Firestore (this project or another project) after the operation
@@ -33,6 +36,8 @@ public interface ExportDocumentsResponseOrBuilder extends
    */
   java.lang.String getOutputUriPrefix();
   /**
+   *
+   *
    * <pre>
    * Location of the output files. This can be used to begin an import
    * into Cloud Firestore (this project or another project) after the operation
@@ -41,6 +46,5 @@ public interface ExportDocumentsResponseOrBuilder extends
    *
    * <code>string output_uri_prefix = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getOutputUriPrefixBytes();
+  com.google.protobuf.ByteString getOutputUriPrefixBytes();
 }

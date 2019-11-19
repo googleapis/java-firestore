@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface TargetOrBuilder extends
+public interface TargetOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.Target)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A target specified by a query.
    * </pre>
@@ -31,6 +34,8 @@ public interface TargetOrBuilder extends
    */
   boolean hasQuery();
   /**
+   *
+   *
    * <pre>
    * A target specified by a query.
    * </pre>
@@ -39,6 +44,8 @@ public interface TargetOrBuilder extends
    */
   com.google.firestore.v1beta1.Target.QueryTarget getQuery();
   /**
+   *
+   *
    * <pre>
    * A target specified by a query.
    * </pre>
@@ -48,6 +55,8 @@ public interface TargetOrBuilder extends
   com.google.firestore.v1beta1.Target.QueryTargetOrBuilder getQueryOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A target specified by a set of document names.
    * </pre>
@@ -56,6 +65,8 @@ public interface TargetOrBuilder extends
    */
   boolean hasDocuments();
   /**
+   *
+   *
    * <pre>
    * A target specified by a set of document names.
    * </pre>
@@ -64,6 +75,8 @@ public interface TargetOrBuilder extends
    */
   com.google.firestore.v1beta1.Target.DocumentsTarget getDocuments();
   /**
+   *
+   *
    * <pre>
    * A target specified by a set of document names.
    * </pre>
@@ -73,6 +86,8 @@ public interface TargetOrBuilder extends
   com.google.firestore.v1beta1.Target.DocumentsTargetOrBuilder getDocumentsOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A resume token from a prior [TargetChange][google.firestore.v1beta1.TargetChange] for an identical target.
    * Using a resume token with a different target is unsupported and may fail.
@@ -83,6 +98,8 @@ public interface TargetOrBuilder extends
   com.google.protobuf.ByteString getResumeToken();
 
   /**
+   *
+   *
    * <pre>
    * Start listening after a specific `read_time`.
    * The client must know the state of matching documents at this time.
@@ -92,6 +109,8 @@ public interface TargetOrBuilder extends
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * Start listening after a specific `read_time`.
    * The client must know the state of matching documents at this time.
@@ -101,6 +120,8 @@ public interface TargetOrBuilder extends
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * Start listening after a specific `read_time`.
    * The client must know the state of matching documents at this time.
@@ -111,6 +132,8 @@ public interface TargetOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The target ID that identifies the target on the stream. Must be a positive
    * number and non-zero.
@@ -121,6 +144,8 @@ public interface TargetOrBuilder extends
   int getTargetId();
 
   /**
+   *
+   *
    * <pre>
    * If the target should be removed once it is current and consistent.
    * </pre>

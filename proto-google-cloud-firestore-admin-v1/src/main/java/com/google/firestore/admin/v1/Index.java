@@ -19,6 +19,8 @@
 package com.google.firestore.admin.v1;
 
 /**
+ *
+ *
  * <pre>
  * Cloud Firestore indexes enable simple and complex queries against
  * documents in a database.
@@ -26,15 +28,16 @@ package com.google.firestore.admin.v1;
  *
  * Protobuf type {@code google.firestore.admin.v1.Index}
  */
-public  final class Index extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class Index extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.Index)
     IndexOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use Index.newBuilder() to construct.
   private Index(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private Index() {
     name_ = "";
     queryScope_ = 0;
@@ -43,10 +46,10 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private Index(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -66,47 +69,51 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            name_ = s;
-            break;
-          }
-          case 16: {
-            int rawValue = input.readEnum();
-
-            queryScope_ = rawValue;
-            break;
-          }
-          case 26: {
-            if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-              fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>();
-              mutable_bitField0_ |= 0x00000004;
+              name_ = s;
+              break;
             }
-            fields_.add(
-                input.readMessage(com.google.firestore.admin.v1.Index.IndexField.parser(), extensionRegistry));
-            break;
-          }
-          case 32: {
-            int rawValue = input.readEnum();
+          case 16:
+            {
+              int rawValue = input.readEnum();
 
-            state_ = rawValue;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              queryScope_ = rawValue;
+              break;
             }
-            break;
-          }
+          case 26:
+            {
+              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+                fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              fields_.add(
+                  input.readMessage(
+                      com.google.firestore.admin.v1.Index.IndexField.parser(), extensionRegistry));
+              break;
+            }
+          case 32:
+            {
+              int rawValue = input.readEnum();
+
+              state_ = rawValue;
+              break;
+            }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000004) != 0)) {
         fields_ = java.util.Collections.unmodifiableList(fields_);
@@ -115,20 +122,25 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.admin.v1.IndexProto
+        .internal_static_google_firestore_admin_v1_Index_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_fieldAccessorTable
+    return com.google.firestore.admin.v1.IndexProto
+        .internal_static_google_firestore_admin_v1_Index_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.admin.v1.Index.class, com.google.firestore.admin.v1.Index.Builder.class);
+            com.google.firestore.admin.v1.Index.class,
+            com.google.firestore.admin.v1.Index.Builder.class);
   }
 
   /**
+   *
+   *
    * <pre>
    * Query Scope defines the scope at which a query is run. This is specified on
    * a StructuredQuery's `from` field.
@@ -136,9 +148,10 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf enum {@code google.firestore.admin.v1.Index.QueryScope}
    */
-  public enum QueryScope
-      implements com.google.protobuf.ProtocolMessageEnum {
+  public enum QueryScope implements com.google.protobuf.ProtocolMessageEnum {
     /**
+     *
+     *
      * <pre>
      * The query scope is unspecified. Not a valid option.
      * </pre>
@@ -147,6 +160,8 @@ private static final long serialVersionUID = 0L;
      */
     QUERY_SCOPE_UNSPECIFIED(0),
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified
@@ -157,6 +172,8 @@ private static final long serialVersionUID = 0L;
      */
     COLLECTION(1),
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection group query scope specified allow queries
      * against all collections that has the collection id specified by the
@@ -170,6 +187,8 @@ private static final long serialVersionUID = 0L;
     ;
 
     /**
+     *
+     *
      * <pre>
      * The query scope is unspecified. Not a valid option.
      * </pre>
@@ -178,6 +197,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int QUERY_SCOPE_UNSPECIFIED_VALUE = 0;
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified
@@ -188,6 +209,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int COLLECTION_VALUE = 1;
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection group query scope specified allow queries
      * against all collections that has the collection id specified by the
@@ -198,7 +221,6 @@ private static final long serialVersionUID = 0L;
      */
     public static final int COLLECTION_GROUP_VALUE = 2;
 
-
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalArgumentException(
@@ -207,9 +229,7 @@ private static final long serialVersionUID = 0L;
       return value;
     }
 
-    /**
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
+    /** @deprecated Use {@link #forNumber(int)} instead. */
     @java.lang.Deprecated
     public static QueryScope valueOf(int value) {
       return forNumber(value);
@@ -217,45 +237,45 @@ private static final long serialVersionUID = 0L;
 
     public static QueryScope forNumber(int value) {
       switch (value) {
-        case 0: return QUERY_SCOPE_UNSPECIFIED;
-        case 1: return COLLECTION;
-        case 2: return COLLECTION_GROUP;
-        default: return null;
+        case 0:
+          return QUERY_SCOPE_UNSPECIFIED;
+        case 1:
+          return COLLECTION;
+        case 2:
+          return COLLECTION_GROUP;
+        default:
+          return null;
       }
     }
 
-    public static com.google.protobuf.Internal.EnumLiteMap<QueryScope>
-        internalGetValueMap() {
+    public static com.google.protobuf.Internal.EnumLiteMap<QueryScope> internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        QueryScope> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<QueryScope>() {
-            public QueryScope findValueByNumber(int number) {
-              return QueryScope.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<QueryScope> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<QueryScope>() {
+          public QueryScope findValueByNumber(int number) {
+            return QueryScope.forNumber(number);
+          }
+        };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.google.firestore.admin.v1.Index.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final QueryScope[] VALUES = values();
 
-    public static QueryScope valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+    public static QueryScope valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -273,6 +293,8 @@ private static final long serialVersionUID = 0L;
   }
 
   /**
+   *
+   *
    * <pre>
    * The state of an index. During index creation, an index will be in the
    * `CREATING` state. If the index is created successfully, it will transition
@@ -282,9 +304,10 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf enum {@code google.firestore.admin.v1.Index.State}
    */
-  public enum State
-      implements com.google.protobuf.ProtocolMessageEnum {
+  public enum State implements com.google.protobuf.ProtocolMessageEnum {
     /**
+     *
+     *
      * <pre>
      * The state is unspecified.
      * </pre>
@@ -293,6 +316,8 @@ private static final long serialVersionUID = 0L;
      */
     STATE_UNSPECIFIED(0),
     /**
+     *
+     *
      * <pre>
      * The index is being created.
      * There is an active long-running operation for the index.
@@ -304,6 +329,8 @@ private static final long serialVersionUID = 0L;
      */
     CREATING(1),
     /**
+     *
+     *
      * <pre>
      * The index is ready to be used.
      * The index is updated when writing a document.
@@ -314,6 +341,8 @@ private static final long serialVersionUID = 0L;
      */
     READY(2),
     /**
+     *
+     *
      * <pre>
      * The index was being created, but something went wrong.
      * There is no active long-running operation for the index,
@@ -332,6 +361,8 @@ private static final long serialVersionUID = 0L;
     ;
 
     /**
+     *
+     *
      * <pre>
      * The state is unspecified.
      * </pre>
@@ -340,6 +371,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int STATE_UNSPECIFIED_VALUE = 0;
     /**
+     *
+     *
      * <pre>
      * The index is being created.
      * There is an active long-running operation for the index.
@@ -351,6 +384,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int CREATING_VALUE = 1;
     /**
+     *
+     *
      * <pre>
      * The index is ready to be used.
      * The index is updated when writing a document.
@@ -361,6 +396,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int READY_VALUE = 2;
     /**
+     *
+     *
      * <pre>
      * The index was being created, but something went wrong.
      * There is no active long-running operation for the index,
@@ -376,7 +413,6 @@ private static final long serialVersionUID = 0L;
      */
     public static final int NEEDS_REPAIR_VALUE = 3;
 
-
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalArgumentException(
@@ -385,9 +421,7 @@ private static final long serialVersionUID = 0L;
       return value;
     }
 
-    /**
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
+    /** @deprecated Use {@link #forNumber(int)} instead. */
     @java.lang.Deprecated
     public static State valueOf(int value) {
       return forNumber(value);
@@ -395,46 +429,47 @@ private static final long serialVersionUID = 0L;
 
     public static State forNumber(int value) {
       switch (value) {
-        case 0: return STATE_UNSPECIFIED;
-        case 1: return CREATING;
-        case 2: return READY;
-        case 3: return NEEDS_REPAIR;
-        default: return null;
+        case 0:
+          return STATE_UNSPECIFIED;
+        case 1:
+          return CREATING;
+        case 2:
+          return READY;
+        case 3:
+          return NEEDS_REPAIR;
+        default:
+          return null;
       }
     }
 
-    public static com.google.protobuf.Internal.EnumLiteMap<State>
-        internalGetValueMap() {
+    public static com.google.protobuf.Internal.EnumLiteMap<State> internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        State> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<State>() {
-            public State findValueByNumber(int number) {
-              return State.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<State> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<State>() {
+          public State findValueByNumber(int number) {
+            return State.forNumber(number);
+          }
+        };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.google.firestore.admin.v1.Index.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final State[] VALUES = values();
 
-    public static State valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+    public static State valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -451,11 +486,14 @@ private static final long serialVersionUID = 0L;
     // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Index.State)
   }
 
-  public interface IndexFieldOrBuilder extends
+  public interface IndexFieldOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Index.IndexField)
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     *
+     *
      * <pre>
      * Can be __name__.
      * For single field indexes, this must match the name of the field or may
@@ -466,6 +504,8 @@ private static final long serialVersionUID = 0L;
      */
     java.lang.String getFieldPath();
     /**
+     *
+     *
      * <pre>
      * Can be __name__.
      * For single field indexes, this must match the name of the field or may
@@ -474,10 +514,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string field_path = 1;</code>
      */
-    com.google.protobuf.ByteString
-        getFieldPathBytes();
+    com.google.protobuf.ByteString getFieldPathBytes();
 
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
      * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -487,6 +528,8 @@ private static final long serialVersionUID = 0L;
      */
     int getOrderValue();
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
      * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -497,6 +540,8 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.admin.v1.Index.IndexField.Order getOrder();
 
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports operations on `array_value`s.
      * </pre>
@@ -505,6 +550,8 @@ private static final long serialVersionUID = 0L;
      */
     int getArrayConfigValue();
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports operations on `array_value`s.
      * </pre>
@@ -516,6 +563,8 @@ private static final long serialVersionUID = 0L;
     public com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
   }
   /**
+   *
+   *
    * <pre>
    * A field in an index.
    * The field_path describes which field is indexed, the value_mode describes
@@ -524,24 +573,25 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code google.firestore.admin.v1.Index.IndexField}
    */
-  public  static final class IndexField extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class IndexField extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.Index.IndexField)
       IndexFieldOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use IndexField.newBuilder() to construct.
     private IndexField(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private IndexField() {
       fieldPath_ = "";
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private IndexField(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -561,66 +611,74 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 10:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
 
-              fieldPath_ = s;
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              valueModeCase_ = 2;
-              valueMode_ = rawValue;
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-              valueModeCase_ = 3;
-              valueMode_ = rawValue;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+                fieldPath_ = s;
+                break;
               }
-              break;
-            }
+            case 16:
+              {
+                int rawValue = input.readEnum();
+                valueModeCase_ = 2;
+                valueMode_ = rawValue;
+                break;
+              }
+            case 24:
+              {
+                int rawValue = input.readEnum();
+                valueModeCase_ = 3;
+                valueMode_ = rawValue;
+                break;
+              }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.admin.v1.IndexProto
+          .internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_IndexField_fieldAccessorTable
+      return com.google.firestore.admin.v1.IndexProto
+          .internal_static_google_firestore_admin_v1_Index_IndexField_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.admin.v1.Index.IndexField.class, com.google.firestore.admin.v1.Index.IndexField.Builder.class);
+              com.google.firestore.admin.v1.Index.IndexField.class,
+              com.google.firestore.admin.v1.Index.IndexField.Builder.class);
     }
 
     /**
+     *
+     *
      * <pre>
      * The supported orderings.
      * </pre>
      *
      * Protobuf enum {@code google.firestore.admin.v1.Index.IndexField.Order}
      */
-    public enum Order
-        implements com.google.protobuf.ProtocolMessageEnum {
+    public enum Order implements com.google.protobuf.ProtocolMessageEnum {
       /**
+       *
+       *
        * <pre>
        * The ordering is unspecified. Not a valid option.
        * </pre>
@@ -629,6 +687,8 @@ private static final long serialVersionUID = 0L;
        */
       ORDER_UNSPECIFIED(0),
       /**
+       *
+       *
        * <pre>
        * The field is ordered by ascending field value.
        * </pre>
@@ -637,6 +697,8 @@ private static final long serialVersionUID = 0L;
        */
       ASCENDING(1),
       /**
+       *
+       *
        * <pre>
        * The field is ordered by descending field value.
        * </pre>
@@ -648,6 +710,8 @@ private static final long serialVersionUID = 0L;
       ;
 
       /**
+       *
+       *
        * <pre>
        * The ordering is unspecified. Not a valid option.
        * </pre>
@@ -656,6 +720,8 @@ private static final long serialVersionUID = 0L;
        */
       public static final int ORDER_UNSPECIFIED_VALUE = 0;
       /**
+       *
+       *
        * <pre>
        * The field is ordered by ascending field value.
        * </pre>
@@ -664,6 +730,8 @@ private static final long serialVersionUID = 0L;
        */
       public static final int ASCENDING_VALUE = 1;
       /**
+       *
+       *
        * <pre>
        * The field is ordered by descending field value.
        * </pre>
@@ -671,7 +739,6 @@ private static final long serialVersionUID = 0L;
        * <code>DESCENDING = 2;</code>
        */
       public static final int DESCENDING_VALUE = 2;
-
 
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
@@ -681,9 +748,7 @@ private static final long serialVersionUID = 0L;
         return value;
       }
 
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
+      /** @deprecated Use {@link #forNumber(int)} instead. */
       @java.lang.Deprecated
       public static Order valueOf(int value) {
         return forNumber(value);
@@ -691,45 +756,45 @@ private static final long serialVersionUID = 0L;
 
       public static Order forNumber(int value) {
         switch (value) {
-          case 0: return ORDER_UNSPECIFIED;
-          case 1: return ASCENDING;
-          case 2: return DESCENDING;
-          default: return null;
+          case 0:
+            return ORDER_UNSPECIFIED;
+          case 1:
+            return ASCENDING;
+          case 2:
+            return DESCENDING;
+          default:
+            return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<Order>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<Order> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          Order> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Order>() {
-              public Order findValueByNumber(int number) {
-                return Order.forNumber(number);
-              }
-            };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      private static final com.google.protobuf.Internal.EnumLiteMap<Order> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<Order>() {
+            public Order findValueByNumber(int number) {
+              return Order.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.google.firestore.admin.v1.Index.IndexField.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Order[] VALUES = values();
 
-      public static Order valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static Order valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -747,15 +812,18 @@ private static final long serialVersionUID = 0L;
     }
 
     /**
+     *
+     *
      * <pre>
      * The supported array value configurations.
      * </pre>
      *
      * Protobuf enum {@code google.firestore.admin.v1.Index.IndexField.ArrayConfig}
      */
-    public enum ArrayConfig
-        implements com.google.protobuf.ProtocolMessageEnum {
+    public enum ArrayConfig implements com.google.protobuf.ProtocolMessageEnum {
       /**
+       *
+       *
        * <pre>
        * The index does not support additional array queries.
        * </pre>
@@ -764,6 +832,8 @@ private static final long serialVersionUID = 0L;
        */
       ARRAY_CONFIG_UNSPECIFIED(0),
       /**
+       *
+       *
        * <pre>
        * The index supports array containment queries.
        * </pre>
@@ -775,6 +845,8 @@ private static final long serialVersionUID = 0L;
       ;
 
       /**
+       *
+       *
        * <pre>
        * The index does not support additional array queries.
        * </pre>
@@ -783,6 +855,8 @@ private static final long serialVersionUID = 0L;
        */
       public static final int ARRAY_CONFIG_UNSPECIFIED_VALUE = 0;
       /**
+       *
+       *
        * <pre>
        * The index supports array containment queries.
        * </pre>
@@ -790,7 +864,6 @@ private static final long serialVersionUID = 0L;
        * <code>CONTAINS = 1;</code>
        */
       public static final int CONTAINS_VALUE = 1;
-
 
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
@@ -800,9 +873,7 @@ private static final long serialVersionUID = 0L;
         return value;
       }
 
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
+      /** @deprecated Use {@link #forNumber(int)} instead. */
       @java.lang.Deprecated
       public static ArrayConfig valueOf(int value) {
         return forNumber(value);
@@ -810,44 +881,43 @@ private static final long serialVersionUID = 0L;
 
       public static ArrayConfig forNumber(int value) {
         switch (value) {
-          case 0: return ARRAY_CONFIG_UNSPECIFIED;
-          case 1: return CONTAINS;
-          default: return null;
+          case 0:
+            return ARRAY_CONFIG_UNSPECIFIED;
+          case 1:
+            return CONTAINS;
+          default:
+            return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<ArrayConfig>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<ArrayConfig> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          ArrayConfig> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<ArrayConfig>() {
-              public ArrayConfig findValueByNumber(int number) {
-                return ArrayConfig.forNumber(number);
-              }
-            };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      private static final com.google.protobuf.Internal.EnumLiteMap<ArrayConfig> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ArrayConfig>() {
+            public ArrayConfig findValueByNumber(int number) {
+              return ArrayConfig.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.google.firestore.admin.v1.Index.IndexField.getDescriptor().getEnumTypes().get(1);
       }
 
       private static final ArrayConfig[] VALUES = values();
 
-      public static ArrayConfig valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static ArrayConfig valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -866,18 +936,17 @@ private static final long serialVersionUID = 0L;
 
     private int valueModeCase_ = 0;
     private java.lang.Object valueMode_;
-    public enum ValueModeCase
-        implements com.google.protobuf.Internal.EnumLite {
+
+    public enum ValueModeCase implements com.google.protobuf.Internal.EnumLite {
       ORDER(2),
       ARRAY_CONFIG(3),
       VALUEMODE_NOT_SET(0);
       private final int value;
+
       private ValueModeCase(int value) {
         this.value = value;
       }
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
+      /** @deprecated Use {@link #forNumber(int)} instead. */
       @java.lang.Deprecated
       public static ValueModeCase valueOf(int value) {
         return forNumber(value);
@@ -885,26 +954,31 @@ private static final long serialVersionUID = 0L;
 
       public static ValueModeCase forNumber(int value) {
         switch (value) {
-          case 2: return ORDER;
-          case 3: return ARRAY_CONFIG;
-          case 0: return VALUEMODE_NOT_SET;
-          default: return null;
+          case 2:
+            return ORDER;
+          case 3:
+            return ARRAY_CONFIG;
+          case 0:
+            return VALUEMODE_NOT_SET;
+          default:
+            return null;
         }
       }
+
       public int getNumber() {
         return this.value;
       }
     };
 
-    public ValueModeCase
-    getValueModeCase() {
-      return ValueModeCase.forNumber(
-          valueModeCase_);
+    public ValueModeCase getValueModeCase() {
+      return ValueModeCase.forNumber(valueModeCase_);
     }
 
     public static final int FIELD_PATH_FIELD_NUMBER = 1;
     private volatile java.lang.Object fieldPath_;
     /**
+     *
+     *
      * <pre>
      * Can be __name__.
      * For single field indexes, this must match the name of the field or may
@@ -918,14 +992,15 @@ private static final long serialVersionUID = 0L;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         fieldPath_ = s;
         return s;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Can be __name__.
      * For single field indexes, this must match the name of the field or may
@@ -934,13 +1009,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string field_path = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getFieldPathBytes() {
+    public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         fieldPath_ = b;
         return b;
       } else {
@@ -950,6 +1023,8 @@ private static final long serialVersionUID = 0L;
 
     public static final int ORDER_FIELD_NUMBER = 2;
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
      * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -964,6 +1039,8 @@ private static final long serialVersionUID = 0L;
       return 0;
     }
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
      * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -974,15 +1051,20 @@ private static final long serialVersionUID = 0L;
     public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
       if (valueModeCase_ == 2) {
         @SuppressWarnings("deprecation")
-        com.google.firestore.admin.v1.Index.IndexField.Order result = com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
-            (java.lang.Integer) valueMode_);
-        return result == null ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED : result;
+        com.google.firestore.admin.v1.Index.IndexField.Order result =
+            com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
+                (java.lang.Integer) valueMode_);
+        return result == null
+            ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED
+            : result;
       }
       return com.google.firestore.admin.v1.Index.IndexField.Order.ORDER_UNSPECIFIED;
     }
 
     public static final int ARRAY_CONFIG_FIELD_NUMBER = 3;
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports operations on `array_value`s.
      * </pre>
@@ -996,6 +1078,8 @@ private static final long serialVersionUID = 0L;
       return 0;
     }
     /**
+     *
+     *
      * <pre>
      * Indicates that this field supports operations on `array_value`s.
      * </pre>
@@ -1005,14 +1089,18 @@ private static final long serialVersionUID = 0L;
     public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
       if (valueModeCase_ == 3) {
         @SuppressWarnings("deprecation")
-        com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result = com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
-            (java.lang.Integer) valueMode_);
-        return result == null ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED : result;
+        com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result =
+            com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
+                (java.lang.Integer) valueMode_);
+        return result == null
+            ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED
+            : result;
       }
       return com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.ARRAY_CONFIG_UNSPECIFIED;
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1024,8 +1112,7 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (!getFieldPathBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, fieldPath_);
       }
@@ -1048,12 +1135,14 @@ private static final long serialVersionUID = 0L;
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, fieldPath_);
       }
       if (valueModeCase_ == 2) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, ((java.lang.Integer) valueMode_));
+        size +=
+            com.google.protobuf.CodedOutputStream.computeEnumSize(
+                2, ((java.lang.Integer) valueMode_));
       }
       if (valueModeCase_ == 3) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, ((java.lang.Integer) valueMode_));
+        size +=
+            com.google.protobuf.CodedOutputStream.computeEnumSize(
+                3, ((java.lang.Integer) valueMode_));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1063,24 +1152,22 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.google.firestore.admin.v1.Index.IndexField)) {
         return super.equals(obj);
       }
-      com.google.firestore.admin.v1.Index.IndexField other = (com.google.firestore.admin.v1.Index.IndexField) obj;
+      com.google.firestore.admin.v1.Index.IndexField other =
+          (com.google.firestore.admin.v1.Index.IndexField) obj;
 
-      if (!getFieldPath()
-          .equals(other.getFieldPath())) return false;
+      if (!getFieldPath().equals(other.getFieldPath())) return false;
       if (!getValueModeCase().equals(other.getValueModeCase())) return false;
       switch (valueModeCase_) {
         case 2:
-          if (getOrderValue()
-              != other.getOrderValue()) return false;
+          if (getOrderValue() != other.getOrderValue()) return false;
           break;
         case 3:
-          if (getArrayConfigValue()
-              != other.getArrayConfigValue()) return false;
+          if (getArrayConfigValue() != other.getArrayConfigValue()) return false;
           break;
         case 0:
         default:
@@ -1115,88 +1202,94 @@ private static final long serialVersionUID = 0L;
       return hash;
     }
 
-    public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
-        java.nio.ByteBuffer data)
+    public static com.google.firestore.admin.v1.Index.IndexField parseFrom(java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.google.firestore.admin.v1.Index.IndexField parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.google.firestore.admin.v1.Index.IndexField parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.google.firestore.admin.v1.Index.IndexField parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.google.firestore.admin.v1.Index.IndexField parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
+
     public static Builder newBuilder(com.google.firestore.admin.v1.Index.IndexField prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1206,6 +1299,8 @@ private static final long serialVersionUID = 0L;
       return builder;
     }
     /**
+     *
+     *
      * <pre>
      * A field in an index.
      * The field_path describes which field is indexed, the value_mode describes
@@ -1214,21 +1309,24 @@ private static final long serialVersionUID = 0L;
      *
      * Protobuf type {@code google.firestore.admin.v1.Index.IndexField}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.Index.IndexField)
         com.google.firestore.admin.v1.Index.IndexFieldOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.admin.v1.IndexProto
+            .internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_IndexField_fieldAccessorTable
+        return com.google.firestore.admin.v1.IndexProto
+            .internal_static_google_firestore_admin_v1_Index_IndexField_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.google.firestore.admin.v1.Index.IndexField.class, com.google.firestore.admin.v1.Index.IndexField.Builder.class);
+                com.google.firestore.admin.v1.Index.IndexField.class,
+                com.google.firestore.admin.v1.Index.IndexField.Builder.class);
       }
 
       // Construct using com.google.firestore.admin.v1.Index.IndexField.newBuilder()
@@ -1236,16 +1334,15 @@ private static final long serialVersionUID = 0L;
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1257,9 +1354,9 @@ private static final long serialVersionUID = 0L;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.admin.v1.IndexProto
+            .internal_static_google_firestore_admin_v1_Index_IndexField_descriptor;
       }
 
       @java.lang.Override
@@ -1278,7 +1375,8 @@ private static final long serialVersionUID = 0L;
 
       @java.lang.Override
       public com.google.firestore.admin.v1.Index.IndexField buildPartial() {
-        com.google.firestore.admin.v1.Index.IndexField result = new com.google.firestore.admin.v1.Index.IndexField(this);
+        com.google.firestore.admin.v1.Index.IndexField result =
+            new com.google.firestore.admin.v1.Index.IndexField(this);
         result.fieldPath_ = fieldPath_;
         if (valueModeCase_ == 2) {
           result.valueMode_ = valueMode_;
@@ -1295,38 +1393,41 @@ private static final long serialVersionUID = 0L;
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.google.firestore.admin.v1.Index.IndexField) {
-          return mergeFrom((com.google.firestore.admin.v1.Index.IndexField)other);
+          return mergeFrom((com.google.firestore.admin.v1.Index.IndexField) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1334,23 +1435,27 @@ private static final long serialVersionUID = 0L;
       }
 
       public Builder mergeFrom(com.google.firestore.admin.v1.Index.IndexField other) {
-        if (other == com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance()) return this;
+        if (other == com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance())
+          return this;
         if (!other.getFieldPath().isEmpty()) {
           fieldPath_ = other.fieldPath_;
           onChanged();
         }
         switch (other.getValueModeCase()) {
-          case ORDER: {
-            setOrderValue(other.getOrderValue());
-            break;
-          }
-          case ARRAY_CONFIG: {
-            setArrayConfigValue(other.getArrayConfigValue());
-            break;
-          }
-          case VALUEMODE_NOT_SET: {
-            break;
-          }
+          case ORDER:
+            {
+              setOrderValue(other.getOrderValue());
+              break;
+            }
+          case ARRAY_CONFIG:
+            {
+              setArrayConfigValue(other.getArrayConfigValue());
+              break;
+            }
+          case VALUEMODE_NOT_SET:
+            {
+              break;
+            }
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1380,12 +1485,12 @@ private static final long serialVersionUID = 0L;
         }
         return this;
       }
+
       private int valueModeCase_ = 0;
       private java.lang.Object valueMode_;
-      public ValueModeCase
-          getValueModeCase() {
-        return ValueModeCase.forNumber(
-            valueModeCase_);
+
+      public ValueModeCase getValueModeCase() {
+        return ValueModeCase.forNumber(valueModeCase_);
       }
 
       public Builder clearValueMode() {
@@ -1395,9 +1500,10 @@ private static final long serialVersionUID = 0L;
         return this;
       }
 
-
       private java.lang.Object fieldPath_ = "";
       /**
+       *
+       *
        * <pre>
        * Can be __name__.
        * For single field indexes, this must match the name of the field or may
@@ -1409,8 +1515,7 @@ private static final long serialVersionUID = 0L;
       public java.lang.String getFieldPath() {
         java.lang.Object ref = fieldPath_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           fieldPath_ = s;
           return s;
@@ -1419,6 +1524,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Can be __name__.
        * For single field indexes, this must match the name of the field or may
@@ -1427,13 +1534,11 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public com.google.protobuf.ByteString
-          getFieldPathBytes() {
+      public com.google.protobuf.ByteString getFieldPathBytes() {
         java.lang.Object ref = fieldPath_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           fieldPath_ = b;
           return b;
         } else {
@@ -1441,6 +1546,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Can be __name__.
        * For single field indexes, this must match the name of the field or may
@@ -1449,17 +1556,18 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public Builder setFieldPath(
-          java.lang.String value) {
+      public Builder setFieldPath(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         fieldPath_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Can be __name__.
        * For single field indexes, this must match the name of the field or may
@@ -1469,12 +1577,14 @@ private static final long serialVersionUID = 0L;
        * <code>string field_path = 1;</code>
        */
       public Builder clearFieldPath() {
-        
+
         fieldPath_ = getDefaultInstance().getFieldPath();
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Can be __name__.
        * For single field indexes, this must match the name of the field or may
@@ -1483,19 +1593,20 @@ private static final long serialVersionUID = 0L;
        *
        * <code>string field_path = 1;</code>
        */
-      public Builder setFieldPathBytes(
-          com.google.protobuf.ByteString value) {
+      public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         fieldPath_ = value;
         onChanged();
         return this;
       }
 
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
        * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -1510,6 +1621,8 @@ private static final long serialVersionUID = 0L;
         return 0;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
        * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -1524,6 +1637,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
        * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -1534,13 +1649,18 @@ private static final long serialVersionUID = 0L;
       public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
         if (valueModeCase_ == 2) {
           @SuppressWarnings("deprecation")
-          com.google.firestore.admin.v1.Index.IndexField.Order result = com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
-              (java.lang.Integer) valueMode_);
-          return result == null ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED : result;
+          com.google.firestore.admin.v1.Index.IndexField.Order result =
+              com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
+                  (java.lang.Integer) valueMode_);
+          return result == null
+              ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED
+              : result;
         }
         return com.google.firestore.admin.v1.Index.IndexField.Order.ORDER_UNSPECIFIED;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
        * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -1558,6 +1678,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
        * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
@@ -1575,6 +1697,8 @@ private static final long serialVersionUID = 0L;
       }
 
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports operations on `array_value`s.
        * </pre>
@@ -1588,6 +1712,8 @@ private static final long serialVersionUID = 0L;
         return 0;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports operations on `array_value`s.
        * </pre>
@@ -1601,6 +1727,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports operations on `array_value`s.
        * </pre>
@@ -1610,20 +1738,26 @@ private static final long serialVersionUID = 0L;
       public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
         if (valueModeCase_ == 3) {
           @SuppressWarnings("deprecation")
-          com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result = com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
-              (java.lang.Integer) valueMode_);
-          return result == null ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED : result;
+          com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result =
+              com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
+                  (java.lang.Integer) valueMode_);
+          return result == null
+              ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED
+              : result;
         }
         return com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.ARRAY_CONFIG_UNSPECIFIED;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports operations on `array_value`s.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
        */
-      public Builder setArrayConfig(com.google.firestore.admin.v1.Index.IndexField.ArrayConfig value) {
+      public Builder setArrayConfig(
+          com.google.firestore.admin.v1.Index.IndexField.ArrayConfig value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1633,6 +1767,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Indicates that this field supports operations on `array_value`s.
        * </pre>
@@ -1647,6 +1783,7 @@ private static final long serialVersionUID = 0L;
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1659,12 +1796,12 @@ private static final long serialVersionUID = 0L;
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.Index.IndexField)
     }
 
     // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.Index.IndexField)
     private static final com.google.firestore.admin.v1.Index.IndexField DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.google.firestore.admin.v1.Index.IndexField();
     }
@@ -1673,16 +1810,16 @@ private static final long serialVersionUID = 0L;
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<IndexField>
-        PARSER = new com.google.protobuf.AbstractParser<IndexField>() {
-      @java.lang.Override
-      public IndexField parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new IndexField(input, extensionRegistry);
-      }
-    };
+    private static final com.google.protobuf.Parser<IndexField> PARSER =
+        new com.google.protobuf.AbstractParser<IndexField>() {
+          @java.lang.Override
+          public IndexField parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new IndexField(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<IndexField> parser() {
       return PARSER;
@@ -1697,13 +1834,14 @@ private static final long serialVersionUID = 0L;
     public com.google.firestore.admin.v1.Index.IndexField getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
   private int bitField0_;
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
+   *
+   *
    * <pre>
    * Output only. A server defined name for this index.
    * The form of this name for composite indexes will be:
@@ -1718,14 +1856,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       name_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Output only. A server defined name for this index.
    * The form of this name for composite indexes will be:
@@ -1735,13 +1874,11 @@ private static final long serialVersionUID = 0L;
    *
    * <code>string name = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getNameBytes() {
+  public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       name_ = b;
       return b;
     } else {
@@ -1752,6 +1889,8 @@ private static final long serialVersionUID = 0L;
   public static final int QUERY_SCOPE_FIELD_NUMBER = 2;
   private int queryScope_;
   /**
+   *
+   *
    * <pre>
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
@@ -1767,6 +1906,8 @@ private static final long serialVersionUID = 0L;
     return queryScope_;
   }
   /**
+   *
+   *
    * <pre>
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
@@ -1780,13 +1921,16 @@ private static final long serialVersionUID = 0L;
    */
   public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
     @SuppressWarnings("deprecation")
-    com.google.firestore.admin.v1.Index.QueryScope result = com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
+    com.google.firestore.admin.v1.Index.QueryScope result =
+        com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
     return result == null ? com.google.firestore.admin.v1.Index.QueryScope.UNRECOGNIZED : result;
   }
 
   public static final int FIELDS_FIELD_NUMBER = 3;
   private java.util.List<com.google.firestore.admin.v1.Index.IndexField> fields_;
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -1805,6 +1949,8 @@ private static final long serialVersionUID = 0L;
     return fields_;
   }
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -1819,11 +1965,13 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
-  public java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder> 
+  public java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
       getFieldsOrBuilderList() {
     return fields_;
   }
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -1842,6 +1990,8 @@ private static final long serialVersionUID = 0L;
     return fields_.size();
   }
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -1860,6 +2010,8 @@ private static final long serialVersionUID = 0L;
     return fields_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * The fields supported by this index.
    * For composite indexes, this is always 2 or more fields.
@@ -1874,14 +2026,15 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
-  public com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(
-      int index) {
+  public com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(int index) {
     return fields_.get(index);
   }
 
   public static final int STATE_FIELD_NUMBER = 4;
   private int state_;
   /**
+   *
+   *
    * <pre>
    * Output only. The serving state of the index.
    * </pre>
@@ -1892,6 +2045,8 @@ private static final long serialVersionUID = 0L;
     return state_;
   }
   /**
+   *
+   *
    * <pre>
    * Output only. The serving state of the index.
    * </pre>
@@ -1900,11 +2055,13 @@ private static final long serialVersionUID = 0L;
    */
   public com.google.firestore.admin.v1.Index.State getState() {
     @SuppressWarnings("deprecation")
-    com.google.firestore.admin.v1.Index.State result = com.google.firestore.admin.v1.Index.State.valueOf(state_);
+    com.google.firestore.admin.v1.Index.State result =
+        com.google.firestore.admin.v1.Index.State.valueOf(state_);
     return result == null ? com.google.firestore.admin.v1.Index.State.UNRECOGNIZED : result;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -1916,12 +2073,12 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
-    if (queryScope_ != com.google.firestore.admin.v1.Index.QueryScope.QUERY_SCOPE_UNSPECIFIED.getNumber()) {
+    if (queryScope_
+        != com.google.firestore.admin.v1.Index.QueryScope.QUERY_SCOPE_UNSPECIFIED.getNumber()) {
       output.writeEnum(2, queryScope_);
     }
     for (int i = 0; i < fields_.size(); i++) {
@@ -1942,17 +2099,15 @@ private static final long serialVersionUID = 0L;
     if (!getNameBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
     }
-    if (queryScope_ != com.google.firestore.admin.v1.Index.QueryScope.QUERY_SCOPE_UNSPECIFIED.getNumber()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(2, queryScope_);
+    if (queryScope_
+        != com.google.firestore.admin.v1.Index.QueryScope.QUERY_SCOPE_UNSPECIFIED.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(2, queryScope_);
     }
     for (int i = 0; i < fields_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, fields_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, fields_.get(i));
     }
     if (state_ != com.google.firestore.admin.v1.Index.State.STATE_UNSPECIFIED.getNumber()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(4, state_);
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(4, state_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -1962,18 +2117,16 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.admin.v1.Index)) {
       return super.equals(obj);
     }
     com.google.firestore.admin.v1.Index other = (com.google.firestore.admin.v1.Index) obj;
 
-    if (!getName()
-        .equals(other.getName())) return false;
+    if (!getName().equals(other.getName())) return false;
     if (queryScope_ != other.queryScope_) return false;
-    if (!getFieldsList()
-        .equals(other.getFieldsList())) return false;
+    if (!getFieldsList().equals(other.getFieldsList())) return false;
     if (state_ != other.state_) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
@@ -2001,97 +2154,103 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.admin.v1.Index parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.admin.v1.Index parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.admin.v1.Index parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.google.firestore.admin.v1.Index parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.Index parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.admin.v1.Index parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.admin.v1.Index parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.admin.v1.Index prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * Cloud Firestore indexes enable simple and complex queries against
    * documents in a database.
@@ -2099,21 +2258,23 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code google.firestore.admin.v1.Index}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.Index)
       com.google.firestore.admin.v1.IndexOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.admin.v1.IndexProto
+          .internal_static_google_firestore_admin_v1_Index_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_fieldAccessorTable
+      return com.google.firestore.admin.v1.IndexProto
+          .internal_static_google_firestore_admin_v1_Index_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.admin.v1.Index.class, com.google.firestore.admin.v1.Index.Builder.class);
+              com.google.firestore.admin.v1.Index.class,
+              com.google.firestore.admin.v1.Index.Builder.class);
     }
 
     // Construct using com.google.firestore.admin.v1.Index.newBuilder()
@@ -2121,17 +2282,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getFieldsFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -2151,9 +2312,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.admin.v1.IndexProto.internal_static_google_firestore_admin_v1_Index_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.admin.v1.IndexProto
+          .internal_static_google_firestore_admin_v1_Index_descriptor;
     }
 
     @java.lang.Override
@@ -2196,38 +2357,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.admin.v1.Index) {
-        return mergeFrom((com.google.firestore.admin.v1.Index)other);
+        return mergeFrom((com.google.firestore.admin.v1.Index) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -2261,9 +2423,10 @@ private static final long serialVersionUID = 0L;
             fieldsBuilder_ = null;
             fields_ = other.fields_;
             bitField0_ = (bitField0_ & ~0x00000004);
-            fieldsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getFieldsFieldBuilder() : null;
+            fieldsBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getFieldsFieldBuilder()
+                    : null;
           } else {
             fieldsBuilder_.addAllMessages(other.fields_);
           }
@@ -2300,10 +2463,13 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
+     *
+     *
      * <pre>
      * Output only. A server defined name for this index.
      * The form of this name for composite indexes will be:
@@ -2316,8 +2482,7 @@ private static final long serialVersionUID = 0L;
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
@@ -2326,6 +2491,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Output only. A server defined name for this index.
      * The form of this name for composite indexes will be:
@@ -2335,13 +2502,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
+    public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -2349,6 +2514,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Output only. A server defined name for this index.
      * The form of this name for composite indexes will be:
@@ -2358,17 +2525,18 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public Builder setName(
-        java.lang.String value) {
+    public Builder setName(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       name_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. A server defined name for this index.
      * The form of this name for composite indexes will be:
@@ -2379,12 +2547,14 @@ private static final long serialVersionUID = 0L;
      * <code>string name = 1;</code>
      */
     public Builder clearName() {
-      
+
       name_ = getDefaultInstance().getName();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. A server defined name for this index.
      * The form of this name for composite indexes will be:
@@ -2394,13 +2564,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       name_ = value;
       onChanged();
       return this;
@@ -2408,6 +2577,8 @@ private static final long serialVersionUID = 0L;
 
     private int queryScope_ = 0;
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
@@ -2423,6 +2594,8 @@ private static final long serialVersionUID = 0L;
       return queryScope_;
     }
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
@@ -2440,6 +2613,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
@@ -2453,10 +2628,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
       @SuppressWarnings("deprecation")
-      com.google.firestore.admin.v1.Index.QueryScope result = com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
+      com.google.firestore.admin.v1.Index.QueryScope result =
+          com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
       return result == null ? com.google.firestore.admin.v1.Index.QueryScope.UNRECOGNIZED : result;
     }
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
@@ -2472,12 +2650,14 @@ private static final long serialVersionUID = 0L;
       if (value == null) {
         throw new NullPointerException();
       }
-      
+
       queryScope_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
@@ -2490,25 +2670,31 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
      */
     public Builder clearQueryScope() {
-      
+
       queryScope_ = 0;
       onChanged();
       return this;
     }
 
     private java.util.List<com.google.firestore.admin.v1.Index.IndexField> fields_ =
-      java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
+
     private void ensureFieldsIsMutable() {
       if (!((bitField0_ & 0x00000004) != 0)) {
         fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>(fields_);
         bitField0_ |= 0x00000004;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.admin.v1.Index.IndexField, com.google.firestore.admin.v1.Index.IndexField.Builder, com.google.firestore.admin.v1.Index.IndexFieldOrBuilder> fieldsBuilder_;
+            com.google.firestore.admin.v1.Index.IndexField,
+            com.google.firestore.admin.v1.Index.IndexField.Builder,
+            com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
+        fieldsBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2531,6 +2717,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2553,6 +2741,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2575,6 +2765,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2589,8 +2781,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public Builder setFields(
-        int index, com.google.firestore.admin.v1.Index.IndexField value) {
+    public Builder setFields(int index, com.google.firestore.admin.v1.Index.IndexField value) {
       if (fieldsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -2604,6 +2795,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2630,6 +2823,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2658,6 +2853,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2672,8 +2869,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public Builder addFields(
-        int index, com.google.firestore.admin.v1.Index.IndexField value) {
+    public Builder addFields(int index, com.google.firestore.admin.v1.Index.IndexField value) {
       if (fieldsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -2687,6 +2883,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2713,6 +2911,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2739,6 +2939,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2757,8 +2959,7 @@ private static final long serialVersionUID = 0L;
         java.lang.Iterable<? extends com.google.firestore.admin.v1.Index.IndexField> values) {
       if (fieldsBuilder_ == null) {
         ensureFieldsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, fields_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, fields_);
         onChanged();
       } else {
         fieldsBuilder_.addAllMessages(values);
@@ -2766,6 +2967,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2791,6 +2994,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2816,6 +3021,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2830,11 +3037,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public com.google.firestore.admin.v1.Index.IndexField.Builder getFieldsBuilder(
-        int index) {
+    public com.google.firestore.admin.v1.Index.IndexField.Builder getFieldsBuilder(int index) {
       return getFieldsFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2849,14 +3057,16 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(
-        int index) {
+    public com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(int index) {
       if (fieldsBuilder_ == null) {
-        return fields_.get(index);  } else {
+        return fields_.get(index);
+      } else {
         return fieldsBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2871,8 +3081,8 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder> 
-         getFieldsOrBuilderList() {
+    public java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
+        getFieldsOrBuilderList() {
       if (fieldsBuilder_ != null) {
         return fieldsBuilder_.getMessageOrBuilderList();
       } else {
@@ -2880,6 +3090,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2895,10 +3107,12 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
     public com.google.firestore.admin.v1.Index.IndexField.Builder addFieldsBuilder() {
-      return getFieldsFieldBuilder().addBuilder(
-          com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance());
+      return getFieldsFieldBuilder()
+          .addBuilder(com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2913,12 +3127,13 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public com.google.firestore.admin.v1.Index.IndexField.Builder addFieldsBuilder(
-        int index) {
-      return getFieldsFieldBuilder().addBuilder(
-          index, com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance());
+    public com.google.firestore.admin.v1.Index.IndexField.Builder addFieldsBuilder(int index) {
+      return getFieldsFieldBuilder()
+          .addBuilder(index, com.google.firestore.admin.v1.Index.IndexField.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The fields supported by this index.
      * For composite indexes, this is always 2 or more fields.
@@ -2933,20 +3148,23 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
      */
-    public java.util.List<com.google.firestore.admin.v1.Index.IndexField.Builder> 
-         getFieldsBuilderList() {
+    public java.util.List<com.google.firestore.admin.v1.Index.IndexField.Builder>
+        getFieldsBuilderList() {
       return getFieldsFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.admin.v1.Index.IndexField, com.google.firestore.admin.v1.Index.IndexField.Builder, com.google.firestore.admin.v1.Index.IndexFieldOrBuilder> 
+            com.google.firestore.admin.v1.Index.IndexField,
+            com.google.firestore.admin.v1.Index.IndexField.Builder,
+            com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
         getFieldsFieldBuilder() {
       if (fieldsBuilder_ == null) {
-        fieldsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.admin.v1.Index.IndexField, com.google.firestore.admin.v1.Index.IndexField.Builder, com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>(
-                fields_,
-                ((bitField0_ & 0x00000004) != 0),
-                getParentForChildren(),
-                isClean());
+        fieldsBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.admin.v1.Index.IndexField,
+                com.google.firestore.admin.v1.Index.IndexField.Builder,
+                com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>(
+                fields_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
         fields_ = null;
       }
       return fieldsBuilder_;
@@ -2954,6 +3172,8 @@ private static final long serialVersionUID = 0L;
 
     private int state_ = 0;
     /**
+     *
+     *
      * <pre>
      * Output only. The serving state of the index.
      * </pre>
@@ -2964,6 +3184,8 @@ private static final long serialVersionUID = 0L;
       return state_;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. The serving state of the index.
      * </pre>
@@ -2976,6 +3198,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. The serving state of the index.
      * </pre>
@@ -2984,10 +3208,13 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.admin.v1.Index.State getState() {
       @SuppressWarnings("deprecation")
-      com.google.firestore.admin.v1.Index.State result = com.google.firestore.admin.v1.Index.State.valueOf(state_);
+      com.google.firestore.admin.v1.Index.State result =
+          com.google.firestore.admin.v1.Index.State.valueOf(state_);
       return result == null ? com.google.firestore.admin.v1.Index.State.UNRECOGNIZED : result;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. The serving state of the index.
      * </pre>
@@ -2998,12 +3225,14 @@ private static final long serialVersionUID = 0L;
       if (value == null) {
         throw new NullPointerException();
       }
-      
+
       state_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Output only. The serving state of the index.
      * </pre>
@@ -3011,14 +3240,14 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
      */
     public Builder clearState() {
-      
+
       state_ = 0;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -3028,12 +3257,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.Index)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.Index)
   private static final com.google.firestore.admin.v1.Index DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.admin.v1.Index();
   }
@@ -3042,16 +3271,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Index>
-      PARSER = new com.google.protobuf.AbstractParser<Index>() {
-    @java.lang.Override
-    public Index parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new Index(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<Index> PARSER =
+      new com.google.protobuf.AbstractParser<Index>() {
+        @java.lang.Override
+        public Index parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Index(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<Index> parser() {
     return PARSER;
@@ -3066,6 +3295,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.admin.v1.Index getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

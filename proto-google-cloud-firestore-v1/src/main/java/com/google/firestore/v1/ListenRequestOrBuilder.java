@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface ListenRequestOrBuilder extends
+public interface ListenRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.ListenRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
@@ -32,6 +35,8 @@ public interface ListenRequestOrBuilder extends
    */
   java.lang.String getDatabase();
   /**
+   *
+   *
    * <pre>
    * The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
@@ -39,10 +44,11 @@ public interface ListenRequestOrBuilder extends
    *
    * <code>string database = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getDatabaseBytes();
+  com.google.protobuf.ByteString getDatabaseBytes();
 
   /**
+   *
+   *
    * <pre>
    * A target to add to this stream.
    * </pre>
@@ -51,6 +57,8 @@ public interface ListenRequestOrBuilder extends
    */
   boolean hasAddTarget();
   /**
+   *
+   *
    * <pre>
    * A target to add to this stream.
    * </pre>
@@ -59,6 +67,8 @@ public interface ListenRequestOrBuilder extends
    */
   com.google.firestore.v1.Target getAddTarget();
   /**
+   *
+   *
    * <pre>
    * A target to add to this stream.
    * </pre>
@@ -68,6 +78,8 @@ public interface ListenRequestOrBuilder extends
   com.google.firestore.v1.TargetOrBuilder getAddTargetOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The ID of a target to remove from this stream.
    * </pre>
@@ -77,6 +89,8 @@ public interface ListenRequestOrBuilder extends
   int getRemoveTarget();
 
   /**
+   *
+   *
    * <pre>
    * Labels associated with this target change.
    * </pre>
@@ -85,50 +99,48 @@ public interface ListenRequestOrBuilder extends
    */
   int getLabelsCount();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this target change.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
-  boolean containsLabels(
-      java.lang.String key);
-  /**
-   * Use {@link #getLabelsMap()} instead.
-   */
+  boolean containsLabels(java.lang.String key);
+  /** Use {@link #getLabelsMap()} instead. */
   @java.lang.Deprecated
-  java.util.Map<java.lang.String, java.lang.String>
-  getLabels();
+  java.util.Map<java.lang.String, java.lang.String> getLabels();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this target change.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
-  java.util.Map<java.lang.String, java.lang.String>
-  getLabelsMap();
+  java.util.Map<java.lang.String, java.lang.String> getLabelsMap();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this target change.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
-
-  java.lang.String getLabelsOrDefault(
-      java.lang.String key,
-      java.lang.String defaultValue);
+  java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue);
   /**
+   *
+   *
    * <pre>
    * Labels associated with this target change.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
-
-  java.lang.String getLabelsOrThrow(
-      java.lang.String key);
+  java.lang.String getLabelsOrThrow(java.lang.String key);
 
   public com.google.firestore.v1.ListenRequest.TargetChangeCase getTargetChangeCase();
 }

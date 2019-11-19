@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ListFieldsRequestOrBuilder extends
+public interface ListFieldsRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ListFieldsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -32,6 +35,8 @@ public interface ListFieldsRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -39,10 +44,11 @@ public interface ListFieldsRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * The filter to apply to list results. Currently,
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
@@ -55,6 +61,8 @@ public interface ListFieldsRequestOrBuilder extends
    */
   java.lang.String getFilter();
   /**
+   *
+   *
    * <pre>
    * The filter to apply to list results. Currently,
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
@@ -65,10 +73,11 @@ public interface ListFieldsRequestOrBuilder extends
    *
    * <code>string filter = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getFilterBytes();
+  com.google.protobuf.ByteString getFilterBytes();
 
   /**
+   *
+   *
    * <pre>
    * The number of results to return.
    * </pre>
@@ -78,6 +87,8 @@ public interface ListFieldsRequestOrBuilder extends
   int getPageSize();
 
   /**
+   *
+   *
    * <pre>
    * A page token, returned from a previous call to
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields], that may be used to get the next
@@ -88,6 +99,8 @@ public interface ListFieldsRequestOrBuilder extends
    */
   java.lang.String getPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token, returned from a previous call to
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields], that may be used to get the next
@@ -96,6 +109,5 @@ public interface ListFieldsRequestOrBuilder extends
    *
    * <code>string page_token = 4;</code>
    */
-  com.google.protobuf.ByteString
-      getPageTokenBytes();
+  com.google.protobuf.ByteString getPageTokenBytes();
 }

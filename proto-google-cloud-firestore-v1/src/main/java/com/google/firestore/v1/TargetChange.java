@@ -19,21 +19,24 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * Targets being watched have changed.
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.TargetChange}
  */
-public  final class TargetChange extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.TargetChange)
     TargetChangeOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use TargetChange.newBuilder() to construct.
   private TargetChange(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private TargetChange() {
     targetChangeType_ = 0;
     targetIds_ = emptyIntList();
@@ -41,10 +44,10 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private TargetChange(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -64,78 +67,83 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
-            int rawValue = input.readEnum();
+          case 8:
+            {
+              int rawValue = input.readEnum();
 
-            targetChangeType_ = rawValue;
-            break;
-          }
-          case 16: {
-            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-              targetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000002;
+              targetChangeType_ = rawValue;
+              break;
             }
-            targetIds_.addInt(input.readInt32());
-            break;
-          }
-          case 18: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
-              targetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000002;
-            }
-            while (input.getBytesUntilLimit() > 0) {
+          case 16:
+            {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                targetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000002;
+              }
               targetIds_.addInt(input.readInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
-          case 26: {
-            com.google.rpc.Status.Builder subBuilder = null;
-            if (cause_ != null) {
-              subBuilder = cause_.toBuilder();
+          case 18:
+            {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
+                targetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                targetIds_.addInt(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
             }
-            cause_ = input.readMessage(com.google.rpc.Status.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(cause_);
-              cause_ = subBuilder.buildPartial();
-            }
+          case 26:
+            {
+              com.google.rpc.Status.Builder subBuilder = null;
+              if (cause_ != null) {
+                subBuilder = cause_.toBuilder();
+              }
+              cause_ = input.readMessage(com.google.rpc.Status.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(cause_);
+                cause_ = subBuilder.buildPartial();
+              }
 
-            break;
-          }
-          case 34: {
+              break;
+            }
+          case 34:
+            {
+              resumeToken_ = input.readBytes();
+              break;
+            }
+          case 50:
+            {
+              com.google.protobuf.Timestamp.Builder subBuilder = null;
+              if (readTime_ != null) {
+                subBuilder = readTime_.toBuilder();
+              }
+              readTime_ =
+                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(readTime_);
+                readTime_ = subBuilder.buildPartial();
+              }
 
-            resumeToken_ = input.readBytes();
-            break;
-          }
-          case 50: {
-            com.google.protobuf.Timestamp.Builder subBuilder = null;
-            if (readTime_ != null) {
-              subBuilder = readTime_.toBuilder();
+              break;
             }
-            readTime_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(readTime_);
-              readTime_ = subBuilder.buildPartial();
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
             }
-
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
-            }
-            break;
-          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000002) != 0)) {
         targetIds_.makeImmutable(); // C
@@ -144,29 +152,35 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_TargetChange_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_TargetChange_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_TargetChange_fieldAccessorTable
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_TargetChange_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.TargetChange.class, com.google.firestore.v1.TargetChange.Builder.class);
+            com.google.firestore.v1.TargetChange.class,
+            com.google.firestore.v1.TargetChange.Builder.class);
   }
 
   /**
+   *
+   *
    * <pre>
    * The type of change.
    * </pre>
    *
    * Protobuf enum {@code google.firestore.v1.TargetChange.TargetChangeType}
    */
-  public enum TargetChangeType
-      implements com.google.protobuf.ProtocolMessageEnum {
+  public enum TargetChangeType implements com.google.protobuf.ProtocolMessageEnum {
     /**
+     *
+     *
      * <pre>
      * No change has occurred. Used only to send an updated `resume_token`.
      * </pre>
@@ -175,6 +189,8 @@ private static final long serialVersionUID = 0L;
      */
     NO_CHANGE(0),
     /**
+     *
+     *
      * <pre>
      * The targets have been added.
      * </pre>
@@ -183,6 +199,8 @@ private static final long serialVersionUID = 0L;
      */
     ADD(1),
     /**
+     *
+     *
      * <pre>
      * The targets have been removed.
      * </pre>
@@ -191,6 +209,8 @@ private static final long serialVersionUID = 0L;
      */
     REMOVE(2),
     /**
+     *
+     *
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
@@ -204,6 +224,8 @@ private static final long serialVersionUID = 0L;
      */
     CURRENT(3),
     /**
+     *
+     *
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
@@ -218,6 +240,8 @@ private static final long serialVersionUID = 0L;
     ;
 
     /**
+     *
+     *
      * <pre>
      * No change has occurred. Used only to send an updated `resume_token`.
      * </pre>
@@ -226,6 +250,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int NO_CHANGE_VALUE = 0;
     /**
+     *
+     *
      * <pre>
      * The targets have been added.
      * </pre>
@@ -234,6 +260,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int ADD_VALUE = 1;
     /**
+     *
+     *
      * <pre>
      * The targets have been removed.
      * </pre>
@@ -242,6 +270,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int REMOVE_VALUE = 2;
     /**
+     *
+     *
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
@@ -255,6 +285,8 @@ private static final long serialVersionUID = 0L;
      */
     public static final int CURRENT_VALUE = 3;
     /**
+     *
+     *
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
@@ -266,7 +298,6 @@ private static final long serialVersionUID = 0L;
      */
     public static final int RESET_VALUE = 4;
 
-
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalArgumentException(
@@ -275,9 +306,7 @@ private static final long serialVersionUID = 0L;
       return value;
     }
 
-    /**
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
+    /** @deprecated Use {@link #forNumber(int)} instead. */
     @java.lang.Deprecated
     public static TargetChangeType valueOf(int value) {
       return forNumber(value);
@@ -285,37 +314,42 @@ private static final long serialVersionUID = 0L;
 
     public static TargetChangeType forNumber(int value) {
       switch (value) {
-        case 0: return NO_CHANGE;
-        case 1: return ADD;
-        case 2: return REMOVE;
-        case 3: return CURRENT;
-        case 4: return RESET;
-        default: return null;
+        case 0:
+          return NO_CHANGE;
+        case 1:
+          return ADD;
+        case 2:
+          return REMOVE;
+        case 3:
+          return CURRENT;
+        case 4:
+          return RESET;
+        default:
+          return null;
       }
     }
 
-    public static com.google.protobuf.Internal.EnumLiteMap<TargetChangeType>
-        internalGetValueMap() {
+    public static com.google.protobuf.Internal.EnumLiteMap<TargetChangeType> internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        TargetChangeType> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<TargetChangeType>() {
-            public TargetChangeType findValueByNumber(int number) {
-              return TargetChangeType.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<TargetChangeType>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<TargetChangeType>() {
+              public TargetChangeType findValueByNumber(int number) {
+                return TargetChangeType.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.google.firestore.v1.TargetChange.getDescriptor().getEnumTypes().get(0);
     }
 
@@ -324,8 +358,7 @@ private static final long serialVersionUID = 0L;
     public static TargetChangeType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -346,6 +379,8 @@ private static final long serialVersionUID = 0L;
   public static final int TARGET_CHANGE_TYPE_FIELD_NUMBER = 1;
   private int targetChangeType_;
   /**
+   *
+   *
    * <pre>
    * The type of change that occurred.
    * </pre>
@@ -356,6 +391,8 @@ private static final long serialVersionUID = 0L;
     return targetChangeType_;
   }
   /**
+   *
+   *
    * <pre>
    * The type of change that occurred.
    * </pre>
@@ -364,13 +401,18 @@ private static final long serialVersionUID = 0L;
    */
   public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
     @SuppressWarnings("deprecation")
-    com.google.firestore.v1.TargetChange.TargetChangeType result = com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
-    return result == null ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED : result;
+    com.google.firestore.v1.TargetChange.TargetChangeType result =
+        com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
+    return result == null
+        ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED
+        : result;
   }
 
   public static final int TARGET_IDS_FIELD_NUMBER = 2;
   private com.google.protobuf.Internal.IntList targetIds_;
   /**
+   *
+   *
    * <pre>
    * The target IDs of targets that have changed.
    * If empty, the change applies to all targets.
@@ -379,11 +421,12 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated int32 target_ids = 2;</code>
    */
-  public java.util.List<java.lang.Integer>
-      getTargetIdsList() {
+  public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
   }
   /**
+   *
+   *
    * <pre>
    * The target IDs of targets that have changed.
    * If empty, the change applies to all targets.
@@ -396,6 +439,8 @@ private static final long serialVersionUID = 0L;
     return targetIds_.size();
   }
   /**
+   *
+   *
    * <pre>
    * The target IDs of targets that have changed.
    * If empty, the change applies to all targets.
@@ -407,11 +452,14 @@ private static final long serialVersionUID = 0L;
   public int getTargetIds(int index) {
     return targetIds_.getInt(index);
   }
+
   private int targetIdsMemoizedSerializedSize = -1;
 
   public static final int CAUSE_FIELD_NUMBER = 3;
   private com.google.rpc.Status cause_;
   /**
+   *
+   *
    * <pre>
    * The error that resulted in this change, if applicable.
    * </pre>
@@ -422,6 +470,8 @@ private static final long serialVersionUID = 0L;
     return cause_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * The error that resulted in this change, if applicable.
    * </pre>
@@ -432,6 +482,8 @@ private static final long serialVersionUID = 0L;
     return cause_ == null ? com.google.rpc.Status.getDefaultInstance() : cause_;
   }
   /**
+   *
+   *
    * <pre>
    * The error that resulted in this change, if applicable.
    * </pre>
@@ -445,6 +497,8 @@ private static final long serialVersionUID = 0L;
   public static final int RESUME_TOKEN_FIELD_NUMBER = 4;
   private com.google.protobuf.ByteString resumeToken_;
   /**
+   *
+   *
    * <pre>
    * A token that can be used to resume the stream for the given `target_ids`,
    * or all targets if `target_ids` is empty.
@@ -460,6 +514,8 @@ private static final long serialVersionUID = 0L;
   public static final int READ_TIME_FIELD_NUMBER = 6;
   private com.google.protobuf.Timestamp readTime_;
   /**
+   *
+   *
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
@@ -477,6 +533,8 @@ private static final long serialVersionUID = 0L;
     return readTime_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
@@ -494,6 +552,8 @@ private static final long serialVersionUID = 0L;
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
   /**
+   *
+   *
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
@@ -512,6 +572,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -523,10 +584,10 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     getSerializedSize();
-    if (targetChangeType_ != com.google.firestore.v1.TargetChange.TargetChangeType.NO_CHANGE.getNumber()) {
+    if (targetChangeType_
+        != com.google.firestore.v1.TargetChange.TargetChangeType.NO_CHANGE.getNumber()) {
       output.writeEnum(1, targetChangeType_);
     }
     if (getTargetIdsList().size() > 0) {
@@ -554,35 +615,31 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (targetChangeType_ != com.google.firestore.v1.TargetChange.TargetChangeType.NO_CHANGE.getNumber()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(1, targetChangeType_);
+    if (targetChangeType_
+        != com.google.firestore.v1.TargetChange.TargetChangeType.NO_CHANGE.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, targetChangeType_);
     }
     {
       int dataSize = 0;
       for (int i = 0; i < targetIds_.size(); i++) {
-        dataSize += com.google.protobuf.CodedOutputStream
-          .computeInt32SizeNoTag(targetIds_.getInt(i));
+        dataSize +=
+            com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(targetIds_.getInt(i));
       }
       size += dataSize;
       if (!getTargetIdsList().isEmpty()) {
         size += 1;
-        size += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(dataSize);
+        size += com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(dataSize);
       }
       targetIdsMemoizedSerializedSize = dataSize;
     }
     if (cause_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, getCause());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, getCause());
     }
     if (!resumeToken_.isEmpty()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(4, resumeToken_);
+      size += com.google.protobuf.CodedOutputStream.computeBytesSize(4, resumeToken_);
     }
     if (readTime_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, getReadTime());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(6, getReadTime());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -592,7 +649,7 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.TargetChange)) {
       return super.equals(obj);
@@ -600,19 +657,15 @@ private static final long serialVersionUID = 0L;
     com.google.firestore.v1.TargetChange other = (com.google.firestore.v1.TargetChange) obj;
 
     if (targetChangeType_ != other.targetChangeType_) return false;
-    if (!getTargetIdsList()
-        .equals(other.getTargetIdsList())) return false;
+    if (!getTargetIdsList().equals(other.getTargetIdsList())) return false;
     if (hasCause() != other.hasCause()) return false;
     if (hasCause()) {
-      if (!getCause()
-          .equals(other.getCause())) return false;
+      if (!getCause().equals(other.getCause())) return false;
     }
-    if (!getResumeToken()
-        .equals(other.getResumeToken())) return false;
+    if (!getResumeToken().equals(other.getResumeToken())) return false;
     if (hasReadTime() != other.hasReadTime()) return false;
     if (hasReadTime()) {
-      if (!getReadTime()
-          .equals(other.getReadTime())) return false;
+      if (!getReadTime().equals(other.getReadTime())) return false;
     }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
@@ -646,118 +699,126 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.TargetChange parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.TargetChange parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.v1.TargetChange parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.google.firestore.v1.TargetChange parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.TargetChange parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.TargetChange parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.TargetChange parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.TargetChange prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * Targets being watched have changed.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.TargetChange}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.TargetChange)
       com.google.firestore.v1.TargetChangeOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_TargetChange_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_TargetChange_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_TargetChange_fieldAccessorTable
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_TargetChange_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.TargetChange.class, com.google.firestore.v1.TargetChange.Builder.class);
+              com.google.firestore.v1.TargetChange.class,
+              com.google.firestore.v1.TargetChange.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.TargetChange.newBuilder()
@@ -765,16 +826,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -800,9 +860,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_TargetChange_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_TargetChange_descriptor;
     }
 
     @java.lang.Override
@@ -850,38 +910,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.TargetChange) {
-        return mergeFrom((com.google.firestore.v1.TargetChange)other);
+        return mergeFrom((com.google.firestore.v1.TargetChange) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -940,10 +1001,13 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private int targetChangeType_ = 0;
     /**
+     *
+     *
      * <pre>
      * The type of change that occurred.
      * </pre>
@@ -954,6 +1018,8 @@ private static final long serialVersionUID = 0L;
       return targetChangeType_;
     }
     /**
+     *
+     *
      * <pre>
      * The type of change that occurred.
      * </pre>
@@ -966,6 +1032,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The type of change that occurred.
      * </pre>
@@ -974,26 +1042,34 @@ private static final long serialVersionUID = 0L;
      */
     public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
       @SuppressWarnings("deprecation")
-      com.google.firestore.v1.TargetChange.TargetChangeType result = com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
-      return result == null ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED : result;
+      com.google.firestore.v1.TargetChange.TargetChangeType result =
+          com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
+      return result == null
+          ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED
+          : result;
     }
     /**
+     *
+     *
      * <pre>
      * The type of change that occurred.
      * </pre>
      *
      * <code>.google.firestore.v1.TargetChange.TargetChangeType target_change_type = 1;</code>
      */
-    public Builder setTargetChangeType(com.google.firestore.v1.TargetChange.TargetChangeType value) {
+    public Builder setTargetChangeType(
+        com.google.firestore.v1.TargetChange.TargetChangeType value) {
       if (value == null) {
         throw new NullPointerException();
       }
-      
+
       targetChangeType_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The type of change that occurred.
      * </pre>
@@ -1001,20 +1077,23 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.TargetChange.TargetChangeType target_change_type = 1;</code>
      */
     public Builder clearTargetChangeType() {
-      
+
       targetChangeType_ = 0;
       onChanged();
       return this;
     }
 
     private com.google.protobuf.Internal.IntList targetIds_ = emptyIntList();
+
     private void ensureTargetIdsIsMutable() {
       if (!((bitField0_ & 0x00000002) != 0)) {
         targetIds_ = mutableCopy(targetIds_);
         bitField0_ |= 0x00000002;
-       }
+      }
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1023,12 +1102,14 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 target_ids = 2;</code>
      */
-    public java.util.List<java.lang.Integer>
-        getTargetIdsList() {
-      return ((bitField0_ & 0x00000002) != 0) ?
-               java.util.Collections.unmodifiableList(targetIds_) : targetIds_;
+    public java.util.List<java.lang.Integer> getTargetIdsList() {
+      return ((bitField0_ & 0x00000002) != 0)
+          ? java.util.Collections.unmodifiableList(targetIds_)
+          : targetIds_;
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1041,6 +1122,8 @@ private static final long serialVersionUID = 0L;
       return targetIds_.size();
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1053,6 +1136,8 @@ private static final long serialVersionUID = 0L;
       return targetIds_.getInt(index);
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1061,14 +1146,15 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 target_ids = 2;</code>
      */
-    public Builder setTargetIds(
-        int index, int value) {
+    public Builder setTargetIds(int index, int value) {
       ensureTargetIdsIsMutable();
       targetIds_.setInt(index, value);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1084,6 +1170,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1092,15 +1180,15 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated int32 target_ids = 2;</code>
      */
-    public Builder addAllTargetIds(
-        java.lang.Iterable<? extends java.lang.Integer> values) {
+    public Builder addAllTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureTargetIdsIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, targetIds_);
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, targetIds_);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The target IDs of targets that have changed.
      * If empty, the change applies to all targets.
@@ -1118,8 +1206,11 @@ private static final long serialVersionUID = 0L;
 
     private com.google.rpc.Status cause_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.rpc.Status, com.google.rpc.Status.Builder, com.google.rpc.StatusOrBuilder> causeBuilder_;
+            com.google.rpc.Status, com.google.rpc.Status.Builder, com.google.rpc.StatusOrBuilder>
+        causeBuilder_;
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1130,6 +1221,8 @@ private static final long serialVersionUID = 0L;
       return causeBuilder_ != null || cause_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1144,6 +1237,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1164,14 +1259,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
      *
      * <code>.google.rpc.Status cause = 3;</code>
      */
-    public Builder setCause(
-        com.google.rpc.Status.Builder builderForValue) {
+    public Builder setCause(com.google.rpc.Status.Builder builderForValue) {
       if (causeBuilder_ == null) {
         cause_ = builderForValue.build();
         onChanged();
@@ -1182,6 +1278,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1191,8 +1289,7 @@ private static final long serialVersionUID = 0L;
     public Builder mergeCause(com.google.rpc.Status value) {
       if (causeBuilder_ == null) {
         if (cause_ != null) {
-          cause_ =
-            com.google.rpc.Status.newBuilder(cause_).mergeFrom(value).buildPartial();
+          cause_ = com.google.rpc.Status.newBuilder(cause_).mergeFrom(value).buildPartial();
         } else {
           cause_ = value;
         }
@@ -1204,6 +1301,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1222,6 +1321,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1229,11 +1330,13 @@ private static final long serialVersionUID = 0L;
      * <code>.google.rpc.Status cause = 3;</code>
      */
     public com.google.rpc.Status.Builder getCauseBuilder() {
-      
+
       onChanged();
       return getCauseFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1244,11 +1347,12 @@ private static final long serialVersionUID = 0L;
       if (causeBuilder_ != null) {
         return causeBuilder_.getMessageOrBuilder();
       } else {
-        return cause_ == null ?
-            com.google.rpc.Status.getDefaultInstance() : cause_;
+        return cause_ == null ? com.google.rpc.Status.getDefaultInstance() : cause_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The error that resulted in this change, if applicable.
      * </pre>
@@ -1256,14 +1360,14 @@ private static final long serialVersionUID = 0L;
      * <code>.google.rpc.Status cause = 3;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.rpc.Status, com.google.rpc.Status.Builder, com.google.rpc.StatusOrBuilder> 
+            com.google.rpc.Status, com.google.rpc.Status.Builder, com.google.rpc.StatusOrBuilder>
         getCauseFieldBuilder() {
       if (causeBuilder_ == null) {
-        causeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.rpc.Status, com.google.rpc.Status.Builder, com.google.rpc.StatusOrBuilder>(
-                getCause(),
-                getParentForChildren(),
-                isClean());
+        causeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.rpc.Status,
+                com.google.rpc.Status.Builder,
+                com.google.rpc.StatusOrBuilder>(getCause(), getParentForChildren(), isClean());
         cause_ = null;
       }
       return causeBuilder_;
@@ -1271,6 +1375,8 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.ByteString resumeToken_ = com.google.protobuf.ByteString.EMPTY;
     /**
+     *
+     *
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
@@ -1283,6 +1389,8 @@ private static final long serialVersionUID = 0L;
       return resumeToken_;
     }
     /**
+     *
+     *
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
@@ -1293,14 +1401,16 @@ private static final long serialVersionUID = 0L;
      */
     public Builder setResumeToken(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       resumeToken_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
@@ -1310,7 +1420,7 @@ private static final long serialVersionUID = 0L;
      * <code>bytes resume_token = 4;</code>
      */
     public Builder clearResumeToken() {
-      
+
       resumeToken_ = getDefaultInstance().getResumeToken();
       onChanged();
       return this;
@@ -1318,8 +1428,13 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.Timestamp readTime_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> readTimeBuilder_;
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        readTimeBuilder_;
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1337,6 +1452,8 @@ private static final long serialVersionUID = 0L;
       return readTimeBuilder_ != null || readTime_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1358,6 +1475,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1385,6 +1504,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1398,8 +1519,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
-    public Builder setReadTime(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
+    public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
         onChanged();
@@ -1410,6 +1530,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1427,7 +1549,7 @@ private static final long serialVersionUID = 0L;
       if (readTimeBuilder_ == null) {
         if (readTime_ != null) {
           readTime_ =
-            com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
         } else {
           readTime_ = value;
         }
@@ -1439,6 +1561,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1464,6 +1588,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1478,11 +1604,13 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-      
+
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1500,11 +1628,12 @@ private static final long serialVersionUID = 0L;
       if (readTimeBuilder_ != null) {
         return readTimeBuilder_.getMessageOrBuilder();
       } else {
-        return readTime_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
+        return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
@@ -1519,21 +1648,24 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
         getReadTimeFieldBuilder() {
       if (readTimeBuilder_ == null) {
-        readTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getReadTime(),
-                getParentForChildren(),
-                isClean());
+        readTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getReadTime(), getParentForChildren(), isClean());
         readTime_ = null;
       }
       return readTimeBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1543,12 +1675,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.TargetChange)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.TargetChange)
   private static final com.google.firestore.v1.TargetChange DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.TargetChange();
   }
@@ -1557,16 +1689,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<TargetChange>
-      PARSER = new com.google.protobuf.AbstractParser<TargetChange>() {
-    @java.lang.Override
-    public TargetChange parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new TargetChange(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<TargetChange> PARSER =
+      new com.google.protobuf.AbstractParser<TargetChange>() {
+        @java.lang.Override
+        public TargetChange parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new TargetChange(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<TargetChange> parser() {
     return PARSER;
@@ -1581,6 +1713,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.TargetChange getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

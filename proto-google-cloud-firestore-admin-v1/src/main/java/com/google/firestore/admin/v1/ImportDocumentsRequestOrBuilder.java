@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ImportDocumentsRequestOrBuilder extends
+public interface ImportDocumentsRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ImportDocumentsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -32,6 +35,8 @@ public interface ImportDocumentsRequestOrBuilder extends
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -39,10 +44,11 @@ public interface ImportDocumentsRequestOrBuilder extends
    *
    * <code>string name = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -50,9 +56,10 @@ public interface ImportDocumentsRequestOrBuilder extends
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  java.util.List<java.lang.String>
-      getCollectionIdsList();
+  java.util.List<java.lang.String> getCollectionIdsList();
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -62,6 +69,8 @@ public interface ImportDocumentsRequestOrBuilder extends
    */
   int getCollectionIdsCount();
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -71,6 +80,8 @@ public interface ImportDocumentsRequestOrBuilder extends
    */
   java.lang.String getCollectionIds(int index);
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -78,10 +89,11 @@ public interface ImportDocumentsRequestOrBuilder extends
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getCollectionIdsBytes(int index);
+  com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
   /**
+   *
+   *
    * <pre>
    * Location of the exported files.
    * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -94,6 +106,8 @@ public interface ImportDocumentsRequestOrBuilder extends
    */
   java.lang.String getInputUriPrefix();
   /**
+   *
+   *
    * <pre>
    * Location of the exported files.
    * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -104,6 +118,5 @@ public interface ImportDocumentsRequestOrBuilder extends
    *
    * <code>string input_uri_prefix = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getInputUriPrefixBytes();
+  com.google.protobuf.ByteString getInputUriPrefixBytes();
 }

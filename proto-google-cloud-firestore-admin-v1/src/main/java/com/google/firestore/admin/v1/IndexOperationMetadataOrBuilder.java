@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface IndexOperationMetadataOrBuilder extends
+public interface IndexOperationMetadataOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.IndexOperationMetadata)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -31,6 +34,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   boolean hasStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -39,6 +44,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -48,6 +55,8 @@ public interface IndexOperationMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -57,6 +66,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   boolean hasEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -66,6 +77,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -76,6 +89,8 @@ public interface IndexOperationMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The index resource that this operation is acting on. For example:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -85,6 +100,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   java.lang.String getIndex();
   /**
+   *
+   *
    * <pre>
    * The index resource that this operation is acting on. For example:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -92,10 +109,11 @@ public interface IndexOperationMetadataOrBuilder extends
    *
    * <code>string index = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getIndexBytes();
+  com.google.protobuf.ByteString getIndexBytes();
 
   /**
+   *
+   *
    * <pre>
    * The state of the operation.
    * </pre>
@@ -104,6 +122,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   int getStateValue();
   /**
+   *
+   *
    * <pre>
    * The state of the operation.
    * </pre>
@@ -113,6 +133,8 @@ public interface IndexOperationMetadataOrBuilder extends
   com.google.firestore.admin.v1.OperationState getState();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -121,6 +143,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   boolean hasProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -129,6 +153,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -138,6 +164,8 @@ public interface IndexOperationMetadataOrBuilder extends
   com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -146,6 +174,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   boolean hasProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -154,6 +184,8 @@ public interface IndexOperationMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>

@@ -18,20 +18,24 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ListFieldsResponseOrBuilder extends
+public interface ListFieldsResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ListFieldsResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The requested fields.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Field fields = 1;</code>
    */
-  java.util.List<com.google.firestore.admin.v1.Field> 
-      getFieldsList();
+  java.util.List<com.google.firestore.admin.v1.Field> getFieldsList();
   /**
+   *
+   *
    * <pre>
    * The requested fields.
    * </pre>
@@ -40,6 +44,8 @@ public interface ListFieldsResponseOrBuilder extends
    */
   com.google.firestore.admin.v1.Field getFields(int index);
   /**
+   *
+   *
    * <pre>
    * The requested fields.
    * </pre>
@@ -48,25 +54,29 @@ public interface ListFieldsResponseOrBuilder extends
    */
   int getFieldsCount();
   /**
+   *
+   *
    * <pre>
    * The requested fields.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Field fields = 1;</code>
    */
-  java.util.List<? extends com.google.firestore.admin.v1.FieldOrBuilder> 
-      getFieldsOrBuilderList();
+  java.util.List<? extends com.google.firestore.admin.v1.FieldOrBuilder> getFieldsOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The requested fields.
    * </pre>
    *
    * <code>repeated .google.firestore.admin.v1.Field fields = 1;</code>
    */
-  com.google.firestore.admin.v1.FieldOrBuilder getFieldsOrBuilder(
-      int index);
+  com.google.firestore.admin.v1.FieldOrBuilder getFieldsOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request another page of results. If blank,
    * this is the last page.
@@ -76,6 +86,8 @@ public interface ListFieldsResponseOrBuilder extends
    */
   java.lang.String getNextPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request another page of results. If blank,
    * this is the last page.
@@ -83,6 +95,5 @@ public interface ListFieldsResponseOrBuilder extends
    *
    * <code>string next_page_token = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getNextPageTokenBytes();
+  com.google.protobuf.ByteString getNextPageTokenBytes();
 }

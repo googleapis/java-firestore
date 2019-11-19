@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface UpdateFieldRequestOrBuilder extends
+public interface UpdateFieldRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.UpdateFieldRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The field to be updated.
    * </pre>
@@ -31,6 +34,8 @@ public interface UpdateFieldRequestOrBuilder extends
    */
   boolean hasField();
   /**
+   *
+   *
    * <pre>
    * The field to be updated.
    * </pre>
@@ -39,6 +44,8 @@ public interface UpdateFieldRequestOrBuilder extends
    */
   com.google.firestore.admin.v1.Field getField();
   /**
+   *
+   *
    * <pre>
    * The field to be updated.
    * </pre>
@@ -48,6 +55,8 @@ public interface UpdateFieldRequestOrBuilder extends
   com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A mask, relative to the field. If specified, only configuration specified
    * by this field_mask will be updated in the field.
@@ -57,6 +66,8 @@ public interface UpdateFieldRequestOrBuilder extends
    */
   boolean hasUpdateMask();
   /**
+   *
+   *
    * <pre>
    * A mask, relative to the field. If specified, only configuration specified
    * by this field_mask will be updated in the field.
@@ -66,6 +77,8 @@ public interface UpdateFieldRequestOrBuilder extends
    */
   com.google.protobuf.FieldMask getUpdateMask();
   /**
+   *
+   *
    * <pre>
    * A mask, relative to the field. If specified, only configuration specified
    * by this field_mask will be updated in the field.

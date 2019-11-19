@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ExportDocumentsRequestOrBuilder extends
+public interface ExportDocumentsRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ExportDocumentsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Database to export. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -32,6 +35,8 @@ public interface ExportDocumentsRequestOrBuilder extends
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * Database to export. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -39,19 +44,21 @@ public interface ExportDocumentsRequestOrBuilder extends
    *
    * <code>string name = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * Which collection ids to export. Unspecified means all collections.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  java.util.List<java.lang.String>
-      getCollectionIdsList();
+  java.util.List<java.lang.String> getCollectionIdsList();
   /**
+   *
+   *
    * <pre>
    * Which collection ids to export. Unspecified means all collections.
    * </pre>
@@ -60,6 +67,8 @@ public interface ExportDocumentsRequestOrBuilder extends
    */
   int getCollectionIdsCount();
   /**
+   *
+   *
    * <pre>
    * Which collection ids to export. Unspecified means all collections.
    * </pre>
@@ -68,16 +77,19 @@ public interface ExportDocumentsRequestOrBuilder extends
    */
   java.lang.String getCollectionIds(int index);
   /**
+   *
+   *
    * <pre>
    * Which collection ids to export. Unspecified means all collections.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getCollectionIdsBytes(int index);
+  com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
   /**
+   *
+   *
    * <pre>
    * The output URI. Currently only supports Google Cloud Storage URIs of the
    * form: `gs://BUCKET_NAME[/NAMESPACE_PATH]`, where `BUCKET_NAME` is the name
@@ -93,6 +105,8 @@ public interface ExportDocumentsRequestOrBuilder extends
    */
   java.lang.String getOutputUriPrefix();
   /**
+   *
+   *
    * <pre>
    * The output URI. Currently only supports Google Cloud Storage URIs of the
    * form: `gs://BUCKET_NAME[/NAMESPACE_PATH]`, where `BUCKET_NAME` is the name
@@ -106,6 +120,5 @@ public interface ExportDocumentsRequestOrBuilder extends
    *
    * <code>string output_uri_prefix = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getOutputUriPrefixBytes();
+  com.google.protobuf.ByteString getOutputUriPrefixBytes();
 }

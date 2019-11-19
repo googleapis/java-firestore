@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface WriteOrBuilder extends
+public interface WriteOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.Write)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A document to write.
    * </pre>
@@ -31,6 +34,8 @@ public interface WriteOrBuilder extends
    */
   boolean hasUpdate();
   /**
+   *
+   *
    * <pre>
    * A document to write.
    * </pre>
@@ -39,6 +44,8 @@ public interface WriteOrBuilder extends
    */
   com.google.firestore.v1beta1.Document getUpdate();
   /**
+   *
+   *
    * <pre>
    * A document to write.
    * </pre>
@@ -48,6 +55,8 @@ public interface WriteOrBuilder extends
   com.google.firestore.v1beta1.DocumentOrBuilder getUpdateOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * A document name to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -57,6 +66,8 @@ public interface WriteOrBuilder extends
    */
   java.lang.String getDelete();
   /**
+   *
+   *
    * <pre>
    * A document name to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -64,10 +75,11 @@ public interface WriteOrBuilder extends
    *
    * <code>string delete = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getDeleteBytes();
+  com.google.protobuf.ByteString getDeleteBytes();
 
   /**
+   *
+   *
    * <pre>
    * Applies a transformation to a document.
    * At most one `transform` per document is allowed in a given request.
@@ -79,6 +91,8 @@ public interface WriteOrBuilder extends
    */
   boolean hasTransform();
   /**
+   *
+   *
    * <pre>
    * Applies a transformation to a document.
    * At most one `transform` per document is allowed in a given request.
@@ -90,6 +104,8 @@ public interface WriteOrBuilder extends
    */
   com.google.firestore.v1beta1.DocumentTransform getTransform();
   /**
+   *
+   *
    * <pre>
    * Applies a transformation to a document.
    * At most one `transform` per document is allowed in a given request.
@@ -102,6 +118,8 @@ public interface WriteOrBuilder extends
   com.google.firestore.v1beta1.DocumentTransformOrBuilder getTransformOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The fields to update in this write.
    * This field can be set only when the operation is `update`.
@@ -118,6 +136,8 @@ public interface WriteOrBuilder extends
    */
   boolean hasUpdateMask();
   /**
+   *
+   *
    * <pre>
    * The fields to update in this write.
    * This field can be set only when the operation is `update`.
@@ -134,6 +154,8 @@ public interface WriteOrBuilder extends
    */
   com.google.firestore.v1beta1.DocumentMask getUpdateMask();
   /**
+   *
+   *
    * <pre>
    * The fields to update in this write.
    * This field can be set only when the operation is `update`.
@@ -151,6 +173,8 @@ public interface WriteOrBuilder extends
   com.google.firestore.v1beta1.DocumentMaskOrBuilder getUpdateMaskOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The write will fail if this is set and not met by the target document.
@@ -160,6 +184,8 @@ public interface WriteOrBuilder extends
    */
   boolean hasCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The write will fail if this is set and not met by the target document.
@@ -169,6 +195,8 @@ public interface WriteOrBuilder extends
    */
   com.google.firestore.v1beta1.Precondition getCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The write will fail if this is set and not met by the target document.

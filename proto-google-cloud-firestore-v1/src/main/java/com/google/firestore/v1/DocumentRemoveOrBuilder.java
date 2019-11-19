@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface DocumentRemoveOrBuilder extends
+public interface DocumentRemoveOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.DocumentRemove)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The resource name of the [Document][google.firestore.v1.Document] that has gone out of view.
    * </pre>
@@ -31,16 +34,19 @@ public interface DocumentRemoveOrBuilder extends
    */
   java.lang.String getDocument();
   /**
+   *
+   *
    * <pre>
    * The resource name of the [Document][google.firestore.v1.Document] that has gone out of view.
    * </pre>
    *
    * <code>string document = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getDocumentBytes();
+  com.google.protobuf.ByteString getDocumentBytes();
 
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this document.
    * </pre>
@@ -49,6 +55,8 @@ public interface DocumentRemoveOrBuilder extends
    */
   java.util.List<java.lang.Integer> getRemovedTargetIdsList();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this document.
    * </pre>
@@ -57,6 +65,8 @@ public interface DocumentRemoveOrBuilder extends
    */
   int getRemovedTargetIdsCount();
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that previously matched this document.
    * </pre>
@@ -66,6 +76,8 @@ public interface DocumentRemoveOrBuilder extends
   int getRemovedTargetIds(int index);
 
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the remove was observed.
    * Greater or equal to the `commit_time` of the change/delete/remove.
@@ -75,6 +87,8 @@ public interface DocumentRemoveOrBuilder extends
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the remove was observed.
    * Greater or equal to the `commit_time` of the change/delete/remove.
@@ -84,6 +98,8 @@ public interface DocumentRemoveOrBuilder extends
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * The read timestamp at which the remove was observed.
    * Greater or equal to the `commit_time` of the change/delete/remove.

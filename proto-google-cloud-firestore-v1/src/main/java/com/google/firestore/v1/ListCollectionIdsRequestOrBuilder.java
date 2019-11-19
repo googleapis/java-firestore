@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface ListCollectionIdsRequestOrBuilder extends
+public interface ListCollectionIdsRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.ListCollectionIdsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The parent document. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -34,6 +37,8 @@ public interface ListCollectionIdsRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * The parent document. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -43,10 +48,11 @@ public interface ListCollectionIdsRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * The maximum number of results to return.
    * </pre>
@@ -56,6 +62,8 @@ public interface ListCollectionIdsRequestOrBuilder extends
   int getPageSize();
 
   /**
+   *
+   *
    * <pre>
    * A page token. Must be a value from
    * [ListCollectionIdsResponse][google.firestore.v1.ListCollectionIdsResponse].
@@ -65,6 +73,8 @@ public interface ListCollectionIdsRequestOrBuilder extends
    */
   java.lang.String getPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token. Must be a value from
    * [ListCollectionIdsResponse][google.firestore.v1.ListCollectionIdsResponse].
@@ -72,6 +82,5 @@ public interface ListCollectionIdsRequestOrBuilder extends
    *
    * <code>string page_token = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getPageTokenBytes();
+  com.google.protobuf.ByteString getPageTokenBytes();
 }

@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface UpdateDocumentRequestOrBuilder extends
+public interface UpdateDocumentRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.UpdateDocumentRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The updated document.
    * Creates the document if it does not already exist.
@@ -32,6 +35,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   boolean hasDocument();
   /**
+   *
+   *
    * <pre>
    * The updated document.
    * Creates the document if it does not already exist.
@@ -41,6 +46,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   com.google.firestore.v1.Document getDocument();
   /**
+   *
+   *
    * <pre>
    * The updated document.
    * Creates the document if it does not already exist.
@@ -51,6 +58,8 @@ public interface UpdateDocumentRequestOrBuilder extends
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
@@ -64,6 +73,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   boolean hasUpdateMask();
   /**
+   *
+   *
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
@@ -77,6 +88,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   com.google.firestore.v1.DocumentMask getUpdateMask();
   /**
+   *
+   *
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
@@ -91,6 +104,8 @@ public interface UpdateDocumentRequestOrBuilder extends
   com.google.firestore.v1.DocumentMaskOrBuilder getUpdateMaskOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If the document has a field that is not present in this mask, that field
@@ -101,6 +116,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   boolean hasMask();
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If the document has a field that is not present in this mask, that field
@@ -111,6 +128,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   com.google.firestore.v1.DocumentMask getMask();
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If the document has a field that is not present in this mask, that field
@@ -122,6 +141,8 @@ public interface UpdateDocumentRequestOrBuilder extends
   com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.
@@ -131,6 +152,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   boolean hasCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.
@@ -140,6 +163,8 @@ public interface UpdateDocumentRequestOrBuilder extends
    */
   com.google.firestore.v1.Precondition getCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.

@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface ListDocumentsRequestOrBuilder extends
+public interface ListDocumentsRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.ListDocumentsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -36,6 +39,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -47,10 +52,11 @@ public interface ListDocumentsRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
@@ -60,6 +66,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   java.lang.String getCollectionId();
   /**
+   *
+   *
    * <pre>
    * The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
@@ -67,10 +75,11 @@ public interface ListDocumentsRequestOrBuilder extends
    *
    * <code>string collection_id = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getCollectionIdBytes();
+  com.google.protobuf.ByteString getCollectionIdBytes();
 
   /**
+   *
+   *
    * <pre>
    * The maximum number of documents to return.
    * </pre>
@@ -80,6 +89,8 @@ public interface ListDocumentsRequestOrBuilder extends
   int getPageSize();
 
   /**
+   *
+   *
    * <pre>
    * The `next_page_token` value returned from a previous List request, if any.
    * </pre>
@@ -88,16 +99,19 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   java.lang.String getPageToken();
   /**
+   *
+   *
    * <pre>
    * The `next_page_token` value returned from a previous List request, if any.
    * </pre>
    *
    * <code>string page_token = 4;</code>
    */
-  com.google.protobuf.ByteString
-      getPageTokenBytes();
+  com.google.protobuf.ByteString getPageTokenBytes();
 
   /**
+   *
+   *
    * <pre>
    * The order to sort results by. For example: `priority desc, name`.
    * </pre>
@@ -106,16 +120,19 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   java.lang.String getOrderBy();
   /**
+   *
+   *
    * <pre>
    * The order to sort results by. For example: `priority desc, name`.
    * </pre>
    *
    * <code>string order_by = 6;</code>
    */
-  com.google.protobuf.ByteString
-      getOrderByBytes();
+  com.google.protobuf.ByteString getOrderByBytes();
 
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
@@ -126,6 +143,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   boolean hasMask();
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
@@ -136,6 +155,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   com.google.firestore.v1beta1.DocumentMask getMask();
   /**
+   *
+   *
    * <pre>
    * The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
@@ -147,6 +168,8 @@ public interface ListDocumentsRequestOrBuilder extends
   com.google.firestore.v1beta1.DocumentMaskOrBuilder getMaskOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Reads documents in a transaction.
    * </pre>
@@ -156,6 +179,8 @@ public interface ListDocumentsRequestOrBuilder extends
   com.google.protobuf.ByteString getTransaction();
 
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -165,6 +190,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -174,6 +201,8 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 60 seconds.
@@ -184,6 +213,8 @@ public interface ListDocumentsRequestOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * If the list should show missing documents. A missing document is a
    * document that does not exist but has sub-documents. These documents will
@@ -197,5 +228,6 @@ public interface ListDocumentsRequestOrBuilder extends
    */
   boolean getShowMissing();
 
-  public com.google.firestore.v1beta1.ListDocumentsRequest.ConsistencySelectorCase getConsistencySelectorCase();
+  public com.google.firestore.v1beta1.ListDocumentsRequest.ConsistencySelectorCase
+      getConsistencySelectorCase();
 }

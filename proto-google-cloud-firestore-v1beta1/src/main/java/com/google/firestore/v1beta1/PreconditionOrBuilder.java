@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface PreconditionOrBuilder extends
+public interface PreconditionOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.Precondition)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * When set to `true`, the target document must exist.
    * When set to `false`, the target document must not exist.
@@ -33,6 +36,8 @@ public interface PreconditionOrBuilder extends
   boolean getExists();
 
   /**
+   *
+   *
    * <pre>
    * When set, the target document must exist and have been last updated at
    * that time.
@@ -42,6 +47,8 @@ public interface PreconditionOrBuilder extends
    */
   boolean hasUpdateTime();
   /**
+   *
+   *
    * <pre>
    * When set, the target document must exist and have been last updated at
    * that time.
@@ -51,6 +58,8 @@ public interface PreconditionOrBuilder extends
    */
   com.google.protobuf.Timestamp getUpdateTime();
   /**
+   *
+   *
    * <pre>
    * When set, the target document must exist and have been last updated at
    * that time.

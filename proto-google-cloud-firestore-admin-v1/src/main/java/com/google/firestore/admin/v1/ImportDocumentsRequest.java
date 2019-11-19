@@ -19,21 +19,24 @@
 package com.google.firestore.admin.v1;
 
 /**
+ *
+ *
  * <pre>
  * The request for [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
  */
-public  final class ImportDocumentsRequest extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.ImportDocumentsRequest)
     ImportDocumentsRequestOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use ImportDocumentsRequest.newBuilder() to construct.
   private ImportDocumentsRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private ImportDocumentsRequest() {
     name_ = "";
     collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -41,10 +44,10 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private ImportDocumentsRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -64,41 +67,43 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            name_ = s;
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
-            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-              collectionIds_ = new com.google.protobuf.LazyStringArrayList();
-              mutable_bitField0_ |= 0x00000002;
+              name_ = s;
+              break;
             }
-            collectionIds_.add(s);
-            break;
-          }
-          case 26: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 18:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                collectionIds_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              collectionIds_.add(s);
+              break;
+            }
+          case 26:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            inputUriPrefix_ = s;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              inputUriPrefix_ = s;
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000002) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
@@ -107,23 +112,28 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.admin.v1.FirestoreAdminProto.internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.admin.v1.FirestoreAdminProto
+        .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.admin.v1.FirestoreAdminProto.internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
+    return com.google.firestore.admin.v1.FirestoreAdminProto
+        .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.admin.v1.ImportDocumentsRequest.class, com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
+            com.google.firestore.admin.v1.ImportDocumentsRequest.class,
+            com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
   }
 
   private int bitField0_;
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
+   *
+   *
    * <pre>
    * Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -136,14 +146,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       name_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
@@ -151,13 +162,11 @@ private static final long serialVersionUID = 0L;
    *
    * <code>string name = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getNameBytes() {
+  public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       name_ = b;
       return b;
     } else {
@@ -168,6 +177,8 @@ private static final long serialVersionUID = 0L;
   public static final int COLLECTION_IDS_FIELD_NUMBER = 2;
   private com.google.protobuf.LazyStringList collectionIds_;
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -175,11 +186,12 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  public com.google.protobuf.ProtocolStringList
-      getCollectionIdsList() {
+  public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
     return collectionIds_;
   }
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -191,6 +203,8 @@ private static final long serialVersionUID = 0L;
     return collectionIds_.size();
   }
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -202,6 +216,8 @@ private static final long serialVersionUID = 0L;
     return collectionIds_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
    * in the import.
@@ -209,14 +225,15 @@ private static final long serialVersionUID = 0L;
    *
    * <code>repeated string collection_ids = 2;</code>
    */
-  public com.google.protobuf.ByteString
-      getCollectionIdsBytes(int index) {
+  public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
     return collectionIds_.getByteString(index);
   }
 
   public static final int INPUT_URI_PREFIX_FIELD_NUMBER = 3;
   private volatile java.lang.Object inputUriPrefix_;
   /**
+   *
+   *
    * <pre>
    * Location of the exported files.
    * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -232,14 +249,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       inputUriPrefix_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Location of the exported files.
    * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -250,13 +268,11 @@ private static final long serialVersionUID = 0L;
    *
    * <code>string input_uri_prefix = 3;</code>
    */
-  public com.google.protobuf.ByteString
-      getInputUriPrefixBytes() {
+  public com.google.protobuf.ByteString getInputUriPrefixBytes() {
     java.lang.Object ref = inputUriPrefix_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       inputUriPrefix_ = b;
       return b;
     } else {
@@ -265,6 +281,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -276,8 +293,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
@@ -318,19 +334,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.admin.v1.ImportDocumentsRequest)) {
       return super.equals(obj);
     }
-    com.google.firestore.admin.v1.ImportDocumentsRequest other = (com.google.firestore.admin.v1.ImportDocumentsRequest) obj;
+    com.google.firestore.admin.v1.ImportDocumentsRequest other =
+        (com.google.firestore.admin.v1.ImportDocumentsRequest) obj;
 
-    if (!getName()
-        .equals(other.getName())) return false;
-    if (!getCollectionIdsList()
-        .equals(other.getCollectionIdsList())) return false;
-    if (!getInputUriPrefix()
-        .equals(other.getInputUriPrefix())) return false;
+    if (!getName().equals(other.getName())) return false;
+    if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
+    if (!getInputUriPrefix().equals(other.getInputUriPrefix())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -356,117 +370,126 @@ private static final long serialVersionUID = 0L;
   }
 
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
-      java.nio.ByteBuffer data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
+      java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseDelimitedFrom(java.io.InputStream input)
+
+  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.admin.v1.ImportDocumentsRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * The request for [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.ImportDocumentsRequest)
       com.google.firestore.admin.v1.ImportDocumentsRequestOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.admin.v1.FirestoreAdminProto.internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.admin.v1.FirestoreAdminProto
+          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.admin.v1.FirestoreAdminProto.internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
+      return com.google.firestore.admin.v1.FirestoreAdminProto
+          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.admin.v1.ImportDocumentsRequest.class, com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
+              com.google.firestore.admin.v1.ImportDocumentsRequest.class,
+              com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
     }
 
     // Construct using com.google.firestore.admin.v1.ImportDocumentsRequest.newBuilder()
@@ -474,16 +497,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -497,9 +519,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.admin.v1.FirestoreAdminProto.internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.admin.v1.FirestoreAdminProto
+          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
     }
 
     @java.lang.Override
@@ -518,7 +540,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.admin.v1.ImportDocumentsRequest buildPartial() {
-      com.google.firestore.admin.v1.ImportDocumentsRequest result = new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
+      com.google.firestore.admin.v1.ImportDocumentsRequest result =
+          new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       result.name_ = name_;
@@ -537,38 +560,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.admin.v1.ImportDocumentsRequest) {
-        return mergeFrom((com.google.firestore.admin.v1.ImportDocumentsRequest)other);
+        return mergeFrom((com.google.firestore.admin.v1.ImportDocumentsRequest) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -576,7 +600,8 @@ private static final long serialVersionUID = 0L;
     }
 
     public Builder mergeFrom(com.google.firestore.admin.v1.ImportDocumentsRequest other) {
-      if (other == com.google.firestore.admin.v1.ImportDocumentsRequest.getDefaultInstance()) return this;
+      if (other == com.google.firestore.admin.v1.ImportDocumentsRequest.getDefaultInstance())
+        return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
         onChanged();
@@ -614,7 +639,8 @@ private static final long serialVersionUID = 0L;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.admin.v1.ImportDocumentsRequest) e.getUnfinishedMessage();
+        parsedMessage =
+            (com.google.firestore.admin.v1.ImportDocumentsRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -623,10 +649,13 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
+     *
+     *
      * <pre>
      * Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
@@ -637,8 +666,7 @@ private static final long serialVersionUID = 0L;
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
@@ -647,6 +675,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
@@ -654,13 +684,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
+    public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -668,6 +696,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
@@ -675,17 +705,18 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public Builder setName(
-        java.lang.String value) {
+    public Builder setName(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       name_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
@@ -694,12 +725,14 @@ private static final long serialVersionUID = 0L;
      * <code>string name = 1;</code>
      */
     public Builder clearName() {
-      
+
       name_ = getDefaultInstance().getName();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
@@ -707,26 +740,29 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string name = 1;</code>
      */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       name_ = value;
       onChanged();
       return this;
     }
 
-    private com.google.protobuf.LazyStringList collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringList collectionIds_ =
+        com.google.protobuf.LazyStringArrayList.EMPTY;
+
     private void ensureCollectionIdsIsMutable() {
       if (!((bitField0_ & 0x00000002) != 0)) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
         bitField0_ |= 0x00000002;
-       }
+      }
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -734,11 +770,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getCollectionIdsList() {
+    public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
       return collectionIds_.getUnmodifiableView();
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -750,6 +787,8 @@ private static final long serialVersionUID = 0L;
       return collectionIds_.size();
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -761,6 +800,8 @@ private static final long serialVersionUID = 0L;
       return collectionIds_.get(index);
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -768,11 +809,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public com.google.protobuf.ByteString
-        getCollectionIdsBytes(int index) {
+    public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
       return collectionIds_.getByteString(index);
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -780,17 +822,18 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public Builder setCollectionIds(
-        int index, java.lang.String value) {
+    public Builder setCollectionIds(int index, java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCollectionIdsIsMutable();
+        throw new NullPointerException();
+      }
+      ensureCollectionIdsIsMutable();
       collectionIds_.set(index, value);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -798,17 +841,18 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public Builder addCollectionIds(
-        java.lang.String value) {
+    public Builder addCollectionIds(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCollectionIdsIsMutable();
+        throw new NullPointerException();
+      }
+      ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -816,15 +860,15 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public Builder addAllCollectionIds(
-        java.lang.Iterable<java.lang.String> values) {
+    public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, collectionIds_);
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, collectionIds_);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -839,6 +883,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
      * in the import.
@@ -846,12 +892,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated string collection_ids = 2;</code>
      */
-    public Builder addCollectionIdsBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder addCollectionIdsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
       onChanged();
@@ -860,6 +905,8 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object inputUriPrefix_ = "";
     /**
+     *
+     *
      * <pre>
      * Location of the exported files.
      * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -873,8 +920,7 @@ private static final long serialVersionUID = 0L;
     public java.lang.String getInputUriPrefix() {
       java.lang.Object ref = inputUriPrefix_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         inputUriPrefix_ = s;
         return s;
@@ -883,6 +929,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Location of the exported files.
      * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -893,13 +941,11 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string input_uri_prefix = 3;</code>
      */
-    public com.google.protobuf.ByteString
-        getInputUriPrefixBytes() {
+    public com.google.protobuf.ByteString getInputUriPrefixBytes() {
       java.lang.Object ref = inputUriPrefix_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         inputUriPrefix_ = b;
         return b;
       } else {
@@ -907,6 +953,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Location of the exported files.
      * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -917,17 +965,18 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string input_uri_prefix = 3;</code>
      */
-    public Builder setInputUriPrefix(
-        java.lang.String value) {
+    public Builder setInputUriPrefix(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       inputUriPrefix_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Location of the exported files.
      * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -939,12 +988,14 @@ private static final long serialVersionUID = 0L;
      * <code>string input_uri_prefix = 3;</code>
      */
     public Builder clearInputUriPrefix() {
-      
+
       inputUriPrefix_ = getDefaultInstance().getInputUriPrefix();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Location of the exported files.
      * This must match the output_uri_prefix of an ExportDocumentsResponse from
@@ -955,20 +1006,19 @@ private static final long serialVersionUID = 0L;
      *
      * <code>string input_uri_prefix = 3;</code>
      */
-    public Builder setInputUriPrefixBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setInputUriPrefixBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       inputUriPrefix_ = value;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -978,12 +1028,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.ImportDocumentsRequest)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.ImportDocumentsRequest)
   private static final com.google.firestore.admin.v1.ImportDocumentsRequest DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.admin.v1.ImportDocumentsRequest();
   }
@@ -992,16 +1042,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ImportDocumentsRequest>
-      PARSER = new com.google.protobuf.AbstractParser<ImportDocumentsRequest>() {
-    @java.lang.Override
-    public ImportDocumentsRequest parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ImportDocumentsRequest(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<ImportDocumentsRequest> PARSER =
+      new com.google.protobuf.AbstractParser<ImportDocumentsRequest>() {
+        @java.lang.Override
+        public ImportDocumentsRequest parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ImportDocumentsRequest(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<ImportDocumentsRequest> parser() {
     return PARSER;
@@ -1016,6 +1066,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.admin.v1.ImportDocumentsRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

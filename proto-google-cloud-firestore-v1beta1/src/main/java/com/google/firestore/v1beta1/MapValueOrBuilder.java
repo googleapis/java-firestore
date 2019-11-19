@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface MapValueOrBuilder extends
+public interface MapValueOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.MapValue)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -35,6 +38,8 @@ public interface MapValueOrBuilder extends
    */
   int getFieldsCount();
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -45,15 +50,13 @@ public interface MapValueOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 1;</code>
    */
-  boolean containsFields(
-      java.lang.String key);
-  /**
-   * Use {@link #getFieldsMap()} instead.
-   */
+  boolean containsFields(java.lang.String key);
+  /** Use {@link #getFieldsMap()} instead. */
   @java.lang.Deprecated
-  java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value>
-  getFields();
+  java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFields();
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -64,9 +67,10 @@ public interface MapValueOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 1;</code>
    */
-  java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value>
-  getFieldsMap();
+  java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFieldsMap();
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -77,11 +81,11 @@ public interface MapValueOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 1;</code>
    */
-
   com.google.firestore.v1beta1.Value getFieldsOrDefault(
-      java.lang.String key,
-      com.google.firestore.v1beta1.Value defaultValue);
+      java.lang.String key, com.google.firestore.v1beta1.Value defaultValue);
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -92,7 +96,5 @@ public interface MapValueOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 1;</code>
    */
-
-  com.google.firestore.v1beta1.Value getFieldsOrThrow(
-      java.lang.String key);
+  com.google.firestore.v1beta1.Value getFieldsOrThrow(java.lang.String key);
 }

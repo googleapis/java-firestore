@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface FieldOperationMetadataOrBuilder extends
+public interface FieldOperationMetadataOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.FieldOperationMetadata)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -31,6 +34,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   boolean hasStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -39,6 +44,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getStartTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation started.
    * </pre>
@@ -48,6 +55,8 @@ public interface FieldOperationMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -57,6 +66,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   boolean hasEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -66,6 +77,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   com.google.protobuf.Timestamp getEndTime();
   /**
+   *
+   *
    * <pre>
    * The time this operation completed. Will be unset if operation still in
    * progress.
@@ -76,6 +89,8 @@ public interface FieldOperationMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The field resource that this operation is acting on. For example:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
@@ -85,6 +100,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   java.lang.String getField();
   /**
+   *
+   *
    * <pre>
    * The field resource that this operation is acting on. For example:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
@@ -92,59 +109,82 @@ public interface FieldOperationMetadataOrBuilder extends
    *
    * <code>string field = 3;</code>
    */
-  com.google.protobuf.ByteString
-      getFieldBytes();
+  com.google.protobuf.ByteString getFieldBytes();
 
   /**
+   *
+   *
    * <pre>
    * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
    * operation.
    * </pre>
    *
-   * <code>repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;</code>
+   * <code>
+   * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
+   * </code>
    */
-  java.util.List<com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta> 
+  java.util.List<com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta>
       getIndexConfigDeltasList();
   /**
+   *
+   *
    * <pre>
    * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
    * operation.
    * </pre>
    *
-   * <code>repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;</code>
+   * <code>
+   * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
+   * </code>
    */
-  com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta getIndexConfigDeltas(int index);
+  com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta getIndexConfigDeltas(
+      int index);
   /**
+   *
+   *
    * <pre>
    * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
    * operation.
    * </pre>
    *
-   * <code>repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;</code>
+   * <code>
+   * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
+   * </code>
    */
   int getIndexConfigDeltasCount();
   /**
+   *
+   *
    * <pre>
    * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
    * operation.
    * </pre>
    *
-   * <code>repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;</code>
+   * <code>
+   * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
+   * </code>
    */
-  java.util.List<? extends com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder> 
+  java.util.List<
+          ? extends com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder>
       getIndexConfigDeltasOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
    * operation.
    * </pre>
    *
-   * <code>repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;</code>
+   * <code>
+   * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
+   * </code>
    */
-  com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder getIndexConfigDeltasOrBuilder(
-      int index);
+  com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder
+      getIndexConfigDeltasOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * The state of the operation.
    * </pre>
@@ -153,6 +193,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   int getStateValue();
   /**
+   *
+   *
    * <pre>
    * The state of the operation.
    * </pre>
@@ -162,6 +204,8 @@ public interface FieldOperationMetadataOrBuilder extends
   com.google.firestore.admin.v1.OperationState getState();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -170,6 +214,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   boolean hasProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -178,6 +224,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressDocuments();
   /**
+   *
+   *
    * <pre>
    * The progress, in documents, of this operation.
    * </pre>
@@ -187,6 +235,8 @@ public interface FieldOperationMetadataOrBuilder extends
   com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -195,6 +245,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   boolean hasProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>
@@ -203,6 +255,8 @@ public interface FieldOperationMetadataOrBuilder extends
    */
   com.google.firestore.admin.v1.Progress getProgressBytes();
   /**
+   *
+   *
    * <pre>
    * The progress, in bytes, of this operation.
    * </pre>

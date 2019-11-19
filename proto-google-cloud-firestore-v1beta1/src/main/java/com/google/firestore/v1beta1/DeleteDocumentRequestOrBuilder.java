@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface DeleteDocumentRequestOrBuilder extends
+public interface DeleteDocumentRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.DeleteDocumentRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -32,6 +35,8 @@ public interface DeleteDocumentRequestOrBuilder extends
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
@@ -39,10 +44,11 @@ public interface DeleteDocumentRequestOrBuilder extends
    *
    * <code>string name = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.
@@ -52,6 +58,8 @@ public interface DeleteDocumentRequestOrBuilder extends
    */
   boolean hasCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.
@@ -61,6 +69,8 @@ public interface DeleteDocumentRequestOrBuilder extends
    */
   com.google.firestore.v1beta1.Precondition getCurrentDocument();
   /**
+   *
+   *
    * <pre>
    * An optional precondition on the document.
    * The request will fail if this is set and not met by the target document.

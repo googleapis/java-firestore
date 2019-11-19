@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1beta1;
 
-public interface CommitResponseOrBuilder extends
+public interface CommitResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1beta1.CommitResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -31,9 +34,10 @@ public interface CommitResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
-  java.util.List<com.google.firestore.v1beta1.WriteResult> 
-      getWriteResultsList();
+  java.util.List<com.google.firestore.v1beta1.WriteResult> getWriteResultsList();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -44,6 +48,8 @@ public interface CommitResponseOrBuilder extends
    */
   com.google.firestore.v1beta1.WriteResult getWriteResults(int index);
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -54,6 +60,8 @@ public interface CommitResponseOrBuilder extends
    */
   int getWriteResultsCount();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -62,9 +70,11 @@ public interface CommitResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
-  java.util.List<? extends com.google.firestore.v1beta1.WriteResultOrBuilder> 
+  java.util.List<? extends com.google.firestore.v1beta1.WriteResultOrBuilder>
       getWriteResultsOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -73,10 +83,11 @@ public interface CommitResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
-  com.google.firestore.v1beta1.WriteResultOrBuilder getWriteResultsOrBuilder(
-      int index);
+  com.google.firestore.v1beta1.WriteResultOrBuilder getWriteResultsOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * The time at which the commit occurred.
    * </pre>
@@ -85,6 +96,8 @@ public interface CommitResponseOrBuilder extends
    */
   boolean hasCommitTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the commit occurred.
    * </pre>
@@ -93,6 +106,8 @@ public interface CommitResponseOrBuilder extends
    */
   com.google.protobuf.Timestamp getCommitTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the commit occurred.
    * </pre>

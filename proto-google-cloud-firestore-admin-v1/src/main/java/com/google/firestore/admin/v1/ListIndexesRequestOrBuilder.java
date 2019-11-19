@@ -18,11 +18,14 @@
 
 package com.google.firestore.admin.v1;
 
-public interface ListIndexesRequestOrBuilder extends
+public interface ListIndexesRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ListIndexesRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -32,6 +35,8 @@ public interface ListIndexesRequestOrBuilder extends
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -39,10 +44,11 @@ public interface ListIndexesRequestOrBuilder extends
    *
    * <code>string parent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * The filter to apply to list results.
    * </pre>
@@ -51,16 +57,19 @@ public interface ListIndexesRequestOrBuilder extends
    */
   java.lang.String getFilter();
   /**
+   *
+   *
    * <pre>
    * The filter to apply to list results.
    * </pre>
    *
    * <code>string filter = 2;</code>
    */
-  com.google.protobuf.ByteString
-      getFilterBytes();
+  com.google.protobuf.ByteString getFilterBytes();
 
   /**
+   *
+   *
    * <pre>
    * The number of results to return.
    * </pre>
@@ -70,6 +79,8 @@ public interface ListIndexesRequestOrBuilder extends
   int getPageSize();
 
   /**
+   *
+   *
    * <pre>
    * A page token, returned from a previous call to
    * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
@@ -80,6 +91,8 @@ public interface ListIndexesRequestOrBuilder extends
    */
   java.lang.String getPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token, returned from a previous call to
    * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
@@ -88,6 +101,5 @@ public interface ListIndexesRequestOrBuilder extends
    *
    * <code>string page_token = 4;</code>
    */
-  com.google.protobuf.ByteString
-      getPageTokenBytes();
+  com.google.protobuf.ByteString getPageTokenBytes();
 }
