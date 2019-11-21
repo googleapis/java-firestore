@@ -54,7 +54,7 @@ bad_license_header = """/\\*
 """
 
 
-def generate_client(service, version, config_path):
+def generate_client(service, version, config_path, package, include_gapic=True):
   library = gapic.java_library(
       service=service,
       version=version,
@@ -76,38 +76,46 @@ def generate_client(service, version, config_path):
       bad_license_header,
       license_header
   )
+  s.replace(
+      library / f'grpc-google-cloud-{service}-{version}/src/**/*.java',
+      f'package {package};',
+      f'{license_header}package {package};'
+  )
+
+  s.copy(library / f'grpc-google-cloud-{service}-{version}/src', f'grpc-google-cloud-{service}-{version}/src')
+  s.copy(library / f'proto-google-cloud-{service}-{version}/src', f'proto-google-cloud-{service}-{version}/src')
   java.format_code(f'grpc-google-cloud-{service}-{version}/src')
   java.format_code(f'proto-google-cloud-{service}-{version}/src')
 
+  if include_gapic:
+    s.copy(library / f'gapic-google-cloud-{service}-{version}/src', 'google-cloud-firestore/src')
+    java.format_code(f'google-cloud-firestore/src')
+
   return library
 
-admin_v1 = generate_client('firestore-admin', 'v1', '/google/firestore/admin/artman_firestore_v1.yaml')
-s.replace(
-    admin_v1 / f'grpc-google-cloud-firestore-admin-v1/src/**/*.java',
-    'package com.google.firestore.admin.v1;',
-    f'{license_header}package com.google.firestore.admin.v1;'
+admin_v1 = generate_client(
+    service='firestore-admin',
+    version='v1',
+    config_path='/google/firestore/admin/artman_firestore_v1.yaml',
+    package='com.google.firestore.admin.v1',
+    include_gapic=True
 )
-s.copy(admin_v1 / 'gapic-google-cloud-firestore-admin-v1/src', 'google-cloud-firestore/src')
-s.copy(admin_v1 / 'grpc-google-cloud-firestore-admin-v1/src', 'grpc-google-cloud-firestore-admin-v1/src')
-s.copy(admin_v1 / 'proto-google-cloud-firestore-admin-v1/src', 'proto-google-cloud-firestore-admin-v1/src')
 
-firestore_v1 = generate_client('firestore', 'v1',      '/google/firestore/artman_firestore_v1.yaml')
-s.replace(
-    firestore_v1 / f'grpc-google-cloud-firestore-v1/src/**/*.java',
-    'package com.google.firestore.v1;',
-    f'{license_header}package com.google.firestore.v1;'
+firestore_v1 = generate_client(
+    service='firestore',
+    version='v1',
+    config_path='/google/firestore/artman_firestore_v1.yaml',
+    package='com.google.firestore.v1',
+    include_gapic=False
 )
-s.copy(firestore_v1 / 'grpc-google-cloud-firestore-v1/src', 'grpc-google-cloud-firestore-v1/src')
-s.copy(firestore_v1 / 'proto-google-cloud-firestore-v1/src', 'proto-google-cloud-firestore-v1/src')
 
-firestore_v1beta1 = generate_client('firestore', 'v1beta1', '/google/firestore/artman_firestore.yaml')
-s.replace(
-    firestore_v1beta1 / f'grpc-google-cloud-firestore-v1beta1/src/**/*.java',
-    'package com.google.firestore.v1beta1;',
-    f'{license_header}package com.google.firestore.v1beta1;'
+firestore_v1beta1 = generate_client(
+    service='firestore',
+    version='v1beta1',
+    config_path='/google/firestore/artman_firestore.yaml',
+    package='com.google.firestore.v1beta1',
+    include_gapic=False
 )
-s.copy(firestore_v1beta1 / 'grpc-google-cloud-firestore-v1beta1/src', 'grpc-google-cloud-firestore-v1beta1/src')
-s.copy(firestore_v1beta1 / 'proto-google-cloud-firestore-v1beta1/src', 'proto-google-cloud-firestore-v1beta1/src')
 
 common_templates = gcp.CommonTemplates()
 templates = common_templates.java_library()
