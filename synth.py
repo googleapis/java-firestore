@@ -122,4 +122,7 @@ templates = common_templates.java_library()
 s.copy(templates, excludes=[
     '.gitignore',
     'README.md',
+    # firestore uses a different project for its integration tests
+    # due to the default project running datastore
+    '.kokoro/presubmit/integration.cfg'
 ])
