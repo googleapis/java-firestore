@@ -7,15 +7,15 @@
   <version>1.31.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
-  <url>https://github.com/googleapis/google-cloud-java/tree/master/google-cloud-clients/google-cloud-firestore
+  <url>https://github.com/googleapis/java-firestore/tree/master
   </url>
   <description>
     Java idiomatic client for Google Cloud Firestore.
   </description>
   <parent>
     <groupId>com.google.cloud</groupId>
-    <artifactId>google-cloud-clients</artifactId>
-    <version>0.119.1-alpha-SNAPSHOT</version><!-- {x-version-update:google-cloud-clients:current} -->
+    <artifactId>google-cloud-firestore-parent</artifactId>
+    <version>0.119.1-alpha-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
@@ -39,8 +39,7 @@
     </dependency>
     <dependency>
       <groupId>com.google.auto.value</groupId>
-      <artifactId>auto-value</artifactId>
-      <scope>provided</scope>
+      <artifactId>auto-value-annotations</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.api.grpc</groupId>
@@ -65,6 +64,7 @@
     <dependency>
       <groupId>io.opencensus</groupId>
       <artifactId>opencensus-contrib-grpc-util</artifactId>
+      <version>${opencensus.version}</version>
     </dependency>
 
     <!-- Test dependencies -->
@@ -74,8 +74,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.truth</groupId>
+      <artifactId>truth</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- Need testing utility classes for generated gRPC clients tests -->
@@ -93,6 +99,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-conformance-tests</artifactId>
+      <version>0.0.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -143,4 +150,19 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>java9</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>
