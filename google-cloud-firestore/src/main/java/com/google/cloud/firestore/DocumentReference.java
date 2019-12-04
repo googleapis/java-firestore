@@ -152,7 +152,7 @@ public class DocumentReference {
    * Creates a new Document at the DocumentReference location. It fails the write if the document
    * exists.
    *
-   * @param pojo A map of the fields and values for the document.
+   * @param pojo The POJO that will be used to populate the document contents.
    * @return An ApiFuture that will be resolved when the write finishes.
    */
   @Nonnull

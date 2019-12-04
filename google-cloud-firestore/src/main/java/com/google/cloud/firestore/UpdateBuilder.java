@@ -151,7 +151,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
    * exists.
    *
    * @param documentReference The DocumentReference to create.
-   * @param pojo A map of the fields and values for the document.
+   * @param pojo The POJO that will be used to populate the document contents.
    * @return The instance for chaining.
    */
   @Nonnull
