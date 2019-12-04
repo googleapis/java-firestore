@@ -27,7 +27,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * The parent resource name. In the format:
+   * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * For example:
@@ -35,14 +35,14 @@ public interface ListDocumentsRequestOrBuilder
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   java.lang.String getParent();
   /**
    *
    *
    * <pre>
-   * The parent resource name. In the format:
+   * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * For example:
@@ -50,7 +50,7 @@ public interface ListDocumentsRequestOrBuilder
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -58,22 +58,22 @@ public interface ListDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   java.lang.String getCollectionId();
   /**
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getCollectionIdBytes();
 

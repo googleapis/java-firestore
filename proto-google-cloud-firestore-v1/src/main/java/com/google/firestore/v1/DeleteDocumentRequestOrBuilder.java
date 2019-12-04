@@ -27,22 +27,22 @@ public interface DeleteDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * The resource name of the Document to delete. In the format:
+   * Required. The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   java.lang.String getName();
   /**
    *
    *
    * <pre>
-   * The resource name of the Document to delete. In the format:
+   * Required. The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getNameBytes();
 

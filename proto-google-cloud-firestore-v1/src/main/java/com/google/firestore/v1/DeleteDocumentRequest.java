@@ -128,11 +128,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The resource name of the Document to delete. In the format:
+   * Required. The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -149,11 +149,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The resource name of the Document to delete. In the format:
+   * Required. The resource name of the Document to delete. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -560,11 +560,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The resource name of the Document to delete. In the format:
+     * Required. The resource name of the Document to delete. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -581,11 +581,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The resource name of the Document to delete. In the format:
+     * Required. The resource name of the Document to delete. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -602,11 +602,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The resource name of the Document to delete. In the format:
+     * Required. The resource name of the Document to delete. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -621,11 +621,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The resource name of the Document to delete. In the format:
+     * Required. The resource name of the Document to delete. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearName() {
 
@@ -637,11 +637,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The resource name of the Document to delete. In the format:
+     * Required. The resource name of the Document to delete. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

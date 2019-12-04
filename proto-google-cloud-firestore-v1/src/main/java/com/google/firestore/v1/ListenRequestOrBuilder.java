@@ -27,22 +27,22 @@ public interface ListenRequestOrBuilder
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   java.lang.String getDatabase();
   /**
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 

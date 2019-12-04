@@ -166,11 +166,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -179,11 +180,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.v1.Document getDocument() {
     return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
@@ -192,11 +194,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
@@ -769,11 +772,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -782,11 +786,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -801,11 +806,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
@@ -824,11 +830,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
@@ -844,11 +851,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder mergeDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
@@ -871,11 +879,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder clearDocument() {
       if (documentBuilder_ == null) {
@@ -892,11 +901,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
 
@@ -907,11 +917,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
       if (documentBuilder_ != null) {
@@ -926,11 +937,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The updated document.
+     * Required. The updated document.
      * Creates the document if it does not already exist.
      * </pre>
      *
-     * <code>.google.firestore.v1.Document document = 1;</code>
+     * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.Document,

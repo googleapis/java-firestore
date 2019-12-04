@@ -27,33 +27,36 @@ public interface UpdateDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   boolean hasDocument();
   /**
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.v1.Document getDocument();
   /**
    *
    *
    * <pre>
-   * The updated document.
+   * Required. The updated document.
    * Creates the document if it does not already exist.
    * </pre>
    *
-   * <code>.google.firestore.v1.Document document = 1;</code>
+   * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 

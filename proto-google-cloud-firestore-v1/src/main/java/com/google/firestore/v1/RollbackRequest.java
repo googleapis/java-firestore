@@ -118,11 +118,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -139,11 +139,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -163,10 +163,10 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The transaction to roll back.
+   * Required. The transaction to roll back.
    * </pre>
    *
-   * <code>bytes transaction = 2;</code>
+   * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
@@ -507,11 +507,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -528,11 +528,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -549,11 +549,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -568,11 +568,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearDatabase() {
 
@@ -584,11 +584,11 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -606,10 +606,10 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The transaction to roll back.
+     * Required. The transaction to roll back.
      * </pre>
      *
-     * <code>bytes transaction = 2;</code>
+     * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
@@ -618,10 +618,10 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The transaction to roll back.
+     * Required. The transaction to roll back.
      * </pre>
      *
-     * <code>bytes transaction = 2;</code>
+     * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -636,10 +636,10 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The transaction to roll back.
+     * Required. The transaction to roll back.
      * </pre>
      *
-     * <code>bytes transaction = 2;</code>
+     * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearTransaction() {
 

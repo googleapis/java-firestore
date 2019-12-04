@@ -223,7 +223,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The parent resource name. In the format:
+   * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * For example:
@@ -231,7 +231,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -248,7 +248,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The parent resource name. In the format:
+   * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * For example:
@@ -256,7 +256,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -276,11 +276,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
@@ -297,11 +297,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
    * or `messages`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
@@ -1054,7 +1054,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The parent resource name. In the format:
+     * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * For example:
@@ -1062,7 +1062,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -1079,7 +1079,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The parent resource name. In the format:
+     * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * For example:
@@ -1087,7 +1087,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -1104,7 +1104,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The parent resource name. In the format:
+     * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * For example:
@@ -1112,7 +1112,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -1127,7 +1127,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The parent resource name. In the format:
+     * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * For example:
@@ -1135,7 +1135,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearParent() {
 
@@ -1147,7 +1147,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The parent resource name. In the format:
+     * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * For example:
@@ -1155,7 +1155,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1173,11 +1173,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
      * or `messages`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
@@ -1194,11 +1194,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
      * or `messages`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
@@ -1215,11 +1215,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
      * or `messages`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setCollectionId(java.lang.String value) {
       if (value == null) {
@@ -1234,11 +1234,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
      * or `messages`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearCollectionId() {
 
@@ -1250,11 +1250,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
      * or `messages`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setCollectionIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
