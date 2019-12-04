@@ -394,7 +394,8 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param document The updated document. Creates the document if it does not already exist.
+   * @param document Required. The updated document. Creates the document if it does not already
+   *     exist.
    * @param updateMask The fields to update. None of the field paths in the mask may contain a
    *     reserved name.
    *     <p>If the document exists on the server and has fields not referenced in the mask, they are
@@ -471,7 +472,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name The resource name of the Document to delete. In the format:
+   * @param name Required. The resource name of the Document to delete. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -495,7 +496,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name The resource name of the Document to delete. In the format:
+   * @param name Required. The resource name of the Document to delete. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -593,7 +594,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -664,7 +665,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
    * @param writes The writes to apply.
    *     <p>Always executed atomically and in order.
@@ -740,9 +741,9 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
-   * @param transaction The transaction to roll back.
+   * @param transaction Required. The transaction to roll back.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void rollback(String database, ByteString transaction) {
@@ -892,7 +893,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent The parent document. In the format:
+   * @param parent Required. The parent document. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`. For example:
    *     `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails

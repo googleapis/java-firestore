@@ -189,11 +189,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The resource name of the Document to get. In the format:
+   * Required. The resource name of the Document to get. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -210,11 +210,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The resource name of the Document to get. In the format:
+   * Required. The resource name of the Document to get. In the format:
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -768,11 +768,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The resource name of the Document to get. In the format:
+     * Required. The resource name of the Document to get. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -789,11 +789,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The resource name of the Document to get. In the format:
+     * Required. The resource name of the Document to get. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -810,11 +810,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The resource name of the Document to get. In the format:
+     * Required. The resource name of the Document to get. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -829,11 +829,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The resource name of the Document to get. In the format:
+     * Required. The resource name of the Document to get. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearName() {
 
@@ -845,11 +845,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The resource name of the Document to get. In the format:
+     * Required. The resource name of the Document to get. In the format:
      * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
