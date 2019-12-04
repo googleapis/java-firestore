@@ -28,6 +28,7 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.ListDocumentsRequest;
 import java.util.Iterator;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -170,13 +171,13 @@ public class CollectionReference extends Query {
    * Adds a new document to this collection with the specified data, assigning it a document ID
    * automatically.
    *
-   * @param fields The Map or POJO containing the data for the new document.
+   * @param fields A Map containing the data for the new document.
    * @return An ApiFuture that will be resolved with the DocumentReference of the newly created
    *     document.
    * @see #document()
    */
   @Nonnull
-  public ApiFuture<DocumentReference> add(@Nonnull final Object fields) {
+  public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
     final DocumentReference documentReference = document();
     ApiFuture<WriteResult> createFuture = documentReference.create(fields);
 
@@ -189,6 +190,23 @@ public class CollectionReference extends Query {
           }
         },
         MoreExecutors.directExecutor());
+  }
+
+  /**
+   * Adds a new document to this collection with the specified POJO as contents, assigning it a
+   * document ID automatically.
+   *
+   * @param pojo The POJO that will be used to populate the contents of the document
+   * @return An ApiFuture that will be resolved with the DocumentReference of the newly created
+   *     document.
+   * @see #document()
+   */
+  public ApiFuture<DocumentReference> add(Object pojo) {
+    Object converted = CustomClassMapper.convertToPlainJavaTypes(pojo);
+    if (!(converted instanceof Map)) {
+      throw FirestoreException.invalidState("Can't set a document's data to an array or primitive");
+    }
+    return add((Map<String, Object>) converted);
   }
 
   /** Returns a resource path pointing to this collection. */
