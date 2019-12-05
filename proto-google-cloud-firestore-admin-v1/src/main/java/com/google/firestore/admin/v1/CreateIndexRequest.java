@@ -128,11 +128,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * A parent name of the form
+   * Required. A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>
+   * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -149,11 +151,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * A parent name of the form
+   * Required. A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>
+   * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -173,10 +177,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public boolean hasIndex() {
     return index_ != null;
@@ -185,10 +190,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.admin.v1.Index getIndex() {
     return index_ == null ? com.google.firestore.admin.v1.Index.getDefaultInstance() : index_;
@@ -197,10 +203,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.admin.v1.IndexOrBuilder getIndexOrBuilder() {
     return getIndex();
@@ -556,11 +563,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * A parent name of the form
+     * Required. A parent name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>
+     * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -577,11 +586,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * A parent name of the form
+     * Required. A parent name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>
+     * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -598,11 +609,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * A parent name of the form
+     * Required. A parent name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>
+     * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -617,11 +630,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * A parent name of the form
+     * Required. A parent name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>
+     * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder clearParent() {
 
@@ -633,11 +648,13 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * A parent name of the form
+     * Required. A parent name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>
+     * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -660,10 +677,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public boolean hasIndex() {
       return indexBuilder_ != null || index_ != null;
@@ -672,10 +690,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.Index getIndex() {
       if (indexBuilder_ == null) {
@@ -688,10 +707,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setIndex(com.google.firestore.admin.v1.Index value) {
       if (indexBuilder_ == null) {
@@ -710,10 +730,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setIndex(com.google.firestore.admin.v1.Index.Builder builderForValue) {
       if (indexBuilder_ == null) {
@@ -729,10 +750,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder mergeIndex(com.google.firestore.admin.v1.Index value) {
       if (indexBuilder_ == null) {
@@ -755,10 +777,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder clearIndex() {
       if (indexBuilder_ == null) {
@@ -775,10 +798,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.Index.Builder getIndexBuilder() {
 
@@ -789,10 +813,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.IndexOrBuilder getIndexOrBuilder() {
       if (indexBuilder_ != null) {
@@ -805,10 +830,11 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The composite index to create.
+     * Required. The composite index to create.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Index index = 2;</code>
+     * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.admin.v1.Index,

@@ -199,11 +199,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -220,11 +220,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -841,11 +841,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -862,11 +862,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -883,11 +883,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -902,11 +902,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearDatabase() {
 
@@ -918,11 +918,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

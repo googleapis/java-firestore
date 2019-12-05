@@ -160,12 +160,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The parent resource. For example:
+   * Required. The parent resource. For example:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -182,12 +182,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The parent resource. For example:
+   * Required. The parent resource. For example:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -207,10 +207,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
@@ -227,10 +227,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
    * </pre>
    *
-   * <code>string collection_id = 2;</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
@@ -295,10 +295,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The document to create. `name` must not be set.
+   * Required. The document to create. `name` must not be set.
    * </pre>
    *
-   * <code>.google.firestore.v1beta1.Document document = 4;</code>
+   * <code>
+   * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -307,10 +309,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The document to create. `name` must not be set.
+   * Required. The document to create. `name` must not be set.
    * </pre>
    *
-   * <code>.google.firestore.v1beta1.Document document = 4;</code>
+   * <code>
+   * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
@@ -321,10 +325,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The document to create. `name` must not be set.
+   * Required. The document to create. `name` must not be set.
    * </pre>
    *
-   * <code>.google.firestore.v1beta1.Document document = 4;</code>
+   * <code>
+   * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.v1beta1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
@@ -786,12 +792,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The parent resource. For example:
+     * Required. The parent resource. For example:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -808,12 +814,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The parent resource. For example:
+     * Required. The parent resource. For example:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -830,12 +836,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The parent resource. For example:
+     * Required. The parent resource. For example:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -850,12 +856,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The parent resource. For example:
+     * Required. The parent resource. For example:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearParent() {
 
@@ -867,12 +873,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The parent resource. For example:
+     * Required. The parent resource. For example:
      * `projects/{project_id}/databases/{database_id}/documents` or
      * `projects/{project_id}/databases/{database_id}/documents/chatrooms/{chatroom_id}`
      * </pre>
      *
-     * <code>string parent = 1;</code>
+     * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -890,10 +896,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
@@ -910,10 +916,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
@@ -930,10 +936,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setCollectionId(java.lang.String value) {
       if (value == null) {
@@ -948,10 +954,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder clearCollectionId() {
 
@@ -963,10 +969,10 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
      * </pre>
      *
-     * <code>string collection_id = 2;</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     public Builder setCollectionIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1088,10 +1094,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -1100,10 +1108,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1beta1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -1118,10 +1128,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setDocument(com.google.firestore.v1beta1.Document value) {
       if (documentBuilder_ == null) {
@@ -1140,10 +1152,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setDocument(com.google.firestore.v1beta1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
@@ -1159,10 +1173,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder mergeDocument(com.google.firestore.v1beta1.Document value) {
       if (documentBuilder_ == null) {
@@ -1185,10 +1201,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder clearDocument() {
       if (documentBuilder_ == null) {
@@ -1205,10 +1223,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1beta1.Document.Builder getDocumentBuilder() {
 
@@ -1219,10 +1239,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.v1beta1.DocumentOrBuilder getDocumentOrBuilder() {
       if (documentBuilder_ != null) {
@@ -1237,10 +1259,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The document to create. `name` must not be set.
+     * Required. The document to create. `name` must not be set.
      * </pre>
      *
-     * <code>.google.firestore.v1beta1.Document document = 4;</code>
+     * <code>
+     * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1beta1.Document,

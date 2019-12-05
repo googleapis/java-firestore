@@ -45,20 +45,23 @@ public final class FieldProto {
   static {
     java.lang.String[] descriptorData = {
       "\n%google/firestore/admin/v1/field.proto\022"
-          + "\031google.firestore.admin.v1\032%google/fires"
-          + "tore/admin/v1/index.proto\032\034google/api/an"
-          + "notations.proto\"\345\001\n\005Field\022\014\n\004name\030\001 \001(\t\022"
-          + "B\n\014index_config\030\002 \001(\0132,.google.firestore"
-          + ".admin.v1.Field.IndexConfig\032\211\001\n\013IndexCon"
-          + "fig\0221\n\007indexes\030\001 \003(\0132 .google.firestore."
-          + "admin.v1.Index\022\034\n\024uses_ancestor_config\030\002"
-          + " \001(\010\022\026\n\016ancestor_field\030\003 \001(\t\022\021\n\trevertin"
-          + "g\030\004 \001(\010B\270\001\n\035com.google.firestore.admin.v"
-          + "1B\nFieldProtoP\001Z>google.golang.org/genpr"
-          + "oto/googleapis/firestore/admin/v1;admin\242"
-          + "\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin.V1"
-          + "\312\002\037Google\\Cloud\\Firestore\\Admin\\V1b\006prot"
-          + "o3"
+          + "\031google.firestore.admin.v1\032\031google/api/r"
+          + "esource.proto\032%google/firestore/admin/v1"
+          + "/index.proto\032\034google/api/annotations.pro"
+          + "to\"\340\002\n\005Field\022\014\n\004name\030\001 \001(\t\022B\n\014index_conf"
+          + "ig\030\002 \001(\0132,.google.firestore.admin.v1.Fie"
+          + "ld.IndexConfig\032\211\001\n\013IndexConfig\0221\n\007indexe"
+          + "s\030\001 \003(\0132 .google.firestore.admin.v1.Inde"
+          + "x\022\034\n\024uses_ancestor_config\030\002 \001(\010\022\026\n\016ances"
+          + "tor_field\030\003 \001(\t\022\021\n\treverting\030\004 \001(\010:y\352Av\n"
+          + "\036firestore.googleapis.com/Field\022Tproject"
+          + "s/{project}/databases/{database}/collect"
+          + "ionGroups/{collection}/fields/{field}B\270\001"
+          + "\n\035com.google.firestore.admin.v1B\nFieldPr"
+          + "otoP\001Z>google.golang.org/genproto/google"
+          + "apis/firestore/admin/v1;admin\242\002\004GCFS\252\002\037G"
+          + "oogle.Cloud.Firestore.Admin.V1\312\002\037Google\\"
+          + "Cloud\\Firestore\\Admin\\V1b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -71,6 +74,7 @@ public final class FieldProto {
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
+          com.google.api.ResourceProto.getDescriptor(),
           com.google.firestore.admin.v1.IndexProto.getDescriptor(),
           com.google.api.AnnotationsProto.getDescriptor(),
         },
@@ -91,6 +95,12 @@ public final class FieldProto {
             new java.lang.String[] {
               "Indexes", "UsesAncestorConfig", "AncestorField", "Reverting",
             });
+    com.google.protobuf.ExtensionRegistry registry =
+        com.google.protobuf.ExtensionRegistry.newInstance();
+    registry.add(com.google.api.ResourceProto.resource);
+    com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
+        descriptor, registry);
+    com.google.api.ResourceProto.getDescriptor();
     com.google.firestore.admin.v1.IndexProto.getDescriptor();
     com.google.api.AnnotationsProto.getDescriptor();
   }
