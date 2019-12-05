@@ -27,30 +27,33 @@ public interface UpdateFieldRequestOrBuilder
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   boolean hasField();
   /**
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.admin.v1.Field getField();
   /**
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder();
 

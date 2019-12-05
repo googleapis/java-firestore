@@ -191,9 +191,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
-   * @param index The composite index to create.
+   * @param index Required. The composite index to create.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation createIndex(ParentName parent, Index index) {
@@ -223,9 +223,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
-   * @param index The composite index to create.
+   * @param index Required. The composite index to create.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation createIndex(String parent, Index index) {
@@ -305,7 +305,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -332,7 +332,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -435,7 +435,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -459,7 +459,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -527,7 +527,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -551,7 +551,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -622,7 +622,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name Database to import into. Should be of the form:
+   * @param name Required. Database to import into. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -649,7 +649,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name Database to import into. Should be of the form:
+   * @param name Required. Database to import into. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -728,7 +728,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name Database to export. Should be of the form:
+   * @param name Required. Database to export. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -757,7 +757,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name Database to export. Should be of the form:
+   * @param name Required. Database to export. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -835,7 +835,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -859,7 +859,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name A name of the form
+   * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -934,7 +934,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -964,7 +964,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent A parent name of the form
+   * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -1093,7 +1093,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param field The field to be updated.
+   * @param field Required. The field to be updated.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation updateField(Field field) {

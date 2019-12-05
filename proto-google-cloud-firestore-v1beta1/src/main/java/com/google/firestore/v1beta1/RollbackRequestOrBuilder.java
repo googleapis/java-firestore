@@ -27,22 +27,22 @@ public interface RollbackRequestOrBuilder
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   java.lang.String getDatabase();
   /**
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -50,10 +50,10 @@ public interface RollbackRequestOrBuilder
    *
    *
    * <pre>
-   * The transaction to roll back.
+   * Required. The transaction to roll back.
    * </pre>
    *
-   * <code>bytes transaction = 2;</code>
+   * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
    */
   com.google.protobuf.ByteString getTransaction();
 }

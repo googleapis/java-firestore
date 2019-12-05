@@ -27,22 +27,26 @@ public interface CreateIndexRequestOrBuilder
    *
    *
    * <pre>
-   * A parent name of the form
+   * Required. A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>
+   * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   java.lang.String getParent();
   /**
    *
    *
    * <pre>
-   * A parent name of the form
+   * Required. A parent name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * </pre>
    *
-   * <code>string parent = 1;</code>
+   * <code>
+   * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -50,30 +54,33 @@ public interface CreateIndexRequestOrBuilder
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   boolean hasIndex();
   /**
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.admin.v1.Index getIndex();
   /**
    *
    *
    * <pre>
-   * The composite index to create.
+   * Required. The composite index to create.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Index index = 2;</code>
+   * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   com.google.firestore.admin.v1.IndexOrBuilder getIndexOrBuilder();
 }

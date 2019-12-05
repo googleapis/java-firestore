@@ -135,11 +135,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Database to import into. Should be of the form:
+   * Required. Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>
+   * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -156,11 +158,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Database to import into. Should be of the form:
+   * Required. Database to import into. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>
+   * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+   * </code>
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -657,11 +661,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Database to import into. Should be of the form:
+     * Required. Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>
+     * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -678,11 +684,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Database to import into. Should be of the form:
+     * Required. Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>
+     * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -699,11 +707,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Database to import into. Should be of the form:
+     * Required. Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>
+     * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -718,11 +728,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Database to import into. Should be of the form:
+     * Required. Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>
+     * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder clearName() {
 
@@ -734,11 +746,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Database to import into. Should be of the form:
+     * Required. Database to import into. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>
+     * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
+     * </code>
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

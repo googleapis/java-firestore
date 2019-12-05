@@ -134,10 +134,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public boolean hasField() {
     return field_ != null;
@@ -146,10 +147,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.admin.v1.Field getField() {
     return field_ == null ? com.google.firestore.admin.v1.Field.getDefaultInstance() : field_;
@@ -158,10 +160,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The field to be updated.
+   * Required. The field to be updated.
    * </pre>
    *
-   * <code>.google.firestore.admin.v1.Field field = 1;</code>
+   * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+   * </code>
    */
   public com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder() {
     return getField();
@@ -576,10 +579,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public boolean hasField() {
       return fieldBuilder_ != null || field_ != null;
@@ -588,10 +592,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.Field getField() {
       if (fieldBuilder_ == null) {
@@ -604,10 +609,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setField(com.google.firestore.admin.v1.Field value) {
       if (fieldBuilder_ == null) {
@@ -626,10 +632,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder setField(com.google.firestore.admin.v1.Field.Builder builderForValue) {
       if (fieldBuilder_ == null) {
@@ -645,10 +652,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder mergeField(com.google.firestore.admin.v1.Field value) {
       if (fieldBuilder_ == null) {
@@ -671,10 +679,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public Builder clearField() {
       if (fieldBuilder_ == null) {
@@ -691,10 +700,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.Field.Builder getFieldBuilder() {
 
@@ -705,10 +715,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     public com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder() {
       if (fieldBuilder_ != null) {
@@ -721,10 +732,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      *
      * <pre>
-     * The field to be updated.
+     * Required. The field to be updated.
      * </pre>
      *
-     * <code>.google.firestore.admin.v1.Field field = 1;</code>
+     * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.admin.v1.Field,
