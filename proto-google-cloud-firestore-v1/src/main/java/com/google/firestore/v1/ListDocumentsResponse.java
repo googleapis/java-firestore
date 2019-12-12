@@ -43,6 +43,12 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListDocumentsResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -120,7 +126,6 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
             com.google.firestore.v1.ListDocumentsResponse.Builder.class);
   }
 
-  private int bitField0_;
   public static final int DOCUMENTS_FIELD_NUMBER = 1;
   private java.util.List<com.google.firestore.v1.Document> documents_;
   /**
@@ -195,6 +200,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The nextPageToken.
    */
   public java.lang.String getNextPageToken() {
     java.lang.Object ref = nextPageToken_;
@@ -215,6 +222,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The bytes for nextPageToken.
    */
   public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
@@ -481,7 +490,6 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
       com.google.firestore.v1.ListDocumentsResponse result =
           new com.google.firestore.v1.ListDocumentsResponse(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (documentsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           documents_ = java.util.Collections.unmodifiableList(documents_);
@@ -492,7 +500,6 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
         result.documents_ = documentsBuilder_.build();
       }
       result.nextPageToken_ = nextPageToken_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -961,6 +968,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return The nextPageToken.
      */
     public java.lang.String getNextPageToken() {
       java.lang.Object ref = nextPageToken_;
@@ -981,6 +990,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return The bytes for nextPageToken.
      */
     public com.google.protobuf.ByteString getNextPageTokenBytes() {
       java.lang.Object ref = nextPageToken_;
@@ -1001,6 +1012,9 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @param value The nextPageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setNextPageToken(java.lang.String value) {
       if (value == null) {
@@ -1019,6 +1033,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
 
@@ -1034,6 +1050,9 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @param value The bytes for nextPageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setNextPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

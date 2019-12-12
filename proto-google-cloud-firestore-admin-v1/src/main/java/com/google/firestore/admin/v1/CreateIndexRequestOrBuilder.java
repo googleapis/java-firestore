@@ -34,6 +34,8 @@ public interface CreateIndexRequestOrBuilder
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The parent.
    */
   java.lang.String getParent();
   /**
@@ -47,6 +49,8 @@ public interface CreateIndexRequestOrBuilder
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -59,6 +63,8 @@ public interface CreateIndexRequestOrBuilder
    *
    * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the index field is set.
    */
   boolean hasIndex();
   /**
@@ -70,6 +76,8 @@ public interface CreateIndexRequestOrBuilder
    *
    * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The index.
    */
   com.google.firestore.admin.v1.Index getIndex();
   /**

@@ -42,6 +42,12 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListenRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -95,10 +101,10 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
             }
           case 34:
             {
-              if (!((mutable_bitField0_ & 0x00000008) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 labels_ =
                     com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
-                mutable_bitField0_ |= 0x00000008;
+                mutable_bitField0_ |= 0x00000001;
               }
               com.google.protobuf.MapEntry<java.lang.String, java.lang.String> labels__ =
                   input.readMessage(
@@ -151,11 +157,13 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.ListenRequest.Builder.class);
   }
 
-  private int bitField0_;
   private int targetChangeCase_ = 0;
   private java.lang.Object targetChange_;
 
-  public enum TargetChangeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum TargetChangeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     ADD_TARGET(2),
     REMOVE_TARGET(3),
     TARGETCHANGE_NOT_SET(0);
@@ -164,7 +172,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     private TargetChangeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static TargetChangeCase valueOf(int value) {
       return forNumber(value);
@@ -203,6 +215,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -224,6 +238,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -246,6 +262,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.Target add_target = 2;</code>
+   *
+   * @return Whether the addTarget field is set.
    */
   public boolean hasAddTarget() {
     return targetChangeCase_ == 2;
@@ -258,6 +276,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.Target add_target = 2;</code>
+   *
+   * @return The addTarget.
    */
   public com.google.firestore.v1.Target getAddTarget() {
     if (targetChangeCase_ == 2) {
@@ -290,6 +310,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>int32 remove_target = 3;</code>
+   *
+   * @return The removeTarget.
    */
   public int getRemoveTarget() {
     if (targetChangeCase_ == 3) {
@@ -702,7 +724,6 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1.ListenRequest result =
           new com.google.firestore.v1.ListenRequest(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.database_ = database_;
       if (targetChangeCase_ == 2) {
         if (addTargetBuilder_ == null) {
@@ -716,7 +737,6 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       }
       result.labels_ = internalGetLabels();
       result.labels_.makeImmutable();
-      result.bitField0_ = to_bitField0_;
       result.targetChangeCase_ = targetChangeCase_;
       onBuilt();
       return result;
@@ -843,6 +863,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The database.
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -864,6 +886,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for database.
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -885,6 +909,9 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -904,6 +931,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDatabase() {
 
@@ -920,6 +949,9 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -945,6 +977,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.Target add_target = 2;</code>
+     *
+     * @return Whether the addTarget field is set.
      */
     public boolean hasAddTarget() {
       return targetChangeCase_ == 2;
@@ -957,6 +991,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.Target add_target = 2;</code>
+     *
+     * @return The addTarget.
      */
     public com.google.firestore.v1.Target getAddTarget() {
       if (addTargetBuilder_ == null) {
@@ -1139,6 +1175,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 remove_target = 3;</code>
+     *
+     * @return The removeTarget.
      */
     public int getRemoveTarget() {
       if (targetChangeCase_ == 3) {
@@ -1154,6 +1192,9 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 remove_target = 3;</code>
+     *
+     * @param value The removeTarget to set.
+     * @return This builder for chaining.
      */
     public Builder setRemoveTarget(int value) {
       targetChangeCase_ = 3;
@@ -1169,6 +1210,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 remove_target = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearRemoveTarget() {
       if (targetChangeCase_ == 3) {

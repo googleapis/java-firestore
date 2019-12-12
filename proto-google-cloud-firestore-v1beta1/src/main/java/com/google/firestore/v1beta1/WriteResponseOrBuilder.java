@@ -32,6 +32,8 @@ public interface WriteResponseOrBuilder
    * </pre>
    *
    * <code>string stream_id = 1;</code>
+   *
+   * @return The streamId.
    */
   java.lang.String getStreamId();
   /**
@@ -43,6 +45,8 @@ public interface WriteResponseOrBuilder
    * </pre>
    *
    * <code>string stream_id = 1;</code>
+   *
+   * @return The bytes for streamId.
    */
   com.google.protobuf.ByteString getStreamIdBytes();
 
@@ -56,6 +60,8 @@ public interface WriteResponseOrBuilder
    * </pre>
    *
    * <code>bytes stream_token = 2;</code>
+   *
+   * @return The streamToken.
    */
   com.google.protobuf.ByteString getStreamToken();
 
@@ -129,6 +135,8 @@ public interface WriteResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+   *
+   * @return Whether the commitTime field is set.
    */
   boolean hasCommitTime();
   /**
@@ -139,6 +147,8 @@ public interface WriteResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+   *
+   * @return The commitTime.
    */
   com.google.protobuf.Timestamp getCommitTime();
   /**

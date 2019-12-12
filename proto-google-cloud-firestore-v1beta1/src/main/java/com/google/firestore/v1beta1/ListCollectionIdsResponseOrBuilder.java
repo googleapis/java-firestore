@@ -31,6 +31,8 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   java.util.List<java.lang.String> getCollectionIdsList();
   /**
@@ -41,6 +43,8 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @return The count of collectionIds.
    */
   int getCollectionIdsCount();
   /**
@@ -51,6 +55,9 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   java.lang.String getCollectionIds(int index);
   /**
@@ -61,6 +68,9 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
@@ -72,6 +82,8 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The nextPageToken.
    */
   java.lang.String getNextPageToken();
   /**
@@ -82,6 +94,8 @@ public interface ListCollectionIdsResponseOrBuilder
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The bytes for nextPageToken.
    */
   com.google.protobuf.ByteString getNextPageTokenBytes();
 }

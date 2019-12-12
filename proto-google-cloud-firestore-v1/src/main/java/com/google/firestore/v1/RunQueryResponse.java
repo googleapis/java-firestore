@@ -42,6 +42,12 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new RunQueryResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -152,6 +157,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
@@ -168,6 +175,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
+   * @return Whether the document field is set.
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -181,6 +190,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
+   * @return The document.
    */
   public com.google.firestore.v1.Document getDocument() {
     return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
@@ -214,6 +225,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return readTime_ != null;
@@ -231,6 +244,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
@@ -264,6 +279,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * </pre>
    *
    * <code>int32 skipped_results = 4;</code>
+   *
+   * @return The skippedResults.
    */
   public int getSkippedResults() {
     return skippedResults_;
@@ -666,6 +683,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
@@ -681,6 +700,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -702,6 +724,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
 
@@ -725,6 +749,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
+     *
+     * @return Whether the document field is set.
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -738,6 +764,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
+     *
+     * @return The document.
      */
     public com.google.firestore.v1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -919,6 +947,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return readTimeBuilder_ != null || readTime_ != null;
@@ -936,6 +966,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
@@ -1130,6 +1162,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>int32 skipped_results = 4;</code>
+     *
+     * @return The skippedResults.
      */
     public int getSkippedResults() {
       return skippedResults_;
@@ -1143,6 +1177,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>int32 skipped_results = 4;</code>
+     *
+     * @param value The skippedResults to set.
+     * @return This builder for chaining.
      */
     public Builder setSkippedResults(int value) {
 
@@ -1159,6 +1196,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * </pre>
      *
      * <code>int32 skipped_results = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearSkippedResults() {
 

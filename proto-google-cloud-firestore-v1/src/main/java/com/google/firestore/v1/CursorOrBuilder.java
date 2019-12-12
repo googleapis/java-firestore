@@ -93,6 +93,8 @@ public interface CursorOrBuilder
    * </pre>
    *
    * <code>bool before = 2;</code>
+   *
+   * @return The before.
    */
   boolean getBefore();
 }

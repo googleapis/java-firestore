@@ -31,6 +31,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target.QueryTarget query = 2;</code>
+   *
+   * @return Whether the query field is set.
    */
   boolean hasQuery();
   /**
@@ -41,6 +43,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target.QueryTarget query = 2;</code>
+   *
+   * @return The query.
    */
   com.google.firestore.v1.Target.QueryTarget getQuery();
   /**
@@ -62,6 +66,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target.DocumentsTarget documents = 3;</code>
+   *
+   * @return Whether the documents field is set.
    */
   boolean hasDocuments();
   /**
@@ -72,6 +78,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target.DocumentsTarget documents = 3;</code>
+   *
+   * @return The documents.
    */
   com.google.firestore.v1.Target.DocumentsTarget getDocuments();
   /**
@@ -94,6 +102,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>bytes resume_token = 4;</code>
+   *
+   * @return The resumeToken.
    */
   com.google.protobuf.ByteString getResumeToken();
 
@@ -106,6 +116,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 11;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -117,6 +129,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 11;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
@@ -140,6 +154,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>int32 target_id = 5;</code>
+   *
+   * @return The targetId.
    */
   int getTargetId();
 
@@ -151,6 +167,8 @@ public interface TargetOrBuilder
    * </pre>
    *
    * <code>bool once = 6;</code>
+   *
+   * @return The once.
    */
   boolean getOnce();
 

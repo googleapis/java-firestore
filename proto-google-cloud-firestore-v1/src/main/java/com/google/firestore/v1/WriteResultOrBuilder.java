@@ -34,6 +34,8 @@ public interface WriteResultOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 1;</code>
+   *
+   * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
   /**
@@ -47,6 +49,8 @@ public interface WriteResultOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 1;</code>
+   *
+   * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
   /**

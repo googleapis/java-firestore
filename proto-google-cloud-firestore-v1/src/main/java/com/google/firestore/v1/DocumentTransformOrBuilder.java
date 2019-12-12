@@ -31,6 +31,8 @@ public interface DocumentTransformOrBuilder
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The document.
    */
   java.lang.String getDocument();
   /**
@@ -41,6 +43,8 @@ public interface DocumentTransformOrBuilder
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The bytes for document.
    */
   com.google.protobuf.ByteString getDocumentBytes();
 

@@ -34,6 +34,8 @@ public interface ListFieldsRequestOrBuilder
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The parent.
    */
   java.lang.String getParent();
   /**
@@ -47,6 +49,8 @@ public interface ListFieldsRequestOrBuilder
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -62,6 +66,8 @@ public interface ListFieldsRequestOrBuilder
    * </pre>
    *
    * <code>string filter = 2;</code>
+   *
+   * @return The filter.
    */
   java.lang.String getFilter();
   /**
@@ -76,6 +82,8 @@ public interface ListFieldsRequestOrBuilder
    * </pre>
    *
    * <code>string filter = 2;</code>
+   *
+   * @return The bytes for filter.
    */
   com.google.protobuf.ByteString getFilterBytes();
 
@@ -87,6 +95,8 @@ public interface ListFieldsRequestOrBuilder
    * </pre>
    *
    * <code>int32 page_size = 3;</code>
+   *
+   * @return The pageSize.
    */
   int getPageSize();
 
@@ -100,6 +110,8 @@ public interface ListFieldsRequestOrBuilder
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The pageToken.
    */
   java.lang.String getPageToken();
   /**
@@ -112,6 +124,8 @@ public interface ListFieldsRequestOrBuilder
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The bytes for pageToken.
    */
   com.google.protobuf.ByteString getPageTokenBytes();
 }

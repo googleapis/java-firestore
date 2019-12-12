@@ -33,6 +33,8 @@ public interface UpdateDocumentRequestOrBuilder
    *
    * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
@@ -45,6 +47,8 @@ public interface UpdateDocumentRequestOrBuilder
    *
    * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The document.
    */
   com.google.firestore.v1.Document getDocument();
   /**
@@ -73,6 +77,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 2;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   boolean hasUpdateMask();
   /**
@@ -88,6 +94,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 2;</code>
+   *
+   * @return The updateMask.
    */
   com.google.firestore.v1.DocumentMask getUpdateMask();
   /**
@@ -116,6 +124,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
+   *
+   * @return Whether the mask field is set.
    */
   boolean hasMask();
   /**
@@ -128,6 +138,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
+   *
+   * @return The mask.
    */
   com.google.firestore.v1.DocumentMask getMask();
   /**
@@ -152,6 +164,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
+   *
+   * @return Whether the currentDocument field is set.
    */
   boolean hasCurrentDocument();
   /**
@@ -163,6 +177,8 @@ public interface UpdateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
+   *
+   * @return The currentDocument.
    */
   com.google.firestore.v1.Precondition getCurrentDocument();
   /**

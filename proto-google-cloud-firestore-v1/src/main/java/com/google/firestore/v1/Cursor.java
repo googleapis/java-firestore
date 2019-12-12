@@ -42,6 +42,12 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Cursor();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -115,7 +121,6 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.Cursor.class, com.google.firestore.v1.Cursor.Builder.class);
   }
 
-  private int bitField0_;
   public static final int VALUES_FIELD_NUMBER = 1;
   private java.util.List<com.google.firestore.v1.Value> values_;
   /**
@@ -200,6 +205,8 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bool before = 2;</code>
+   *
+   * @return The before.
    */
   public boolean getBefore() {
     return before_;
@@ -454,7 +461,6 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.Cursor buildPartial() {
       com.google.firestore.v1.Cursor result = new com.google.firestore.v1.Cursor(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (valuesBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           values_ = java.util.Collections.unmodifiableList(values_);
@@ -465,7 +471,6 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
         result.values_ = valuesBuilder_.build();
       }
       result.before_ = before_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -967,6 +972,8 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool before = 2;</code>
+     *
+     * @return The before.
      */
     public boolean getBefore() {
       return before_;
@@ -980,6 +987,9 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool before = 2;</code>
+     *
+     * @param value The before to set.
+     * @return This builder for chaining.
      */
     public Builder setBefore(boolean value) {
 
@@ -996,6 +1006,8 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool before = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearBefore() {
 

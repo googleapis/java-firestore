@@ -42,6 +42,12 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new BatchGetDocumentsResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -144,7 +149,10 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
   private int resultCase_ = 0;
   private java.lang.Object result_;
 
-  public enum ResultCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ResultCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     FOUND(1),
     MISSING(2),
     RESULT_NOT_SET(0);
@@ -153,7 +161,11 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
     private ResultCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ResultCase valueOf(int value) {
       return forNumber(value);
@@ -190,6 +202,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>.google.firestore.v1.Document found = 1;</code>
+   *
+   * @return Whether the found field is set.
    */
   public boolean hasFound() {
     return resultCase_ == 1;
@@ -202,6 +216,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>.google.firestore.v1.Document found = 1;</code>
+   *
+   * @return The found.
    */
   public com.google.firestore.v1.Document getFound() {
     if (resultCase_ == 1) {
@@ -235,6 +251,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>string missing = 2;</code>
+   *
+   * @return The missing.
    */
   public java.lang.String getMissing() {
     java.lang.Object ref = "";
@@ -261,6 +279,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>string missing = 2;</code>
+   *
+   * @return The bytes for missing.
    */
   public com.google.protobuf.ByteString getMissingBytes() {
     java.lang.Object ref = "";
@@ -291,6 +311,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>bytes transaction = 3;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
@@ -309,6 +331,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return readTime_ != null;
@@ -324,6 +348,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
@@ -784,6 +810,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>.google.firestore.v1.Document found = 1;</code>
+     *
+     * @return Whether the found field is set.
      */
     public boolean hasFound() {
       return resultCase_ == 1;
@@ -796,6 +824,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>.google.firestore.v1.Document found = 1;</code>
+     *
+     * @return The found.
      */
     public com.google.firestore.v1.Document getFound() {
       if (foundBuilder_ == null) {
@@ -978,6 +1008,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string missing = 2;</code>
+     *
+     * @return The missing.
      */
     public java.lang.String getMissing() {
       java.lang.Object ref = "";
@@ -1004,6 +1036,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string missing = 2;</code>
+     *
+     * @return The bytes for missing.
      */
     public com.google.protobuf.ByteString getMissingBytes() {
       java.lang.Object ref = "";
@@ -1030,6 +1064,9 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string missing = 2;</code>
+     *
+     * @param value The missing to set.
+     * @return This builder for chaining.
      */
     public Builder setMissing(java.lang.String value) {
       if (value == null) {
@@ -1049,6 +1086,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string missing = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearMissing() {
       if (resultCase_ == 2) {
@@ -1067,6 +1106,9 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string missing = 2;</code>
+     *
+     * @param value The bytes for missing to set.
+     * @return This builder for chaining.
      */
     public Builder setMissingBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1090,6 +1132,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
@@ -1104,6 +1148,9 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1124,6 +1171,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
 
@@ -1149,6 +1198,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return readTimeBuilder_ != null || readTime_ != null;
@@ -1164,6 +1215,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {

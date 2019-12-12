@@ -42,6 +42,12 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
   private Progress() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Progress();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -119,6 +124,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>int64 estimated_work = 1;</code>
+   *
+   * @return The estimatedWork.
    */
   public long getEstimatedWork() {
     return estimatedWork_;
@@ -134,6 +141,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>int64 completed_work = 2;</code>
+   *
+   * @return The completedWork.
    */
   public long getCompletedWork() {
     return completedWork_;
@@ -479,6 +488,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 estimated_work = 1;</code>
+     *
+     * @return The estimatedWork.
      */
     public long getEstimatedWork() {
       return estimatedWork_;
@@ -491,6 +502,9 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 estimated_work = 1;</code>
+     *
+     * @param value The estimatedWork to set.
+     * @return This builder for chaining.
      */
     public Builder setEstimatedWork(long value) {
 
@@ -506,6 +520,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 estimated_work = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearEstimatedWork() {
 
@@ -523,6 +539,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 completed_work = 2;</code>
+     *
+     * @return The completedWork.
      */
     public long getCompletedWork() {
       return completedWork_;
@@ -535,6 +553,9 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 completed_work = 2;</code>
+     *
+     * @param value The completedWork to set.
+     * @return This builder for chaining.
      */
     public Builder setCompletedWork(long value) {
 
@@ -550,6 +571,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 completed_work = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCompletedWork() {
 

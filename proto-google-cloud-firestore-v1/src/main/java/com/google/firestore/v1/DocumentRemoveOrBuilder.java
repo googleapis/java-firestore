@@ -31,6 +31,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The document.
    */
   java.lang.String getDocument();
   /**
@@ -41,6 +43,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The bytes for document.
    */
   com.google.protobuf.ByteString getDocumentBytes();
 
@@ -52,6 +56,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 2;</code>
+   *
+   * @return A list containing the removedTargetIds.
    */
   java.util.List<java.lang.Integer> getRemovedTargetIdsList();
   /**
@@ -62,6 +68,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 2;</code>
+   *
+   * @return The count of removedTargetIds.
    */
   int getRemovedTargetIdsCount();
   /**
@@ -72,6 +80,9 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The removedTargetIds at the given index.
    */
   int getRemovedTargetIds(int index);
 
@@ -84,6 +95,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -95,6 +108,8 @@ public interface DocumentRemoveOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

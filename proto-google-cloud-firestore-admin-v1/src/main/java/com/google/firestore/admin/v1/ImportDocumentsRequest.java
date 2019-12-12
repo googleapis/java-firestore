@@ -44,6 +44,12 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ImportDocumentsRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -77,9 +83,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
           case 18:
             {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 collectionIds_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               collectionIds_.add(s);
               break;
@@ -105,7 +111,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
       }
       this.unknownFields = unknownFields.build();
@@ -128,7 +134,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
             com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
   }
 
-  private int bitField0_;
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
@@ -142,6 +147,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * <code>
    * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The name.
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -165,6 +172,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * <code>
    * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The bytes for name.
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -189,6 +198,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
     return collectionIds_;
@@ -202,6 +213,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @return The count of collectionIds.
    */
   public int getCollectionIdsCount() {
     return collectionIds_.size();
@@ -215,6 +228,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   public java.lang.String getCollectionIds(int index) {
     return collectionIds_.get(index);
@@ -228,6 +244,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
     return collectionIds_.getByteString(index);
@@ -247,6 +266,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>string input_uri_prefix = 3;</code>
+   *
+   * @return The inputUriPrefix.
    */
   public java.lang.String getInputUriPrefix() {
     java.lang.Object ref = inputUriPrefix_;
@@ -271,6 +292,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>string input_uri_prefix = 3;</code>
+   *
+   * @return The bytes for inputUriPrefix.
    */
   public com.google.protobuf.ByteString getInputUriPrefixBytes() {
     java.lang.Object ref = inputUriPrefix_;
@@ -516,7 +539,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       name_ = "";
 
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       inputUriPrefix_ = "";
 
       return this;
@@ -547,15 +570,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       com.google.firestore.admin.v1.ImportDocumentsRequest result =
           new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.name_ = name_;
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.collectionIds_ = collectionIds_;
       result.inputUriPrefix_ = inputUriPrefix_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -613,7 +634,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -668,6 +689,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * <code>
      * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -691,6 +714,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * <code>
      * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return The bytes for name.
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -714,6 +739,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * <code>
      * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -735,6 +763,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * <code>
      * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearName() {
 
@@ -753,6 +783,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * <code>
      * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -769,9 +802,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         com.google.protobuf.LazyStringArrayList.EMPTY;
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
     /**
@@ -783,6 +816,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
       return collectionIds_.getUnmodifiableView();
@@ -796,6 +831,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @return The count of collectionIds.
      */
     public int getCollectionIdsCount() {
       return collectionIds_.size();
@@ -809,6 +846,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The collectionIds at the given index.
      */
     public java.lang.String getCollectionIds(int index) {
       return collectionIds_.get(index);
@@ -822,6 +862,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the collectionIds at the given index.
      */
     public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
       return collectionIds_.getByteString(index);
@@ -835,6 +878,10 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The collectionIds to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionIds(int index, java.lang.String value) {
       if (value == null) {
@@ -854,6 +901,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param value The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIds(java.lang.String value) {
       if (value == null) {
@@ -873,6 +923,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param values The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
@@ -889,10 +942,12 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -905,6 +960,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
+     *
+     * @param value The bytes of the collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIdsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -930,6 +988,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string input_uri_prefix = 3;</code>
+     *
+     * @return The inputUriPrefix.
      */
     public java.lang.String getInputUriPrefix() {
       java.lang.Object ref = inputUriPrefix_;
@@ -954,6 +1014,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string input_uri_prefix = 3;</code>
+     *
+     * @return The bytes for inputUriPrefix.
      */
     public com.google.protobuf.ByteString getInputUriPrefixBytes() {
       java.lang.Object ref = inputUriPrefix_;
@@ -978,6 +1040,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string input_uri_prefix = 3;</code>
+     *
+     * @param value The inputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setInputUriPrefix(java.lang.String value) {
       if (value == null) {
@@ -1000,6 +1065,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string input_uri_prefix = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearInputUriPrefix() {
 
@@ -1019,6 +1086,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string input_uri_prefix = 3;</code>
+     *
+     * @param value The bytes for inputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setInputUriPrefixBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

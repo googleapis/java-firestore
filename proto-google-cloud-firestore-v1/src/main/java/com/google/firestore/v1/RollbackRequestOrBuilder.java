@@ -32,6 +32,8 @@ public interface RollbackRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   java.lang.String getDatabase();
   /**
@@ -43,6 +45,8 @@ public interface RollbackRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -54,6 +58,8 @@ public interface RollbackRequestOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 }

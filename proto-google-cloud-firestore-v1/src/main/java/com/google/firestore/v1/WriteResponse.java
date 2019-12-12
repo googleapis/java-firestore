@@ -44,6 +44,12 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new WriteResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -81,9 +87,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             }
           case 26:
             {
-              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 writeResults_ = new java.util.ArrayList<com.google.firestore.v1.WriteResult>();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000001;
               }
               writeResults_.add(
                   input.readMessage(
@@ -119,7 +125,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000004) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         writeResults_ = java.util.Collections.unmodifiableList(writeResults_);
       }
       this.unknownFields = unknownFields.build();
@@ -142,7 +148,6 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.WriteResponse.Builder.class);
   }
 
-  private int bitField0_;
   public static final int STREAM_ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object streamId_;
   /**
@@ -154,6 +159,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string stream_id = 1;</code>
+   *
+   * @return The streamId.
    */
   public java.lang.String getStreamId() {
     java.lang.Object ref = streamId_;
@@ -175,6 +182,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string stream_id = 1;</code>
+   *
+   * @return The bytes for streamId.
    */
   public com.google.protobuf.ByteString getStreamIdBytes() {
     java.lang.Object ref = streamId_;
@@ -200,6 +209,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bytes stream_token = 2;</code>
+   *
+   * @return The streamToken.
    */
   public com.google.protobuf.ByteString getStreamToken() {
     return streamToken_;
@@ -289,6 +300,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+   *
+   * @return Whether the commitTime field is set.
    */
   public boolean hasCommitTime() {
     return commitTime_ != null;
@@ -301,6 +314,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+   *
+   * @return The commitTime.
    */
   public com.google.protobuf.Timestamp getCommitTime() {
     return commitTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : commitTime_;
@@ -562,7 +577,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
 
       if (writeResultsBuilder_ == null) {
         writeResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         writeResultsBuilder_.clear();
       }
@@ -600,13 +615,12 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1.WriteResponse result =
           new com.google.firestore.v1.WriteResponse(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.streamId_ = streamId_;
       result.streamToken_ = streamToken_;
       if (writeResultsBuilder_ == null) {
-        if (((bitField0_ & 0x00000004) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           writeResults_ = java.util.Collections.unmodifiableList(writeResults_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.writeResults_ = writeResults_;
       } else {
@@ -617,7 +631,6 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         result.commitTime_ = commitTimeBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -678,7 +691,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
         if (!other.writeResults_.isEmpty()) {
           if (writeResults_.isEmpty()) {
             writeResults_ = other.writeResults_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureWriteResultsIsMutable();
             writeResults_.addAll(other.writeResults_);
@@ -691,7 +704,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             writeResultsBuilder_.dispose();
             writeResultsBuilder_ = null;
             writeResults_ = other.writeResults_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000001);
             writeResultsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getWriteResultsFieldBuilder()
@@ -745,6 +758,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string stream_id = 1;</code>
+     *
+     * @return The streamId.
      */
     public java.lang.String getStreamId() {
       java.lang.Object ref = streamId_;
@@ -766,6 +781,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string stream_id = 1;</code>
+     *
+     * @return The bytes for streamId.
      */
     public com.google.protobuf.ByteString getStreamIdBytes() {
       java.lang.Object ref = streamId_;
@@ -787,6 +804,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string stream_id = 1;</code>
+     *
+     * @param value The streamId to set.
+     * @return This builder for chaining.
      */
     public Builder setStreamId(java.lang.String value) {
       if (value == null) {
@@ -806,6 +826,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string stream_id = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearStreamId() {
 
@@ -822,6 +844,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string stream_id = 1;</code>
+     *
+     * @param value The bytes for streamId to set.
+     * @return This builder for chaining.
      */
     public Builder setStreamIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -845,6 +870,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes stream_token = 2;</code>
+     *
+     * @return The streamToken.
      */
     public com.google.protobuf.ByteString getStreamToken() {
       return streamToken_;
@@ -859,6 +886,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes stream_token = 2;</code>
+     *
+     * @param value The streamToken to set.
+     * @return This builder for chaining.
      */
     public Builder setStreamToken(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -879,6 +909,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes stream_token = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearStreamToken() {
 
@@ -891,9 +923,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureWriteResultsIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         writeResults_ = new java.util.ArrayList<com.google.firestore.v1.WriteResult>(writeResults_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -1130,7 +1162,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     public Builder clearWriteResults() {
       if (writeResultsBuilder_ == null) {
         writeResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         writeResultsBuilder_.clear();
@@ -1266,7 +1298,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.WriteResult,
                 com.google.firestore.v1.WriteResult.Builder,
                 com.google.firestore.v1.WriteResultOrBuilder>(
-                writeResults_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
+                writeResults_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         writeResults_ = null;
       }
       return writeResultsBuilder_;
@@ -1286,6 +1318,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+     *
+     * @return Whether the commitTime field is set.
      */
     public boolean hasCommitTime() {
       return commitTimeBuilder_ != null || commitTime_ != null;
@@ -1298,6 +1332,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
+     *
+     * @return The commitTime.
      */
     public com.google.protobuf.Timestamp getCommitTime() {
       if (commitTimeBuilder_ == null) {

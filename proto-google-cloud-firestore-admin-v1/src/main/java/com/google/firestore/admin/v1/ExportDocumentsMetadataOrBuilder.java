@@ -31,6 +31,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return Whether the startTime field is set.
    */
   boolean hasStartTime();
   /**
@@ -41,6 +43,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return The startTime.
    */
   com.google.protobuf.Timestamp getStartTime();
   /**
@@ -63,6 +67,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return Whether the endTime field is set.
    */
   boolean hasEndTime();
   /**
@@ -74,6 +80,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return The endTime.
    */
   com.google.protobuf.Timestamp getEndTime();
   /**
@@ -96,6 +104,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+   *
+   * @return The enum numeric value on the wire for operationState.
    */
   int getOperationStateValue();
   /**
@@ -106,6 +116,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+   *
+   * @return The operationState.
    */
   com.google.firestore.admin.v1.OperationState getOperationState();
 
@@ -117,6 +129,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+   *
+   * @return Whether the progressDocuments field is set.
    */
   boolean hasProgressDocuments();
   /**
@@ -127,6 +141,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+   *
+   * @return The progressDocuments.
    */
   com.google.firestore.admin.v1.Progress getProgressDocuments();
   /**
@@ -148,6 +164,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+   *
+   * @return Whether the progressBytes field is set.
    */
   boolean hasProgressBytes();
   /**
@@ -158,6 +176,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+   *
+   * @return The progressBytes.
    */
   com.google.firestore.admin.v1.Progress getProgressBytes();
   /**
@@ -179,6 +199,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   java.util.List<java.lang.String> getCollectionIdsList();
   /**
@@ -189,6 +211,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @return The count of collectionIds.
    */
   int getCollectionIdsCount();
   /**
@@ -199,6 +223,9 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   java.lang.String getCollectionIds(int index);
   /**
@@ -209,6 +236,9 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
@@ -220,6 +250,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
+   *
+   * @return The outputUriPrefix.
    */
   java.lang.String getOutputUriPrefix();
   /**
@@ -230,6 +262,8 @@ public interface ExportDocumentsMetadataOrBuilder
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
+   *
+   * @return The bytes for outputUriPrefix.
    */
   com.google.protobuf.ByteString getOutputUriPrefixBytes();
 }

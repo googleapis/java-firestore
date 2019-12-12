@@ -42,6 +42,12 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new CommitResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -128,7 +134,6 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.CommitResponse.Builder.class);
   }
 
-  private int bitField0_;
   public static final int WRITE_RESULTS_FIELD_NUMBER = 1;
   private java.util.List<com.google.firestore.v1.WriteResult> writeResults_;
   /**
@@ -213,6 +218,8 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+   *
+   * @return Whether the commitTime field is set.
    */
   public boolean hasCommitTime() {
     return commitTime_ != null;
@@ -225,6 +232,8 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+   *
+   * @return The commitTime.
    */
   public com.google.protobuf.Timestamp getCommitTime() {
     return commitTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : commitTime_;
@@ -503,7 +512,6 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1.CommitResponse result =
           new com.google.firestore.v1.CommitResponse(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (writeResultsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           writeResults_ = java.util.Collections.unmodifiableList(writeResults_);
@@ -518,7 +526,6 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         result.commitTime_ = commitTimeBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -1028,6 +1035,8 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+     *
+     * @return Whether the commitTime field is set.
      */
     public boolean hasCommitTime() {
       return commitTimeBuilder_ != null || commitTime_ != null;
@@ -1040,6 +1049,8 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+     *
+     * @return The commitTime.
      */
     public com.google.protobuf.Timestamp getCommitTime() {
       if (commitTimeBuilder_ == null) {

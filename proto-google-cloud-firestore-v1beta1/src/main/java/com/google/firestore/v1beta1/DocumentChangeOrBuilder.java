@@ -32,6 +32,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
@@ -43,6 +45,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return The document.
    */
   com.google.firestore.v1beta1.Document getDocument();
   /**
@@ -65,6 +69,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @return A list containing the targetIds.
    */
   java.util.List<java.lang.Integer> getTargetIdsList();
   /**
@@ -75,6 +81,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @return The count of targetIds.
    */
   int getTargetIdsCount();
   /**
@@ -85,6 +93,9 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The targetIds at the given index.
    */
   int getTargetIds(int index);
 
@@ -96,6 +107,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @return A list containing the removedTargetIds.
    */
   java.util.List<java.lang.Integer> getRemovedTargetIdsList();
   /**
@@ -106,6 +119,8 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @return The count of removedTargetIds.
    */
   int getRemovedTargetIdsCount();
   /**
@@ -116,6 +131,9 @@ public interface DocumentChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The removedTargetIds at the given index.
    */
   int getRemovedTargetIds(int index);
 }

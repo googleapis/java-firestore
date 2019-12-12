@@ -43,6 +43,12 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListCollectionIdsResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -120,7 +126,6 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
             com.google.firestore.v1beta1.ListCollectionIdsResponse.Builder.class);
   }
 
-  private int bitField0_;
   public static final int COLLECTION_IDS_FIELD_NUMBER = 1;
   private com.google.protobuf.LazyStringList collectionIds_;
   /**
@@ -131,6 +136,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
     return collectionIds_;
@@ -143,6 +150,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @return The count of collectionIds.
    */
   public int getCollectionIdsCount() {
     return collectionIds_.size();
@@ -155,6 +164,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   public java.lang.String getCollectionIds(int index) {
     return collectionIds_.get(index);
@@ -167,6 +179,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>repeated string collection_ids = 1;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
     return collectionIds_.getByteString(index);
@@ -182,6 +197,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The nextPageToken.
    */
   public java.lang.String getNextPageToken() {
     java.lang.Object ref = nextPageToken_;
@@ -202,6 +219,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
+   * @return The bytes for nextPageToken.
    */
   public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
@@ -468,14 +487,12 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       com.google.firestore.v1beta1.ListCollectionIdsResponse result =
           new com.google.firestore.v1beta1.ListCollectionIdsResponse(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
         bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.collectionIds_ = collectionIds_;
       result.nextPageToken_ = nextPageToken_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -589,6 +606,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
       return collectionIds_.getUnmodifiableView();
@@ -601,6 +620,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @return The count of collectionIds.
      */
     public int getCollectionIdsCount() {
       return collectionIds_.size();
@@ -613,6 +634,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The collectionIds at the given index.
      */
     public java.lang.String getCollectionIds(int index) {
       return collectionIds_.get(index);
@@ -625,6 +649,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the collectionIds at the given index.
      */
     public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
       return collectionIds_.getByteString(index);
@@ -637,6 +664,10 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The collectionIds to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionIds(int index, java.lang.String value) {
       if (value == null) {
@@ -655,6 +686,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param value The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIds(java.lang.String value) {
       if (value == null) {
@@ -673,6 +707,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param values The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
@@ -688,6 +725,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -703,6 +742,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>repeated string collection_ids = 1;</code>
+     *
+     * @param value The bytes of the collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIdsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -724,6 +766,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return The nextPageToken.
      */
     public java.lang.String getNextPageToken() {
       java.lang.Object ref = nextPageToken_;
@@ -744,6 +788,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return The bytes for nextPageToken.
      */
     public com.google.protobuf.ByteString getNextPageTokenBytes() {
       java.lang.Object ref = nextPageToken_;
@@ -764,6 +810,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @param value The nextPageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setNextPageToken(java.lang.String value) {
       if (value == null) {
@@ -782,6 +831,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
 
@@ -797,6 +848,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
+     * @param value The bytes for nextPageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setNextPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

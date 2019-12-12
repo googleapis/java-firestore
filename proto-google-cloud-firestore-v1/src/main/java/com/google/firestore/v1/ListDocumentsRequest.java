@@ -45,6 +45,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListDocumentsRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -57,7 +63,6 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -180,7 +185,10 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   private int consistencySelectorCase_ = 0;
   private java.lang.Object consistencySelector_;
 
-  public enum ConsistencySelectorCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TRANSACTION(8),
     READ_TIME(10),
     CONSISTENCYSELECTOR_NOT_SET(0);
@@ -189,7 +197,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ConsistencySelectorCase valueOf(int value) {
       return forNumber(value);
@@ -232,6 +244,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -257,6 +271,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -281,6 +297,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The collectionId.
    */
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
@@ -302,6 +320,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for collectionId.
    */
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
@@ -325,6 +345,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>int32 page_size = 3;</code>
+   *
+   * @return The pageSize.
    */
   public int getPageSize() {
     return pageSize_;
@@ -340,6 +362,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The pageToken.
    */
   public java.lang.String getPageToken() {
     java.lang.Object ref = pageToken_;
@@ -360,6 +384,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The bytes for pageToken.
    */
   public com.google.protobuf.ByteString getPageTokenBytes() {
     java.lang.Object ref = pageToken_;
@@ -383,6 +409,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string order_by = 6;</code>
+   *
+   * @return The orderBy.
    */
   public java.lang.String getOrderBy() {
     java.lang.Object ref = orderBy_;
@@ -403,6 +431,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>string order_by = 6;</code>
+   *
+   * @return The bytes for orderBy.
    */
   public com.google.protobuf.ByteString getOrderByBytes() {
     java.lang.Object ref = orderBy_;
@@ -428,6 +458,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   *
+   * @return Whether the mask field is set.
    */
   public boolean hasMask() {
     return mask_ != null;
@@ -442,6 +474,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   *
+   * @return The mask.
    */
   public com.google.firestore.v1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
@@ -470,6 +504,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>bytes transaction = 8;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 8) {
@@ -488,6 +524,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 10;
@@ -501,6 +539,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 10) {
@@ -540,6 +580,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    * </pre>
    *
    * <code>bool show_missing = 12;</code>
+   *
+   * @return The showMissing.
    */
   public boolean getShowMissing() {
     return showMissing_;
@@ -1063,6 +1105,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -1088,6 +1132,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for parent.
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -1113,6 +1159,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -1136,6 +1185,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearParent() {
 
@@ -1156,6 +1207,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1178,6 +1232,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The collectionId.
      */
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
@@ -1199,6 +1255,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for collectionId.
      */
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
@@ -1220,6 +1278,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The collectionId to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionId(java.lang.String value) {
       if (value == null) {
@@ -1239,6 +1300,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCollectionId() {
 
@@ -1255,6 +1318,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for collectionId to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1276,6 +1342,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @return The pageSize.
      */
     public int getPageSize() {
       return pageSize_;
@@ -1288,6 +1356,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @param value The pageSize to set.
+     * @return This builder for chaining.
      */
     public Builder setPageSize(int value) {
 
@@ -1303,6 +1374,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearPageSize() {
 
@@ -1320,6 +1393,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return The pageToken.
      */
     public java.lang.String getPageToken() {
       java.lang.Object ref = pageToken_;
@@ -1340,6 +1415,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return The bytes for pageToken.
      */
     public com.google.protobuf.ByteString getPageTokenBytes() {
       java.lang.Object ref = pageToken_;
@@ -1360,6 +1437,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @param value The pageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setPageToken(java.lang.String value) {
       if (value == null) {
@@ -1378,6 +1458,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearPageToken() {
 
@@ -1393,6 +1475,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @param value The bytes for pageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1414,6 +1499,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string order_by = 6;</code>
+     *
+     * @return The orderBy.
      */
     public java.lang.String getOrderBy() {
       java.lang.Object ref = orderBy_;
@@ -1434,6 +1521,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string order_by = 6;</code>
+     *
+     * @return The bytes for orderBy.
      */
     public com.google.protobuf.ByteString getOrderByBytes() {
       java.lang.Object ref = orderBy_;
@@ -1454,6 +1543,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string order_by = 6;</code>
+     *
+     * @param value The orderBy to set.
+     * @return This builder for chaining.
      */
     public Builder setOrderBy(java.lang.String value) {
       if (value == null) {
@@ -1472,6 +1564,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string order_by = 6;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOrderBy() {
 
@@ -1487,6 +1581,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>string order_by = 6;</code>
+     *
+     * @param value The bytes for orderBy to set.
+     * @return This builder for chaining.
      */
     public Builder setOrderByBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1515,6 +1612,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     *
+     * @return Whether the mask field is set.
      */
     public boolean hasMask() {
       return maskBuilder_ != null || mask_ != null;
@@ -1529,6 +1628,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     *
+     * @return The mask.
      */
     public com.google.firestore.v1.DocumentMask getMask() {
       if (maskBuilder_ == null) {
@@ -1702,6 +1803,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       if (consistencySelectorCase_ == 8) {
@@ -1717,6 +1820,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1735,6 +1841,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
       if (consistencySelectorCase_ == 8) {
@@ -1759,6 +1867,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 10;
@@ -1772,6 +1882,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
@@ -1969,6 +2081,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
+     *
+     * @return The showMissing.
      */
     public boolean getShowMissing() {
       return showMissing_;
@@ -1986,6 +2100,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
+     *
+     * @param value The showMissing to set.
+     * @return This builder for chaining.
      */
     public Builder setShowMissing(boolean value) {
 
@@ -2006,6 +2123,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearShowMissing() {
 

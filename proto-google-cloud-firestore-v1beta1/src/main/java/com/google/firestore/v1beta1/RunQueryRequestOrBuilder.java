@@ -36,6 +36,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   java.lang.String getParent();
   /**
@@ -51,6 +53,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -62,6 +66,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+   *
+   * @return Whether the structuredQuery field is set.
    */
   boolean hasStructuredQuery();
   /**
@@ -72,6 +78,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+   *
+   * @return The structuredQuery.
    */
   com.google.firestore.v1beta1.StructuredQuery getStructuredQuery();
   /**
@@ -93,6 +101,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -107,6 +117,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 6;</code>
+   *
+   * @return Whether the newTransaction field is set.
    */
   boolean hasNewTransaction();
   /**
@@ -120,6 +132,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 6;</code>
+   *
+   * @return The newTransaction.
    */
   com.google.firestore.v1beta1.TransactionOptions getNewTransaction();
   /**
@@ -145,6 +159,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -156,6 +172,8 @@ public interface RunQueryRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

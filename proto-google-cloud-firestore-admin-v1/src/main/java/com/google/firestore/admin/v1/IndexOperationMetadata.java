@@ -44,6 +44,12 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new IndexOperationMetadata();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -56,7 +62,6 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -187,6 +192,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return Whether the startTime field is set.
    */
   public boolean hasStartTime() {
     return startTime_ != null;
@@ -199,6 +206,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return The startTime.
    */
   public com.google.protobuf.Timestamp getStartTime() {
     return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
@@ -227,6 +236,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return Whether the endTime field is set.
    */
   public boolean hasEndTime() {
     return endTime_ != null;
@@ -240,6 +251,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return The endTime.
    */
   public com.google.protobuf.Timestamp getEndTime() {
     return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
@@ -269,6 +282,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>string index = 3;</code>
+   *
+   * @return The index.
    */
   public java.lang.String getIndex() {
     java.lang.Object ref = index_;
@@ -290,6 +305,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>string index = 3;</code>
+   *
+   * @return The bytes for index.
    */
   public com.google.protobuf.ByteString getIndexBytes() {
     java.lang.Object ref = index_;
@@ -313,6 +330,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+   *
+   * @return The enum numeric value on the wire for state.
    */
   public int getStateValue() {
     return state_;
@@ -325,6 +344,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+   *
+   * @return The state.
    */
   public com.google.firestore.admin.v1.OperationState getState() {
     @SuppressWarnings("deprecation")
@@ -343,6 +364,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 5;</code>
+   *
+   * @return Whether the progressDocuments field is set.
    */
   public boolean hasProgressDocuments() {
     return progressDocuments_ != null;
@@ -355,6 +378,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 5;</code>
+   *
+   * @return The progressDocuments.
    */
   public com.google.firestore.admin.v1.Progress getProgressDocuments() {
     return progressDocuments_ == null
@@ -384,6 +409,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 6;</code>
+   *
+   * @return Whether the progressBytes field is set.
    */
   public boolean hasProgressBytes() {
     return progressBytes_ != null;
@@ -396,6 +423,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 6;</code>
+   *
+   * @return The progressBytes.
    */
   public com.google.firestore.admin.v1.Progress getProgressBytes() {
     return progressBytes_ == null
@@ -877,6 +906,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
+     *
+     * @return Whether the startTime field is set.
      */
     public boolean hasStartTime() {
       return startTimeBuilder_ != null || startTime_ != null;
@@ -889,6 +920,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
+     *
+     * @return The startTime.
      */
     public com.google.protobuf.Timestamp getStartTime() {
       if (startTimeBuilder_ == null) {
@@ -1053,6 +1086,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
+     *
+     * @return Whether the endTime field is set.
      */
     public boolean hasEndTime() {
       return endTimeBuilder_ != null || endTime_ != null;
@@ -1066,6 +1101,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
+     *
+     * @return The endTime.
      */
     public com.google.protobuf.Timestamp getEndTime() {
       if (endTimeBuilder_ == null) {
@@ -1232,6 +1269,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string index = 3;</code>
+     *
+     * @return The index.
      */
     public java.lang.String getIndex() {
       java.lang.Object ref = index_;
@@ -1253,6 +1292,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string index = 3;</code>
+     *
+     * @return The bytes for index.
      */
     public com.google.protobuf.ByteString getIndexBytes() {
       java.lang.Object ref = index_;
@@ -1274,6 +1315,9 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string index = 3;</code>
+     *
+     * @param value The index to set.
+     * @return This builder for chaining.
      */
     public Builder setIndex(java.lang.String value) {
       if (value == null) {
@@ -1293,6 +1337,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string index = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearIndex() {
 
@@ -1309,6 +1355,9 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>string index = 3;</code>
+     *
+     * @param value The bytes for index to set.
+     * @return This builder for chaining.
      */
     public Builder setIndexBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1330,6 +1379,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+     *
+     * @return The enum numeric value on the wire for state.
      */
     public int getStateValue() {
       return state_;
@@ -1342,6 +1393,9 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+     *
+     * @param value The enum numeric value on the wire for state to set.
+     * @return This builder for chaining.
      */
     public Builder setStateValue(int value) {
       state_ = value;
@@ -1356,6 +1410,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+     *
+     * @return The state.
      */
     public com.google.firestore.admin.v1.OperationState getState() {
       @SuppressWarnings("deprecation")
@@ -1371,6 +1427,9 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+     *
+     * @param value The state to set.
+     * @return This builder for chaining.
      */
     public Builder setState(com.google.firestore.admin.v1.OperationState value) {
       if (value == null) {
@@ -1389,6 +1448,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState state = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearState() {
 
@@ -1411,6 +1472,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_documents = 5;</code>
+     *
+     * @return Whether the progressDocuments field is set.
      */
     public boolean hasProgressDocuments() {
       return progressDocumentsBuilder_ != null || progressDocuments_ != null;
@@ -1423,6 +1486,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_documents = 5;</code>
+     *
+     * @return The progressDocuments.
      */
     public com.google.firestore.admin.v1.Progress getProgressDocuments() {
       if (progressDocumentsBuilder_ == null) {
@@ -1593,6 +1658,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 6;</code>
+     *
+     * @return Whether the progressBytes field is set.
      */
     public boolean hasProgressBytes() {
       return progressBytesBuilder_ != null || progressBytes_ != null;
@@ -1605,6 +1672,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 6;</code>
+     *
+     * @return The progressBytes.
      */
     public com.google.firestore.admin.v1.Progress getProgressBytes() {
       if (progressBytesBuilder_ == null) {

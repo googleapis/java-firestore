@@ -43,6 +43,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new StructuredQuery();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -85,11 +91,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             }
           case 18:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 from_ =
                     new java.util.ArrayList<
                         com.google.firestore.v1.StructuredQuery.CollectionSelector>();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               from_.add(
                   input.readMessage(
@@ -115,9 +121,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             }
           case 34:
             {
-              if (!((mutable_bitField0_ & 0x00000008) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
                 orderBy_ = new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Order>();
-                mutable_bitField0_ |= 0x00000008;
+                mutable_bitField0_ |= 0x00000002;
               }
               orderBy_.add(
                   input.readMessage(
@@ -188,10 +194,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         from_ = java.util.Collections.unmodifiableList(from_);
       }
-      if (((mutable_bitField0_ & 0x00000008) != 0)) {
+      if (((mutable_bitField0_ & 0x00000002) != 0)) {
         orderBy_ = java.util.Collections.unmodifiableList(orderBy_);
       }
       this.unknownFields = unknownFields.build();
@@ -296,12 +302,20 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       return value;
     }
 
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static Direction valueOf(int value) {
       return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
     public static Direction forNumber(int value) {
       switch (value) {
         case 0:
@@ -373,6 +387,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string collection_id = 2;</code>
+     *
+     * @return The collectionId.
      */
     java.lang.String getCollectionId();
     /**
@@ -384,6 +400,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string collection_id = 2;</code>
+     *
+     * @return The bytes for collectionId.
      */
     com.google.protobuf.ByteString getCollectionIdBytes();
 
@@ -397,6 +415,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>bool all_descendants = 3;</code>
+     *
+     * @return The allDescendants.
      */
     boolean getAllDescendants();
   }
@@ -424,6 +444,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new CollectionSelector();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -436,7 +462,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -504,6 +529,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string collection_id = 2;</code>
+     *
+     * @return The collectionId.
      */
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
@@ -525,6 +552,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string collection_id = 2;</code>
+     *
+     * @return The bytes for collectionId.
      */
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
@@ -550,6 +579,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>bool all_descendants = 3;</code>
+     *
+     * @return The allDescendants.
      */
     public boolean getAllDescendants() {
       return allDescendants_;
@@ -905,6 +936,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>string collection_id = 2;</code>
+       *
+       * @return The collectionId.
        */
       public java.lang.String getCollectionId() {
         java.lang.Object ref = collectionId_;
@@ -926,6 +959,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>string collection_id = 2;</code>
+       *
+       * @return The bytes for collectionId.
        */
       public com.google.protobuf.ByteString getCollectionIdBytes() {
         java.lang.Object ref = collectionId_;
@@ -947,6 +982,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>string collection_id = 2;</code>
+       *
+       * @param value The collectionId to set.
+       * @return This builder for chaining.
        */
       public Builder setCollectionId(java.lang.String value) {
         if (value == null) {
@@ -966,6 +1004,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>string collection_id = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearCollectionId() {
 
@@ -982,6 +1022,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>string collection_id = 2;</code>
+       *
+       * @param value The bytes for collectionId to set.
+       * @return This builder for chaining.
        */
       public Builder setCollectionIdBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1005,6 +1048,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>bool all_descendants = 3;</code>
+       *
+       * @return The allDescendants.
        */
       public boolean getAllDescendants() {
         return allDescendants_;
@@ -1019,6 +1064,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>bool all_descendants = 3;</code>
+       *
+       * @param value The allDescendants to set.
+       * @return This builder for chaining.
        */
       public Builder setAllDescendants(boolean value) {
 
@@ -1036,6 +1084,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>bool all_descendants = 3;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearAllDescendants() {
 
@@ -1110,6 +1160,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+     *
+     * @return Whether the compositeFilter field is set.
      */
     boolean hasCompositeFilter();
     /**
@@ -1120,6 +1172,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+     *
+     * @return The compositeFilter.
      */
     com.google.firestore.v1.StructuredQuery.CompositeFilter getCompositeFilter();
     /**
@@ -1141,6 +1195,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+     *
+     * @return Whether the fieldFilter field is set.
      */
     boolean hasFieldFilter();
     /**
@@ -1151,6 +1207,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+     *
+     * @return The fieldFilter.
      */
     com.google.firestore.v1.StructuredQuery.FieldFilter getFieldFilter();
     /**
@@ -1172,6 +1230,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+     *
+     * @return Whether the unaryFilter field is set.
      */
     boolean hasUnaryFilter();
     /**
@@ -1182,6 +1242,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+     *
+     * @return The unaryFilter.
      */
     com.google.firestore.v1.StructuredQuery.UnaryFilter getUnaryFilter();
     /**
@@ -1219,6 +1281,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     private Filter() {}
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new Filter();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -1231,7 +1299,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -1339,7 +1406,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     private int filterTypeCase_ = 0;
     private java.lang.Object filterType_;
 
-    public enum FilterTypeCase implements com.google.protobuf.Internal.EnumLite {
+    public enum FilterTypeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       COMPOSITE_FILTER(1),
       FIELD_FILTER(2),
       UNARY_FILTER(3),
@@ -1349,7 +1419,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       private FilterTypeCase(int value) {
         this.value = value;
       }
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static FilterTypeCase valueOf(int value) {
         return forNumber(value);
@@ -1388,6 +1462,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+     *
+     * @return Whether the compositeFilter field is set.
      */
     public boolean hasCompositeFilter() {
       return filterTypeCase_ == 1;
@@ -1400,6 +1476,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+     *
+     * @return The compositeFilter.
      */
     public com.google.firestore.v1.StructuredQuery.CompositeFilter getCompositeFilter() {
       if (filterTypeCase_ == 1) {
@@ -1433,6 +1511,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+     *
+     * @return Whether the fieldFilter field is set.
      */
     public boolean hasFieldFilter() {
       return filterTypeCase_ == 2;
@@ -1445,6 +1525,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+     *
+     * @return The fieldFilter.
      */
     public com.google.firestore.v1.StructuredQuery.FieldFilter getFieldFilter() {
       if (filterTypeCase_ == 2) {
@@ -1477,6 +1559,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+     *
+     * @return Whether the unaryFilter field is set.
      */
     public boolean hasUnaryFilter() {
       return filterTypeCase_ == 3;
@@ -1489,6 +1573,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+     *
+     * @return The unaryFilter.
      */
     public com.google.firestore.v1.StructuredQuery.UnaryFilter getUnaryFilter() {
       if (filterTypeCase_ == 3) {
@@ -1944,6 +2030,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+       *
+       * @return Whether the compositeFilter field is set.
        */
       public boolean hasCompositeFilter() {
         return filterTypeCase_ == 1;
@@ -1956,6 +2044,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
+       *
+       * @return The compositeFilter.
        */
       public com.google.firestore.v1.StructuredQuery.CompositeFilter getCompositeFilter() {
         if (compositeFilterBuilder_ == null) {
@@ -2152,6 +2242,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+       *
+       * @return Whether the fieldFilter field is set.
        */
       public boolean hasFieldFilter() {
         return filterTypeCase_ == 2;
@@ -2164,6 +2256,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
+       *
+       * @return The fieldFilter.
        */
       public com.google.firestore.v1.StructuredQuery.FieldFilter getFieldFilter() {
         if (fieldFilterBuilder_ == null) {
@@ -2356,6 +2450,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+       *
+       * @return Whether the unaryFilter field is set.
        */
       public boolean hasUnaryFilter() {
         return filterTypeCase_ == 3;
@@ -2368,6 +2464,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
+       *
+       * @return The unaryFilter.
        */
       public com.google.firestore.v1.StructuredQuery.UnaryFilter getUnaryFilter() {
         if (unaryFilterBuilder_ == null) {
@@ -2612,6 +2710,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     int getOpValue();
     /**
@@ -2622,6 +2722,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+     *
+     * @return The op.
      */
     com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp();
 
@@ -2707,6 +2809,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new CompositeFilter();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -2739,10 +2847,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               }
             case 18:
               {
-                if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                   filters_ =
                       new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Filter>();
-                  mutable_bitField0_ |= 0x00000002;
+                  mutable_bitField0_ |= 0x00000001;
                 }
                 filters_.add(
                     input.readMessage(
@@ -2764,7 +2872,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) != 0)) {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
           filters_ = java.util.Collections.unmodifiableList(filters_);
         }
         this.unknownFields = unknownFields.build();
@@ -2849,12 +2957,20 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static Operator valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Operator forNumber(int value) {
         switch (value) {
           case 0:
@@ -2912,7 +3028,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       // @@protoc_insertion_point(enum_scope:google.firestore.v1.StructuredQuery.CompositeFilter.Operator)
     }
 
-    private int bitField0_;
     public static final int OP_FIELD_NUMBER = 1;
     private int op_;
     /**
@@ -2923,6 +3038,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     public int getOpValue() {
       return op_;
@@ -2935,6 +3052,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+     *
+     * @return The op.
      */
     public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
       @SuppressWarnings("deprecation")
@@ -3242,7 +3361,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
         if (filtersBuilder_ == null) {
           filters_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           filtersBuilder_.clear();
         }
@@ -3274,18 +3393,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         com.google.firestore.v1.StructuredQuery.CompositeFilter result =
             new com.google.firestore.v1.StructuredQuery.CompositeFilter(this);
         int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
         result.op_ = op_;
         if (filtersBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) != 0)) {
+          if (((bitField0_ & 0x00000001) != 0)) {
             filters_ = java.util.Collections.unmodifiableList(filters_);
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           }
           result.filters_ = filters_;
         } else {
           result.filters_ = filtersBuilder_.build();
         }
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -3345,7 +3462,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           if (!other.filters_.isEmpty()) {
             if (filters_.isEmpty()) {
               filters_ = other.filters_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
             } else {
               ensureFiltersIsMutable();
               filters_.addAll(other.filters_);
@@ -3358,7 +3475,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               filtersBuilder_.dispose();
               filtersBuilder_ = null;
               filters_ = other.filters_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
               filtersBuilder_ =
                   com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                       ? getFiltersFieldBuilder()
@@ -3409,6 +3526,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+       *
+       * @return The enum numeric value on the wire for op.
        */
       public int getOpValue() {
         return op_;
@@ -3421,6 +3540,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+       *
+       * @param value The enum numeric value on the wire for op to set.
+       * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
         op_ = value;
@@ -3435,6 +3557,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+       *
+       * @return The op.
        */
       public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
         @SuppressWarnings("deprecation")
@@ -3452,6 +3576,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+       *
+       * @param value The op to set.
+       * @return This builder for chaining.
        */
       public Builder setOp(com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator value) {
         if (value == null) {
@@ -3470,6 +3597,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter.Operator op = 1;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearOp() {
 
@@ -3482,10 +3611,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           java.util.Collections.emptyList();
 
       private void ensureFiltersIsMutable() {
-        if (!((bitField0_ & 0x00000002) != 0)) {
+        if (!((bitField0_ & 0x00000001) != 0)) {
           filters_ =
               new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Filter>(filters_);
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000001;
         }
       }
 
@@ -3712,7 +3841,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public Builder clearFilters() {
         if (filtersBuilder_ == null) {
           filters_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
           filtersBuilder_.clear();
@@ -3842,7 +3971,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                   com.google.firestore.v1.StructuredQuery.Filter,
                   com.google.firestore.v1.StructuredQuery.Filter.Builder,
                   com.google.firestore.v1.StructuredQuery.FilterOrBuilder>(
-                  filters_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
+                  filters_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
           filters_ = null;
         }
         return filtersBuilder_;
@@ -3913,6 +4042,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
      */
     boolean hasField();
     /**
@@ -3923,6 +4054,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
      */
     com.google.firestore.v1.StructuredQuery.FieldReference getField();
     /**
@@ -3944,6 +4077,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     int getOpValue();
     /**
@@ -3954,6 +4089,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+     *
+     * @return The op.
      */
     com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp();
 
@@ -3965,6 +4102,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Value value = 3;</code>
+     *
+     * @return Whether the value field is set.
      */
     boolean hasValue();
     /**
@@ -3975,6 +4114,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Value value = 3;</code>
+     *
+     * @return The value.
      */
     com.google.firestore.v1.Value getValue();
     /**
@@ -4012,6 +4153,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new FieldFilter();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -4024,7 +4171,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -4316,12 +4462,20 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static Operator valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Operator forNumber(int value) {
         switch (value) {
           case 0:
@@ -4403,6 +4557,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
      */
     public boolean hasField() {
       return field_ != null;
@@ -4415,6 +4571,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
      */
     public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
       return field_ == null
@@ -4444,6 +4602,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     public int getOpValue() {
       return op_;
@@ -4456,6 +4616,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+     *
+     * @return The op.
      */
     public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
       @SuppressWarnings("deprecation")
@@ -4476,6 +4638,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Value value = 3;</code>
+     *
+     * @return Whether the value field is set.
      */
     public boolean hasValue() {
       return value_ != null;
@@ -4488,6 +4652,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Value value = 3;</code>
+     *
+     * @return The value.
      */
     public com.google.firestore.v1.Value getValue() {
       return value_ == null ? com.google.firestore.v1.Value.getDefaultInstance() : value_;
@@ -4901,6 +5067,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return Whether the field field is set.
        */
       public boolean hasField() {
         return fieldBuilder_ != null || field_ != null;
@@ -4913,6 +5081,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return The field.
        */
       public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
         if (fieldBuilder_ == null) {
@@ -5078,6 +5248,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+       *
+       * @return The enum numeric value on the wire for op.
        */
       public int getOpValue() {
         return op_;
@@ -5090,6 +5262,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+       *
+       * @param value The enum numeric value on the wire for op to set.
+       * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
         op_ = value;
@@ -5104,6 +5279,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+       *
+       * @return The op.
        */
       public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
         @SuppressWarnings("deprecation")
@@ -5121,6 +5298,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+       *
+       * @param value The op to set.
+       * @return This builder for chaining.
        */
       public Builder setOp(com.google.firestore.v1.StructuredQuery.FieldFilter.Operator value) {
         if (value == null) {
@@ -5139,6 +5319,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter.Operator op = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearOp() {
 
@@ -5161,6 +5343,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.Value value = 3;</code>
+       *
+       * @return Whether the value field is set.
        */
       public boolean hasValue() {
         return valueBuilder_ != null || value_ != null;
@@ -5173,6 +5357,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.Value value = 3;</code>
+       *
+       * @return The value.
        */
       public com.google.firestore.v1.Value getValue() {
         if (valueBuilder_ == null) {
@@ -5387,6 +5573,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     int getOpValue();
     /**
@@ -5397,6 +5585,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The op.
      */
     com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp();
 
@@ -5408,6 +5598,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return Whether the field field is set.
      */
     boolean hasField();
     /**
@@ -5418,6 +5610,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return The field.
      */
     com.google.firestore.v1.StructuredQuery.FieldReference getField();
     /**
@@ -5457,6 +5651,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new UnaryFilter();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -5469,7 +5669,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -5623,12 +5822,20 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static Operator valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Operator forNumber(int value) {
         switch (value) {
           case 0:
@@ -5691,7 +5898,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     private int operandTypeCase_ = 0;
     private java.lang.Object operandType_;
 
-    public enum OperandTypeCase implements com.google.protobuf.Internal.EnumLite {
+    public enum OperandTypeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       FIELD(2),
       OPERANDTYPE_NOT_SET(0);
       private final int value;
@@ -5699,7 +5909,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       private OperandTypeCase(int value) {
         this.value = value;
       }
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static OperandTypeCase valueOf(int value) {
         return forNumber(value);
@@ -5735,6 +5949,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
      */
     public int getOpValue() {
       return op_;
@@ -5747,6 +5963,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The op.
      */
     public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
       @SuppressWarnings("deprecation")
@@ -5766,6 +5984,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return Whether the field field is set.
      */
     public boolean hasField() {
       return operandTypeCase_ == 2;
@@ -5778,6 +5998,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return The field.
      */
     public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
       if (operandTypeCase_ == 2) {
@@ -6196,6 +6418,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return The enum numeric value on the wire for op.
        */
       public int getOpValue() {
         return op_;
@@ -6208,6 +6432,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @param value The enum numeric value on the wire for op to set.
+       * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
         op_ = value;
@@ -6222,6 +6449,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return The op.
        */
       public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
         @SuppressWarnings("deprecation")
@@ -6239,6 +6468,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @param value The op to set.
+       * @return This builder for chaining.
        */
       public Builder setOp(com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator value) {
         if (value == null) {
@@ -6257,6 +6489,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearOp() {
 
@@ -6278,6 +6512,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       *
+       * @return Whether the field field is set.
        */
       public boolean hasField() {
         return operandTypeCase_ == 2;
@@ -6290,6 +6526,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       *
+       * @return The field.
        */
       public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
         if (fieldBuilder_ == null) {
@@ -6534,6 +6772,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
      */
     boolean hasField();
     /**
@@ -6544,6 +6784,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
      */
     com.google.firestore.v1.StructuredQuery.FieldReference getField();
     /**
@@ -6565,6 +6807,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The enum numeric value on the wire for direction.
      */
     int getDirectionValue();
     /**
@@ -6575,6 +6819,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The direction.
      */
     com.google.firestore.v1.StructuredQuery.Direction getDirection();
   }
@@ -6602,6 +6848,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new Order();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -6614,7 +6866,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -6693,6 +6944,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
      */
     public boolean hasField() {
       return field_ != null;
@@ -6705,6 +6958,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
      */
     public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
       return field_ == null
@@ -6734,6 +6989,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The enum numeric value on the wire for direction.
      */
     public int getDirectionValue() {
       return direction_;
@@ -6746,6 +7003,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The direction.
      */
     public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
       @SuppressWarnings("deprecation")
@@ -7120,6 +7379,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return Whether the field field is set.
        */
       public boolean hasField() {
         return fieldBuilder_ != null || field_ != null;
@@ -7132,6 +7393,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return The field.
        */
       public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
         if (fieldBuilder_ == null) {
@@ -7297,6 +7560,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return The enum numeric value on the wire for direction.
        */
       public int getDirectionValue() {
         return direction_;
@@ -7309,6 +7574,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @param value The enum numeric value on the wire for direction to set.
+       * @return This builder for chaining.
        */
       public Builder setDirectionValue(int value) {
         direction_ = value;
@@ -7323,6 +7591,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return The direction.
        */
       public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
         @SuppressWarnings("deprecation")
@@ -7340,6 +7610,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @param value The direction to set.
+       * @return This builder for chaining.
        */
       public Builder setDirection(com.google.firestore.v1.StructuredQuery.Direction value) {
         if (value == null) {
@@ -7358,6 +7631,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearDirection() {
 
@@ -7423,9 +7698,17 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.FieldReference)
       com.google.protobuf.MessageOrBuilder {
 
-    /** <code>string field_path = 2;</code> */
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The fieldPath.
+     */
     java.lang.String getFieldPath();
-    /** <code>string field_path = 2;</code> */
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The bytes for fieldPath.
+     */
     com.google.protobuf.ByteString getFieldPathBytes();
   }
   /**
@@ -7452,6 +7735,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new FieldReference();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -7464,7 +7753,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -7518,7 +7806,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
     public static final int FIELD_PATH_FIELD_NUMBER = 2;
     private volatile java.lang.Object fieldPath_;
-    /** <code>string field_path = 2;</code> */
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The fieldPath.
+     */
     public java.lang.String getFieldPath() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
@@ -7530,7 +7822,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return s;
       }
     }
-    /** <code>string field_path = 2;</code> */
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The bytes for fieldPath.
+     */
     public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
@@ -7867,7 +8163,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       private java.lang.Object fieldPath_ = "";
-      /** <code>string field_path = 2;</code> */
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return The fieldPath.
+       */
       public java.lang.String getFieldPath() {
         java.lang.Object ref = fieldPath_;
         if (!(ref instanceof java.lang.String)) {
@@ -7879,7 +8179,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           return (java.lang.String) ref;
         }
       }
-      /** <code>string field_path = 2;</code> */
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return The bytes for fieldPath.
+       */
       public com.google.protobuf.ByteString getFieldPathBytes() {
         java.lang.Object ref = fieldPath_;
         if (ref instanceof String) {
@@ -7891,7 +8195,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /** <code>string field_path = 2;</code> */
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @param value The fieldPath to set.
+       * @return This builder for chaining.
+       */
       public Builder setFieldPath(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
@@ -7901,14 +8210,23 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         onChanged();
         return this;
       }
-      /** <code>string field_path = 2;</code> */
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return This builder for chaining.
+       */
       public Builder clearFieldPath() {
 
         fieldPath_ = getDefaultInstance().getFieldPath();
         onChanged();
         return this;
       }
-      /** <code>string field_path = 2;</code> */
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @param value The bytes for fieldPath to set.
+       * @return This builder for chaining.
+       */
       public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
@@ -8060,6 +8378,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
     private Projection() {
       fields_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new Projection();
     }
 
     @java.lang.Override
@@ -9028,7 +9352,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
   }
 
-  private int bitField0_;
   public static final int SELECT_FIELD_NUMBER = 1;
   private com.google.firestore.v1.StructuredQuery.Projection select_;
   /**
@@ -9039,6 +9362,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+   *
+   * @return Whether the select field is set.
    */
   public boolean hasSelect() {
     return select_ != null;
@@ -9051,6 +9376,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+   *
+   * @return The select.
    */
   public com.google.firestore.v1.StructuredQuery.Projection getSelect() {
     return select_ == null
@@ -9146,6 +9473,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+   *
+   * @return Whether the where field is set.
    */
   public boolean hasWhere() {
     return where_ != null;
@@ -9158,6 +9487,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+   *
+   * @return The where.
    */
   public com.google.firestore.v1.StructuredQuery.Filter getWhere() {
     return where_ == null
@@ -9316,6 +9647,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+   *
+   * @return Whether the startAt field is set.
    */
   public boolean hasStartAt() {
     return startAt_ != null;
@@ -9328,6 +9661,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+   *
+   * @return The startAt.
    */
   public com.google.firestore.v1.Cursor getStartAt() {
     return startAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : startAt_;
@@ -9355,6 +9690,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+   *
+   * @return Whether the endAt field is set.
    */
   public boolean hasEndAt() {
     return endAt_ != null;
@@ -9367,6 +9704,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+   *
+   * @return The endAt.
    */
   public com.google.firestore.v1.Cursor getEndAt() {
     return endAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : endAt_;
@@ -9396,6 +9735,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>int32 offset = 6;</code>
+   *
+   * @return The offset.
    */
   public int getOffset() {
     return offset_;
@@ -9413,6 +9754,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
+   *
+   * @return Whether the limit field is set.
    */
   public boolean hasLimit() {
     return limit_ != null;
@@ -9427,6 +9770,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
+   *
+   * @return The limit.
    */
   public com.google.protobuf.Int32Value getLimit() {
     return limit_ == null ? com.google.protobuf.Int32Value.getDefaultInstance() : limit_;
@@ -9752,7 +10097,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
       if (fromBuilder_ == null) {
         from_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         fromBuilder_.clear();
       }
@@ -9764,7 +10109,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
       if (orderByBuilder_ == null) {
         orderBy_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000002);
       } else {
         orderByBuilder_.clear();
       }
@@ -9816,16 +10161,15 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       com.google.firestore.v1.StructuredQuery result =
           new com.google.firestore.v1.StructuredQuery(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (selectBuilder_ == null) {
         result.select_ = select_;
       } else {
         result.select_ = selectBuilder_.build();
       }
       if (fromBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           from_ = java.util.Collections.unmodifiableList(from_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.from_ = from_;
       } else {
@@ -9837,9 +10181,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         result.where_ = whereBuilder_.build();
       }
       if (orderByBuilder_ == null) {
-        if (((bitField0_ & 0x00000008) != 0)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           orderBy_ = java.util.Collections.unmodifiableList(orderBy_);
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.orderBy_ = orderBy_;
       } else {
@@ -9861,7 +10205,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       } else {
         result.limit_ = limitBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -9918,7 +10261,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (!other.from_.isEmpty()) {
           if (from_.isEmpty()) {
             from_ = other.from_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureFromIsMutable();
             from_.addAll(other.from_);
@@ -9931,7 +10274,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             fromBuilder_.dispose();
             fromBuilder_ = null;
             from_ = other.from_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
             fromBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFromFieldBuilder()
@@ -9948,7 +10291,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (!other.orderBy_.isEmpty()) {
           if (orderBy_.isEmpty()) {
             orderBy_ = other.orderBy_;
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureOrderByIsMutable();
             orderBy_.addAll(other.orderBy_);
@@ -9961,7 +10304,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             orderByBuilder_.dispose();
             orderByBuilder_ = null;
             orderBy_ = other.orderBy_;
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000002);
             orderByBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getOrderByFieldBuilder()
@@ -10028,6 +10371,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+     *
+     * @return Whether the select field is set.
      */
     public boolean hasSelect() {
       return selectBuilder_ != null || select_ != null;
@@ -10040,6 +10385,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+     *
+     * @return The select.
      */
     public com.google.firestore.v1.StructuredQuery.Projection getSelect() {
       if (selectBuilder_ == null) {
@@ -10200,11 +10547,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         java.util.Collections.emptyList();
 
     private void ensureFromIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         from_ =
             new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.CollectionSelector>(
                 from_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -10426,7 +10773,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder clearFrom() {
       if (fromBuilder_ == null) {
         from_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         fromBuilder_.clear();
@@ -10555,7 +10902,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                 com.google.firestore.v1.StructuredQuery.CollectionSelector,
                 com.google.firestore.v1.StructuredQuery.CollectionSelector.Builder,
                 com.google.firestore.v1.StructuredQuery.CollectionSelectorOrBuilder>(
-                from_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
+                from_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         from_ = null;
       }
       return fromBuilder_;
@@ -10575,6 +10922,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+     *
+     * @return Whether the where field is set.
      */
     public boolean hasWhere() {
       return whereBuilder_ != null || where_ != null;
@@ -10587,6 +10936,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+     *
+     * @return The where.
      */
     public com.google.firestore.v1.StructuredQuery.Filter getWhere() {
       if (whereBuilder_ == null) {
@@ -10747,9 +11098,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         java.util.Collections.emptyList();
 
     private void ensureOrderByIsMutable() {
-      if (!((bitField0_ & 0x00000008) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         orderBy_ = new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Order>(orderBy_);
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000002;
       }
     }
 
@@ -11108,7 +11459,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder clearOrderBy() {
       if (orderByBuilder_ == null) {
         orderBy_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
       } else {
         orderByBuilder_.clear();
@@ -11321,7 +11672,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                 com.google.firestore.v1.StructuredQuery.Order,
                 com.google.firestore.v1.StructuredQuery.Order.Builder,
                 com.google.firestore.v1.StructuredQuery.OrderOrBuilder>(
-                orderBy_, ((bitField0_ & 0x00000008) != 0), getParentForChildren(), isClean());
+                orderBy_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
         orderBy_ = null;
       }
       return orderByBuilder_;
@@ -11341,6 +11692,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+     *
+     * @return Whether the startAt field is set.
      */
     public boolean hasStartAt() {
       return startAtBuilder_ != null || startAt_ != null;
@@ -11353,6 +11706,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+     *
+     * @return The startAt.
      */
     public com.google.firestore.v1.Cursor getStartAt() {
       if (startAtBuilder_ == null) {
@@ -11516,6 +11871,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+     *
+     * @return Whether the endAt field is set.
      */
     public boolean hasEndAt() {
       return endAtBuilder_ != null || endAt_ != null;
@@ -11528,6 +11885,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+     *
+     * @return The endAt.
      */
     public com.google.firestore.v1.Cursor getEndAt() {
       if (endAtBuilder_ == null) {
@@ -11688,6 +12047,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 offset = 6;</code>
+     *
+     * @return The offset.
      */
     public int getOffset() {
       return offset_;
@@ -11702,6 +12063,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 offset = 6;</code>
+     *
+     * @param value The offset to set.
+     * @return This builder for chaining.
      */
     public Builder setOffset(int value) {
 
@@ -11719,6 +12083,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 offset = 6;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOffset() {
 
@@ -11743,6 +12109,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
+     *
+     * @return Whether the limit field is set.
      */
     public boolean hasLimit() {
       return limitBuilder_ != null || limit_ != null;
@@ -11757,6 +12125,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
+     *
+     * @return The limit.
      */
     public com.google.protobuf.Int32Value getLimit() {
       if (limitBuilder_ == null) {

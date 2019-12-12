@@ -32,6 +32,8 @@ public interface BeginTransactionRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   java.lang.String getDatabase();
   /**
@@ -43,6 +45,8 @@ public interface BeginTransactionRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -55,6 +59,8 @@ public interface BeginTransactionRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+   *
+   * @return Whether the options field is set.
    */
   boolean hasOptions();
   /**
@@ -66,6 +72,8 @@ public interface BeginTransactionRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+   *
+   * @return The options.
    */
   com.google.firestore.v1beta1.TransactionOptions getOptions();
   /**

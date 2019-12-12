@@ -43,6 +43,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new DocumentTransform();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -75,11 +81,11 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
             }
           case 18:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 fieldTransforms_ =
                     new java.util.ArrayList<
                         com.google.firestore.v1.DocumentTransform.FieldTransform>();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               fieldTransforms_.add(
                   input.readMessage(
@@ -101,7 +107,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         fieldTransforms_ = java.util.Collections.unmodifiableList(fieldTransforms_);
       }
       this.unknownFields = unknownFields.build();
@@ -138,6 +144,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The fieldPath.
      */
     java.lang.String getFieldPath();
     /**
@@ -149,6 +157,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The bytes for fieldPath.
      */
     com.google.protobuf.ByteString getFieldPathBytes();
 
@@ -162,6 +172,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * <code>
      * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
      * </code>
+     *
+     * @return The enum numeric value on the wire for setToServerValue.
      */
     int getSetToServerValueValue();
     /**
@@ -174,6 +186,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * <code>
      * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
      * </code>
+     *
+     * @return The setToServerValue.
      */
     com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue getSetToServerValue();
 
@@ -193,6 +207,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value increment = 3;</code>
+     *
+     * @return Whether the increment field is set.
      */
     boolean hasIncrement();
     /**
@@ -211,6 +227,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value increment = 3;</code>
+     *
+     * @return The increment.
      */
     com.google.firestore.v1.Value getIncrement();
     /**
@@ -250,6 +268,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value maximum = 4;</code>
+     *
+     * @return Whether the maximum field is set.
      */
     boolean hasMaximum();
     /**
@@ -270,6 +290,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value maximum = 4;</code>
+     *
+     * @return The maximum.
      */
     com.google.firestore.v1.Value getMaximum();
     /**
@@ -311,6 +333,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value minimum = 5;</code>
+     *
+     * @return Whether the minimum field is set.
      */
     boolean hasMinimum();
     /**
@@ -331,6 +355,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value minimum = 5;</code>
+     *
+     * @return The minimum.
      */
     com.google.firestore.v1.Value getMinimum();
     /**
@@ -371,6 +397,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+     *
+     * @return Whether the appendMissingElements field is set.
      */
     boolean hasAppendMissingElements();
     /**
@@ -390,6 +418,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+     *
+     * @return The appendMissingElements.
      */
     com.google.firestore.v1.ArrayValue getAppendMissingElements();
     /**
@@ -427,6 +457,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+     *
+     * @return Whether the removeAllFromArray field is set.
      */
     boolean hasRemoveAllFromArray();
     /**
@@ -444,6 +476,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+     *
+     * @return The removeAllFromArray.
      */
     com.google.firestore.v1.ArrayValue getRemoveAllFromArray();
     /**
@@ -491,6 +525,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new FieldTransform();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -503,7 +543,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -703,12 +742,20 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static ServerValue valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static ServerValue forNumber(int value) {
         switch (value) {
           case 0:
@@ -769,7 +816,10 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     private int transformTypeCase_ = 0;
     private java.lang.Object transformType_;
 
-    public enum TransformTypeCase implements com.google.protobuf.Internal.EnumLite {
+    public enum TransformTypeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       SET_TO_SERVER_VALUE(2),
       INCREMENT(3),
       MAXIMUM(4),
@@ -782,7 +832,11 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       private TransformTypeCase(int value) {
         this.value = value;
       }
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static TransformTypeCase valueOf(int value) {
         return forNumber(value);
@@ -829,6 +883,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The fieldPath.
      */
     public java.lang.String getFieldPath() {
       java.lang.Object ref = fieldPath_;
@@ -850,6 +906,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The bytes for fieldPath.
      */
     public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
@@ -874,6 +932,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * <code>
      * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
      * </code>
+     *
+     * @return The enum numeric value on the wire for setToServerValue.
      */
     public int getSetToServerValueValue() {
       if (transformTypeCase_ == 2) {
@@ -891,6 +951,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * <code>
      * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
      * </code>
+     *
+     * @return The setToServerValue.
      */
     public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
         getSetToServerValue() {
@@ -924,6 +986,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value increment = 3;</code>
+     *
+     * @return Whether the increment field is set.
      */
     public boolean hasIncrement() {
       return transformTypeCase_ == 3;
@@ -944,6 +1008,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value increment = 3;</code>
+     *
+     * @return The increment.
      */
     public com.google.firestore.v1.Value getIncrement() {
       if (transformTypeCase_ == 3) {
@@ -994,6 +1060,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value maximum = 4;</code>
+     *
+     * @return Whether the maximum field is set.
      */
     public boolean hasMaximum() {
       return transformTypeCase_ == 4;
@@ -1016,6 +1084,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value maximum = 4;</code>
+     *
+     * @return The maximum.
      */
     public com.google.firestore.v1.Value getMaximum() {
       if (transformTypeCase_ == 4) {
@@ -1068,6 +1138,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value minimum = 5;</code>
+     *
+     * @return Whether the minimum field is set.
      */
     public boolean hasMinimum() {
       return transformTypeCase_ == 5;
@@ -1090,6 +1162,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.Value minimum = 5;</code>
+     *
+     * @return The minimum.
      */
     public com.google.firestore.v1.Value getMinimum() {
       if (transformTypeCase_ == 5) {
@@ -1141,6 +1215,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+     *
+     * @return Whether the appendMissingElements field is set.
      */
     public boolean hasAppendMissingElements() {
       return transformTypeCase_ == 6;
@@ -1162,6 +1238,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+     *
+     * @return The appendMissingElements.
      */
     public com.google.firestore.v1.ArrayValue getAppendMissingElements() {
       if (transformTypeCase_ == 6) {
@@ -1210,6 +1288,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+     *
+     * @return Whether the removeAllFromArray field is set.
      */
     public boolean hasRemoveAllFromArray() {
       return transformTypeCase_ == 7;
@@ -1229,6 +1309,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+     *
+     * @return The removeAllFromArray.
      */
     public com.google.firestore.v1.ArrayValue getRemoveAllFromArray() {
       if (transformTypeCase_ == 7) {
@@ -1782,6 +1864,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return The fieldPath.
        */
       public java.lang.String getFieldPath() {
         java.lang.Object ref = fieldPath_;
@@ -1803,6 +1887,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return The bytes for fieldPath.
        */
       public com.google.protobuf.ByteString getFieldPathBytes() {
         java.lang.Object ref = fieldPath_;
@@ -1824,6 +1910,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @param value The fieldPath to set.
+       * @return This builder for chaining.
        */
       public Builder setFieldPath(java.lang.String value) {
         if (value == null) {
@@ -1843,6 +1932,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearFieldPath() {
 
@@ -1859,6 +1950,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @param value The bytes for fieldPath to set.
+       * @return This builder for chaining.
        */
       public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1881,6 +1975,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * <code>
        * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
        * </code>
+       *
+       * @return The enum numeric value on the wire for setToServerValue.
        */
       public int getSetToServerValueValue() {
         if (transformTypeCase_ == 2) {
@@ -1898,6 +1994,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * <code>
        * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
        * </code>
+       *
+       * @param value The enum numeric value on the wire for setToServerValue to set.
+       * @return This builder for chaining.
        */
       public Builder setSetToServerValueValue(int value) {
         transformTypeCase_ = 2;
@@ -1915,6 +2014,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * <code>
        * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
        * </code>
+       *
+       * @return The setToServerValue.
        */
       public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
           getSetToServerValue() {
@@ -1940,6 +2041,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * <code>
        * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
        * </code>
+       *
+       * @param value The setToServerValue to set.
+       * @return This builder for chaining.
        */
       public Builder setSetToServerValue(
           com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue value) {
@@ -1961,6 +2065,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * <code>
        * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
        * </code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearSetToServerValue() {
         if (transformTypeCase_ == 2) {
@@ -1992,6 +2098,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value increment = 3;</code>
+       *
+       * @return Whether the increment field is set.
        */
       public boolean hasIncrement() {
         return transformTypeCase_ == 3;
@@ -2012,6 +2120,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value increment = 3;</code>
+       *
+       * @return The increment.
        */
       public com.google.firestore.v1.Value getIncrement() {
         if (incrementBuilder_ == null) {
@@ -2267,6 +2377,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value maximum = 4;</code>
+       *
+       * @return Whether the maximum field is set.
        */
       public boolean hasMaximum() {
         return transformTypeCase_ == 4;
@@ -2289,6 +2401,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value maximum = 4;</code>
+       *
+       * @return The maximum.
        */
       public com.google.firestore.v1.Value getMaximum() {
         if (maximumBuilder_ == null) {
@@ -2558,6 +2672,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value minimum = 5;</code>
+       *
+       * @return Whether the minimum field is set.
        */
       public boolean hasMinimum() {
         return transformTypeCase_ == 5;
@@ -2580,6 +2696,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.Value minimum = 5;</code>
+       *
+       * @return The minimum.
        */
       public com.google.firestore.v1.Value getMinimum() {
         if (minimumBuilder_ == null) {
@@ -2848,6 +2966,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+       *
+       * @return Whether the appendMissingElements field is set.
        */
       public boolean hasAppendMissingElements() {
         return transformTypeCase_ == 6;
@@ -2869,6 +2989,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.ArrayValue append_missing_elements = 6;</code>
+       *
+       * @return The appendMissingElements.
        */
       public com.google.firestore.v1.ArrayValue getAppendMissingElements() {
         if (appendMissingElementsBuilder_ == null) {
@@ -3129,6 +3251,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+       *
+       * @return Whether the removeAllFromArray field is set.
        */
       public boolean hasRemoveAllFromArray() {
         return transformTypeCase_ == 7;
@@ -3148,6 +3272,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * </pre>
        *
        * <code>.google.firestore.v1.ArrayValue remove_all_from_array = 7;</code>
+       *
+       * @return The removeAllFromArray.
        */
       public com.google.firestore.v1.ArrayValue getRemoveAllFromArray() {
         if (removeAllFromArrayBuilder_ == null) {
@@ -3426,7 +3552,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
   }
 
-  private int bitField0_;
   public static final int DOCUMENT_FIELD_NUMBER = 1;
   private volatile java.lang.Object document_;
   /**
@@ -3437,6 +3562,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The document.
    */
   public java.lang.String getDocument() {
     java.lang.Object ref = document_;
@@ -3457,6 +3584,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string document = 1;</code>
+   *
+   * @return The bytes for document.
    */
   public com.google.protobuf.ByteString getDocumentBytes() {
     java.lang.Object ref = document_;
@@ -3772,7 +3901,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
 
       if (fieldTransformsBuilder_ == null) {
         fieldTransforms_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         fieldTransformsBuilder_.clear();
       }
@@ -3804,18 +3933,16 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       com.google.firestore.v1.DocumentTransform result =
           new com.google.firestore.v1.DocumentTransform(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.document_ = document_;
       if (fieldTransformsBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           fieldTransforms_ = java.util.Collections.unmodifiableList(fieldTransforms_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.fieldTransforms_ = fieldTransforms_;
       } else {
         result.fieldTransforms_ = fieldTransformsBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -3873,7 +4000,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         if (!other.fieldTransforms_.isEmpty()) {
           if (fieldTransforms_.isEmpty()) {
             fieldTransforms_ = other.fieldTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureFieldTransformsIsMutable();
             fieldTransforms_.addAll(other.fieldTransforms_);
@@ -3886,7 +4013,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
             fieldTransformsBuilder_.dispose();
             fieldTransformsBuilder_ = null;
             fieldTransforms_ = other.fieldTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
             fieldTransformsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFieldTransformsFieldBuilder()
@@ -3936,6 +4063,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string document = 1;</code>
+     *
+     * @return The document.
      */
     public java.lang.String getDocument() {
       java.lang.Object ref = document_;
@@ -3956,6 +4085,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string document = 1;</code>
+     *
+     * @return The bytes for document.
      */
     public com.google.protobuf.ByteString getDocumentBytes() {
       java.lang.Object ref = document_;
@@ -3976,6 +4107,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string document = 1;</code>
+     *
+     * @param value The document to set.
+     * @return This builder for chaining.
      */
     public Builder setDocument(java.lang.String value) {
       if (value == null) {
@@ -3994,6 +4128,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string document = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDocument() {
 
@@ -4009,6 +4145,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string document = 1;</code>
+     *
+     * @param value The bytes for document to set.
+     * @return This builder for chaining.
      */
     public Builder setDocumentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -4025,11 +4164,11 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         fieldTransforms_ = java.util.Collections.emptyList();
 
     private void ensureFieldTransformsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         fieldTransforms_ =
             new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>(
                 fieldTransforms_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -4285,7 +4424,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     public Builder clearFieldTransforms() {
       if (fieldTransformsBuilder_ == null) {
         fieldTransforms_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         fieldTransformsBuilder_.clear();
@@ -4436,7 +4575,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
                 com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
                 com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>(
                 fieldTransforms_,
-                ((bitField0_ & 0x00000002) != 0),
+                ((bitField0_ & 0x00000001) != 0),
                 getParentForChildren(),
                 isClean());
         fieldTransforms_ = null;

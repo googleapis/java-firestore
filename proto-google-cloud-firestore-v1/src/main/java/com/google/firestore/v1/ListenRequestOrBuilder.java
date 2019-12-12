@@ -32,6 +32,8 @@ public interface ListenRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   java.lang.String getDatabase();
   /**
@@ -43,6 +45,8 @@ public interface ListenRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -54,6 +58,8 @@ public interface ListenRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target add_target = 2;</code>
+   *
+   * @return Whether the addTarget field is set.
    */
   boolean hasAddTarget();
   /**
@@ -64,6 +70,8 @@ public interface ListenRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Target add_target = 2;</code>
+   *
+   * @return The addTarget.
    */
   com.google.firestore.v1.Target getAddTarget();
   /**
@@ -85,6 +93,8 @@ public interface ListenRequestOrBuilder
    * </pre>
    *
    * <code>int32 remove_target = 3;</code>
+   *
+   * @return The removeTarget.
    */
   int getRemoveTarget();
 

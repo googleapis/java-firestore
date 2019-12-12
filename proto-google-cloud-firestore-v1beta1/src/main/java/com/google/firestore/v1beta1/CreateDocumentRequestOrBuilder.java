@@ -33,6 +33,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   java.lang.String getParent();
   /**
@@ -45,6 +47,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -56,6 +60,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The collectionId.
    */
   java.lang.String getCollectionId();
   /**
@@ -66,6 +72,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for collectionId.
    */
   com.google.protobuf.ByteString getCollectionIdBytes();
 
@@ -78,6 +86,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string document_id = 3;</code>
+   *
+   * @return The documentId.
    */
   java.lang.String getDocumentId();
   /**
@@ -89,6 +99,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string document_id = 3;</code>
+   *
+   * @return The bytes for documentId.
    */
   com.google.protobuf.ByteString getDocumentIdBytes();
 
@@ -102,6 +114,8 @@ public interface CreateDocumentRequestOrBuilder
    * <code>
    * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
@@ -114,6 +128,8 @@ public interface CreateDocumentRequestOrBuilder
    * <code>
    * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The document.
    */
   com.google.firestore.v1beta1.Document getDocument();
   /**
@@ -139,6 +155,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+   *
+   * @return Whether the mask field is set.
    */
   boolean hasMask();
   /**
@@ -151,6 +169,8 @@ public interface CreateDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+   *
+   * @return The mask.
    */
   com.google.firestore.v1beta1.DocumentMask getMask();
   /**

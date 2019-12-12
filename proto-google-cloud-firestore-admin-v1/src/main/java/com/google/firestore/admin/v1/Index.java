@@ -46,6 +46,12 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Index();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -85,9 +91,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             }
           case 26:
             {
-              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000001;
               }
               fields_.add(
                   input.readMessage(
@@ -115,7 +121,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000004) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         fields_ = java.util.Collections.unmodifiableList(fields_);
       }
       this.unknownFields = unknownFields.build();
@@ -229,12 +235,20 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       return value;
     }
 
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static QueryScope valueOf(int value) {
       return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
     public static QueryScope forNumber(int value) {
       switch (value) {
         case 0:
@@ -421,12 +435,20 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       return value;
     }
 
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static State valueOf(int value) {
       return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
     public static State forNumber(int value) {
       switch (value) {
         case 0:
@@ -501,6 +523,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The fieldPath.
      */
     java.lang.String getFieldPath();
     /**
@@ -513,6 +537,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The bytes for fieldPath.
      */
     com.google.protobuf.ByteString getFieldPathBytes();
 
@@ -525,6 +551,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+     *
+     * @return The enum numeric value on the wire for order.
      */
     int getOrderValue();
     /**
@@ -536,6 +564,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+     *
+     * @return The order.
      */
     com.google.firestore.admin.v1.Index.IndexField.Order getOrder();
 
@@ -547,6 +577,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+     *
+     * @return The enum numeric value on the wire for arrayConfig.
      */
     int getArrayConfigValue();
     /**
@@ -557,6 +589,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+     *
+     * @return The arrayConfig.
      */
     com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig();
 
@@ -588,6 +622,12 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new IndexField();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -600,7 +640,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -748,12 +787,20 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static Order valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Order forNumber(int value) {
         switch (value) {
           case 0:
@@ -873,12 +920,20 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         return value;
       }
 
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static ArrayConfig valueOf(int value) {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static ArrayConfig forNumber(int value) {
         switch (value) {
           case 0:
@@ -937,7 +992,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     private int valueModeCase_ = 0;
     private java.lang.Object valueMode_;
 
-    public enum ValueModeCase implements com.google.protobuf.Internal.EnumLite {
+    public enum ValueModeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       ORDER(2),
       ARRAY_CONFIG(3),
       VALUEMODE_NOT_SET(0);
@@ -946,7 +1004,11 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       private ValueModeCase(int value) {
         this.value = value;
       }
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static ValueModeCase valueOf(int value) {
         return forNumber(value);
@@ -986,6 +1048,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The fieldPath.
      */
     public java.lang.String getFieldPath() {
       java.lang.Object ref = fieldPath_;
@@ -1008,6 +1072,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string field_path = 1;</code>
+     *
+     * @return The bytes for fieldPath.
      */
     public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
@@ -1031,6 +1097,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+     *
+     * @return The enum numeric value on the wire for order.
      */
     public int getOrderValue() {
       if (valueModeCase_ == 2) {
@@ -1047,6 +1115,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+     *
+     * @return The order.
      */
     public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
       if (valueModeCase_ == 2) {
@@ -1070,6 +1140,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+     *
+     * @return The enum numeric value on the wire for arrayConfig.
      */
     public int getArrayConfigValue() {
       if (valueModeCase_ == 3) {
@@ -1085,6 +1157,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+     *
+     * @return The arrayConfig.
      */
     public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
       if (valueModeCase_ == 3) {
@@ -1511,6 +1585,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return The fieldPath.
        */
       public java.lang.String getFieldPath() {
         java.lang.Object ref = fieldPath_;
@@ -1533,6 +1609,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return The bytes for fieldPath.
        */
       public com.google.protobuf.ByteString getFieldPathBytes() {
         java.lang.Object ref = fieldPath_;
@@ -1555,6 +1633,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @param value The fieldPath to set.
+       * @return This builder for chaining.
        */
       public Builder setFieldPath(java.lang.String value) {
         if (value == null) {
@@ -1575,6 +1656,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearFieldPath() {
 
@@ -1592,6 +1675,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string field_path = 1;</code>
+       *
+       * @param value The bytes for fieldPath to set.
+       * @return This builder for chaining.
        */
       public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1613,6 +1699,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+       *
+       * @return The enum numeric value on the wire for order.
        */
       public int getOrderValue() {
         if (valueModeCase_ == 2) {
@@ -1629,6 +1717,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+       *
+       * @param value The enum numeric value on the wire for order to set.
+       * @return This builder for chaining.
        */
       public Builder setOrderValue(int value) {
         valueModeCase_ = 2;
@@ -1645,6 +1736,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+       *
+       * @return The order.
        */
       public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
         if (valueModeCase_ == 2) {
@@ -1667,6 +1760,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+       *
+       * @param value The order to set.
+       * @return This builder for chaining.
        */
       public Builder setOrder(com.google.firestore.admin.v1.Index.IndexField.Order value) {
         if (value == null) {
@@ -1686,6 +1782,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearOrder() {
         if (valueModeCase_ == 2) {
@@ -1704,6 +1802,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+       *
+       * @return The enum numeric value on the wire for arrayConfig.
        */
       public int getArrayConfigValue() {
         if (valueModeCase_ == 3) {
@@ -1719,6 +1819,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+       *
+       * @param value The enum numeric value on the wire for arrayConfig to set.
+       * @return This builder for chaining.
        */
       public Builder setArrayConfigValue(int value) {
         valueModeCase_ = 3;
@@ -1734,6 +1837,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+       *
+       * @return The arrayConfig.
        */
       public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
         if (valueModeCase_ == 3) {
@@ -1755,6 +1860,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+       *
+       * @param value The arrayConfig to set.
+       * @return This builder for chaining.
        */
       public Builder setArrayConfig(
           com.google.firestore.admin.v1.Index.IndexField.ArrayConfig value) {
@@ -1774,6 +1882,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.ArrayConfig array_config = 3;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearArrayConfig() {
         if (valueModeCase_ == 3) {
@@ -1836,7 +1946,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
   }
 
-  private int bitField0_;
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
@@ -1850,6 +1959,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The name.
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -1873,6 +1984,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The bytes for name.
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -1901,6 +2014,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+   *
+   * @return The enum numeric value on the wire for queryScope.
    */
   public int getQueryScopeValue() {
     return queryScope_;
@@ -1918,6 +2033,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+   *
+   * @return The queryScope.
    */
   public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
     @SuppressWarnings("deprecation")
@@ -2040,6 +2157,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+   *
+   * @return The enum numeric value on the wire for state.
    */
   public int getStateValue() {
     return state_;
@@ -2052,6 +2171,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+   *
+   * @return The state.
    */
   public com.google.firestore.admin.v1.Index.State getState() {
     @SuppressWarnings("deprecation")
@@ -2302,7 +2423,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
 
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         fieldsBuilder_.clear();
       }
@@ -2335,20 +2456,18 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.admin.v1.Index buildPartial() {
       com.google.firestore.admin.v1.Index result = new com.google.firestore.admin.v1.Index(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.name_ = name_;
       result.queryScope_ = queryScope_;
       if (fieldsBuilder_ == null) {
-        if (((bitField0_ & 0x00000004) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           fields_ = java.util.Collections.unmodifiableList(fields_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.fields_ = fields_;
       } else {
         result.fields_ = fieldsBuilder_.build();
       }
       result.state_ = state_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -2409,7 +2528,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         if (!other.fields_.isEmpty()) {
           if (fields_.isEmpty()) {
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureFieldsIsMutable();
             fields_.addAll(other.fields_);
@@ -2422,7 +2541,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             fieldsBuilder_.dispose();
             fieldsBuilder_ = null;
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000001);
             fieldsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFieldsFieldBuilder()
@@ -2478,6 +2597,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -2501,6 +2622,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return The bytes for name.
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -2524,6 +2647,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -2545,6 +2671,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearName() {
 
@@ -2563,6 +2691,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -2589,6 +2720,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+     *
+     * @return The enum numeric value on the wire for queryScope.
      */
     public int getQueryScopeValue() {
       return queryScope_;
@@ -2606,6 +2739,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+     *
+     * @param value The enum numeric value on the wire for queryScope to set.
+     * @return This builder for chaining.
      */
     public Builder setQueryScopeValue(int value) {
       queryScope_ = value;
@@ -2625,6 +2761,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+     *
+     * @return The queryScope.
      */
     public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
       @SuppressWarnings("deprecation")
@@ -2645,6 +2783,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+     *
+     * @param value The queryScope to set.
+     * @return This builder for chaining.
      */
     public Builder setQueryScope(com.google.firestore.admin.v1.Index.QueryScope value) {
       if (value == null) {
@@ -2668,6 +2809,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearQueryScope() {
 
@@ -2680,9 +2823,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureFieldsIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>(fields_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -2986,7 +3129,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     public Builder clearFields() {
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         fieldsBuilder_.clear();
@@ -3164,7 +3307,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.admin.v1.Index.IndexField,
                 com.google.firestore.admin.v1.Index.IndexField.Builder,
                 com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>(
-                fields_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
+                fields_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         fields_ = null;
       }
       return fieldsBuilder_;
@@ -3179,6 +3322,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+     *
+     * @return The enum numeric value on the wire for state.
      */
     public int getStateValue() {
       return state_;
@@ -3191,6 +3336,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+     *
+     * @param value The enum numeric value on the wire for state to set.
+     * @return This builder for chaining.
      */
     public Builder setStateValue(int value) {
       state_ = value;
@@ -3205,6 +3353,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+     *
+     * @return The state.
      */
     public com.google.firestore.admin.v1.Index.State getState() {
       @SuppressWarnings("deprecation")
@@ -3220,6 +3370,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+     *
+     * @param value The state to set.
+     * @return This builder for chaining.
      */
     public Builder setState(com.google.firestore.admin.v1.Index.State value) {
       if (value == null) {
@@ -3238,6 +3391,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearState() {
 

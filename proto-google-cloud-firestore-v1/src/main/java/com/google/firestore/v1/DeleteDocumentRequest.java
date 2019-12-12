@@ -42,6 +42,12 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new DeleteDocumentRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -133,6 +138,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The name.
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -154,6 +161,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for name.
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -178,6 +187,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 2;</code>
+   *
+   * @return Whether the currentDocument field is set.
    */
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
@@ -191,6 +202,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 2;</code>
+   *
+   * @return The currentDocument.
    */
   public com.google.firestore.v1.Precondition getCurrentDocument() {
     return currentDocument_ == null
@@ -565,6 +578,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -586,6 +601,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for name.
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -607,6 +624,9 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -626,6 +646,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearName() {
 
@@ -642,6 +664,9 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -669,6 +694,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1.Precondition current_document = 2;</code>
+     *
+     * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
       return currentDocumentBuilder_ != null || currentDocument_ != null;
@@ -682,6 +709,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1.Precondition current_document = 2;</code>
+     *
+     * @return The currentDocument.
      */
     public com.google.firestore.v1.Precondition getCurrentDocument() {
       if (currentDocumentBuilder_ == null) {

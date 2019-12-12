@@ -42,6 +42,12 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ExportDocumentsResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -118,6 +123,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string output_uri_prefix = 1;</code>
+   *
+   * @return The outputUriPrefix.
    */
   public java.lang.String getOutputUriPrefix() {
     java.lang.Object ref = outputUriPrefix_;
@@ -140,6 +147,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string output_uri_prefix = 1;</code>
+   *
+   * @return The bytes for outputUriPrefix.
    */
   public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
     java.lang.Object ref = outputUriPrefix_;
@@ -483,6 +492,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 1;</code>
+     *
+     * @return The outputUriPrefix.
      */
     public java.lang.String getOutputUriPrefix() {
       java.lang.Object ref = outputUriPrefix_;
@@ -505,6 +516,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 1;</code>
+     *
+     * @return The bytes for outputUriPrefix.
      */
     public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
       java.lang.Object ref = outputUriPrefix_;
@@ -527,6 +540,9 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 1;</code>
+     *
+     * @param value The outputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setOutputUriPrefix(java.lang.String value) {
       if (value == null) {
@@ -547,6 +563,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOutputUriPrefix() {
 
@@ -564,6 +582,9 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 1;</code>
+     *
+     * @param value The bytes for outputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setOutputUriPrefixBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

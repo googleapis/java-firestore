@@ -40,6 +40,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   private Target() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Target();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -180,6 +185,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return A list containing the documents.
      */
     java.util.List<java.lang.String> getDocumentsList();
     /**
@@ -193,6 +200,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return The count of documents.
      */
     int getDocumentsCount();
     /**
@@ -206,6 +215,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The documents at the given index.
      */
     java.lang.String getDocuments(int index);
     /**
@@ -219,6 +231,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the documents at the given index.
      */
     com.google.protobuf.ByteString getDocumentsBytes(int index);
   }
@@ -243,6 +258,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
     private DocumentsTarget() {
       documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new DocumentsTarget();
     }
 
     @java.lang.Override
@@ -329,6 +350,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return A list containing the documents.
      */
     public com.google.protobuf.ProtocolStringList getDocumentsList() {
       return documents_;
@@ -344,6 +367,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return The count of documents.
      */
     public int getDocumentsCount() {
       return documents_.size();
@@ -359,6 +384,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The documents at the given index.
      */
     public java.lang.String getDocuments(int index) {
       return documents_.get(index);
@@ -374,6 +402,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the documents at the given index.
      */
     public com.google.protobuf.ByteString getDocumentsBytes(int index) {
       return documents_.getByteString(index);
@@ -742,6 +773,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @return A list containing the documents.
        */
       public com.google.protobuf.ProtocolStringList getDocumentsList() {
         return documents_.getUnmodifiableView();
@@ -757,6 +790,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @return The count of documents.
        */
       public int getDocumentsCount() {
         return documents_.size();
@@ -772,6 +807,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param index The index of the element to return.
+       * @return The documents at the given index.
        */
       public java.lang.String getDocuments(int index) {
         return documents_.get(index);
@@ -787,6 +825,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param index The index of the value to return.
+       * @return The bytes of the documents at the given index.
        */
       public com.google.protobuf.ByteString getDocumentsBytes(int index) {
         return documents_.getByteString(index);
@@ -802,6 +843,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param index The index to set the value at.
+       * @param value The documents to set.
+       * @return This builder for chaining.
        */
       public Builder setDocuments(int index, java.lang.String value) {
         if (value == null) {
@@ -823,6 +868,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param value The documents to add.
+       * @return This builder for chaining.
        */
       public Builder addDocuments(java.lang.String value) {
         if (value == null) {
@@ -844,6 +892,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param values The documents to add.
+       * @return This builder for chaining.
        */
       public Builder addAllDocuments(java.lang.Iterable<java.lang.String> values) {
         ensureDocumentsIsMutable();
@@ -862,6 +913,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearDocuments() {
         documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -880,6 +933,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>repeated string documents = 2;</code>
+       *
+       * @param value The bytes of the documents to add.
+       * @return This builder for chaining.
        */
       public Builder addDocumentsBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -962,6 +1018,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
+     * @return The parent.
      */
     java.lang.String getParent();
     /**
@@ -977,6 +1035,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
+     * @return The bytes for parent.
      */
     com.google.protobuf.ByteString getParentBytes();
 
@@ -988,6 +1048,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return Whether the structuredQuery field is set.
      */
     boolean hasStructuredQuery();
     /**
@@ -998,6 +1060,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return The structuredQuery.
      */
     com.google.firestore.v1beta1.StructuredQuery getStructuredQuery();
     /**
@@ -1037,6 +1101,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new QueryTarget();
+    }
+
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
@@ -1049,7 +1119,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -1121,7 +1190,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     private int queryTypeCase_ = 0;
     private java.lang.Object queryType_;
 
-    public enum QueryTypeCase implements com.google.protobuf.Internal.EnumLite {
+    public enum QueryTypeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       STRUCTURED_QUERY(2),
       QUERYTYPE_NOT_SET(0);
       private final int value;
@@ -1129,7 +1201,11 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       private QueryTypeCase(int value) {
         this.value = value;
       }
-      /** @deprecated Use {@link #forNumber(int)} instead. */
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
       @java.lang.Deprecated
       public static QueryTypeCase valueOf(int value) {
         return forNumber(value);
@@ -1170,6 +1246,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
+     * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -1195,6 +1273,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
+     * @return The bytes for parent.
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -1217,6 +1297,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return Whether the structuredQuery field is set.
      */
     public boolean hasStructuredQuery() {
       return queryTypeCase_ == 2;
@@ -1229,6 +1311,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return The structuredQuery.
      */
     public com.google.firestore.v1beta1.StructuredQuery getStructuredQuery() {
       if (queryTypeCase_ == 2) {
@@ -1647,6 +1731,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string parent = 1;</code>
+       *
+       * @return The parent.
        */
       public java.lang.String getParent() {
         java.lang.Object ref = parent_;
@@ -1672,6 +1758,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string parent = 1;</code>
+       *
+       * @return The bytes for parent.
        */
       public com.google.protobuf.ByteString getParentBytes() {
         java.lang.Object ref = parent_;
@@ -1697,6 +1785,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string parent = 1;</code>
+       *
+       * @param value The parent to set.
+       * @return This builder for chaining.
        */
       public Builder setParent(java.lang.String value) {
         if (value == null) {
@@ -1720,6 +1811,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string parent = 1;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearParent() {
 
@@ -1740,6 +1833,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string parent = 1;</code>
+       *
+       * @param value The bytes for parent to set.
+       * @return This builder for chaining.
        */
       public Builder setParentBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1765,6 +1861,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+       *
+       * @return Whether the structuredQuery field is set.
        */
       public boolean hasStructuredQuery() {
         return queryTypeCase_ == 2;
@@ -1777,6 +1875,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>.google.firestore.v1beta1.StructuredQuery structured_query = 2;</code>
+       *
+       * @return The structuredQuery.
        */
       public com.google.firestore.v1beta1.StructuredQuery getStructuredQuery() {
         if (structuredQueryBuilder_ == null) {
@@ -2009,7 +2109,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   private int targetTypeCase_ = 0;
   private java.lang.Object targetType_;
 
-  public enum TargetTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum TargetTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     QUERY(2),
     DOCUMENTS(3),
     TARGETTYPE_NOT_SET(0);
@@ -2018,7 +2121,11 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     private TargetTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static TargetTypeCase valueOf(int value) {
       return forNumber(value);
@@ -2049,7 +2156,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   private int resumeTypeCase_ = 0;
   private java.lang.Object resumeType_;
 
-  public enum ResumeTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ResumeTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     RESUME_TOKEN(4),
     READ_TIME(11),
     RESUMETYPE_NOT_SET(0);
@@ -2058,7 +2168,11 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     private ResumeTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ResumeTypeCase valueOf(int value) {
       return forNumber(value);
@@ -2095,6 +2209,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Target.QueryTarget query = 2;</code>
+   *
+   * @return Whether the query field is set.
    */
   public boolean hasQuery() {
     return targetTypeCase_ == 2;
@@ -2107,6 +2223,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Target.QueryTarget query = 2;</code>
+   *
+   * @return The query.
    */
   public com.google.firestore.v1beta1.Target.QueryTarget getQuery() {
     if (targetTypeCase_ == 2) {
@@ -2139,6 +2257,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Target.DocumentsTarget documents = 3;</code>
+   *
+   * @return Whether the documents field is set.
    */
   public boolean hasDocuments() {
     return targetTypeCase_ == 3;
@@ -2151,6 +2271,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Target.DocumentsTarget documents = 3;</code>
+   *
+   * @return The documents.
    */
   public com.google.firestore.v1beta1.Target.DocumentsTarget getDocuments() {
     if (targetTypeCase_ == 3) {
@@ -2184,6 +2306,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bytes resume_token = 4;</code>
+   *
+   * @return The resumeToken.
    */
   public com.google.protobuf.ByteString getResumeToken() {
     if (resumeTypeCase_ == 4) {
@@ -2202,6 +2326,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 11;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return resumeTypeCase_ == 11;
@@ -2215,6 +2341,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 11;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     if (resumeTypeCase_ == 11) {
@@ -2250,6 +2378,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>int32 target_id = 5;</code>
+   *
+   * @return The targetId.
    */
   public int getTargetId() {
     return targetId_;
@@ -2265,6 +2395,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bool once = 6;</code>
+   *
+   * @return The once.
    */
   public boolean getOnce() {
     return once_;
@@ -2778,6 +2910,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Target.QueryTarget query = 2;</code>
+     *
+     * @return Whether the query field is set.
      */
     public boolean hasQuery() {
       return targetTypeCase_ == 2;
@@ -2790,6 +2924,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Target.QueryTarget query = 2;</code>
+     *
+     * @return The query.
      */
     public com.google.firestore.v1beta1.Target.QueryTarget getQuery() {
       if (queryBuilder_ == null) {
@@ -2981,6 +3117,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Target.DocumentsTarget documents = 3;</code>
+     *
+     * @return Whether the documents field is set.
      */
     public boolean hasDocuments() {
       return targetTypeCase_ == 3;
@@ -2993,6 +3131,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Target.DocumentsTarget documents = 3;</code>
+     *
+     * @return The documents.
      */
     public com.google.firestore.v1beta1.Target.DocumentsTarget getDocuments() {
       if (documentsBuilder_ == null) {
@@ -3180,6 +3320,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @return The resumeToken.
      */
     public com.google.protobuf.ByteString getResumeToken() {
       if (resumeTypeCase_ == 4) {
@@ -3196,6 +3338,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @param value The resumeToken to set.
+     * @return This builder for chaining.
      */
     public Builder setResumeToken(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -3215,6 +3360,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearResumeToken() {
       if (resumeTypeCase_ == 4) {
@@ -3239,6 +3386,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 11;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return resumeTypeCase_ == 11;
@@ -3252,6 +3401,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 11;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
@@ -3442,6 +3593,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
+     *
+     * @return The targetId.
      */
     public int getTargetId() {
       return targetId_;
@@ -3455,6 +3608,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
+     *
+     * @param value The targetId to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetId(int value) {
 
@@ -3471,6 +3627,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTargetId() {
 
@@ -3488,6 +3646,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool once = 6;</code>
+     *
+     * @return The once.
      */
     public boolean getOnce() {
       return once_;
@@ -3500,6 +3660,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool once = 6;</code>
+     *
+     * @param value The once to set.
+     * @return This builder for chaining.
      */
     public Builder setOnce(boolean value) {
 
@@ -3515,6 +3678,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool once = 6;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOnce() {
 

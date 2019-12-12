@@ -45,6 +45,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ExportDocumentsMetadata();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -140,9 +146,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
           case 50:
             {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000020) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 collectionIds_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000020;
+                mutable_bitField0_ |= 0x00000001;
               }
               collectionIds_.add(s);
               break;
@@ -168,7 +174,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000020) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
       }
       this.unknownFields = unknownFields.build();
@@ -191,7 +197,6 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
             com.google.firestore.admin.v1.ExportDocumentsMetadata.Builder.class);
   }
 
-  private int bitField0_;
   public static final int START_TIME_FIELD_NUMBER = 1;
   private com.google.protobuf.Timestamp startTime_;
   /**
@@ -202,6 +207,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return Whether the startTime field is set.
    */
   public boolean hasStartTime() {
     return startTime_ != null;
@@ -214,6 +221,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return The startTime.
    */
   public com.google.protobuf.Timestamp getStartTime() {
     return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
@@ -242,6 +251,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return Whether the endTime field is set.
    */
   public boolean hasEndTime() {
     return endTime_ != null;
@@ -255,6 +266,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return The endTime.
    */
   public com.google.protobuf.Timestamp getEndTime() {
     return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
@@ -283,6 +296,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+   *
+   * @return The enum numeric value on the wire for operationState.
    */
   public int getOperationStateValue() {
     return operationState_;
@@ -295,6 +310,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+   *
+   * @return The operationState.
    */
   public com.google.firestore.admin.v1.OperationState getOperationState() {
     @SuppressWarnings("deprecation")
@@ -313,6 +330,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+   *
+   * @return Whether the progressDocuments field is set.
    */
   public boolean hasProgressDocuments() {
     return progressDocuments_ != null;
@@ -325,6 +344,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+   *
+   * @return The progressDocuments.
    */
   public com.google.firestore.admin.v1.Progress getProgressDocuments() {
     return progressDocuments_ == null
@@ -354,6 +375,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+   *
+   * @return Whether the progressBytes field is set.
    */
   public boolean hasProgressBytes() {
     return progressBytes_ != null;
@@ -366,6 +389,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+   *
+   * @return The progressBytes.
    */
   public com.google.firestore.admin.v1.Progress getProgressBytes() {
     return progressBytes_ == null
@@ -395,6 +420,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
     return collectionIds_;
@@ -407,6 +434,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @return The count of collectionIds.
    */
   public int getCollectionIdsCount() {
     return collectionIds_.size();
@@ -419,6 +448,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   public java.lang.String getCollectionIds(int index) {
     return collectionIds_.get(index);
@@ -431,6 +463,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
     return collectionIds_.getByteString(index);
@@ -446,6 +481,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
+   *
+   * @return The outputUriPrefix.
    */
   public java.lang.String getOutputUriPrefix() {
     java.lang.Object ref = outputUriPrefix_;
@@ -466,6 +503,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
+   *
+   * @return The bytes for outputUriPrefix.
    */
   public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
     java.lang.Object ref = outputUriPrefix_;
@@ -795,7 +834,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         progressBytesBuilder_ = null;
       }
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000001);
       outputUriPrefix_ = "";
 
       return this;
@@ -826,7 +865,6 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       com.google.firestore.admin.v1.ExportDocumentsMetadata result =
           new com.google.firestore.admin.v1.ExportDocumentsMetadata(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (startTimeBuilder_ == null) {
         result.startTime_ = startTime_;
       } else {
@@ -848,13 +886,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       } else {
         result.progressBytes_ = progressBytesBuilder_.build();
       }
-      if (((bitField0_ & 0x00000020) != 0)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.collectionIds_ = collectionIds_;
       result.outputUriPrefix_ = outputUriPrefix_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -923,7 +960,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -980,6 +1017,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
+     *
+     * @return Whether the startTime field is set.
      */
     public boolean hasStartTime() {
       return startTimeBuilder_ != null || startTime_ != null;
@@ -992,6 +1031,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
+     *
+     * @return The startTime.
      */
     public com.google.protobuf.Timestamp getStartTime() {
       if (startTimeBuilder_ == null) {
@@ -1156,6 +1197,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
+     *
+     * @return Whether the endTime field is set.
      */
     public boolean hasEndTime() {
       return endTimeBuilder_ != null || endTime_ != null;
@@ -1169,6 +1212,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
+     *
+     * @return The endTime.
      */
     public com.google.protobuf.Timestamp getEndTime() {
       if (endTimeBuilder_ == null) {
@@ -1334,6 +1379,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+     *
+     * @return The enum numeric value on the wire for operationState.
      */
     public int getOperationStateValue() {
       return operationState_;
@@ -1346,6 +1393,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+     *
+     * @param value The enum numeric value on the wire for operationState to set.
+     * @return This builder for chaining.
      */
     public Builder setOperationStateValue(int value) {
       operationState_ = value;
@@ -1360,6 +1410,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+     *
+     * @return The operationState.
      */
     public com.google.firestore.admin.v1.OperationState getOperationState() {
       @SuppressWarnings("deprecation")
@@ -1375,6 +1427,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+     *
+     * @param value The operationState to set.
+     * @return This builder for chaining.
      */
     public Builder setOperationState(com.google.firestore.admin.v1.OperationState value) {
       if (value == null) {
@@ -1393,6 +1448,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.OperationState operation_state = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOperationState() {
 
@@ -1415,6 +1472,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+     *
+     * @return Whether the progressDocuments field is set.
      */
     public boolean hasProgressDocuments() {
       return progressDocumentsBuilder_ != null || progressDocuments_ != null;
@@ -1427,6 +1486,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
+     *
+     * @return The progressDocuments.
      */
     public com.google.firestore.admin.v1.Progress getProgressDocuments() {
       if (progressDocumentsBuilder_ == null) {
@@ -1597,6 +1658,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+     *
+     * @return Whether the progressBytes field is set.
      */
     public boolean hasProgressBytes() {
       return progressBytesBuilder_ != null || progressBytes_ != null;
@@ -1609,6 +1672,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
+     *
+     * @return The progressBytes.
      */
     public com.google.firestore.admin.v1.Progress getProgressBytes() {
       if (progressBytesBuilder_ == null) {
@@ -1769,9 +1834,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         com.google.protobuf.LazyStringArrayList.EMPTY;
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000020) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000001;
       }
     }
     /**
@@ -1782,6 +1847,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
       return collectionIds_.getUnmodifiableView();
@@ -1794,6 +1861,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @return The count of collectionIds.
      */
     public int getCollectionIdsCount() {
       return collectionIds_.size();
@@ -1806,6 +1875,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The collectionIds at the given index.
      */
     public java.lang.String getCollectionIds(int index) {
       return collectionIds_.get(index);
@@ -1818,6 +1890,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the collectionIds at the given index.
      */
     public com.google.protobuf.ByteString getCollectionIdsBytes(int index) {
       return collectionIds_.getByteString(index);
@@ -1830,6 +1905,10 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The collectionIds to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionIds(int index, java.lang.String value) {
       if (value == null) {
@@ -1848,6 +1927,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param value The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIds(java.lang.String value) {
       if (value == null) {
@@ -1866,6 +1948,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param values The collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
@@ -1881,10 +1966,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1896,6 +1983,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>repeated string collection_ids = 6;</code>
+     *
+     * @param value The bytes of the collectionIds to add.
+     * @return This builder for chaining.
      */
     public Builder addCollectionIdsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1917,6 +2007,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
+     *
+     * @return The outputUriPrefix.
      */
     public java.lang.String getOutputUriPrefix() {
       java.lang.Object ref = outputUriPrefix_;
@@ -1937,6 +2029,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
+     *
+     * @return The bytes for outputUriPrefix.
      */
     public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
       java.lang.Object ref = outputUriPrefix_;
@@ -1957,6 +2051,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
+     *
+     * @param value The outputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setOutputUriPrefix(java.lang.String value) {
       if (value == null) {
@@ -1975,6 +2072,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearOutputUriPrefix() {
 
@@ -1990,6 +2089,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
+     *
+     * @param value The bytes for outputUriPrefix to set.
+     * @return This builder for chaining.
      */
     public Builder setOutputUriPrefixBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

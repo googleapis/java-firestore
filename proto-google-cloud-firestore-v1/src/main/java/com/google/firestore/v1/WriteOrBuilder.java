@@ -31,6 +31,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Document update = 1;</code>
+   *
+   * @return Whether the update field is set.
    */
   boolean hasUpdate();
   /**
@@ -41,6 +43,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Document update = 1;</code>
+   *
+   * @return The update.
    */
   com.google.firestore.v1.Document getUpdate();
   /**
@@ -63,6 +67,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>string delete = 2;</code>
+   *
+   * @return The delete.
    */
   java.lang.String getDelete();
   /**
@@ -74,6 +80,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>string delete = 2;</code>
+   *
+   * @return The bytes for delete.
    */
   com.google.protobuf.ByteString getDeleteBytes();
 
@@ -88,6 +96,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentTransform transform = 6;</code>
+   *
+   * @return Whether the transform field is set.
    */
   boolean hasTransform();
   /**
@@ -101,6 +111,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentTransform transform = 6;</code>
+   *
+   * @return The transform.
    */
   com.google.firestore.v1.DocumentTransform getTransform();
   /**
@@ -133,6 +145,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 3;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   boolean hasUpdateMask();
   /**
@@ -151,6 +165,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 3;</code>
+   *
+   * @return The updateMask.
    */
   com.google.firestore.v1.DocumentMask getUpdateMask();
   /**
@@ -181,6 +197,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
+   *
+   * @return Whether the currentDocument field is set.
    */
   boolean hasCurrentDocument();
   /**
@@ -192,6 +210,8 @@ public interface WriteOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
+   *
+   * @return The currentDocument.
    */
   com.google.firestore.v1.Precondition getCurrentDocument();
   /**

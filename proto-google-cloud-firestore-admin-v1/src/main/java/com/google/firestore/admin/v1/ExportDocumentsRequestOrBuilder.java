@@ -34,6 +34,8 @@ public interface ExportDocumentsRequestOrBuilder
    * <code>
    * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The name.
    */
   java.lang.String getName();
   /**
@@ -47,6 +49,8 @@ public interface ExportDocumentsRequestOrBuilder
    * <code>
    * string name = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The bytes for name.
    */
   com.google.protobuf.ByteString getNameBytes();
 
@@ -58,6 +62,8 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @return A list containing the collectionIds.
    */
   java.util.List<java.lang.String> getCollectionIdsList();
   /**
@@ -68,6 +74,8 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @return The count of collectionIds.
    */
   int getCollectionIdsCount();
   /**
@@ -78,6 +86,9 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The collectionIds at the given index.
    */
   java.lang.String getCollectionIds(int index);
   /**
@@ -88,6 +99,9 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the collectionIds at the given index.
    */
   com.google.protobuf.ByteString getCollectionIdsBytes(int index);
 
@@ -106,6 +120,8 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string output_uri_prefix = 3;</code>
+   *
+   * @return The outputUriPrefix.
    */
   java.lang.String getOutputUriPrefix();
   /**
@@ -123,6 +139,8 @@ public interface ExportDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string output_uri_prefix = 3;</code>
+   *
+   * @return The bytes for outputUriPrefix.
    */
   com.google.protobuf.ByteString getOutputUriPrefixBytes();
 }
