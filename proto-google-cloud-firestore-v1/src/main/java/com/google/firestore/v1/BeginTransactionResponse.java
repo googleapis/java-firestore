@@ -42,6 +42,12 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new BeginTransactionResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -114,6 +119,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>bytes transaction = 1;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
@@ -444,6 +451,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 1;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
@@ -456,6 +465,9 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 1;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -474,6 +486,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
 

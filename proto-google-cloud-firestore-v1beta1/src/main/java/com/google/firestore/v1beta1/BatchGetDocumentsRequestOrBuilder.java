@@ -32,6 +32,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   java.lang.String getDatabase();
   /**
@@ -43,6 +45,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -57,6 +61,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @return A list containing the documents.
    */
   java.util.List<java.lang.String> getDocumentsList();
   /**
@@ -70,6 +76,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @return The count of documents.
    */
   int getDocumentsCount();
   /**
@@ -83,6 +91,9 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The documents at the given index.
    */
   java.lang.String getDocuments(int index);
   /**
@@ -96,6 +107,9 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the documents at the given index.
    */
   com.google.protobuf.ByteString getDocumentsBytes(int index);
 
@@ -109,6 +123,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return Whether the mask field is set.
    */
   boolean hasMask();
   /**
@@ -121,6 +137,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return The mask.
    */
   com.google.firestore.v1beta1.DocumentMask getMask();
   /**
@@ -144,6 +162,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 4;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -158,6 +178,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+   *
+   * @return Whether the newTransaction field is set.
    */
   boolean hasNewTransaction();
   /**
@@ -171,6 +193,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+   *
+   * @return The newTransaction.
    */
   com.google.firestore.v1beta1.TransactionOptions getNewTransaction();
   /**
@@ -196,6 +220,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -207,6 +233,8 @@ public interface BatchGetDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

@@ -40,6 +40,12 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
   private Write() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Write();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -172,7 +177,10 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
   private int operationCase_ = 0;
   private java.lang.Object operation_;
 
-  public enum OperationCase implements com.google.protobuf.Internal.EnumLite {
+  public enum OperationCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     UPDATE(1),
     DELETE(2),
     TRANSFORM(6),
@@ -182,7 +190,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     private OperationCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static OperationCase valueOf(int value) {
       return forNumber(value);
@@ -221,6 +233,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document update = 1;</code>
+   *
+   * @return Whether the update field is set.
    */
   public boolean hasUpdate() {
     return operationCase_ == 1;
@@ -233,6 +247,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document update = 1;</code>
+   *
+   * @return The update.
    */
   public com.google.firestore.v1beta1.Document getUpdate() {
     if (operationCase_ == 1) {
@@ -266,6 +282,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string delete = 2;</code>
+   *
+   * @return The delete.
    */
   public java.lang.String getDelete() {
     java.lang.Object ref = "";
@@ -292,6 +310,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string delete = 2;</code>
+   *
+   * @return The bytes for delete.
    */
   public com.google.protobuf.ByteString getDeleteBytes() {
     java.lang.Object ref = "";
@@ -322,6 +342,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentTransform transform = 6;</code>
+   *
+   * @return Whether the transform field is set.
    */
   public boolean hasTransform() {
     return operationCase_ == 6;
@@ -337,6 +359,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentTransform transform = 6;</code>
+   *
+   * @return The transform.
    */
   public com.google.firestore.v1beta1.DocumentTransform getTransform() {
     if (operationCase_ == 6) {
@@ -381,6 +405,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask update_mask = 3;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   public boolean hasUpdateMask() {
     return updateMask_ != null;
@@ -401,6 +427,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask update_mask = 3;</code>
+   *
+   * @return The updateMask.
    */
   public com.google.firestore.v1beta1.DocumentMask getUpdateMask() {
     return updateMask_ == null
@@ -439,6 +467,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+   *
+   * @return Whether the currentDocument field is set.
    */
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
@@ -452,6 +482,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+   *
+   * @return The currentDocument.
    */
   public com.google.firestore.v1beta1.Precondition getCurrentDocument() {
     return currentDocument_ == null
@@ -947,6 +979,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Document update = 1;</code>
+     *
+     * @return Whether the update field is set.
      */
     public boolean hasUpdate() {
       return operationCase_ == 1;
@@ -959,6 +993,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Document update = 1;</code>
+     *
+     * @return The update.
      */
     public com.google.firestore.v1beta1.Document getUpdate() {
       if (updateBuilder_ == null) {
@@ -1144,6 +1180,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string delete = 2;</code>
+     *
+     * @return The delete.
      */
     public java.lang.String getDelete() {
       java.lang.Object ref = "";
@@ -1170,6 +1208,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string delete = 2;</code>
+     *
+     * @return The bytes for delete.
      */
     public com.google.protobuf.ByteString getDeleteBytes() {
       java.lang.Object ref = "";
@@ -1196,6 +1236,9 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string delete = 2;</code>
+     *
+     * @param value The delete to set.
+     * @return This builder for chaining.
      */
     public Builder setDelete(java.lang.String value) {
       if (value == null) {
@@ -1215,6 +1258,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string delete = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDelete() {
       if (operationCase_ == 2) {
@@ -1233,6 +1278,9 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string delete = 2;</code>
+     *
+     * @param value The bytes for delete to set.
+     * @return This builder for chaining.
      */
     public Builder setDeleteBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1261,6 +1309,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentTransform transform = 6;</code>
+     *
+     * @return Whether the transform field is set.
      */
     public boolean hasTransform() {
       return operationCase_ == 6;
@@ -1276,6 +1326,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentTransform transform = 6;</code>
+     *
+     * @return The transform.
      */
     public com.google.firestore.v1beta1.DocumentTransform getTransform() {
       if (transformBuilder_ == null) {
@@ -1496,6 +1548,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask update_mask = 3;</code>
+     *
+     * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
       return updateMaskBuilder_ != null || updateMask_ != null;
@@ -1516,6 +1570,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask update_mask = 3;</code>
+     *
+     * @return The updateMask.
      */
     public com.google.firestore.v1beta1.DocumentMask getUpdateMask() {
       if (updateMaskBuilder_ == null) {
@@ -1743,6 +1799,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+     *
+     * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
       return currentDocumentBuilder_ != null || currentDocument_ != null;
@@ -1756,6 +1814,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+     *
+     * @return The currentDocument.
      */
     public com.google.firestore.v1beta1.Precondition getCurrentDocument() {
       if (currentDocumentBuilder_ == null) {

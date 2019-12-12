@@ -47,6 +47,12 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new DocumentChange();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -88,9 +94,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
             }
           case 40:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 targetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               targetIds_.addInt(input.readInt32());
               break;
@@ -99,9 +105,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
             {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
                 targetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               while (input.getBytesUntilLimit() > 0) {
                 targetIds_.addInt(input.readInt32());
@@ -111,9 +117,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
             }
           case 48:
             {
-              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
                 removedTargetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000002;
               }
               removedTargetIds_.addInt(input.readInt32());
               break;
@@ -122,9 +128,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
             {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000004) != 0) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
                 removedTargetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000002;
               }
               while (input.getBytesUntilLimit() > 0) {
                 removedTargetIds_.addInt(input.readInt32());
@@ -146,10 +152,10 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         targetIds_.makeImmutable(); // C
       }
-      if (((mutable_bitField0_ & 0x00000004) != 0)) {
+      if (((mutable_bitField0_ & 0x00000002) != 0)) {
         removedTargetIds_.makeImmutable(); // C
       }
       this.unknownFields = unknownFields.build();
@@ -172,7 +178,6 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1beta1.DocumentChange.Builder.class);
   }
 
-  private int bitField0_;
   public static final int DOCUMENT_FIELD_NUMBER = 1;
   private com.google.firestore.v1beta1.Document document_;
   /**
@@ -184,6 +189,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return Whether the document field is set.
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -197,6 +204,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return The document.
    */
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
@@ -227,6 +236,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @return A list containing the targetIds.
    */
   public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
@@ -239,6 +250,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @return The count of targetIds.
    */
   public int getTargetIdsCount() {
     return targetIds_.size();
@@ -251,6 +264,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The targetIds at the given index.
    */
   public int getTargetIds(int index) {
     return targetIds_.getInt(index);
@@ -268,6 +284,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @return A list containing the removedTargetIds.
    */
   public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
     return removedTargetIds_;
@@ -280,6 +298,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @return The count of removedTargetIds.
    */
   public int getRemovedTargetIdsCount() {
     return removedTargetIds_.size();
@@ -292,6 +312,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The removedTargetIds at the given index.
    */
   public int getRemovedTargetIds(int index) {
     return removedTargetIds_.getInt(index);
@@ -571,9 +594,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
         documentBuilder_ = null;
       }
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       removedTargetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -602,23 +625,21 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1beta1.DocumentChange result =
           new com.google.firestore.v1beta1.DocumentChange(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (documentBuilder_ == null) {
         result.document_ = document_;
       } else {
         result.document_ = documentBuilder_.build();
       }
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         targetIds_.makeImmutable();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.targetIds_ = targetIds_;
-      if (((bitField0_ & 0x00000004) != 0)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         removedTargetIds_.makeImmutable();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
       }
       result.removedTargetIds_ = removedTargetIds_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -674,7 +695,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
       if (!other.targetIds_.isEmpty()) {
         if (targetIds_.isEmpty()) {
           targetIds_ = other.targetIds_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           ensureTargetIdsIsMutable();
           targetIds_.addAll(other.targetIds_);
@@ -684,7 +705,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
       if (!other.removedTargetIds_.isEmpty()) {
         if (removedTargetIds_.isEmpty()) {
           removedTargetIds_ = other.removedTargetIds_;
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureRemovedTargetIdsIsMutable();
           removedTargetIds_.addAll(other.removedTargetIds_);
@@ -737,6 +758,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Document document = 1;</code>
+     *
+     * @return Whether the document field is set.
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -750,6 +773,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Document document = 1;</code>
+     *
+     * @return The document.
      */
     public com.google.firestore.v1beta1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -915,9 +940,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
     private com.google.protobuf.Internal.IntList targetIds_ = emptyIntList();
 
     private void ensureTargetIdsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         targetIds_ = mutableCopy(targetIds_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
     /**
@@ -928,9 +953,11 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @return A list containing the targetIds.
      */
     public java.util.List<java.lang.Integer> getTargetIdsList() {
-      return ((bitField0_ & 0x00000002) != 0)
+      return ((bitField0_ & 0x00000001) != 0)
           ? java.util.Collections.unmodifiableList(targetIds_)
           : targetIds_;
     }
@@ -942,6 +969,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @return The count of targetIds.
      */
     public int getTargetIdsCount() {
       return targetIds_.size();
@@ -954,6 +983,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The targetIds at the given index.
      */
     public int getTargetIds(int index) {
       return targetIds_.getInt(index);
@@ -966,6 +998,10 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The targetIds to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetIds(int index, int value) {
       ensureTargetIdsIsMutable();
@@ -981,6 +1017,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @param value The targetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addTargetIds(int value) {
       ensureTargetIdsIsMutable();
@@ -996,6 +1035,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @param values The targetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureTargetIdsIsMutable();
@@ -1011,10 +1053,12 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTargetIds() {
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1022,9 +1066,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
     private com.google.protobuf.Internal.IntList removedTargetIds_ = emptyIntList();
 
     private void ensureRemovedTargetIdsIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         removedTargetIds_ = mutableCopy(removedTargetIds_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000002;
       }
     }
     /**
@@ -1035,9 +1079,11 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @return A list containing the removedTargetIds.
      */
     public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
-      return ((bitField0_ & 0x00000004) != 0)
+      return ((bitField0_ & 0x00000002) != 0)
           ? java.util.Collections.unmodifiableList(removedTargetIds_)
           : removedTargetIds_;
     }
@@ -1049,6 +1095,8 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @return The count of removedTargetIds.
      */
     public int getRemovedTargetIdsCount() {
       return removedTargetIds_.size();
@@ -1061,6 +1109,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The removedTargetIds at the given index.
      */
     public int getRemovedTargetIds(int index) {
       return removedTargetIds_.getInt(index);
@@ -1073,6 +1124,10 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The removedTargetIds to set.
+     * @return This builder for chaining.
      */
     public Builder setRemovedTargetIds(int index, int value) {
       ensureRemovedTargetIdsIsMutable();
@@ -1088,6 +1143,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @param value The removedTargetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addRemovedTargetIds(int value) {
       ensureRemovedTargetIdsIsMutable();
@@ -1103,6 +1161,9 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @param values The removedTargetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllRemovedTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureRemovedTargetIdsIsMutable();
@@ -1118,10 +1179,12 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearRemovedTargetIds() {
       removedTargetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }

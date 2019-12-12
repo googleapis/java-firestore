@@ -42,6 +42,12 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new WriteResult();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -82,9 +88,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
             }
           case 18:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 transformResults_ = new java.util.ArrayList<com.google.firestore.v1.Value>();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               transformResults_.add(
                   input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry));
@@ -104,7 +110,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         transformResults_ = java.util.Collections.unmodifiableList(transformResults_);
       }
       this.unknownFields = unknownFields.build();
@@ -127,7 +133,6 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.WriteResult.Builder.class);
   }
 
-  private int bitField0_;
   public static final int UPDATE_TIME_FIELD_NUMBER = 1;
   private com.google.protobuf.Timestamp updateTime_;
   /**
@@ -141,6 +146,8 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 1;</code>
+   *
+   * @return Whether the updateTime field is set.
    */
   public boolean hasUpdateTime() {
     return updateTime_ != null;
@@ -156,6 +163,8 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 1;</code>
+   *
+   * @return The updateTime.
    */
   public com.google.protobuf.Timestamp getUpdateTime() {
     return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
@@ -473,7 +482,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
       }
       if (transformResultsBuilder_ == null) {
         transformResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         transformResultsBuilder_.clear();
       }
@@ -504,22 +513,20 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.WriteResult buildPartial() {
       com.google.firestore.v1.WriteResult result = new com.google.firestore.v1.WriteResult(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       if (updateTimeBuilder_ == null) {
         result.updateTime_ = updateTime_;
       } else {
         result.updateTime_ = updateTimeBuilder_.build();
       }
       if (transformResultsBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           transformResults_ = java.util.Collections.unmodifiableList(transformResults_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.transformResults_ = transformResults_;
       } else {
         result.transformResults_ = transformResultsBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -576,7 +583,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
         if (!other.transformResults_.isEmpty()) {
           if (transformResults_.isEmpty()) {
             transformResults_ = other.transformResults_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureTransformResultsIsMutable();
             transformResults_.addAll(other.transformResults_);
@@ -589,7 +596,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
             transformResultsBuilder_.dispose();
             transformResultsBuilder_ = null;
             transformResults_ = other.transformResults_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
             transformResultsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getTransformResultsFieldBuilder()
@@ -647,6 +654,8 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 1;</code>
+     *
+     * @return Whether the updateTime field is set.
      */
     public boolean hasUpdateTime() {
       return updateTimeBuilder_ != null || updateTime_ != null;
@@ -662,6 +671,8 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 1;</code>
+     *
+     * @return The updateTime.
      */
     public com.google.protobuf.Timestamp getUpdateTime() {
       if (updateTimeBuilder_ == null) {
@@ -840,10 +851,10 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureTransformResultsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         transformResults_ =
             new java.util.ArrayList<com.google.firestore.v1.Value>(transformResults_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -1069,7 +1080,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     public Builder clearTransformResults() {
       if (transformResultsBuilder_ == null) {
         transformResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         transformResultsBuilder_.clear();
@@ -1198,7 +1209,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.Value.Builder,
                 com.google.firestore.v1.ValueOrBuilder>(
                 transformResults_,
-                ((bitField0_ & 0x00000002) != 0),
+                ((bitField0_ & 0x00000001) != 0),
                 getParentForChildren(),
                 isClean());
         transformResults_ = null;

@@ -46,6 +46,12 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new DocumentMask();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -127,6 +133,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
+   *
+   * @return A list containing the fieldPaths.
    */
   public com.google.protobuf.ProtocolStringList getFieldPathsList() {
     return fieldPaths_;
@@ -140,6 +148,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
+   *
+   * @return The count of fieldPaths.
    */
   public int getFieldPathsCount() {
     return fieldPaths_.size();
@@ -153,6 +163,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The fieldPaths at the given index.
    */
   public java.lang.String getFieldPaths(int index) {
     return fieldPaths_.get(index);
@@ -166,6 +179,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the fieldPaths at the given index.
    */
   public com.google.protobuf.ByteString getFieldPathsBytes(int index) {
     return fieldPaths_.getByteString(index);
@@ -526,6 +542,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @return A list containing the fieldPaths.
      */
     public com.google.protobuf.ProtocolStringList getFieldPathsList() {
       return fieldPaths_.getUnmodifiableView();
@@ -539,6 +557,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @return The count of fieldPaths.
      */
     public int getFieldPathsCount() {
       return fieldPaths_.size();
@@ -552,6 +572,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The fieldPaths at the given index.
      */
     public java.lang.String getFieldPaths(int index) {
       return fieldPaths_.get(index);
@@ -565,6 +588,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the fieldPaths at the given index.
      */
     public com.google.protobuf.ByteString getFieldPathsBytes(int index) {
       return fieldPaths_.getByteString(index);
@@ -578,6 +604,10 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The fieldPaths to set.
+     * @return This builder for chaining.
      */
     public Builder setFieldPaths(int index, java.lang.String value) {
       if (value == null) {
@@ -597,6 +627,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param value The fieldPaths to add.
+     * @return This builder for chaining.
      */
     public Builder addFieldPaths(java.lang.String value) {
       if (value == null) {
@@ -616,6 +649,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param values The fieldPaths to add.
+     * @return This builder for chaining.
      */
     public Builder addAllFieldPaths(java.lang.Iterable<java.lang.String> values) {
       ensureFieldPathsIsMutable();
@@ -632,6 +668,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearFieldPaths() {
       fieldPaths_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -648,6 +686,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
+     *
+     * @param value The bytes of the fieldPaths to add.
+     * @return This builder for chaining.
      */
     public Builder addFieldPathsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

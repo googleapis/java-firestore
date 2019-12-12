@@ -42,6 +42,12 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new RunQueryRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -164,7 +169,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   private int queryTypeCase_ = 0;
   private java.lang.Object queryType_;
 
-  public enum QueryTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum QueryTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     STRUCTURED_QUERY(2),
     QUERYTYPE_NOT_SET(0);
     private final int value;
@@ -172,7 +180,11 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     private QueryTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static QueryTypeCase valueOf(int value) {
       return forNumber(value);
@@ -201,7 +213,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   private int consistencySelectorCase_ = 0;
   private java.lang.Object consistencySelector_;
 
-  public enum ConsistencySelectorCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TRANSACTION(5),
     NEW_TRANSACTION(6),
     READ_TIME(7),
@@ -211,7 +226,11 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ConsistencySelectorCase valueOf(int value) {
       return forNumber(value);
@@ -256,6 +275,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -281,6 +302,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -303,6 +326,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
+   * @return Whether the structuredQuery field is set.
    */
   public boolean hasStructuredQuery() {
     return queryTypeCase_ == 2;
@@ -315,6 +340,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
+   * @return The structuredQuery.
    */
   public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
     if (queryTypeCase_ == 2) {
@@ -347,6 +374,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 5) {
@@ -367,6 +396,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.TransactionOptions new_transaction = 6;</code>
+   *
+   * @return Whether the newTransaction field is set.
    */
   public boolean hasNewTransaction() {
     return consistencySelectorCase_ == 6;
@@ -382,6 +413,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.firestore.v1.TransactionOptions new_transaction = 6;</code>
+   *
+   * @return The newTransaction.
    */
   public com.google.firestore.v1.TransactionOptions getNewTransaction() {
     if (consistencySelectorCase_ == 6) {
@@ -418,6 +451,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 7;
@@ -431,6 +466,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 7) {
@@ -952,6 +989,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -977,6 +1016,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for parent.
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -1002,6 +1043,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -1025,6 +1069,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearParent() {
 
@@ -1045,6 +1091,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1070,6 +1119,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return Whether the structuredQuery field is set.
      */
     public boolean hasStructuredQuery() {
       return queryTypeCase_ == 2;
@@ -1082,6 +1133,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+     *
+     * @return The structuredQuery.
      */
     public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
       if (structuredQueryBuilder_ == null) {
@@ -1267,6 +1320,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       if (consistencySelectorCase_ == 5) {
@@ -1282,6 +1337,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1300,6 +1358,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
       if (consistencySelectorCase_ == 5) {
@@ -1326,6 +1386,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.TransactionOptions new_transaction = 6;</code>
+     *
+     * @return Whether the newTransaction field is set.
      */
     public boolean hasNewTransaction() {
       return consistencySelectorCase_ == 6;
@@ -1341,6 +1403,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.firestore.v1.TransactionOptions new_transaction = 6;</code>
+     *
+     * @return The newTransaction.
      */
     public com.google.firestore.v1.TransactionOptions getNewTransaction() {
       if (newTransactionBuilder_ == null) {
@@ -1554,6 +1618,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 7;
@@ -1567,6 +1633,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {

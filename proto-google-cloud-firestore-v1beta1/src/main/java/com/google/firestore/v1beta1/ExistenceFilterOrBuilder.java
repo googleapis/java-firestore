@@ -31,6 +31,8 @@ public interface ExistenceFilterOrBuilder
    * </pre>
    *
    * <code>int32 target_id = 1;</code>
+   *
+   * @return The targetId.
    */
   int getTargetId();
 
@@ -44,6 +46,8 @@ public interface ExistenceFilterOrBuilder
    * </pre>
    *
    * <code>int32 count = 2;</code>
+   *
+   * @return The count.
    */
   int getCount();
 }

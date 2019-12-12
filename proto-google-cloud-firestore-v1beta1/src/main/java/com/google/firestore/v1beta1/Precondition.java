@@ -40,6 +40,12 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
   private Precondition() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Precondition();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -121,7 +126,10 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
   private int conditionTypeCase_ = 0;
   private java.lang.Object conditionType_;
 
-  public enum ConditionTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ConditionTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     EXISTS(1),
     UPDATE_TIME(2),
     CONDITIONTYPE_NOT_SET(0);
@@ -130,7 +138,11 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
     private ConditionTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ConditionTypeCase valueOf(int value) {
       return forNumber(value);
@@ -168,6 +180,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bool exists = 1;</code>
+   *
+   * @return The exists.
    */
   public boolean getExists() {
     if (conditionTypeCase_ == 1) {
@@ -186,6 +200,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
+   *
+   * @return Whether the updateTime field is set.
    */
   public boolean hasUpdateTime() {
     return conditionTypeCase_ == 2;
@@ -199,6 +215,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
+   *
+   * @return The updateTime.
    */
   public com.google.protobuf.Timestamp getUpdateTime() {
     if (conditionTypeCase_ == 2) {
@@ -614,6 +632,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool exists = 1;</code>
+     *
+     * @return The exists.
      */
     public boolean getExists() {
       if (conditionTypeCase_ == 1) {
@@ -630,6 +650,9 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool exists = 1;</code>
+     *
+     * @param value The exists to set.
+     * @return This builder for chaining.
      */
     public Builder setExists(boolean value) {
       conditionTypeCase_ = 1;
@@ -646,6 +669,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool exists = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearExists() {
       if (conditionTypeCase_ == 1) {
@@ -670,6 +695,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
+     *
+     * @return Whether the updateTime field is set.
      */
     public boolean hasUpdateTime() {
       return conditionTypeCase_ == 2;
@@ -683,6 +710,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
+     *
+     * @return The updateTime.
      */
     public com.google.protobuf.Timestamp getUpdateTime() {
       if (updateTimeBuilder_ == null) {

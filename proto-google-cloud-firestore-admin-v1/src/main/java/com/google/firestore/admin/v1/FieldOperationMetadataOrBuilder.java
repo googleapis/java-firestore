@@ -31,6 +31,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return Whether the startTime field is set.
    */
   boolean hasStartTime();
   /**
@@ -41,6 +43,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
+   *
+   * @return The startTime.
    */
   com.google.protobuf.Timestamp getStartTime();
   /**
@@ -63,6 +67,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return Whether the endTime field is set.
    */
   boolean hasEndTime();
   /**
@@ -74,6 +80,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
+   *
+   * @return The endTime.
    */
   com.google.protobuf.Timestamp getEndTime();
   /**
@@ -97,6 +105,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>string field = 3;</code>
+   *
+   * @return The field.
    */
   java.lang.String getField();
   /**
@@ -108,6 +118,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>string field = 3;</code>
+   *
+   * @return The bytes for field.
    */
   com.google.protobuf.ByteString getFieldBytes();
 
@@ -190,6 +202,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState state = 5;</code>
+   *
+   * @return The enum numeric value on the wire for state.
    */
   int getStateValue();
   /**
@@ -200,6 +214,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.OperationState state = 5;</code>
+   *
+   * @return The state.
    */
   com.google.firestore.admin.v1.OperationState getState();
 
@@ -211,6 +227,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 6;</code>
+   *
+   * @return Whether the progressDocuments field is set.
    */
   boolean hasProgressDocuments();
   /**
@@ -221,6 +239,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 6;</code>
+   *
+   * @return The progressDocuments.
    */
   com.google.firestore.admin.v1.Progress getProgressDocuments();
   /**
@@ -242,6 +262,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 7;</code>
+   *
+   * @return Whether the progressBytes field is set.
    */
   boolean hasProgressBytes();
   /**
@@ -252,6 +274,8 @@ public interface FieldOperationMetadataOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 7;</code>
+   *
+   * @return The progressBytes.
    */
   com.google.firestore.admin.v1.Progress getProgressBytes();
   /**

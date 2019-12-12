@@ -31,6 +31,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+   *
+   * @return Whether the select field is set.
    */
   boolean hasSelect();
   /**
@@ -41,6 +43,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
+   *
+   * @return The select.
    */
   com.google.firestore.v1.StructuredQuery.Projection getSelect();
   /**
@@ -114,6 +118,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+   *
+   * @return Whether the where field is set.
    */
   boolean hasWhere();
   /**
@@ -124,6 +130,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
+   *
+   * @return The where.
    */
   com.google.firestore.v1.StructuredQuery.Filter getWhere();
   /**
@@ -262,6 +270,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+   *
+   * @return Whether the startAt field is set.
    */
   boolean hasStartAt();
   /**
@@ -272,6 +282,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
+   *
+   * @return The startAt.
    */
   com.google.firestore.v1.Cursor getStartAt();
   /**
@@ -293,6 +305,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+   *
+   * @return Whether the endAt field is set.
    */
   boolean hasEndAt();
   /**
@@ -303,6 +317,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
+   *
+   * @return The endAt.
    */
   com.google.firestore.v1.Cursor getEndAt();
   /**
@@ -326,6 +342,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>int32 offset = 6;</code>
+   *
+   * @return The offset.
    */
   int getOffset();
 
@@ -339,6 +357,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
+   *
+   * @return Whether the limit field is set.
    */
   boolean hasLimit();
   /**
@@ -351,6 +371,8 @@ public interface StructuredQueryOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
+   *
+   * @return The limit.
    */
   com.google.protobuf.Int32Value getLimit();
   /**

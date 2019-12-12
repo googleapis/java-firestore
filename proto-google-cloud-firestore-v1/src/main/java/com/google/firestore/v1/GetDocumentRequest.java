@@ -42,6 +42,12 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new GetDocumentRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -146,7 +151,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
   private int consistencySelectorCase_ = 0;
   private java.lang.Object consistencySelector_;
 
-  public enum ConsistencySelectorCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TRANSACTION(3),
     READ_TIME(5),
     CONSISTENCYSELECTOR_NOT_SET(0);
@@ -155,7 +163,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ConsistencySelectorCase valueOf(int value) {
       return forNumber(value);
@@ -194,6 +206,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The name.
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -215,6 +229,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for name.
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -240,6 +256,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
+   *
+   * @return Whether the mask field is set.
    */
   public boolean hasMask() {
     return mask_ != null;
@@ -254,6 +272,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
+   *
+   * @return The mask.
    */
   public com.google.firestore.v1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
@@ -282,6 +302,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>bytes transaction = 3;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 3) {
@@ -300,6 +322,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 5;
@@ -313,6 +337,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 5) {
@@ -773,6 +799,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -794,6 +822,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for name.
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -815,6 +845,9 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -834,6 +867,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearName() {
 
@@ -850,6 +885,9 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -878,6 +916,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
+     *
+     * @return Whether the mask field is set.
      */
     public boolean hasMask() {
       return maskBuilder_ != null || mask_ != null;
@@ -892,6 +932,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
+     *
+     * @return The mask.
      */
     public com.google.firestore.v1.DocumentMask getMask() {
       if (maskBuilder_ == null) {
@@ -1065,6 +1107,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       if (consistencySelectorCase_ == 3) {
@@ -1080,6 +1124,9 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1098,6 +1145,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
       if (consistencySelectorCase_ == 3) {
@@ -1122,6 +1171,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 5;
@@ -1135,6 +1186,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {

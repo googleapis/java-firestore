@@ -40,6 +40,12 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
   private Value() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Value();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -203,7 +208,10 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
   private int valueTypeCase_ = 0;
   private java.lang.Object valueType_;
 
-  public enum ValueTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ValueTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     NULL_VALUE(11),
     BOOLEAN_VALUE(1),
     INTEGER_VALUE(2),
@@ -221,7 +229,11 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     private ValueTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ValueTypeCase valueOf(int value) {
       return forNumber(value);
@@ -276,6 +288,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.NullValue null_value = 11;</code>
+   *
+   * @return The enum numeric value on the wire for nullValue.
    */
   public int getNullValueValue() {
     if (valueTypeCase_ == 11) {
@@ -291,6 +305,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.NullValue null_value = 11;</code>
+   *
+   * @return The nullValue.
    */
   public com.google.protobuf.NullValue getNullValue() {
     if (valueTypeCase_ == 11) {
@@ -311,6 +327,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bool boolean_value = 1;</code>
+   *
+   * @return The booleanValue.
    */
   public boolean getBooleanValue() {
     if (valueTypeCase_ == 1) {
@@ -328,6 +346,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>int64 integer_value = 2;</code>
+   *
+   * @return The integerValue.
    */
   public long getIntegerValue() {
     if (valueTypeCase_ == 2) {
@@ -345,6 +365,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>double double_value = 3;</code>
+   *
+   * @return The doubleValue.
    */
   public double getDoubleValue() {
     if (valueTypeCase_ == 3) {
@@ -364,6 +386,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
+   *
+   * @return Whether the timestampValue field is set.
    */
   public boolean hasTimestampValue() {
     return valueTypeCase_ == 10;
@@ -378,6 +402,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
+   *
+   * @return The timestampValue.
    */
   public com.google.protobuf.Timestamp getTimestampValue() {
     if (valueTypeCase_ == 10) {
@@ -415,6 +441,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string string_value = 17;</code>
+   *
+   * @return The stringValue.
    */
   public java.lang.String getStringValue() {
     java.lang.Object ref = "";
@@ -443,6 +471,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string string_value = 17;</code>
+   *
+   * @return The bytes for stringValue.
    */
   public com.google.protobuf.ByteString getStringValueBytes() {
     java.lang.Object ref = "";
@@ -472,6 +502,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bytes bytes_value = 18;</code>
+   *
+   * @return The bytesValue.
    */
   public com.google.protobuf.ByteString getBytesValue() {
     if (valueTypeCase_ == 18) {
@@ -490,6 +522,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string reference_value = 5;</code>
+   *
+   * @return The referenceValue.
    */
   public java.lang.String getReferenceValue() {
     java.lang.Object ref = "";
@@ -516,6 +550,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string reference_value = 5;</code>
+   *
+   * @return The bytes for referenceValue.
    */
   public com.google.protobuf.ByteString getReferenceValueBytes() {
     java.lang.Object ref = "";
@@ -543,6 +579,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.type.LatLng geo_point_value = 8;</code>
+   *
+   * @return Whether the geoPointValue field is set.
    */
   public boolean hasGeoPointValue() {
     return valueTypeCase_ == 8;
@@ -555,6 +593,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.type.LatLng geo_point_value = 8;</code>
+   *
+   * @return The geoPointValue.
    */
   public com.google.type.LatLng getGeoPointValue() {
     if (valueTypeCase_ == 8) {
@@ -589,6 +629,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
+   *
+   * @return Whether the arrayValue field is set.
    */
   public boolean hasArrayValue() {
     return valueTypeCase_ == 9;
@@ -603,6 +645,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
+   *
+   * @return The arrayValue.
    */
   public com.google.firestore.v1.ArrayValue getArrayValue() {
     if (valueTypeCase_ == 9) {
@@ -637,6 +681,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.MapValue map_value = 6;</code>
+   *
+   * @return Whether the mapValue field is set.
    */
   public boolean hasMapValue() {
     return valueTypeCase_ == 6;
@@ -649,6 +695,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1.MapValue map_value = 6;</code>
+   *
+   * @return The mapValue.
    */
   public com.google.firestore.v1.MapValue getMapValue() {
     if (valueTypeCase_ == 6) {
@@ -1281,6 +1329,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.NullValue null_value = 11;</code>
+     *
+     * @return The enum numeric value on the wire for nullValue.
      */
     public int getNullValueValue() {
       if (valueTypeCase_ == 11) {
@@ -1296,6 +1346,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.NullValue null_value = 11;</code>
+     *
+     * @param value The enum numeric value on the wire for nullValue to set.
+     * @return This builder for chaining.
      */
     public Builder setNullValueValue(int value) {
       valueTypeCase_ = 11;
@@ -1311,6 +1364,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.NullValue null_value = 11;</code>
+     *
+     * @return The nullValue.
      */
     public com.google.protobuf.NullValue getNullValue() {
       if (valueTypeCase_ == 11) {
@@ -1329,6 +1384,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.NullValue null_value = 11;</code>
+     *
+     * @param value The nullValue to set.
+     * @return This builder for chaining.
      */
     public Builder setNullValue(com.google.protobuf.NullValue value) {
       if (value == null) {
@@ -1347,6 +1405,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.NullValue null_value = 11;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearNullValue() {
       if (valueTypeCase_ == 11) {
@@ -1365,6 +1425,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool boolean_value = 1;</code>
+     *
+     * @return The booleanValue.
      */
     public boolean getBooleanValue() {
       if (valueTypeCase_ == 1) {
@@ -1380,6 +1442,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool boolean_value = 1;</code>
+     *
+     * @param value The booleanValue to set.
+     * @return This builder for chaining.
      */
     public Builder setBooleanValue(boolean value) {
       valueTypeCase_ = 1;
@@ -1395,6 +1460,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool boolean_value = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearBooleanValue() {
       if (valueTypeCase_ == 1) {
@@ -1413,6 +1480,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 integer_value = 2;</code>
+     *
+     * @return The integerValue.
      */
     public long getIntegerValue() {
       if (valueTypeCase_ == 2) {
@@ -1428,6 +1497,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 integer_value = 2;</code>
+     *
+     * @param value The integerValue to set.
+     * @return This builder for chaining.
      */
     public Builder setIntegerValue(long value) {
       valueTypeCase_ = 2;
@@ -1443,6 +1515,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>int64 integer_value = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearIntegerValue() {
       if (valueTypeCase_ == 2) {
@@ -1461,6 +1535,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>double double_value = 3;</code>
+     *
+     * @return The doubleValue.
      */
     public double getDoubleValue() {
       if (valueTypeCase_ == 3) {
@@ -1476,6 +1552,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>double double_value = 3;</code>
+     *
+     * @param value The doubleValue to set.
+     * @return This builder for chaining.
      */
     public Builder setDoubleValue(double value) {
       valueTypeCase_ = 3;
@@ -1491,6 +1570,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>double double_value = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDoubleValue() {
       if (valueTypeCase_ == 3) {
@@ -1516,6 +1597,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
+     *
+     * @return Whether the timestampValue field is set.
      */
     public boolean hasTimestampValue() {
       return valueTypeCase_ == 10;
@@ -1530,6 +1613,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
+     *
+     * @return The timestampValue.
      */
     public com.google.protobuf.Timestamp getTimestampValue() {
       if (timestampValueBuilder_ == null) {
@@ -1728,6 +1813,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string string_value = 17;</code>
+     *
+     * @return The stringValue.
      */
     public java.lang.String getStringValue() {
       java.lang.Object ref = "";
@@ -1756,6 +1843,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string string_value = 17;</code>
+     *
+     * @return The bytes for stringValue.
      */
     public com.google.protobuf.ByteString getStringValueBytes() {
       java.lang.Object ref = "";
@@ -1784,6 +1873,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string string_value = 17;</code>
+     *
+     * @param value The stringValue to set.
+     * @return This builder for chaining.
      */
     public Builder setStringValue(java.lang.String value) {
       if (value == null) {
@@ -1805,6 +1897,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string string_value = 17;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearStringValue() {
       if (valueTypeCase_ == 17) {
@@ -1825,6 +1919,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string string_value = 17;</code>
+     *
+     * @param value The bytes for stringValue to set.
+     * @return This builder for chaining.
      */
     public Builder setStringValueBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1847,6 +1944,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes bytes_value = 18;</code>
+     *
+     * @return The bytesValue.
      */
     public com.google.protobuf.ByteString getBytesValue() {
       if (valueTypeCase_ == 18) {
@@ -1864,6 +1963,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes bytes_value = 18;</code>
+     *
+     * @param value The bytesValue to set.
+     * @return This builder for chaining.
      */
     public Builder setBytesValue(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1884,6 +1986,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes bytes_value = 18;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearBytesValue() {
       if (valueTypeCase_ == 18) {
@@ -1903,6 +2007,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string reference_value = 5;</code>
+     *
+     * @return The referenceValue.
      */
     public java.lang.String getReferenceValue() {
       java.lang.Object ref = "";
@@ -1929,6 +2035,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string reference_value = 5;</code>
+     *
+     * @return The bytes for referenceValue.
      */
     public com.google.protobuf.ByteString getReferenceValueBytes() {
       java.lang.Object ref = "";
@@ -1955,6 +2063,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string reference_value = 5;</code>
+     *
+     * @param value The referenceValue to set.
+     * @return This builder for chaining.
      */
     public Builder setReferenceValue(java.lang.String value) {
       if (value == null) {
@@ -1974,6 +2085,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string reference_value = 5;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearReferenceValue() {
       if (valueTypeCase_ == 5) {
@@ -1992,6 +2105,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string reference_value = 5;</code>
+     *
+     * @param value The bytes for referenceValue to set.
+     * @return This builder for chaining.
      */
     public Builder setReferenceValueBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -2015,6 +2131,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.type.LatLng geo_point_value = 8;</code>
+     *
+     * @return Whether the geoPointValue field is set.
      */
     public boolean hasGeoPointValue() {
       return valueTypeCase_ == 8;
@@ -2027,6 +2145,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.type.LatLng geo_point_value = 8;</code>
+     *
+     * @return The geoPointValue.
      */
     public com.google.type.LatLng getGeoPointValue() {
       if (geoPointValueBuilder_ == null) {
@@ -2212,6 +2332,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
+     *
+     * @return Whether the arrayValue field is set.
      */
     public boolean hasArrayValue() {
       return valueTypeCase_ == 9;
@@ -2226,6 +2348,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
+     *
+     * @return The arrayValue.
      */
     public com.google.firestore.v1.ArrayValue getArrayValue() {
       if (arrayValueBuilder_ == null) {
@@ -2427,6 +2551,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.MapValue map_value = 6;</code>
+     *
+     * @return Whether the mapValue field is set.
      */
     public boolean hasMapValue() {
       return valueTypeCase_ == 6;
@@ -2439,6 +2565,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1.MapValue map_value = 6;</code>
+     *
+     * @return The mapValue.
      */
     public com.google.firestore.v1.MapValue getMapValue() {
       if (mapValueBuilder_ == null) {

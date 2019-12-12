@@ -44,6 +44,12 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListFieldsRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -56,7 +62,6 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -140,6 +145,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The parent.
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -163,6 +170,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * <code>
    * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
    * </code>
+   *
+   * @return The bytes for parent.
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -190,6 +199,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string filter = 2;</code>
+   *
+   * @return The filter.
    */
   public java.lang.String getFilter() {
     java.lang.Object ref = filter_;
@@ -214,6 +225,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string filter = 2;</code>
+   *
+   * @return The bytes for filter.
    */
   public com.google.protobuf.ByteString getFilterBytes() {
     java.lang.Object ref = filter_;
@@ -237,6 +250,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>int32 page_size = 3;</code>
+   *
+   * @return The pageSize.
    */
   public int getPageSize() {
     return pageSize_;
@@ -254,6 +269,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The pageToken.
    */
   public java.lang.String getPageToken() {
     java.lang.Object ref = pageToken_;
@@ -276,6 +293,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The bytes for pageToken.
    */
   public com.google.protobuf.ByteString getPageTokenBytes() {
     java.lang.Object ref = pageToken_;
@@ -665,6 +684,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * <code>
      * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -688,6 +709,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * <code>
      * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return The bytes for parent.
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -711,6 +734,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * <code>
      * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @param value The parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -732,6 +758,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * <code>
      * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearParent() {
 
@@ -750,6 +778,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * <code>
      * string parent = 1 [(.google.api.field_behavior) = REQUIRED, (.google.api.resource_reference) = { ... }
      * </code>
+     *
+     * @param value The bytes for parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -775,6 +806,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string filter = 2;</code>
+     *
+     * @return The filter.
      */
     public java.lang.String getFilter() {
       java.lang.Object ref = filter_;
@@ -799,6 +832,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string filter = 2;</code>
+     *
+     * @return The bytes for filter.
      */
     public com.google.protobuf.ByteString getFilterBytes() {
       java.lang.Object ref = filter_;
@@ -823,6 +858,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string filter = 2;</code>
+     *
+     * @param value The filter to set.
+     * @return This builder for chaining.
      */
     public Builder setFilter(java.lang.String value) {
       if (value == null) {
@@ -845,6 +883,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string filter = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearFilter() {
 
@@ -864,6 +904,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string filter = 2;</code>
+     *
+     * @param value The bytes for filter to set.
+     * @return This builder for chaining.
      */
     public Builder setFilterBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -885,6 +928,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @return The pageSize.
      */
     public int getPageSize() {
       return pageSize_;
@@ -897,6 +942,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @param value The pageSize to set.
+     * @return This builder for chaining.
      */
     public Builder setPageSize(int value) {
 
@@ -912,6 +960,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>int32 page_size = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearPageSize() {
 
@@ -931,6 +981,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return The pageToken.
      */
     public java.lang.String getPageToken() {
       java.lang.Object ref = pageToken_;
@@ -953,6 +1005,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return The bytes for pageToken.
      */
     public com.google.protobuf.ByteString getPageTokenBytes() {
       java.lang.Object ref = pageToken_;
@@ -975,6 +1029,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @param value The pageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setPageToken(java.lang.String value) {
       if (value == null) {
@@ -995,6 +1052,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearPageToken() {
 
@@ -1012,6 +1071,9 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * </pre>
      *
      * <code>string page_token = 4;</code>
+     *
+     * @param value The bytes for pageToken to set.
+     * @return This builder for chaining.
      */
     public Builder setPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {

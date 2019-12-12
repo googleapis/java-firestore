@@ -44,6 +44,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new TargetChange();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -76,9 +82,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
             }
           case 16:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 targetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               targetIds_.addInt(input.readInt32());
               break;
@@ -87,9 +93,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
             {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
                 targetIds_ = newIntList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               while (input.getBytesUntilLimit() > 0) {
                 targetIds_.addInt(input.readInt32());
@@ -145,7 +151,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         targetIds_.makeImmutable(); // C
       }
       this.unknownFields = unknownFields.build();
@@ -306,12 +312,20 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       return value;
     }
 
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static TargetChangeType valueOf(int value) {
       return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
     public static TargetChangeType forNumber(int value) {
       switch (value) {
         case 0:
@@ -375,7 +389,6 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     // @@protoc_insertion_point(enum_scope:google.firestore.v1beta1.TargetChange.TargetChangeType)
   }
 
-  private int bitField0_;
   public static final int TARGET_CHANGE_TYPE_FIELD_NUMBER = 1;
   private int targetChangeType_;
   /**
@@ -386,6 +399,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+   *
+   * @return The enum numeric value on the wire for targetChangeType.
    */
   public int getTargetChangeTypeValue() {
     return targetChangeType_;
@@ -398,6 +413,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+   *
+   * @return The targetChangeType.
    */
   public com.google.firestore.v1beta1.TargetChange.TargetChangeType getTargetChangeType() {
     @SuppressWarnings("deprecation")
@@ -420,6 +437,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @return A list containing the targetIds.
    */
   public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
@@ -434,6 +453,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @return The count of targetIds.
    */
   public int getTargetIdsCount() {
     return targetIds_.size();
@@ -448,6 +469,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The targetIds at the given index.
    */
   public int getTargetIds(int index) {
     return targetIds_.getInt(index);
@@ -465,6 +489,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.rpc.Status cause = 3;</code>
+   *
+   * @return Whether the cause field is set.
    */
   public boolean hasCause() {
     return cause_ != null;
@@ -477,6 +503,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.rpc.Status cause = 3;</code>
+   *
+   * @return The cause.
    */
   public com.google.rpc.Status getCause() {
     return cause_ == null ? com.google.rpc.Status.getDefaultInstance() : cause_;
@@ -506,6 +534,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bytes resume_token = 4;</code>
+   *
+   * @return The resumeToken.
    */
   public com.google.protobuf.ByteString getResumeToken() {
     return resumeToken_;
@@ -528,6 +558,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return readTime_ != null;
@@ -547,6 +579,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
@@ -843,7 +877,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       targetChangeType_ = 0;
 
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       if (causeBuilder_ == null) {
         cause_ = null;
       } else {
@@ -886,11 +920,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1beta1.TargetChange result =
           new com.google.firestore.v1beta1.TargetChange(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.targetChangeType_ = targetChangeType_;
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         targetIds_.makeImmutable();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.targetIds_ = targetIds_;
       if (causeBuilder_ == null) {
@@ -904,7 +937,6 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       } else {
         result.readTime_ = readTimeBuilder_.build();
       }
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -960,7 +992,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       if (!other.targetIds_.isEmpty()) {
         if (targetIds_.isEmpty()) {
           targetIds_ = other.targetIds_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           ensureTargetIdsIsMutable();
           targetIds_.addAll(other.targetIds_);
@@ -1016,6 +1048,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+     *
+     * @return The enum numeric value on the wire for targetChangeType.
      */
     public int getTargetChangeTypeValue() {
       return targetChangeType_;
@@ -1028,6 +1062,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+     *
+     * @param value The enum numeric value on the wire for targetChangeType to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetChangeTypeValue(int value) {
       targetChangeType_ = value;
@@ -1042,6 +1079,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+     *
+     * @return The targetChangeType.
      */
     public com.google.firestore.v1beta1.TargetChange.TargetChangeType getTargetChangeType() {
       @SuppressWarnings("deprecation")
@@ -1059,6 +1098,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+     *
+     * @param value The targetChangeType to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetChangeType(
         com.google.firestore.v1beta1.TargetChange.TargetChangeType value) {
@@ -1078,6 +1120,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange.TargetChangeType target_change_type = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTargetChangeType() {
 
@@ -1089,9 +1133,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     private com.google.protobuf.Internal.IntList targetIds_ = emptyIntList();
 
     private void ensureTargetIdsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         targetIds_ = mutableCopy(targetIds_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
     /**
@@ -1104,9 +1148,11 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @return A list containing the targetIds.
      */
     public java.util.List<java.lang.Integer> getTargetIdsList() {
-      return ((bitField0_ & 0x00000002) != 0)
+      return ((bitField0_ & 0x00000001) != 0)
           ? java.util.Collections.unmodifiableList(targetIds_)
           : targetIds_;
     }
@@ -1120,6 +1166,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @return The count of targetIds.
      */
     public int getTargetIdsCount() {
       return targetIds_.size();
@@ -1134,6 +1182,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The targetIds at the given index.
      */
     public int getTargetIds(int index) {
       return targetIds_.getInt(index);
@@ -1148,6 +1199,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The targetIds to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetIds(int index, int value) {
       ensureTargetIdsIsMutable();
@@ -1165,6 +1220,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @param value The targetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addTargetIds(int value) {
       ensureTargetIdsIsMutable();
@@ -1182,6 +1240,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @param values The targetIds to add.
+     * @return This builder for chaining.
      */
     public Builder addAllTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureTargetIdsIsMutable();
@@ -1199,10 +1260,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>repeated int32 target_ids = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTargetIds() {
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1219,6 +1282,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.rpc.Status cause = 3;</code>
+     *
+     * @return Whether the cause field is set.
      */
     public boolean hasCause() {
       return causeBuilder_ != null || cause_ != null;
@@ -1231,6 +1296,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.rpc.Status cause = 3;</code>
+     *
+     * @return The cause.
      */
     public com.google.rpc.Status getCause() {
       if (causeBuilder_ == null) {
@@ -1387,6 +1454,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @return The resumeToken.
      */
     public com.google.protobuf.ByteString getResumeToken() {
       return resumeToken_;
@@ -1401,6 +1470,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @param value The resumeToken to set.
+     * @return This builder for chaining.
      */
     public Builder setResumeToken(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1421,6 +1493,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes resume_token = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearResumeToken() {
 
@@ -1450,6 +1524,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return readTimeBuilder_ != null || readTime_ != null;
@@ -1469,6 +1545,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {

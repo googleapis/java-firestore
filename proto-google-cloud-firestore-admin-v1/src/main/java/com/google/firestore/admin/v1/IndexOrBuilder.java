@@ -34,6 +34,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The name.
    */
   java.lang.String getName();
   /**
@@ -47,6 +49,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The bytes for name.
    */
   com.google.protobuf.ByteString getNameBytes();
 
@@ -63,6 +67,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+   *
+   * @return The enum numeric value on the wire for queryScope.
    */
   int getQueryScopeValue();
   /**
@@ -78,6 +84,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.QueryScope query_scope = 2;</code>
+   *
+   * @return The queryScope.
    */
   com.google.firestore.admin.v1.Index.QueryScope getQueryScope();
 
@@ -181,6 +189,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+   *
+   * @return The enum numeric value on the wire for state.
    */
   int getStateValue();
   /**
@@ -191,6 +201,8 @@ public interface IndexOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Index.State state = 4;</code>
+   *
+   * @return The state.
    */
   com.google.firestore.admin.v1.Index.State getState();
 }

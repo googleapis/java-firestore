@@ -40,6 +40,12 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
   private UpdateFieldRequest() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new UpdateFieldRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -139,6 +144,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the field field is set.
    */
   public boolean hasField() {
     return field_ != null;
@@ -152,6 +159,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The field.
    */
   public com.google.firestore.admin.v1.Field getField() {
     return field_ == null ? com.google.firestore.admin.v1.Field.getDefaultInstance() : field_;
@@ -181,6 +190,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   public boolean hasUpdateMask() {
     return updateMask_ != null;
@@ -194,6 +205,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    * </pre>
    *
    * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+   *
+   * @return The updateMask.
    */
   public com.google.protobuf.FieldMask getUpdateMask() {
     return updateMask_ == null ? com.google.protobuf.FieldMask.getDefaultInstance() : updateMask_;
@@ -584,6 +597,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return Whether the field field is set.
      */
     public boolean hasField() {
       return fieldBuilder_ != null || field_ != null;
@@ -597,6 +612,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      *
      * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return The field.
      */
     public com.google.firestore.admin.v1.Field getField() {
       if (fieldBuilder_ == null) {
@@ -770,6 +787,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+     *
+     * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
       return updateMaskBuilder_ != null || updateMask_ != null;
@@ -783,6 +802,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * </pre>
      *
      * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+     *
+     * @return The updateMask.
      */
     public com.google.protobuf.FieldMask getUpdateMask() {
       if (updateMaskBuilder_ == null) {

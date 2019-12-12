@@ -42,6 +42,12 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new BeginTransactionRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -54,7 +60,6 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -133,6 +138,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -154,6 +161,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -178,6 +187,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+   *
+   * @return Whether the options field is set.
    */
   public boolean hasOptions() {
     return options_ != null;
@@ -191,6 +202,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+   *
+   * @return The options.
    */
   public com.google.firestore.v1beta1.TransactionOptions getOptions() {
     return options_ == null
@@ -567,6 +580,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The database.
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -588,6 +603,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for database.
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -609,6 +626,9 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -628,6 +648,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDatabase() {
 
@@ -644,6 +666,9 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -671,6 +696,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+     *
+     * @return Whether the options field is set.
      */
     public boolean hasOptions() {
       return optionsBuilder_ != null || options_ != null;
@@ -684,6 +711,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
+     *
+     * @return The options.
      */
     public com.google.firestore.v1beta1.TransactionOptions getOptions() {
       if (optionsBuilder_ == null) {

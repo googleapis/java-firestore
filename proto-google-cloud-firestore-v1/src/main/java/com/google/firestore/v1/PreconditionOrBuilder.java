@@ -32,6 +32,8 @@ public interface PreconditionOrBuilder
    * </pre>
    *
    * <code>bool exists = 1;</code>
+   *
+   * @return The exists.
    */
   boolean getExists();
 
@@ -44,6 +46,8 @@ public interface PreconditionOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
+   *
+   * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
   /**
@@ -55,6 +59,8 @@ public interface PreconditionOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
+   *
+   * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
   /**

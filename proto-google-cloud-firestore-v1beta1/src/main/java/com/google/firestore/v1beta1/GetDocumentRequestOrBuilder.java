@@ -32,6 +32,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The name.
    */
   java.lang.String getName();
   /**
@@ -43,6 +45,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for name.
    */
   com.google.protobuf.ByteString getNameBytes();
 
@@ -56,6 +60,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 2;</code>
+   *
+   * @return Whether the mask field is set.
    */
   boolean hasMask();
   /**
@@ -68,6 +74,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 2;</code>
+   *
+   * @return The mask.
    */
   com.google.firestore.v1beta1.DocumentMask getMask();
   /**
@@ -91,6 +99,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 3;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -103,6 +113,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -114,6 +126,8 @@ public interface GetDocumentRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

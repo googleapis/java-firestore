@@ -44,6 +44,12 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new CommitRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -76,9 +82,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             }
           case 18:
             {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               writes_.add(
                   input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry));
@@ -103,7 +109,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         writes_ = java.util.Collections.unmodifiableList(writes_);
       }
       this.unknownFields = unknownFields.build();
@@ -126,7 +132,6 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             com.google.firestore.v1.CommitRequest.Builder.class);
   }
 
-  private int bitField0_;
   public static final int DATABASE_FIELD_NUMBER = 1;
   private volatile java.lang.Object database_;
   /**
@@ -138,6 +143,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -159,6 +166,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -250,6 +259,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>bytes transaction = 3;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
@@ -483,7 +494,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
 
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
         writesBuilder_.clear();
       }
@@ -517,19 +528,17 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
       com.google.firestore.v1.CommitRequest result =
           new com.google.firestore.v1.CommitRequest(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.database_ = database_;
       if (writesBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           writes_ = java.util.Collections.unmodifiableList(writes_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.writes_ = writes_;
       } else {
         result.writes_ = writesBuilder_.build();
       }
       result.transaction_ = transaction_;
-      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -587,7 +596,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
         if (!other.writes_.isEmpty()) {
           if (writes_.isEmpty()) {
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureWritesIsMutable();
             writes_.addAll(other.writes_);
@@ -600,7 +609,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             writesBuilder_.dispose();
             writesBuilder_ = null;
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
             writesBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getWritesFieldBuilder()
@@ -654,6 +663,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The database.
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -675,6 +686,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for database.
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -696,6 +709,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -715,6 +731,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDatabase() {
 
@@ -731,6 +749,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -747,9 +768,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureWritesIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>(writes_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
 
@@ -973,7 +994,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     public Builder clearWrites() {
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
         writesBuilder_.clear();
@@ -1100,7 +1121,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.Write,
                 com.google.firestore.v1.Write.Builder,
                 com.google.firestore.v1.WriteOrBuilder>(
-                writes_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
+                writes_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         writes_ = null;
       }
       return writesBuilder_;
@@ -1115,6 +1136,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
@@ -1127,6 +1150,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1145,6 +1171,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bytes transaction = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
 

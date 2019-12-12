@@ -33,6 +33,8 @@ public interface WriteRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   java.lang.String getDatabase();
   /**
@@ -45,6 +47,8 @@ public interface WriteRequestOrBuilder
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   com.google.protobuf.ByteString getDatabaseBytes();
 
@@ -58,6 +62,8 @@ public interface WriteRequestOrBuilder
    * </pre>
    *
    * <code>string stream_id = 2;</code>
+   *
+   * @return The streamId.
    */
   java.lang.String getStreamId();
   /**
@@ -70,6 +76,8 @@ public interface WriteRequestOrBuilder
    * </pre>
    *
    * <code>string stream_id = 2;</code>
+   *
+   * @return The bytes for streamId.
    */
   com.google.protobuf.ByteString getStreamIdBytes();
 
@@ -161,6 +169,8 @@ public interface WriteRequestOrBuilder
    * </pre>
    *
    * <code>bytes stream_token = 4;</code>
+   *
+   * @return The streamToken.
    */
   com.google.protobuf.ByteString getStreamToken();
 

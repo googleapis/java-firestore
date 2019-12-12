@@ -32,6 +32,8 @@ public interface UpdateFieldRequestOrBuilder
    *
    * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the field field is set.
    */
   boolean hasField();
   /**
@@ -43,6 +45,8 @@ public interface UpdateFieldRequestOrBuilder
    *
    * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The field.
    */
   com.google.firestore.admin.v1.Field getField();
   /**
@@ -66,6 +70,8 @@ public interface UpdateFieldRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   boolean hasUpdateMask();
   /**
@@ -77,6 +83,8 @@ public interface UpdateFieldRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.FieldMask update_mask = 2;</code>
+   *
+   * @return The updateMask.
    */
   com.google.protobuf.FieldMask getUpdateMask();
   /**

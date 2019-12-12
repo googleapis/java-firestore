@@ -32,6 +32,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The name.
    */
   java.lang.String getName();
   /**
@@ -43,6 +45,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The bytes for name.
    */
   com.google.protobuf.ByteString getNameBytes();
 
@@ -202,6 +206,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 3;</code>
+   *
+   * @return Whether the createTime field is set.
    */
   boolean hasCreateTime();
   /**
@@ -215,6 +221,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 3;</code>
+   *
+   * @return The createTime.
    */
   com.google.protobuf.Timestamp getCreateTime();
   /**
@@ -242,6 +250,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 4;</code>
+   *
+   * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
   /**
@@ -255,6 +265,8 @@ public interface DocumentOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 4;</code>
+   *
+   * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
   /**

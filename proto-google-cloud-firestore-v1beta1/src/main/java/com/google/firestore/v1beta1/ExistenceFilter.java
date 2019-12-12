@@ -40,6 +40,12 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
   private ExistenceFilter() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ExistenceFilter();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -117,6 +122,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>int32 target_id = 1;</code>
+   *
+   * @return The targetId.
    */
   public int getTargetId() {
     return targetId_;
@@ -134,6 +141,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    * </pre>
    *
    * <code>int32 count = 2;</code>
+   *
+   * @return The count.
    */
   public int getCount() {
     return count_;
@@ -478,6 +487,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 target_id = 1;</code>
+     *
+     * @return The targetId.
      */
     public int getTargetId() {
       return targetId_;
@@ -490,6 +501,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 target_id = 1;</code>
+     *
+     * @param value The targetId to set.
+     * @return This builder for chaining.
      */
     public Builder setTargetId(int value) {
 
@@ -505,6 +519,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 target_id = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTargetId() {
 
@@ -524,6 +540,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 count = 2;</code>
+     *
+     * @return The count.
      */
     public int getCount() {
       return count_;
@@ -538,6 +556,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 count = 2;</code>
+     *
+     * @param value The count to set.
+     * @return This builder for chaining.
      */
     public Builder setCount(int value) {
 
@@ -555,6 +576,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * </pre>
      *
      * <code>int32 count = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCount() {
 

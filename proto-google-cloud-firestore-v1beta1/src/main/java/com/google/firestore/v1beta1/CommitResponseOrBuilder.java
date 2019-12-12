@@ -93,6 +93,8 @@ public interface CommitResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+   *
+   * @return Whether the commitTime field is set.
    */
   boolean hasCommitTime();
   /**
@@ -103,6 +105,8 @@ public interface CommitResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
+   *
+   * @return The commitTime.
    */
   com.google.protobuf.Timestamp getCommitTime();
   /**

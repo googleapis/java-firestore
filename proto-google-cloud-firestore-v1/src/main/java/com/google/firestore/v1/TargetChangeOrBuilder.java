@@ -31,6 +31,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.TargetChange.TargetChangeType target_change_type = 1;</code>
+   *
+   * @return The enum numeric value on the wire for targetChangeType.
    */
   int getTargetChangeTypeValue();
   /**
@@ -41,6 +43,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.TargetChange.TargetChangeType target_change_type = 1;</code>
+   *
+   * @return The targetChangeType.
    */
   com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType();
 
@@ -54,6 +58,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @return A list containing the targetIds.
    */
   java.util.List<java.lang.Integer> getTargetIdsList();
   /**
@@ -66,6 +72,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @return The count of targetIds.
    */
   int getTargetIdsCount();
   /**
@@ -78,6 +86,9 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>repeated int32 target_ids = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The targetIds at the given index.
    */
   int getTargetIds(int index);
 
@@ -89,6 +100,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.rpc.Status cause = 3;</code>
+   *
+   * @return Whether the cause field is set.
    */
   boolean hasCause();
   /**
@@ -99,6 +112,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.rpc.Status cause = 3;</code>
+   *
+   * @return The cause.
    */
   com.google.rpc.Status getCause();
   /**
@@ -122,6 +137,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>bytes resume_token = 4;</code>
+   *
+   * @return The resumeToken.
    */
   com.google.protobuf.ByteString getResumeToken();
 
@@ -140,6 +157,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -157,6 +176,8 @@ public interface TargetChangeOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

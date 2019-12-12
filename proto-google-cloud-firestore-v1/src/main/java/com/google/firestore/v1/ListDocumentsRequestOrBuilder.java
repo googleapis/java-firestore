@@ -36,6 +36,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   java.lang.String getParent();
   /**
@@ -51,6 +53,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
 
@@ -63,6 +67,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The collectionId.
    */
   java.lang.String getCollectionId();
   /**
@@ -74,6 +80,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for collectionId.
    */
   com.google.protobuf.ByteString getCollectionIdBytes();
 
@@ -85,6 +93,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>int32 page_size = 3;</code>
+   *
+   * @return The pageSize.
    */
   int getPageSize();
 
@@ -96,6 +106,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The pageToken.
    */
   java.lang.String getPageToken();
   /**
@@ -106,6 +118,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
+   * @return The bytes for pageToken.
    */
   com.google.protobuf.ByteString getPageTokenBytes();
 
@@ -117,6 +131,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string order_by = 6;</code>
+   *
+   * @return The orderBy.
    */
   java.lang.String getOrderBy();
   /**
@@ -127,6 +143,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>string order_by = 6;</code>
+   *
+   * @return The bytes for orderBy.
    */
   com.google.protobuf.ByteString getOrderByBytes();
 
@@ -140,6 +158,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   *
+   * @return Whether the mask field is set.
    */
   boolean hasMask();
   /**
@@ -152,6 +172,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   *
+   * @return The mask.
    */
   com.google.firestore.v1.DocumentMask getMask();
   /**
@@ -175,6 +197,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 8;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -187,6 +211,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -198,6 +224,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
@@ -225,6 +253,8 @@ public interface ListDocumentsRequestOrBuilder
    * </pre>
    *
    * <code>bool show_missing = 12;</code>
+   *
+   * @return The showMissing.
    */
   boolean getShowMissing();
 

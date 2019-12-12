@@ -43,6 +43,12 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new BatchGetDocumentsRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -76,9 +82,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
           case 18:
             {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 documents_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               documents_.add(s);
               break;
@@ -153,7 +159,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
         documents_ = documents_.getUnmodifiableView();
       }
       this.unknownFields = unknownFields.build();
@@ -176,11 +182,13 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
             com.google.firestore.v1beta1.BatchGetDocumentsRequest.Builder.class);
   }
 
-  private int bitField0_;
   private int consistencySelectorCase_ = 0;
   private java.lang.Object consistencySelector_;
 
-  public enum ConsistencySelectorCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TRANSACTION(4),
     NEW_TRANSACTION(5),
     READ_TIME(7),
@@ -190,7 +198,11 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ConsistencySelectorCase valueOf(int value) {
       return forNumber(value);
@@ -231,6 +243,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The database.
    */
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
@@ -252,6 +266,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for database.
    */
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
@@ -278,6 +294,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @return A list containing the documents.
    */
   public com.google.protobuf.ProtocolStringList getDocumentsList() {
     return documents_;
@@ -293,6 +311,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @return The count of documents.
    */
   public int getDocumentsCount() {
     return documents_.size();
@@ -308,6 +328,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The documents at the given index.
    */
   public java.lang.String getDocuments(int index) {
     return documents_.get(index);
@@ -323,6 +346,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>repeated string documents = 2;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the documents at the given index.
    */
   public com.google.protobuf.ByteString getDocumentsBytes(int index) {
     return documents_.getByteString(index);
@@ -340,6 +366,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return Whether the mask field is set.
    */
   public boolean hasMask() {
     return mask_ != null;
@@ -354,6 +382,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return The mask.
    */
   public com.google.firestore.v1beta1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1beta1.DocumentMask.getDefaultInstance() : mask_;
@@ -382,6 +412,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>bytes transaction = 4;</code>
+   *
+   * @return The transaction.
    */
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 4) {
@@ -402,6 +434,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+   *
+   * @return Whether the newTransaction field is set.
    */
   public boolean hasNewTransaction() {
     return consistencySelectorCase_ == 5;
@@ -417,6 +451,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+   *
+   * @return The newTransaction.
    */
   public com.google.firestore.v1beta1.TransactionOptions getNewTransaction() {
     if (consistencySelectorCase_ == 5) {
@@ -453,6 +489,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 7;
@@ -466,6 +504,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
+   *
+   * @return The readTime.
    */
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 7) {
@@ -783,7 +823,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       database_ = "";
 
       documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       if (maskBuilder_ == null) {
         mask_ = null;
       } else {
@@ -820,11 +860,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       com.google.firestore.v1beta1.BatchGetDocumentsRequest result =
           new com.google.firestore.v1beta1.BatchGetDocumentsRequest(this);
       int from_bitField0_ = bitField0_;
-      int to_bitField0_ = 0;
       result.database_ = database_;
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         documents_ = documents_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.documents_ = documents_;
       if (maskBuilder_ == null) {
@@ -849,7 +888,6 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
           result.consistencySelector_ = readTimeBuilder_.build();
         }
       }
-      result.bitField0_ = to_bitField0_;
       result.consistencySelectorCase_ = consistencySelectorCase_;
       onBuilt();
       return result;
@@ -908,7 +946,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       if (!other.documents_.isEmpty()) {
         if (documents_.isEmpty()) {
           documents_ = other.documents_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           ensureDocumentsIsMutable();
           documents_.addAll(other.documents_);
@@ -995,6 +1033,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The database.
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
@@ -1016,6 +1056,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for database.
      */
     public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
@@ -1037,6 +1079,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabase(java.lang.String value) {
       if (value == null) {
@@ -1056,6 +1101,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDatabase() {
 
@@ -1072,6 +1119,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for database to set.
+     * @return This builder for chaining.
      */
     public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1088,9 +1138,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
         com.google.protobuf.LazyStringArrayList.EMPTY;
 
     private void ensureDocumentsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000001) != 0)) {
         documents_ = new com.google.protobuf.LazyStringArrayList(documents_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
       }
     }
     /**
@@ -1104,6 +1154,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return A list containing the documents.
      */
     public com.google.protobuf.ProtocolStringList getDocumentsList() {
       return documents_.getUnmodifiableView();
@@ -1119,6 +1171,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return The count of documents.
      */
     public int getDocumentsCount() {
       return documents_.size();
@@ -1134,6 +1188,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The documents at the given index.
      */
     public java.lang.String getDocuments(int index) {
       return documents_.get(index);
@@ -1149,6 +1206,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the documents at the given index.
      */
     public com.google.protobuf.ByteString getDocumentsBytes(int index) {
       return documents_.getByteString(index);
@@ -1164,6 +1224,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The documents to set.
+     * @return This builder for chaining.
      */
     public Builder setDocuments(int index, java.lang.String value) {
       if (value == null) {
@@ -1185,6 +1249,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param value The documents to add.
+     * @return This builder for chaining.
      */
     public Builder addDocuments(java.lang.String value) {
       if (value == null) {
@@ -1206,6 +1273,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param values The documents to add.
+     * @return This builder for chaining.
      */
     public Builder addAllDocuments(java.lang.Iterable<java.lang.String> values) {
       ensureDocumentsIsMutable();
@@ -1224,10 +1294,12 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDocuments() {
       documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1242,6 +1314,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>repeated string documents = 2;</code>
+     *
+     * @param value The bytes of the documents to add.
+     * @return This builder for chaining.
      */
     public Builder addDocumentsBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1270,6 +1345,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+     *
+     * @return Whether the mask field is set.
      */
     public boolean hasMask() {
       return maskBuilder_ != null || mask_ != null;
@@ -1284,6 +1361,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+     *
+     * @return The mask.
      */
     public com.google.firestore.v1beta1.DocumentMask getMask() {
       if (maskBuilder_ == null) {
@@ -1461,6 +1540,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
+     * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
       if (consistencySelectorCase_ == 4) {
@@ -1476,6 +1557,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
+     * @param value The transaction to set.
+     * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1494,6 +1578,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearTransaction() {
       if (consistencySelectorCase_ == 4) {
@@ -1520,6 +1606,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+     *
+     * @return Whether the newTransaction field is set.
      */
     public boolean hasNewTransaction() {
       return consistencySelectorCase_ == 5;
@@ -1535,6 +1623,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
+     *
+     * @return The newTransaction.
      */
     public com.google.firestore.v1beta1.TransactionOptions getNewTransaction() {
       if (newTransactionBuilder_ == null) {
@@ -1749,6 +1839,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
+     *
+     * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 7;
@@ -1762,6 +1854,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
+     *
+     * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {

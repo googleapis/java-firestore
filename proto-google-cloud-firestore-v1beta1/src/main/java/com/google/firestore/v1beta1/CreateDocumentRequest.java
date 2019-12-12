@@ -44,6 +44,12 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new CreateDocumentRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -56,7 +62,6 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -166,6 +171,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The parent.
    */
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
@@ -188,6 +195,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for parent.
    */
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
@@ -211,6 +220,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The collectionId.
    */
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
@@ -231,6 +242,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
+   * @return The bytes for collectionId.
    */
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
@@ -255,6 +268,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string document_id = 3;</code>
+   *
+   * @return The documentId.
    */
   public java.lang.String getDocumentId() {
     java.lang.Object ref = documentId_;
@@ -276,6 +291,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>string document_id = 3;</code>
+   *
+   * @return The bytes for documentId.
    */
   public com.google.protobuf.ByteString getDocumentIdBytes() {
     java.lang.Object ref = documentId_;
@@ -301,6 +318,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * <code>
    * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the document field is set.
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -315,6 +334,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * <code>
    * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The document.
    */
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
@@ -348,6 +369,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+   *
+   * @return Whether the mask field is set.
    */
   public boolean hasMask() {
     return mask_ != null;
@@ -362,6 +385,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+   *
+   * @return The mask.
    */
   public com.google.firestore.v1beta1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1beta1.DocumentMask.getDefaultInstance() : mask_;
@@ -798,6 +823,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
@@ -820,6 +847,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for parent.
      */
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
@@ -842,6 +871,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParent(java.lang.String value) {
       if (value == null) {
@@ -862,6 +894,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearParent() {
 
@@ -879,6 +913,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for parent to set.
+     * @return This builder for chaining.
      */
     public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -900,6 +937,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The collectionId.
      */
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
@@ -920,6 +959,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return The bytes for collectionId.
      */
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
@@ -940,6 +981,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The collectionId to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionId(java.lang.String value) {
       if (value == null) {
@@ -958,6 +1002,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearCollectionId() {
 
@@ -973,6 +1019,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
+     * @param value The bytes for collectionId to set.
+     * @return This builder for chaining.
      */
     public Builder setCollectionIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -995,6 +1044,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string document_id = 3;</code>
+     *
+     * @return The documentId.
      */
     public java.lang.String getDocumentId() {
       java.lang.Object ref = documentId_;
@@ -1016,6 +1067,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string document_id = 3;</code>
+     *
+     * @return The bytes for documentId.
      */
     public com.google.protobuf.ByteString getDocumentIdBytes() {
       java.lang.Object ref = documentId_;
@@ -1037,6 +1090,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string document_id = 3;</code>
+     *
+     * @param value The documentId to set.
+     * @return This builder for chaining.
      */
     public Builder setDocumentId(java.lang.String value) {
       if (value == null) {
@@ -1056,6 +1112,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string document_id = 3;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearDocumentId() {
 
@@ -1072,6 +1130,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>string document_id = 3;</code>
+     *
+     * @param value The bytes for documentId to set.
+     * @return This builder for chaining.
      */
     public Builder setDocumentIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -1100,6 +1161,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>
      * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return Whether the document field is set.
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -1114,6 +1177,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>
      * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return The document.
      */
     public com.google.firestore.v1beta1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -1299,6 +1364,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+     *
+     * @return Whether the mask field is set.
      */
     public boolean hasMask() {
       return maskBuilder_ != null || mask_ != null;
@@ -1313,6 +1380,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
+     *
+     * @return The mask.
      */
     public com.google.firestore.v1beta1.DocumentMask getMask() {
       if (maskBuilder_ == null) {

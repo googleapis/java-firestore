@@ -40,6 +40,12 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
   private UpdateDocumentRequest() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new UpdateDocumentRequest();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -174,6 +179,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * <code>
    * .google.firestore.v1beta1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return Whether the document field is set.
    */
   public boolean hasDocument() {
     return document_ != null;
@@ -189,6 +196,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * <code>
    * .google.firestore.v1beta1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
+   *
+   * @return The document.
    */
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
@@ -226,6 +235,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask update_mask = 2;</code>
+   *
+   * @return Whether the updateMask field is set.
    */
   public boolean hasUpdateMask() {
     return updateMask_ != null;
@@ -243,6 +254,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask update_mask = 2;</code>
+   *
+   * @return The updateMask.
    */
   public com.google.firestore.v1beta1.DocumentMask getUpdateMask() {
     return updateMask_ == null
@@ -279,6 +292,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return Whether the mask field is set.
    */
   public boolean hasMask() {
     return mask_ != null;
@@ -293,6 +308,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+   *
+   * @return The mask.
    */
   public com.google.firestore.v1beta1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1beta1.DocumentMask.getDefaultInstance() : mask_;
@@ -323,6 +340,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+   *
+   * @return Whether the currentDocument field is set.
    */
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
@@ -336,6 +355,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+   *
+   * @return The currentDocument.
    */
   public com.google.firestore.v1beta1.Precondition getCurrentDocument() {
     return currentDocument_ == null
@@ -787,6 +808,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>
      * .google.firestore.v1beta1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return Whether the document field is set.
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
@@ -802,6 +825,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>
      * .google.firestore.v1beta1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
      * </code>
+     *
+     * @return The document.
      */
     public com.google.firestore.v1beta1.Document getDocument() {
       if (documentBuilder_ == null) {
@@ -997,6 +1022,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask update_mask = 2;</code>
+     *
+     * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
       return updateMaskBuilder_ != null || updateMask_ != null;
@@ -1014,6 +1041,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask update_mask = 2;</code>
+     *
+     * @return The updateMask.
      */
     public com.google.firestore.v1beta1.DocumentMask getUpdateMask() {
       if (updateMaskBuilder_ == null) {
@@ -1221,6 +1250,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+     *
+     * @return Whether the mask field is set.
      */
     public boolean hasMask() {
       return maskBuilder_ != null || mask_ != null;
@@ -1235,6 +1266,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
+     *
+     * @return The mask.
      */
     public com.google.firestore.v1beta1.DocumentMask getMask() {
       if (maskBuilder_ == null) {
@@ -1419,6 +1452,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+     *
+     * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
       return currentDocumentBuilder_ != null || currentDocument_ != null;
@@ -1432,6 +1467,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </pre>
      *
      * <code>.google.firestore.v1beta1.Precondition current_document = 4;</code>
+     *
+     * @return The currentDocument.
      */
     public com.google.firestore.v1beta1.Precondition getCurrentDocument() {
       if (currentDocumentBuilder_ == null) {

@@ -40,6 +40,12 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
   private ListenResponse() {}
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new ListenResponse();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -52,7 +58,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -185,7 +190,10 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
   private int responseTypeCase_ = 0;
   private java.lang.Object responseType_;
 
-  public enum ResponseTypeCase implements com.google.protobuf.Internal.EnumLite {
+  public enum ResponseTypeCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TARGET_CHANGE(2),
     DOCUMENT_CHANGE(3),
     DOCUMENT_DELETE(4),
@@ -197,7 +205,11 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
     private ResponseTypeCase(int value) {
       this.value = value;
     }
-    /** @deprecated Use {@link #forNumber(int)} instead. */
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
     @java.lang.Deprecated
     public static ResponseTypeCase valueOf(int value) {
       return forNumber(value);
@@ -240,6 +252,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TargetChange target_change = 2;</code>
+   *
+   * @return Whether the targetChange field is set.
    */
   public boolean hasTargetChange() {
     return responseTypeCase_ == 2;
@@ -252,6 +266,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TargetChange target_change = 2;</code>
+   *
+   * @return The targetChange.
    */
   public com.google.firestore.v1beta1.TargetChange getTargetChange() {
     if (responseTypeCase_ == 2) {
@@ -284,6 +300,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentChange document_change = 3;</code>
+   *
+   * @return Whether the documentChange field is set.
    */
   public boolean hasDocumentChange() {
     return responseTypeCase_ == 3;
@@ -296,6 +314,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentChange document_change = 3;</code>
+   *
+   * @return The documentChange.
    */
   public com.google.firestore.v1beta1.DocumentChange getDocumentChange() {
     if (responseTypeCase_ == 3) {
@@ -328,6 +348,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentDelete document_delete = 4;</code>
+   *
+   * @return Whether the documentDelete field is set.
    */
   public boolean hasDocumentDelete() {
     return responseTypeCase_ == 4;
@@ -340,6 +362,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentDelete document_delete = 4;</code>
+   *
+   * @return The documentDelete.
    */
   public com.google.firestore.v1beta1.DocumentDelete getDocumentDelete() {
     if (responseTypeCase_ == 4) {
@@ -373,6 +397,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentRemove document_remove = 6;</code>
+   *
+   * @return Whether the documentRemove field is set.
    */
   public boolean hasDocumentRemove() {
     return responseTypeCase_ == 6;
@@ -386,6 +412,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.DocumentRemove document_remove = 6;</code>
+   *
+   * @return The documentRemove.
    */
   public com.google.firestore.v1beta1.DocumentRemove getDocumentRemove() {
     if (responseTypeCase_ == 6) {
@@ -422,6 +450,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.ExistenceFilter filter = 5;</code>
+   *
+   * @return Whether the filter field is set.
    */
   public boolean hasFilter() {
     return responseTypeCase_ == 5;
@@ -437,6 +467,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.v1beta1.ExistenceFilter filter = 5;</code>
+   *
+   * @return The filter.
    */
   public com.google.firestore.v1beta1.ExistenceFilter getFilter() {
     if (responseTypeCase_ == 5) {
@@ -943,6 +975,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange target_change = 2;</code>
+     *
+     * @return Whether the targetChange field is set.
      */
     public boolean hasTargetChange() {
       return responseTypeCase_ == 2;
@@ -955,6 +989,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.TargetChange target_change = 2;</code>
+     *
+     * @return The targetChange.
      */
     public com.google.firestore.v1beta1.TargetChange getTargetChange() {
       if (targetChangeBuilder_ == null) {
@@ -1145,6 +1181,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentChange document_change = 3;</code>
+     *
+     * @return Whether the documentChange field is set.
      */
     public boolean hasDocumentChange() {
       return responseTypeCase_ == 3;
@@ -1157,6 +1195,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentChange document_change = 3;</code>
+     *
+     * @return The documentChange.
      */
     public com.google.firestore.v1beta1.DocumentChange getDocumentChange() {
       if (documentChangeBuilder_ == null) {
@@ -1347,6 +1387,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentDelete document_delete = 4;</code>
+     *
+     * @return Whether the documentDelete field is set.
      */
     public boolean hasDocumentDelete() {
       return responseTypeCase_ == 4;
@@ -1359,6 +1401,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentDelete document_delete = 4;</code>
+     *
+     * @return The documentDelete.
      */
     public com.google.firestore.v1beta1.DocumentDelete getDocumentDelete() {
       if (documentDeleteBuilder_ == null) {
@@ -1550,6 +1594,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentRemove document_remove = 6;</code>
+     *
+     * @return Whether the documentRemove field is set.
      */
     public boolean hasDocumentRemove() {
       return responseTypeCase_ == 6;
@@ -1563,6 +1609,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.DocumentRemove document_remove = 6;</code>
+     *
+     * @return The documentRemove.
      */
     public com.google.firestore.v1beta1.DocumentRemove getDocumentRemove() {
       if (documentRemoveBuilder_ == null) {
@@ -1763,6 +1811,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.ExistenceFilter filter = 5;</code>
+     *
+     * @return Whether the filter field is set.
      */
     public boolean hasFilter() {
       return responseTypeCase_ == 5;
@@ -1778,6 +1828,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.v1beta1.ExistenceFilter filter = 5;</code>
+     *
+     * @return The filter.
      */
     public com.google.firestore.v1beta1.ExistenceFilter getFilter() {
       if (filterBuilder_ == null) {

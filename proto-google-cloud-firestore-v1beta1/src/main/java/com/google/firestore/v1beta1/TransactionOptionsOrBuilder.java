@@ -31,6 +31,8 @@ public interface TransactionOptionsOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadOnly read_only = 2;</code>
+   *
+   * @return Whether the readOnly field is set.
    */
   boolean hasReadOnly();
   /**
@@ -41,6 +43,8 @@ public interface TransactionOptionsOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadOnly read_only = 2;</code>
+   *
+   * @return The readOnly.
    */
   com.google.firestore.v1beta1.TransactionOptions.ReadOnly getReadOnly();
   /**
@@ -62,6 +66,8 @@ public interface TransactionOptionsOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadWrite read_write = 3;</code>
+   *
+   * @return Whether the readWrite field is set.
    */
   boolean hasReadWrite();
   /**
@@ -72,6 +78,8 @@ public interface TransactionOptionsOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadWrite read_write = 3;</code>
+   *
+   * @return The readWrite.
    */
   com.google.firestore.v1beta1.TransactionOptions.ReadWrite getReadWrite();
   /**

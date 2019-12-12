@@ -31,6 +31,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Document found = 1;</code>
+   *
+   * @return Whether the found field is set.
    */
   boolean hasFound();
   /**
@@ -41,6 +43,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1.Document found = 1;</code>
+   *
+   * @return The found.
    */
   com.google.firestore.v1.Document getFound();
   /**
@@ -63,6 +67,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>string missing = 2;</code>
+   *
+   * @return The missing.
    */
   java.lang.String getMissing();
   /**
@@ -74,6 +80,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>string missing = 2;</code>
+   *
+   * @return The bytes for missing.
    */
   com.google.protobuf.ByteString getMissingBytes();
 
@@ -87,6 +95,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 3;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -101,6 +111,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -114,6 +126,8 @@ public interface BatchGetDocumentsResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**

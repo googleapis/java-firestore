@@ -34,6 +34,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
+   *
+   * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
@@ -46,6 +48,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
@@ -57,6 +61,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
+   *
+   * @return The document.
    */
   com.google.firestore.v1beta1.Document getDocument();
   /**
@@ -84,6 +90,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
+   * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
@@ -99,6 +107,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
+   * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
@@ -126,6 +136,8 @@ public interface RunQueryResponseOrBuilder
    * </pre>
    *
    * <code>int32 skipped_results = 4;</code>
+   *
+   * @return The skippedResults.
    */
   int getSkippedResults();
 }

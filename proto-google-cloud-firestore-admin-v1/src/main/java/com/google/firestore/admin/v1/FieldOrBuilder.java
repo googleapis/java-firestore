@@ -52,6 +52,8 @@ public interface FieldOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The name.
    */
   java.lang.String getName();
   /**
@@ -83,6 +85,8 @@ public interface FieldOrBuilder
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The bytes for name.
    */
   com.google.protobuf.ByteString getNameBytes();
 
@@ -97,6 +101,8 @@ public interface FieldOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+   *
+   * @return Whether the indexConfig field is set.
    */
   boolean hasIndexConfig();
   /**
@@ -110,6 +116,8 @@ public interface FieldOrBuilder
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+   *
+   * @return The indexConfig.
    */
   com.google.firestore.admin.v1.Field.IndexConfig getIndexConfig();
   /**

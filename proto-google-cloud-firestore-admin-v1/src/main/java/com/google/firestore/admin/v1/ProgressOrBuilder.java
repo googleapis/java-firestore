@@ -31,6 +31,8 @@ public interface ProgressOrBuilder
    * </pre>
    *
    * <code>int64 estimated_work = 1;</code>
+   *
+   * @return The estimatedWork.
    */
   long getEstimatedWork();
 
@@ -42,6 +44,8 @@ public interface ProgressOrBuilder
    * </pre>
    *
    * <code>int64 completed_work = 2;</code>
+   *
+   * @return The completedWork.
    */
   long getCompletedWork();
 }

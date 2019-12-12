@@ -44,6 +44,12 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
   }
 
   @java.lang.Override
+  @SuppressWarnings({"unused"})
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+    return new Field();
+  }
+
+  @java.lang.Override
   public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
@@ -56,7 +62,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -191,6 +196,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool uses_ancestor_config = 2;</code>
+     *
+     * @return The usesAncestorConfig.
      */
     boolean getUsesAncestorConfig();
 
@@ -205,6 +212,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string ancestor_field = 3;</code>
+     *
+     * @return The ancestorField.
      */
     java.lang.String getAncestorField();
     /**
@@ -218,6 +227,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string ancestor_field = 3;</code>
+     *
+     * @return The bytes for ancestorField.
      */
     com.google.protobuf.ByteString getAncestorFieldBytes();
 
@@ -233,6 +244,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool reverting = 4;</code>
+     *
+     * @return The reverting.
      */
     boolean getReverting();
   }
@@ -258,6 +271,12 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     private IndexConfig() {
       indexes_ = java.util.Collections.emptyList();
       ancestorField_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new IndexConfig();
     }
 
     @java.lang.Override
@@ -349,7 +368,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
               com.google.firestore.admin.v1.Field.IndexConfig.Builder.class);
     }
 
-    private int bitField0_;
     public static final int INDEXES_FIELD_NUMBER = 1;
     private java.util.List<com.google.firestore.admin.v1.Index> indexes_;
     /**
@@ -426,6 +444,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool uses_ancestor_config = 2;</code>
+     *
+     * @return The usesAncestorConfig.
      */
     public boolean getUsesAncestorConfig() {
       return usesAncestorConfig_;
@@ -444,6 +464,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string ancestor_field = 3;</code>
+     *
+     * @return The ancestorField.
      */
     public java.lang.String getAncestorField() {
       java.lang.Object ref = ancestorField_;
@@ -467,6 +489,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string ancestor_field = 3;</code>
+     *
+     * @return The bytes for ancestorField.
      */
     public com.google.protobuf.ByteString getAncestorFieldBytes() {
       java.lang.Object ref = ancestorField_;
@@ -494,6 +518,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>bool reverting = 4;</code>
+     *
+     * @return The reverting.
      */
     public boolean getReverting() {
       return reverting_;
@@ -776,7 +802,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         com.google.firestore.admin.v1.Field.IndexConfig result =
             new com.google.firestore.admin.v1.Field.IndexConfig(this);
         int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
         if (indexesBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             indexes_ = java.util.Collections.unmodifiableList(indexes_);
@@ -789,7 +814,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         result.usesAncestorConfig_ = usesAncestorConfig_;
         result.ancestorField_ = ancestorField_;
         result.reverting_ = reverting_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1270,6 +1294,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool uses_ancestor_config = 2;</code>
+       *
+       * @return The usesAncestorConfig.
        */
       public boolean getUsesAncestorConfig() {
         return usesAncestorConfig_;
@@ -1284,6 +1310,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool uses_ancestor_config = 2;</code>
+       *
+       * @param value The usesAncestorConfig to set.
+       * @return This builder for chaining.
        */
       public Builder setUsesAncestorConfig(boolean value) {
 
@@ -1301,6 +1330,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool uses_ancestor_config = 2;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearUsesAncestorConfig() {
 
@@ -1321,6 +1352,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string ancestor_field = 3;</code>
+       *
+       * @return The ancestorField.
        */
       public java.lang.String getAncestorField() {
         java.lang.Object ref = ancestorField_;
@@ -1344,6 +1377,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string ancestor_field = 3;</code>
+       *
+       * @return The bytes for ancestorField.
        */
       public com.google.protobuf.ByteString getAncestorFieldBytes() {
         java.lang.Object ref = ancestorField_;
@@ -1367,6 +1402,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string ancestor_field = 3;</code>
+       *
+       * @param value The ancestorField to set.
+       * @return This builder for chaining.
        */
       public Builder setAncestorField(java.lang.String value) {
         if (value == null) {
@@ -1388,6 +1426,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string ancestor_field = 3;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearAncestorField() {
 
@@ -1406,6 +1446,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>string ancestor_field = 3;</code>
+       *
+       * @param value The bytes for ancestorField to set.
+       * @return This builder for chaining.
        */
       public Builder setAncestorFieldBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1431,6 +1474,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool reverting = 4;</code>
+       *
+       * @return The reverting.
        */
       public boolean getReverting() {
         return reverting_;
@@ -1447,6 +1492,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool reverting = 4;</code>
+       *
+       * @param value The reverting to set.
+       * @return This builder for chaining.
        */
       public Builder setReverting(boolean value) {
 
@@ -1466,6 +1514,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * </pre>
        *
        * <code>bool reverting = 4;</code>
+       *
+       * @return This builder for chaining.
        */
       public Builder clearReverting() {
 
@@ -1557,6 +1607,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The name.
    */
   public java.lang.String getName() {
     java.lang.Object ref = name_;
@@ -1598,6 +1650,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
+   * @return The bytes for name.
    */
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
@@ -1624,6 +1678,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+   *
+   * @return Whether the indexConfig field is set.
    */
   public boolean hasIndexConfig() {
     return indexConfig_ != null;
@@ -1639,6 +1695,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * </pre>
    *
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+   *
+   * @return The indexConfig.
    */
   public com.google.firestore.admin.v1.Field.IndexConfig getIndexConfig() {
     return indexConfig_ == null
@@ -2034,6 +2092,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -2075,6 +2135,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return The bytes for name.
      */
     public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
@@ -2116,6 +2178,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
      */
     public Builder setName(java.lang.String value) {
       if (value == null) {
@@ -2155,6 +2220,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @return This builder for chaining.
      */
     public Builder clearName() {
 
@@ -2191,6 +2258,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
      */
     public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
@@ -2220,6 +2290,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+     *
+     * @return Whether the indexConfig field is set.
      */
     public boolean hasIndexConfig() {
       return indexConfigBuilder_ != null || indexConfig_ != null;
@@ -2235,6 +2307,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
+     *
+     * @return The indexConfig.
      */
     public com.google.firestore.admin.v1.Field.IndexConfig getIndexConfig() {
       if (indexConfigBuilder_ == null) {
