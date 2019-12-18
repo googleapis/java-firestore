@@ -383,7 +383,7 @@
       <properties>
         <auto-value.version>1.7</auto-value.version>
         <auto-value-annotation.version>${auto-value.version}</auto-value-annotation.version>
-        <auto-service-annotations.version>1.0-rc5</auto-service-annotations.version>
+        <auto-service-annotations.version>1.0-rc6</auto-service-annotations.version>
       </properties>
       <build>
         <plugins>
