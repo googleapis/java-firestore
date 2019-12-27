@@ -89,7 +89,8 @@ public interface CommitResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the commit.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
@@ -101,7 +102,8 @@ public interface CommitResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the commit.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
@@ -113,7 +115,8 @@ public interface CommitResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the commit.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
