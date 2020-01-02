@@ -1,12 +1,12 @@
 # Format:
 # module:released-version:current-version
 
-google-cloud-firestore:1.32.0:1.32.1-SNAPSHOT
-google-cloud-firestore-bom:1.32.0:1.32.1-SNAPSHOT
-google-cloud-firestore-parent:1.32.0:1.32.1-SNAPSHOT
-grpc-google-cloud-firestore-admin-v1:1.32.0:1.32.1-SNAPSHOT
-grpc-google-cloud-firestore-v1:1.32.0:1.32.1-SNAPSHOT
-grpc-google-cloud-firestore-v1beta1:0.85.0:0.85.1-SNAPSHOT
-proto-google-cloud-firestore-admin-v1:1.32.0:1.32.1-SNAPSHOT
-proto-google-cloud-firestore-v1:1.32.0:1.32.1-SNAPSHOT
-proto-google-cloud-firestore-v1beta1:0.85.0:0.85.1-SNAPSHOT
+google-cloud-firestore:1.32.1:1.32.1
+google-cloud-firestore-bom:1.32.1:1.32.1
+google-cloud-firestore-parent:1.32.1:1.32.1
+grpc-google-cloud-firestore-admin-v1:1.32.1:1.32.1
+grpc-google-cloud-firestore-v1:1.32.1:1.32.1
+grpc-google-cloud-firestore-v1beta1:0.85.1:0.85.1
+proto-google-cloud-firestore-admin-v1:1.32.1:1.32.1
+proto-google-cloud-firestore-v1:1.32.1:1.32.1
+proto-google-cloud-firestore-v1beta1:0.85.1:0.85.1
