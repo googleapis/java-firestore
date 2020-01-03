@@ -296,7 +296,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the write.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -310,7 +311,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the write.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -324,7 +326,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The time at which the commit occurred.
+   * The time at which the commit occurred. Any read with an equal or greater
+   * `read_time` is guaranteed to see the effects of the write.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1314,7 +1317,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1328,7 +1332,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1348,7 +1353,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1370,7 +1376,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1389,7 +1396,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1413,7 +1421,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1433,7 +1442,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1447,7 +1457,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
@@ -1465,7 +1476,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The time at which the commit occurred.
+     * The time at which the commit occurred. Any read with an equal or greater
+     * `read_time` is guaranteed to see the effects of the write.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
