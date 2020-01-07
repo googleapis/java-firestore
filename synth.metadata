@@ -1,5 +1,5 @@
 {
-  "updateTime": "2020-01-03T08:48:15.662288Z",
+  "updateTime": "2020-01-07T08:50:00.359050Z",
   "sources": [
     {
       "generator": {
@@ -12,8 +12,8 @@
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "4d45a6399e9444fbddaeb1c86aabfde210723714",
-        "internalRef": "287908369"
+        "sha": "cb79155f596e0396dd900da93872be7066f6340d",
+        "internalRef": "288441307"
       }
     },
     {
@@ -58,16 +58,10 @@
   ],
   "newFiles": [
     {
-      "path": "CHANGELOG.md"
+      "path": ".repo-metadata.json"
     },
     {
-      "path": "synth.metadata"
-    },
-    {
-      "path": ".gitignore"
-    },
-    {
-      "path": "java.header"
+      "path": "renovate.json"
     },
     {
       "path": "license-checks.xml"
@@ -76,556 +70,67 @@
       "path": "synth.py"
     },
     {
-      "path": "renovate.json"
-    },
-    {
-      "path": "CONTRIBUTING.md"
+      "path": "CHANGELOG.md"
     },
     {
       "path": "codecov.yaml"
     },
     {
-      "path": ".repo-metadata.json"
-    },
-    {
-      "path": "README.md"
-    },
-    {
       "path": "LICENSE"
     },
     {
-      "path": "CODE_OF_CONDUCT.md"
-    },
-    {
-      "path": "versions.txt"
+      "path": ".gitignore"
     },
     {
       "path": "pom.xml"
     },
     {
-      "path": ".git/shallow"
+      "path": "CODE_OF_CONDUCT.md"
     },
     {
-      "path": ".git/HEAD"
+      "path": "synth.metadata"
     },
     {
-      "path": ".git/index"
+      "path": "README.md"
     },
     {
-      "path": ".git/config"
+      "path": "versions.txt"
     },
     {
-      "path": ".git/packed-refs"
+      "path": "CONTRIBUTING.md"
     },
     {
-      "path": ".git/logs/HEAD"
-    },
-    {
-      "path": ".git/logs/refs/heads/autosynth"
-    },
-    {
-      "path": ".git/logs/refs/heads/master"
-    },
-    {
-      "path": ".git/logs/refs/remotes/origin/HEAD"
-    },
-    {
-      "path": ".git/objects/pack/pack-f808012fe09481cf12fb850ae04be867afeaf811.idx"
-    },
-    {
-      "path": ".git/objects/pack/pack-f808012fe09481cf12fb850ae04be867afeaf811.pack"
-    },
-    {
-      "path": ".git/refs/tags/v1.32.1"
-    },
-    {
-      "path": ".git/refs/heads/autosynth"
-    },
-    {
-      "path": ".git/refs/heads/master"
-    },
-    {
-      "path": ".git/refs/remotes/origin/HEAD"
-    },
-    {
-      "path": ".kokoro/coerce_logs.sh"
-    },
-    {
-      "path": ".kokoro/dependencies.sh"
-    },
-    {
-      "path": ".kokoro/build.bat"
-    },
-    {
-      "path": ".kokoro/build.sh"
-    },
-    {
-      "path": ".kokoro/linkage-monitor.sh"
-    },
-    {
-      "path": ".kokoro/trampoline.sh"
-    },
-    {
-      "path": ".kokoro/common.cfg"
-    },
-    {
-      "path": ".kokoro/release/drop.sh"
-    },
-    {
-      "path": ".kokoro/release/stage.cfg"
-    },
-    {
-      "path": ".kokoro/release/snapshot.sh"
-    },
-    {
-      "path": ".kokoro/release/publish_javadoc.cfg"
-    },
-    {
-      "path": ".kokoro/release/common.sh"
-    },
-    {
-      "path": ".kokoro/release/bump_snapshot.sh"
-    },
-    {
-      "path": ".kokoro/release/promote.sh"
-    },
-    {
-      "path": ".kokoro/release/drop.cfg"
-    },
-    {
-      "path": ".kokoro/release/promote.cfg"
-    },
-    {
-      "path": ".kokoro/release/publish_javadoc.sh"
-    },
-    {
-      "path": ".kokoro/release/snapshot.cfg"
-    },
-    {
-      "path": ".kokoro/release/stage.sh"
-    },
-    {
-      "path": ".kokoro/release/bump_snapshot.cfg"
-    },
-    {
-      "path": ".kokoro/release/common.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/java11.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/integration.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/java8-osx.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/dependencies.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/java8-win.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/linkage-monitor.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/lint.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/java7.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/java8.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/common.cfg"
-    },
-    {
-      "path": ".kokoro/presubmit/clirr.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/java11.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/integration.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/java8-osx.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/dependencies.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/java8-win.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/lint.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/java7.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/java8.cfg"
-    },
-    {
-      "path": ".kokoro/nightly/common.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/java11.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/integration.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/java8-osx.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/propose_release.sh"
-    },
-    {
-      "path": ".kokoro/continuous/dependencies.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/java8-win.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/propose_release.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/lint.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/java7.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/java8.cfg"
-    },
-    {
-      "path": ".kokoro/continuous/common.cfg"
-    },
-    {
-      "path": "grpc-google-cloud-firestore-admin-v1/pom.xml"
-    },
-    {
-      "path": "grpc-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FirestoreAdminGrpc.java"
-    },
-    {
-      "path": "google-cloud-firestore-bom/pom.xml"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/pom.xml"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/write.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/common.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/query.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/document.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/firestore.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Value.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentPathName.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRootName.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/QueryProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ExistenceFilter.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Document.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/StructuredQueryOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResultOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentDelete.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/MapValueOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Write.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentDeleteOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RollbackRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CreateDocumentRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/FirestoreProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentTransform.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentChange.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/MapValue.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommonProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CursorOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRemove.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentTransformOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentChangeOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRemoveOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ExistenceFilterOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetChange.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/UpdateDocumentRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/GetDocumentRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetChangeOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DeleteDocumentRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RollbackRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/GetDocumentRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentMask.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DeleteDocumentRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Target.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CreateDocumentRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ArrayValueOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ArrayValue.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/UpdateDocumentRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DatabaseRootName.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Cursor.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TransactionOptions.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResult.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TransactionOptionsOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Precondition.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentMaskOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/AnyPathName.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/PreconditionOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/StructuredQuery.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ValueOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitResponseOrBuilder.java"
-    },
-    {
-      "path": "__pycache__/synth.cpython-36.pyc"
-    },
-    {
-      "path": "grpc-google-cloud-firestore-v1/pom.xml"
-    },
-    {
-      "path": "grpc-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/FirestoreGrpc.java"
-    },
-    {
-      "path": ".github/release-please.yml"
-    },
-    {
-      "path": ".github/PULL_REQUEST_TEMPLATE.md"
-    },
-    {
-      "path": ".github/ISSUE_TEMPLATE/support_request.md"
-    },
-    {
-      "path": ".github/ISSUE_TEMPLATE/bug_report.md"
-    },
-    {
-      "path": ".github/ISSUE_TEMPLATE/feature_request.md"
+      "path": "java.header"
     },
     {
       "path": "google-cloud-firestore/pom.xml"
     },
     {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/CollectionReferenceTest.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceTest.java"
+    },
+    {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/OrderTest.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/FirestoreTest.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/WriteBatchTest.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/WriteBatchTest.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/WatchTest.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/TransactionTest.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/QueryTest.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceConversions.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/FirestoreTest.java"
     },
     {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/LocalFirestoreHelper.java"
@@ -634,184 +139,205 @@
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/DocumentReferenceTest.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceConversions.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/CollectionReferenceTest.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/QueryTest.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/TransactionTest.java"
-    },
-    {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/MapperTest.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/WatchTest.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceTest.java"
     },
     {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/MockFirestore.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/FirestoreClientTest.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/MockFirestoreAdmin.java"
     },
     {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/MockFirestoreImpl.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/FirestoreAdminClientTest.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/FirestoreClientTest.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/MockFirestoreAdmin.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/FirestoreAdminClientTest.java"
     },
     {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1/MockFirestoreAdminImpl.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1beta1/MockFirestore.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/it/ITSystemTest.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1beta1/FirestoreClientTest.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1beta1/MockFirestore.java"
     },
     {
       "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1beta1/MockFirestoreImpl.java"
     },
     {
-      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/it/ITSystemTest.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/UserDataConverter.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Query.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/WriteBatch.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldPath.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentTransform.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreException.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldMask.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentReference.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Transaction.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentChange.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/ListenerRegistration.java"
+      "path": "google-cloud-firestore/src/test/java/com/google/cloud/firestore/v1beta1/FirestoreClientTest.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Blob.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/UpdateBuilder.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/CustomClassMapper.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/CollectionReference.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/GeoPoint.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/EventListener.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreRpcFactory.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentSnapshot.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Order.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/QueryDocumentSnapshot.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Firestore.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/TransactionOptions.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/TraceUtil.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentSet.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/WriteResult.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/WriteBatch.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreOptions.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreFactory.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/ResourcePath.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/QuerySnapshot.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Internal.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/SetOptions.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/TransactionOptions.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Precondition.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/WriteResult.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Watch.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/QuerySnapshot.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldValue.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentSet.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/BasePath.java"
     },
     {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/SetOptions.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Query.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/UpdateBuilder.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Transaction.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/GeoPoint.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Precondition.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/EventListener.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldMask.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentTransform.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldValue.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentSnapshot.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentChange.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/UserDataConverter.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Order.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/DocumentReference.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/ResourcePath.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/CollectionReference.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Firestore.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/CustomClassMapper.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FieldPath.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreException.java"
+    },
+    {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreImpl.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/Exclude.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreRpcFactory.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/IgnoreExtraProperties.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/QueryDocumentSnapshot.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/ThrowOnExtraProperties.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/ListenerRegistration.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/FirestoreFactory.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/Watch.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/TraceUtil.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreSettings.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminClient.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminSettings.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/package-info.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreClient.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStubSettings.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStub.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreAdminStub.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreStub.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreCallableFactory.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreAdminCallableFactory.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStub.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStubSettings.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/PropertyName.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/DocumentId.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/IgnoreExtraProperties.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/ServerTimestamp.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/DocumentId.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/Exclude.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/annotation/ThrowOnExtraProperties.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/spi/v1/GrpcFirestoreRpc.java"
@@ -820,64 +346,28 @@
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/spi/v1/FirestoreRpc.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreSettings.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreClient.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminClient.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/package-info.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminSettings.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreStub.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStub.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreCallableFactory.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreAdminStub.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStubSettings.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStubSettings.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStub.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/GrpcFirestoreAdminCallableFactory.java"
-    },
-    {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/package-info.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/GrpcFirestoreStub.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/FirestoreStubSettings.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/FirestoreStub.java"
     },
     {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/GrpcFirestoreStub.java"
+    },
+    {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/GrpcFirestoreCallableFactory.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/stub/FirestoreStubSettings.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ImmutableSortedMap.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/StandardComparator.java"
@@ -886,16 +376,7 @@
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBRedValueNode.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ImmutableSortedMap.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBBlackValueNode.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBValueNode.java"
-    },
-    {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ArraySortedMap.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ImmutableSortedMapIterator.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBNode.java"
@@ -904,172 +385,622 @@
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBEmptyNode.java"
     },
     {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBBlackValueNode.java"
+    },
+    {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ImmutableSortedSet.java"
+    },
+    {
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/LLRBValueNode.java"
     },
     {
       "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/RBTreeSortedMap.java"
     },
     {
-      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ImmutableSortedMapIterator.java"
+      "path": "google-cloud-firestore/src/main/java/com/google/cloud/firestore/collection/ArraySortedMap.java"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-v1beta1/pom.xml"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/FirestoreGrpc.java"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-admin-v1/pom.xml"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FirestoreAdminGrpc.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/pom.xml"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/query.proto"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/firestore.proto"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/common.proto"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/write.proto"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/document.proto"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/UpdateDocumentRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetChange.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ValueOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/MapValue.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentDelete.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/FirestoreProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentTransformOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/GetDocumentRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/StructuredQueryOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentMask.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResultOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TransactionOptions.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Cursor.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ArrayValueOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Target.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResult.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Write.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TransactionOptionsOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CreateDocumentRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Document.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentMaskOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/StructuredQuery.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CreateDocumentRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/PreconditionOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Precondition.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ExistenceFilter.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentTransform.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CursorOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/UpdateDocumentRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RollbackRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Value.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/MapValueOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentChange.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRemove.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentDeleteOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommonProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/GetDocumentRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/QueryProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetChangeOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/AnyPathName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ArrayValue.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DeleteDocumentRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentChangeOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ExistenceFilterOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRootName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RollbackRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentPathName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRemoveOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DatabaseRootName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DeleteDocumentRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenRequestOrBuilder.java"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-v1/pom.xml"
+    },
+    {
+      "path": "grpc-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/FirestoreGrpc.java"
+    },
+    {
+      "path": "google-cloud-firestore-bom/pom.xml"
+    },
+    {
+      "path": ".kokoro/build.bat"
+    },
+    {
+      "path": ".kokoro/build.sh"
+    },
+    {
+      "path": ".kokoro/dependencies.sh"
+    },
+    {
+      "path": ".kokoro/common.cfg"
+    },
+    {
+      "path": ".kokoro/trampoline.sh"
+    },
+    {
+      "path": ".kokoro/coerce_logs.sh"
+    },
+    {
+      "path": ".kokoro/linkage-monitor.sh"
+    },
+    {
+      "path": ".kokoro/continuous/dependencies.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/samples.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/java7.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/java8-osx.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/java8-win.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/propose_release.sh"
+    },
+    {
+      "path": ".kokoro/continuous/lint.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/java11.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/common.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/propose_release.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/java8.cfg"
+    },
+    {
+      "path": ".kokoro/continuous/integration.cfg"
+    },
+    {
+      "path": ".kokoro/release/drop.sh"
+    },
+    {
+      "path": ".kokoro/release/stage.cfg"
+    },
+    {
+      "path": ".kokoro/release/promote.cfg"
+    },
+    {
+      "path": ".kokoro/release/publish_javadoc.cfg"
+    },
+    {
+      "path": ".kokoro/release/bump_snapshot.cfg"
+    },
+    {
+      "path": ".kokoro/release/promote.sh"
+    },
+    {
+      "path": ".kokoro/release/stage.sh"
+    },
+    {
+      "path": ".kokoro/release/snapshot.sh"
+    },
+    {
+      "path": ".kokoro/release/snapshot.cfg"
+    },
+    {
+      "path": ".kokoro/release/common.cfg"
+    },
+    {
+      "path": ".kokoro/release/bump_snapshot.sh"
+    },
+    {
+      "path": ".kokoro/release/common.sh"
+    },
+    {
+      "path": ".kokoro/release/drop.cfg"
+    },
+    {
+      "path": ".kokoro/release/publish_javadoc.sh"
+    },
+    {
+      "path": ".kokoro/presubmit/dependencies.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/samples.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/java7.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/java8-osx.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/linkage-monitor.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/java8-win.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/lint.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/java11.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/common.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/clirr.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/java8.cfg"
+    },
+    {
+      "path": ".kokoro/presubmit/integration.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/dependencies.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/samples.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/java7.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/java8-osx.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/java8-win.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/lint.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/java11.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/common.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/java8.cfg"
+    },
+    {
+      "path": ".kokoro/nightly/integration.cfg"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/pom.xml"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/index.proto"
-    },
-    {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/location.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/firestore_admin.proto"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/operation.proto"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/field.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldProto.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/operation.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/index.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Index.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsMetadata.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsMetadataOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ParentName.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/LocationMetadata.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetIndexRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/OperationProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOperationMetadata.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsMetadata.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetIndexRequest.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/OperationState.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CreateIndexRequestOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesResponseOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/firestore_admin.proto"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DeleteIndexRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequestOrBuilder.java"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Progress.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsRequest.java"
-    },
-    {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldOperationMetadata.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexProto.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DeleteIndexRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Index.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FirestoreAdminProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldOperationMetadataOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsResponse.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOperationMetadataOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/LocationProto.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsMetadataOrBuilder.java"
-    },
-    {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DatabaseName.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOperationMetadata.java"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/LocationMetadataOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ProgressOrBuilder.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/LocationMetadata.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Field.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CreateIndexRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsResponse.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsMetadata.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DeleteIndexRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesResponse.java"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesRequestOrBuilder.java"
     },
     {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsMetadataOrBuilder.java"
+    },
+    {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldName.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexName.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/LocationProto.java"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListIndexesRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsMetadata.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ProgressOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldOperationMetadataOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOperationMetadataOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/OperationProto.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DatabaseName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetIndexRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsMetadataOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexName.java"
     },
     {
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldOrBuilder.java"
@@ -1078,292 +1009,367 @@
       "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CreateIndexRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/pom.xml"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ParentName.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/write.proto"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Field.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/common.proto"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetIndexRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/query.proto"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/OperationState.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/document.proto"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ImportDocumentsRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/proto/google/firestore/v1/firestore.proto"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitRequest.java"
+      "path": "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FirestoreAdminProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionRequestOrBuilder.java"
+      "path": ".github/release-please.yml"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Value.java"
+      "path": ".github/PULL_REQUEST_TEMPLATE.md"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentPathName.java"
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRootName.java"
+      "path": ".github/ISSUE_TEMPLATE/support_request.md"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsResponse.java"
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/pom.xml"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/QueryProto.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/query.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ExistenceFilter.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/firestore.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Document.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/common.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/StructuredQueryOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/write.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/proto/google/firestore/v1beta1/document.proto"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResultOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/UpdateDocumentRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentDelete.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetChange.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/MapValueOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ValueOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Write.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/MapValue.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentDeleteOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RollbackRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentDelete.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CreateDocumentRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/FirestoreProto.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/FirestoreProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentTransform.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentTransformOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteProto.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/GetDocumentRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/StructuredQueryOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentMask.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResultOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentProto.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TransactionOptions.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentChange.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Cursor.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/MapValue.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ArrayValueOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Target.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommonProto.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResult.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CursorOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Write.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRemove.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentTransformOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentChangeOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TransactionOptionsOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CreateDocumentRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRemoveOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ExistenceFilterOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Document.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetChange.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/UpdateDocumentRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/GetDocumentRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TargetChangeOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentMaskOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DeleteDocumentRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/StructuredQuery.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CreateDocumentRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RollbackRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/PreconditionOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Precondition.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/GetDocumentRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ExistenceFilter.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentMask.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentTransform.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DeleteDocumentRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CursorOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Target.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/UpdateDocumentRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CreateDocumentRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RollbackRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ArrayValueOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ArrayValue.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/Value.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/UpdateDocumentRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DatabaseRootName.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/MapValueOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListenResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentChange.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRemove.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Cursor.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TransactionOptions.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentDeleteOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteResult.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsResponseOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/TransactionOptionsOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommonProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/GetDocumentRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/RunQueryResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitResponse.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/QueryProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BeginTransactionResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetChangeOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/Precondition.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentProto.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListCollectionIdsResponse.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/AnyPathName.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentMaskOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/WriteRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/AnyPathName.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ArrayValue.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ListDocumentsRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BatchGetDocumentsRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/PreconditionOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DeleteDocumentRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentChangeOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/BatchGetDocumentsRequest.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ExistenceFilterOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/WriteRequestOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRootName.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/StructuredQuery.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryRequest.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/ValueOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/BeginTransactionRequestOrBuilder.java"
     },
     {
-      "path": "proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/CommitResponseOrBuilder.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RollbackRequestOrBuilder.java"
     },
     {
-      "path": "grpc-google-cloud-firestore-v1beta1/pom.xml"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenResponse.java"
     },
     {
-      "path": "grpc-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/FirestoreGrpc.java"
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentPathName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsRequest.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DocumentRemoveOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DatabaseRootName.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListCollectionIdsResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/RunQueryResponseOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/CommitRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListDocumentsRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/DeleteDocumentRequestOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/TargetOrBuilder.java"
+    },
+    {
+      "path": "proto-google-cloud-firestore-v1beta1/src/main/java/com/google/firestore/v1beta1/ListenRequestOrBuilder.java"
+    },
+    {
+      "path": "__pycache__/synth.cpython-36.pyc"
+    },
+    {
+      "path": ".git/index"
+    },
+    {
+      "path": ".git/packed-refs"
+    },
+    {
+      "path": ".git/HEAD"
+    },
+    {
+      "path": ".git/config"
+    },
+    {
+      "path": ".git/shallow"
+    },
+    {
+      "path": ".git/objects/pack/pack-9071caba6b4cd47115462ecebb0f2ac3e64f8a53.idx"
+    },
+    {
+      "path": ".git/objects/pack/pack-9071caba6b4cd47115462ecebb0f2ac3e64f8a53.pack"
+    },
+    {
+      "path": ".git/refs/remotes/origin/HEAD"
+    },
+    {
+      "path": ".git/refs/heads/autosynth"
+    },
+    {
+      "path": ".git/refs/heads/master"
+    },
+    {
+      "path": ".git/logs/HEAD"
+    },
+    {
+      "path": ".git/logs/refs/remotes/origin/HEAD"
+    },
+    {
+      "path": ".git/logs/refs/heads/autosynth"
+    },
+    {
+      "path": ".git/logs/refs/heads/master"
     }
   ]
 }
