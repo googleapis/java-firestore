@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -197,7 +197,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation createIndex(ParentName parent, Index index) {
-
     CreateIndexRequest request =
         CreateIndexRequest.newBuilder()
             .setParent(parent == null ? null : parent.toString())
@@ -229,7 +228,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation createIndex(String parent, Index index) {
-
     CreateIndexRequest request =
         CreateIndexRequest.newBuilder().setParent(parent).setIndex(index).build();
     return createIndex(request);
@@ -440,7 +438,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Index getIndex(IndexName name) {
-
     GetIndexRequest request =
         GetIndexRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     return getIndex(request);
@@ -464,7 +461,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Index getIndex(String name) {
-
     GetIndexRequest request = GetIndexRequest.newBuilder().setName(name).build();
     return getIndex(request);
   }
@@ -532,7 +528,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void deleteIndex(IndexName name) {
-
     DeleteIndexRequest request =
         DeleteIndexRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     deleteIndex(request);
@@ -556,7 +551,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void deleteIndex(String name) {
-
     DeleteIndexRequest request = DeleteIndexRequest.newBuilder().setName(name).build();
     deleteIndex(request);
   }
@@ -627,7 +621,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation importDocuments(DatabaseName name) {
-
     ImportDocumentsRequest request =
         ImportDocumentsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     return importDocuments(request);
@@ -654,7 +647,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation importDocuments(String name) {
-
     ImportDocumentsRequest request = ImportDocumentsRequest.newBuilder().setName(name).build();
     return importDocuments(request);
   }
@@ -733,7 +725,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation exportDocuments(DatabaseName name) {
-
     ExportDocumentsRequest request =
         ExportDocumentsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     return exportDocuments(request);
@@ -762,7 +753,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation exportDocuments(String name) {
-
     ExportDocumentsRequest request = ExportDocumentsRequest.newBuilder().setName(name).build();
     return exportDocuments(request);
   }
@@ -840,7 +830,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Field getField(FieldName name) {
-
     GetFieldRequest request =
         GetFieldRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     return getField(request);
@@ -864,7 +853,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Field getField(String name) {
-
     GetFieldRequest request = GetFieldRequest.newBuilder().setName(name).build();
     return getField(request);
   }
@@ -1097,7 +1085,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Operation updateField(Field field) {
-
     UpdateFieldRequest request = UpdateFieldRequest.newBuilder().setField(field).build();
     return updateField(request);
   }
