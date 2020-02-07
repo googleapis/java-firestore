@@ -1,0 +1,469 @@
+package com.google.cloud.firestore.it;
+
+import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Collections.emptySet;
+
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentChange;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.EventListener;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreException;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.ListenerRegistration;
+import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Range;
+import com.google.common.truth.Truth;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import javax.annotation.Nullable;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+
+public final class ITQueryWatchTest {
+
+  private static Firestore firestore;
+
+  @Rule
+  public TestName testName = new TestName();
+
+  private CollectionReference randomColl;
+
+  @BeforeClass
+  public static void beforeClass() {
+    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+    firestore = firestoreOptions.getService();
+  }
+
+  @Before
+  public void before() {
+    String autoId = LocalFirestoreHelper.autoId();
+    String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
+    randomColl = firestore.collection(collPath);
+  }
+
+  @AfterClass
+  public static void afterClass() throws Exception {
+    firestore.close();
+  }
+
+  /*
+  Start a listener on a query with an empty result set
+   */
+  @Test
+  public void emptyResults() throws InterruptedException {
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    // register the snapshot listener for the query
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCDL.await();
+    } finally {
+      registration.remove();
+    }
+
+    assertThat(listener.receivedEvents).hasSize(1);
+    ListenerEvent e = listener.receivedEvents.get(0);
+    assertThat(e.error).isNull();
+    QuerySnapshot snap = e.value;
+    assertThat(snap).isNotNull();
+    assertThat(snap).isEmpty();
+    assertThat(snap.getDocumentChanges()).isEmpty();
+  }
+
+  /*
+  Start a listener on a query with a non-empty result set
+   */
+  @Test
+  public void nonEmptyResults()
+      throws InterruptedException, TimeoutException, ExecutionException {
+    // create a document in our collection that will match the query
+    randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
+    List<ListenerEvent> receivedEvents = listener.receivedEvents;
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCDL.await();
+    } finally {
+      registration.remove();
+    }
+
+    assertThat(receivedEvents).hasSize(1);
+    ListenerEvent e = receivedEvents.get(0);
+    assertThat(e.error).isNull();
+    QuerySnapshot snap = e.value;
+    assertThat(snap).isNotNull();
+    assertThat(snap).hasSize(1);
+  }
+
+  /*
+  Starting from a query with empty results creating a new document
+  that matches the query should result in an ADDED event
+   */
+  @Test
+  public void emptyResults_newDocument_ADDED()
+      throws InterruptedException, TimeoutException, ExecutionException {
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+      listener.eventsCDL.await(DocumentChange.Type.ADDED);
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet());
+  }
+
+  /*
+  Starting from a query with empty results, modifying an existing document to
+  match the query should result in an ADDED event
+   */
+  @Test
+  public void emptyResults_modifiedDocument_ADDED()
+      throws InterruptedException, TimeoutException, ExecutionException {
+    // create our "existing non-matching document"
+    randomColl.document("doc").set(map("baz", "baz")).get(5, TimeUnit.SECONDS);
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
+    List<ListenerEvent> receivedEvents = listener.receivedEvents;
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      randomColl.document("doc").update("foo", "bar").get(5, TimeUnit.SECONDS);
+      listener.eventsCDL.await(DocumentChange.Type.ADDED);
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet());
+
+    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    //noinspection ConstantConditions guarded by "assertNoError" above
+    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    assertThat(doc.get("foo")).isEqualTo("bar");
+    assertThat(doc.get("baz")).isEqualTo("baz");
+  }
+
+  /*
+  Starting from a query with non-empty results, modifying an existing document which matches
+  the query should result in a MODIFIED event
+   */
+  @Test
+  public void nonEmptyResults_modifiedDocument_MODIFIED()
+      throws InterruptedException, TimeoutException, ExecutionException {
+    DocumentReference testDoc = randomColl.document("doc");
+    // create our "existing non-matching document"
+    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    // register the snapshot listener for the query
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 1, 0);
+    List<ListenerEvent> receivedEvents = listener.receivedEvents;
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCDL.await();
+      testDoc.update("baz", "baz").get(5, TimeUnit.SECONDS);
+      listener.eventsCDL.await(DocumentChange.Type.MODIFIED);
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.removedIdsIsAnyOf(emptySet());
+
+    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    //noinspection ConstantConditions guarded by "assertNoError" above
+    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    assertThat(doc.get("foo")).isEqualTo("bar");
+    assertThat(doc.get("baz")).isEqualTo("baz");
+  }
+
+  /*
+  Starting from a query with non-empty results, deleting an existing document which matches
+  the query should result in a REMOVED event
+   */
+  @Test
+  public void nonEmptyResults_deletedDocument_REMOVED()
+      throws InterruptedException, TimeoutException, ExecutionException {
+    DocumentReference testDoc = randomColl.document("doc");
+    // create our "existing non-matching document"
+    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    // register the snapshot listener for the query
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
+    List<ListenerEvent> receivedEvents = listener.receivedEvents;
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCDL.await();
+      testDoc.delete().get(5, TimeUnit.SECONDS);
+      listener.eventsCDL.await(DocumentChange.Type.REMOVED);
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+
+    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    //noinspection ConstantConditions guarded by "assertNoError" above
+    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    assertThat(doc.get("foo")).isEqualTo("bar");
+  }
+
+  /*
+  Starting from a query with non-empty results, modifying an existing document which matches
+  the query such that it no longer matches the query should result in a REMOVED event
+   */
+  @Test
+  public void nonEmptyResults_modifiedDocument_REMOVED()
+      throws InterruptedException, TimeoutException, ExecutionException {
+    DocumentReference testDoc = randomColl.document("doc");
+    // create our "existing non-matching document"
+    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+
+    // run our test
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    // register the snapshot listener for the query
+    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
+    List<ListenerEvent> receivedEvents = listener.receivedEvents;
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCDL.await();
+      testDoc.set(map("bar", "foo")).get(5, TimeUnit.SECONDS);
+      listener.eventsCDL.await(DocumentChange.Type.REMOVED);
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+
+    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    //noinspection ConstantConditions guarded by "assertNoError" above
+    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    assertThat(doc.get("foo")).isEqualTo("bar");
+  }
+
+  /**
+   * A tuple class used by {@code #queryWatch}. This class represents an event delivered to the
+   * registered query listener.
+   */
+  private static final class ListenerEvent {
+
+    @Nullable private final QuerySnapshot value;
+    @Nullable private final FirestoreException error;
+
+    ListenerEvent(@Nullable QuerySnapshot value, @Nullable FirestoreException error) {
+      this.value = value;
+      this.error = error;
+    }
+  }
+
+  private static final class EventsCDL {
+    private final CountDownLatch cdl;
+    private final EnumMap<DocumentChange.Type, CountDownLatch> cdls;
+
+    EventsCDL(int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
+      cdl = new CountDownLatch(nonChangeInitial);
+      cdls = new EnumMap<>(DocumentChange.Type.class);
+      cdls.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitial));
+      cdls.put(DocumentChange.Type.MODIFIED, new CountDownLatch(modifiedInitial));
+      cdls.put(DocumentChange.Type.REMOVED, new CountDownLatch(removedInitial));
+    }
+
+    void countDown() {
+      cdl.countDown();
+    }
+
+    void countDown(DocumentChange.Type type) {
+      cdls.get(type).countDown();
+    }
+
+    void await() throws InterruptedException {
+      cdl.await(5, TimeUnit.SECONDS);
+    }
+
+    void await(DocumentChange.Type type)
+        throws InterruptedException {
+      cdls.get(type).await(5, TimeUnit.SECONDS);
+    }
+  }
+
+  static class QuerySnapshotEventListener implements EventListener<QuerySnapshot> {
+    final List<ListenerEvent> receivedEvents;
+    final EventsCDL eventsCDL;
+
+    QuerySnapshotEventListener(int nonChangeInitial) {
+      this(nonChangeInitial, 0, 0, 0);
+    }
+
+    QuerySnapshotEventListener(int nonChangeInitial, int addedInitial, int modifiedInitial,
+        int removedInitial) {
+      this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
+      this.eventsCDL = new EventsCDL(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
+    }
+
+    @Override
+    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirestoreException error) {
+      receivedEvents.add(new ListenerEvent(value, error));
+      if (value != null) {
+        List<DocumentChange> documentChanges = value.getDocumentChanges();
+        for (DocumentChange dc : documentChanges) {
+          eventsCDL.countDown(dc.getType());
+        }
+      }
+      eventsCDL.countDown();
+    }
+
+    ListenerAssertions assertions() {
+      return new ListenerAssertions(receivedEvents);
+    }
+
+    static final class ListenerAssertions {
+      final List<ListenerEvent> receivedEvents;
+      private final FluentIterable<ListenerEvent> events;
+      private final Set<String> addedIds;
+      private final Set<String> modifiedIds;
+      private final Set<String> removedIds;
+
+      ListenerAssertions(List<ListenerEvent> receivedEvents) {
+        this.receivedEvents = receivedEvents;
+        events = FluentIterable.from(receivedEvents);
+        List<QuerySnapshot> querySnapshots = getQuerySnapshots(events);
+        addedIds = getIds(querySnapshots, DocumentChange.Type.ADDED);
+        modifiedIds = getIds(querySnapshots, DocumentChange.Type.MODIFIED);
+        removedIds = getIds(querySnapshots, DocumentChange.Type.REMOVED);
+
+      }
+
+      private void noError() {
+        final Optional<ListenerEvent> anyError =
+            events.firstMatch(
+                new Predicate<ListenerEvent>() {
+                  @Override
+                  public boolean apply(ListenerEvent input) {
+                    return input.error != null;
+                  }
+                });
+        assertWithMessage("snapshotListener received an error").that(anyError).isAbsent();
+      }
+
+      private static List<QuerySnapshot> getQuerySnapshots(FluentIterable<ListenerEvent> events) {
+        return events
+            .filter(
+                new Predicate<ListenerEvent>() {
+                  @Override
+                  public boolean apply(ListenerEvent input) {
+                    return input.value != null;
+                  }
+                })
+            .transform(
+                new com.google.common.base.Function<ListenerEvent, QuerySnapshot>() {
+                  @Override
+                  public QuerySnapshot apply(ListenerEvent input) {
+                    return input.value;
+                  }
+                })
+            .toList();
+      }
+      private static Set<String> getIds(List<QuerySnapshot> querySnapshots, DocumentChange.Type type) {
+        final Set<String> documentIds = new HashSet<>();
+        for (QuerySnapshot querySnapshot : querySnapshots) {
+          final List<DocumentChange> changes = querySnapshot.getDocumentChanges();
+          for (DocumentChange change : changes) {
+            if (change.getType() == type) {
+              documentIds.add(change.getDocument().getId());
+            }
+          }
+        }
+        return documentIds;
+      }
+
+      void addedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+        Truth.assertThat(addedIds).isAnyOf(s1, s2);
+      }
+
+      void modifiedIdsIsAnyOf(Set<?> s) {
+        Truth.assertThat(modifiedIds).isEqualTo(s);
+      }
+
+      void modifiedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+        Truth.assertThat(modifiedIds).isAnyOf(s1, s2);
+      }
+
+      void removedIdsIsAnyOf(Set<?> s) {
+        Truth.assertThat(removedIds).isEqualTo(s);
+      }
+
+      void removedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+        Truth.assertThat(removedIds).isAnyOf(s1, s2);
+      }
+
+      void eventCountIsAnyOf(Range<Integer> range) {
+        Truth.assertThat(receivedEvents.size()).isIn(range);
+      }
+    }
+  }
+}
