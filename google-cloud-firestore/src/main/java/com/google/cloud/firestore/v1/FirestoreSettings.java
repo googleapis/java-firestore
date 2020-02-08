@@ -80,8 +80,12 @@ import javax.annotation.Generated;
  * <code>
  * FirestoreSettings.Builder firestoreSettingsBuilder =
  *     FirestoreSettings.newBuilder();
- * firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
- *     .setTotalTimeout(Duration.ofSeconds(30));
+ * firestoreSettingsBuilder
+ *     .updateDocumentSettings()
+ *     .setRetrySettings(
+ *         firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
+ *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
  * </code>
  * </pre>

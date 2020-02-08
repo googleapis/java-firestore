@@ -85,8 +85,12 @@ import org.threeten.bp.Duration;
  * <code>
  * FirestoreAdminStubSettings.Builder firestoreAdminSettingsBuilder =
  *     FirestoreAdminStubSettings.newBuilder();
- * firestoreAdminSettingsBuilder.createIndexSettings().getRetrySettings().toBuilder()
- *     .setTotalTimeout(Duration.ofSeconds(30));
+ * firestoreAdminSettingsBuilder
+ *     .createIndexSettings()
+ *     .setRetrySettings(
+ *         firestoreAdminSettingsBuilder.createIndexSettings().getRetrySettings().toBuilder()
+ *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .build());
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
  * </code>
  * </pre>
