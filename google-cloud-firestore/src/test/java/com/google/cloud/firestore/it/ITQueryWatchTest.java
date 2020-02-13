@@ -62,8 +62,7 @@ public final class ITQueryWatchTest {
 
   private static Firestore firestore;
 
-  @Rule
-  public TestName testName = new TestName();
+  @Rule public TestName testName = new TestName();
 
   private CollectionReference randomColl;
 
@@ -114,8 +113,7 @@ public final class ITQueryWatchTest {
   Start a listener on a query with a non-empty result set
    */
   @Test
-  public void nonEmptyResults()
-      throws InterruptedException, TimeoutException, ExecutionException {
+  public void nonEmptyResults() throws InterruptedException, TimeoutException, ExecutionException {
     // create a document in our collection that will match the query
     randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
@@ -361,8 +359,7 @@ public final class ITQueryWatchTest {
       cdl.await(5, TimeUnit.SECONDS);
     }
 
-    void await(DocumentChange.Type type)
-        throws InterruptedException {
+    void await(DocumentChange.Type type) throws InterruptedException {
       cdls.get(type).await(5, TimeUnit.SECONDS);
     }
   }
@@ -375,10 +372,11 @@ public final class ITQueryWatchTest {
       this(nonChangeInitial, 0, 0, 0);
     }
 
-    QuerySnapshotEventListener(int nonChangeInitial, int addedInitial, int modifiedInitial,
-        int removedInitial) {
+    QuerySnapshotEventListener(
+        int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
       this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
-      this.eventsCDL = new EventsCDL(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
+      this.eventsCDL =
+          new EventsCDL(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
     }
 
     @Override
@@ -411,7 +409,6 @@ public final class ITQueryWatchTest {
         addedIds = getIds(querySnapshots, DocumentChange.Type.ADDED);
         modifiedIds = getIds(querySnapshots, DocumentChange.Type.MODIFIED);
         removedIds = getIds(querySnapshots, DocumentChange.Type.REMOVED);
-
       }
 
       private void noError() {
@@ -444,7 +441,9 @@ public final class ITQueryWatchTest {
                 })
             .toList();
       }
-      private static Set<String> getIds(List<QuerySnapshot> querySnapshots, DocumentChange.Type type) {
+
+      private static Set<String> getIds(
+          List<QuerySnapshot> querySnapshots, DocumentChange.Type type) {
         final Set<String> documentIds = new HashSet<>();
         for (QuerySnapshot querySnapshot : querySnapshots) {
           final List<DocumentChange> changes = querySnapshot.getDocumentChanges();
