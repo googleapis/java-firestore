@@ -28,7 +28,11 @@ public final class FirestoreException extends BaseGrpcServiceException {
   private Status status;
 
   private FirestoreException(String reason, Status status) {
-    super(reason, null, status.getCode().value(), false);
+    this(reason, status, null);
+  }
+
+  private FirestoreException(String reason, Status status, @Nullable Throwable cause) {
+    super(reason, cause, status.getCode().value(), false);
 
     this.status = status;
   }
@@ -58,7 +62,17 @@ public final class FirestoreException extends BaseGrpcServiceException {
    * @return The FirestoreException
    */
   static FirestoreException serverRejected(Status status, String message, Object... params) {
-    return new FirestoreException(String.format(message, params), status);
+      return serverRejected(status, null, message, params);
+  }
+
+  /**
+   * Creates a FirestoreException with the provided GRPC Status code and message in a nested
+   * exception.
+   *
+   * @return The FirestoreException
+   */
+  static FirestoreException serverRejected(Status status, @Nullable Throwable cause, String message, Object... params) {
+    return new FirestoreException(String.format(message, params), status, cause);
   }
 
   /**
