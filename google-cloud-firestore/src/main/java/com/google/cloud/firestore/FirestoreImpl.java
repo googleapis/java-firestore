@@ -406,7 +406,9 @@ class FirestoreImpl implements Firestore {
               span.setStatus(TOO_MANY_RETRIES_STATUS);
               rejectTransaction(
                   FirestoreException.serverRejected(
-                      Status.ABORTED, throwable, "Transaction was cancelled because of too many retries."));
+                      Status.ABORTED,
+                      throwable,
+                      "Transaction was cancelled because of too many retries."));
             }
           }
 

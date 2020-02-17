@@ -62,7 +62,7 @@ public final class FirestoreException extends BaseGrpcServiceException {
    * @return The FirestoreException
    */
   static FirestoreException serverRejected(Status status, String message, Object... params) {
-      return serverRejected(status, null, message, params);
+    return serverRejected(status, null, message, params);
   }
 
   /**
@@ -71,7 +71,8 @@ public final class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  static FirestoreException serverRejected(Status status, @Nullable Throwable cause, String message, Object... params) {
+  static FirestoreException serverRejected(
+      Status status, @Nullable Throwable cause, String message, Object... params) {
     return new FirestoreException(String.format(message, params), status, cause);
   }
 
