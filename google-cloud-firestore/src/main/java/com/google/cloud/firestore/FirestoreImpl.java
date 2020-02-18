@@ -360,7 +360,7 @@ class FirestoreImpl implements Firestore {
                           @Override
                           public void onFailure(Throwable throwable) {
                             // Retry failed commits.
-                            maybeRetry();
+                            maybeRetry(throwable);
                           }
 
                           @Override
@@ -393,7 +393,7 @@ class FirestoreImpl implements Firestore {
             return callbackResult;
           }
 
-          private void maybeRetry() {
+          private void maybeRetry(Throwable throwable) {
             if (attemptsRemaining > 0) {
               span.addAnnotation("retrying");
               runTransactionAttempt(
@@ -406,7 +406,9 @@ class FirestoreImpl implements Firestore {
               span.setStatus(TOO_MANY_RETRIES_STATUS);
               rejectTransaction(
                   FirestoreException.serverRejected(
-                      Status.ABORTED, "Transaction was cancelled because of too many retries."));
+                      Status.ABORTED,
+                      throwable,
+                      "Transaction was cancelled because of too many retries."));
             }
           }
 
