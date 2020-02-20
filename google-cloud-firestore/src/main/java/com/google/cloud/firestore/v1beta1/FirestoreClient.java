@@ -139,9 +139,11 @@ import javax.annotation.Generated;
  *     FirestoreClient.create(firestoreSettings);
  * </code>
  * </pre>
+ * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead
  */
 @Generated("by gapic-generator")
 @BetaApi
+@Deprecated
 public class FirestoreClient implements BackgroundResource {
   private final FirestoreSettings settings;
   private final FirestoreStub stub;

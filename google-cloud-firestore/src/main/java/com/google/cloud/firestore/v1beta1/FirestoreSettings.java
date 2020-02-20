@@ -89,9 +89,11 @@ import javax.annotation.Generated;
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
  * </code>
  * </pre>
+* @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead
  */
 @Generated("by gapic-generator")
 @BetaApi
+@Deprecated
 public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   /** Returns the object with the settings used for calls to getDocument. */
   public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
