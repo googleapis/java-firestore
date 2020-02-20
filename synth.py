@@ -114,7 +114,7 @@ firestore_v1beta1 = generate_client(
     version='v1beta1',
     config_path='/google/firestore/artman_firestore.yaml',
     package='com.google.firestore.v1beta1',
-    include_gapic=False
+    include_gapic=True
 )
 
 common_templates = gcp.CommonTemplates()
