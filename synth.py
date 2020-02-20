@@ -126,3 +126,25 @@ s.copy(templates, excludes=[
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg'
 ])
+
+# Mark v1beta1 as deprecated
+s.replace(
+  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
+  "public class FirestoreClient",
+  "@Deprecated\npublic class FirestoreClient"
+)
+s.replace(
+  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
+  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
+  "* @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead\n */\n@Generated(\"by gapic-generator\")"
+)
+s.replace(
+  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
+  "public class FirestoreSettings",
+  "@Deprecated\npublic class FirestoreSettings"
+)
+s.replace(
+  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
+  " \\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
+  "* @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
+)
