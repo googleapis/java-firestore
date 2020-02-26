@@ -101,13 +101,12 @@ public final class ITQueryWatchTest {
       registration.remove();
     }
 
-    assertThat(listener.receivedEvents).hasSize(1);
-    ListenerEvent event = listener.receivedEvents.get(0);
-    assertThat(event.error).isNull();
-    QuerySnapshot snap = event.value;
-    assertThat(snap).isNotNull();
-    assertThat(snap).isEmpty();
-    assertThat(snap.getDocumentChanges()).isEmpty();
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 1));
+    la.addedIdsIsAnyOf(emptySet());
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet());
   }
 
   /*
@@ -121,7 +120,6 @@ public final class ITQueryWatchTest {
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
-    List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -130,12 +128,12 @@ public final class ITQueryWatchTest {
       registration.remove();
     }
 
-    assertThat(receivedEvents).hasSize(1);
-    ListenerEvent event = receivedEvents.get(0);
-    assertThat(event.error).isNull();
-    QuerySnapshot snap = event.value;
-    assertThat(snap).isNotNull();
-    assertThat(snap).hasSize(1);
+    ListenerAssertions la = listener.assertions();
+    la.noError();
+    la.eventCountIsAnyOf(Range.closed(1, 1));
+    la.addedIdsIsAnyOf(newHashSet("doc"));
+    la.modifiedIdsIsAnyOf(emptySet());
+    la.removedIdsIsAnyOf(emptySet());
   }
 
   /*
@@ -399,6 +397,7 @@ public final class ITQueryWatchTest {
     }
 
     static final class ListenerAssertions {
+      private static final MapJoiner MAP_JOINER = Joiner.on(",").withKeyValueSeparator("=");
       final List<ListenerEvent> receivedEvents;
       private final FluentIterable<ListenerEvent> events;
       private final Set<String> addedIds;
