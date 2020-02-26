@@ -152,6 +152,7 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
+      listener.eventsCDL.await();
       randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
       listener.eventsCDL.await(DocumentChange.Type.ADDED);
     } finally {
@@ -160,7 +161,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions la = listener.assertions();
     la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.eventCountIsAnyOf(Range.closed(2, 2));
     la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet());
@@ -183,6 +184,7 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
+      listener.eventsCDL.await();
       randomColl.document("doc").update("foo", "bar").get(5, TimeUnit.SECONDS);
       listener.eventsCDL.await(DocumentChange.Type.ADDED);
     } finally {
@@ -191,7 +193,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions la = listener.assertions();
     la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.eventCountIsAnyOf(Range.closed(2, 2));
     la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet());
@@ -231,7 +233,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions la = listener.assertions();
     la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.eventCountIsAnyOf(Range.closed(2, 2));
     la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.removedIdsIsAnyOf(emptySet());
@@ -271,7 +273,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions la = listener.assertions();
     la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.eventCountIsAnyOf(Range.closed(2, 2));
     la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
@@ -310,7 +312,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions la = listener.assertions();
     la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 2));
+    la.eventCountIsAnyOf(Range.closed(2, 2));
     la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
