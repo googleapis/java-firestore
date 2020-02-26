@@ -157,56 +157,6 @@ public final class FirestoreGrpc {
   }
 
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getCreateDocumentMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
-      METHOD_CREATE_DOCUMENT = getCreateDocumentMethodHelper();
-
-  private static volatile io.grpc.MethodDescriptor<
-          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
-      getCreateDocumentMethod;
-
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static io.grpc.MethodDescriptor<
-          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
-      getCreateDocumentMethod() {
-    return getCreateDocumentMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
-      getCreateDocumentMethodHelper() {
-    io.grpc.MethodDescriptor<
-            com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
-        getCreateDocumentMethod;
-    if ((getCreateDocumentMethod = FirestoreGrpc.getCreateDocumentMethod) == null) {
-      synchronized (FirestoreGrpc.class) {
-        if ((getCreateDocumentMethod = FirestoreGrpc.getCreateDocumentMethod) == null) {
-          FirestoreGrpc.getCreateDocumentMethod =
-              getCreateDocumentMethod =
-                  io.grpc.MethodDescriptor
-                      .<com.google.firestore.v1.CreateDocumentRequest,
-                          com.google.firestore.v1.Document>
-                          newBuilder()
-                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName("google.firestore.v1.Firestore", "CreateDocument"))
-                      .setSampledToLocalTracing(true)
-                      .setRequestMarshaller(
-                          io.grpc.protobuf.ProtoUtils.marshaller(
-                              com.google.firestore.v1.CreateDocumentRequest.getDefaultInstance()))
-                      .setResponseMarshaller(
-                          io.grpc.protobuf.ProtoUtils.marshaller(
-                              com.google.firestore.v1.Document.getDefaultInstance()))
-                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("CreateDocument"))
-                      .build();
-        }
-      }
-    }
-    return getCreateDocumentMethod;
-  }
-
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
   @java.lang.Deprecated // Use {@link #getUpdateDocumentMethod()} instead.
   public static final io.grpc.MethodDescriptor<
           com.google.firestore.v1.UpdateDocumentRequest, com.google.firestore.v1.Document>
@@ -728,6 +678,56 @@ public final class FirestoreGrpc {
     return getListCollectionIdsMethod;
   }
 
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @java.lang.Deprecated // Use {@link #getCreateDocumentMethod()} instead.
+  public static final io.grpc.MethodDescriptor<
+          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
+      METHOD_CREATE_DOCUMENT = getCreateDocumentMethodHelper();
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
+      getCreateDocumentMethod;
+
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
+      getCreateDocumentMethod() {
+    return getCreateDocumentMethodHelper();
+  }
+
+  private static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
+      getCreateDocumentMethodHelper() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.CreateDocumentRequest, com.google.firestore.v1.Document>
+        getCreateDocumentMethod;
+    if ((getCreateDocumentMethod = FirestoreGrpc.getCreateDocumentMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getCreateDocumentMethod = FirestoreGrpc.getCreateDocumentMethod) == null) {
+          FirestoreGrpc.getCreateDocumentMethod =
+              getCreateDocumentMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.CreateDocumentRequest,
+                          com.google.firestore.v1.Document>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName("google.firestore.v1.Firestore", "CreateDocument"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.CreateDocumentRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.Document.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("CreateDocument"))
+                      .build();
+        }
+      }
+    }
+    return getCreateDocumentMethod;
+  }
+
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreStub newStub(io.grpc.Channel channel) {
     return new FirestoreStub(channel);
@@ -785,19 +785,6 @@ public final class FirestoreGrpc {
         io.grpc.stub.StreamObserver<com.google.firestore.v1.ListDocumentsResponse>
             responseObserver) {
       asyncUnimplementedUnaryCall(getListDocumentsMethodHelper(), responseObserver);
-    }
-
-    /**
-     *
-     *
-     * <pre>
-     * Creates a new document.
-     * </pre>
-     */
-    public void createDocument(
-        com.google.firestore.v1.CreateDocumentRequest request,
-        io.grpc.stub.StreamObserver<com.google.firestore.v1.Document> responseObserver) {
-      asyncUnimplementedUnaryCall(getCreateDocumentMethodHelper(), responseObserver);
     }
 
     /**
@@ -933,6 +920,19 @@ public final class FirestoreGrpc {
       asyncUnimplementedUnaryCall(getListCollectionIdsMethodHelper(), responseObserver);
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new document.
+     * </pre>
+     */
+    public void createDocument(
+        com.google.firestore.v1.CreateDocumentRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.Document> responseObserver) {
+      asyncUnimplementedUnaryCall(getCreateDocumentMethodHelper(), responseObserver);
+    }
+
     @java.lang.Override
     public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
@@ -949,12 +949,6 @@ public final class FirestoreGrpc {
                       com.google.firestore.v1.ListDocumentsRequest,
                       com.google.firestore.v1.ListDocumentsResponse>(
                       this, METHODID_LIST_DOCUMENTS)))
-          .addMethod(
-              getCreateDocumentMethodHelper(),
-              asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.v1.CreateDocumentRequest,
-                      com.google.firestore.v1.Document>(this, METHODID_CREATE_DOCUMENT)))
           .addMethod(
               getUpdateDocumentMethodHelper(),
               asyncUnaryCall(
@@ -1018,6 +1012,12 @@ public final class FirestoreGrpc {
                       com.google.firestore.v1.ListCollectionIdsRequest,
                       com.google.firestore.v1.ListCollectionIdsResponse>(
                       this, METHODID_LIST_COLLECTION_IDS)))
+          .addMethod(
+              getCreateDocumentMethodHelper(),
+              asyncUnaryCall(
+                  new MethodHandlers<
+                      com.google.firestore.v1.CreateDocumentRequest,
+                      com.google.firestore.v1.Document>(this, METHODID_CREATE_DOCUMENT)))
           .build();
     }
   }
@@ -1078,22 +1078,6 @@ public final class FirestoreGrpc {
             responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getListDocumentsMethodHelper(), getCallOptions()),
-          request,
-          responseObserver);
-    }
-
-    /**
-     *
-     *
-     * <pre>
-     * Creates a new document.
-     * </pre>
-     */
-    public void createDocument(
-        com.google.firestore.v1.CreateDocumentRequest request,
-        io.grpc.stub.StreamObserver<com.google.firestore.v1.Document> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(getCreateDocumentMethodHelper(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -1256,6 +1240,22 @@ public final class FirestoreGrpc {
           request,
           responseObserver);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new document.
+     * </pre>
+     */
+    public void createDocument(
+        com.google.firestore.v1.CreateDocumentRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.Document> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getCreateDocumentMethodHelper(), getCallOptions()),
+          request,
+          responseObserver);
+    }
   }
 
   /**
@@ -1311,19 +1311,6 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.ListDocumentsRequest request) {
       return blockingUnaryCall(
           getChannel(), getListDocumentsMethodHelper(), getCallOptions(), request);
-    }
-
-    /**
-     *
-     *
-     * <pre>
-     * Creates a new document.
-     * </pre>
-     */
-    public com.google.firestore.v1.Document createDocument(
-        com.google.firestore.v1.CreateDocumentRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getCreateDocumentMethodHelper(), getCallOptions(), request);
     }
 
     /**
@@ -1428,6 +1415,19 @@ public final class FirestoreGrpc {
       return blockingUnaryCall(
           getChannel(), getListCollectionIdsMethodHelper(), getCallOptions(), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new document.
+     * </pre>
+     */
+    public com.google.firestore.v1.Document createDocument(
+        com.google.firestore.v1.CreateDocumentRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getCreateDocumentMethodHelper(), getCallOptions(), request);
+    }
   }
 
   /**
@@ -1483,19 +1483,6 @@ public final class FirestoreGrpc {
         listDocuments(com.google.firestore.v1.ListDocumentsRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getListDocumentsMethodHelper(), getCallOptions()), request);
-    }
-
-    /**
-     *
-     *
-     * <pre>
-     * Creates a new document.
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.v1.Document>
-        createDocument(com.google.firestore.v1.CreateDocumentRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getCreateDocumentMethodHelper(), getCallOptions()), request);
     }
 
     /**
@@ -1578,19 +1565,32 @@ public final class FirestoreGrpc {
       return futureUnaryCall(
           getChannel().newCall(getListCollectionIdsMethodHelper(), getCallOptions()), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new document.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.v1.Document>
+        createDocument(com.google.firestore.v1.CreateDocumentRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getCreateDocumentMethodHelper(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_DOCUMENT = 0;
   private static final int METHODID_LIST_DOCUMENTS = 1;
-  private static final int METHODID_CREATE_DOCUMENT = 2;
-  private static final int METHODID_UPDATE_DOCUMENT = 3;
-  private static final int METHODID_DELETE_DOCUMENT = 4;
-  private static final int METHODID_BATCH_GET_DOCUMENTS = 5;
-  private static final int METHODID_BEGIN_TRANSACTION = 6;
-  private static final int METHODID_COMMIT = 7;
-  private static final int METHODID_ROLLBACK = 8;
-  private static final int METHODID_RUN_QUERY = 9;
-  private static final int METHODID_LIST_COLLECTION_IDS = 10;
+  private static final int METHODID_UPDATE_DOCUMENT = 2;
+  private static final int METHODID_DELETE_DOCUMENT = 3;
+  private static final int METHODID_BATCH_GET_DOCUMENTS = 4;
+  private static final int METHODID_BEGIN_TRANSACTION = 5;
+  private static final int METHODID_COMMIT = 6;
+  private static final int METHODID_ROLLBACK = 7;
+  private static final int METHODID_RUN_QUERY = 8;
+  private static final int METHODID_LIST_COLLECTION_IDS = 9;
+  private static final int METHODID_CREATE_DOCUMENT = 10;
   private static final int METHODID_WRITE = 11;
   private static final int METHODID_LISTEN = 12;
 
@@ -1621,11 +1621,6 @@ public final class FirestoreGrpc {
               (com.google.firestore.v1.ListDocumentsRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.ListDocumentsResponse>)
                   responseObserver);
-          break;
-        case METHODID_CREATE_DOCUMENT:
-          serviceImpl.createDocument(
-              (com.google.firestore.v1.CreateDocumentRequest) request,
-              (io.grpc.stub.StreamObserver<com.google.firestore.v1.Document>) responseObserver);
           break;
         case METHODID_UPDATE_DOCUMENT:
           serviceImpl.updateDocument(
@@ -1671,6 +1666,11 @@ public final class FirestoreGrpc {
               (com.google.firestore.v1.ListCollectionIdsRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.ListCollectionIdsResponse>)
                   responseObserver);
+          break;
+        case METHODID_CREATE_DOCUMENT:
+          serviceImpl.createDocument(
+              (com.google.firestore.v1.CreateDocumentRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.Document>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1748,7 +1748,6 @@ public final class FirestoreGrpc {
                       .setSchemaDescriptor(new FirestoreFileDescriptorSupplier())
                       .addMethod(getGetDocumentMethodHelper())
                       .addMethod(getListDocumentsMethodHelper())
-                      .addMethod(getCreateDocumentMethodHelper())
                       .addMethod(getUpdateDocumentMethodHelper())
                       .addMethod(getDeleteDocumentMethodHelper())
                       .addMethod(getBatchGetDocumentsMethodHelper())
@@ -1759,6 +1758,7 @@ public final class FirestoreGrpc {
                       .addMethod(getWriteMethodHelper())
                       .addMethod(getListenMethodHelper())
                       .addMethod(getListCollectionIdsMethodHelper())
+                      .addMethod(getCreateDocumentMethodHelper())
                       .build();
         }
       }
