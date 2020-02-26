@@ -85,7 +85,8 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Start a listener on a query with an empty result set
+  Attach a listener to a query with empty results.
+  Verify the listener receives an empty event.
    */
   @Test
   public void emptyResults() throws InterruptedException {
@@ -110,14 +111,14 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Start a listener on a query with a non-empty result set
+  Attach a listener to a query with non-empty results.
+  Verify the listener receives an event including the expected document.
    */
   @Test
   public void nonEmptyResults() throws InterruptedException, TimeoutException, ExecutionException {
     // create a document in our collection that will match the query
     randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
@@ -138,14 +139,14 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Starting from a query with empty results creating a new document
-  that matches the query should result in an ADDED event
+   Attach a listener to a query with empty results.
+   Create a new document that matches the query.
+   Verify newly created document results in an ADDED event.
    */
   @Test
   public void emptyResults_newDocument_ADDED()
       throws InterruptedException, TimeoutException, ExecutionException {
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
     ListenerRegistration registration = query.addSnapshotListener(listener);
@@ -166,8 +167,9 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Starting from a query with empty results, modifying an existing document to
-  match the query should result in an ADDED event
+   Attach a listener to a query with empty results.
+   Modify an existing document so that it matches the query.
+   Verify newly created document results in an ADDED event.
    */
   @Test
   public void emptyResults_modifiedDocument_ADDED()
@@ -175,7 +177,6 @@ public final class ITQueryWatchTest {
     // create our "existing non-matching document"
     randomColl.document("doc").set(map("baz", "baz")).get(5, TimeUnit.SECONDS);
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
@@ -203,8 +204,9 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Starting from a query with non-empty results, modifying an existing document which matches
-  the query should result in a MODIFIED event
+   Attach a listener to a query with non-empty results.
+   Modify an existing document that is part of the results.
+   Verify modified document results in a MODIFIED event.
    */
   @Test
   public void nonEmptyResults_modifiedDocument_MODIFIED()
@@ -213,7 +215,6 @@ public final class ITQueryWatchTest {
     // create our "existing non-matching document"
     testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 1, 0);
@@ -243,8 +244,9 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Starting from a query with non-empty results, deleting an existing document which matches
-  the query should result in a REMOVED event
+   Attach a listener to a query with non-empty results.
+   Delete an existing document that is part of the results.
+   Verify deleted document results in a REMOVED event.
    */
   @Test
   public void nonEmptyResults_deletedDocument_REMOVED()
@@ -253,7 +255,6 @@ public final class ITQueryWatchTest {
     // create our "existing non-matching document"
     testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
@@ -282,8 +283,9 @@ public final class ITQueryWatchTest {
   }
 
   /*
-  Starting from a query with non-empty results, modifying an existing document which matches
-  the query such that it no longer matches the query should result in a REMOVED event
+   Attach a listener to a query with non-empty results.
+   Modify an existing document that is part of the results to no longer match the query.
+   Verify modified document results in a REMOVED event.
    */
   @Test
   public void nonEmptyResults_modifiedDocument_REMOVED()
@@ -292,7 +294,6 @@ public final class ITQueryWatchTest {
     // create our "existing non-matching document"
     testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
-    // run our test
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
     QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
