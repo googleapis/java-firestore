@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPES_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPES_PROTO;
+import static com.google.cloud.firestore.LocalFirestoreHelper.Array_Value;
 import static com.google.cloud.firestore.LocalFirestoreHelper.BLOB;
 import static com.google.cloud.firestore.LocalFirestoreHelper.CREATE_PRECONDITION;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DATE;
@@ -27,9 +28,11 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FIELD_TRANSFORM_COMMIT_RESPONSE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.GEO_POINT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.NESTED_CLASS_OBJECT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.OBJECT_VALUE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SERVER_TIMESTAMP_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SERVER_TIMESTAMP_TRANSFORM;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_DELETE_COMMIT_RESPONSE;
+import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_ARRAY;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
@@ -255,6 +258,18 @@ public class DocumentReferenceTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(5, 6), snapshot.getReadTime());
 
     assertEquals(get(), getAllCapture.getValue());
+    assertArrayEquals(SINGLE_FIELD_ARRAY, snapshot.getArray(Array_Value).toArray());
+    try {
+      snapshot.getArray(OBJECT_VALUE);
+    } catch (IllegalArgumentException exception) {
+      assertEquals("IllegalArgumentException", exception.getClass().getSimpleName());
+    }
+    assertEquals(SINGLE_FIELD_MAP.size(), snapshot.getMap(OBJECT_VALUE).size());
+    try {
+      snapshot.getMap(Array_Value);
+    } catch (IllegalArgumentException exception) {
+      assertEquals("IllegalArgumentException", exception.getClass().getSimpleName());
+    }
   }
 
   @Test

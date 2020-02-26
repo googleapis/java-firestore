@@ -16,10 +16,13 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.LocalFirestoreHelper.Array_Value;
+import static com.google.cloud.firestore.LocalFirestoreHelper.OBJECT_VALUE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -94,6 +97,7 @@ public class ITSystemTest {
   private final SingleField SINGLE_FIELD_OBJECT = LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
   private final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT =
       LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
+  public static final String[] SINGLE_FIELD_ARRAY = {"foo"};
 
   @Rule public TestName testName = new TestName();
 
@@ -1338,6 +1342,32 @@ public class ITSystemTest {
     docRef.update("sum", FieldValue.increment(2.2)).get();
     DocumentSnapshot docSnap = docRef.get().get();
     assertEquals(3.3, (Double) docSnap.get("sum"), DOUBLE_EPSILON);
+  }
+
+  @Test
+  public void getFieldArray() throws ExecutionException, InterruptedException {
+    DocumentReference documentReference = randomColl.add(ALL_SUPPORTED_TYPES_MAP).get();
+    DocumentSnapshot documentSnapshot = documentReference.get().get();
+    assertEquals(
+        SINGLE_FIELD_ARRAY.length, documentSnapshot.getArray(Array_Value).toArray().length);
+    assertArrayEquals(SINGLE_FIELD_ARRAY, documentSnapshot.getArray(Array_Value).toArray());
+    try {
+      documentSnapshot.getArray(OBJECT_VALUE);
+    } catch (IllegalArgumentException expectedException) {
+      assertEquals("IllegalArgumentException", expectedException.getClass().getSimpleName());
+    }
+  }
+
+  @Test
+  public void getFieldMap() throws ExecutionException, InterruptedException {
+    DocumentReference documentReference = randomColl.add(ALL_SUPPORTED_TYPES_MAP).get();
+    DocumentSnapshot documentSnapshot = documentReference.get().get();
+    assertEquals(SINGLE_FIELD_MAP.size(), documentSnapshot.getMap(OBJECT_VALUE).size());
+    try {
+      documentSnapshot.getMap(Array_Value);
+    } catch (IllegalArgumentException expectedException) {
+      assertEquals("IllegalArgumentException", expectedException.getClass().getSimpleName());
+    }
   }
 
   private static Set<String> getIds(

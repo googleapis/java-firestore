@@ -118,10 +118,14 @@ public final class LocalFirestoreHelper {
   public static final Timestamp TIMESTAMP;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
+  public static final String[] SINGLE_FIELD_ARRAY = {"foo"};
 
   public static final Precondition CREATE_PRECONDITION;
 
   public static final Precondition UPDATE_PRECONDITION;
+
+  public static final String OBJECT_VALUE = "objectValue";
+  public static final String Array_Value = "arrayValue";
 
   public static class SingleField {
 

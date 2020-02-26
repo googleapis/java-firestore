@@ -469,6 +469,42 @@ public class DocumentSnapshot {
   }
 
   /**
+   * Returns the value of the field as an array.
+   *
+   * @param field The path to the field.
+   * @throws IllegalArgumentException if the value is not an array.
+   * @return The value of the field as an array.
+   */
+  @Nullable
+  public <T> List<T> getArray(@Nonnull String field) {
+    if (field == null) {
+      return null;
+    }
+    Object fieldValue = get(field);
+    Preconditions.checkArgument(
+        fieldValue instanceof List, "The field value at  " + field + " is not an array.");
+    return (List<T>) fieldValue;
+  }
+
+  /**
+   * Returns the value of the field as a Map.
+   *
+   * @param field The path to the field.
+   * @throws IllegalArgumentException if the value is not a Map.
+   * @return The value of the field as a Map.
+   */
+  @Nullable
+  public <T> Map<String, T> getMap(@Nonnull String field) {
+    if (field == null) {
+      return null;
+    }
+    Object fieldValue = get(field);
+    Preconditions.checkArgument(
+        fieldValue instanceof Map, "The field value at " + field + " is not a map");
+    return (Map<String, T>) fieldValue;
+  }
+
+  /**
    * Returns true if the document's data and path in this DocumentSnapshot equals the provided
    * snapshot.
    *
