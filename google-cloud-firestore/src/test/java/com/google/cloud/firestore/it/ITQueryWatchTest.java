@@ -140,10 +140,10 @@ public final class ITQueryWatchTest {
   }
 
   /*
-   Attach a listener to a query with empty results.
-   Create a new document that matches the query.
-   Verify newly created document results in an ADDED event.
-   */
+  Attach a listener to a query with empty results.
+  Create a new document that matches the query.
+  Verify newly created document results in an ADDED event.
+  */
   @Test
   public void emptyResults_newDocument_ADDED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -169,10 +169,10 @@ public final class ITQueryWatchTest {
   }
 
   /*
-   Attach a listener to a query with empty results.
-   Modify an existing document so that it matches the query.
-   Verify newly created document results in an ADDED event.
-   */
+  Attach a listener to a query with empty results.
+  Modify an existing document so that it matches the query.
+  Verify newly created document results in an ADDED event.
+  */
   @Test
   public void emptyResults_modifiedDocument_ADDED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -207,10 +207,10 @@ public final class ITQueryWatchTest {
   }
 
   /*
-   Attach a listener to a query with non-empty results.
-   Modify an existing document that is part of the results.
-   Verify modified document results in a MODIFIED event.
-   */
+  Attach a listener to a query with non-empty results.
+  Modify an existing document that is part of the results.
+  Verify modified document results in a MODIFIED event.
+  */
   @Test
   public void nonEmptyResults_modifiedDocument_MODIFIED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -247,10 +247,10 @@ public final class ITQueryWatchTest {
   }
 
   /*
-   Attach a listener to a query with non-empty results.
-   Delete an existing document that is part of the results.
-   Verify deleted document results in a REMOVED event.
-   */
+  Attach a listener to a query with non-empty results.
+  Delete an existing document that is part of the results.
+  Verify deleted document results in a REMOVED event.
+  */
   @Test
   public void nonEmptyResults_deletedDocument_REMOVED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -286,10 +286,10 @@ public final class ITQueryWatchTest {
   }
 
   /*
-   Attach a listener to a query with non-empty results.
-   Modify an existing document that is part of the results to no longer match the query.
-   Verify modified document results in a REMOVED event.
-   */
+  Attach a listener to a query with non-empty results.
+  Modify an existing document that is part of the results to no longer match the query.
+  Verify modified document results in a REMOVED event.
+  */
   @Test
   public void nonEmptyResults_modifiedDocument_REMOVED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -343,7 +343,8 @@ public final class ITQueryWatchTest {
     private final CountDownLatch cdl;
     private final EnumMap<DocumentChange.Type, CountDownLatch> cdls;
 
-    EventsCountDownLatch(int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
+    EventsCountDownLatch(
+        int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
       cdl = new CountDownLatch(nonChangeInitial);
       cdls = new EnumMap<>(DocumentChange.Type.class);
       cdls.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitial));
@@ -464,6 +465,7 @@ public final class ITQueryWatchTest {
       void addedIdsIsAnyOf(Set<?> s) {
         Truth.assertWithMessage(debugMessage()).that(addedIds).isEqualTo(s);
       }
+
       void addedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(addedIds).isAnyOf(s1, s2);
       }
@@ -524,7 +526,8 @@ public final class ITQueryWatchTest {
         }
       }
 
-      private static void debugMessage(StringBuilder builder, QueryDocumentSnapshot queryDocumentSnapshot) {
+      private static void debugMessage(
+          StringBuilder builder, QueryDocumentSnapshot queryDocumentSnapshot) {
         if (queryDocumentSnapshot == null) {
           builder.append("null");
         } else {
