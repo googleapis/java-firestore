@@ -99,7 +99,7 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
     } finally {
       registration.remove();
     }
@@ -126,7 +126,7 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
     } finally {
       registration.remove();
     }
@@ -153,9 +153,9 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
       randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
-      listener.eventsCDL.await(DocumentChange.Type.ADDED);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
     } finally {
       registration.remove();
     }
@@ -185,9 +185,9 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
       randomColl.document("doc").update("foo", "bar").get(5, TimeUnit.SECONDS);
-      listener.eventsCDL.await(DocumentChange.Type.ADDED);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
     } finally {
       registration.remove();
     }
@@ -225,9 +225,9 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
       testDoc.update("baz", "baz").get(5, TimeUnit.SECONDS);
-      listener.eventsCDL.await(DocumentChange.Type.MODIFIED);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.MODIFIED);
     } finally {
       registration.remove();
     }
@@ -265,9 +265,9 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
       testDoc.delete().get(5, TimeUnit.SECONDS);
-      listener.eventsCDL.await(DocumentChange.Type.REMOVED);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
     } finally {
       registration.remove();
     }
@@ -304,9 +304,9 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCDL.await();
+      listener.eventsCountDownLatch.await();
       testDoc.set(map("bar", "foo")).get(5, TimeUnit.SECONDS);
-      listener.eventsCDL.await(DocumentChange.Type.REMOVED);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
     } finally {
       registration.remove();
     }
@@ -339,11 +339,11 @@ public final class ITQueryWatchTest {
     }
   }
 
-  private static final class EventsCDL {
+  private static final class EventsCountDownLatch {
     private final CountDownLatch cdl;
     private final EnumMap<DocumentChange.Type, CountDownLatch> cdls;
 
-    EventsCDL(int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
+    EventsCountDownLatch(int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
       cdl = new CountDownLatch(nonChangeInitial);
       cdls = new EnumMap<>(DocumentChange.Type.class);
       cdls.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitial));
@@ -370,7 +370,7 @@ public final class ITQueryWatchTest {
 
   static class QuerySnapshotEventListener implements EventListener<QuerySnapshot> {
     final List<ListenerEvent> receivedEvents;
-    final EventsCDL eventsCDL;
+    final EventsCountDownLatch eventsCountDownLatch;
 
     QuerySnapshotEventListener(int nonChangeInitial) {
       this(nonChangeInitial, 0, 0, 0);
@@ -379,8 +379,8 @@ public final class ITQueryWatchTest {
     QuerySnapshotEventListener(
         int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
       this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
-      this.eventsCDL =
-          new EventsCDL(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
+      this.eventsCountDownLatch =
+          new EventsCountDownLatch(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
     }
 
     @Override
@@ -389,10 +389,10 @@ public final class ITQueryWatchTest {
       if (value != null) {
         List<DocumentChange> documentChanges = value.getDocumentChanges();
         for (DocumentChange dc : documentChanges) {
-          eventsCDL.countDown(dc.getType());
+          eventsCountDownLatch.countDown(dc.getType());
         }
       }
-      eventsCDL.countDown();
+      eventsCountDownLatch.countDown();
     }
 
     ListenerAssertions assertions() {
