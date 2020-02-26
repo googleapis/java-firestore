@@ -35,6 +35,8 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Joiner.MapJoiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -45,6 +47,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -458,28 +461,86 @@ public final class ITQueryWatchTest {
         return documentIds;
       }
 
+      void addedIdsIsAnyOf(Set<?> s) {
+        Truth.assertWithMessage(debugMessage()).that(addedIds).isEqualTo(s);
+      }
       void addedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
-        Truth.assertThat(addedIds).isAnyOf(s1, s2);
+        Truth.assertWithMessage(debugMessage()).that(addedIds).isAnyOf(s1, s2);
       }
 
       void modifiedIdsIsAnyOf(Set<?> s) {
-        Truth.assertThat(modifiedIds).isEqualTo(s);
+        Truth.assertWithMessage(debugMessage()).that(modifiedIds).isEqualTo(s);
       }
 
       void modifiedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
-        Truth.assertThat(modifiedIds).isAnyOf(s1, s2);
+        Truth.assertWithMessage(debugMessage()).that(modifiedIds).isAnyOf(s1, s2);
       }
 
       void removedIdsIsAnyOf(Set<?> s) {
-        Truth.assertThat(removedIds).isEqualTo(s);
+        Truth.assertWithMessage(debugMessage()).that(removedIds).isEqualTo(s);
       }
 
       void removedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
-        Truth.assertThat(removedIds).isAnyOf(s1, s2);
+        Truth.assertWithMessage(debugMessage()).that(removedIds).isAnyOf(s1, s2);
       }
 
       void eventCountIsAnyOf(Range<Integer> range) {
-        Truth.assertThat(receivedEvents.size()).isIn(range);
+        Truth.assertWithMessage(debugMessage()).that(receivedEvents.size()).isIn(range);
+      }
+
+      private String debugMessage() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("events[\n");
+        for (ListenerEvent receivedEvent : receivedEvents) {
+          builder.append("event{");
+          builder.append("error=").append(receivedEvent.error);
+          builder.append(",");
+          builder.append("value=");
+          debugMessage(builder, receivedEvent.value);
+          builder.append("},\n");
+        }
+        builder.append("]");
+        return builder.toString();
+      }
+
+      private static void debugMessage(StringBuilder builder, QuerySnapshot qs) {
+        if (qs == null) {
+          builder.append("null");
+        } else {
+          builder.append("{");
+          List<QueryDocumentSnapshot> documents = qs.getDocuments();
+          builder.append("documents[");
+          for (QueryDocumentSnapshot document : documents) {
+            debugMessage(builder, document);
+          }
+          builder.append("],");
+          List<DocumentChange> changes = qs.getDocumentChanges();
+          builder.append("documentChanges[");
+          for (DocumentChange change : changes) {
+            debugMessage(builder, change.getDocument());
+          }
+          builder.append("]");
+          builder.append("}");
+        }
+      }
+
+      private static void debugMessage(StringBuilder builder, QueryDocumentSnapshot queryDocumentSnapshot) {
+        if (queryDocumentSnapshot == null) {
+          builder.append("null");
+        } else {
+          builder.append("{");
+          builder.append("path=").append(queryDocumentSnapshot.getReference().getPath());
+          builder.append(",");
+          builder.append("data=");
+          debugMessage(builder, queryDocumentSnapshot.getData());
+          builder.append("}");
+        }
+      }
+
+      private static void debugMessage(StringBuilder builder, Map<String, Object> data) {
+        builder.append("{");
+        MAP_JOINER.appendTo(builder, data);
+        builder.append("}");
       }
     }
   }
