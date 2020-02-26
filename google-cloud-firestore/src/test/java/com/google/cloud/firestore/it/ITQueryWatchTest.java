@@ -102,9 +102,9 @@ public final class ITQueryWatchTest {
     }
 
     assertThat(listener.receivedEvents).hasSize(1);
-    ListenerEvent e = listener.receivedEvents.get(0);
-    assertThat(e.error).isNull();
-    QuerySnapshot snap = e.value;
+    ListenerEvent event = listener.receivedEvents.get(0);
+    assertThat(event.error).isNull();
+    QuerySnapshot snap = event.value;
     assertThat(snap).isNotNull();
     assertThat(snap).isEmpty();
     assertThat(snap.getDocumentChanges()).isEmpty();
@@ -131,9 +131,9 @@ public final class ITQueryWatchTest {
     }
 
     assertThat(receivedEvents).hasSize(1);
-    ListenerEvent e = receivedEvents.get(0);
-    assertThat(e.error).isNull();
-    QuerySnapshot snap = e.value;
+    ListenerEvent event = receivedEvents.get(0);
+    assertThat(event.error).isNull();
+    QuerySnapshot snap = event.value;
     assertThat(snap).isNotNull();
     assertThat(snap).hasSize(1);
   }
@@ -196,9 +196,9 @@ public final class ITQueryWatchTest {
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet());
 
-    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
-    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
     assertThat(doc.get("baz")).isEqualTo("baz");
   }
@@ -236,9 +236,9 @@ public final class ITQueryWatchTest {
     la.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
     la.removedIdsIsAnyOf(emptySet());
 
-    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
-    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
     assertThat(doc.get("baz")).isEqualTo("baz");
   }
@@ -276,9 +276,9 @@ public final class ITQueryWatchTest {
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
 
-    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
-    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
   }
 
@@ -315,9 +315,9 @@ public final class ITQueryWatchTest {
     la.modifiedIdsIsAnyOf(emptySet());
     la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
 
-    ListenerEvent e = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
-    QueryDocumentSnapshot doc = e.value.getDocumentChanges().get(0).getDocument();
+    QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
   }
 
