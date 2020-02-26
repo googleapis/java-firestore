@@ -18,6 +18,7 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.Array_Value;
 import static com.google.cloud.firestore.LocalFirestoreHelper.OBJECT_VALUE;
+import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_ARRAY;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -97,7 +98,6 @@ public class ITSystemTest {
   private final SingleField SINGLE_FIELD_OBJECT = LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
   private final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT =
       LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
-  public static final String[] SINGLE_FIELD_ARRAY = {"foo"};
 
   @Rule public TestName testName = new TestName();
 
@@ -1345,7 +1345,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void getFieldArray() throws ExecutionException, InterruptedException {
+  public void testGetFieldArray() throws ExecutionException, InterruptedException {
     DocumentReference documentReference = randomColl.add(ALL_SUPPORTED_TYPES_MAP).get();
     DocumentSnapshot documentSnapshot = documentReference.get().get();
     assertEquals(
@@ -1359,7 +1359,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void getFieldMap() throws ExecutionException, InterruptedException {
+  public void testGetFieldMap() throws ExecutionException, InterruptedException {
     DocumentReference documentReference = randomColl.add(ALL_SUPPORTED_TYPES_MAP).get();
     DocumentSnapshot documentSnapshot = documentReference.get().get();
     assertEquals(SINGLE_FIELD_MAP.size(), documentSnapshot.getMap(OBJECT_VALUE).size());
