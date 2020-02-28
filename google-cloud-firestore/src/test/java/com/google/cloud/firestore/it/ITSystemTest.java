@@ -1354,7 +1354,10 @@ public class ITSystemTest {
     try {
       documentSnapshot.getArray(OBJECT_VALUE);
     } catch (IllegalArgumentException expectedException) {
-      assertEquals("IllegalArgumentException", expectedException.getClass().getSimpleName());
+      assertTrue(
+          expectedException
+              .getMessage()
+              .contains("The field value at  objectValue is not an array."));
     }
   }
 
@@ -1366,7 +1369,8 @@ public class ITSystemTest {
     try {
       documentSnapshot.getMap(Array_Value);
     } catch (IllegalArgumentException expectedException) {
-      assertEquals("IllegalArgumentException", expectedException.getClass().getSimpleName());
+      assertTrue(
+          expectedException.getMessage().contains("The field value at arrayValue is not a map"));
     }
   }
 
