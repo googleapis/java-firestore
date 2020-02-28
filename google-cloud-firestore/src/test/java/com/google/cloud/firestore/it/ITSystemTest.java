@@ -1353,6 +1353,7 @@ public class ITSystemTest {
     assertArrayEquals(SINGLE_FIELD_ARRAY, documentSnapshot.getArray(Array_Value).toArray());
     try {
       documentSnapshot.getArray(OBJECT_VALUE);
+      fail();
     } catch (IllegalArgumentException expectedException) {
       assertTrue(
           expectedException
@@ -1368,6 +1369,7 @@ public class ITSystemTest {
     assertEquals(SINGLE_FIELD_MAP.size(), documentSnapshot.getMap(OBJECT_VALUE).size());
     try {
       documentSnapshot.getMap(Array_Value);
+      fail();
     } catch (IllegalArgumentException expectedException) {
       assertTrue(
           expectedException.getMessage().contains("The field value at arrayValue is not a map"));

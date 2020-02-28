@@ -261,6 +261,7 @@ public class DocumentReferenceTest {
     assertArrayEquals(SINGLE_FIELD_ARRAY, snapshot.getArray(Array_Value).toArray());
     try {
       snapshot.getArray(OBJECT_VALUE);
+      fail();
     } catch (IllegalArgumentException exception) {
       assertTrue(
           exception.getMessage().contains("The field value at  objectValue is not an array."));
@@ -268,6 +269,7 @@ public class DocumentReferenceTest {
     assertEquals(SINGLE_FIELD_MAP.size(), snapshot.getMap(OBJECT_VALUE).size());
     try {
       snapshot.getMap(Array_Value);
+      fail();
     } catch (IllegalArgumentException exception) {
       assertTrue(exception.getMessage().contains("The field value at arrayValue is not a map"));
     }
