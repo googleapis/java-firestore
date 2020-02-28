@@ -264,7 +264,7 @@ public class DocumentReferenceTest {
       fail();
     } catch (IllegalArgumentException exception) {
       assertTrue(
-          exception.getMessage().contains("The field value at  objectValue is not an array."));
+          exception.getMessage().contains("The field value at objectValue is not an array."));
     }
     assertEquals(SINGLE_FIELD_MAP.size(), snapshot.getMap(OBJECT_VALUE).size());
     try {

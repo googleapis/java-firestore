@@ -482,7 +482,7 @@ public class DocumentSnapshot {
     }
     Object fieldValue = get(field);
     Preconditions.checkArgument(
-        fieldValue instanceof List, "The field value at  " + field + " is not an array.");
+        fieldValue instanceof List, "The field value at " + field + " is not an array.");
     return (List<T>) fieldValue;
   }
 

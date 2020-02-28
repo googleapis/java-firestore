@@ -1358,7 +1358,7 @@ public class ITSystemTest {
       assertTrue(
           expectedException
               .getMessage()
-              .contains("The field value at  objectValue is not an array."));
+              .contains("The field value at objectValue is not an array."));
     }
   }
 
