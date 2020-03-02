@@ -99,17 +99,17 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 1));
-    la.addedIdsIsAnyOf(emptySet());
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet());
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
+    listenerAssertions.addedIdsIsAnyOf(emptySet());
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
   /*
@@ -126,17 +126,17 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(1, 1));
-    la.addedIdsIsAnyOf(newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet());
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
+    listenerAssertions.addedIdsIsAnyOf(newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
   /*
@@ -153,19 +153,19 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
       randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(2, 2));
-    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet());
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
+    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
   /*
@@ -185,19 +185,19 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
       randomColl.document("doc").update("foo", "bar").get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(2, 2));
-    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet());
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
+    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet());
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -225,19 +225,19 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
       testDoc.update("baz", "baz").get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.MODIFIED);
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(2, 2));
-    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.removedIdsIsAnyOf(emptySet());
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
+    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.removedIdsIsAnyOf(emptySet());
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -265,19 +265,19 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
       testDoc.delete().get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(2, 2));
-    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
+    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -304,19 +304,19 @@ public final class ITQueryWatchTest {
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
-      listener.eventsCountDownLatch.await();
+      listener.eventsCountDownLatch.awaitInitialEvents();
       testDoc.set(map("bar", "foo")).get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
     } finally {
       registration.remove();
     }
 
-    ListenerAssertions la = listener.assertions();
-    la.noError();
-    la.eventCountIsAnyOf(Range.closed(2, 2));
-    la.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    la.modifiedIdsIsAnyOf(emptySet());
-    la.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
+    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
+    listenerAssertions.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -340,32 +340,37 @@ public final class ITQueryWatchTest {
   }
 
   private static final class EventsCountDownLatch {
-    private final CountDownLatch cdl;
-    private final EnumMap<DocumentChange.Type, CountDownLatch> cdls;
+    private final CountDownLatch initialEventsCountDownLatch;
+    private final EnumMap<DocumentChange.Type, CountDownLatch> eventsCountDownLatches;
 
     EventsCountDownLatch(
-        int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
-      cdl = new CountDownLatch(nonChangeInitial);
-      cdls = new EnumMap<>(DocumentChange.Type.class);
-      cdls.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitial));
-      cdls.put(DocumentChange.Type.MODIFIED, new CountDownLatch(modifiedInitial));
-      cdls.put(DocumentChange.Type.REMOVED, new CountDownLatch(removedInitial));
+        int initialEventCount,
+        int addedInitialCount,
+        int modifiedInitialCount,
+        int removedInitialCount) {
+      initialEventsCountDownLatch = new CountDownLatch(initialEventCount);
+      eventsCountDownLatches = new EnumMap<>(DocumentChange.Type.class);
+      eventsCountDownLatches.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitialCount));
+      eventsCountDownLatches.put(
+          DocumentChange.Type.MODIFIED, new CountDownLatch(modifiedInitialCount));
+      eventsCountDownLatches.put(
+          DocumentChange.Type.REMOVED, new CountDownLatch(removedInitialCount));
     }
 
     void countDown() {
-      cdl.countDown();
+      initialEventsCountDownLatch.countDown();
     }
 
     void countDown(DocumentChange.Type type) {
-      cdls.get(type).countDown();
+      eventsCountDownLatches.get(type).countDown();
     }
 
-    void await() throws InterruptedException {
-      cdl.await(5, TimeUnit.SECONDS);
+    void awaitInitialEvents() throws InterruptedException {
+      initialEventsCountDownLatch.await(5, TimeUnit.SECONDS);
     }
 
     void await(DocumentChange.Type type) throws InterruptedException {
-      cdls.get(type).await(5, TimeUnit.SECONDS);
+      eventsCountDownLatches.get(type).await(5, TimeUnit.SECONDS);
     }
   }
 
@@ -389,8 +394,8 @@ public final class ITQueryWatchTest {
       receivedEvents.add(new ListenerEvent(value, error));
       if (value != null) {
         List<DocumentChange> documentChanges = value.getDocumentChanges();
-        for (DocumentChange dc : documentChanges) {
-          eventsCountDownLatch.countDown(dc.getType());
+        for (DocumentChange docChange : documentChanges) {
+          eventsCountDownLatch.countDown(docChange.getType());
         }
       }
       eventsCountDownLatch.countDown();
