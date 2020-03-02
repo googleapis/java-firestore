@@ -407,14 +407,12 @@ public final class ITQueryWatchTest {
 
     static final class ListenerAssertions {
       private static final MapJoiner MAP_JOINER = Joiner.on(",").withKeyValueSeparator("=");
-      final List<ListenerEvent> receivedEvents;
       private final FluentIterable<ListenerEvent> events;
       private final Set<String> addedIds;
       private final Set<String> modifiedIds;
       private final Set<String> removedIds;
 
       ListenerAssertions(List<ListenerEvent> receivedEvents) {
-        this.receivedEvents = receivedEvents;
         events = FluentIterable.from(receivedEvents);
         List<QuerySnapshot> querySnapshots = getQuerySnapshots(events);
         addedIds = getIds(querySnapshots, DocumentChange.Type.ADDED);
@@ -492,13 +490,13 @@ public final class ITQueryWatchTest {
       }
 
       void eventCountIsAnyOf(Range<Integer> range) {
-        Truth.assertWithMessage(debugMessage()).that(receivedEvents.size()).isIn(range);
+        Truth.assertWithMessage(debugMessage()).that(events.size()).isIn(range);
       }
 
       private String debugMessage() {
         final StringBuilder builder = new StringBuilder();
         builder.append("events[\n");
-        for (ListenerEvent receivedEvent : receivedEvents) {
+        for (ListenerEvent receivedEvent : events) {
           builder.append("event{");
           builder.append("error=").append(receivedEvent.error);
           builder.append(",");
