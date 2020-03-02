@@ -99,7 +99,8 @@ public final class ITQueryWatchTest {
   public void emptyResults() throws InterruptedException {
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -130,7 +131,8 @@ public final class ITQueryWatchTest {
     randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -161,7 +163,8 @@ public final class ITQueryWatchTest {
       throws InterruptedException, TimeoutException, ExecutionException {
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).setAddedEventCount(1).build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -196,7 +199,8 @@ public final class ITQueryWatchTest {
     randomColl.document("doc").set(map("baz", "baz")).get(5, TimeUnit.SECONDS);
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 1, 0, 0);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).setAddedEventCount(1).build();
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
@@ -240,7 +244,11 @@ public final class ITQueryWatchTest {
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 1, 0);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder()
+            .setInitialEventCount(1)
+            .setModifiedEventCount(1)
+            .build();
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
@@ -284,7 +292,11 @@ public final class ITQueryWatchTest {
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder()
+            .setInitialEventCount(1)
+            .setRemovedEventCount(1)
+            .build();
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
@@ -327,7 +339,11 @@ public final class ITQueryWatchTest {
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
-    QuerySnapshotEventListener listener = new QuerySnapshotEventListener(1, 0, 0, 1);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder()
+            .setInitialEventCount(1)
+            .setRemovedEventCount(1)
+            .build();
     List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
@@ -406,15 +422,12 @@ public final class ITQueryWatchTest {
     final List<ListenerEvent> receivedEvents;
     final EventsCountDownLatch eventsCountDownLatch;
 
-    QuerySnapshotEventListener(int nonChangeInitial) {
-      this(nonChangeInitial, 0, 0, 0);
-    }
-
-    QuerySnapshotEventListener(
-        int nonChangeInitial, int addedInitial, int modifiedInitial, int removedInitial) {
+    private QuerySnapshotEventListener(
+        int initialCount, int addedEventCount, int modifiedEventCount, int removedEventCount) {
       this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
       this.eventsCountDownLatch =
-          new EventsCountDownLatch(nonChangeInitial, addedInitial, modifiedInitial, removedInitial);
+          new EventsCountDownLatch(
+              initialCount, addedEventCount, modifiedEventCount, removedEventCount);
     }
 
     @Override
@@ -431,6 +444,45 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions assertions() {
       return new ListenerAssertions(receivedEvents);
+    }
+
+    static Builder builder() {
+      return new Builder();
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    static final class Builder {
+      private int initialEventCount = 0;
+      private int addedEventCount = 0;
+      private int modifiedEventCount = 0;
+      private int removedEventCount = 0;
+
+      private Builder() {}
+
+      Builder setInitialEventCount(int initialEventCount) {
+        this.initialEventCount = initialEventCount;
+        return this;
+      }
+
+      Builder setAddedEventCount(int addedEventCount) {
+        this.addedEventCount = addedEventCount;
+        return this;
+      }
+
+      Builder setModifiedEventCount(int modifiedEventCount) {
+        this.modifiedEventCount = modifiedEventCount;
+        return this;
+      }
+
+      Builder setRemovedEventCount(int removedEventCount) {
+        this.removedEventCount = removedEventCount;
+        return this;
+      }
+
+      public QuerySnapshotEventListener build() {
+        return new QuerySnapshotEventListener(
+            initialEventCount, addedEventCount, modifiedEventCount, removedEventCount);
+      }
     }
 
     static final class ListenerAssertions {
