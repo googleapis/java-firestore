@@ -385,6 +385,8 @@ public final class ITQueryWatchTest {
 
   private static final class EventsCountDownLatch {
     private final CountDownLatch initialEventsCountDownLatch;
+    private final int initialEventCount;
+    private final EnumMap<DocumentChange.Type, Integer> eventsCounts;
     private final EnumMap<DocumentChange.Type, CountDownLatch> eventsCountDownLatches;
 
     EventsCountDownLatch(
@@ -393,6 +395,11 @@ public final class ITQueryWatchTest {
         int modifiedInitialCount,
         int removedInitialCount) {
       initialEventsCountDownLatch = new CountDownLatch(initialEventCount);
+      this.initialEventCount = initialEventCount;
+      eventsCounts = new EnumMap<>(DocumentChange.Type.class);
+      eventsCounts.put(DocumentChange.Type.ADDED, addedInitialCount);
+      eventsCounts.put(DocumentChange.Type.MODIFIED, modifiedInitialCount);
+      eventsCounts.put(DocumentChange.Type.REMOVED, removedInitialCount);
       eventsCountDownLatches = new EnumMap<>(DocumentChange.Type.class);
       eventsCountDownLatches.put(DocumentChange.Type.ADDED, new CountDownLatch(addedInitialCount));
       eventsCountDownLatches.put(
@@ -410,11 +417,12 @@ public final class ITQueryWatchTest {
     }
 
     void awaitInitialEvents() throws InterruptedException {
-      initialEventsCountDownLatch.await(5, TimeUnit.SECONDS);
+      initialEventsCountDownLatch.await(5 * initialEventCount, TimeUnit.SECONDS);
     }
 
     void await(DocumentChange.Type type) throws InterruptedException {
-      eventsCountDownLatches.get(type).await(5, TimeUnit.SECONDS);
+      int count = eventsCounts.get(type);
+      eventsCountDownLatches.get(type).await(5 * count, TimeUnit.SECONDS);
     }
   }
 
