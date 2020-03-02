@@ -87,9 +87,13 @@ public final class ITQueryWatchTest {
     firestore.close();
   }
 
-  /*
-  Attach a listener to a query with empty results.
-  Verify the listener receives an empty event.
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with empty results.
+   *   <li>Verify the listener receives an empty event.
+   * </ol>
    */
   @Test
   public void emptyResults() throws InterruptedException {
@@ -112,9 +116,13 @@ public final class ITQueryWatchTest {
     listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
-  /*
-  Attach a listener to a query with non-empty results.
-  Verify the listener receives an event including the expected document.
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with non-empty results.
+   *   <li>Verify the listener receives an event including the expected document.
+   * </ol>
    */
   @Test
   public void nonEmptyResults() throws InterruptedException, TimeoutException, ExecutionException {
@@ -139,11 +147,15 @@ public final class ITQueryWatchTest {
     listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
-  /*
-  Attach a listener to a query with empty results.
-  Create a new document that matches the query.
-  Verify newly created document results in an ADDED event.
-  */
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with empty results.
+   *   <li>Create a new document that matches the query.
+   *   <li>Verify newly created document results in an ADDED event.
+   * </ol>
+   */
   @Test
   public void emptyResults_newDocument_ADDED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -168,11 +180,15 @@ public final class ITQueryWatchTest {
     listenerAssertions.removedIdsIsAnyOf(emptySet());
   }
 
-  /*
-  Attach a listener to a query with empty results.
-  Modify an existing document so that it matches the query.
-  Verify newly created document results in an ADDED event.
-  */
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with empty results.
+   *   <li>Modify an existing document so that it matches the query.
+   *   <li>Verify newly created document results in an ADDED event.
+   * </ol>
+   */
   @Test
   public void emptyResults_modifiedDocument_ADDED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -206,11 +222,15 @@ public final class ITQueryWatchTest {
     assertThat(doc.get("baz")).isEqualTo("baz");
   }
 
-  /*
-  Attach a listener to a query with non-empty results.
-  Modify an existing document that is part of the results.
-  Verify modified document results in a MODIFIED event.
-  */
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with non-empty results.
+   *   <li>Modify an existing document that is part of the results.
+   *   <li>Verify modified document results in a MODIFIED event.
+   * </ol>
+   */
   @Test
   public void nonEmptyResults_modifiedDocument_MODIFIED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -246,11 +266,15 @@ public final class ITQueryWatchTest {
     assertThat(doc.get("baz")).isEqualTo("baz");
   }
 
-  /*
-  Attach a listener to a query with non-empty results.
-  Delete an existing document that is part of the results.
-  Verify deleted document results in a REMOVED event.
-  */
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with non-empty results.
+   *   <li>Delete an existing document that is part of the results.
+   *   <li>Verify deleted document results in a REMOVED event.
+   * </ol>
+   */
   @Test
   public void nonEmptyResults_deletedDocument_REMOVED()
       throws InterruptedException, TimeoutException, ExecutionException {
@@ -285,11 +309,15 @@ public final class ITQueryWatchTest {
     assertThat(doc.get("foo")).isEqualTo("bar");
   }
 
-  /*
-  Attach a listener to a query with non-empty results.
-  Modify an existing document that is part of the results to no longer match the query.
-  Verify modified document results in a REMOVED event.
-  */
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with non-empty results.
+   *   <li>Modify an existing document that is part of the results to no longer match the query.
+   *   <li>Verify modified document results in a REMOVED event.
+   * </ol>
+   */
   @Test
   public void nonEmptyResults_modifiedDocument_REMOVED()
       throws InterruptedException, TimeoutException, ExecutionException {
