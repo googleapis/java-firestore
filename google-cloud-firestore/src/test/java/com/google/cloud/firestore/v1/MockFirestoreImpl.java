@@ -109,21 +109,6 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   }
 
   @Override
-  public void createDocument(
-      CreateDocumentRequest request, StreamObserver<Document> responseObserver) {
-    Object response = responses.remove();
-    if (response instanceof Document) {
-      requests.add(request);
-      responseObserver.onNext((Document) response);
-      responseObserver.onCompleted();
-    } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
-    } else {
-      responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
-    }
-  }
-
-  @Override
   public void updateDocument(
       UpdateDocumentRequest request, StreamObserver<Document> responseObserver) {
     Object response = responses.remove();
@@ -293,6 +278,21 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     if (response instanceof ListCollectionIdsResponse) {
       requests.add(request);
       responseObserver.onNext((ListCollectionIdsResponse) response);
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError((Exception) response);
+    } else {
+      responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
+    }
+  }
+
+  @Override
+  public void createDocument(
+      CreateDocumentRequest request, StreamObserver<Document> responseObserver) {
+    Object response = responses.remove();
+    if (response instanceof Document) {
+      requests.add(request);
+      responseObserver.onNext((Document) response);
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
       responseObserver.onError((Exception) response);
