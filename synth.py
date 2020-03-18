@@ -117,10 +117,7 @@ firestore_v1beta1 = generate_client(
     include_gapic=False
 )
 
-common_templates = gcp.CommonTemplates()
-templates = common_templates.java_library()
-s.copy(templates, excludes=[
-    '.gitignore',
+java.common_templates(excludes=[
     'README.md',
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
