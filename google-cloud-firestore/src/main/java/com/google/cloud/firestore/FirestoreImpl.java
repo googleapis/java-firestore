@@ -299,13 +299,30 @@ class FirestoreImpl implements Firestore {
       @Nonnull final Transaction.Function<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
     SettableApiFuture<T> resultFuture = SettableApiFuture.create();
+    runTransaction(new TransactionAsyncAdapter<>(updateFunction), resultFuture, transactionOptions);
+    return resultFuture;
+  }
+
+  @Nonnull
+  @Override
+  public <T> ApiFuture<T> runAsyncTransaction(
+      @Nonnull final Transaction.AsyncFunction<T> updateFunction) {
+    return runAsyncTransaction(updateFunction, TransactionOptions.create());
+  }
+
+  @Nonnull
+  @Override
+  public <T> ApiFuture<T> runAsyncTransaction(
+      @Nonnull final Transaction.AsyncFunction<T> updateFunction,
+      @Nonnull TransactionOptions transactionOptions) {
+    SettableApiFuture<T> resultFuture = SettableApiFuture.create();
     runTransaction(updateFunction, resultFuture, transactionOptions);
     return resultFuture;
   }
 
   /** Transaction functions that returns its result in the provided SettableFuture. */
   private <T> void runTransaction(
-      final Transaction.Function<T> transactionCallback,
+      final Transaction.AsyncFunction<T> transactionCallback,
       final SettableApiFuture<T> resultFuture,
       final TransactionOptions options) {
     // span is intentionally not ended here. It will be ended by runTransactionAttempt on success
@@ -317,7 +334,7 @@ class FirestoreImpl implements Firestore {
   }
 
   private <T> void runTransactionAttempt(
-      final Transaction.Function<T> transactionCallback,
+      final Transaction.AsyncFunction<T> transactionCallback,
       final SettableApiFuture<T> resultFuture,
       final TransactionOptions options,
       final Span span) {
@@ -384,7 +401,21 @@ class FirestoreImpl implements Firestore {
                   @Override
                   public void run() {
                     try {
-                      callbackResult.set(transactionCallback.updateCallback(transaction));
+                      ApiFuture<T> updateCallback = transactionCallback.updateCallback(transaction);
+                      ApiFutures.addCallback(
+                          updateCallback,
+                          new ApiFutureCallback<T>() {
+                            @Override
+                            public void onFailure(Throwable t) {
+                              callbackResult.setException(t);
+                            }
+
+                            @Override
+                            public void onSuccess(T result) {
+                              callbackResult.set(result);
+                            }
+                          },
+                          MoreExecutors.directExecutor());
                     } catch (Throwable t) {
                       callbackResult.setException(t);
                     }
@@ -493,5 +524,24 @@ class FirestoreImpl implements Firestore {
   public void close() throws Exception {
     firestoreClient.close();
     closed = true;
+  }
+
+  private static class TransactionAsyncAdapter<T> implements Transaction.AsyncFunction<T> {
+    private final Transaction.Function<T> syncFunction;
+
+    public TransactionAsyncAdapter(Transaction.Function<T> syncFunction) {
+      this.syncFunction = syncFunction;
+    }
+
+    @Override
+    public ApiFuture<T> updateCallback(Transaction transaction) {
+      SettableApiFuture<T> callbackResult = SettableApiFuture.create();
+      try {
+        callbackResult.set(syncFunction.updateCallback(transaction));
+      } catch (Throwable e) {
+        callbackResult.setException(e);
+      }
+      return callbackResult;
+    }
   }
 }
