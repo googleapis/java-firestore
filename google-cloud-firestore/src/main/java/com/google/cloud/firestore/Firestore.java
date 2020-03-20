@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Represents a Firestore Database and is the entry point for all Firestore operations */
+@InternalExtensionOnly
 public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /**
