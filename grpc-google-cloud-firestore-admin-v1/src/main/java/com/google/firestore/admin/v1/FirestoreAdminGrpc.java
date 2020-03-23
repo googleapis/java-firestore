@@ -31,7 +31,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  * </pre>
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.10.0)",
+    value = "by gRPC proto compiler",
     comments = "Source: google/firestore/admin/v1/firestore_admin.proto")
 public final class FirestoreAdminGrpc {
 
@@ -40,26 +40,18 @@ public final class FirestoreAdminGrpc {
   public static final String SERVICE_NAME = "google.firestore.admin.v1.FirestoreAdmin";
 
   // Static method descriptors that strictly reflect the proto.
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getCreateIndexMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.CreateIndexRequest, com.google.longrunning.Operation>
-      METHOD_CREATE_INDEX = getCreateIndexMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.CreateIndexRequest, com.google.longrunning.Operation>
       getCreateIndexMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CreateIndex",
+      requestType = com.google.firestore.admin.v1.CreateIndexRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.CreateIndexRequest, com.google.longrunning.Operation>
       getCreateIndexMethod() {
-    return getCreateIndexMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.CreateIndexRequest, com.google.longrunning.Operation>
-      getCreateIndexMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.CreateIndexRequest, com.google.longrunning.Operation>
         getCreateIndexMethod;
@@ -73,9 +65,7 @@ public final class FirestoreAdminGrpc {
                           com.google.longrunning.Operation>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "CreateIndex"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CreateIndex"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -93,30 +83,20 @@ public final class FirestoreAdminGrpc {
     return getCreateIndexMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getListIndexesMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ListIndexesRequest,
-          com.google.firestore.admin.v1.ListIndexesResponse>
-      METHOD_LIST_INDEXES = getListIndexesMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ListIndexesRequest,
           com.google.firestore.admin.v1.ListIndexesResponse>
       getListIndexesMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ListIndexes",
+      requestType = com.google.firestore.admin.v1.ListIndexesRequest.class,
+      responseType = com.google.firestore.admin.v1.ListIndexesResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ListIndexesRequest,
           com.google.firestore.admin.v1.ListIndexesResponse>
       getListIndexesMethod() {
-    return getListIndexesMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ListIndexesRequest,
-          com.google.firestore.admin.v1.ListIndexesResponse>
-      getListIndexesMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.ListIndexesRequest,
             com.google.firestore.admin.v1.ListIndexesResponse>
@@ -131,9 +111,7 @@ public final class FirestoreAdminGrpc {
                           com.google.firestore.admin.v1.ListIndexesResponse>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "ListIndexes"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ListIndexes"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -152,26 +130,18 @@ public final class FirestoreAdminGrpc {
     return getListIndexesMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getGetIndexMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.GetIndexRequest, com.google.firestore.admin.v1.Index>
-      METHOD_GET_INDEX = getGetIndexMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetIndexRequest, com.google.firestore.admin.v1.Index>
       getGetIndexMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetIndex",
+      requestType = com.google.firestore.admin.v1.GetIndexRequest.class,
+      responseType = com.google.firestore.admin.v1.Index.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetIndexRequest, com.google.firestore.admin.v1.Index>
       getGetIndexMethod() {
-    return getGetIndexMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.GetIndexRequest, com.google.firestore.admin.v1.Index>
-      getGetIndexMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.GetIndexRequest, com.google.firestore.admin.v1.Index>
         getGetIndexMethod;
@@ -185,9 +155,7 @@ public final class FirestoreAdminGrpc {
                           com.google.firestore.admin.v1.Index>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "GetIndex"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetIndex"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -203,26 +171,18 @@ public final class FirestoreAdminGrpc {
     return getGetIndexMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getDeleteIndexMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
-      METHOD_DELETE_INDEX = getDeleteIndexMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
       getDeleteIndexMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeleteIndex",
+      requestType = com.google.firestore.admin.v1.DeleteIndexRequest.class,
+      responseType = com.google.protobuf.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
       getDeleteIndexMethod() {
-    return getDeleteIndexMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
-      getDeleteIndexMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
         getDeleteIndexMethod;
@@ -235,9 +195,7 @@ public final class FirestoreAdminGrpc {
                       .<com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "DeleteIndex"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeleteIndex"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -255,26 +213,18 @@ public final class FirestoreAdminGrpc {
     return getDeleteIndexMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getGetFieldMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.GetFieldRequest, com.google.firestore.admin.v1.Field>
-      METHOD_GET_FIELD = getGetFieldMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetFieldRequest, com.google.firestore.admin.v1.Field>
       getGetFieldMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetField",
+      requestType = com.google.firestore.admin.v1.GetFieldRequest.class,
+      responseType = com.google.firestore.admin.v1.Field.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetFieldRequest, com.google.firestore.admin.v1.Field>
       getGetFieldMethod() {
-    return getGetFieldMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.GetFieldRequest, com.google.firestore.admin.v1.Field>
-      getGetFieldMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.GetFieldRequest, com.google.firestore.admin.v1.Field>
         getGetFieldMethod;
@@ -288,9 +238,7 @@ public final class FirestoreAdminGrpc {
                           com.google.firestore.admin.v1.Field>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "GetField"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetField"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -306,26 +254,18 @@ public final class FirestoreAdminGrpc {
     return getGetFieldMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getUpdateFieldMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.UpdateFieldRequest, com.google.longrunning.Operation>
-      METHOD_UPDATE_FIELD = getUpdateFieldMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.UpdateFieldRequest, com.google.longrunning.Operation>
       getUpdateFieldMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdateField",
+      requestType = com.google.firestore.admin.v1.UpdateFieldRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.UpdateFieldRequest, com.google.longrunning.Operation>
       getUpdateFieldMethod() {
-    return getUpdateFieldMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.UpdateFieldRequest, com.google.longrunning.Operation>
-      getUpdateFieldMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.UpdateFieldRequest, com.google.longrunning.Operation>
         getUpdateFieldMethod;
@@ -339,9 +279,7 @@ public final class FirestoreAdminGrpc {
                           com.google.longrunning.Operation>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "UpdateField"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "UpdateField"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -359,30 +297,20 @@ public final class FirestoreAdminGrpc {
     return getUpdateFieldMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getListFieldsMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ListFieldsRequest,
-          com.google.firestore.admin.v1.ListFieldsResponse>
-      METHOD_LIST_FIELDS = getListFieldsMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ListFieldsRequest,
           com.google.firestore.admin.v1.ListFieldsResponse>
       getListFieldsMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ListFields",
+      requestType = com.google.firestore.admin.v1.ListFieldsRequest.class,
+      responseType = com.google.firestore.admin.v1.ListFieldsResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ListFieldsRequest,
           com.google.firestore.admin.v1.ListFieldsResponse>
       getListFieldsMethod() {
-    return getListFieldsMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ListFieldsRequest,
-          com.google.firestore.admin.v1.ListFieldsResponse>
-      getListFieldsMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.ListFieldsRequest,
             com.google.firestore.admin.v1.ListFieldsResponse>
@@ -397,9 +325,7 @@ public final class FirestoreAdminGrpc {
                           com.google.firestore.admin.v1.ListFieldsResponse>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "ListFields"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ListFields"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -416,26 +342,18 @@ public final class FirestoreAdminGrpc {
     return getListFieldsMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getExportDocumentsMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ExportDocumentsRequest, com.google.longrunning.Operation>
-      METHOD_EXPORT_DOCUMENTS = getExportDocumentsMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ExportDocumentsRequest, com.google.longrunning.Operation>
       getExportDocumentsMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ExportDocuments",
+      requestType = com.google.firestore.admin.v1.ExportDocumentsRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ExportDocumentsRequest, com.google.longrunning.Operation>
       getExportDocumentsMethod() {
-    return getExportDocumentsMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ExportDocumentsRequest, com.google.longrunning.Operation>
-      getExportDocumentsMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.ExportDocumentsRequest, com.google.longrunning.Operation>
         getExportDocumentsMethod;
@@ -449,9 +367,7 @@ public final class FirestoreAdminGrpc {
                           com.google.longrunning.Operation>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "ExportDocuments"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ExportDocuments"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -469,26 +385,18 @@ public final class FirestoreAdminGrpc {
     return getExportDocumentsMethod;
   }
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  @java.lang.Deprecated // Use {@link #getImportDocumentsMethod()} instead.
-  public static final io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ImportDocumentsRequest, com.google.longrunning.Operation>
-      METHOD_IMPORT_DOCUMENTS = getImportDocumentsMethodHelper();
-
   private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ImportDocumentsRequest, com.google.longrunning.Operation>
       getImportDocumentsMethod;
 
-  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ImportDocuments",
+      requestType = com.google.firestore.admin.v1.ImportDocumentsRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.ImportDocumentsRequest, com.google.longrunning.Operation>
       getImportDocumentsMethod() {
-    return getImportDocumentsMethodHelper();
-  }
-
-  private static io.grpc.MethodDescriptor<
-          com.google.firestore.admin.v1.ImportDocumentsRequest, com.google.longrunning.Operation>
-      getImportDocumentsMethodHelper() {
     io.grpc.MethodDescriptor<
             com.google.firestore.admin.v1.ImportDocumentsRequest, com.google.longrunning.Operation>
         getImportDocumentsMethod;
@@ -502,9 +410,7 @@ public final class FirestoreAdminGrpc {
                           com.google.longrunning.Operation>
                           newBuilder()
                       .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-                      .setFullMethodName(
-                          generateFullMethodName(
-                              "google.firestore.admin.v1.FirestoreAdmin", "ImportDocuments"))
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ImportDocuments"))
                       .setSampledToLocalTracing(true)
                       .setRequestMarshaller(
                           io.grpc.protobuf.ProtoUtils.marshaller(
@@ -524,19 +430,43 @@ public final class FirestoreAdminGrpc {
 
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreAdminStub newStub(io.grpc.Channel channel) {
-    return new FirestoreAdminStub(channel);
+    io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminStub> factory =
+        new io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminStub>() {
+          @java.lang.Override
+          public FirestoreAdminStub newStub(
+              io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+            return new FirestoreAdminStub(channel, callOptions);
+          }
+        };
+    return FirestoreAdminStub.newStub(factory, channel);
   }
 
   /**
    * Creates a new blocking-style stub that supports unary and streaming output calls on the service
    */
   public static FirestoreAdminBlockingStub newBlockingStub(io.grpc.Channel channel) {
-    return new FirestoreAdminBlockingStub(channel);
+    io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminBlockingStub> factory =
+        new io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminBlockingStub>() {
+          @java.lang.Override
+          public FirestoreAdminBlockingStub newStub(
+              io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+            return new FirestoreAdminBlockingStub(channel, callOptions);
+          }
+        };
+    return FirestoreAdminBlockingStub.newStub(factory, channel);
   }
 
   /** Creates a new ListenableFuture-style stub that supports unary calls on the service */
   public static FirestoreAdminFutureStub newFutureStub(io.grpc.Channel channel) {
-    return new FirestoreAdminFutureStub(channel);
+    io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminFutureStub> factory =
+        new io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminFutureStub>() {
+          @java.lang.Override
+          public FirestoreAdminFutureStub newStub(
+              io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+            return new FirestoreAdminFutureStub(channel, callOptions);
+          }
+        };
+    return FirestoreAdminFutureStub.newStub(factory, channel);
   }
 
   /**
@@ -561,7 +491,7 @@ public final class FirestoreAdminGrpc {
     public void createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getCreateIndexMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getCreateIndexMethod(), responseObserver);
     }
 
     /**
@@ -575,7 +505,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListIndexesRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListIndexesResponse>
             responseObserver) {
-      asyncUnimplementedUnaryCall(getListIndexesMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getListIndexesMethod(), responseObserver);
     }
 
     /**
@@ -588,7 +518,7 @@ public final class FirestoreAdminGrpc {
     public void getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Index> responseObserver) {
-      asyncUnimplementedUnaryCall(getGetIndexMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getGetIndexMethod(), responseObserver);
     }
 
     /**
@@ -601,7 +531,7 @@ public final class FirestoreAdminGrpc {
     public void deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
-      asyncUnimplementedUnaryCall(getDeleteIndexMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getDeleteIndexMethod(), responseObserver);
     }
 
     /**
@@ -614,7 +544,7 @@ public final class FirestoreAdminGrpc {
     public void getField(
         com.google.firestore.admin.v1.GetFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Field> responseObserver) {
-      asyncUnimplementedUnaryCall(getGetFieldMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getGetFieldMethod(), responseObserver);
     }
 
     /**
@@ -637,7 +567,7 @@ public final class FirestoreAdminGrpc {
     public void updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getUpdateFieldMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getUpdateFieldMethod(), responseObserver);
     }
 
     /**
@@ -655,7 +585,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListFieldsRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListFieldsResponse>
             responseObserver) {
-      asyncUnimplementedUnaryCall(getListFieldsMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getListFieldsMethod(), responseObserver);
     }
 
     /**
@@ -675,7 +605,7 @@ public final class FirestoreAdminGrpc {
     public void exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getExportDocumentsMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getExportDocumentsMethod(), responseObserver);
     }
 
     /**
@@ -692,64 +622,64 @@ public final class FirestoreAdminGrpc {
     public void importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getImportDocumentsMethodHelper(), responseObserver);
+      asyncUnimplementedUnaryCall(getImportDocumentsMethod(), responseObserver);
     }
 
     @java.lang.Override
     public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
-              getCreateIndexMethodHelper(),
+              getCreateIndexMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.CreateIndexRequest,
                       com.google.longrunning.Operation>(this, METHODID_CREATE_INDEX)))
           .addMethod(
-              getListIndexesMethodHelper(),
+              getListIndexesMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ListIndexesRequest,
                       com.google.firestore.admin.v1.ListIndexesResponse>(
                       this, METHODID_LIST_INDEXES)))
           .addMethod(
-              getGetIndexMethodHelper(),
+              getGetIndexMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.GetIndexRequest,
                       com.google.firestore.admin.v1.Index>(this, METHODID_GET_INDEX)))
           .addMethod(
-              getDeleteIndexMethodHelper(),
+              getDeleteIndexMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>(
                       this, METHODID_DELETE_INDEX)))
           .addMethod(
-              getGetFieldMethodHelper(),
+              getGetFieldMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.GetFieldRequest,
                       com.google.firestore.admin.v1.Field>(this, METHODID_GET_FIELD)))
           .addMethod(
-              getUpdateFieldMethodHelper(),
+              getUpdateFieldMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.UpdateFieldRequest,
                       com.google.longrunning.Operation>(this, METHODID_UPDATE_FIELD)))
           .addMethod(
-              getListFieldsMethodHelper(),
+              getListFieldsMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ListFieldsRequest,
                       com.google.firestore.admin.v1.ListFieldsResponse>(
                       this, METHODID_LIST_FIELDS)))
           .addMethod(
-              getExportDocumentsMethodHelper(),
+              getExportDocumentsMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ExportDocumentsRequest,
                       com.google.longrunning.Operation>(this, METHODID_EXPORT_DOCUMENTS)))
           .addMethod(
-              getImportDocumentsMethodHelper(),
+              getImportDocumentsMethod(),
               asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ImportDocumentsRequest,
@@ -767,11 +697,7 @@ public final class FirestoreAdminGrpc {
    * </pre>
    */
   public static final class FirestoreAdminStub
-      extends io.grpc.stub.AbstractStub<FirestoreAdminStub> {
-    private FirestoreAdminStub(io.grpc.Channel channel) {
-      super(channel);
-    }
-
+      extends io.grpc.stub.AbstractAsyncStub<FirestoreAdminStub> {
     private FirestoreAdminStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
@@ -794,7 +720,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.CreateIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getCreateIndexMethodHelper(), getCallOptions()),
+          getChannel().newCall(getCreateIndexMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -811,7 +737,7 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListIndexesResponse>
             responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getListIndexesMethodHelper(), getCallOptions()),
+          getChannel().newCall(getListIndexesMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -827,9 +753,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.GetIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Index> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getGetIndexMethodHelper(), getCallOptions()),
-          request,
-          responseObserver);
+          getChannel().newCall(getGetIndexMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -843,7 +767,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.DeleteIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getDeleteIndexMethodHelper(), getCallOptions()),
+          getChannel().newCall(getDeleteIndexMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -859,9 +783,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.GetFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Field> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getGetFieldMethodHelper(), getCallOptions()),
-          request,
-          responseObserver);
+          getChannel().newCall(getGetFieldMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -885,7 +807,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.UpdateFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getUpdateFieldMethodHelper(), getCallOptions()),
+          getChannel().newCall(getUpdateFieldMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -906,9 +828,7 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListFieldsResponse>
             responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getListFieldsMethodHelper(), getCallOptions()),
-          request,
-          responseObserver);
+          getChannel().newCall(getListFieldsMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -929,7 +849,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ExportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getExportDocumentsMethodHelper(), getCallOptions()),
+          getChannel().newCall(getExportDocumentsMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -949,7 +869,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ImportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getImportDocumentsMethodHelper(), getCallOptions()),
+          getChannel().newCall(getImportDocumentsMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -964,11 +884,7 @@ public final class FirestoreAdminGrpc {
    * </pre>
    */
   public static final class FirestoreAdminBlockingStub
-      extends io.grpc.stub.AbstractStub<FirestoreAdminBlockingStub> {
-    private FirestoreAdminBlockingStub(io.grpc.Channel channel) {
-      super(channel);
-    }
-
+      extends io.grpc.stub.AbstractBlockingStub<FirestoreAdminBlockingStub> {
     private FirestoreAdminBlockingStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
@@ -990,8 +906,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getCreateIndexMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getCreateIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1003,8 +918,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.ListIndexesResponse listIndexes(
         com.google.firestore.admin.v1.ListIndexesRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getListIndexesMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getListIndexesMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1016,7 +930,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.Index getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request) {
-      return blockingUnaryCall(getChannel(), getGetIndexMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getGetIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1028,8 +942,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.protobuf.Empty deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getDeleteIndexMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getDeleteIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1041,7 +954,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.Field getField(
         com.google.firestore.admin.v1.GetFieldRequest request) {
-      return blockingUnaryCall(getChannel(), getGetFieldMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getGetFieldMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1063,8 +976,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getUpdateFieldMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getUpdateFieldMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1080,8 +992,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
         com.google.firestore.admin.v1.ListFieldsRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getListFieldsMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getListFieldsMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1100,8 +1011,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getExportDocumentsMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getExportDocumentsMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1117,8 +1027,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getImportDocumentsMethodHelper(), getCallOptions(), request);
+      return blockingUnaryCall(getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
     }
   }
 
@@ -1131,11 +1040,7 @@ public final class FirestoreAdminGrpc {
    * </pre>
    */
   public static final class FirestoreAdminFutureStub
-      extends io.grpc.stub.AbstractStub<FirestoreAdminFutureStub> {
-    private FirestoreAdminFutureStub(io.grpc.Channel channel) {
-      super(channel);
-    }
-
+      extends io.grpc.stub.AbstractFutureStub<FirestoreAdminFutureStub> {
     private FirestoreAdminFutureStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
@@ -1158,7 +1063,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         createIndex(com.google.firestore.admin.v1.CreateIndexRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getCreateIndexMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getCreateIndexMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1172,7 +1077,7 @@ public final class FirestoreAdminGrpc {
             com.google.firestore.admin.v1.ListIndexesResponse>
         listIndexes(com.google.firestore.admin.v1.ListIndexesRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getListIndexesMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getListIndexesMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1184,8 +1089,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.admin.v1.Index>
         getIndex(com.google.firestore.admin.v1.GetIndexRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getGetIndexMethodHelper(), getCallOptions()), request);
+      return futureUnaryCall(getChannel().newCall(getGetIndexMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1198,7 +1102,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty>
         deleteIndex(com.google.firestore.admin.v1.DeleteIndexRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getDeleteIndexMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getDeleteIndexMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1210,8 +1114,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.admin.v1.Field>
         getField(com.google.firestore.admin.v1.GetFieldRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getGetFieldMethodHelper(), getCallOptions()), request);
+      return futureUnaryCall(getChannel().newCall(getGetFieldMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1234,7 +1137,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         updateField(com.google.firestore.admin.v1.UpdateFieldRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getUpdateFieldMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getUpdateFieldMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1252,7 +1155,7 @@ public final class FirestoreAdminGrpc {
             com.google.firestore.admin.v1.ListFieldsResponse>
         listFields(com.google.firestore.admin.v1.ListFieldsRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getListFieldsMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getListFieldsMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1272,7 +1175,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         exportDocuments(com.google.firestore.admin.v1.ExportDocumentsRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getExportDocumentsMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getExportDocumentsMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1289,7 +1192,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         importDocuments(com.google.firestore.admin.v1.ImportDocumentsRequest request) {
       return futureUnaryCall(
-          getChannel().newCall(getImportDocumentsMethodHelper(), getCallOptions()), request);
+          getChannel().newCall(getImportDocumentsMethod(), getCallOptions()), request);
     }
   }
 
@@ -1431,15 +1334,15 @@ public final class FirestoreAdminGrpc {
               result =
                   io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
                       .setSchemaDescriptor(new FirestoreAdminFileDescriptorSupplier())
-                      .addMethod(getCreateIndexMethodHelper())
-                      .addMethod(getListIndexesMethodHelper())
-                      .addMethod(getGetIndexMethodHelper())
-                      .addMethod(getDeleteIndexMethodHelper())
-                      .addMethod(getGetFieldMethodHelper())
-                      .addMethod(getUpdateFieldMethodHelper())
-                      .addMethod(getListFieldsMethodHelper())
-                      .addMethod(getExportDocumentsMethodHelper())
-                      .addMethod(getImportDocumentsMethodHelper())
+                      .addMethod(getCreateIndexMethod())
+                      .addMethod(getListIndexesMethod())
+                      .addMethod(getGetIndexMethod())
+                      .addMethod(getDeleteIndexMethod())
+                      .addMethod(getGetFieldMethod())
+                      .addMethod(getUpdateFieldMethod())
+                      .addMethod(getListFieldsMethod())
+                      .addMethod(getExportDocumentsMethod())
+                      .addMethod(getImportDocumentsMethod())
                       .build();
         }
       }
