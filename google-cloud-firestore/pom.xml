@@ -162,7 +162,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-conformance-tests</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -178,7 +178,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.0</version>
         <configuration>
           <show>protected</show>
           <nohelp>true</nohelp>

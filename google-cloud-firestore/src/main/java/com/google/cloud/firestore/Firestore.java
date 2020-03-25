@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Represents a Firestore Database and is the entry point for all Firestore operations */
+@InternalExtensionOnly
 public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /**
@@ -97,6 +99,43 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   <T> ApiFuture<T> runTransaction(
       @Nonnull final Transaction.Function<T> updateFunction,
+      @Nonnull TransactionOptions transactionOptions);
+
+  /**
+   * Executes the given updateFunction and then attempts to commit the changes applied within the
+   * transaction. If any document read within the transaction has changed, the updateFunction will
+   * be retried. If it fails to commit after 5 attempts, the transaction will fail. <br>
+   * <br>
+   * Running a transaction places locks all consumed documents. To unblock other clients, the
+   * Firestore backend automatically releases all locks after 60 seconds of inactivity and fails all
+   * transactions that last longer than 270 seconds (see <a
+   * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
+   * Quotas</a>).
+   *
+   * @param updateFunction The function to execute within the transaction context.
+   * @return An ApiFuture that will be resolved with the result from updateFunction.
+   */
+  @Nonnull
+  <T> ApiFuture<T> runAsyncTransaction(@Nonnull final Transaction.AsyncFunction<T> updateFunction);
+
+  /**
+   * Executes the given updateFunction and then attempts to commit the changes applied within the
+   * transaction. If any document read within the transaction has changed, the updateFunction will
+   * be retried. If it fails to commit after the maxmimum number of attemps specified in
+   * transactionOptions, the transaction will fail. <br>
+   * <br>
+   * Running a transaction places locks all consumed documents. To unblock other clients, the
+   * Firestore backend automatically releases all locks after 60 seconds of inactivity and fails all
+   * transactions that last longer than 270 seconds (see <a
+   * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
+   * Quotas</a>).
+   *
+   * @param updateFunction The function to execute within the transaction context.
+   * @return An ApiFuture that will be resolved with the result from updateFunction.
+   */
+  @Nonnull
+  <T> ApiFuture<T> runAsyncTransaction(
+      @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions);
 
   /**
