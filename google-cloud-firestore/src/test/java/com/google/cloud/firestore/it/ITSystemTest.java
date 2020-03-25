@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_MODEL_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -55,6 +56,7 @@ import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -246,6 +248,11 @@ public class ITSystemTest {
     randomDoc.update(Precondition.updatedAt(writeResult.getUpdateTime()), "foo", "updated").get();
     documentSnapshot = randomDoc.get().get();
     expectedResult.foo = "updated";
+    assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
+    expectedResult.model =
+        ImmutableMap.of("stringValue", (Object) UPDATE_MODEL_OBJECT.getStringValue());
+    randomDoc.update("model", UPDATE_MODEL_OBJECT).get();
+    documentSnapshot = randomDoc.get().get();
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
   }
 
