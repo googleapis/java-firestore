@@ -213,7 +213,7 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
     listenerAssertions.modifiedIdsIsAnyOf(emptyList());
     listenerAssertions.removedIdsIsAnyOf(emptyList());
 

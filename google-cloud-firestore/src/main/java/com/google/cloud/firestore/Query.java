@@ -789,8 +789,8 @@ public class Query {
   /**
    * Creates and returns a new Query that only returns the last matching documents.
    *
-   * <p>You must specify at least one orderBy clause for limitToLast queries, otherwise an exception
-   * will be thrown during execution.
+   * <p>You must specify at least one orderBy clause for limitToLast queries, otherwise an {@link
+   * java.lang.IllegalStateException} will be thrown during execution.
    *
    * <p>Results for limitToLast queries cannot be streamed via the {@link
    * #stream(ApiStreamObserver)} API.
