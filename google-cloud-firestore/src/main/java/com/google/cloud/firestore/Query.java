@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.EQUAL;
@@ -182,6 +183,12 @@ public class Query {
     }
   }
 
+  /** Denotes whether a provided limit is applied to the beginning or the end of the result set. */
+  enum LimitType {
+    First,
+    Last
+  }
+
   /** Options that define a Firestore Query. */
   @AutoValue
   abstract static class QueryOptions {
@@ -193,6 +200,8 @@ public class Query {
     abstract boolean getAllDescendants();
 
     abstract @Nullable Integer getLimit();
+
+    abstract @Nullable LimitType getLimitType();
 
     abstract @Nullable Integer getOffset();
 
@@ -225,6 +234,8 @@ public class Query {
       abstract Builder setAllDescendants(boolean value);
 
       abstract Builder setLimit(Integer value);
+
+      abstract Builder setLimitType(LimitType value);
 
       abstract Builder setOffset(Integer value);
 
@@ -764,15 +775,33 @@ public class Query {
   }
 
   /**
-   * Creates and returns a new Query that's additionally limited to only return up to the specified
-   * number of documents.
+   * Creates and returns a new Query that only returns the first matching documents.
    *
    * @param limit The maximum number of items to return.
    * @return The created Query.
    */
   @Nonnull
   public Query limit(int limit) {
-    return new Query(firestore, options.toBuilder().setLimit(limit).build());
+    return new Query(
+        firestore, options.toBuilder().setLimit(limit).setLimitType(LimitType.First).build());
+  }
+
+  /**
+   * Creates and returns a new Query that only returns the last matching documents.
+   *
+   * <p>You must specify at least one orderBy clause for limitToLast queries, otherwise an exception
+   * will be thrown during execution.
+   *
+   * <p>Results for limitToLast queries cannot be streamed via the {@link
+   * #stream(ApiStreamObserver)} API.
+   *
+   * @param limit The maximum number of items to return.
+   * @return The created Query.
+   */
+  @Nonnull
+  public Query limitToLast(int limit) {
+    return new Query(
+        firestore, options.toBuilder().setLimit(limit).setLimitType(LimitType.Last).build());
   }
 
   /**
@@ -1004,8 +1033,22 @@ public class Query {
 
     if (!options.getFieldOrders().isEmpty()) {
       for (FieldOrder order : options.getFieldOrders()) {
-        structuredQuery.addOrderBy(order.toProto());
+        if (LimitType.Last.equals(options.getLimitType())) {
+          // Flip the orderBy directions since we want the last results
+          order =
+              new FieldOrder(
+                  order.fieldPath,
+                  order.direction.equals(Direction.ASCENDING)
+                      ? Direction.DESCENDING
+                      : Direction.ASCENDING);
+          structuredQuery.addOrderBy(order.toProto());
+        } else {
+          structuredQuery.addOrderBy(order.toProto());
+        }
       }
+    } else if (LimitType.Last.equals(options.getLimitType())) {
+      throw new IllegalStateException(
+          "limitToLast() queries require specifying at least one orderBy() clause.");
     }
 
     if (!options.getFieldProjections().isEmpty()) {
@@ -1021,11 +1064,33 @@ public class Query {
     }
 
     if (options.getStartCursor() != null) {
-      structuredQuery.setStartAt(options.getStartCursor());
+      if (LimitType.Last.equals(options.getLimitType())) {
+        // Swap the cursors to match the flipped query ordering.
+        Cursor cursor =
+            options
+                .getStartCursor()
+                .toBuilder()
+                .setBefore(!options.getStartCursor().getBefore())
+                .build();
+        structuredQuery.setEndAt(cursor);
+      } else {
+        structuredQuery.setStartAt(options.getStartCursor());
+      }
     }
 
     if (options.getEndCursor() != null) {
-      structuredQuery.setEndAt(options.getEndCursor());
+      if (LimitType.Last.equals(options.getLimitType())) {
+        // Swap the cursors to match the flipped query ordering.
+        Cursor cursor =
+            options
+                .getEndCursor()
+                .toBuilder()
+                .setBefore(!options.getEndCursor().getBefore())
+                .build();
+        structuredQuery.setStartAt(cursor);
+      } else {
+        structuredQuery.setEndAt(options.getEndCursor());
+      }
     }
 
     return structuredQuery;
@@ -1037,7 +1102,12 @@ public class Query {
    * @param responseObserver The observer to be notified when results arrive.
    */
   public void stream(@Nonnull final ApiStreamObserver<DocumentSnapshot> responseObserver) {
-    stream(
+    Preconditions.checkState(
+        !LimitType.Last.equals(Query.this.options.getLimitType()),
+        "Query results for queries that include limitToLast() constraints cannot be streamed. "
+            + "Use Query.get() instead.");
+
+    internalStream(
         new QuerySnapshotObserver() {
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
@@ -1073,7 +1143,7 @@ public class Query {
     }
   }
 
-  private void stream(
+  private void internalStream(
       final QuerySnapshotObserver documentObserver, @Nullable ByteString transactionId) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
@@ -1178,7 +1248,7 @@ public class Query {
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
-    stream(
+    internalStream(
         new QuerySnapshotObserver() {
           List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
@@ -1194,8 +1264,14 @@ public class Query {
 
           @Override
           public void onCompleted() {
+            // The results for limitToLast queries need to be flipped since we reversed the
+            // ordering constraints before sending the query to the backend.
+            List<QueryDocumentSnapshot> resultView =
+                LimitType.Last.equals(Query.this.options.getLimitType())
+                    ? reverse(documentSnapshots)
+                    : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), documentSnapshots);
+                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
             result.set(querySnapshot);
           }
         },

@@ -356,12 +356,22 @@ public class ITSystemTest {
 
   @Test
   public void limitQuery() throws Exception {
-    addDocument("foo", "bar");
-    addDocument("foo", "bar");
+    setDocument("doc1", Collections.singletonMap("counter", (Object) 1));
+    setDocument("doc2", Collections.singletonMap("counter", (Object) 2));
+    setDocument("doc3", Collections.singletonMap("counter", (Object) 3));
 
-    QuerySnapshot querySnapshot = randomColl.limit(1).get().get();
-    assertEquals(1, querySnapshot.size());
-    assertEquals("bar", querySnapshot.getDocuments().get(0).get("foo"));
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limit(2).get().get();
+    assertEquals(asList("doc1", "doc2"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void limitToLastQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", (Object) 1));
+    setDocument("doc2", Collections.singletonMap("counter", (Object) 2));
+    setDocument("doc3", Collections.singletonMap("counter", (Object) 3));
+
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limitToLast(2).get().get();
+    assertEquals(asList("doc2", "doc3"), querySnapshotToIds(querySnapshot));
   }
 
   @Test
