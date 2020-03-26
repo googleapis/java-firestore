@@ -1,5 +1,5 @@
 {
-  "updateTime": "2020-03-26T03:22:20.679680Z",
+  "updateTime": "2020-03-26T03:27:35.869486Z",
   "sources": [
     {
       "git": {
@@ -7,6 +7,13 @@
         "remote": "https://github.com/googleapis/googleapis.git",
         "sha": "d4aa417ed2bba89c2d216900282bddfdafef6128",
         "internalRef": "303010132"
+      }
+    },
+    {
+      "git": {
+        "name": "synthtool",
+        "remote": "https://github.com/googleapis/synthtool.git",
+        "sha": "e36822bfa0acb355502dab391b8ef9c4f30208d8"
       }
     }
   ],
@@ -25,6 +32,15 @@
         "source": "googleapis",
         "apiName": "firestore",
         "apiVersion": "v1",
+        "language": "java",
+        "generator": "bazel"
+      }
+    },
+    {
+      "client": {
+        "source": "googleapis",
+        "apiName": "firestore",
+        "apiVersion": "v1beta1",
         "language": "java",
         "generator": "bazel"
       }

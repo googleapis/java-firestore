@@ -137,7 +137,7 @@ s.replace(
 s.replace(
   "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
   "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "* @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead\n */\n@Generated(\"by gapic-generator\")"
+  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead\n */\n@Generated(\"by gapic-generator\")"
 )
 s.replace(
   "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
@@ -146,6 +146,6 @@ s.replace(
 )
 s.replace(
   "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
-  " \\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "* @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
+  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
+  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
 )
