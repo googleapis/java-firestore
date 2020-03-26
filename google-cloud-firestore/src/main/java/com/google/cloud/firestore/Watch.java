@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import com.google.api.core.CurrentMillisClock;
 import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
-import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -49,7 +48,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nullable;
-import org.threeten.bp.Duration;
 
 /**
  * Watch provides listen functionality and exposes snapshot listeners. It can be used with any valid
@@ -65,18 +63,6 @@ class Watch implements ApiStreamObserver<ListenResponse> {
    * stream. The actual target ID we use is arbitrary.
    */
   private static final int WATCH_TARGET_ID = 0x1;
-
-  private static RetrySettings RETRY_SETTINGS =
-      RetrySettings.newBuilder()
-          // The initial backoff time in seconds after an error.
-          // Set to 1s according to https://cloud.google.com/apis/design/errors.
-          .setInitialRetryDelay(Duration.ofSeconds(1))
-          // The maximum backoff time in minutes.
-          .setMaxRetryDelay(Duration.ofMinutes(1))
-          // The factor to increase the backup by after each failed attempt.
-          .setRetryDelayMultiplier(1.5)
-          .setJittered(true)
-          .build();
 
   private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
@@ -138,7 +124,8 @@ class Watch implements ApiStreamObserver<ListenResponse> {
     this.query = query;
     this.comparator = query.comparator();
     this.backoff =
-        new ExponentialRetryAlgorithm(RETRY_SETTINGS, CurrentMillisClock.getDefaultClock());
+        new ExponentialRetryAlgorithm(
+            firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.firestoreExecutor = firestore.getClient().getExecutor();
     this.isActive = new AtomicBoolean();
     this.nextAttempt = backoff.createFirstAttempt();

@@ -37,12 +37,16 @@ public final class FirestoreException extends BaseGrpcServiceException {
     this.status = status;
   }
 
-  private FirestoreException(IOException exception, boolean retryable) {
-    super(exception, retryable);
+  private FirestoreException(String reason, ApiException exception) {
+    super(
+        reason,
+        exception,
+        exception.getStatusCode().getCode().getHttpStatusCode(),
+        exception.isRetryable());
   }
 
-  private FirestoreException(ApiException exception) {
-    super(exception);
+  private FirestoreException(IOException exception, boolean retryable) {
+    super(exception, retryable);
   }
 
   /**
@@ -91,7 +95,16 @@ public final class FirestoreException extends BaseGrpcServiceException {
    * @return The FirestoreException
    */
   static FirestoreException apiException(ApiException exception) {
-    return new FirestoreException(exception);
+    return new FirestoreException(exception.getMessage(), exception);
+  }
+
+  /**
+   * Creates a FirestoreException from an ApiException.
+   *
+   * @return The FirestoreException
+   */
+  static FirestoreException apiException(ApiException exception, String message) {
+    return new FirestoreException(message, exception);
   }
 
   @InternalApi

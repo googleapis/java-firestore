@@ -530,6 +530,34 @@ public class ITSystemTest {
   }
 
   @Test
+  public void doesNotRetryTransactionsWithFailedPreconditions() {
+    final DocumentReference documentReference = randomColl.document();
+
+    final AtomicInteger attempts = new AtomicInteger();
+
+    ApiFuture<Void> firstTransaction =
+        firestore.runTransaction(
+            new Transaction.Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) {
+                attempts.incrementAndGet();
+                transaction.update(documentReference, "foo", "bar");
+                return null;
+              }
+            });
+
+    try {
+      firstTransaction.get();
+      fail("ApiFuture should fail with ExecutionException");
+    } catch (InterruptedException e) {
+      fail("ApiFuture should fail with ExecutionException");
+    } catch (ExecutionException e) {
+      assertEquals(1, attempts.intValue());
+      assertEquals(404, ((FirestoreException) e.getCause()).getCode());
+    }
+  }
+
+  @Test
   public void successfulTransactionWithContention() throws Exception {
     final DocumentReference documentReference = addDocument("counter", 1);
 

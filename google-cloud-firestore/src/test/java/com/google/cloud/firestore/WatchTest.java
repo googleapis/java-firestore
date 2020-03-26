@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.DATABASE_NAME;
+import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_FIELD_MAP;
@@ -97,7 +98,11 @@ public class WatchTest {
   @Spy
   private FirestoreImpl firestoreMock =
       new FirestoreImpl(
-          FirestoreOptions.newBuilder().setProjectId("test-project").build(), firestoreRpc);
+          FirestoreOptions.newBuilder()
+              .setProjectId("test-project")
+              .setRetrySettings(IMMEDIATE_RETRY_SETTINGS)
+              .build(),
+          firestoreRpc);
 
   @Captor private ArgumentCaptor<ApiStreamObserver<ListenResponse>> streamObserverCapture;
 
