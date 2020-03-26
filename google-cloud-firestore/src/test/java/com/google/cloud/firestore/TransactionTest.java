@@ -34,6 +34,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
@@ -133,6 +134,33 @@ public class TransactionTest {
   }
 
   @Test
+  public void returnsValueAsync() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<String>() {
+              @Override
+              public ApiFuture<String> updateCallback(Transaction transaction) {
+                Assert.assertEquals("user_provided", Thread.currentThread().getName());
+                return ApiFutures.immediateFuture("foo");
+              }
+            },
+            options);
+
+    assertEquals("foo", transaction.get());
+
+    List<Message> requests = requestCapture.getAllValues();
+    assertEquals(2, requests.size());
+
+    assertEquals(begin(), requests.get(0));
+    assertEquals(commit(TRANSACTION_ID), requests.get(1));
+  }
+
+  @Test
   public void canReturnNull() throws Exception {
     doReturn(beginResponse())
         .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
@@ -152,6 +180,28 @@ public class TransactionTest {
             options);
 
     assertEquals(null, transaction.get());
+  }
+
+  @Test
+  public void canReturnNullAsync() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo2")))
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<String>() {
+              @Override
+              public ApiFuture<String> updateCallback(Transaction transaction) {
+                return ApiFutures.immediateFuture(null);
+              }
+            },
+            options);
+
+    assertNull(transaction.get());
   }
 
   @Test
@@ -186,6 +236,37 @@ public class TransactionTest {
   }
 
   @Test
+  public void rollbackOnCallbackErrorAsync() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(rollbackResponse())
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<String>() {
+              @Override
+              public ApiFuture<String> updateCallback(Transaction transaction) {
+                return ApiFutures.immediateFailedFuture(new Exception("Expected exception"));
+              }
+            },
+            options);
+
+    try {
+      transaction.get();
+      fail();
+    } catch (Exception e) {
+      assertTrue(e.getMessage().endsWith("Expected exception"));
+    }
+
+    List<Message> requests = requestCapture.getAllValues();
+    assertEquals(2, requests.size());
+
+    assertEquals(begin(), requests.get(0));
+    assertEquals(rollback(), requests.get(1));
+  }
+
+  @Test
   public void noRollbackOnBeginFailure() throws Exception {
     doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
@@ -196,6 +277,34 @@ public class TransactionTest {
             new Transaction.Function<String>() {
               @Override
               public String updateCallback(Transaction transaction) {
+                fail();
+                return null;
+              }
+            },
+            options);
+
+    try {
+      transaction.get();
+      fail();
+    } catch (Exception e) {
+      assertTrue(e.getMessage().endsWith("Expected exception"));
+    }
+
+    List<Message> requests = requestCapture.getAllValues();
+    assertEquals(1, requests.size());
+  }
+
+  @Test
+  public void noRollbackOnBeginFailureAsync() throws Exception {
+    doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<String>() {
+              @Override
+              public ApiFuture<String> updateCallback(Transaction transaction) {
                 fail();
                 return null;
               }
@@ -329,6 +438,40 @@ public class TransactionTest {
               public DocumentSnapshot updateCallback(Transaction transaction)
                   throws ExecutionException, InterruptedException {
                 return transaction.get(documentReference).get();
+              }
+            },
+            options);
+
+    assertEquals("doc", transaction.get().getId());
+
+    List<Message> requests = requestCapture.getAllValues();
+    assertEquals(3, requests.size());
+
+    assertEquals(begin(), requests.get(0));
+    assertEquals(get(TRANSACTION_ID), requests.get(1));
+    assertEquals(commit(TRANSACTION_ID), requests.get(2));
+  }
+
+  @Test
+  public void getDocumentAsync() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
+        .when(firestoreMock)
+        .streamRequest(
+            requestCapture.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable<Message, Message>>any());
+
+    ApiFuture<DocumentSnapshot> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<DocumentSnapshot>() {
+              @Override
+              public ApiFuture<DocumentSnapshot> updateCallback(Transaction transaction) {
+                return transaction.get(documentReference);
               }
             },
             options);

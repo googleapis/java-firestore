@@ -42,13 +42,23 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       "Firestore transactions require all reads to be executed before all writes";
 
   /**
-   * User callback that takes a Firestore Transaction
+   * User callback that takes a Firestore Transaction.
    *
    * @param <T> The result type of the user callback.
    */
   public interface Function<T> {
 
     T updateCallback(Transaction transaction) throws Exception;
+  }
+
+  /**
+   * User callback that takes a Firestore Async Transaction.
+   *
+   * @param <T> The result type of the user async callback.
+   */
+  public interface AsyncFunction<T> {
+
+    ApiFuture<T> updateCallback(Transaction transaction);
   }
 
   private final ByteString previousTransactionId;

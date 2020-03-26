@@ -89,7 +89,8 @@ import javax.annotation.Generated;
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
  * </code>
  * </pre>
-* @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead
+ *
+ * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead
  */
 @Generated("by gapic-generator")
 @BetaApi

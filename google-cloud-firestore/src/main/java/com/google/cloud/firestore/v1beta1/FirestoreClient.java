@@ -139,6 +139,7 @@ import javax.annotation.Generated;
  *     FirestoreClient.create(firestoreSettings);
  * </code>
  * </pre>
+ *
  * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead
  */
 @Generated("by gapic-generator")

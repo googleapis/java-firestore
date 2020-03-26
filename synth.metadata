@@ -1,33 +1,12 @@
 {
-  "updateTime": "2020-02-20T23:44:11.323234Z",
+  "updateTime": "2020-03-26T03:22:20.679680Z",
   "sources": [
-    {
-      "generator": {
-        "name": "artman",
-        "version": "0.45.0",
-        "dockerImage": "googleapis/artman@sha256:6aec9c34db0e4be221cdaf6faba27bdc07cfea846808b3d3b964dfce3a9a0f9b"
-      }
-    },
-    {
-      "git": {
-        "name": ".",
-        "remote": "git@github.com:schmidt-sebastian/java-firestore.git",
-        "sha": "780aca3341bf91563821de2b6a431190bbd25ea5"
-      }
-    },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "3eaaaf8626ce5b0c0bc7eee05e143beffa373b01",
-        "internalRef": "296274723"
-      }
-    },
-    {
-      "template": {
-        "name": "java_library",
-        "origin": "synthtool.gcp",
-        "version": "2020.2.4"
+        "sha": "d4aa417ed2bba89c2d216900282bddfdafef6128",
+        "internalRef": "303010132"
       }
     }
   ],
@@ -38,8 +17,7 @@
         "apiName": "firestore-admin",
         "apiVersion": "v1",
         "language": "java",
-        "generator": "gapic",
-        "config": "google/firestore/admin/artman_firestore_v1.yaml"
+        "generator": "bazel"
       }
     },
     {
@@ -48,18 +26,7 @@
         "apiName": "firestore",
         "apiVersion": "v1",
         "language": "java",
-        "generator": "gapic",
-        "config": "google/firestore/artman_firestore_v1.yaml"
-      }
-    },
-    {
-      "client": {
-        "source": "googleapis",
-        "apiName": "firestore",
-        "apiVersion": "v1beta1",
-        "language": "java",
-        "generator": "gapic",
-        "config": "google/firestore/artman_firestore.yaml"
+        "generator": "bazel"
       }
     }
   ]
