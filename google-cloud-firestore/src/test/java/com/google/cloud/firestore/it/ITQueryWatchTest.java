@@ -127,7 +127,7 @@ public final class ITQueryWatchTest {
   @Test
   public void nonEmptyResults() throws Exception {
     // create a document in our collection that will match the query
-    setDocument("doc", map("foo", (Object) "bar"));
+    setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
@@ -194,7 +194,7 @@ public final class ITQueryWatchTest {
   @Test
   public void emptyResults_modifiedDocument_ADDED() throws Exception {
     // create our "existing non-matching document"
-    DocumentReference testDoc = setDocument("doc", map("baz", (Object) "baz"));
+    DocumentReference testDoc = setDocument("doc", map("baz", "baz"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
@@ -213,7 +213,7 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
     listenerAssertions.modifiedIdsIsAnyOf(emptyList());
     listenerAssertions.removedIdsIsAnyOf(emptyList());
 
@@ -235,7 +235,7 @@ public final class ITQueryWatchTest {
    */
   @Test
   public void nonEmptyResults_modifiedDocument_MODIFIED() throws Exception {
-    DocumentReference testDoc = setDocument("doc", map("foo", (Object) "bar"));
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -280,7 +280,7 @@ public final class ITQueryWatchTest {
    */
   @Test
   public void nonEmptyResults_deletedDocument_REMOVED() throws Exception {
-    DocumentReference testDoc = setDocument("doc", map("foo", (Object) "bar"));
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -324,7 +324,7 @@ public final class ITQueryWatchTest {
    */
   @Test
   public void nonEmptyResults_modifiedDocument_REMOVED() throws Exception {
-    DocumentReference testDoc = setDocument("doc", map("foo", (Object) "bar"));
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -360,9 +360,9 @@ public final class ITQueryWatchTest {
   /** Verifies that QuerySnapshot for limitToLast() queries are ordered correctly. */
   @Test
   public void limitToLast() throws Exception {
-    setDocument("doc1", Collections.singletonMap("counter", (Object) 1));
-    setDocument("doc2", Collections.singletonMap("counter", (Object) 2));
-    setDocument("doc3", Collections.singletonMap("counter", (Object) 3));
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
 
     final Query query = randomColl.orderBy("counter").limitToLast(2);
     QuerySnapshotEventListener listener =
@@ -651,8 +651,7 @@ public final class ITQueryWatchTest {
     }
   }
 
-  private DocumentReference setDocument(String documentId, Map<String, Object> fields)
-      throws Exception {
+  private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {
     DocumentReference documentReference = randomColl.document(documentId);
     documentReference.set(fields).get();
     return documentReference;

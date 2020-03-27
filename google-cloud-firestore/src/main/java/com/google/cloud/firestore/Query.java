@@ -201,7 +201,7 @@ public class Query {
 
     abstract @Nullable Integer getLimit();
 
-    abstract @Nullable LimitType getLimitType();
+    abstract LimitType getLimitType();
 
     abstract @Nullable Integer getOffset();
 
@@ -218,6 +218,7 @@ public class Query {
     static Builder builder() {
       return new AutoValue_Query_QueryOptions.Builder()
           .setAllDescendants(false)
+          .setLimitType(LimitType.First)
           .setFieldOrders(ImmutableList.<FieldOrder>of())
           .setFieldFilters(ImmutableList.<FieldFilter>of())
           .setFieldProjections(ImmutableList.<FieldReference>of());
@@ -789,14 +790,14 @@ public class Query {
   /**
    * Creates and returns a new Query that only returns the last matching documents.
    *
-   * <p>You must specify at least one orderBy clause for limitToLast queries, otherwise an {@link
-   * java.lang.IllegalStateException} will be thrown during execution.
+   * <p>You must specify at least one orderBy clause for limitToLast queries. Otherwise, an {@link
+   * java.lang.IllegalStateException} is thrown during execution.
    *
-   * <p>Results for limitToLast queries cannot be streamed via the {@link
-   * #stream(ApiStreamObserver)} API.
+   * <p>Results for limitToLast() queries are only available once all documents are received. Hence,
+   * limitToLast() queries cannot be streamed via the {@link #stream(ApiStreamObserver)} API.
    *
-   * @param limit The maximum number of items to return.
-   * @return The created Query.
+   * @param limit the maximum number of items to return
+   * @return the created Query
    */
   @Nonnull
   public Query limitToLast(int limit) {
@@ -1033,17 +1034,20 @@ public class Query {
 
     if (!options.getFieldOrders().isEmpty()) {
       for (FieldOrder order : options.getFieldOrders()) {
-        if (LimitType.Last.equals(options.getLimitType())) {
-          // Flip the orderBy directions since we want the last results
-          order =
-              new FieldOrder(
-                  order.fieldPath,
-                  order.direction.equals(Direction.ASCENDING)
-                      ? Direction.DESCENDING
-                      : Direction.ASCENDING);
-          structuredQuery.addOrderBy(order.toProto());
-        } else {
-          structuredQuery.addOrderBy(order.toProto());
+        switch (options.getLimitType()) {
+          case First:
+            structuredQuery.addOrderBy(order.toProto());
+            break;
+          case Last:
+            // Flip the orderBy directions since we want the last results
+            order =
+                new FieldOrder(
+                    order.fieldPath,
+                    order.direction.equals(Direction.ASCENDING)
+                        ? Direction.DESCENDING
+                        : Direction.ASCENDING);
+            structuredQuery.addOrderBy(order.toProto());
+            break;
         }
       }
     } else if (LimitType.Last.equals(options.getLimitType())) {
@@ -1064,32 +1068,38 @@ public class Query {
     }
 
     if (options.getStartCursor() != null) {
-      if (LimitType.Last.equals(options.getLimitType())) {
-        // Swap the cursors to match the flipped query ordering.
-        Cursor cursor =
-            options
-                .getStartCursor()
-                .toBuilder()
-                .setBefore(!options.getStartCursor().getBefore())
-                .build();
-        structuredQuery.setEndAt(cursor);
-      } else {
-        structuredQuery.setStartAt(options.getStartCursor());
+      switch (options.getLimitType()) {
+        case First:
+          structuredQuery.setStartAt(options.getStartCursor());
+          break;
+        case Last:
+          // Swap the cursors to match the flipped query ordering.
+          Cursor cursor =
+              options
+                  .getStartCursor()
+                  .toBuilder()
+                  .setBefore(!options.getStartCursor().getBefore())
+                  .build();
+          structuredQuery.setEndAt(cursor);
+          break;
       }
     }
 
     if (options.getEndCursor() != null) {
-      if (LimitType.Last.equals(options.getLimitType())) {
-        // Swap the cursors to match the flipped query ordering.
-        Cursor cursor =
-            options
-                .getEndCursor()
-                .toBuilder()
-                .setBefore(!options.getEndCursor().getBefore())
-                .build();
-        structuredQuery.setStartAt(cursor);
-      } else {
-        structuredQuery.setEndAt(options.getEndCursor());
+      switch (options.getLimitType()) {
+        case First:
+          structuredQuery.setEndAt(options.getEndCursor());
+          break;
+        case Last:
+          // Swap the cursors to match the flipped query ordering.
+          Cursor cursor =
+              options
+                  .getEndCursor()
+                  .toBuilder()
+                  .setBefore(!options.getEndCursor().getBefore())
+                  .build();
+          structuredQuery.setStartAt(cursor);
+          break;
       }
     }
 
