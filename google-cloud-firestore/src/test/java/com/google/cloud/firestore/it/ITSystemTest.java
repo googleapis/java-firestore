@@ -105,8 +105,7 @@ public class ITSystemTest {
     firestore.close();
   }
 
-  private DocumentReference setDocument(String documentId, Map<String, Object> fields)
-      throws Exception {
+  private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {
     DocumentReference documentReference = randomColl.document(documentId);
     documentReference.set(fields).get();
     return documentReference;
@@ -229,7 +228,7 @@ public class ITSystemTest {
   @Test
   public void mergeDocumentWithServerTimestamp() throws Exception {
     Map<String, Object> originalMap = LocalFirestoreHelper.<String, Object>map("a", "b");
-    Map<String, Object> updateMap = map("c", (Object) FieldValue.serverTimestamp());
+    Map<String, FieldValue> updateMap = map("c", FieldValue.serverTimestamp());
     randomDoc.set(originalMap).get();
     randomDoc.set(updateMap, SetOptions.merge()).get();
     DocumentSnapshot documentSnapshot = randomDoc.get().get();
@@ -356,12 +355,22 @@ public class ITSystemTest {
 
   @Test
   public void limitQuery() throws Exception {
-    addDocument("foo", "bar");
-    addDocument("foo", "bar");
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
 
-    QuerySnapshot querySnapshot = randomColl.limit(1).get().get();
-    assertEquals(1, querySnapshot.size());
-    assertEquals("bar", querySnapshot.getDocuments().get(0).get("foo"));
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limit(2).get().get();
+    assertEquals(asList("doc1", "doc2"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void limitToLastQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limitToLast(2).get().get();
+    assertEquals(asList("doc2", "doc3"), querySnapshotToIds(querySnapshot));
   }
 
   @Test
@@ -950,13 +959,13 @@ public class ITSystemTest {
 
     DocumentReference doc1 = randomColl.document();
     DocumentReference doc2 = randomColl.document();
-    doc1.set(Collections.singletonMap("foo", (Object) FieldValue.arrayUnion("bar"))).get();
-    doc2.set(Collections.singletonMap("foo", (Object) FieldValue.arrayUnion("baz"))).get();
+    doc1.set(Collections.singletonMap("foo", FieldValue.arrayUnion("bar"))).get();
+    doc2.set(Collections.singletonMap("foo", FieldValue.arrayUnion("baz"))).get();
 
     assertEquals(1, containsQuery.get().get().size());
 
-    doc1.set(Collections.singletonMap("foo", (Object) FieldValue.arrayRemove("bar"))).get();
-    doc2.set(Collections.singletonMap("foo", (Object) FieldValue.arrayRemove("baz"))).get();
+    doc1.set(Collections.singletonMap("foo", FieldValue.arrayRemove("bar"))).get();
+    doc2.set(Collections.singletonMap("foo", FieldValue.arrayRemove("baz"))).get();
 
     assertTrue(containsQuery.get().get().isEmpty());
   }
@@ -1085,12 +1094,12 @@ public class ITSystemTest {
 
   @Test
   public void inQueries() throws Exception {
-    setDocument("a", map("zip", (Object) 98101));
-    setDocument("b", map("zip", (Object) 91102));
-    setDocument("c", map("zip", (Object) 98103));
-    setDocument("d", map("zip", (Object) asList(98101)));
-    setDocument("e", map("zip", (Object) asList("98101", map("zip", 98101))));
-    setDocument("f", map("zip", (Object) map("code", 500)));
+    setDocument("a", map("zip", 98101));
+    setDocument("b", map("zip", 91102));
+    setDocument("c", map("zip", 98103));
+    setDocument("d", map("zip", asList(98101)));
+    setDocument("e", map("zip", asList("98101", map("zip", 98101))));
+    setDocument("f", map("zip", map("code", 500)));
 
     QuerySnapshot querySnapshot =
         randomColl.whereIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
@@ -1100,13 +1109,13 @@ public class ITSystemTest {
 
   @Test
   public void arrayContainsAnyQueries() throws Exception {
-    setDocument("a", map("array", (Object) asList(42)));
-    setDocument("b", map("array", (Object) asList("a", 42, "c")));
-    setDocument("c", map("array", (Object) asList(41.999, "42", map("a", 42))));
-    setDocument("d", map("array", (Object) asList(42), "array2", "sigh"));
-    setDocument("e", map("array", (Object) asList(43)));
-    setDocument("f", map("array", (Object) asList(map("a", 42))));
-    setDocument("g", map("array", (Object) 42));
+    setDocument("a", map("array", asList(42)));
+    setDocument("b", map("array", asList("a", 42, "c")));
+    setDocument("c", map("array", asList(41.999, "42", map("a", 42))));
+    setDocument("d", map("array", asList(42), "array2", "sigh"));
+    setDocument("e", map("array", asList(43)));
+    setDocument("f", map("array", asList(map("a", 42))));
+    setDocument("g", map("array", 42));
 
     QuerySnapshot querySnapshot =
         randomColl.whereArrayContainsAny("array", Arrays.<Object>asList(42, 43)).get().get();
@@ -1117,7 +1126,7 @@ public class ITSystemTest {
   @Test
   public void integerIncrement() throws ExecutionException, InterruptedException {
     DocumentReference docRef = randomColl.document();
-    docRef.set(Collections.singletonMap("sum", (Object) 1L)).get();
+    docRef.set(Collections.singletonMap("sum", 1L)).get();
     docRef.update("sum", FieldValue.increment(2)).get();
     DocumentSnapshot docSnap = docRef.get().get();
     assertEquals(3L, docSnap.get("sum"));
@@ -1126,7 +1135,7 @@ public class ITSystemTest {
   @Test
   public void floatIncrement() throws ExecutionException, InterruptedException {
     DocumentReference docRef = randomColl.document();
-    docRef.set(Collections.singletonMap("sum", (Object) 1.1)).get();
+    docRef.set(Collections.singletonMap("sum", 1.1)).get();
     docRef.update("sum", FieldValue.increment(2.2)).get();
     DocumentSnapshot docSnap = docRef.get().get();
     assertEquals(3.3, (Double) docSnap.get("sum"), DOUBLE_EPSILON);

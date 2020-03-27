@@ -17,10 +17,11 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
-import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
-import static java.util.Collections.emptySet;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
@@ -45,10 +46,8 @@ import com.google.common.truth.Truth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -112,9 +111,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
-    listenerAssertions.addedIdsIsAnyOf(emptySet());
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet());
+    listenerAssertions.addedIdsIsAnyOf(emptyList());
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
   }
 
   /**
@@ -126,9 +125,9 @@ public final class ITQueryWatchTest {
    * </ol>
    */
   @Test
-  public void nonEmptyResults() throws InterruptedException, TimeoutException, ExecutionException {
+  public void nonEmptyResults() throws Exception {
     // create a document in our collection that will match the query
-    randomColl.document("doc").set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+    setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
@@ -144,9 +143,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
-    listenerAssertions.addedIdsIsAnyOf(newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet());
+    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
   }
 
   /**
@@ -178,9 +177,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet());
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
   }
 
   /**
@@ -193,10 +192,9 @@ public final class ITQueryWatchTest {
    * </ol>
    */
   @Test
-  public void emptyResults_modifiedDocument_ADDED()
-      throws InterruptedException, TimeoutException, ExecutionException {
+  public void emptyResults_modifiedDocument_ADDED() throws Exception {
     // create our "existing non-matching document"
-    randomColl.document("doc").set(map("baz", "baz")).get(5, TimeUnit.SECONDS);
+    DocumentReference testDoc = setDocument("doc", map("baz", "baz"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
@@ -206,7 +204,7 @@ public final class ITQueryWatchTest {
 
     try {
       listener.eventsCountDownLatch.awaitInitialEvents();
-      randomColl.document("doc").update("foo", "bar").get(5, TimeUnit.SECONDS);
+      testDoc.update("foo", "bar").get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
     } finally {
       registration.remove();
@@ -215,9 +213,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet());
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -236,11 +234,8 @@ public final class ITQueryWatchTest {
    * </ol>
    */
   @Test
-  public void nonEmptyResults_modifiedDocument_MODIFIED()
-      throws InterruptedException, TimeoutException, ExecutionException {
-    DocumentReference testDoc = randomColl.document("doc");
-    // create our "existing non-matching document"
-    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+  public void nonEmptyResults_modifiedDocument_MODIFIED() throws Exception {
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -263,9 +258,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.removedIdsIsAnyOf(emptySet());
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -284,11 +279,8 @@ public final class ITQueryWatchTest {
    * </ol>
    */
   @Test
-  public void nonEmptyResults_deletedDocument_REMOVED()
-      throws InterruptedException, TimeoutException, ExecutionException {
-    DocumentReference testDoc = randomColl.document("doc");
-    // create our "existing non-matching document"
-    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+  public void nonEmptyResults_deletedDocument_REMOVED() throws Exception {
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -311,9 +303,9 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList(), singletonList("doc"));
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
@@ -331,11 +323,8 @@ public final class ITQueryWatchTest {
    * </ol>
    */
   @Test
-  public void nonEmptyResults_modifiedDocument_REMOVED()
-      throws InterruptedException, TimeoutException, ExecutionException {
-    DocumentReference testDoc = randomColl.document("doc");
-    // create our "existing non-matching document"
-    testDoc.set(map("foo", "bar")).get(5, TimeUnit.SECONDS);
+  public void nonEmptyResults_modifiedDocument_REMOVED() throws Exception {
+    DocumentReference testDoc = setDocument("doc", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
     // register the snapshot listener for the query
@@ -358,14 +347,37 @@ public final class ITQueryWatchTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
-    listenerAssertions.addedIdsIsAnyOf(emptySet(), newHashSet("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptySet());
-    listenerAssertions.removedIdsIsAnyOf(emptySet(), newHashSet("doc"));
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList(), singletonList("doc"));
 
     ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
     //noinspection ConstantConditions guarded by "assertNoError" above
     QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
+  }
+
+  /** Verifies that QuerySnapshot for limitToLast() queries are ordered correctly. */
+  @Test
+  public void limitToLast() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    final Query query = randomColl.orderBy("counter").limitToLast(2);
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCountDownLatch.awaitInitialEvents();
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.addedIdsIsAnyOf(emptyList(), asList("doc2", "doc3"));
   }
 
   /**
@@ -496,9 +508,9 @@ public final class ITQueryWatchTest {
     static final class ListenerAssertions {
       private static final MapJoiner MAP_JOINER = Joiner.on(",").withKeyValueSeparator("=");
       private final FluentIterable<ListenerEvent> events;
-      private final Set<String> addedIds;
-      private final Set<String> modifiedIds;
-      private final Set<String> removedIds;
+      private final List<String> addedIds;
+      private final List<String> modifiedIds;
+      private final List<String> removedIds;
 
       ListenerAssertions(List<ListenerEvent> receivedEvents) {
         events = FluentIterable.from(receivedEvents);
@@ -539,9 +551,9 @@ public final class ITQueryWatchTest {
             .toList();
       }
 
-      private static Set<String> getIds(
+      private static List<String> getIds(
           List<QuerySnapshot> querySnapshots, DocumentChange.Type type) {
-        final Set<String> documentIds = new HashSet<>();
+        final List<String> documentIds = new ArrayList<>();
         for (QuerySnapshot querySnapshot : querySnapshots) {
           final List<DocumentChange> changes = querySnapshot.getDocumentChanges();
           for (DocumentChange change : changes) {
@@ -553,27 +565,27 @@ public final class ITQueryWatchTest {
         return documentIds;
       }
 
-      void addedIdsIsAnyOf(Set<?> s) {
+      void addedIdsIsAnyOf(List<?> s) {
         Truth.assertWithMessage(debugMessage()).that(addedIds).isEqualTo(s);
       }
 
-      void addedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+      void addedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(addedIds).isAnyOf(s1, s2);
       }
 
-      void modifiedIdsIsAnyOf(Set<?> s) {
+      void modifiedIdsIsAnyOf(List<?> s) {
         Truth.assertWithMessage(debugMessage()).that(modifiedIds).isEqualTo(s);
       }
 
-      void modifiedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+      void modifiedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(modifiedIds).isAnyOf(s1, s2);
       }
 
-      void removedIdsIsAnyOf(Set<?> s) {
+      void removedIdsIsAnyOf(List<?> s) {
         Truth.assertWithMessage(debugMessage()).that(removedIds).isEqualTo(s);
       }
 
-      void removedIdsIsAnyOf(Set<?> s1, Set<?> s2) {
+      void removedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(removedIds).isAnyOf(s1, s2);
       }
 
@@ -637,5 +649,11 @@ public final class ITQueryWatchTest {
         builder.append("}");
       }
     }
+  }
+
+  private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {
+    DocumentReference documentReference = randomColl.document(documentId);
+    documentReference.set(fields).get();
+    return documentReference;
   }
 }

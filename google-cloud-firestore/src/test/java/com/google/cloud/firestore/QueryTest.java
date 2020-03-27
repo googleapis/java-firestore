@@ -29,6 +29,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.reference;
 import static com.google.cloud.firestore.LocalFirestoreHelper.select;
 import static com.google.cloud.firestore.LocalFirestoreHelper.startAt;
+import static com.google.cloud.firestore.LocalFirestoreHelper.string;
 import static com.google.cloud.firestore.LocalFirestoreHelper.unaryFilter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -90,6 +91,96 @@ public class QueryTest {
     query.limit(42).get().get();
 
     assertEquals(query(limit(42)), runQuery.getValue());
+  }
+
+  @Test
+  public void limitToLastReversesOrderingConstraints() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    query.orderBy("foo").limitToLast(42).get().get();
+
+    assertEquals(
+        query(limit(42), order("foo", StructuredQuery.Direction.DESCENDING)), runQuery.getValue());
+  }
+
+  @Test
+  public void limitToLastReversesCursors() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    query.orderBy("foo").startAt("foo").endAt("bar").limitToLast(42).get().get();
+
+    assertEquals(
+        query(
+            limit(42),
+            order("foo", StructuredQuery.Direction.DESCENDING),
+            endAt(string("foo"), false),
+            startAt(string("bar"), true)),
+        runQuery.getValue());
+  }
+
+  @Test
+  public void limitToLastReversesResults() throws Exception {
+    doAnswer(queryResponse(DOCUMENT_NAME + "2", DOCUMENT_NAME + "1"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    QuerySnapshot querySnapshot = query.orderBy("foo").limitToLast(2).get().get();
+
+    Iterator<QueryDocumentSnapshot> docIterator = querySnapshot.iterator();
+    assertEquals("doc1", docIterator.next().getId());
+    assertEquals("doc2", docIterator.next().getId());
+  }
+
+  @Test
+  public void limitToLastRequiresAtLeastOneOrderingConstraint() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    try {
+      query.limitToLast(1).get().get();
+      fail("Expected exception");
+    } catch (IllegalStateException e) {
+      assertEquals(
+          e.getMessage(),
+          "limitToLast() queries require specifying at least one orderBy() clause.");
+    }
+  }
+
+  @Test
+  public void limitToLastRejectsStream() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    try {
+      query.orderBy("foo").limitToLast(1).stream(null);
+      fail("Expected exception");
+    } catch (IllegalStateException e) {
+      assertEquals(
+          e.getMessage(),
+          "Query results for queries that include limitToLast() constraints cannot be streamed. "
+              + "Use Query.get() instead.");
+    }
   }
 
   @Test
