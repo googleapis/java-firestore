@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_MODEL_OBJECT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -249,9 +249,8 @@ public class ITSystemTest {
     documentSnapshot = randomDoc.get().get();
     expectedResult.foo = "updated";
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
-    expectedResult.model =
-        ImmutableMap.of("stringValue", (Object) UPDATE_MODEL_OBJECT.getStringValue());
-    randomDoc.update("model", UPDATE_MODEL_OBJECT).get();
+    expectedResult.model = ImmutableMap.of("foo", (Object) UPDATE_SINGLE_FIELD_OBJECT.foo);
+    randomDoc.update("model", UPDATE_SINGLE_FIELD_OBJECT).get();
     documentSnapshot = randomDoc.get().get();
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
   }

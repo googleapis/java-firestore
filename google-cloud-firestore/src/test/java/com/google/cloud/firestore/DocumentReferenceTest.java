@@ -258,7 +258,7 @@ public class DocumentReferenceTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(5, 6), snapshot.getReadTime());
 
     assertEquals(get(), getAllCapture.getValue());
-    assertEquals("foo", ((Map<String, Object>) snapshot.get("model")).get("stringValue"));
+    assertEquals("bar", ((Map<String, Object>) snapshot.get("model")).get("foo"));
   }
 
   @Test
@@ -844,7 +844,7 @@ public class DocumentReferenceTest {
             "second.objectValue.foo",
             "second.timestampValue",
             "second.trueValue",
-            "second.model.stringValue");
+            "second.model.foo");
 
     CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
