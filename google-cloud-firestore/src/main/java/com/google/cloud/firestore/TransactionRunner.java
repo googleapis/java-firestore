@@ -40,8 +40,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Implements backoff and retry semantics for Firestore transactions.
  *
- * <p>Consumers should invoke `run()` to obtain an ApiFuture that resolves when all retries
- * complete. Backoff settings can be customized via FirebaseOptions.
+ * <p>A TransactionRunner is instantiated with a `userCallback`, a `userCallbackExecutor` and
+ * `numberOfAttempts`. Upon invoking {@link #run()}, the class invokes the provided callback on the
+ * specified executor at most `numberOfAttempts` times. {@link #run()} returns an ApiFuture that
+ * resolves when all retries complete.
+ *
+ * <p>TransactionRunner uses exponential backoff to increase the chance that retries succeed. To
+ * customize the backoff settings, you can specify custom settings via {@link FirestoreOptions}.
  */
 class TransactionRunner<T> {
 
@@ -49,7 +54,7 @@ class TransactionRunner<T> {
   private static final io.opencensus.trace.Status TOO_MANY_RETRIES_STATUS =
       io.opencensus.trace.Status.ABORTED.withDescription("too many retries");
   private static final io.opencensus.trace.Status USER_CALLBACK_FAILED =
-      io.opencensus.trace.Status.ABORTED.withDescription("user_callback_failed");
+      io.opencensus.trace.Status.ABORTED.withDescription("user callback failed");
 
   private final Transaction.AsyncFunction<T> userCallback;
   private final Span span;
@@ -67,7 +72,7 @@ class TransactionRunner<T> {
    * @param userCallbackExecutor The executor to run the user callback on
    * @param numberOfAttempts The total number of attempts for this transaction
    */
-  public TransactionRunner(
+  TransactionRunner(
       FirestoreImpl firestore,
       Transaction.AsyncFunction<T> userCallback,
       Executor userCallbackExecutor,
@@ -139,25 +144,6 @@ class TransactionRunner<T> {
           }
         });
     return callbackResult;
-  }
-
-  /** Determines whether the provided error is considered retryable. */
-  private boolean isRetryableTransactionError(ApiException exception) {
-    switch (exception.getStatusCode().getCode()) {
-        // This list is based on
-        // https://github.com/firebase/firebase-js-sdk/blob/master/packages/firestore/src/core/transaction_runner.ts#L112
-      case ABORTED:
-      case CANCELLED:
-      case UNKNOWN:
-      case DEADLINE_EXCEEDED:
-      case INTERNAL:
-      case UNAVAILABLE:
-      case UNAUTHENTICATED:
-      case RESOURCE_EXHAUSTED:
-        return true;
-      default:
-        return false;
-    }
   }
 
   /** A callback that invokes the BeginTransaction callback. */
@@ -241,6 +227,25 @@ class TransactionRunner<T> {
             FirestoreException.apiException(
                 apiException, "Transaction failed with non-retryable error");
         return rollbackAndReject(firestoreException);
+      }
+    }
+
+    /** Determines whether the provided error is considered retryable. */
+    private boolean isRetryableTransactionError(ApiException exception) {
+      switch (exception.getStatusCode().getCode()) {
+          // This list is based on
+          // https://github.com/firebase/firebase-js-sdk/blob/c822e78b00dd3420dcc749beb2f09a947aa4a344/packages/firestore/src/core/transaction_runner.ts#L112
+        case ABORTED:
+        case CANCELLED:
+        case UNKNOWN:
+        case DEADLINE_EXCEEDED:
+        case INTERNAL:
+        case UNAVAILABLE:
+        case UNAUTHENTICATED:
+        case RESOURCE_EXHAUSTED:
+          return true;
+        default:
+          return false;
       }
     }
 
