@@ -41,6 +41,7 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ import javax.annotation.Nullable;
  */
 class FirestoreImpl implements Firestore {
 
-  private static final Random RANDOM = new Random();
+  private static final Random RANDOM = new SecureRandom();
   private static final int AUTO_ID_LENGTH = 20;
   private static final String AUTO_ID_ALPHABET =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
