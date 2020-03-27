@@ -86,7 +86,10 @@ public class DocumentSnapshot {
     Map<String, Value> fields = new HashMap<>();
     for (Map.Entry<String, Object> entry : values.entrySet()) {
       Value encodedValue =
-          UserDataConverter.encodeValue(FieldPath.of(entry.getKey()), entry.getValue(), options);
+          UserDataConverter.encodeValue(
+              FieldPath.of(entry.getKey()),
+              CustomClassMapper.convertToPlainJavaTypes(entry.getValue()),
+              options);
       if (encodedValue != null) {
         fields.put(entry.getKey(), encodedValue);
       }

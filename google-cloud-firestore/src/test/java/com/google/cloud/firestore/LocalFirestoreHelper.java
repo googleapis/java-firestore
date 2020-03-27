@@ -93,6 +93,7 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Object> UPDATED_FIELD_MAP;
   public static final Map<String, Value> UPDATED_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_SINGLE_FIELD_PROTO;
+  public static final Map<String, Value> UPDATED_POJO_PROTO;
 
   public static final Map<String, Float> SINGLE_FLOAT_MAP;
   public static final Map<String, Value> SINGLE_FLOAT_PROTO;
@@ -113,6 +114,8 @@ public final class LocalFirestoreHelper {
   public static final ApiFuture<CommitResponse> SINGLE_WRITE_COMMIT_RESPONSE;
 
   public static final ApiFuture<CommitResponse> FIELD_TRANSFORM_COMMIT_RESPONSE;
+
+  public static final Map<String, Object> UPDATED_POJO;
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
@@ -660,6 +663,7 @@ public final class LocalFirestoreHelper {
     public String nullValue = null;
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
+    public Map<String, Object> model = ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
 
     @Override
     public boolean equals(Object o) {
@@ -684,7 +688,8 @@ public final class LocalFirestoreHelper {
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
-          && Objects.equals(geoPointValue, that.geoPointValue);
+          && Objects.equals(geoPointValue, that.geoPointValue)
+          && Objects.equals(model, that.model);
     }
   }
 
@@ -717,6 +722,14 @@ public final class LocalFirestoreHelper {
     SINGLE_FIELD_MAP = map("foo", (Object) "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     SINGLE_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
+    UPDATED_POJO_PROTO =
+        map(
+            "model",
+            Value.newBuilder()
+                .setMapValue(
+                    MapValue.newBuilder()
+                        .putFields("foo", Value.newBuilder().setStringValue("foobar").build()))
+                .build());
     SINGLE_FIELD_SNAPSHOT =
         new DocumentSnapshot(
             null,
@@ -777,7 +790,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
-
+    ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())
@@ -823,9 +836,13 @@ public final class LocalFirestoreHelper {
                     .setGeoPointValue(
                         LatLng.newBuilder().setLatitude(50.1430847).setLongitude(-122.9477780))
                     .build())
+            .put(
+                "model",
+                Value.newBuilder()
+                    .setMapValue(MapValue.newBuilder().putAllFields(SINGLE_FIELD_PROTO))
+                    .build())
             .build();
     ALL_SUPPORTED_TYPES_OBJECT = new AllSupportedTypes();
-
     SINGLE_WRITE_COMMIT_RESPONSE = commitResponse(/* adds= */ 1, /* deletes= */ 0);
     SINGLE_DELETE_COMMIT_RESPONSE = commitResponse(/* adds= */ 0, /* deletes= */ 1);
     SINGLE_CREATE_COMMIT_REQUEST = commit(create(SINGLE_FIELD_PROTO));
@@ -837,6 +854,7 @@ public final class LocalFirestoreHelper {
     CREATE_PRECONDITION = Precondition.newBuilder().setExists(false).build();
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
+    UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);
   }
 
   public static String autoId() {
