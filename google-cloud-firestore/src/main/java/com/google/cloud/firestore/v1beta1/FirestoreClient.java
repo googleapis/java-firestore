@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,9 +139,12 @@ import javax.annotation.Generated;
  *     FirestoreClient.create(firestoreSettings);
  * </code>
  * </pre>
+ *
+ * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead
  */
 @Generated("by gapic-generator")
 @BetaApi
+@Deprecated
 public class FirestoreClient implements BackgroundResource {
   private final FirestoreSettings settings;
   private final FirestoreStub stub;
@@ -395,7 +398,8 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param document The updated document. Creates the document if it does not already exist.
+   * @param document Required. The updated document. Creates the document if it does not already
+   *     exist.
    * @param updateMask The fields to update. None of the field paths in the mask may contain a
    *     reserved name.
    *     <p>If the document exists on the server and has fields not referenced in the mask, they are
@@ -404,7 +408,6 @@ public class FirestoreClient implements BackgroundResource {
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Document updateDocument(Document document, DocumentMask updateMask) {
-
     UpdateDocumentRequest request =
         UpdateDocumentRequest.newBuilder().setDocument(document).setUpdateMask(updateMask).build();
     return updateDocument(request);
@@ -472,12 +475,11 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name The resource name of the Document to delete. In the format:
+   * @param name Required. The resource name of the Document to delete. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void deleteDocument(AnyPathName name) {
-
     DeleteDocumentRequest request =
         DeleteDocumentRequest.newBuilder().setName(name == null ? null : name.toString()).build();
     deleteDocument(request);
@@ -496,12 +498,11 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param name The resource name of the Document to delete. In the format:
+   * @param name Required. The resource name of the Document to delete. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void deleteDocument(String name) {
-
     DeleteDocumentRequest request = DeleteDocumentRequest.newBuilder().setName(name).build();
     deleteDocument(request);
   }
@@ -594,12 +595,11 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final BeginTransactionResponse beginTransaction(String database) {
-
     BeginTransactionRequest request =
         BeginTransactionRequest.newBuilder().setDatabase(database).build();
     return beginTransaction(request);
@@ -665,14 +665,13 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
    * @param writes The writes to apply.
    *     <p>Always executed atomically and in order.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final CommitResponse commit(String database, List<Write> writes) {
-
     CommitRequest request =
         CommitRequest.newBuilder().setDatabase(database).addAllWrites(writes).build();
     return commit(request);
@@ -741,13 +740,12 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param database The database name. In the format:
+   * @param database Required. The database name. In the format:
    *     `projects/{project_id}/databases/{database_id}`.
-   * @param transaction The transaction to roll back.
+   * @param transaction Required. The transaction to roll back.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final void rollback(String database, ByteString transaction) {
-
     RollbackRequest request =
         RollbackRequest.newBuilder().setDatabase(database).setTransaction(transaction).build();
     rollback(request);
@@ -893,7 +891,7 @@ public class FirestoreClient implements BackgroundResource {
    * }
    * </code></pre>
    *
-   * @param parent The parent document. In the format:
+   * @param parent Required. The parent document. In the format:
    *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`. For example:
    *     `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails

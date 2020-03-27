@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,14 +80,21 @@ import javax.annotation.Generated;
  * <code>
  * FirestoreSettings.Builder firestoreSettingsBuilder =
  *     FirestoreSettings.newBuilder();
- * firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
- *     .setTotalTimeout(Duration.ofSeconds(30));
+ * firestoreSettingsBuilder
+ *     .updateDocumentSettings()
+ *     .setRetrySettings(
+ *         firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
+ *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
  * </code>
  * </pre>
+ *
+ * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead
  */
 @Generated("by gapic-generator")
 @BetaApi
+@Deprecated
 public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   /** Returns the object with the settings used for calls to getDocument. */
   public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {

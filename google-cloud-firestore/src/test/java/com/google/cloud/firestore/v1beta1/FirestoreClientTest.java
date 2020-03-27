@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.google.cloud.firestore.v1beta1;
 
 import static com.google.cloud.firestore.v1beta1.FirestoreClient.ListCollectionIdsPagedResponse;
+import static com.google.cloud.firestore.v1beta1.FirestoreClient.ListDocumentsPagedResponse;
 
 import com.google.api.gax.core.NoCredentialsProvider;
 import com.google.api.gax.grpc.GaxGrpcProperties;
@@ -37,12 +38,16 @@ import com.google.firestore.v1beta1.BeginTransactionRequest;
 import com.google.firestore.v1beta1.BeginTransactionResponse;
 import com.google.firestore.v1beta1.CommitRequest;
 import com.google.firestore.v1beta1.CommitResponse;
+import com.google.firestore.v1beta1.CreateDocumentRequest;
 import com.google.firestore.v1beta1.DatabaseRootName;
 import com.google.firestore.v1beta1.DeleteDocumentRequest;
 import com.google.firestore.v1beta1.Document;
 import com.google.firestore.v1beta1.DocumentMask;
+import com.google.firestore.v1beta1.GetDocumentRequest;
 import com.google.firestore.v1beta1.ListCollectionIdsRequest;
 import com.google.firestore.v1beta1.ListCollectionIdsResponse;
+import com.google.firestore.v1beta1.ListDocumentsRequest;
+import com.google.firestore.v1beta1.ListDocumentsResponse;
 import com.google.firestore.v1beta1.ListenRequest;
 import com.google.firestore.v1beta1.ListenResponse;
 import com.google.firestore.v1beta1.RollbackRequest;
@@ -106,6 +111,174 @@ public class FirestoreClientTest {
   @After
   public void tearDown() throws Exception {
     client.close();
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void getDocumentTest() {
+    String name2 = "name2-1052831874";
+    Document expectedResponse = Document.newBuilder().setName(name2).build();
+    mockFirestore.addResponse(expectedResponse);
+
+    AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+    GetDocumentRequest request = GetDocumentRequest.newBuilder().setName(name.toString()).build();
+
+    Document actualResponse = client.getDocument(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetDocumentRequest actualRequest = (GetDocumentRequest) actualRequests.get(0);
+
+    Assert.assertEquals(name, AnyPathName.parse(actualRequest.getName()));
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void getDocumentExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+      GetDocumentRequest request = GetDocumentRequest.newBuilder().setName(name.toString()).build();
+
+      client.getDocument(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void listDocumentsTest() {
+    String nextPageToken = "";
+    Document documentsElement = Document.newBuilder().build();
+    List<Document> documents = Arrays.asList(documentsElement);
+    ListDocumentsResponse expectedResponse =
+        ListDocumentsResponse.newBuilder()
+            .setNextPageToken(nextPageToken)
+            .addAllDocuments(documents)
+            .build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String formattedParent =
+        AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+    String collectionId = "collectionId-821242276";
+    ListDocumentsRequest request =
+        ListDocumentsRequest.newBuilder()
+            .setParent(formattedParent)
+            .setCollectionId(collectionId)
+            .build();
+
+    ListDocumentsPagedResponse pagedListResponse = client.listDocuments(request);
+
+    List<Document> resources = Lists.newArrayList(pagedListResponse.iterateAll());
+    Assert.assertEquals(1, resources.size());
+    Assert.assertEquals(expectedResponse.getDocumentsList().get(0), resources.get(0));
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListDocumentsRequest actualRequest = (ListDocumentsRequest) actualRequests.get(0);
+
+    Assert.assertEquals(formattedParent, actualRequest.getParent());
+    Assert.assertEquals(collectionId, actualRequest.getCollectionId());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void listDocumentsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String formattedParent =
+          AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+      String collectionId = "collectionId-821242276";
+      ListDocumentsRequest request =
+          ListDocumentsRequest.newBuilder()
+              .setParent(formattedParent)
+              .setCollectionId(collectionId)
+              .build();
+
+      client.listDocuments(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void createDocumentTest() {
+    String name = "name3373707";
+    Document expectedResponse = Document.newBuilder().setName(name).build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String formattedParent =
+        AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+    String collectionId = "collectionId-821242276";
+    String documentId = "documentId506676927";
+    Document document = Document.newBuilder().build();
+    CreateDocumentRequest request =
+        CreateDocumentRequest.newBuilder()
+            .setParent(formattedParent)
+            .setCollectionId(collectionId)
+            .setDocumentId(documentId)
+            .setDocument(document)
+            .build();
+
+    Document actualResponse = client.createDocument(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateDocumentRequest actualRequest = (CreateDocumentRequest) actualRequests.get(0);
+
+    Assert.assertEquals(formattedParent, actualRequest.getParent());
+    Assert.assertEquals(collectionId, actualRequest.getCollectionId());
+    Assert.assertEquals(documentId, actualRequest.getDocumentId());
+    Assert.assertEquals(document, actualRequest.getDocument());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void createDocumentExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String formattedParent =
+          AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+      String collectionId = "collectionId-821242276";
+      String documentId = "documentId506676927";
+      Document document = Document.newBuilder().build();
+      CreateDocumentRequest request =
+          CreateDocumentRequest.newBuilder()
+              .setParent(formattedParent)
+              .setCollectionId(collectionId)
+              .setDocumentId(documentId)
+              .setDocument(document)
+              .build();
+
+      client.createDocument(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
   }
 
   @Test
