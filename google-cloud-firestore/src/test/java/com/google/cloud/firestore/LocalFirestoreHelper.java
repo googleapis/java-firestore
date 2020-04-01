@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
 import com.google.common.collect.ImmutableList;
@@ -57,7 +58,6 @@ import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,14 +73,23 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.threeten.bp.Duration;
 
 public final class LocalFirestoreHelper {
+
+  protected static RetrySettings IMMEDIATE_RETRY_SETTINGS =
+      RetrySettings.newBuilder()
+          .setInitialRetryDelay(Duration.ZERO)
+          .setMaxRetryDelay(Duration.ZERO)
+          .setRetryDelayMultiplier(1)
+          .setJittered(false)
+          .build();
 
   public static final String DATABASE_NAME;
   public static final String COLLECTION_ID;
   public static final String DOCUMENT_PATH;
   public static final String DOCUMENT_NAME;
-  public static final ByteString TRANSACTION_ID;
+  public static final String TRANSACTION_ID;
 
   public static final Map<String, Value> EMPTY_MAP_PROTO;
 
@@ -285,12 +294,15 @@ public final class LocalFirestoreHelper {
     return begin(null);
   }
 
-  public static BeginTransactionRequest begin(@Nullable ByteString previousTransactionId) {
+  public static BeginTransactionRequest begin(@Nullable String previousTransactionId) {
     BeginTransactionRequest.Builder begin = BeginTransactionRequest.newBuilder();
     begin.setDatabase(DATABASE_NAME);
 
     if (previousTransactionId != null) {
-      begin.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(previousTransactionId);
+      begin
+          .getOptionsBuilder()
+          .getReadWriteBuilder()
+          .setRetryTransaction(ByteString.copyFromUtf8(previousTransactionId));
     }
 
     return begin.build();
@@ -300,16 +312,20 @@ public final class LocalFirestoreHelper {
     return beginResponse(TRANSACTION_ID);
   }
 
-  public static ApiFuture<BeginTransactionResponse> beginResponse(ByteString transactionId) {
+  public static ApiFuture<BeginTransactionResponse> beginResponse(String transactionId) {
     BeginTransactionResponse.Builder beginResponse = BeginTransactionResponse.newBuilder();
-    beginResponse.setTransaction(transactionId);
+    beginResponse.setTransaction(ByteString.copyFromUtf8(transactionId));
     return ApiFutures.immediateFuture(beginResponse.build());
   }
 
   public static RollbackRequest rollback() {
+    return rollback(TRANSACTION_ID);
+  }
+
+  public static RollbackRequest rollback(String transactionId) {
     RollbackRequest.Builder rollback = RollbackRequest.newBuilder();
     rollback.setDatabase(DATABASE_NAME);
-    rollback.setTransaction(TRANSACTION_ID);
+    rollback.setTransaction(ByteString.copyFromUtf8(transactionId));
     return rollback.build();
   }
 
@@ -424,13 +440,13 @@ public final class LocalFirestoreHelper {
     return write.build();
   }
 
-  public static CommitRequest commit(@Nullable ByteString transactionId, Write... writes) {
+  public static CommitRequest commit(@Nullable String transactionId, Write... writes) {
     CommitRequest.Builder commitRequest = CommitRequest.newBuilder();
     commitRequest.setDatabase(DATABASE_NAME);
     commitRequest.addAllWrites(Arrays.asList(writes));
 
     if (transactionId != null) {
-      commitRequest.setTransaction(transactionId);
+      commitRequest.setTransaction(ByteString.copyFromUtf8(transactionId));
     }
 
     return commitRequest.build();
@@ -484,7 +500,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static RunQueryRequest query(
-      @Nullable ByteString transactionId, boolean allDescendants, StructuredQuery... query) {
+      @Nullable String transactionId, boolean allDescendants, StructuredQuery... query) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setParent(LocalFirestoreHelper.DATABASE_NAME + "/documents");
     StructuredQuery.Builder structuredQuery = request.getStructuredQueryBuilder();
@@ -512,7 +528,7 @@ public final class LocalFirestoreHelper {
     }
 
     if (transactionId != null) {
-      request.setTransaction(transactionId);
+      request.setTransaction(ByteString.copyFromUtf8(transactionId));
     }
 
     return request.build();
@@ -522,12 +538,12 @@ public final class LocalFirestoreHelper {
     return getAll(null, DOCUMENT_NAME);
   }
 
-  public static BatchGetDocumentsRequest get(@Nullable ByteString transactionId) {
+  public static BatchGetDocumentsRequest get(@Nullable String transactionId) {
     return getAll(transactionId, DOCUMENT_NAME);
   }
 
   public static BatchGetDocumentsRequest getAll(
-      @Nullable ByteString transactionId, String... documentNames) {
+      @Nullable String transactionId, String... documentNames) {
     BatchGetDocumentsRequest.Builder request = BatchGetDocumentsRequest.newBuilder();
     request.setDatabase(DATABASE_NAME);
 
@@ -536,7 +552,7 @@ public final class LocalFirestoreHelper {
     }
 
     if (transactionId != null) {
-      request.setTransaction(transactionId);
+      request.setTransaction(ByteString.copyFromUtf8(transactionId));
     }
 
     return request.build();
@@ -694,7 +710,7 @@ public final class LocalFirestoreHelper {
   }
 
   static {
-    TRANSACTION_ID = ByteString.copyFrom("foo", Charset.defaultCharset());
+    TRANSACTION_ID = "foo";
 
     try {
       DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z").parse("1985-03-18 08:20:00.123 CET");
