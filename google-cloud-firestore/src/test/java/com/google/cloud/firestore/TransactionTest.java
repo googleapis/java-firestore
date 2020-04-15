@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
 import static com.google.cloud.firestore.LocalFirestoreHelper.begin;
@@ -43,26 +42,19 @@ import static org.mockito.Mockito.doReturn;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.api.gax.grpc.GrpcStatusCode;
-import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
-import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.Write;
-import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
-import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -77,26 +69,16 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Stubber;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
-
-  private final ApiFuture<GeneratedMessageV3> RETRYABLE_API_EXCEPTION =
-      ApiFutures.immediateFailedFuture(
-          new ApiException(
-              new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
   @Spy private FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
   @Spy
   private FirestoreImpl firestoreMock =
       new FirestoreImpl(
-          FirestoreOptions.newBuilder()
-              .setProjectId("test-project")
-              .setRetrySettings(IMMEDIATE_RETRY_SETTINGS)
-              .build(),
-          firestoreRpc);
+          FirestoreOptions.newBuilder().setProjectId("test-project").build(), firestoreRpc);
 
   @Captor private ArgumentCaptor<Message> requestCapture;
   @Captor private ArgumentCaptor<ApiStreamObserver<Message>> streamObserverCapture;
@@ -181,6 +163,8 @@ public class TransactionTest {
   @Test
   public void canReturnNull() throws Exception {
     doReturn(beginResponse())
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo2")))
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
@@ -195,12 +179,14 @@ public class TransactionTest {
             },
             options);
 
-    assertNull(transaction.get());
+    assertEquals(null, transaction.get());
   }
 
   @Test
   public void canReturnNullAsync() throws Exception {
     doReturn(beginResponse())
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo2")))
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
@@ -338,40 +324,28 @@ public class TransactionTest {
 
   @Test
   public void limitsRetriesWithFailure() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
-          {
-            put(begin(), beginResponse("foo1"));
-            put(commit("foo1"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo1"), rollbackResponse());
-            put(begin("foo1"), beginResponse("foo2"));
-            put(commit("foo2"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo2"), rollbackResponse());
-            put(begin("foo2"), beginResponse("foo3"));
-            put(commit("foo3"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo3"), rollbackResponse());
-            put(begin("foo3"), beginResponse("foo4"));
-            put(commit("foo4"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo4"), rollbackResponse());
-            put(begin("foo4"), beginResponse("foo5"));
-            put(commit("foo5"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo5"), rollbackResponse());
-          }
-        };
-
-    initializeStub(requestResponseMap);
-
-    final AtomicInteger retryCount = new AtomicInteger(1);
+    doReturn(beginResponse(ByteString.copyFromUtf8("foo1")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo2")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo3")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo4")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo5")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
             new Transaction.Function<String>() {
               @Override
               public String updateCallback(Transaction transaction) {
-                return "foo" + retryCount.getAndIncrement();
+                return "foo";
               }
             },
-            TransactionOptions.create(options.getExecutor(), 5));
+            options);
 
     try {
       transaction.get();
@@ -381,40 +355,36 @@ public class TransactionTest {
     }
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(10, requests.size());
 
-    int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
-      assertEquals(request, requests.get(index++));
-    }
+    assertEquals(begin(), requests.get(0));
+    assertEquals(commit(ByteString.copyFromUtf8("foo1")), requests.get(1));
+    assertEquals(begin(ByteString.copyFromUtf8("foo1")), requests.get(2));
+    assertEquals(commit(ByteString.copyFromUtf8("foo2")), requests.get(3));
+    assertEquals(begin(ByteString.copyFromUtf8("foo2")), requests.get(4));
+    assertEquals(commit(ByteString.copyFromUtf8("foo3")), requests.get(5));
+    assertEquals(begin(ByteString.copyFromUtf8("foo3")), requests.get(6));
+    assertEquals(commit(ByteString.copyFromUtf8("foo4")), requests.get(7));
+    assertEquals(begin(ByteString.copyFromUtf8("foo4")), requests.get(8));
+    assertEquals(commit(ByteString.copyFromUtf8("foo5")), requests.get(9));
   }
 
   @Test
   public void limitsRetriesWithSuccess() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
-          {
-            put(begin(), beginResponse("foo1"));
-            put(commit("foo1"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo1"), rollbackResponse());
-            put(begin("foo1"), beginResponse("foo2"));
-            put(commit("foo2"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo2"), rollbackResponse());
-            put(begin("foo2"), beginResponse("foo3"));
-            put(commit("foo3"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo3"), rollbackResponse());
-            put(begin("foo3"), beginResponse("foo4"));
-            put(commit("foo4"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo4"), rollbackResponse());
-            put(begin("foo4"), beginResponse("foo5"));
-            put(commit("foo5"), RETRYABLE_API_EXCEPTION);
-            put(rollback("foo5"), rollbackResponse());
-            put(begin("foo5"), beginResponse("foo6"));
-            put(commit("foo6"), commitResponse(0, 0));
-          }
-        };
-
-    initializeStub(requestResponseMap);
+    doReturn(beginResponse(ByteString.copyFromUtf8("foo1")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo2")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo3")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo4")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo5")))
+        .doReturn(ApiFutures.immediateFailedFuture(new Exception()))
+        .doReturn(beginResponse(ByteString.copyFromUtf8("foo6")))
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -431,109 +401,20 @@ public class TransactionTest {
     assertEquals("foo6", transaction.get());
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(12, requests.size());
 
-    int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
-      assertEquals(request, requests.get(index++));
-    }
-  }
-
-  @Test
-  public void retriesBasedOnErrorCode() throws Exception {
-    Map<Status.Code, Boolean> retryBehavior =
-        new HashMap<Status.Code, Boolean>() {
-          {
-            put(Status.Code.CANCELLED, true);
-            put(Status.Code.UNKNOWN, true);
-            put(Status.Code.INVALID_ARGUMENT, false);
-            put(Status.Code.DEADLINE_EXCEEDED, true);
-            put(Status.Code.NOT_FOUND, false);
-            put(Status.Code.ALREADY_EXISTS, false);
-            put(Status.Code.RESOURCE_EXHAUSTED, true);
-            put(Status.Code.FAILED_PRECONDITION, false);
-            put(Status.Code.ABORTED, true);
-            put(Status.Code.OUT_OF_RANGE, false);
-            put(Status.Code.UNIMPLEMENTED, false);
-            put(Status.Code.INTERNAL, true);
-            put(Status.Code.UNAVAILABLE, true);
-            put(Status.Code.DATA_LOSS, false);
-            put(Status.Code.UNAUTHENTICATED, true);
-          }
-        };
-
-    for (Map.Entry<Status.Code, Boolean> entry : retryBehavior.entrySet()) {
-      StatusCode code = GrpcStatusCode.of(entry.getKey());
-      boolean shouldRetry = entry.getValue();
-
-      final ApiException apiException =
-          new ApiException(new Exception("Test Exception"), code, shouldRetry);
-
-      if (shouldRetry) {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(apiException));
-                put(rollback("foo1"), rollbackResponse());
-                put(begin("foo1"), beginResponse("foo2"));
-                put(commit("foo2"), commitResponse(0, 0));
-              }
-            };
-        initializeStub(requestResponseMap);
-
-        final int[] attempts = new int[] {0};
-
-        ApiFuture<String> transaction =
-            firestoreMock.runTransaction(
-                new Transaction.Function<String>() {
-                  @Override
-                  public String updateCallback(Transaction transaction) {
-                    ++attempts[0];
-                    return null;
-                  }
-                });
-
-        transaction.get();
-
-        assertEquals(2, attempts[0]);
-      } else {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(apiException));
-                put(rollback("foo1"), rollbackResponse());
-              }
-            };
-
-        initializeStub(requestResponseMap);
-
-        final int[] attempts = new int[] {0};
-
-        ApiFuture<String> transaction =
-            firestoreMock.runTransaction(
-                new Transaction.Function<String>() {
-                  @Override
-                  public String updateCallback(Transaction transaction) {
-                    ++attempts[0];
-                    return null;
-                  }
-                });
-
-        try {
-          transaction.get();
-          fail("Transaction should have failed");
-        } catch (Exception ignored) {
-        }
-
-        assertEquals(1, attempts[0]);
-      }
-    }
+    assertEquals(begin(), requests.get(0));
+    assertEquals(commit(ByteString.copyFromUtf8("foo1")), requests.get(1));
+    assertEquals(begin(ByteString.copyFromUtf8("foo1")), requests.get(2));
+    assertEquals(commit(ByteString.copyFromUtf8("foo2")), requests.get(3));
+    assertEquals(begin(ByteString.copyFromUtf8("foo2")), requests.get(4));
+    assertEquals(commit(ByteString.copyFromUtf8("foo3")), requests.get(5));
+    assertEquals(begin(ByteString.copyFromUtf8("foo3")), requests.get(6));
+    assertEquals(commit(ByteString.copyFromUtf8("foo4")), requests.get(7));
+    assertEquals(begin(ByteString.copyFromUtf8("foo4")), requests.get(8));
+    assertEquals(commit(ByteString.copyFromUtf8("foo5")), requests.get(9));
+    assertEquals(begin(ByteString.copyFromUtf8("foo5")), requests.get(10));
+    assertEquals(commit(ByteString.copyFromUtf8("foo6")), requests.get(11));
   }
 
   @Test
@@ -865,18 +746,5 @@ public class TransactionTest {
 
     assertEquals(begin(), requests.get(0));
     assertEquals(commit(TRANSACTION_ID, writes.toArray(new Write[] {})), requests.get(1));
-  }
-
-  static class RequestResponseMap
-      extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {}
-
-  private void initializeStub(RequestResponseMap requestResponseMap) {
-    Stubber stubber = null;
-    for (ApiFuture<? extends GeneratedMessageV3> response : requestResponseMap.values()) {
-      stubber = (stubber != null) ? stubber.doReturn(response) : doReturn(response);
-    }
-    stubber
-        .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
   }
 }

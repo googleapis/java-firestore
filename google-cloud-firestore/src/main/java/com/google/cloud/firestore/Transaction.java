@@ -61,15 +61,25 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
+  private final ByteString previousTransactionId;
   private ByteString transactionId;
-  private @Nullable ByteString previousTransactionId;
+  private boolean pending;
 
-  Transaction(FirestoreImpl firestore, @Nullable Transaction previousTransaction) {
+  Transaction(FirestoreImpl firestore, @Nullable ByteString previousTransactionId) {
     super(firestore);
-    previousTransactionId = previousTransaction != null ? previousTransaction.transactionId : null;
+    this.previousTransactionId = previousTransactionId;
   }
 
-  /** Starts a transaction and obtains the transaction id. */
+  @Nullable
+  ByteString getTransactionId() {
+    return transactionId;
+  }
+
+  boolean isPending() {
+    return pending;
+  }
+
+  /** Starts a transaction and obtains the transaction id from the server. */
   ApiFuture<Void> begin() {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
@@ -91,6 +101,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
           @Override
           public Void apply(BeginTransactionResponse beginTransactionResponse) {
             transactionId = beginTransactionResponse.getTransaction();
+            pending = true;
             return null;
           }
         },
@@ -99,11 +110,14 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Commits a transaction. */
   ApiFuture<List<WriteResult>> commit() {
+    pending = false;
     return super.commit(transactionId);
   }
 
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
+    pending = false;
+
     RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
     reqBuilder.setTransaction(transactionId);
     reqBuilder.setDatabase(firestore.getDatabaseName());

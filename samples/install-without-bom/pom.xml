@@ -14,7 +14,7 @@
   <parent>
     <groupId>com.google.cloud.samples</groupId>
     <artifactId>shared-configuration</artifactId>
-    <version>1.0.15</version>
+    <version>1.0.13</version>
   </parent>
 
   <properties>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-firestore</artifactId>
-      <version>1.33.0</version>
+      <version>1.32.5</version>
     </dependency>
     <!-- [END firestore_install_without_bom] -->
 

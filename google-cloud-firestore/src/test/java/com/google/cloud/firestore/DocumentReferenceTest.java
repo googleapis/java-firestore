@@ -35,8 +35,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_OBJEC
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_WRITE_COMMIT_RESPONSE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TIMESTAMP;
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_POJO;
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_POJO_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_PRECONDITION;
 import static com.google.cloud.firestore.LocalFirestoreHelper.arrayRemove;
 import static com.google.cloud.firestore.LocalFirestoreHelper.arrayUnion;
@@ -84,7 +82,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -258,7 +255,6 @@ public class DocumentReferenceTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(5, 6), snapshot.getReadTime());
 
     assertEquals(get(), getAllCapture.getValue());
-    assertEquals("bar", ((Map<String, Object>) snapshot.get("model")).get("foo"));
   }
 
   @Test
@@ -843,8 +839,7 @@ public class DocumentReferenceTest {
             "second.nullValue",
             "second.objectValue.foo",
             "second.timestampValue",
-            "second.trueValue",
-            "second.model.foo");
+            "second.trueValue");
 
     CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
@@ -1028,22 +1023,6 @@ public class DocumentReferenceTest {
 
     CommitRequest expectedCommit =
         commit(update(SINGLE_FIELD_PROTO, Collections.singletonList("foo"), precondition.build()));
-
-    for (CommitRequest request : commitCapture.getAllValues()) {
-      assertCommitEquals(expectedCommit, request);
-    }
-  }
-
-  @Test
-  public void updateIndividualPojo() throws ExecutionException, InterruptedException {
-    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
-        .when(firestoreMock)
-        .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
-    documentReference.update(UPDATED_POJO);
-    documentReference.update(UPDATED_POJO).get();
-    CommitRequest expectedCommit =
-        commit(update(UPDATED_POJO_PROTO, Collections.singletonList("model")));
 
     for (CommitRequest request : commitCapture.getAllValues()) {
       assertCommitEquals(expectedCommit, request);

@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -56,7 +55,6 @@ import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -247,10 +245,6 @@ public class ITSystemTest {
     randomDoc.update(Precondition.updatedAt(writeResult.getUpdateTime()), "foo", "updated").get();
     documentSnapshot = randomDoc.get().get();
     expectedResult.foo = "updated";
-    assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
-    expectedResult.model = ImmutableMap.of("foo", (Object) UPDATE_SINGLE_FIELD_OBJECT.foo);
-    randomDoc.update("model", UPDATE_SINGLE_FIELD_OBJECT).get();
-    documentSnapshot = randomDoc.get().get();
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
   }
 
@@ -541,34 +535,6 @@ public class ITSystemTest {
       fail();
     } catch (Exception e) {
       assertTrue(e.getMessage().endsWith("User exception"));
-    }
-  }
-
-  @Test
-  public void doesNotRetryTransactionsWithFailedPreconditions() {
-    final DocumentReference documentReference = randomColl.document();
-
-    final AtomicInteger attempts = new AtomicInteger();
-
-    ApiFuture<Void> firstTransaction =
-        firestore.runTransaction(
-            new Transaction.Function<Void>() {
-              @Override
-              public Void updateCallback(Transaction transaction) {
-                attempts.incrementAndGet();
-                transaction.update(documentReference, "foo", "bar");
-                return null;
-              }
-            });
-
-    try {
-      firstTransaction.get();
-      fail("ApiFuture should fail with ExecutionException");
-    } catch (InterruptedException e) {
-      fail("ApiFuture should fail with ExecutionException");
-    } catch (ExecutionException e) {
-      assertEquals(1, attempts.intValue());
-      assertEquals(404, ((FirestoreException) e.getCause()).getCode());
     }
   }
 

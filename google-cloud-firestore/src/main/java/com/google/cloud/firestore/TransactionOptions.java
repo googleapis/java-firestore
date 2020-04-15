@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.common.base.Preconditions;
+import com.google.protobuf.ByteString;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,10 +29,12 @@ public final class TransactionOptions {
 
   private final int numberOfAttempts;
   private final Executor executor;
+  private final ByteString previousTransactionId;
 
-  TransactionOptions(int maxAttempts, Executor executor) {
+  TransactionOptions(int maxAttempts, Executor executor, ByteString previousTransactionId) {
     this.numberOfAttempts = maxAttempts;
     this.executor = executor;
+    this.previousTransactionId = previousTransactionId;
   }
 
   public int getNumberOfAttempts() {
@@ -43,6 +46,11 @@ public final class TransactionOptions {
     return executor;
   }
 
+  @Nullable
+  ByteString getPreviousTransactionId() {
+    return previousTransactionId;
+  }
+
   /**
    * Create a default set of options suitable for most use cases. Transactions will be attempted 5
    * times.
@@ -51,7 +59,7 @@ public final class TransactionOptions {
    */
   @Nonnull
   public static TransactionOptions create() {
-    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, null);
+    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, null, null);
   }
 
   /**
@@ -63,7 +71,7 @@ public final class TransactionOptions {
   @Nonnull
   public static TransactionOptions create(int numberOfAttempts) {
     Preconditions.checkArgument(numberOfAttempts > 0, "You must allow at least one attempt");
-    return new TransactionOptions(numberOfAttempts, null);
+    return new TransactionOptions(numberOfAttempts, null, null);
   }
 
   /**
@@ -74,7 +82,7 @@ public final class TransactionOptions {
    */
   @Nonnull
   public static TransactionOptions create(@Nonnull Executor executor) {
-    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, executor);
+    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, executor, null);
   }
 
   /**
@@ -87,6 +95,6 @@ public final class TransactionOptions {
   @Nonnull
   public static TransactionOptions create(@Nonnull Executor executor, int numberOfAttempts) {
     Preconditions.checkArgument(numberOfAttempts > 0, "You must allow at least one attempt");
-    return new TransactionOptions(numberOfAttempts, executor);
+    return new TransactionOptions(numberOfAttempts, executor, null);
   }
 }

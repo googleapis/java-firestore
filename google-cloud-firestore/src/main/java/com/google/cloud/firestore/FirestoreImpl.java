@@ -17,7 +17,10 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureCallback;
+import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ServerStreamingCallable;
@@ -26,21 +29,25 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
 import io.grpc.Context;
+import io.grpc.Status;
+import io.opencensus.common.Scope;
 import io.opencensus.trace.AttributeValue;
+import io.opencensus.trace.Span;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executor;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -50,12 +57,15 @@ import javax.annotation.Nullable;
  */
 class FirestoreImpl implements Firestore {
 
-  private static final Random RANDOM = new SecureRandom();
+  private static final Random RANDOM = new Random();
   private static final int AUTO_ID_LENGTH = 20;
   private static final String AUTO_ID_ALPHABET =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+  private static final Logger LOGGER = Logger.getLogger("Firestore");
   private static final Tracer tracer = Tracing.getTracer();
+  private static final io.opencensus.trace.Status TOO_MANY_RETRIES_STATUS =
+      io.opencensus.trace.Status.ABORTED.withDescription("too many retries");
 
   private final FirestoreRpc firestoreClient;
   private final FirestoreOptions firestoreOptions;
@@ -280,8 +290,7 @@ class FirestoreImpl implements Firestore {
   @Nonnull
   @Override
   public <T> ApiFuture<T> runTransaction(@Nonnull final Transaction.Function<T> updateFunction) {
-    return runAsyncTransaction(
-        new TransactionAsyncAdapter<>(updateFunction), TransactionOptions.create());
+    return runTransaction(updateFunction, TransactionOptions.create());
   }
 
   @Nonnull
@@ -289,7 +298,9 @@ class FirestoreImpl implements Firestore {
   public <T> ApiFuture<T> runTransaction(
       @Nonnull final Transaction.Function<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
-    return runAsyncTransaction(new TransactionAsyncAdapter<>(updateFunction), transactionOptions);
+    SettableApiFuture<T> resultFuture = SettableApiFuture.create();
+    runTransaction(new TransactionAsyncAdapter<>(updateFunction), resultFuture, transactionOptions);
+    return resultFuture;
   }
 
   @Nonnull
@@ -304,16 +315,160 @@ class FirestoreImpl implements Firestore {
   public <T> ApiFuture<T> runAsyncTransaction(
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
+    SettableApiFuture<T> resultFuture = SettableApiFuture.create();
+    runTransaction(updateFunction, resultFuture, transactionOptions);
+    return resultFuture;
+  }
+
+  /** Transaction functions that returns its result in the provided SettableFuture. */
+  private <T> void runTransaction(
+      final Transaction.AsyncFunction<T> transactionCallback,
+      final SettableApiFuture<T> resultFuture,
+      final TransactionOptions options) {
+    // span is intentionally not ended here. It will be ended by runTransactionAttempt on success
+    // or error.
+    Span span = tracer.spanBuilder("CloudFirestore.Transaction").startSpan();
+    try (Scope s = tracer.withSpan(span)) {
+      runTransactionAttempt(transactionCallback, resultFuture, options, span);
+    }
+  }
+
+  private <T> void runTransactionAttempt(
+      final Transaction.AsyncFunction<T> transactionCallback,
+      final SettableApiFuture<T> resultFuture,
+      final TransactionOptions options,
+      final Span span) {
+    final Transaction transaction = new Transaction(this, options.getPreviousTransactionId());
     final Executor userCallbackExecutor =
         Context.currentContextExecutor(
-            transactionOptions.getExecutor() != null
-                ? transactionOptions.getExecutor()
-                : firestoreClient.getExecutor());
+            options.getExecutor() != null ? options.getExecutor() : firestoreClient.getExecutor());
 
-    TransactionRunner<T> transactionRunner =
-        new TransactionRunner<>(
-            this, updateFunction, userCallbackExecutor, transactionOptions.getNumberOfAttempts());
-    return transactionRunner.run();
+    final int attemptsRemaining = options.getNumberOfAttempts() - 1;
+    span.addAnnotation(
+        "Start runTransaction",
+        ImmutableMap.of("attemptsRemaining", AttributeValue.longAttributeValue(attemptsRemaining)));
+
+    ApiFutures.addCallback(
+        transaction.begin(),
+        new ApiFutureCallback<Void>() {
+          @Override
+          public void onFailure(Throwable throwable) {
+            // Don't retry failed BeginTransaction requests.
+            rejectTransaction(throwable);
+          }
+
+          @Override
+          public void onSuccess(Void ignored) {
+            ApiFutures.addCallback(
+                invokeUserCallback(),
+                new ApiFutureCallback<T>() {
+                  @Override
+                  public void onFailure(Throwable throwable) {
+                    // This was a error in the user callback, forward the throwable.
+                    rejectTransaction(throwable);
+                  }
+
+                  @Override
+                  public void onSuccess(final T userResult) {
+                    // Commit the transaction
+                    ApiFutures.addCallback(
+                        transaction.commit(),
+                        new ApiFutureCallback<List<WriteResult>>() {
+                          @Override
+                          public void onFailure(Throwable throwable) {
+                            // Retry failed commits.
+                            maybeRetry(throwable);
+                          }
+
+                          @Override
+                          public void onSuccess(List<WriteResult> writeResults) {
+                            span.setStatus(io.opencensus.trace.Status.OK);
+                            span.end();
+                            resultFuture.set(userResult);
+                          }
+                        },
+                        MoreExecutors.directExecutor());
+                  }
+                },
+                MoreExecutors.directExecutor());
+          }
+
+          private SettableApiFuture<T> invokeUserCallback() {
+            // Execute the user callback on the provided executor.
+            final SettableApiFuture<T> callbackResult = SettableApiFuture.create();
+            userCallbackExecutor.execute(
+                new Runnable() {
+                  @Override
+                  public void run() {
+                    try {
+                      ApiFuture<T> updateCallback = transactionCallback.updateCallback(transaction);
+                      ApiFutures.addCallback(
+                          updateCallback,
+                          new ApiFutureCallback<T>() {
+                            @Override
+                            public void onFailure(Throwable t) {
+                              callbackResult.setException(t);
+                            }
+
+                            @Override
+                            public void onSuccess(T result) {
+                              callbackResult.set(result);
+                            }
+                          },
+                          MoreExecutors.directExecutor());
+                    } catch (Throwable t) {
+                      callbackResult.setException(t);
+                    }
+                  }
+                });
+            return callbackResult;
+          }
+
+          private void maybeRetry(Throwable throwable) {
+            if (attemptsRemaining > 0) {
+              span.addAnnotation("retrying");
+              runTransactionAttempt(
+                  transactionCallback,
+                  resultFuture,
+                  new TransactionOptions(
+                      attemptsRemaining, options.getExecutor(), transaction.getTransactionId()),
+                  span);
+            } else {
+              span.setStatus(TOO_MANY_RETRIES_STATUS);
+              rejectTransaction(
+                  FirestoreException.serverRejected(
+                      Status.ABORTED,
+                      throwable,
+                      "Transaction was cancelled because of too many retries."));
+            }
+          }
+
+          private void rejectTransaction(final Throwable throwable) {
+            if (throwable instanceof ApiException) {
+              span.setStatus(TraceUtil.statusFromApiException((ApiException) throwable));
+            }
+            span.end();
+            if (transaction.isPending()) {
+              ApiFutures.addCallback(
+                  transaction.rollback(),
+                  new ApiFutureCallback<Void>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                      resultFuture.setException(throwable);
+                    }
+
+                    @Override
+                    public void onSuccess(Void ignored) {
+                      resultFuture.setException(throwable);
+                    }
+                  },
+                  MoreExecutors.directExecutor());
+            } else {
+              resultFuture.setException(throwable);
+            }
+          }
+        },
+        MoreExecutors.directExecutor());
   }
 
   /** Returns whether the user has opted into receiving dates as com.google.cloud.Timestamp. */
