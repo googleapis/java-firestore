@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
 import com.google.common.collect.ImmutableList;
@@ -58,6 +57,7 @@ import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,23 +73,14 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.threeten.bp.Duration;
 
 public final class LocalFirestoreHelper {
-
-  protected static RetrySettings IMMEDIATE_RETRY_SETTINGS =
-      RetrySettings.newBuilder()
-          .setInitialRetryDelay(Duration.ZERO)
-          .setMaxRetryDelay(Duration.ZERO)
-          .setRetryDelayMultiplier(1)
-          .setJittered(false)
-          .build();
 
   public static final String DATABASE_NAME;
   public static final String COLLECTION_ID;
   public static final String DOCUMENT_PATH;
   public static final String DOCUMENT_NAME;
-  public static final String TRANSACTION_ID;
+  public static final ByteString TRANSACTION_ID;
 
   public static final Map<String, Value> EMPTY_MAP_PROTO;
 
@@ -102,7 +93,6 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Object> UPDATED_FIELD_MAP;
   public static final Map<String, Value> UPDATED_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_SINGLE_FIELD_PROTO;
-  public static final Map<String, Value> UPDATED_POJO_PROTO;
 
   public static final Map<String, Float> SINGLE_FLOAT_MAP;
   public static final Map<String, Value> SINGLE_FLOAT_PROTO;
@@ -123,8 +113,6 @@ public final class LocalFirestoreHelper {
   public static final ApiFuture<CommitResponse> SINGLE_WRITE_COMMIT_RESPONSE;
 
   public static final ApiFuture<CommitResponse> FIELD_TRANSFORM_COMMIT_RESPONSE;
-
-  public static final Map<String, Object> UPDATED_POJO;
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
@@ -294,15 +282,12 @@ public final class LocalFirestoreHelper {
     return begin(null);
   }
 
-  public static BeginTransactionRequest begin(@Nullable String previousTransactionId) {
+  public static BeginTransactionRequest begin(@Nullable ByteString previousTransactionId) {
     BeginTransactionRequest.Builder begin = BeginTransactionRequest.newBuilder();
     begin.setDatabase(DATABASE_NAME);
 
     if (previousTransactionId != null) {
-      begin
-          .getOptionsBuilder()
-          .getReadWriteBuilder()
-          .setRetryTransaction(ByteString.copyFromUtf8(previousTransactionId));
+      begin.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(previousTransactionId);
     }
 
     return begin.build();
@@ -312,20 +297,16 @@ public final class LocalFirestoreHelper {
     return beginResponse(TRANSACTION_ID);
   }
 
-  public static ApiFuture<BeginTransactionResponse> beginResponse(String transactionId) {
+  public static ApiFuture<BeginTransactionResponse> beginResponse(ByteString transactionId) {
     BeginTransactionResponse.Builder beginResponse = BeginTransactionResponse.newBuilder();
-    beginResponse.setTransaction(ByteString.copyFromUtf8(transactionId));
+    beginResponse.setTransaction(transactionId);
     return ApiFutures.immediateFuture(beginResponse.build());
   }
 
   public static RollbackRequest rollback() {
-    return rollback(TRANSACTION_ID);
-  }
-
-  public static RollbackRequest rollback(String transactionId) {
     RollbackRequest.Builder rollback = RollbackRequest.newBuilder();
     rollback.setDatabase(DATABASE_NAME);
-    rollback.setTransaction(ByteString.copyFromUtf8(transactionId));
+    rollback.setTransaction(TRANSACTION_ID);
     return rollback.build();
   }
 
@@ -440,13 +421,13 @@ public final class LocalFirestoreHelper {
     return write.build();
   }
 
-  public static CommitRequest commit(@Nullable String transactionId, Write... writes) {
+  public static CommitRequest commit(@Nullable ByteString transactionId, Write... writes) {
     CommitRequest.Builder commitRequest = CommitRequest.newBuilder();
     commitRequest.setDatabase(DATABASE_NAME);
     commitRequest.addAllWrites(Arrays.asList(writes));
 
     if (transactionId != null) {
-      commitRequest.setTransaction(ByteString.copyFromUtf8(transactionId));
+      commitRequest.setTransaction(transactionId);
     }
 
     return commitRequest.build();
@@ -500,7 +481,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static RunQueryRequest query(
-      @Nullable String transactionId, boolean allDescendants, StructuredQuery... query) {
+      @Nullable ByteString transactionId, boolean allDescendants, StructuredQuery... query) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setParent(LocalFirestoreHelper.DATABASE_NAME + "/documents");
     StructuredQuery.Builder structuredQuery = request.getStructuredQueryBuilder();
@@ -528,7 +509,7 @@ public final class LocalFirestoreHelper {
     }
 
     if (transactionId != null) {
-      request.setTransaction(ByteString.copyFromUtf8(transactionId));
+      request.setTransaction(transactionId);
     }
 
     return request.build();
@@ -538,12 +519,12 @@ public final class LocalFirestoreHelper {
     return getAll(null, DOCUMENT_NAME);
   }
 
-  public static BatchGetDocumentsRequest get(@Nullable String transactionId) {
+  public static BatchGetDocumentsRequest get(@Nullable ByteString transactionId) {
     return getAll(transactionId, DOCUMENT_NAME);
   }
 
   public static BatchGetDocumentsRequest getAll(
-      @Nullable String transactionId, String... documentNames) {
+      @Nullable ByteString transactionId, String... documentNames) {
     BatchGetDocumentsRequest.Builder request = BatchGetDocumentsRequest.newBuilder();
     request.setDatabase(DATABASE_NAME);
 
@@ -552,7 +533,7 @@ public final class LocalFirestoreHelper {
     }
 
     if (transactionId != null) {
-      request.setTransaction(ByteString.copyFromUtf8(transactionId));
+      request.setTransaction(transactionId);
     }
 
     return request.build();
@@ -679,7 +660,6 @@ public final class LocalFirestoreHelper {
     public String nullValue = null;
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
-    public Map<String, Object> model = ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
 
     @Override
     public boolean equals(Object o) {
@@ -704,13 +684,12 @@ public final class LocalFirestoreHelper {
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
-          && Objects.equals(geoPointValue, that.geoPointValue)
-          && Objects.equals(model, that.model);
+          && Objects.equals(geoPointValue, that.geoPointValue);
     }
   }
 
   static {
-    TRANSACTION_ID = "foo";
+    TRANSACTION_ID = ByteString.copyFrom("foo", Charset.defaultCharset());
 
     try {
       DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z").parse("1985-03-18 08:20:00.123 CET");
@@ -738,14 +717,6 @@ public final class LocalFirestoreHelper {
     SINGLE_FIELD_MAP = map("foo", (Object) "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     SINGLE_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
-    UPDATED_POJO_PROTO =
-        map(
-            "model",
-            Value.newBuilder()
-                .setMapValue(
-                    MapValue.newBuilder()
-                        .putFields("foo", Value.newBuilder().setStringValue("foobar").build()))
-                .build());
     SINGLE_FIELD_SNAPSHOT =
         new DocumentSnapshot(
             null,
@@ -806,7 +777,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
-    ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
+
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())
@@ -852,13 +823,9 @@ public final class LocalFirestoreHelper {
                     .setGeoPointValue(
                         LatLng.newBuilder().setLatitude(50.1430847).setLongitude(-122.9477780))
                     .build())
-            .put(
-                "model",
-                Value.newBuilder()
-                    .setMapValue(MapValue.newBuilder().putAllFields(SINGLE_FIELD_PROTO))
-                    .build())
             .build();
     ALL_SUPPORTED_TYPES_OBJECT = new AllSupportedTypes();
+
     SINGLE_WRITE_COMMIT_RESPONSE = commitResponse(/* adds= */ 1, /* deletes= */ 0);
     SINGLE_DELETE_COMMIT_RESPONSE = commitResponse(/* adds= */ 0, /* deletes= */ 1);
     SINGLE_CREATE_COMMIT_REQUEST = commit(create(SINGLE_FIELD_PROTO));
@@ -870,7 +837,6 @@ public final class LocalFirestoreHelper {
     CREATE_PRECONDITION = Precondition.newBuilder().setExists(false).build();
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
-    UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);
   }
 
   public static String autoId() {
