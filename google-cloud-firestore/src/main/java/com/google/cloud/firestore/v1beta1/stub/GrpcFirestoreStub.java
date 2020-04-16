@@ -69,41 +69,6 @@ import javax.annotation.Generated;
 @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
 public class GrpcFirestoreStub extends FirestoreStub {
 
-  private static final MethodDescriptor<GetDocumentRequest, Document> getDocumentMethodDescriptor =
-      MethodDescriptor.<GetDocumentRequest, Document>newBuilder()
-          .setType(MethodDescriptor.MethodType.UNARY)
-          .setFullMethodName("google.firestore.v1beta1.Firestore/GetDocument")
-          .setRequestMarshaller(ProtoUtils.marshaller(GetDocumentRequest.getDefaultInstance()))
-          .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
-          .build();
-  private static final MethodDescriptor<ListDocumentsRequest, ListDocumentsResponse>
-      listDocumentsMethodDescriptor =
-          MethodDescriptor.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1beta1.Firestore/ListDocuments")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(ListDocumentsRequest.getDefaultInstance()))
-              .setResponseMarshaller(
-                  ProtoUtils.marshaller(ListDocumentsResponse.getDefaultInstance()))
-              .build();
-  private static final MethodDescriptor<CreateDocumentRequest, Document>
-      createDocumentMethodDescriptor =
-          MethodDescriptor.<CreateDocumentRequest, Document>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1beta1.Firestore/CreateDocument")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(CreateDocumentRequest.getDefaultInstance()))
-              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
-              .build();
-  private static final MethodDescriptor<UpdateDocumentRequest, Document>
-      updateDocumentMethodDescriptor =
-          MethodDescriptor.<UpdateDocumentRequest, Document>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1beta1.Firestore/UpdateDocument")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(UpdateDocumentRequest.getDefaultInstance()))
-              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
-              .build();
   private static final MethodDescriptor<DeleteDocumentRequest, Empty>
       deleteDocumentMethodDescriptor =
           MethodDescriptor.<DeleteDocumentRequest, Empty>newBuilder()
@@ -133,13 +98,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(BeginTransactionResponse.getDefaultInstance()))
               .build();
-  private static final MethodDescriptor<CommitRequest, CommitResponse> commitMethodDescriptor =
-      MethodDescriptor.<CommitRequest, CommitResponse>newBuilder()
-          .setType(MethodDescriptor.MethodType.UNARY)
-          .setFullMethodName("google.firestore.v1beta1.Firestore/Commit")
-          .setRequestMarshaller(ProtoUtils.marshaller(CommitRequest.getDefaultInstance()))
-          .setResponseMarshaller(ProtoUtils.marshaller(CommitResponse.getDefaultInstance()))
-          .build();
   private static final MethodDescriptor<RollbackRequest, Empty> rollbackMethodDescriptor =
       MethodDescriptor.<RollbackRequest, Empty>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -179,21 +137,56 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<GetDocumentRequest, Document> getDocumentMethodDescriptor =
+      MethodDescriptor.<GetDocumentRequest, Document>newBuilder()
+          .setType(MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName("google.firestore.v1beta1.Firestore/GetDocument")
+          .setRequestMarshaller(ProtoUtils.marshaller(GetDocumentRequest.getDefaultInstance()))
+          .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
+          .build();
+  private static final MethodDescriptor<ListDocumentsRequest, ListDocumentsResponse>
+      listDocumentsMethodDescriptor =
+          MethodDescriptor.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1beta1.Firestore/ListDocuments")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(ListDocumentsRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(ListDocumentsResponse.getDefaultInstance()))
+              .build();
+  private static final MethodDescriptor<CreateDocumentRequest, Document>
+      createDocumentMethodDescriptor =
+          MethodDescriptor.<CreateDocumentRequest, Document>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1beta1.Firestore/CreateDocument")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(CreateDocumentRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
+              .build();
+  private static final MethodDescriptor<UpdateDocumentRequest, Document>
+      updateDocumentMethodDescriptor =
+          MethodDescriptor.<UpdateDocumentRequest, Document>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1beta1.Firestore/UpdateDocument")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(UpdateDocumentRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
+              .build();
+  private static final MethodDescriptor<CommitRequest, CommitResponse> commitMethodDescriptor =
+      MethodDescriptor.<CommitRequest, CommitResponse>newBuilder()
+          .setType(MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName("google.firestore.v1beta1.Firestore/Commit")
+          .setRequestMarshaller(ProtoUtils.marshaller(CommitRequest.getDefaultInstance()))
+          .setResponseMarshaller(ProtoUtils.marshaller(CommitResponse.getDefaultInstance()))
+          .build();
 
   private final BackgroundResource backgroundResources;
 
-  private final UnaryCallable<GetDocumentRequest, Document> getDocumentCallable;
-  private final UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable;
-  private final UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
-      listDocumentsPagedCallable;
-  private final UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable;
-  private final UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable;
   private final UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable;
   private final ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable;
   private final UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable;
-  private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
   private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
   private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
   private final BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable;
@@ -202,6 +195,13 @@ public class GrpcFirestoreStub extends FirestoreStub {
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
+  private final UnaryCallable<GetDocumentRequest, Document> getDocumentCallable;
+  private final UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable;
+  private final UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
+      listDocumentsPagedCallable;
+  private final UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable;
+  private final UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable;
+  private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -241,40 +241,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
       throws IOException {
     this.callableFactory = callableFactory;
 
-    GrpcCallSettings<GetDocumentRequest, Document> getDocumentTransportSettings =
-        GrpcCallSettings.<GetDocumentRequest, Document>newBuilder()
-            .setMethodDescriptor(getDocumentMethodDescriptor)
-            .setParamsExtractor(
-                new RequestParamsExtractor<GetDocumentRequest>() {
-                  @Override
-                  public Map<String, String> extract(GetDocumentRequest request) {
-                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                    params.put("name", String.valueOf(request.getName()));
-                    return params.build();
-                  }
-                })
-            .build();
-    GrpcCallSettings<ListDocumentsRequest, ListDocumentsResponse> listDocumentsTransportSettings =
-        GrpcCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
-            .setMethodDescriptor(listDocumentsMethodDescriptor)
-            .build();
-    GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
-        GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
-            .setMethodDescriptor(createDocumentMethodDescriptor)
-            .build();
-    GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
-        GrpcCallSettings.<UpdateDocumentRequest, Document>newBuilder()
-            .setMethodDescriptor(updateDocumentMethodDescriptor)
-            .setParamsExtractor(
-                new RequestParamsExtractor<UpdateDocumentRequest>() {
-                  @Override
-                  public Map<String, String> extract(UpdateDocumentRequest request) {
-                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                    params.put("document.name", String.valueOf(request.getDocument().getName()));
-                    return params.build();
-                  }
-                })
-            .build();
     GrpcCallSettings<DeleteDocumentRequest, Empty> deleteDocumentTransportSettings =
         GrpcCallSettings.<DeleteDocumentRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteDocumentMethodDescriptor)
@@ -316,19 +282,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
-    GrpcCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
-        GrpcCallSettings.<CommitRequest, CommitResponse>newBuilder()
-            .setMethodDescriptor(commitMethodDescriptor)
-            .setParamsExtractor(
-                new RequestParamsExtractor<CommitRequest>() {
-                  @Override
-                  public Map<String, String> extract(CommitRequest request) {
-                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                    params.put("database", String.valueOf(request.getDatabase()));
-                    return params.build();
-                  }
-                })
-            .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         GrpcCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
@@ -377,22 +330,54 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<GetDocumentRequest, Document> getDocumentTransportSettings =
+        GrpcCallSettings.<GetDocumentRequest, Document>newBuilder()
+            .setMethodDescriptor(getDocumentMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<GetDocumentRequest>() {
+                  @Override
+                  public Map<String, String> extract(GetDocumentRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("name", String.valueOf(request.getName()));
+                    return params.build();
+                  }
+                })
+            .build();
+    GrpcCallSettings<ListDocumentsRequest, ListDocumentsResponse> listDocumentsTransportSettings =
+        GrpcCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
+            .setMethodDescriptor(listDocumentsMethodDescriptor)
+            .build();
+    GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
+        GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
+            .setMethodDescriptor(createDocumentMethodDescriptor)
+            .build();
+    GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
+        GrpcCallSettings.<UpdateDocumentRequest, Document>newBuilder()
+            .setMethodDescriptor(updateDocumentMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<UpdateDocumentRequest>() {
+                  @Override
+                  public Map<String, String> extract(UpdateDocumentRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("document.name", String.valueOf(request.getDocument().getName()));
+                    return params.build();
+                  }
+                })
+            .build();
+    GrpcCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
+        GrpcCallSettings.<CommitRequest, CommitResponse>newBuilder()
+            .setMethodDescriptor(commitMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<CommitRequest>() {
+                  @Override
+                  public Map<String, String> extract(CommitRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("database", String.valueOf(request.getDatabase()));
+                    return params.build();
+                  }
+                })
+            .build();
 
-    this.getDocumentCallable =
-        callableFactory.createUnaryCallable(
-            getDocumentTransportSettings, settings.getDocumentSettings(), clientContext);
-    this.listDocumentsCallable =
-        callableFactory.createUnaryCallable(
-            listDocumentsTransportSettings, settings.listDocumentsSettings(), clientContext);
-    this.listDocumentsPagedCallable =
-        callableFactory.createPagedCallable(
-            listDocumentsTransportSettings, settings.listDocumentsSettings(), clientContext);
-    this.createDocumentCallable =
-        callableFactory.createUnaryCallable(
-            createDocumentTransportSettings, settings.createDocumentSettings(), clientContext);
-    this.updateDocumentCallable =
-        callableFactory.createUnaryCallable(
-            updateDocumentTransportSettings, settings.updateDocumentSettings(), clientContext);
     this.deleteDocumentCallable =
         callableFactory.createUnaryCallable(
             deleteDocumentTransportSettings, settings.deleteDocumentSettings(), clientContext);
@@ -404,9 +389,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this.beginTransactionCallable =
         callableFactory.createUnaryCallable(
             beginTransactionTransportSettings, settings.beginTransactionSettings(), clientContext);
-    this.commitCallable =
-        callableFactory.createUnaryCallable(
-            commitTransportSettings, settings.commitSettings(), clientContext);
     this.rollbackCallable =
         callableFactory.createUnaryCallable(
             rollbackTransportSettings, settings.rollbackSettings(), clientContext);
@@ -429,29 +411,26 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
+    this.getDocumentCallable =
+        callableFactory.createUnaryCallable(
+            getDocumentTransportSettings, settings.getDocumentSettings(), clientContext);
+    this.listDocumentsCallable =
+        callableFactory.createUnaryCallable(
+            listDocumentsTransportSettings, settings.listDocumentsSettings(), clientContext);
+    this.listDocumentsPagedCallable =
+        callableFactory.createPagedCallable(
+            listDocumentsTransportSettings, settings.listDocumentsSettings(), clientContext);
+    this.createDocumentCallable =
+        callableFactory.createUnaryCallable(
+            createDocumentTransportSettings, settings.createDocumentSettings(), clientContext);
+    this.updateDocumentCallable =
+        callableFactory.createUnaryCallable(
+            updateDocumentTransportSettings, settings.updateDocumentSettings(), clientContext);
+    this.commitCallable =
+        callableFactory.createUnaryCallable(
+            commitTransportSettings, settings.commitSettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
-  }
-
-  public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
-    return getDocumentCallable;
-  }
-
-  public UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
-      listDocumentsPagedCallable() {
-    return listDocumentsPagedCallable;
-  }
-
-  public UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
-    return listDocumentsCallable;
-  }
-
-  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
-    return createDocumentCallable;
-  }
-
-  public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
-    return updateDocumentCallable;
   }
 
   public UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable() {
@@ -466,10 +445,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     return beginTransactionCallable;
-  }
-
-  public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
-    return commitCallable;
   }
 
   public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
@@ -496,6 +471,31 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
+  }
+
+  public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
+    return getDocumentCallable;
+  }
+
+  public UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
+      listDocumentsPagedCallable() {
+    return listDocumentsPagedCallable;
+  }
+
+  public UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
+    return listDocumentsCallable;
+  }
+
+  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
+    return createDocumentCallable;
+  }
+
+  public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
+    return updateDocumentCallable;
+  }
+
+  public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
+    return commitCallable;
   }
 
   @Override
