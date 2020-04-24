@@ -31,6 +31,7 @@ import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.DatabaseRootName;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -70,6 +71,14 @@ public class MapperTest {
     private double value;
 
     public double getValue() {
+      return value;
+    }
+  }
+
+  private static class BigDecimalBean {
+    private BigDecimal value;
+
+    public BigDecimal getValue() {
       return value;
     }
   }
@@ -1037,6 +1046,38 @@ public class MapperTest {
     // Boolean
     try {
       deserialize("{'value': true}", DoubleBean.class);
+      fail("Should throw");
+    } catch (RuntimeException e) { // ignore
+    }
+
+    // String
+    try {
+      deserialize("{'value': 'foo'}", DoubleBean.class);
+      fail("Should throw");
+    } catch (RuntimeException e) { // ignore
+    }
+  }
+
+  @Test
+  public void primitiveDeserializeBigDecimal() {
+    BigDecimalBean beanBigdecimal = deserialize("{'value': 123}", BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(123), beanBigdecimal.value);
+
+    // Int
+    BigDecimalBean beanInt = deserialize("{'value': 1}", BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(1), beanInt.value);
+
+    // Long
+    BigDecimalBean beanLong = deserialize("{'value': 1234567890123}", BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(1234567890123L), beanLong.value);
+
+    // Double
+    BigDecimalBean beanDouble = deserialize("{'value': 1.1}", BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(1.1), beanDouble.value);
+
+    // Boolean
+    try {
+      deserialize("{'value': true}", BigDecimalBean.class);
       fail("Should throw");
     } catch (RuntimeException e) { // ignore
     }

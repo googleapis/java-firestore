@@ -35,6 +35,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -324,6 +325,8 @@ class CustomClassMapper {
       return (T) convertDouble(o, context);
     } else if (Long.class.isAssignableFrom(clazz) || long.class.isAssignableFrom(clazz)) {
       return (T) convertLong(o, context);
+    } else if (BigDecimal.class.isAssignableFrom(clazz)) {
+      return (T) convertBigDecimal(o, context);
     } else if (Float.class.isAssignableFrom(clazz) || float.class.isAssignableFrom(clazz)) {
       return (T) (Float) convertDouble(o, context).floatValue();
     } else {
@@ -459,6 +462,22 @@ class CustomClassMapper {
       throw deserializeError(
           context.errorPath,
           "Failed to convert a value of type " + o.getClass().getName() + " to double");
+    }
+  }
+
+  private static BigDecimal convertBigDecimal(Object o, DeserializeContext context) {
+    if (o instanceof Integer) {
+      return BigDecimal.valueOf(((Integer) o).intValue());
+    } else if (o instanceof Long) {
+      return BigDecimal.valueOf(((Long) o).longValue());
+    } else if (o instanceof Double) {
+      return BigDecimal.valueOf(((Double) o).doubleValue()).abs();
+    } else if (o instanceof BigDecimal) {
+      return (BigDecimal) o;
+    } else {
+      throw deserializeError(
+          context.errorPath,
+          "Failed to convert a value of type " + o.getClass().getName() + " to BigDecimal");
     }
   }
 
