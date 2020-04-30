@@ -92,7 +92,8 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
 
         clientContext =
             ClientContext.newBuilder()
-                .setCredentials(options.getCredentials())
+                .setCredentials(
+                    options.getHost().contains("localhost") ? options.getCredentials() : null)
                 .setExecutor(executor)
                 .setTransportChannel(transportChannel)
                 .setDefaultCallContext(GrpcCallContext.of(managedChannel, CallOptions.DEFAULT))
