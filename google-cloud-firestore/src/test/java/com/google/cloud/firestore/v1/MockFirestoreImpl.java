@@ -33,6 +33,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -212,12 +214,28 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   }
 
   @Override
+  public void partitionQuery(
+      PartitionQueryRequest request, StreamObserver<PartitionQueryResponse> responseObserver) {
+    Object response = responses.remove();
+    if (response instanceof PartitionQueryResponse) {
+      requests.add(request);
+      responseObserver.onNext((PartitionQueryResponse) response);
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError((Exception) response);
+    } else {
+      responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
+    }
+  }
+
+  @Override
   public StreamObserver<WriteRequest> write(final StreamObserver<WriteResponse> responseObserver) {
-    final Object response = responses.remove();
     StreamObserver<WriteRequest> requestObserver =
         new StreamObserver<WriteRequest>() {
           @Override
           public void onNext(WriteRequest value) {
+            requests.add(value);
+            final Object response = responses.remove();
             if (response instanceof WriteResponse) {
               responseObserver.onNext((WriteResponse) response);
             } else if (response instanceof Exception) {
@@ -243,11 +261,12 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public StreamObserver<ListenRequest> listen(
       final StreamObserver<ListenResponse> responseObserver) {
-    final Object response = responses.remove();
     StreamObserver<ListenRequest> requestObserver =
         new StreamObserver<ListenRequest>() {
           @Override
           public void onNext(ListenRequest value) {
+            requests.add(value);
+            final Object response = responses.remove();
             if (response instanceof ListenResponse) {
               responseObserver.onNext((ListenResponse) response);
             } else if (response instanceof Exception) {

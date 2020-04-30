@@ -17,6 +17,7 @@ package com.google.cloud.firestore.v1.stub;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
+import static com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 
 import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
@@ -45,6 +46,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -179,6 +182,16 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryMethodDescriptor =
+          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
+              .build();
 
   private final BackgroundResource backgroundResources;
 
@@ -202,6 +215,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -377,6 +393,20 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
+        partitionQueryTransportSettings =
+            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+                .setMethodDescriptor(partitionQueryMethodDescriptor)
+                .setParamsExtractor(
+                    new RequestParamsExtractor<PartitionQueryRequest>() {
+                      @Override
+                      public Map<String, String> extract(PartitionQueryRequest request) {
+                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                        params.put("parent", String.valueOf(request.getParent()));
+                        return params.build();
+                      }
+                    })
+                .build();
 
     this.getDocumentCallable =
         callableFactory.createUnaryCallable(
@@ -429,6 +459,12 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
+    this.partitionQueryCallable =
+        callableFactory.createUnaryCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
+    this.partitionQueryPagedCallable =
+        callableFactory.createPagedCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
@@ -496,6 +532,15 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return partitionQueryPagedCallable;
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
+    return partitionQueryCallable;
   }
 
   @Override
