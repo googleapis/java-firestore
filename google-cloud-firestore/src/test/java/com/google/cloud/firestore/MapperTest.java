@@ -1555,6 +1555,13 @@ public class MapperTest {
   }
 
   @Test
+  public void serializeBigDecimalBean() {
+    BigDecimalBean bean = new BigDecimalBean();
+    bean.value = BigDecimal.valueOf(1.1);
+    assertEquals(mapAnyType("value", "1.1"), serialize(bean));
+  }
+
+  @Test
   public void serializeBooleanBean() {
     BooleanBean bean = new BooleanBean();
     bean.value = true;
