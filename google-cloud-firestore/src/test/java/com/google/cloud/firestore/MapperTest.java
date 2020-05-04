@@ -1875,7 +1875,7 @@ public class MapperTest {
     final ShortBean bean = new ShortBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Short are not supported, please use an int, long, float or double (found in field 'value')",
+        "Numbers of type Short are not supported, please use an int, long, float, double or bigDecimal (found in field 'value')",
         new Runnable() {
           @Override
           public void run() {
@@ -1889,7 +1889,7 @@ public class MapperTest {
     final ByteBean bean = new ByteBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Byte are not supported, please use an int, long, float or double (found in field 'value')",
+        "Numbers of type Byte are not supported, please use an int, long, float, double or bigDecimal (found in field 'value')",
         new Runnable() {
           @Override
           public void run() {
@@ -2526,7 +2526,7 @@ public class MapperTest {
     } catch (RuntimeException e) {
       assertEquals(
           "Could not serialize object. Numbers of type Short are not supported, please use an int, "
-              + "long, float or double (found in field 'value.inner.value.short')",
+              + "long, float, double or bigDecimal (found in field 'value.inner.value.short')",
           e.getMessage());
     }
   }
