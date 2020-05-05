@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,6 +81,23 @@ public class MapperTest {
 
     public BigDecimal getValue() {
       return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      BigDecimalBean bean = (BigDecimalBean) o;
+      return Objects.equals(value, bean.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(value);
     }
   }
 
@@ -1063,6 +1081,9 @@ public class MapperTest {
     BigDecimalBean beanBigdecimal = deserialize("{'value': 123}", BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(123), beanBigdecimal.value);
 
+    beanBigdecimal = deserialize("{'value': '123'}", BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(123), beanBigdecimal.value);
+
     // Int
     BigDecimalBean beanInt = deserialize("{'value': 1}", BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1), beanInt.value);
@@ -1084,7 +1105,7 @@ public class MapperTest {
 
     // String
     try {
-      deserialize("{'value': 'foo'}", DoubleBean.class);
+      deserialize("{'value': 'foo'}", BigDecimalBean.class);
       fail("Should throw");
     } catch (RuntimeException e) { // ignore
     }
@@ -1562,6 +1583,16 @@ public class MapperTest {
   }
 
   @Test
+  public void bigDecimalRoundTrip() {
+    BigDecimal doubleMaxPlusOne = BigDecimal.valueOf(Double.MAX_VALUE).add(BigDecimal.ONE);
+    BigDecimalBean a = new BigDecimalBean();
+    a.value = doubleMaxPlusOne;
+    Map<String, Object> serialized = (Map<String, Object>) serialize(a);
+    BigDecimalBean b = convertToCustomClass(serialized, BigDecimalBean.class);
+    assertEquals(a, b);
+  }
+
+  @Test
   public void serializeBooleanBean() {
     BooleanBean bean = new BooleanBean();
     bean.value = true;
@@ -1875,7 +1906,7 @@ public class MapperTest {
     final ShortBean bean = new ShortBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Short are not supported, please use an int, long, float, double or bigDecimal (found in field 'value')",
+        "Numbers of type Short are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
         new Runnable() {
           @Override
           public void run() {
@@ -1889,7 +1920,7 @@ public class MapperTest {
     final ByteBean bean = new ByteBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Byte are not supported, please use an int, long, float, double or bigDecimal (found in field 'value')",
+        "Numbers of type Byte are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
         new Runnable() {
           @Override
           public void run() {
@@ -2526,7 +2557,7 @@ public class MapperTest {
     } catch (RuntimeException e) {
       assertEquals(
           "Could not serialize object. Numbers of type Short are not supported, please use an int, "
-              + "long, float, double or bigDecimal (found in field 'value.inner.value.short')",
+              + "long, float, double or BigDecimal (found in field 'value.inner.value.short')",
           e.getMessage());
     }
   }

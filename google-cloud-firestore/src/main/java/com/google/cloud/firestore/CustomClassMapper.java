@@ -119,12 +119,12 @@ class CustomClassMapper {
       if (o instanceof Long || o instanceof Integer || o instanceof Double || o instanceof Float) {
         return o;
       } else if (o instanceof BigDecimal) {
-        return String.valueOf(o).trim();
+        return String.valueOf(o);
       } else {
         throw serializeError(
             path,
             String.format(
-                "Numbers of type %s are not supported, please use an int, long, float, double or bigDecimal",
+                "Numbers of type %s are not supported, please use an int, long, float, double or BigDecimal",
                 o.getClass().getSimpleName()));
       }
     } else if (o instanceof String) {
@@ -476,6 +476,8 @@ class CustomClassMapper {
       return BigDecimal.valueOf(((Double) o).doubleValue()).abs();
     } else if (o instanceof BigDecimal) {
       return (BigDecimal) o;
+    } else if (o instanceof String) {
+      return new BigDecimal((String) o);
     } else {
       throw deserializeError(
           context.errorPath,
