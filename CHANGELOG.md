@@ -1,5 +1,16 @@
 # Changelog
 
+### [1.33.1](https://www.github.com/googleapis/java-firestore/compare/v1.33.0...v1.33.1) (2020-05-05)
+
+
+### Dependencies
+
+* update dependency com.google.api.grpc:proto-google-common-protos to v1.18.0 ([#204](https://www.github.com/googleapis/java-firestore/issues/204)) ([1e05de4](https://www.github.com/googleapis/java-firestore/commit/1e05de4ecfde055a1c84c2f6dd338604b8580a61))
+* update dependency com.google.cloud:google-cloud-conformance-tests to v0.0.10 ([#197](https://www.github.com/googleapis/java-firestore/issues/197)) ([69372af](https://www.github.com/googleapis/java-firestore/commit/69372af7253564691b291766e2bf4d80e9ecc770))
+* update dependency com.google.guava:guava-bom to v29 ([#180](https://www.github.com/googleapis/java-firestore/issues/180)) ([3c204b4](https://www.github.com/googleapis/java-firestore/commit/3c204b42ddfbe435ac095368d1e695ed282280bd))
+* update dependency org.threeten:threetenbp to v1.4.4 ([#194](https://www.github.com/googleapis/java-firestore/issues/194)) ([c867bd5](https://www.github.com/googleapis/java-firestore/commit/c867bd5772aa4a4710c622546e69fdc0f1ca22b6))
+* update jackson dependencies to v2.11.0 ([#195](https://www.github.com/googleapis/java-firestore/issues/195)) ([5066812](https://www.github.com/googleapis/java-firestore/commit/50668126e99422cc9498b317c9c76a80a8bf7b30))
+
 ## [1.33.0](https://www.github.com/googleapis/java-firestore/compare/v1.32.5...v1.33.0) (2020-04-08)
 
 
