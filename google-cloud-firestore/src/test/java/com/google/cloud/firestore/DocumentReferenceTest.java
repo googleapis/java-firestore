@@ -180,19 +180,19 @@ public class DocumentReferenceTest {
     pojo.bigIntegerValue = new BigInteger("0");
     expectedErrorMessages.put(
         pojo,
-        "Could not serialize object. Numbers of type BigInteger are not supported, please use an int, long, float or double (found in field 'bigIntegerValue')");
+        "Could not serialize object. Numbers of type BigInteger are not supported, please use an int, long, float, double or BigDecimal (found in field 'bigIntegerValue')");
 
     pojo = new InvalidPOJO();
     pojo.byteValue = 0;
     expectedErrorMessages.put(
         pojo,
-        "Could not serialize object. Numbers of type Byte are not supported, please use an int, long, float or double (found in field 'byteValue')");
+        "Could not serialize object. Numbers of type Byte are not supported, please use an int, long, float, double or BigDecimal (found in field 'byteValue')");
 
     pojo = new InvalidPOJO();
     pojo.shortValue = 0;
     expectedErrorMessages.put(
         pojo,
-        "Could not serialize object. Numbers of type Short are not supported, please use an int, long, float or double (found in field 'shortValue')");
+        "Could not serialize object. Numbers of type Short are not supported, please use an int, long, float, double or BigDecimal (found in field 'shortValue')");
 
     for (Map.Entry<InvalidPOJO, String> testCase : expectedErrorMessages.entrySet()) {
       try {
