@@ -40,6 +40,7 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.Direction;
@@ -270,6 +271,87 @@ public class QueryTest {
 
     for (RunQueryRequest actual : runQuery.getAllValues()) {
       assertEquals(expected.next(), actual);
+    }
+  }
+
+  @Test
+  public void inQueriesWithReferenceArray() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    query
+        .whereIn(
+            FieldPath.documentId(),
+            Arrays.<Object>asList("doc", firestoreMock.document("coll/doc")))
+        .get()
+        .get();
+
+    Value value =
+        Value.newBuilder()
+            .setArrayValue(
+                ArrayValue.newBuilder()
+                    .addValues(reference(DOCUMENT_NAME))
+                    .addValues(reference(DOCUMENT_NAME))
+                    .build())
+            .build();
+    RunQueryRequest expectedRequest = query(filter(Operator.IN, "__name__", value));
+
+    assertEquals(expectedRequest, runQuery.getValue());
+  }
+
+  @Test
+  public void validatesInQueries() throws Exception {
+    try {
+      query.whereIn(FieldPath.documentId(), Arrays.<Object>asList("foo", 42)).get();
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "The corresponding value for FieldPath.documentId() must be a String or a "
+              + "DocumentReference, but was: 42.",
+          e.getMessage());
+    }
+
+    try {
+      query.whereIn(FieldPath.documentId(), Arrays.<Object>asList(42)).get();
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "The corresponding value for FieldPath.documentId() must be a String or a "
+              + "DocumentReference, but was: 42.",
+          e.getMessage());
+    }
+
+    try {
+      query.whereIn(FieldPath.documentId(), Arrays.<Object>asList()).get();
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "Invalid Query. A non-empty array is required for 'IN' filters.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void validatesQueryOperatorForFieldPathDocumentId() throws Exception {
+    try {
+      query.whereArrayContains(FieldPath.documentId(), "bar");
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "Invalid query. You cannot perform 'ARRAY_CONTAINS' queries on FieldPath.documentId().",
+          e.getMessage());
+    }
+
+    try {
+      query.whereArrayContainsAny(FieldPath.documentId(), Collections.<Object>singletonList("bar"));
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "Invalid query. You cannot perform 'ARRAY_CONTAINS_ANY' queries on FieldPath.documentId().",
+          e.getMessage());
     }
   }
 
@@ -523,7 +605,7 @@ public class QueryTest {
     } catch (IllegalArgumentException e) {
       assertEquals(
           "The corresponding value for FieldPath.documentId() must be a String or a "
-              + "DocumentReference.",
+              + "DocumentReference, but was: 42.",
           e.getMessage());
     }
 

@@ -1142,6 +1142,18 @@ public class ITSystemTest {
   }
 
   @Test
+  public void inQueriesWithDocumentId() throws Exception {
+    DocumentReference doc1 = setDocument("a", map("count", 1));
+    DocumentReference doc2 = setDocument("b", map("count", 2));
+    setDocument("c", map("count", 3));
+
+    QuerySnapshot querySnapshot =
+        randomColl.whereIn("zip", Arrays.<Object>asList(doc1.getId(), doc2)).get().get();
+
+    assertEquals(asList("a", "c"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
   public void arrayContainsAnyQueries() throws Exception {
     setDocument("a", map("array", asList(42)));
     setDocument("b", map("array", asList("a", 42, "c")));
