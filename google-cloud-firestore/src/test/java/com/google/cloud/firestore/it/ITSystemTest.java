@@ -30,7 +30,9 @@ import static org.junit.Assert.fail;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -57,6 +59,8 @@ import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1148,9 +1152,9 @@ public class ITSystemTest {
     setDocument("c", map("count", 3));
 
     QuerySnapshot querySnapshot =
-        randomColl.whereIn("zip", Arrays.<Object>asList(doc1.getId(), doc2)).get().get();
+        randomColl.whereIn(FieldPath.documentId(), Arrays.<Object>asList(doc1.getId(), doc2)).get().get();
 
-    assertEquals(asList("a", "c"), querySnapshotToIds(querySnapshot));
+    assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
   }
 
   @Test

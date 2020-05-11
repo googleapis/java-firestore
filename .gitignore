@@ -2,3 +2,7 @@ target/
 .idea/
 *.iml
 __pycache__/
+.project
+.settings
+.factorypath
+.classpath
