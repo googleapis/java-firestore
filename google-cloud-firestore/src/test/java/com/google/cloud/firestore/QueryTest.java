@@ -316,16 +316,6 @@ public class QueryTest {
     }
 
     try {
-      query.whereIn(FieldPath.documentId(), Arrays.<Object>asList(42)).get();
-      fail();
-    } catch (IllegalArgumentException e) {
-      assertEquals(
-          "The corresponding value for FieldPath.documentId() must be a String or a "
-              + "DocumentReference, but was: 42.",
-          e.getMessage());
-    }
-
-    try {
       query.whereIn(FieldPath.documentId(), Arrays.<Object>asList()).get();
       fail();
     } catch (IllegalArgumentException e) {

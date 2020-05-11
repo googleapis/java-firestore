@@ -717,7 +717,7 @@ public class Query {
                 "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
                 operator.toString()));
       } else if (operator == IN) {
-        if (!(value instanceof List) || ((List<?>) value).size() == 0) {
+        if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
           throw new IllegalArgumentException(
               String.format(
                   "Invalid Query. A non-empty array is required for '%s' filters.",
