@@ -407,8 +407,10 @@ public class Query {
       reference = (DocumentReference) fieldValue;
     } else {
       throw new IllegalArgumentException(
-          "The corresponding value for FieldPath.documentId() must be a String or a "
-              + "DocumentReference.");
+          String.format(
+              "The corresponding value for FieldPath.documentId() must be a String or a "
+                  + "DocumentReference, but was: %s.",
+              fieldValue.toString()));
     }
 
     if (!basePath.isPrefixOf(reference.getResourcePath())) {
@@ -709,7 +711,27 @@ public class Query {
   private Query whereHelper(
       FieldPath fieldPath, StructuredQuery.FieldFilter.Operator operator, Object value) {
     if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
-      value = this.convertReference(value);
+      if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
+        throw new IllegalArgumentException(
+            String.format(
+                "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
+                operator.toString()));
+      } else if (operator == IN) {
+        if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Invalid Query. A non-empty array is required for '%s' filters.",
+                  operator.toString()));
+        }
+        List<Object> referenceList = new ArrayList<>();
+        for (Object arrayValue : (List<Object>) value) {
+          Object convertedValue = this.convertReference(arrayValue);
+          referenceList.add(convertedValue);
+        }
+        value = referenceList;
+      } else {
+        value = this.convertReference(value);
+      }
     }
 
     Builder newOptions = options.toBuilder();
