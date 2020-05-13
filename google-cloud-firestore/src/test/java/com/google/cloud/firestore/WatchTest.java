@@ -990,15 +990,15 @@ public class WatchTest {
     return response.build();
   }
 
-  private void send(ListenResponse response) throws InterruptedException {
+  private void send(ListenResponse response) {
     streamObserverCapture.getValue().onNext(response);
   }
 
-  private void destroy(Code code) throws InterruptedException {
+  private void destroy(Code code) {
     streamObserverCapture.getValue().onError(new StatusException(io.grpc.Status.fromCode(code)));
   }
 
-  private void close() throws InterruptedException {
+  private void close() {
     streamObserverCapture.getValue().onCompleted();
   }
 
@@ -1006,7 +1006,7 @@ public class WatchTest {
   private Answer newRequestObserver() {
     return new Answer() {
       @Override
-      public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+      public Object answer(InvocationOnMock invocationOnMock) {
         return new ApiStreamObserver<ListenRequest>() {
           @Override
           public void onNext(ListenRequest listenRequest) {

@@ -165,7 +165,7 @@ public class QueryTest {
   }
 
   @Test
-  public void limitToLastRejectsStream() throws Exception {
+  public void limitToLastRejectsStream() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -304,7 +304,7 @@ public class QueryTest {
   }
 
   @Test
-  public void validatesInQueries() throws Exception {
+  public void validatesInQueries() {
     try {
       query.whereIn(FieldPath.documentId(), Arrays.<Object>asList("foo", 42)).get();
       fail();
@@ -325,7 +325,7 @@ public class QueryTest {
   }
 
   @Test
-  public void validatesQueryOperatorForFieldPathDocumentId() throws Exception {
+  public void validatesQueryOperatorForFieldPathDocumentId() {
     try {
       query.whereArrayContains(FieldPath.documentId(), "bar");
       fail();
@@ -447,7 +447,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withDocumentSnapshotCursor() throws Exception {
+  public void withDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -468,7 +468,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withDocumentIdAndDocumentSnapshotCursor() throws Exception {
+  public void withDocumentIdAndDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -489,7 +489,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withExtractedDirectionForDocumentSnapshotCursor() throws Exception {
+  public void withExtractedDirectionForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -512,7 +512,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withInequalityFilterForDocumentSnapshotCursor() throws Exception {
+  public void withInequalityFilterForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -543,7 +543,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withEqualityFilterForDocumentSnapshotCursor() throws Exception {
+  public void withEqualityFilterForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -588,7 +588,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withInvalidStartAt() throws Exception {
+  public void withInvalidStartAt() {
     try {
       query.orderBy(FieldPath.documentId()).startAt(42).get();
       fail();
@@ -670,7 +670,7 @@ public class QueryTest {
   }
 
   @Test
-  public void withCollectionGroup() throws Exception {
+  public void withCollectionGroup() {
     doAnswer(queryResponse())
         .when(firestoreMock)
         .streamRequest(
@@ -707,12 +707,12 @@ public class QueryTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void overspecifiedCursor() throws Exception {
+  public void overspecifiedCursor() {
     query.orderBy("foo").startAt("foo", "bar", "bar", "foo");
   }
 
   @Test(expected = IllegalStateException.class)
-  public void orderByWithCursor() throws Exception {
+  public void orderByWithCursor() {
     query.startAt("foo").orderBy("foo");
   }
 
@@ -798,7 +798,7 @@ public class QueryTest {
   }
 
   @Test
-  public void equalsTest() throws Exception {
+  public void equalsTest() {
     assertEquals(query.limit(42).offset(1337), query.offset(1337).limit(42));
     assertEquals(query.limit(42).offset(1337).hashCode(), query.offset(1337).limit(42).hashCode());
   }
