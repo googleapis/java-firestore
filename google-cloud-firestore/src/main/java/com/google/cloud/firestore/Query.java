@@ -149,7 +149,14 @@ public class Query {
 
     @Override
     boolean isEqualsFilter() {
-      return operator.equals(EQUAL);
+      return !isInequalityFilter();
+    }
+
+    private boolean isInequalityFilter() {
+      return operator.equals(GREATER_THAN)
+          || operator.equals(GREATER_THAN_OR_EQUAL)
+          || operator.equals(LESS_THAN)
+          || operator.equals(LESS_THAN_OR_EQUAL);
     }
 
     Filter toProto() {

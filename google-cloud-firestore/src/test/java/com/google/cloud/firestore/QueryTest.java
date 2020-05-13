@@ -304,6 +304,39 @@ public class QueryTest {
   }
 
   @Test
+  public void inQueriesFieldsNotUsedInOrderBy() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    // Field "foo" used in `whereIn` should not appear in implicit orderBys in the resulting query.
+    query
+        .whereIn(FieldPath.of("foo"), Arrays.<Object>asList("value1", "value2"))
+        .startAt(SINGLE_FIELD_SNAPSHOT)
+        .get()
+        .get();
+
+    Value value =
+        Value.newBuilder()
+            .setArrayValue(
+                ArrayValue.newBuilder()
+                    .addValues(Value.newBuilder().setStringValue("value1").build())
+                    .addValues(Value.newBuilder().setStringValue("value2").build())
+                    .build())
+            .build();
+    RunQueryRequest expectedRequest =
+        query(
+            filter(Operator.IN, "foo", value),
+            order("__name__", Direction.ASCENDING),
+            startAt(reference(DOCUMENT_NAME), true));
+
+    assertEquals(expectedRequest, runQuery.getValue());
+  }
+
+  @Test
   public void validatesInQueries() throws Exception {
     try {
       query.whereIn(FieldPath.documentId(), Arrays.<Object>asList("foo", 42)).get();
