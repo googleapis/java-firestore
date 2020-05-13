@@ -19,13 +19,14 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_VALUE;
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_PRECONDITION;
 import static com.google.cloud.firestore.LocalFirestoreHelper.arrayRemove;
 import static com.google.cloud.firestore.LocalFirestoreHelper.arrayUnion;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.transform;
+import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.cloud.firestore.LocalFirestoreHelper.writeWithTransform;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
@@ -40,6 +41,9 @@ import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.ListCollectionIdsRequest;
+import com.google.firestore.v1.Value;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.junit.Test;
@@ -196,7 +200,10 @@ public class FirestoreTest {
     doc.update("array", FieldValue.arrayUnion(SINGLE_FIELD_OBJECT)).get();
 
     CommitRequest expectedRequest =
-        commit(transform(UPDATE_PRECONDITION, "array", arrayUnion(SINGLE_FIELD_VALUE)));
+        commit(
+            writeWithTransform(
+                update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+                transform("array", arrayUnion(SINGLE_FIELD_VALUE))));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);
   }
@@ -212,7 +219,10 @@ public class FirestoreTest {
     doc.update("array", FieldValue.arrayRemove(SINGLE_FIELD_OBJECT)).get();
 
     CommitRequest expectedRequest =
-        commit(transform(UPDATE_PRECONDITION, "array", arrayRemove(SINGLE_FIELD_VALUE)));
+        commit(
+            writeWithTransform(
+                update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+                transform("array", arrayRemove(SINGLE_FIELD_VALUE))));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);
   }

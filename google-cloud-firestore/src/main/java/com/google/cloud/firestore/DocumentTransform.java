@@ -17,7 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.firestore.v1.DocumentTransform.FieldTransform;
-import com.google.firestore.v1.Write;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +30,9 @@ import java.util.TreeMap;
  */
 final class DocumentTransform {
 
-  private DocumentReference documentReference;
   private final SortedMap<FieldPath, FieldTransform> transforms; // Sorted for testing.
 
-  private DocumentTransform(
-      DocumentReference documentReference, SortedMap<FieldPath, FieldTransform> transforms) {
-    this.documentReference = documentReference;
+  private DocumentTransform(SortedMap<FieldPath, FieldTransform> transforms) {
     this.transforms = transforms;
   }
 
@@ -61,7 +58,7 @@ final class DocumentTransform {
       }
     }
 
-    return new DocumentTransform(documentReference, transforms);
+    return new DocumentTransform(transforms);
   }
 
   private static SortedMap<FieldPath, FieldTransform> extractFromMap(
@@ -116,11 +113,7 @@ final class DocumentTransform {
     return Collections.unmodifiableSet(transforms.keySet());
   }
 
-  Write.Builder toPb() {
-    Write.Builder write = Write.newBuilder();
-    com.google.firestore.v1.DocumentTransform.Builder transform = write.getTransformBuilder();
-    transform.addAllFieldTransforms(transforms.values());
-    transform.setDocument(documentReference.getName());
-    return write;
+  Collection<FieldTransform> toPb() {
+    return transforms.values();
   }
 }

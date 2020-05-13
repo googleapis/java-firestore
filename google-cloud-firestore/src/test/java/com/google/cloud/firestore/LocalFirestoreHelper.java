@@ -38,7 +38,6 @@ import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
-import com.google.firestore.v1.DocumentTransform;
 import com.google.firestore.v1.DocumentTransform.FieldTransform;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Precondition;
@@ -112,7 +111,6 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Object> SERVER_TIMESTAMP_MAP;
   public static final ServerTimestamp SERVER_TIMESTAMP_OBJECT;
   public static final Map<String, Value> SERVER_TIMESTAMP_PROTO;
-  public static final Write SERVER_TIMESTAMP_TRANSFORM;
 
   public static final Map<String, Object> ALL_SUPPORTED_TYPES_MAP;
   public static final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT;
@@ -130,8 +128,6 @@ public final class LocalFirestoreHelper {
   public static final Timestamp TIMESTAMP;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
-
-  public static final Precondition CREATE_PRECONDITION;
 
   public static final Precondition UPDATE_PRECONDITION;
 
@@ -351,33 +347,21 @@ public final class LocalFirestoreHelper {
         .build();
   }
 
-  public static Write transform(
+  public static List<FieldTransform> transform(
       String fieldPath, FieldTransform fieldTransform, Object... fieldPathOrTransform) {
-    return transform(null, fieldPath, fieldTransform, fieldPathOrTransform);
-  }
 
-  public static Write transform(
-      @Nullable Precondition precondition,
-      String fieldPath,
-      FieldTransform fieldTransform,
-      Object... fieldPathOrTransform) {
-    Write.Builder write = Write.newBuilder();
-    DocumentTransform.Builder documentTransform = write.getTransformBuilder();
-    documentTransform.setDocument(DOCUMENT_NAME);
+    List<FieldTransform> transforms = new ArrayList<>();
+    FieldTransform.Builder transformBuilder = FieldTransform.newBuilder();
+    transformBuilder.setFieldPath(fieldPath).mergeFrom(fieldTransform);
 
-    documentTransform.addFieldTransformsBuilder().setFieldPath(fieldPath).mergeFrom(fieldTransform);
+    transforms.add(transformBuilder.build());
 
     for (int i = 0; i < fieldPathOrTransform.length; i += 2) {
       String path = (String) fieldPathOrTransform[i];
       FieldTransform transform = (FieldTransform) fieldPathOrTransform[i + 1];
-      documentTransform.addFieldTransformsBuilder().setFieldPath(path).mergeFrom(transform);
+      transforms.add(FieldTransform.newBuilder().setFieldPath(path).mergeFrom(transform).build());
     }
-
-    if (precondition != null) {
-      write.setCurrentDocument(precondition);
-    }
-
-    return write.build();
+    return transforms;
   }
 
   public static Write create(Map<String, Value> fields) {
@@ -454,6 +438,10 @@ public final class LocalFirestoreHelper {
 
   public static CommitRequest commit(Write... writes) {
     return commit(null, writes);
+  }
+
+  public static Write writeWithTransform(Write write, List<FieldTransform> transforms) {
+    return write.toBuilder().addAllUpdateTransforms(transforms).build();
   }
 
   public static StructuredQuery filter(StructuredQuery.FieldFilter.Operator operator) {
@@ -644,9 +632,8 @@ public final class LocalFirestoreHelper {
         writes.setUpdateMask(DocumentMask.newBuilder().addAllFieldPaths(updateMask));
       }
 
-      if (writes.getTransform().getFieldTransformsCount() > 0) {
-        ArrayList<FieldTransform> transformList =
-            new ArrayList<>(writes.getTransform().getFieldTransformsList());
+      if (!writes.getUpdateTransformsList().isEmpty()) {
+        ArrayList<FieldTransform> transformList = new ArrayList<>(writes.getUpdateTransformsList());
         Collections.sort(
             transformList,
             new Comparator<FieldTransform>() {
@@ -655,7 +642,7 @@ public final class LocalFirestoreHelper {
                 return t1.getFieldPath().compareTo(t2.getFieldPath());
               }
             });
-        writes.setTransform(DocumentTransform.newBuilder().addAllFieldTransforms(transformList));
+        writes.clearUpdateTransforms().addAllUpdateTransforms(transformList);
       }
     }
 
@@ -787,8 +774,6 @@ public final class LocalFirestoreHelper {
     mapValue.getMapValueBuilder();
     SERVER_TIMESTAMP_PROTO = Collections.emptyMap();
     SERVER_TIMESTAMP_OBJECT = new ServerTimestamp();
-    SERVER_TIMESTAMP_TRANSFORM =
-        transform("foo", serverTimestamp(), "inner.bar", serverTimestamp());
 
     ALL_SUPPORTED_TYPES_MAP = new HashMap<>();
     ALL_SUPPORTED_TYPES_MAP.put("foo", "bar");
@@ -866,8 +851,6 @@ public final class LocalFirestoreHelper {
     FIELD_TRANSFORM_COMMIT_RESPONSE = commitResponse(/* adds= */ 2, /* deletes= */ 0);
 
     NESTED_CLASS_OBJECT = new NestedClass();
-
-    CREATE_PRECONDITION = Precondition.newBuilder().setExists(false).build();
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
     UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);

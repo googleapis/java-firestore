@@ -126,12 +126,10 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     Mutation mutation = addMutation();
     mutation.precondition = Precondition.exists(false).toPb();
 
-    if (!documentSnapshot.isEmpty() || documentTransform.isEmpty()) {
-      mutation.document = documentSnapshot.toPb();
-    }
+    mutation.document = documentSnapshot.toPb();
 
     if (!documentTransform.isEmpty()) {
-      mutation.transform = documentTransform.toPb();
+      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
     }
 
     return (T) this;
@@ -248,29 +246,23 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     DocumentTransform documentTransform =
         DocumentTransform.fromFieldPathMap(documentReference, documentData);
 
-    if (options.isMerge()) {
-      if (options.getFieldMask() != null) {
-        List<FieldPath> fieldMask = new ArrayList<>(options.getFieldMask());
-        fieldMask.removeAll(documentTransform.getFields());
-        documentMask = new FieldMask(fieldMask);
-      } else {
-        documentMask = FieldMask.fromObject(fields);
-      }
+    if (options.getFieldMask() != null) {
+      List<FieldPath> fieldMask = new ArrayList<>(options.getFieldMask());
+      fieldMask.removeAll(documentTransform.getFields());
+      documentMask = new FieldMask(fieldMask);
+    } else if (options.isMerge()) {
+      documentMask = FieldMask.fromObject(fields);
     }
 
     Mutation mutation = addMutation();
 
-    boolean hasDocumentData = !documentSnapshot.isEmpty() || !documentMask.isEmpty();
-
-    if (!options.isMerge()) {
-      mutation.document = documentSnapshot.toPb();
-    } else if (hasDocumentData || documentTransform.isEmpty()) {
-      mutation.document = documentSnapshot.toPb();
-      mutation.document.setUpdateMask(documentMask.toPb());
+    mutation.document = documentSnapshot.toPb();
+    if (!documentTransform.isEmpty()) {
+      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    if (!documentTransform.isEmpty()) {
-      mutation.transform = documentTransform.toPb();
+    if (options.isMerge() || options.getFieldMask() != null) {
+      mutation.document.setUpdateMask(documentMask.toPb());
     }
 
     return (T) this;
@@ -535,13 +527,11 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     Mutation mutation = addMutation();
     mutation.precondition = precondition.toPb();
 
-    if (!documentSnapshot.isEmpty() || !fieldMask.isEmpty()) {
-      mutation.document = documentSnapshot.toPb();
-      mutation.document.setUpdateMask(fieldMask.toPb());
-    }
+    mutation.document = documentSnapshot.toPb();
+    mutation.document.setUpdateMask(fieldMask.toPb());
 
     if (!documentTransform.isEmpty()) {
-      mutation.transform = documentTransform.toPb();
+      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
     }
 
     return (T) this;
@@ -595,22 +585,11 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     request.setDatabase(firestore.getDatabaseName());
 
     for (Mutation mutation : mutations) {
-      Preconditions.checkState(
-          mutation.document != null || mutation.transform != null,
-          "Either a write or transform must be set");
-
       if (mutation.precondition != null) {
-        (mutation.document != null ? mutation.document : mutation.transform)
-            .setCurrentDocument(mutation.precondition);
+        mutation.document.setCurrentDocument(mutation.precondition);
       }
 
-      if (mutation.document != null) {
-        request.addWrites(mutation.document);
-      }
-
-      if (mutation.transform != null) {
-        request.addWrites(mutation.transform);
-      }
+      request.addWrites(mutation.document);
     }
 
     if (transactionId != null) {
@@ -632,27 +611,12 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
             List<WriteResult> result = new ArrayList<>();
 
-            Preconditions.checkState(
-                request.getWritesCount() == writeResults.size(),
-                "Expected one write result per operation, but got %s results for %s operations.",
-                writeResults.size(),
-                request.getWritesCount());
-
             Iterator<Mutation> mutationIterator = mutations.iterator();
             Iterator<com.google.firestore.v1.WriteResult> responseIterator =
                 writeResults.iterator();
 
             while (mutationIterator.hasNext()) {
-              Mutation mutation = mutationIterator.next();
-
-              // Don't return both write results for a write that contains a transform, as the fact
-              // that we have to split one write operation into two distinct write requests is an
-              // implementation detail.
-              if (mutation.document != null && mutation.transform != null) {
-                // The document transform is always sent last and produces the latest update time.
-                responseIterator.next();
-              }
-
+              mutationIterator.next();
               result.add(
                   WriteResult.fromProto(responseIterator.next(), commitResponse.getCommitTime()));
             }
