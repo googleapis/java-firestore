@@ -31,7 +31,6 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -110,6 +109,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
+    verifyNotCommitted();
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, fields, UserDataConverter.NO_DELETES);
@@ -117,7 +117,6 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
         DocumentTransform.fromFieldPathMap(
             documentReference, convertToFieldPaths(fields, /* splitOnDots= */ false));
 
-    verifyNotCommitted();
     Write.Builder write = documentSnapshot.toPb();
     write.setCurrentDocument(Precondition.exists(false).toPb());
 
@@ -223,6 +222,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
       @Nonnull SetOptions options) {
+    verifyNotCommitted();
     Map<FieldPath, Object> documentData;
 
     if (options.getFieldMask() != null) {
@@ -246,7 +246,6 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       documentMask = FieldMask.fromObject(fields);
     }
 
-    verifyNotCommitted();
     Write.Builder write = documentSnapshot.toPb();
     if (!documentTransform.isEmpty()) {
       write.addAllUpdateTransforms(documentTransform.toPb());
@@ -492,6 +491,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       @Nonnull DocumentReference documentReference,
       @Nonnull final Map<FieldPath, Object> fields,
       @Nonnull Precondition precondition) {
+    verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
 
     Map<String, Object> deconstructedMap = expandObject(fields);
@@ -517,7 +517,6 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     fieldPaths.removeAll(documentTransform.getFields());
     FieldMask fieldMask = new FieldMask(fieldPaths);
 
-    verifyNotCommitted();
     Write.Builder write = documentSnapshot.toPb();
     write.setCurrentDocument(precondition.toPb());
     write.setUpdateMask(fieldMask.toPb());
@@ -601,14 +600,8 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
             List<WriteResult> result = new ArrayList<>();
 
-            Iterator<Write.Builder> writeIterator = writes.iterator();
-            Iterator<com.google.firestore.v1.WriteResult> responseIterator =
-                writeResults.iterator();
-
-            while (writeIterator.hasNext()) {
-              writeIterator.next();
-              result.add(
-                  WriteResult.fromProto(responseIterator.next(), commitResponse.getCommitTime()));
+            for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+              result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
             }
 
             return result;
