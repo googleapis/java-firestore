@@ -26,7 +26,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.transform;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
-import static com.google.cloud.firestore.LocalFirestoreHelper.writeWithTransform;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
@@ -201,9 +200,8 @@ public class FirestoreTest {
 
     CommitRequest expectedRequest =
         commit(
-            writeWithTransform(
-                update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
-                transform("array", arrayUnion(SINGLE_FIELD_VALUE))));
+            update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+            transform("array", arrayUnion(SINGLE_FIELD_VALUE)));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);
   }
@@ -220,9 +218,8 @@ public class FirestoreTest {
 
     CommitRequest expectedRequest =
         commit(
-            writeWithTransform(
-                update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
-                transform("array", arrayRemove(SINGLE_FIELD_VALUE))));
+            update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+            transform("array", arrayRemove(SINGLE_FIELD_VALUE)));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);
   }

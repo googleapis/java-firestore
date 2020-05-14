@@ -440,8 +440,8 @@ public final class LocalFirestoreHelper {
     return commit(null, writes);
   }
 
-  public static Write writeWithTransform(Write write, List<FieldTransform> transforms) {
-    return write.toBuilder().addAllUpdateTransforms(transforms).build();
+  public static CommitRequest commit(Write write, List<FieldTransform> transforms) {
+    return commit((String) null, write.toBuilder().addAllUpdateTransforms(transforms).build());
   }
 
   public static StructuredQuery filter(StructuredQuery.FieldFilter.Operator operator) {

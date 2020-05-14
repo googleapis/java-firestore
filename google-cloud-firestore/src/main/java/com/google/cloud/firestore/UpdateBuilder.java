@@ -46,19 +46,13 @@ import javax.annotation.Nullable;
  */
 public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
-  private static class Mutation {
-    Write.Builder document;
-    Write.Builder transform;
-    com.google.firestore.v1.Precondition precondition;
-  }
-
   final FirestoreImpl firestore;
-  private final List<Mutation> mutations;
+  private final List<Write.Builder> writes;
   private boolean committed;
 
   UpdateBuilder(FirestoreImpl firestore) {
     this.firestore = firestore;
-    this.mutations = new ArrayList<>();
+    this.writes = new ArrayList<>();
   }
 
   /**
@@ -123,25 +117,23 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
         DocumentTransform.fromFieldPathMap(
             documentReference, convertToFieldPaths(fields, /* splitOnDots= */ false));
 
-    Mutation mutation = addMutation();
-    mutation.precondition = Precondition.exists(false).toPb();
-
-    mutation.document = documentSnapshot.toPb();
+    verifyNotCommitted();
+    Write.Builder write = documentSnapshot.toPb();
+    write.setCurrentDocument(Precondition.exists(false).toPb());
 
     if (!documentTransform.isEmpty()) {
-      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
+      write.addAllUpdateTransforms(documentTransform.toPb());
     }
+
+    writes.add(write);
 
     return (T) this;
   }
 
-  /** Adds a new mutation to the batch. */
-  private Mutation addMutation() {
+  /** Adds a new write to the batch. */
+  private void verifyNotCommitted() {
     Preconditions.checkState(
         !committed, "Cannot modify a WriteBatch that has already been committed.");
-    Mutation mutation = new Mutation();
-    mutations.add(mutation);
-    return mutation;
   }
 
   /**
@@ -254,16 +246,17 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       documentMask = FieldMask.fromObject(fields);
     }
 
-    Mutation mutation = addMutation();
-
-    mutation.document = documentSnapshot.toPb();
+    verifyNotCommitted();
+    Write.Builder write = documentSnapshot.toPb();
     if (!documentTransform.isEmpty()) {
-      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
+      write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
     if (options.isMerge() || options.getFieldMask() != null) {
-      mutation.document.setUpdateMask(documentMask.toPb());
+      write.setUpdateMask(documentMask.toPb());
     }
+
+    writes.add(write);
 
     return (T) this;
   }
@@ -524,15 +517,15 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     fieldPaths.removeAll(documentTransform.getFields());
     FieldMask fieldMask = new FieldMask(fieldPaths);
 
-    Mutation mutation = addMutation();
-    mutation.precondition = precondition.toPb();
-
-    mutation.document = documentSnapshot.toPb();
-    mutation.document.setUpdateMask(fieldMask.toPb());
+    verifyNotCommitted();
+    Write.Builder write = documentSnapshot.toPb();
+    write.setCurrentDocument(precondition.toPb());
+    write.setUpdateMask(fieldMask.toPb());
 
     if (!documentTransform.isEmpty()) {
-      mutation.document.addAllUpdateTransforms(documentTransform.toPb());
+      write.addAllUpdateTransforms(documentTransform.toPb());
     }
+    writes.add(write);
 
     return (T) this;
   }
@@ -563,12 +556,13 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
-    Mutation mutation = addMutation();
-    mutation.document = Write.newBuilder().setDelete(documentReference.getName());
+    verifyNotCommitted();
+    Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
     if (!precondition.isEmpty()) {
-      mutation.precondition = precondition.toPb();
+      write.setCurrentDocument(precondition.toPb());
     }
+    writes.add(write);
 
     return (T) this;
   }
@@ -579,17 +573,13 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
         .getCurrentSpan()
         .addAnnotation(
             "CloudFirestore.Commit",
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(mutations.size())));
+            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
 
     final CommitRequest.Builder request = CommitRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
-    for (Mutation mutation : mutations) {
-      if (mutation.precondition != null) {
-        mutation.document.setCurrentDocument(mutation.precondition);
-      }
-
-      request.addWrites(mutation.document);
+    for (Write.Builder write : writes) {
+      request.addWrites(write);
     }
 
     if (transactionId != null) {
@@ -611,12 +601,12 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
             List<WriteResult> result = new ArrayList<>();
 
-            Iterator<Mutation> mutationIterator = mutations.iterator();
+            Iterator<Write.Builder> writeIterator = writes.iterator();
             Iterator<com.google.firestore.v1.WriteResult> responseIterator =
                 writeResults.iterator();
 
-            while (mutationIterator.hasNext()) {
-              mutationIterator.next();
+            while (writeIterator.hasNext()) {
+              writeIterator.next();
               result.add(
                   WriteResult.fromProto(responseIterator.next(), commitResponse.getCommitTime()));
             }
@@ -629,11 +619,11 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
   /** Checks whether any updates have been queued. */
   boolean isEmpty() {
-    return mutations.isEmpty();
+    return writes.isEmpty();
   }
 
-  /** Get the number of mutations. */
-  public int getMutationsSize() {
-    return mutations.size();
+  /** Get the number of writes. */
+  public int getNumWrites() {
+    return writes.size();
   }
 }

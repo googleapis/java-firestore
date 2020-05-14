@@ -53,7 +53,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.streamingResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.string;
 import static com.google.cloud.firestore.LocalFirestoreHelper.transform;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
-import static com.google.cloud.firestore.LocalFirestoreHelper.writeWithTransform;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -405,9 +404,8 @@ public class DocumentReferenceTest {
 
     CommitRequest create =
         commit(
-            writeWithTransform(
-                create(Collections.<String, Value>emptyMap()),
-                transform("foo", serverTimestamp(), "inner.bar", serverTimestamp())));
+            create(Collections.<String, Value>emptyMap()),
+            transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(create, commitRequests.get(0));
@@ -426,9 +424,8 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            writeWithTransform(
-                set(SERVER_TIMESTAMP_PROTO),
-                transform("foo", serverTimestamp(), "inner.bar", serverTimestamp())));
+            set(SERVER_TIMESTAMP_PROTO),
+            transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(set, commitRequests.get(0));
@@ -446,9 +443,8 @@ public class DocumentReferenceTest {
 
     CommitRequest update =
         commit(
-            writeWithTransform(
-                update(Collections.<String, Value>emptyMap(), Collections.singletonList("inner")),
-                transform("foo", serverTimestamp(), "inner.bar", serverTimestamp())));
+            update(Collections.<String, Value>emptyMap(), Collections.singletonList("inner")),
+            transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     assertCommitEquals(update, commitCapture.getValue());
 
@@ -457,12 +453,11 @@ public class DocumentReferenceTest {
 
     update =
         commit(
-            writeWithTransform(
-                update(
-                    Collections.<String, Value>emptyMap(),
-                    new ArrayList<String>(),
-                    UPDATE_PRECONDITION),
-                transform("foo", serverTimestamp(), "inner.bar", serverTimestamp())));
+            update(
+                Collections.<String, Value>emptyMap(),
+                new ArrayList<String>(),
+                UPDATE_PRECONDITION),
+            transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     assertCommitEquals(update, commitCapture.getValue());
   }
@@ -483,9 +478,8 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            writeWithTransform(
-                set(SERVER_TIMESTAMP_PROTO, new ArrayList<String>()),
-                transform("inner.bar", serverTimestamp())));
+            set(SERVER_TIMESTAMP_PROTO, new ArrayList<String>()),
+            transform("inner.bar", serverTimestamp()));
 
     List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(set, commitRequests.get(0));
@@ -505,13 +499,12 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            writeWithTransform(
-                set(Collections.<String, Value>emptyMap()),
-                transform(
-                    "integer",
-                    increment(Value.newBuilder().setIntegerValue(1).build()),
-                    "double",
-                    increment(Value.newBuilder().setDoubleValue(1.1).build()))));
+            set(Collections.<String, Value>emptyMap()),
+            transform(
+                "integer",
+                increment(Value.newBuilder().setIntegerValue(1).build()),
+                "double",
+                increment(Value.newBuilder().setDoubleValue(1.1).build())));
 
     CommitRequest commitRequest = commitCapture.getValue();
     assertCommitEquals(set, commitRequest);
@@ -528,9 +521,8 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            writeWithTransform(
-                set(Collections.<String, Value>emptyMap()),
-                transform("foo", arrayUnion(string("bar"), object("foo", string("baz"))))));
+            set(Collections.<String, Value>emptyMap()),
+            transform("foo", arrayUnion(string("bar"), object("foo", string("baz")))));
 
     CommitRequest commitRequest = commitCapture.getValue();
     assertCommitEquals(set, commitRequest);
@@ -547,9 +539,8 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            writeWithTransform(
-                set(Collections.<String, Value>emptyMap()),
-                transform("foo", arrayRemove(string("bar"), object("foo", string("baz"))))));
+            set(Collections.<String, Value>emptyMap()),
+            transform("foo", arrayRemove(string("bar"), object("foo", string("baz")))));
 
     CommitRequest commitRequest = commitCapture.getValue();
     assertCommitEquals(set, commitRequest);
