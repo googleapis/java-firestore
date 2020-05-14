@@ -623,7 +623,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
   }
 
   /** Get the number of writes. */
-  public int getNumWrites() {
+  public int getMutationsSize() {
     return writes.size();
   }
 }

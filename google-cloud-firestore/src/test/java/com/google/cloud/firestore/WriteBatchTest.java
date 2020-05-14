@@ -93,7 +93,7 @@ public class WriteBatchTest {
     batch.update(documentReference, updateTime, "foo", "bar");
     batch.update(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP, updateTime);
 
-    assertEquals(4, batch.getNumWrites());
+    assertEquals(4, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     List<Write> writes = new ArrayList<>();
@@ -119,7 +119,7 @@ public class WriteBatchTest {
             commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch.update(documentReference, "foo", UPDATE_SINGLE_FIELD_OBJECT);
-    assertEquals(1, batch.getNumWrites());
+    assertEquals(1, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     assertEquals(1, writeResults.size());
@@ -149,7 +149,7 @@ public class WriteBatchTest {
     writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, Arrays.asList("foo")));
     writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, Arrays.asList("foo")));
 
-    assertEquals(4, batch.getNumWrites());
+    assertEquals(4, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     for (int i = 0; i < writeResults.size(); ++i) {
@@ -179,7 +179,7 @@ public class WriteBatchTest {
     writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, Arrays.asList("foo")));
     writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, Arrays.asList("foo")));
 
-    assertEquals(4, batch.getNumWrites());
+    assertEquals(4, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     for (int i = 0; i < writeResults.size(); ++i) {
@@ -202,7 +202,7 @@ public class WriteBatchTest {
     List<Write> writes = new ArrayList<>();
     writes.add(set(LocalFirestoreHelper.SINGLE_FLOAT_PROTO));
 
-    assertEquals(1, batch.getNumWrites());
+    assertEquals(1, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     for (int i = 0; i < writeResults.size(); ++i) {
@@ -222,7 +222,7 @@ public class WriteBatchTest {
 
     batch.set(documentReference, map("time", FieldValue.serverTimestamp()));
 
-    assertEquals(1, batch.getNumWrites());
+    assertEquals(1, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     assertEquals(1, writeResults.size());
@@ -239,7 +239,7 @@ public class WriteBatchTest {
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
 
-    assertEquals(2, batch.getNumWrites());
+    assertEquals(2, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     List<Write> writes = new ArrayList<>();
@@ -264,7 +264,7 @@ public class WriteBatchTest {
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_PROTO)
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
 
-    assertEquals(2, batch.getNumWrites());
+    assertEquals(2, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     List<Write> writes = new ArrayList<>();
@@ -287,7 +287,7 @@ public class WriteBatchTest {
 
     batch.create(documentReference, LocalFirestoreHelper.SINGLE_FLOAT_MAP);
 
-    assertEquals(1, batch.getNumWrites());
+    assertEquals(1, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
     List<Write> writes = new ArrayList<>();
@@ -318,7 +318,7 @@ public class WriteBatchTest {
     precondition.getUpdateTimeBuilder().setSeconds(1).setNanos(2);
     writes.add(delete(precondition.build()));
 
-    assertEquals(2, batch.getNumWrites());
+    assertEquals(2, batch.getMutationsSize());
 
     List<WriteResult> writeResults = batch.commit().get();
 
