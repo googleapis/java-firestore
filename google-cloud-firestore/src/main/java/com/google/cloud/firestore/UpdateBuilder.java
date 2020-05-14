@@ -129,7 +129,6 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     return (T) this;
   }
 
-  /** Adds a new write to the batch. */
   private void verifyNotCommitted() {
     Preconditions.checkState(
         !committed, "Cannot modify a WriteBatch that has already been committed.");
