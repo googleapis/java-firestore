@@ -219,7 +219,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void rollbackOnCallbackError() throws Exception {
+  public void rollbackOnCallbackError() {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
@@ -250,7 +250,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void rollbackOnCallbackErrorAsync() throws Exception {
+  public void rollbackOnCallbackErrorAsync() {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
@@ -281,7 +281,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void noRollbackOnBeginFailure() throws Exception {
+  public void noRollbackOnBeginFailure() {
     doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
@@ -309,7 +309,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void noRollbackOnBeginFailureAsync() throws Exception {
+  public void noRollbackOnBeginFailureAsync() {
     doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
@@ -337,7 +337,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void limitsRetriesWithFailure() throws Exception {
+  public void limitsRetriesWithFailure() {
     RequestResponseMap requestResponseMap =
         new RequestResponseMap() {
           {
