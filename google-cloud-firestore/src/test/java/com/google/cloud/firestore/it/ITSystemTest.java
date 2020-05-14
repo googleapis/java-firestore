@@ -55,6 +55,7 @@ import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
@@ -104,6 +105,9 @@ public class ITSystemTest {
 
   @After
   public void after() throws Exception {
+    Preconditions.checkNotNull(
+        firestore,
+        "Error instantiating Firestore. Check that the service account credentials were properly set.");
     firestore.close();
   }
 
