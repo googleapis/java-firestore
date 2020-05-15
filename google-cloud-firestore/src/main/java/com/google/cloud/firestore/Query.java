@@ -104,7 +104,7 @@ public class Query {
       return encodedValue;
     }
 
-    abstract boolean isEqualsFilter();
+    abstract boolean isInequalityFilter();
 
     abstract Filter toProto();
   }
@@ -117,8 +117,8 @@ public class Query {
     }
 
     @Override
-    boolean isEqualsFilter() {
-      return true;
+    boolean isInequalityFilter() {
+      return false;
     }
 
     Filter toProto() {
@@ -148,8 +148,11 @@ public class Query {
     }
 
     @Override
-    boolean isEqualsFilter() {
-      return operator.equals(EQUAL);
+    boolean isInequalityFilter() {
+      return operator.equals(GREATER_THAN)
+          || operator.equals(GREATER_THAN_OR_EQUAL)
+          || operator.equals(LESS_THAN)
+          || operator.equals(LESS_THAN_OR_EQUAL);
     }
 
     Filter toProto() {
@@ -306,7 +309,7 @@ public class Query {
     if (implicitOrders.isEmpty()) {
       // If no explicit ordering is specified, use the first inequality to define an implicit order.
       for (FieldFilter fieldFilter : options.getFieldFilters()) {
-        if (!fieldFilter.isEqualsFilter()) {
+        if (fieldFilter.isInequalityFilter()) {
           implicitOrders.add(new FieldOrder(fieldFilter.fieldPath, Direction.ASCENDING));
           break;
         }
