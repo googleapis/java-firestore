@@ -39,9 +39,8 @@
  * <pre>
  * <code>
  * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
- *   Document document = Document.newBuilder().build();
- *   DocumentMask updateMask = DocumentMask.newBuilder().build();
- *   Document response = firestoreClient.updateDocument(document, updateMask);
+ *   String name = "";
+ *   firestoreClient.deleteDocument(name);
  * }
  * </code>
  * </pre>
