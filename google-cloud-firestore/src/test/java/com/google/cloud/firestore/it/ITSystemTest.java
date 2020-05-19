@@ -232,6 +232,15 @@ public class ITSystemTest {
   }
 
   @Test
+  public void setWithIncrementAndMerge() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("sum", 1L)).get();
+    docRef.set(Collections.singletonMap("sum", FieldValue.increment(2)), SetOptions.merge()).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(3L, docSnap.get("sum"));
+  }
+
+  @Test
   public void mergeDocumentWithServerTimestamp() throws Exception {
     Map<String, Object> originalMap = LocalFirestoreHelper.<String, Object>map("a", "b");
     Map<String, FieldValue> updateMap = map("c", FieldValue.serverTimestamp());

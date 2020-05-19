@@ -215,7 +215,7 @@ public class WriteBatchTest {
 
   @Test
   public void omitWriteResultForDocumentTransforms() throws Exception {
-    doReturn(commitResponse(2, 0))
+    doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
             commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
