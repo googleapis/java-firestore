@@ -215,6 +215,15 @@
     </plugins>
   </reporting>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
   <profiles>
     <profile>
       <id>java9</id>
@@ -225,6 +234,7 @@
         <dependency>
           <groupId>javax.annotation</groupId>
           <artifactId>javax.annotation-api</artifactId>
+          <version>${javax.annotations.version}</version>
         </dependency>
       </dependencies>
     </profile>
