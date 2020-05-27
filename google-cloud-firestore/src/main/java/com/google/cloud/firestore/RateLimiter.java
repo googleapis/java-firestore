@@ -67,7 +67,7 @@ public class RateLimiter {
    * Tries to make the number of operations. Returns true if the request succeeded and false
    * otherwise.
    *
-   * @param requestTimeMillis The date used to calculate the number of available tokens. Used for
+   * @param requestTimeMillis The time used to calculate the number of available tokens. Used for
    *     testing the limiter.
    */
   public boolean tryMakeRequest(int numOperations, long requestTimeMillis) {
@@ -88,7 +88,7 @@ public class RateLimiter {
    * Returns 0 if the request can be made with the existing capacity. Returns -1 if the request is
    * not possible with the current capacity.
    *
-   * @param requestTimeMillis The date used to calculate the number of available tokens. Used for
+   * @param requestTimeMillis The time used to calculate the number of available tokens. Used for
    *     testing the limiter.
    */
   public long getNextRequestDelayMs(int numOperations, long requestTimeMillis) {
@@ -106,11 +106,11 @@ public class RateLimiter {
   }
 
   /**
-   * Refills the number of available tokens based on how much time has elapsed
-   * since the last time the tokens were refilled.
+   * Refills the number of available tokens based on how much time has elapsed since the last time
+   * the tokens were refilled.
    *
-   * @param requestTimeMillis The date used to calculate the number of available
-   * tokens. Used for testing the limiter.
+   * @param requestTimeMillis The time used to calculate the number of available tokens. Used for
+   *     testing the limiter.
    */
   private void refillTokens(long requestTimeMillis) {
     if (requestTimeMillis >= lastRefillTimeMillis) {
