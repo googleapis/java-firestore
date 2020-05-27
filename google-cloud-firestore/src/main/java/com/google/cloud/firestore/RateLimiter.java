@@ -1,0 +1,139 @@
+/*
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.firestore;
+
+import java.util.Date;
+
+/**
+ * A helper that uses the Token Bucket algorithm to rate limit the number of operations that can be
+ * made in a second.
+ *
+ * <p>Before a given request containing a number of operations can proceed, RateLimiter determines
+ * doing so stays under the provided rate limits. It can also determine how much time is required
+ * before a request can be made.
+ *
+ * <p>RateLimiter can also implement a gradually increasing rate limit. This is used to enforce the
+ * 500/50/5 rule (https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic).
+ */
+public class RateLimiter {
+  final int initialCapacity;
+  final double multiplier;
+  final int multiplierMillis;
+  final long startTimeMillis;
+
+  private int availableTokens;
+  private long lastRefillTimeMillis;
+
+  RateLimiter(int initialCapacity, int multiplier, int multiplierMillis) {
+    this(initialCapacity, multiplier, multiplierMillis, new Date().getTime());
+  }
+
+  /**
+   * @param initialCapacity Initial maximum number of operations per second.
+   * @param multiplier Rate by which to increase the capacity.
+   * @param multiplierMillis How often the capacity should increase in milliseconds.
+   * @param startTimeMillis The starting time in epoch milliseconds that the rate limit is based on.
+   *     Used for testing the limiter.
+   */
+  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis, long startTimeMillis) {
+    this.initialCapacity = initialCapacity;
+    this.multiplier = multiplier;
+    this.multiplierMillis = multiplierMillis;
+    this.startTimeMillis = startTimeMillis;
+
+    this.availableTokens = initialCapacity;
+    this.lastRefillTimeMillis = startTimeMillis;
+  }
+
+  public boolean tryMakeRequest(int numOperations) {
+    return tryMakeRequest(numOperations, new Date(0).getTime());
+  }
+
+  /**
+   * Tries to make the number of operations. Returns true if the request succeeded and false
+   * otherwise.
+   *
+   * @param requestTimeMillis The date used to calculate the number of available tokens. Used for
+   *     testing the limiter.
+   */
+  public boolean tryMakeRequest(int numOperations, long requestTimeMillis) {
+    refillTokens(requestTimeMillis);
+    if (numOperations <= availableTokens) {
+      availableTokens -= numOperations;
+      return true;
+    }
+    return false;
+  }
+
+  public long getNextRequestDelayMs(int numOperations) {
+    return getNextRequestDelayMs(numOperations, new Date().getTime());
+  }
+
+  /**
+   * Returns the number of ms needed to make a request with the provided number of operations.
+   * Returns 0 if the request can be made with the existing capacity. Returns -1 if the request is
+   * not possible with the current capacity.
+   *
+   * @param requestTimeMillis The date used to calculate the number of available tokens. Used for
+   *     testing the limiter.
+   */
+  public long getNextRequestDelayMs(int numOperations, long requestTimeMillis) {
+    if (numOperations < availableTokens) {
+      return 0;
+    }
+
+    int capacity = calculateCapacity(requestTimeMillis);
+    if (capacity < numOperations) {
+      return -1;
+    }
+
+    int requiredTokens = numOperations - availableTokens;
+    return (long) Math.ceil((double) (requiredTokens * 1000) / capacity);
+  }
+
+  /**
+   * Refills the number of available tokens based on how much time has elapsed
+   * since the last time the tokens were refilled.
+   *
+   * @param requestTimeMillis The date used to calculate the number of available
+   * tokens. Used for testing the limiter.
+   */
+  private void refillTokens(long requestTimeMillis) {
+    if (requestTimeMillis >= lastRefillTimeMillis) {
+      long elapsedTime = requestTimeMillis - lastRefillTimeMillis;
+      int capacity = calculateCapacity(requestTimeMillis);
+      int tokensToAdd = (int) Math.floor((elapsedTime * capacity) / 1000);
+      if (tokensToAdd > 0) {
+        availableTokens = Math.min(capacity, availableTokens + tokensToAdd);
+        lastRefillTimeMillis = requestTimeMillis;
+      }
+    } else {
+      throw new IllegalArgumentException(
+          "Request time should not be before the last token refill time");
+    }
+  }
+
+  public int calculateCapacity(long requestTimeMillis) {
+    long millisElapsed = requestTimeMillis - startTimeMillis;
+    int operationsPerSecond =
+        (int)
+            Math.floor(
+                Math.pow(multiplier, Math.floor(millisElapsed / multiplierMillis))
+                    * initialCapacity);
+    return operationsPerSecond;
+  }
+}
