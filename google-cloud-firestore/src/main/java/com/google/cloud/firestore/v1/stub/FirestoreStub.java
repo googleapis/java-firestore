@@ -25,6 +25,8 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -121,6 +123,10 @@ public abstract class FirestoreStub implements BackgroundResource {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     throw new UnsupportedOperationException("Not implemented: listCollectionIdsCallable()");
+  }
+
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
   }
 
   @Override

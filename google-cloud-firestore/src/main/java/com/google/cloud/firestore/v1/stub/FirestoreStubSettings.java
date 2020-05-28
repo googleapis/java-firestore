@@ -48,6 +48,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -133,6 +135,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final PagedCallSettings<
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings;
+  private final UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings;
 
   /** Returns the object with the settings used for calls to getDocument. */
   public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
@@ -202,6 +205,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return listCollectionIdsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to batchWrite. */
+  public UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+    return batchWriteSettings;
   }
 
   @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
@@ -285,6 +293,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     writeSettings = settingsBuilder.writeSettings().build();
     listenSettings = settingsBuilder.listenSettings().build();
     listCollectionIdsSettings = settingsBuilder.listCollectionIdsSettings().build();
+    batchWriteSettings = settingsBuilder.batchWriteSettings().build();
   }
 
   private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
@@ -423,6 +432,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final PagedCallSettings.Builder<
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings;
+    private final UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse>
+        batchWriteSettings;
 
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
@@ -434,9 +445,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           "idempotent",
           ImmutableSet.copyOf(
               Lists.<StatusCode.Code>newArrayList(
-                  StatusCode.Code.DEADLINE_EXCEEDED,
-                  StatusCode.Code.INTERNAL,
-                  StatusCode.Code.UNAVAILABLE)));
+                  StatusCode.Code.DEADLINE_EXCEEDED, StatusCode.Code.UNAVAILABLE)));
       definitions.put("non_idempotent", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       RETRYABLE_CODE_DEFINITIONS = definitions.build();
     }
@@ -504,6 +513,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
       listCollectionIdsSettings = PagedCallSettings.newBuilder(LIST_COLLECTION_IDS_PAGE_STR_FACT);
 
+      batchWriteSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
               getDocumentSettings,
@@ -514,7 +525,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               beginTransactionSettings,
               commitSettings,
               rollbackSettings,
-              listCollectionIdsSettings);
+              listCollectionIdsSettings,
+              batchWriteSettings);
 
       initDefaults(this);
     }
@@ -582,7 +594,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
       builder
           .listCollectionIdsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+
+      builder
+          .batchWriteSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       return builder;
@@ -604,6 +621,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       writeSettings = settings.writeSettings.toBuilder();
       listenSettings = settings.listenSettings.toBuilder();
       listCollectionIdsSettings = settings.listCollectionIdsSettings.toBuilder();
+      batchWriteSettings = settings.batchWriteSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -615,7 +633,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               beginTransactionSettings,
               commitSettings,
               rollbackSettings,
-              listCollectionIdsSettings);
+              listCollectionIdsSettings,
+              batchWriteSettings);
     }
 
     // NEXT_MAJOR_VER: remove 'throws Exception'
@@ -704,6 +723,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return listCollectionIdsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to batchWrite. */
+    public UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+      return batchWriteSettings;
     }
 
     @Override

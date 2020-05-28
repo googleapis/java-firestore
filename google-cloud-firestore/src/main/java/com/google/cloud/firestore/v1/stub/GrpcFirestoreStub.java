@@ -31,6 +31,8 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -179,6 +181,14 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<BatchWriteRequest, BatchWriteResponse>
+      batchWriteMethodDescriptor =
+          MethodDescriptor.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/BatchWrite")
+              .setRequestMarshaller(ProtoUtils.marshaller(BatchWriteRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BatchWriteResponse.getDefaultInstance()))
+              .build();
 
   private final BackgroundResource backgroundResources;
 
@@ -202,6 +212,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
+  private final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -377,6 +388,19 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
+        GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+            .setMethodDescriptor(batchWriteMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<BatchWriteRequest>() {
+                  @Override
+                  public Map<String, String> extract(BatchWriteRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("database", String.valueOf(request.getDatabase()));
+                    return params.build();
+                  }
+                })
+            .build();
 
     this.getDocumentCallable =
         callableFactory.createUnaryCallable(
@@ -429,6 +453,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
+    this.batchWriteCallable =
+        callableFactory.createUnaryCallable(
+            batchWriteTransportSettings, settings.batchWriteSettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
@@ -496,6 +523,10 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
+  }
+
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return batchWriteCallable;
   }
 
   @Override

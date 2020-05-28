@@ -34,6 +34,8 @@ import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -160,6 +162,11 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return ((FirestoreStubSettings) getStubSettings()).listCollectionIdsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to batchWrite. */
+  public UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).batchWriteSettings();
   }
 
   public static final FirestoreSettings create(FirestoreStubSettings stub) throws IOException {
@@ -328,6 +335,11 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return getStubSettingsBuilder().listCollectionIdsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to batchWrite. */
+    public UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+      return getStubSettingsBuilder().batchWriteSettings();
     }
 
     @Override
