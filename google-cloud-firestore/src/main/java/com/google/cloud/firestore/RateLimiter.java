@@ -27,13 +27,15 @@ import java.util.Date;
  * before a request can be made.
  *
  * <p>RateLimiter can also implement a gradually increasing rate limit. This is used to enforce the
- * 500/50/5 rule (https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic).
+ * 500/50/5 rule.
+ *
+ * @see "https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic"
  */
 public class RateLimiter {
-  final int initialCapacity;
-  final double multiplier;
-  final int multiplierMillis;
-  final long startTimeMillis;
+  private final int initialCapacity;
+  private final double multiplier;
+  private final int multiplierMillis;
+  private final long startTimeMillis;
 
   private int availableTokens;
   private long lastRefillTimeMillis;
@@ -116,7 +118,7 @@ public class RateLimiter {
     if (requestTimeMillis >= lastRefillTimeMillis) {
       long elapsedTime = requestTimeMillis - lastRefillTimeMillis;
       int capacity = calculateCapacity(requestTimeMillis);
-      int tokensToAdd = (int) Math.floor((elapsedTime * capacity) / 1000);
+      int tokensToAdd = (int) ((elapsedTime * capacity) / 1000);
       if (tokensToAdd > 0) {
         availableTokens = Math.min(capacity, availableTokens + tokensToAdd);
         lastRefillTimeMillis = requestTimeMillis;
@@ -130,10 +132,7 @@ public class RateLimiter {
   public int calculateCapacity(long requestTimeMillis) {
     long millisElapsed = requestTimeMillis - startTimeMillis;
     int operationsPerSecond =
-        (int)
-            Math.floor(
-                Math.pow(multiplier, Math.floor(millisElapsed / multiplierMillis))
-                    * initialCapacity);
+        (int) (Math.pow(multiplier, (int) (millisElapsed / multiplierMillis)) * initialCapacity);
     return operationsPerSecond;
   }
 }
