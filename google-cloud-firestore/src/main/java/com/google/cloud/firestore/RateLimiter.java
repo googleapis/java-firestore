@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.common.base.Preconditions;
 import java.util.Date;
 
 /**
@@ -29,9 +30,10 @@ import java.util.Date;
  * <p>RateLimiter can also implement a gradually increasing rate limit. This is used to enforce the
  * 500/50/5 rule.
  *
- * @see "https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic"
+ * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping up
+ *     traffic</a>
  */
-public class RateLimiter {
+class RateLimiter {
   private final int initialCapacity;
   private final double multiplier;
   private final int multiplierMillis;
@@ -115,17 +117,15 @@ public class RateLimiter {
    *     testing the limiter.
    */
   private void refillTokens(long requestTimeMillis) {
-    if (requestTimeMillis >= lastRefillTimeMillis) {
-      long elapsedTime = requestTimeMillis - lastRefillTimeMillis;
-      int capacity = calculateCapacity(requestTimeMillis);
-      int tokensToAdd = (int) ((elapsedTime * capacity) / 1000);
-      if (tokensToAdd > 0) {
-        availableTokens = Math.min(capacity, availableTokens + tokensToAdd);
-        lastRefillTimeMillis = requestTimeMillis;
-      }
-    } else {
-      throw new IllegalArgumentException(
-          "Request time should not be before the last token refill time");
+    Preconditions.checkArgument(
+        requestTimeMillis >= lastRefillTimeMillis,
+        "Request time should not be before the last token refill time");
+    long elapsedTime = requestTimeMillis - lastRefillTimeMillis;
+    int capacity = calculateCapacity(requestTimeMillis);
+    int tokensToAdd = (int) ((elapsedTime * capacity) / 1000);
+    if (tokensToAdd > 0) {
+      availableTokens = Math.min(capacity, availableTokens + tokensToAdd);
+      lastRefillTimeMillis = requestTimeMillis;
     }
   }
 
