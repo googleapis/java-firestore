@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  * BatchWriteRequests.
  */
 public final class BatchWriteResult {
-  private final Timestamp writeTime;
+  @Nullable private final Timestamp writeTime;
   private final Status status;
 
   BatchWriteResult(@Nullable Timestamp timestamp, Status status) {
@@ -33,6 +33,7 @@ public final class BatchWriteResult {
     this.status = status;
   }
 
+  @Nullable
   public Timestamp getWriteTime() {
     return writeTime;
   }

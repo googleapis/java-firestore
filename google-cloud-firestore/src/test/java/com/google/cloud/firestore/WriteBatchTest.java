@@ -340,9 +340,9 @@ public class WriteBatchTest {
   @Test
   public void bulkCommit() throws Exception {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
-    response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(0).setNanos(1);
+    response.addWriteResultsBuilder().getUpdateTimeBuilder().setNanos(1);
     response.addWriteResultsBuilder();
-    response.addStatusBuilder().setCode(0).build();
+    response.addStatusBuilder().build();
     response.addStatusBuilder().setCode(14).build();
     doReturn(ApiFutures.immediateFuture(response.build()))
         .when(firestoreMock)
@@ -361,10 +361,10 @@ public class WriteBatchTest {
 
     List<BatchWriteResult> batchWriteResults = batch.bulkCommit().get();
 
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 1), batchWriteResults.get(0).getWriteTime());
     assertEquals(Status.OK, batchWriteResults.get(0).getStatus());
-    assertNull(batchWriteResults.get(1).getWriteTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 1), batchWriteResults.get(0).getWriteTime());
     assertEquals(Status.UNAVAILABLE, batchWriteResults.get(1).getStatus());
+    assertNull(batchWriteResults.get(1).getWriteTime());
 
     BatchWriteRequest batchWriteRequest = batchWriteCapture.getValue();
     assertEquals(batchWrite(writes.toArray(new Write[] {})), batchWriteRequest);
