@@ -30,6 +30,7 @@ import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
+import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -656,7 +657,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
                       writeResult.hasUpdateTime()
                           ? Timestamp.fromProto(writeResult.getUpdateTime())
                           : null,
-                      status));
+                      Status.fromCodeValue(status.getCode())));
             }
 
             return result;

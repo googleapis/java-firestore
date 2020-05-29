@@ -17,7 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
-import com.google.rpc.Status;
+import io.grpc.Status;
 import javax.annotation.Nullable;
 
 /**
