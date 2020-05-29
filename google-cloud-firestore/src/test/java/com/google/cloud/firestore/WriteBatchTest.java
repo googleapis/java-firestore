@@ -39,7 +39,7 @@ import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
-import com.google.rpc.Status;
+import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -362,9 +362,9 @@ public class WriteBatchTest {
     List<BatchWriteResult> batchWriteResults = batch.bulkCommit().get();
 
     assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 1), batchWriteResults.get(0).getWriteTime());
-    assertEquals(Status.newBuilder().setCode(0).build(), batchWriteResults.get(0).getStatus());
+    assertEquals(Status.OK, batchWriteResults.get(0).getStatus());
     assertNull(batchWriteResults.get(1).getWriteTime());
-    assertEquals(Status.newBuilder().setCode(14).build(), batchWriteResults.get(1).getStatus());
+    assertEquals(Status.UNAVAILABLE, batchWriteResults.get(1).getStatus());
 
     BatchWriteRequest batchWriteRequest = batchWriteCapture.getValue();
     assertEquals(batchWrite(writes.toArray(new Write[] {})), batchWriteRequest);
