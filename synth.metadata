@@ -3,23 +3,15 @@
     {
       "git": {
         "name": ".",
-        "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "495f7f97405fcd2bff4d09e67ddbeb51615ea843"
-      }
-    },
-    {
-      "git": {
-        "name": "googleapis",
-        "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "d4aa417ed2bba89c2d216900282bddfdafef6128",
-        "internalRef": "303010132"
+        "remote": "git@github.com:googleapis/java-firestore.git",
+        "sha": "785488b622afe468e29af366afed6e2cb54ba2db"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "52638600f387deb98efb5f9c85fec39e82aa9052"
+        "sha": "71b8a272549c06b5768d00fa48d3ae990e871bec"
       }
     }
   ],

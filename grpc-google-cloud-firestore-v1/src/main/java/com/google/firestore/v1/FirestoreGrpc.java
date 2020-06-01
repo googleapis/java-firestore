@@ -600,6 +600,47 @@ public final class FirestoreGrpc {
     return getCreateDocumentMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+      getBatchWriteMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "BatchWrite",
+      requestType = com.google.firestore.v1.BatchWriteRequest.class,
+      responseType = com.google.firestore.v1.BatchWriteResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+      getBatchWriteMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+        getBatchWriteMethod;
+    if ((getBatchWriteMethod = FirestoreGrpc.getBatchWriteMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getBatchWriteMethod = FirestoreGrpc.getBatchWriteMethod) == null) {
+          FirestoreGrpc.getBatchWriteMethod =
+              getBatchWriteMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.BatchWriteRequest,
+                          com.google.firestore.v1.BatchWriteResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "BatchWrite"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.BatchWriteRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.BatchWriteResponse.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("BatchWrite"))
+                      .build();
+        }
+      }
+    }
+    return getBatchWriteMethod;
+  }
+
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<FirestoreStub> factory =
@@ -828,6 +869,19 @@ public final class FirestoreGrpc {
       asyncUnimplementedUnaryCall(getCreateDocumentMethod(), responseObserver);
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Commit a batch of non-transactional writes.
+     * </pre>
+     */
+    public void batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getBatchWriteMethod(), responseObserver);
+    }
+
     @java.lang.Override
     public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
@@ -913,6 +967,12 @@ public final class FirestoreGrpc {
                   new MethodHandlers<
                       com.google.firestore.v1.CreateDocumentRequest,
                       com.google.firestore.v1.Document>(this, METHODID_CREATE_DOCUMENT)))
+          .addMethod(
+              getBatchWriteMethod(),
+              asyncUnaryCall(
+                  new MethodHandlers<
+                      com.google.firestore.v1.BatchWriteRequest,
+                      com.google.firestore.v1.BatchWriteResponse>(this, METHODID_BATCH_WRITE)))
           .build();
     }
   }
@@ -1141,6 +1201,20 @@ public final class FirestoreGrpc {
           request,
           responseObserver);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Commit a batch of non-transactional writes.
+     * </pre>
+     */
+    public void batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getBatchWriteMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -1304,6 +1378,18 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.CreateDocumentRequest request) {
       return blockingUnaryCall(getChannel(), getCreateDocumentMethod(), getCallOptions(), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Commit a batch of non-transactional writes.
+     * </pre>
+     */
+    public com.google.firestore.v1.BatchWriteResponse batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request) {
+      return blockingUnaryCall(getChannel(), getBatchWriteMethod(), getCallOptions(), request);
+    }
   }
 
   /**
@@ -1448,6 +1534,20 @@ public final class FirestoreGrpc {
       return futureUnaryCall(
           getChannel().newCall(getCreateDocumentMethod(), getCallOptions()), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Commit a batch of non-transactional writes.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.v1.BatchWriteResponse>
+        batchWrite(com.google.firestore.v1.BatchWriteRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getBatchWriteMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_GET_DOCUMENT = 0;
@@ -1461,8 +1561,9 @@ public final class FirestoreGrpc {
   private static final int METHODID_RUN_QUERY = 8;
   private static final int METHODID_LIST_COLLECTION_IDS = 9;
   private static final int METHODID_CREATE_DOCUMENT = 10;
-  private static final int METHODID_WRITE = 11;
-  private static final int METHODID_LISTEN = 12;
+  private static final int METHODID_BATCH_WRITE = 11;
+  private static final int METHODID_WRITE = 12;
+  private static final int METHODID_LISTEN = 13;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1541,6 +1642,12 @@ public final class FirestoreGrpc {
           serviceImpl.createDocument(
               (com.google.firestore.v1.CreateDocumentRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.Document>) responseObserver);
+          break;
+        case METHODID_BATCH_WRITE:
+          serviceImpl.batchWrite(
+              (com.google.firestore.v1.BatchWriteRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse>)
+                  responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1629,6 +1736,7 @@ public final class FirestoreGrpc {
                       .addMethod(getListenMethod())
                       .addMethod(getListCollectionIdsMethod())
                       .addMethod(getCreateDocumentMethod())
+                      .addMethod(getBatchWriteMethod())
                       .build();
         }
       }

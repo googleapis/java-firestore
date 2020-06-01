@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.batchWrite;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.create;
@@ -26,14 +27,19 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doReturn;
 
+import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
+import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,6 +64,7 @@ public class WriteBatchTest {
           Mockito.mock(FirestoreRpc.class));
 
   @Captor private ArgumentCaptor<CommitRequest> commitCapture;
+  @Captor private ArgumentCaptor<BatchWriteRequest> batchWriteCapture;
 
   private WriteBatch batch;
   private DocumentReference documentReference;
@@ -328,5 +335,38 @@ public class WriteBatchTest {
 
     CommitRequest commitRequest = commitCapture.getValue();
     assertEquals(commit(writes.toArray(new Write[] {})), commitRequest);
+  }
+
+  @Test
+  public void bulkCommit() throws Exception {
+    BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
+    response.addWriteResultsBuilder().getUpdateTimeBuilder().setNanos(1);
+    response.addWriteResultsBuilder();
+    response.addStatusBuilder().build();
+    response.addStatusBuilder().setCode(14).build();
+    doReturn(ApiFutures.immediateFuture(response.build()))
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+
+    List<Write> writes = new ArrayList<>();
+    batch.set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO));
+
+    batch.create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    writes.add(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO));
+
+    assertEquals(2, batch.getMutationsSize());
+
+    List<BatchWriteResult> batchWriteResults = batch.bulkCommit().get();
+
+    assertEquals(Status.OK, batchWriteResults.get(0).getStatus());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 1), batchWriteResults.get(0).getWriteTime());
+    assertEquals(Status.UNAVAILABLE, batchWriteResults.get(1).getStatus());
+    assertNull(batchWriteResults.get(1).getWriteTime());
+
+    BatchWriteRequest batchWriteRequest = batchWriteCapture.getValue();
+    assertEquals(batchWrite(writes.toArray(new Write[] {})), batchWriteRequest);
   }
 }

@@ -24,6 +24,8 @@ import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedRespo
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -43,6 +45,8 @@ public interface FirestoreRpc extends AutoCloseable, ServiceRpc {
 
   /** Commits a transaction, while optionally updating documents. */
   UnaryCallable<CommitRequest, CommitResponse> commitCallable();
+
+  UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable();
 
   /** Gets multiple documents. */
   ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>

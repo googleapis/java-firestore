@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -442,6 +443,13 @@ public final class LocalFirestoreHelper {
 
   public static CommitRequest commit(Write write, List<FieldTransform> transforms) {
     return commit((String) null, write.toBuilder().addAllUpdateTransforms(transforms).build());
+  }
+
+  public static BatchWriteRequest batchWrite(Write... writes) {
+    BatchWriteRequest.Builder batchWriteRequest = BatchWriteRequest.newBuilder();
+    batchWriteRequest.setDatabase(DATABASE_NAME);
+    batchWriteRequest.addAllWrites(Arrays.asList(writes));
+    return batchWriteRequest.build();
   }
 
   public static StructuredQuery filter(StructuredQuery.FieldFilter.Operator operator) {
