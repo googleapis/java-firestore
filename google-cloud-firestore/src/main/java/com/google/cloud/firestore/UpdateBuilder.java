@@ -19,14 +19,18 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
+import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -601,6 +605,59 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
             for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
               result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+            }
+
+            return result;
+          }
+        },
+        MoreExecutors.directExecutor());
+  }
+
+  /**
+   * Commits all pending operations to the database and verifies all preconditions.
+   *
+   * <p>The writes in the batch are not applied atomically and can be applied out of order.
+   */
+  ApiFuture<List<BatchWriteResult>> bulkCommit() {
+    Tracing.getTracer()
+        .getCurrentSpan()
+        .addAnnotation(
+            "CloudFirestore.BatchWrite",
+            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
+
+    final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
+    request.setDatabase(firestore.getDatabaseName());
+
+    for (Write.Builder write : writes) {
+      request.addWrites(write);
+    }
+
+    committed = true;
+
+    ApiFuture<BatchWriteResponse> response =
+        firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable());
+
+    return ApiFutures.transform(
+        response,
+        new ApiFunction<BatchWriteResponse, List<BatchWriteResult>>() {
+          @Override
+          public List<BatchWriteResult> apply(BatchWriteResponse batchWriteResponse) {
+            List<com.google.firestore.v1.WriteResult> writeResults =
+                batchWriteResponse.getWriteResultsList();
+
+            List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
+
+            List<BatchWriteResult> result = new ArrayList<>();
+
+            for (int i = 0; i < writeResults.size(); ++i) {
+              com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
+              com.google.rpc.Status status = statuses.get(i);
+              result.add(
+                  new BatchWriteResult(
+                      writeResult.hasUpdateTime()
+                          ? Timestamp.fromProto(writeResult.getUpdateTime())
+                          : null,
+                      Status.fromCodeValue(status.getCode())));
             }
 
             return result;

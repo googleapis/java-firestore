@@ -44,6 +44,8 @@ import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.cloud.grpc.GrpcTransportOptions.ExecutorFactory;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -161,6 +163,11 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   @Override
   public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
     return firestoreStub.commitCallable();
+  }
+
+  @Override
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return firestoreStub.batchWriteCallable();
   }
 
   @Override
