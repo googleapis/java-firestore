@@ -20,24 +20,24 @@ import javax.annotation.Nonnull;
 
 /** Options used to disable request throttling in BulkWriter. */
 public class BulkWriterOptions {
+
   private final boolean disableThrottling;
 
-  BulkWriterOptions(boolean disableThrottling) {
+  private BulkWriterOptions(boolean disableThrottling) {
     this.disableThrottling = disableThrottling;
   }
 
-  public boolean getDisableThrottling() {
+  boolean getDisableThrottling() {
     return disableThrottling;
   }
 
   /**
-   * Create a set of options to disable or enable throttling.
+   * An option object that will disable throttling in the created BulkWriter.
    *
-   * @param disableThrottling Whether to disable throttling.
    * @return The BulkWriterOptions object.
    */
   @Nonnull
-  public static BulkWriterOptions create(boolean disableThrottling) {
-    return new BulkWriterOptions(disableThrottling);
+  public static BulkWriterOptions withThrottlingDisabled() {
+    return new BulkWriterOptions(true);
   }
 }

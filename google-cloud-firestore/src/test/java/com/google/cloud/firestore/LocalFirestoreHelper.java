@@ -929,22 +929,45 @@ public final class LocalFirestoreHelper {
     return fromJsonString(json.replace("'", "\""));
   }
 
-  static class RequestResponseMap
+  /** Map of request/response pairs to be returned when `sendRequest()` is called. */
+  static class RequestResponseStubber
       extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {
+    void initializeStub(
+        ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
+      Stubber stubber = null;
+      for (final ApiFuture<? extends GeneratedMessageV3> response : values()) {
+        stubber = (stubber != null) ? stubber.doReturn(response) : doReturn(response);
+      }
+      if (stubber != null) {
+        stubber
+            .when(firestoreMock)
+            .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+      }
+    }
+  }
+
+  /**
+   * Map of request/response pairs to be returned when `sendRequest()` is called.
+   *
+   * <p>Enforces that only one active request can be pending at a time.
+   */
+  static class SerialRequestStubber extends RequestResponseStubber {
     int activeRequestCounter = 0;
     SettableApiFuture<Void> activeRequestComplete = SettableApiFuture.create();
     CountDownLatch latch = new CountDownLatch(1);
 
-    void markComplete() {
+    void markRequestComplete() {
       activeRequestComplete.set(null);
     }
 
-    void awaitLatch() {
+    void awaitRequest() {
+      activeRequestComplete = SettableApiFuture.create();
       try {
         latch.await();
       } catch (Exception e) {
         fail("latch.await() should not fail");
       }
+      latch = new CountDownLatch(1);
     }
 
     ApiFuture<? extends GeneratedMessageV3> checkOneActiveRequestAndReturnResponse(
@@ -963,37 +986,26 @@ public final class LocalFirestoreHelper {
       return response;
     }
 
+    @Override
     void initializeStub(
-        ArgumentCaptor<? extends Message> argumentCaptor,
-        FirestoreImpl firestoreMock,
-        boolean enforceSingleConcurrentRequest) {
+        ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
       Stubber stubber = null;
       for (final ApiFuture<? extends GeneratedMessageV3> response : values()) {
-        if (enforceSingleConcurrentRequest) {
-          Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
-              new Answer<ApiFuture<? extends GeneratedMessageV3>>() {
-                @Override
-                public ApiFuture<? extends GeneratedMessageV3> answer(
-                    InvocationOnMock invocationOnMock) throws Throwable {
-                  return checkOneActiveRequestAndReturnResponse(response);
-                }
-              };
-          stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
-        } else {
-          stubber = (stubber != null) ? stubber.doReturn(response) : doReturn(response);
-        }
+        Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
+            new Answer<ApiFuture<? extends GeneratedMessageV3>>() {
+              @Override
+              public ApiFuture<? extends GeneratedMessageV3> answer(
+                  InvocationOnMock invocationOnMock) throws Throwable {
+                return checkOneActiveRequestAndReturnResponse(response);
+              }
+            };
+        stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
       }
-
       if (stubber != null) {
         stubber
             .when(firestoreMock)
             .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
       }
-    }
-
-    void initializeStub(
-        ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
-      initializeStub(argumentCaptor, firestoreMock, false);
     }
   }
 }

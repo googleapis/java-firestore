@@ -19,6 +19,8 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.cloud.firestore.UpdateBuilder.BatchState;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -113,7 +115,7 @@ public class BulkWriter {
    *
    * @param documentReference A reference to the document to be created.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> create(
@@ -129,7 +131,8 @@ public class BulkWriter {
    * Delete a document from the database.
    *
    * @param documentReference The DocumentReference to delete.
-   * @return An ApiFuture containing the result of the delete. Throws an error if the delete fails.
+   * @return An ApiFuture containing the result of the delete. Contains an error if the delete
+   *     fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull DocumentReference documentReference) {
@@ -144,15 +147,16 @@ public class BulkWriter {
    * Delete a document from the database.
    *
    * @param documentReference The DocumentReference to delete.
-   * @param options Preconditions to enforce for this delete.
-   * @return An ApiFuture containing the result of the delete. Throws an error if the delete fails.
+   * @param precondition Precondition to enforce for this delete.
+   * @return An ApiFuture containing the result of the delete. Contains an error if the delete
+   *     fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(
-      @Nonnull DocumentReference documentReference, @Nonnull Precondition options) {
+      @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
-    ApiFuture<WriteResult> future = bulkCommitBatch.delete(documentReference, options);
+    ApiFuture<WriteResult> future = bulkCommitBatch.delete(documentReference, precondition);
     sendReadyBatches();
     return future;
   }
@@ -163,7 +167,7 @@ public class BulkWriter {
    *
    * @param documentReference A reference to the document to be set.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -183,7 +187,7 @@ public class BulkWriter {
    * @param documentReference A reference to the document to be set.
    * @param fields A map of the fields and values for the document.
    * @param options An object to configure the set behavior.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -208,7 +212,7 @@ public class BulkWriter {
    *
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -231,17 +235,17 @@ public class BulkWriter {
    *
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
-   * @param options Preconditions to enforce on this update.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @param precondition Precondition to enforce on this update.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
-      Precondition options) {
+      Precondition precondition) {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
-    ApiFuture<WriteResult> future = bulkCommitBatch.update(documentReference, fields, options);
+    ApiFuture<WriteResult> future = bulkCommitBatch.update(documentReference, fields, precondition);
     sendReadyBatches();
     return future;
   }
@@ -259,7 +263,7 @@ public class BulkWriter {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -288,7 +292,7 @@ public class BulkWriter {
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -317,19 +321,19 @@ public class BulkWriter {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull String field,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
     ApiFuture<WriteResult> future =
-        bulkCommitBatch.update(documentReference, options, field, value, moreFieldsAndValues);
+        bulkCommitBatch.update(documentReference, precondition, field, value, moreFieldsAndValues);
     sendReadyBatches();
     return future;
   }
@@ -344,23 +348,24 @@ public class BulkWriter {
    * by providing FieldPath objects.
    *
    * @param documentReference A reference to the document to be updated.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Throws an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
     ApiFuture<WriteResult> future =
-        bulkCommitBatch.update(documentReference, options, fieldPath, value, moreFieldsAndValues);
+        bulkCommitBatch.update(
+            documentReference, precondition, fieldPath, value, moreFieldsAndValues);
     sendReadyBatches();
     return future;
   }
@@ -369,7 +374,7 @@ public class BulkWriter {
    * Commits all writes that have been enqueued up to this point in parallel.
    *
    * <p>Returns an ApiFuture that completes when all currently queued operations have been
-   * committed. The ApiFuture will never throw an error since the results for each individual
+   * committed. The ApiFuture will never return an error since the results for each individual
    * operation are conveyed via their individual ApiFutures.
    *
    * <p>The ApiFuture completes immediately if there are no pending writes. Otherwise, the ApiFuture
@@ -402,7 +407,7 @@ public class BulkWriter {
   /**
    * Commits all enqueued writes and marks the BulkWriter instance as closed.
    *
-   * <p>After calling `close()`, calling any method wil throw an error.
+   * <p>After calling `close()`, calling any method wil return an error.
    *
    * <p>Returns an ApiFuture that completes when there are no more pending writes. The ApiFuture
    * will never error. Calling this method will send all requests. The ApiFuture completes
@@ -432,7 +437,7 @@ public class BulkWriter {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
       if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN
-          && !lastBatch.getDocPaths().contains(documentReference.getPath())) {
+          && !lastBatch.getDocuments().contains(documentReference)) {
         return lastBatch;
       }
     }
@@ -478,8 +483,8 @@ public class BulkWriter {
 
       // Send the batch if it is under the rate limit, or schedule another attempt after the
       // appropriate timeout.
-      long delayMs = rateLimiter.getNextRequestDelayMs(batch.getOpCount());
-      Preconditions.checkArgument(delayMs != -1, "Batch size should be under capacity");
+      long delayMs = rateLimiter.getNextRequestDelayMs(batch.getOperationCount());
+      Preconditions.checkState(delayMs != -1, "Batch size should be under capacity");
       if (delayMs == 0) {
         sendBatch(batch);
       } else {
@@ -506,22 +511,29 @@ public class BulkWriter {
    * Sends the provided batch and processes the results. After the batch is committed, sends the
    * next group of ready batches.
    */
-  private void sendBatch(BulkCommitBatch batch) {
-    boolean success = rateLimiter.tryMakeRequest(batch.getOpCount());
+  private void sendBatch(final BulkCommitBatch batch) {
+    boolean success = rateLimiter.tryMakeRequest(batch.getOperationCount());
     Preconditions.checkState(success, "Batch should be under rate limit to be sent.");
     try {
-      List<BatchWriteResult> results = batch.bulkCommit().get();
-      batch.processResults(results, null);
+      final ApiFuture<List<BatchWriteResult>> commitFuture = batch.bulkCommit();
+      commitFuture.addListener(
+          new Runnable() {
+            public void run() {
+              try {
+                batch.processResults(commitFuture.get(), null);
+              } catch (Exception e) {
+                batch.processResults(new ArrayList<BatchWriteResult>(), e);
+              }
+              // Remove the batch from BatchQueue after it has been processed.
+              boolean removed = batchQueue.remove(batch);
+              Preconditions.checkState(removed, "The batch should be in the BatchQueue.");
+              sendReadyBatches();
+            }
+          },
+          MoreExecutors.directExecutor());
     } catch (Exception e) {
       batch.processResults(new ArrayList<BatchWriteResult>(), e);
     }
-
-    // Remove the batch from BatchQueue after it has been processed.
-    int batchIndex = batchQueue.indexOf(batch);
-    Preconditions.checkState(batchIndex != -1, "The batch should be in the BatchQueue.");
-    batchQueue.remove(batchIndex);
-
-    sendReadyBatches();
   }
 
   /**
@@ -529,25 +541,19 @@ public class BulkWriter {
    * READY_TO_SEND (2) not write to references that are currently in flight.
    */
   private boolean isBatchSendable(BulkCommitBatch batch) {
-    if (batch.getState() != UpdateBuilder.BatchState.READY_TO_SEND) {
+    if (!batch.getState().equals(UpdateBuilder.BatchState.READY_TO_SEND)) {
       return false;
     }
 
-    for (final String path : batch.getDocPaths()) {
+    for (final DocumentReference document : batch.getDocuments()) {
       boolean isRefInFlight =
           FluentIterable.from(batchQueue)
-              .filter(
-                  new Predicate<BulkCommitBatch>() {
-                    @Override
-                    public boolean apply(BulkCommitBatch batch) {
-                      return batch.getState() == UpdateBuilder.BatchState.SENT;
-                    }
-                  })
               .anyMatch(
                   new Predicate<BulkCommitBatch>() {
                     @Override
                     public boolean apply(BulkCommitBatch batch) {
-                      return batch.getDocPaths().contains(path);
+                      return batch.getState().equals(BatchState.SENT)
+                          && batch.getDocuments().contains(document);
                     }
                   });
 
@@ -558,7 +564,7 @@ public class BulkWriter {
                 "Duplicate write to document %s detected. Writing to the same document multiple"
                     + " times will slow down BulkWriter. Write to unique documents in order to "
                     + "maximize throughput.",
-                path));
+                document));
         return false;
       }
     }
@@ -566,6 +572,7 @@ public class BulkWriter {
     return true;
   }
 
+  @VisibleForTesting
   void setMaxBatchSize(int size) {
     maxBatchSize = size;
   }

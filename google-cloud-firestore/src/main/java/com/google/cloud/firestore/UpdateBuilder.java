@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
@@ -57,7 +58,7 @@ public abstract class UpdateBuilder<T> {
   private final int maxBatchSize;
 
   private BatchState state = BatchState.OPEN;
-  private final HashSet<String> docPaths = new HashSet<>();
+  private final HashSet<DocumentReference> documents = new HashSet<>();
   private final SettableApiFuture<Void> completeFuture = SettableApiFuture.create();
   private final Map<Integer, SettableApiFuture<WriteResult>> resultsMap = new HashMap<>();
 
@@ -83,6 +84,12 @@ public abstract class UpdateBuilder<T> {
     this.writes = new ArrayList<>();
   }
 
+  /**
+   * Wraps the result of the write operation before it is returned.
+   *
+   * <p>This method allows operations on Transaction and Writebatch to return the object for
+   * chaining, while also allowing BulkWriter operations to return the future directly.
+   */
   abstract T wrapResult(ApiFuture<WriteResult> result);
 
   /** Whether to allow multiple writes to the same document in a batch. */
@@ -375,18 +382,18 @@ public abstract class UpdateBuilder<T> {
    *
    * @param documentReference The DocumentReference to update.
    * @param fields A Map containing the fields and values with which to update the document.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @return The instance for chaining.
    */
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
-      Precondition options) {
+      Precondition precondition) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
     return performUpdate(
-        documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), options);
+        documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), precondition);
   }
 
   /**
@@ -438,7 +445,7 @@ public abstract class UpdateBuilder<T> {
    * doesn't exist yet, the update will fail.
    *
    * @param documentReference The DocumentReference to update.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
@@ -447,15 +454,15 @@ public abstract class UpdateBuilder<T> {
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull String field,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
     return performUpdate(
         documentReference,
-        options,
+        precondition,
         FieldPath.fromDotSeparatedString(field),
         value,
         moreFieldsAndValues);
@@ -466,7 +473,7 @@ public abstract class UpdateBuilder<T> {
    * doesn't exist yet, the update will fail.
    *
    * @param documentReference The DocumentReference to update.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
@@ -475,18 +482,18 @@ public abstract class UpdateBuilder<T> {
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
-    return performUpdate(documentReference, options, fieldPath, value, moreFieldsAndValues);
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+    return performUpdate(documentReference, precondition, fieldPath, value, moreFieldsAndValues);
   }
 
   private T performUpdate(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object[] moreFieldsAndValues) {
@@ -519,7 +526,7 @@ public abstract class UpdateBuilder<T> {
       fields.put(currentPath, objectValue);
     }
 
-    return performUpdate(documentReference, fields, options);
+    return performUpdate(documentReference, fields, precondition);
   }
 
   private T performUpdate(
@@ -717,24 +724,24 @@ public abstract class UpdateBuilder<T> {
     return state;
   }
 
-  HashSet<String> getDocPaths() {
-    return docPaths;
+  Set<DocumentReference> getDocuments() {
+    return documents;
   }
 
-  int getOpCount() {
+  int getOperationCount() {
     return resultsMap.size();
   }
 
   private ApiFuture<WriteResult> processOperation(DocumentReference documentReference) {
     Preconditions.checkState(
-        allowDuplicateDocs() || !docPaths.contains(documentReference.getPath()),
+        allowDuplicateDocs() || !documents.contains(documentReference.getPath()),
         "Batch should not contain writes to the same document");
     Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
-    docPaths.add(documentReference.getPath());
+    documents.add(documentReference);
     SettableApiFuture<WriteResult> result = SettableApiFuture.create();
-    resultsMap.put(getOpCount(), result);
+    resultsMap.put(getOperationCount(), result);
 
-    if (getOpCount() == maxBatchSize) {
+    if (getOperationCount() == maxBatchSize) {
       state = BatchState.READY_TO_SEND;
     }
 
@@ -742,13 +749,11 @@ public abstract class UpdateBuilder<T> {
   }
   /** Resolves the individual operations in the batch with the results. */
   void processResults(List<BatchWriteResult> results, @Nullable Exception error) {
-    if (error == null) {
-      for (int i = 0; i < getOpCount(); ++i) {
+    for (int i = 0; i < resultsMap.size(); ++i) {
+      if (error == null) {
         SettableApiFuture<WriteResult> future = resultsMap.get(i);
         convertBatchWriteResult(results.get(i), future);
-      }
-    } else {
-      for (int i = 0; i < getOpCount(); ++i) {
+      } else {
         resultsMap.get(i).setException(error);
       }
     }

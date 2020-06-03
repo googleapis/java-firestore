@@ -33,12 +33,14 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.LocalFirestoreHelper.RequestResponseMap;
+import com.google.cloud.firestore.LocalFirestoreHelper.RequestResponseStubber;
+import com.google.cloud.firestore.LocalFirestoreHelper.SerialRequestStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.GeneratedMessageV3;
+import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,17 +78,17 @@ public class BulkWriterTest {
   private DocumentReference doc1;
   private DocumentReference doc2;
 
-  private ApiFuture<BatchWriteResponse> successResponse(int seconds) {
+  private ApiFuture<BatchWriteResponse> successResponse(int updateTimeSeconds) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
-    response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(seconds).build();
+    response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(updateTimeSeconds).build();
     response.addStatusBuilder().build();
     return ApiFutures.immediateFuture(response.build());
   }
 
-  private ApiFuture<BatchWriteResponse> failResponse() {
+  private ApiFuture<BatchWriteResponse> failedResponse() {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().build();
-    response.addStatusBuilder().setCode(14).build();
+    response.addStatusBuilder().setCode(Code.UNAVAILABLE_VALUE).build();
     return ApiFutures.immediateFuture(response.build());
   }
 
@@ -102,9 +104,9 @@ public class BulkWriterTest {
   }
 
   private void verifyRequests(
-      List<BatchWriteRequest> requests, RequestResponseMap requestResponseMap) {
+      List<BatchWriteRequest> requests, RequestResponseStubber requestResponseStubber) {
     int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
+    for (GeneratedMessageV3 request : requestResponseStubber.keySet()) {
       assertEquals(request, requests.get(index++));
     }
   }
@@ -118,109 +120,109 @@ public class BulkWriterTest {
 
   @Test
   public void hasSetMethod() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
   @Test
   public void hasUpdateMethod() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.update(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
   @Test
   public void hasDeleteMethod() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(batchWrite(delete("coll/doc1")), successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.delete(doc1);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
   @Test
   public void hasCreateMethod() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
   @Test
   public void surfacesErrors() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                failResponse());
+                failedResponse());
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
     try {
       result.get();
       fail("set() should have failed");
@@ -237,18 +239,18 @@ public class BulkWriterTest {
 
   @Test
   public void addsWritesToNewBatchAfterFlush() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                successResponse(2));
+                successResponse(1));
             put(
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
                 successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result1 = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush();
@@ -256,10 +258,10 @@ public class BulkWriterTest {
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result1.get().getUpdateTime());
+    verifyRequests(requests, requestResponseStubber);
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
 
@@ -312,18 +314,18 @@ public class BulkWriterTest {
 
   @Test
   public void sendsWritesToSameDocInSeparateBatches() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                successResponse(0));
+                successResponse(1));
             put(
                 batchWrite(update(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1")),
-                successResponse(1));
+                successResponse(2));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     // Create another document reference pointing to the same document.
     DocumentReference sameDoc = firestoreMock.document(doc1.getPath());
@@ -333,53 +335,53 @@ public class BulkWriterTest {
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result1.get().getUpdateTime());
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result2.get().getUpdateTime());
+    verifyRequests(requests, requestResponseStubber);
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
 
   @Test
   public void sendWritesToDifferentDocsInSameBatch() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
                     update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
-                mergeResponses(successResponse(0), successResponse(1)));
+                mergeResponses(successResponse(1), successResponse(2)));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.update(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result1.get().getUpdateTime());
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result2.get().getUpdateTime());
+    verifyRequests(requests, requestResponseStubber);
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
 
   @Test
   public void sendBatchesWhenSizeLimitIsReached() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
                     update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
                     create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
-                mergeResponses(successResponse(0), successResponse(1), successResponse(2)));
+                mergeResponses(successResponse(1), successResponse(2), successResponse(3)));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     bulkWriter.setMaxBatchSize(3);
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -388,23 +390,22 @@ public class BulkWriterTest {
         bulkWriter.create(
             firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
 
-    // The 4th write should not be sent because it should be in a new batch. However, this write
-    // should trigger the first batch to be sent.
+    // The 4th write should not be sent because it should be in a new batch.
     bulkWriter.delete(firestoreMock.document("coll/doc4"));
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result1.get().getUpdateTime());
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result2.get().getUpdateTime());
-    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result3.get().getUpdateTime());
+    verifyRequests(requests, requestResponseStubber);
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
   }
 
   @Test
   public void doesNotSendBatchesIfSameDocIsInFlight() throws Exception {
-    final RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    final SerialRequestStubber requestResponseStubber =
+        new SerialRequestStubber() {
           {
             put(
                 batchWrite(
@@ -416,7 +417,7 @@ public class BulkWriterTest {
                 successResponse(3));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock, true);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
 
@@ -435,21 +436,21 @@ public class BulkWriterTest {
 
     // Wait for flush() to perform logic and reach the stubbed response. This simulates a first
     // batch that has been sent with its response still pending.
-    requestResponseMap.awaitLatch();
+    requestResponseStubber.awaitRequest();
 
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<Void> flush2 = bulkWriter.flush();
 
     // Wait for flush() to receive its response and process the batch.
-    requestResponseMap.markComplete();
+    requestResponseStubber.markRequestComplete();
     flush1.get().get();
     flush2.get();
     bulkWriter.close().get();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
-    verifyRequests(requests, requestResponseMap);
+    verifyRequests(requests, requestResponseStubber);
   }
 
   @Test
@@ -475,8 +476,8 @@ public class BulkWriterTest {
       responses2.add(successResponse(i));
     }
 
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(
                 batchWrite(requests1.toArray(new Write[500])),
@@ -486,7 +487,7 @@ public class BulkWriterTest {
                 mergeResponses(responses2.toArray(new ApiFuture[5])));
           }
         };
-    requestResponseMap.initializeStub(batchWriteCapture, firestoreMock);
+    requestResponseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     for (int i = 0; i < 500; ++i) {
       bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);

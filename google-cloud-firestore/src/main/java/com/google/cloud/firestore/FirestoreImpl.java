@@ -97,7 +97,7 @@ class FirestoreImpl implements Firestore {
   @Nonnull
   @Override
   public BulkWriter bulkWriter() {
-    return new BulkWriter(this, true);
+    return new BulkWriter(this, /* enableThrottling= */ true);
   }
 
   @Nonnull

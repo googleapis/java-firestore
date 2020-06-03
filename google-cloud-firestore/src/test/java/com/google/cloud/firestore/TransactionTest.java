@@ -50,7 +50,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.LocalFirestoreHelper.RequestResponseMap;
+import com.google.cloud.firestore.LocalFirestoreHelper.RequestResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
@@ -337,8 +337,8 @@ public class TransactionTest {
 
   @Test
   public void limitsRetriesWithFailure() {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(begin(), beginResponse("foo1"));
             put(commit("foo1"), RETRYABLE_API_EXCEPTION);
@@ -358,7 +358,7 @@ public class TransactionTest {
           }
         };
 
-    requestResponseMap.initializeStub(requestCapture, firestoreMock);
+    requestResponseStubber.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -380,18 +380,18 @@ public class TransactionTest {
     }
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
     int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
+    for (GeneratedMessageV3 request : requestResponseStubber.keySet()) {
       assertEquals(request, requests.get(index++));
     }
   }
 
   @Test
   public void limitsRetriesWithSuccess() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    RequestResponseStubber requestResponseStubber =
+        new RequestResponseStubber() {
           {
             put(begin(), beginResponse("foo1"));
             put(commit("foo1"), RETRYABLE_API_EXCEPTION);
@@ -413,7 +413,7 @@ public class TransactionTest {
           }
         };
 
-    requestResponseMap.initializeStub(requestCapture, firestoreMock);
+    requestResponseStubber.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -430,10 +430,10 @@ public class TransactionTest {
     assertEquals("foo6", transaction.get());
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(requestResponseStubber.size(), requests.size());
 
     int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
+    for (GeneratedMessageV3 request : requestResponseStubber.keySet()) {
       assertEquals(request, requests.get(index++));
     }
   }
@@ -469,8 +469,8 @@ public class TransactionTest {
           new ApiException(new Exception("Test Exception"), code, shouldRetry);
 
       if (shouldRetry) {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
+        RequestResponseStubber requestResponseStubber =
+            new RequestResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
                 put(
@@ -481,7 +481,7 @@ public class TransactionTest {
                 put(commit("foo2"), commitResponse(0, 0));
               }
             };
-        requestResponseMap.initializeStub(requestCapture, firestoreMock);
+        requestResponseStubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
@@ -499,8 +499,8 @@ public class TransactionTest {
 
         assertEquals(2, attempts[0]);
       } else {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
+        RequestResponseStubber requestResponseStubber =
+            new RequestResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
                 put(
@@ -510,7 +510,7 @@ public class TransactionTest {
               }
             };
 
-        requestResponseMap.initializeStub(requestCapture, firestoreMock);
+        requestResponseStubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
