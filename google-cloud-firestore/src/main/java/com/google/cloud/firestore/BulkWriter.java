@@ -32,18 +32,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Used to represent the state of batch.
- *
- * <p>Writes can only be added while the batch is OPEN. For a batch to be sent, the batch must be
- * READY_TO_SEND. After a batch is sent, it is marked as SENT.
- */
-enum BatchState {
-  OPEN,
-  READY_TO_SEND,
-  SENT,
-}
-
 /** Used to represent a batch on the BatchQueue. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
@@ -68,14 +56,16 @@ public class BulkWriter {
   /**
    * The starting maximum number of operations per second as allowed by the 500/50/5 rule.
    *
-   * <p>https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic.
+   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   *     up traffic</a>
    */
   private static final int STARTING_MAXIMUM_OPS_PER_SECOND = 500;
 
   /**
    * The rate by which to increase the capacity as specified by the 500/50/5 rule.
    *
-   * <p>https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic.
+   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   *     up traffic</a>
    */
   private static final double RATE_LIMITER_MULTIPLIER = 1.5;
 
@@ -83,7 +73,8 @@ public class BulkWriter {
    * How often the operations per second capacity should increase in milliseconds as specified by
    * the 500/50/5 rule.
    *
-   * <p>https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic.
+   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   *     up traffic</a>
    */
   private static final int RATE_LIMITER_MULTIPLIER_MILLIS = 5 * 60 * 1000;
 
@@ -179,8 +170,7 @@ public class BulkWriter {
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
-    ApiFuture<WriteResult> future =
-        bulkCommitBatch.set(documentReference, fields, SetOptions.OVERWRITE);
+    ApiFuture<WriteResult> future = bulkCommitBatch.set(documentReference, fields);
     sendReadyBatches();
     return future;
   }
@@ -209,7 +199,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -232,7 +222,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -258,7 +248,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -287,7 +277,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -316,7 +306,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -346,7 +336,7 @@ public class BulkWriter {
 
   /**
    * Update fields of the document referred to by the provided {@link DocumentReference}. If the
-   * document doesn't yet exist, the update fails and the entire batch will be rejected.
+   * document doesn't yet exist, the update will fail.
    *
    * <p>The update() method accepts either an object with field paths encoded as keys and field
    * values encoded as values, or a variable number of arguments that alternate between field paths
@@ -378,9 +368,9 @@ public class BulkWriter {
   /**
    * Commits all writes that have been enqueued up to this point in parallel.
    *
-   * <p>Returns a ApiFuture that completes when all currently queued operations have been committed.
-   * The ApiFuture will never throw an error since the results for each individual operation are
-   * conveyed via their individual ApiFutures.
+   * <p>Returns an ApiFuture that completes when all currently queued operations have been
+   * committed. The ApiFuture will never throw an error since the results for each individual
+   * operation are conveyed via their individual ApiFutures.
    *
    * <p>The ApiFuture completes immediately if there are no pending writes. Otherwise, the ApiFuture
    * waits for all previously issued writes, but it does not wait for writes that were added after
@@ -441,7 +431,7 @@ public class BulkWriter {
   private BulkCommitBatch getEligibleBatch(DocumentReference documentReference) {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
-      if (lastBatch.getState() == BatchState.OPEN
+      if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN
           && !lastBatch.getDocPaths().contains(documentReference.getPath())) {
         return lastBatch;
       }
@@ -477,7 +467,7 @@ public class BulkWriter {
                 new Predicate<BulkCommitBatch>() {
                   @Override
                   public boolean apply(BulkCommitBatch batch) {
-                    return batch.getState() == BatchState.READY_TO_SEND;
+                    return batch.getState() == UpdateBuilder.BatchState.READY_TO_SEND;
                   }
                 })
             .toList();
@@ -539,7 +529,7 @@ public class BulkWriter {
    * READY_TO_SEND (2) not write to references that are currently in flight.
    */
   private boolean isBatchSendable(BulkCommitBatch batch) {
-    if (batch.getState() != BatchState.READY_TO_SEND) {
+    if (batch.getState() != UpdateBuilder.BatchState.READY_TO_SEND) {
       return false;
     }
 
@@ -550,7 +540,7 @@ public class BulkWriter {
                   new Predicate<BulkCommitBatch>() {
                     @Override
                     public boolean apply(BulkCommitBatch batch) {
-                      return batch.getState() == BatchState.SENT;
+                      return batch.getState() == UpdateBuilder.BatchState.SENT;
                     }
                   })
               .anyMatch(

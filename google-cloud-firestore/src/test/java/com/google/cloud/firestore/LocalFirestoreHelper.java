@@ -381,7 +381,6 @@ public final class LocalFirestoreHelper {
   public static Write create(Map<String, Value> fields, String docPath) {
     Write.Builder write = Write.newBuilder();
     Document.Builder document = write.getUpdateBuilder();
-
     document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
     write.getCurrentDocumentBuilder().setExists(false);

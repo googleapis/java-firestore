@@ -61,6 +61,18 @@ public abstract class UpdateBuilder<T> {
   private final SettableApiFuture<Void> completeFuture = SettableApiFuture.create();
   private final Map<Integer, SettableApiFuture<WriteResult>> resultsMap = new HashMap<>();
 
+  /**
+   * Used to represent the state of batch.
+   *
+   * <p>Writes can only be added while the batch is OPEN. For a batch to be sent, the batch must be
+   * READY_TO_SEND. After a batch is sent, it is marked as SENT.
+   */
+  enum BatchState {
+    OPEN,
+    READY_TO_SEND,
+    SENT,
+  }
+
   UpdateBuilder(FirestoreImpl firestore) {
     this(firestore, BulkWriter.MAX_BATCH_SIZE);
   }
