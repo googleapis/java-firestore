@@ -50,6 +50,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.LocalFirestoreHelper.RequestResponseMap;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
@@ -60,7 +61,6 @@ import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -77,7 +77,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Stubber;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
@@ -359,7 +358,7 @@ public class TransactionTest {
           }
         };
 
-    initializeStub(requestResponseMap);
+    requestResponseMap.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -414,7 +413,7 @@ public class TransactionTest {
           }
         };
 
-    initializeStub(requestResponseMap);
+    requestResponseMap.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -482,7 +481,7 @@ public class TransactionTest {
                 put(commit("foo2"), commitResponse(0, 0));
               }
             };
-        initializeStub(requestResponseMap);
+        requestResponseMap.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
@@ -511,7 +510,7 @@ public class TransactionTest {
               }
             };
 
-        initializeStub(requestResponseMap);
+        requestResponseMap.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
@@ -865,18 +864,5 @@ public class TransactionTest {
 
     assertEquals(begin(), requests.get(0));
     assertEquals(commit(TRANSACTION_ID, writes.toArray(new Write[] {})), requests.get(1));
-  }
-
-  static class RequestResponseMap
-      extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {}
-
-  private void initializeStub(RequestResponseMap requestResponseMap) {
-    Stubber stubber = null;
-    for (ApiFuture<? extends GeneratedMessageV3> response : requestResponseMap.values()) {
-      stubber = (stubber != null) ? stubber.doReturn(response) : doReturn(response);
-    }
-    stubber
-        .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
   }
 }

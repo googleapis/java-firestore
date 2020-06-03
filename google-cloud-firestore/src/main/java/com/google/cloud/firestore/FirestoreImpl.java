@@ -96,6 +96,18 @@ class FirestoreImpl implements Firestore {
 
   @Nonnull
   @Override
+  public BulkWriter bulkWriter() {
+    return new BulkWriter(this, true);
+  }
+
+  @Nonnull
+  @Override
+  public BulkWriter bulkWriter(BulkWriterOptions options) {
+    return new BulkWriter(this, !options.getDisableThrottling());
+  }
+
+  @Nonnull
+  @Override
   public CollectionReference collection(@Nonnull String collectionPath) {
     ResourcePath path = databasePath.append(collectionPath);
     Preconditions.checkArgument(

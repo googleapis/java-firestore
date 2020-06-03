@@ -25,7 +25,7 @@ public final class WriteResult {
 
   private final Timestamp updateTime;
 
-  private WriteResult(Timestamp updateTime) {
+  WriteResult(Timestamp updateTime) {
     this.updateTime = updateTime;
   }
 

@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.SettableApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.common.base.Preconditions;
@@ -35,6 +36,7 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,15 +49,33 @@ import javax.annotation.Nullable;
  * Abstract class that collects and bundles all write operations for {@link Transaction} and {@link
  * WriteBatch}.
  */
-public abstract class UpdateBuilder<T extends UpdateBuilder> {
+public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
   private final List<Write.Builder> writes;
   private boolean committed;
+  private final int maxBatchSize;
+
+  private BatchState state = BatchState.OPEN;
+  private final HashSet<String> docPaths = new HashSet<>();
+  private final SettableApiFuture<Void> completeFuture = SettableApiFuture.create();
+  private final Map<Integer, SettableApiFuture<WriteResult>> resultsMap = new HashMap<>();
 
   UpdateBuilder(FirestoreImpl firestore) {
+    this(firestore, BulkWriter.MAX_BATCH_SIZE);
+  }
+
+  UpdateBuilder(FirestoreImpl firestore, int maxBatchSize) {
     this.firestore = firestore;
+    this.maxBatchSize = maxBatchSize;
     this.writes = new ArrayList<>();
+  }
+
+  abstract T wrapResult(ApiFuture<WriteResult> result);
+
+  /** Whether to allow multiple writes to the same document in a batch. */
+  boolean allowDuplicateDocs() {
+    return true;
   }
 
   /**
@@ -130,7 +150,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
     writes.add(write);
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   private void verifyNotCommitted() {
@@ -260,7 +280,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
 
     writes.add(write);
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -529,7 +549,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     }
     writes.add(write);
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /**
@@ -566,7 +586,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     }
     writes.add(write);
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /** Commit the current batch. */
@@ -625,6 +645,11 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
             "CloudFirestore.BatchWrite",
             ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
 
+    Preconditions.checkState(
+        state == BatchState.READY_TO_SEND,
+        "The batch should be marked as READY_TO_SEND before committing");
+    state = BatchState.SENT;
+
     final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
@@ -674,5 +699,68 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
   /** Get the number of writes. */
   public int getMutationsSize() {
     return writes.size();
+  }
+
+  BatchState getState() {
+    return state;
+  }
+
+  HashSet<String> getDocPaths() {
+    return docPaths;
+  }
+
+  int getOpCount() {
+    return resultsMap.size();
+  }
+
+  private ApiFuture<WriteResult> processOperation(DocumentReference documentReference) {
+    Preconditions.checkState(
+        allowDuplicateDocs() || !docPaths.contains(documentReference.getPath()),
+        "Batch should not contain writes to the same document");
+    Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
+    docPaths.add(documentReference.getPath());
+    SettableApiFuture<WriteResult> result = SettableApiFuture.create();
+    resultsMap.put(getOpCount(), result);
+
+    if (getOpCount() == maxBatchSize) {
+      state = BatchState.READY_TO_SEND;
+    }
+
+    return result;
+  }
+  /** Resolves the individual operations in the batch with the results. */
+  void processResults(List<BatchWriteResult> results, @Nullable Exception error) {
+    if (error == null) {
+      for (int i = 0; i < getOpCount(); ++i) {
+        SettableApiFuture<WriteResult> future = resultsMap.get(i);
+        convertBatchWriteResult(results.get(i), future);
+      }
+    } else {
+      for (int i = 0; i < getOpCount(); ++i) {
+        resultsMap.get(i).setException(error);
+      }
+    }
+    completeFuture.set(null);
+  }
+
+  private void convertBatchWriteResult(
+      BatchWriteResult result, SettableApiFuture<WriteResult> future) {
+    if (result.getWriteTime() != null) {
+      future.set(new WriteResult(result.getWriteTime()));
+    } else {
+      future.setException(FirestoreException.serverRejected(result.getStatus(), "Backend error"));
+    }
+  }
+
+  /** Returns a future that returns when the batch has been sent, and a response is received. */
+  ApiFuture<Void> awaitBulkCommit() {
+    markReadyToSend();
+    return completeFuture;
+  }
+
+  void markReadyToSend() {
+    if (state == BatchState.OPEN) {
+      state = BatchState.READY_TO_SEND;
+    }
   }
 }

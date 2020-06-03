@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,28 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFuture;
-import java.util.List;
 import javax.annotation.Nonnull;
 
-/**
- * A Firestore WriteBatch that can be used to atomically commit multiple write operations at once.
- *
- * @see Firestore#batch()
- */
-public class WriteBatch extends UpdateBuilder<WriteBatch> {
+/** Options used to disable request throttling in BulkWriter. */
+public class BulkWriterOptions {
+  private final boolean disableThrottling;
 
-  WriteBatch(FirestoreImpl firestore) {
-    super(firestore);
+  BulkWriterOptions(boolean disableThrottling) {
+    this.disableThrottling = disableThrottling;
+  }
+
+  public boolean getDisableThrottling() {
+    return disableThrottling;
   }
 
   /**
-   * Applies the current WriteBatch and returns an array with WriteResults.
+   * Create a set of options to disable or enable throttling.
    *
-   * @return ApiFuture with a List of WriteResults
+   * @param disableThrottling Whether to disable throttling.
+   * @return The BulkWriterOptions object.
    */
   @Nonnull
-  public ApiFuture<List<WriteResult>> commit() {
-    return super.commit(null);
-  }
-
-  WriteBatch wrapResult(ApiFuture<WriteResult> result) {
-    return this;
+  public static BulkWriterOptions create(boolean disableThrottling) {
+    return new BulkWriterOptions(disableThrottling);
   }
 }
