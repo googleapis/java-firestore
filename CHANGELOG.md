@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.34.0](https://www.github.com/googleapis/java-firestore/compare/v1.33.0...v1.34.0) (2020-05-29)
+
+
+### Features
+
+* add support for BigDecimal to CustomClassMapper ([#196](https://www.github.com/googleapis/java-firestore/issues/196)) ([a471f1e](https://www.github.com/googleapis/java-firestore/commit/a471f1eed1e555e95b3d9bcda31ce0277e35a14a))
+* Create CODEOWNERS ([#207](https://www.github.com/googleapis/java-firestore/issues/207)) ([cd19eae](https://www.github.com/googleapis/java-firestore/commit/cd19eae68a4898a53c6c3cc8189eab30545a661d))
+
+
+### Bug Fixes
+
+* add RateLimiter ([#230](https://www.github.com/googleapis/java-firestore/issues/230)) ([47d4a11](https://www.github.com/googleapis/java-firestore/commit/47d4a11625d5888d6f31e494923853a08bb8af77))
+* catch null Firestore in system tests ([#215](https://www.github.com/googleapis/java-firestore/issues/215)) ([2a4a7b5](https://www.github.com/googleapis/java-firestore/commit/2a4a7b50d40ff1c165e3d359d5f4eaf929f6ffbc))
+* Fields used in whereIn should be equality filters ([#216](https://www.github.com/googleapis/java-firestore/issues/216)) ([4a62633](https://www.github.com/googleapis/java-firestore/commit/4a626333e5af0d70a4dc4853ed373dcf50ea0f4a))
+* replace usages of transform proto with update_transform ([#213](https://www.github.com/googleapis/java-firestore/issues/213)) ([46a3c51](https://www.github.com/googleapis/java-firestore/commit/46a3c51386b57f20bd65c564e93181e9ce399e2b))
+* support array of references for IN queries ([#211](https://www.github.com/googleapis/java-firestore/issues/211)) ([b376003](https://www.github.com/googleapis/java-firestore/commit/b3760032952529f148065928c3bf13ff73a34edd))
+
+
+### Dependencies
+
+* update core dependencies to v1.93.5 ([#229](https://www.github.com/googleapis/java-firestore/issues/229)) ([b078213](https://www.github.com/googleapis/java-firestore/commit/b078213209f3936cfe9c9e2cdea040c1262621d4))
+* update dependency com.google.api:api-common to v1.9.1 ([#228](https://www.github.com/googleapis/java-firestore/issues/228)) ([7e4568d](https://www.github.com/googleapis/java-firestore/commit/7e4568d8b3f0fc6f591640ccc2d646eb2764e572))
+* update dependency com.google.api.grpc:proto-google-common-protos to v1.18.0 ([#204](https://www.github.com/googleapis/java-firestore/issues/204)) ([1e05de4](https://www.github.com/googleapis/java-firestore/commit/1e05de4ecfde055a1c84c2f6dd338604b8580a61))
+* update dependency com.google.cloud:google-cloud-conformance-tests to v0.0.10 ([#197](https://www.github.com/googleapis/java-firestore/issues/197)) ([69372af](https://www.github.com/googleapis/java-firestore/commit/69372af7253564691b291766e2bf4d80e9ecc770))
+* update dependency com.google.guava:guava-bom to v29 ([#180](https://www.github.com/googleapis/java-firestore/issues/180)) ([3c204b4](https://www.github.com/googleapis/java-firestore/commit/3c204b42ddfbe435ac095368d1e695ed282280bd))
+* update dependency io.grpc:grpc-bom to v1.29.0 ([#206](https://www.github.com/googleapis/java-firestore/issues/206)) ([5d8c50f](https://www.github.com/googleapis/java-firestore/commit/5d8c50f105649100abf4fa7a6882bb0469ccbf8f))
+* update dependency org.threeten:threetenbp to v1.4.4 ([#194](https://www.github.com/googleapis/java-firestore/issues/194)) ([c867bd5](https://www.github.com/googleapis/java-firestore/commit/c867bd5772aa4a4710c622546e69fdc0f1ca22b6))
+* update jackson dependencies to v2.11.0 ([#195](https://www.github.com/googleapis/java-firestore/issues/195)) ([5066812](https://www.github.com/googleapis/java-firestore/commit/50668126e99422cc9498b317c9c76a80a8bf7b30))
+* update protobuf.version to v3.12.0 ([#220](https://www.github.com/googleapis/java-firestore/issues/220)) ([2c0b35d](https://www.github.com/googleapis/java-firestore/commit/2c0b35dfc5786b986b5301a00f06177f527496c3))
+* update protobuf.version to v3.12.2 ([#226](https://www.github.com/googleapis/java-firestore/issues/226)) ([2eeea19](https://www.github.com/googleapis/java-firestore/commit/2eeea193d7eb54b1efa92b4d5dd996c170048a73))
+
+
+### Documentation
+
+* update README to include code formatting ([#209](https://www.github.com/googleapis/java-firestore/issues/209)) ([04f8b3b](https://www.github.com/googleapis/java-firestore/commit/04f8b3b0f873c2f1988c184de1e5268e0de9053f))
+
 ## [1.33.0](https://www.github.com/googleapis/java-firestore/compare/v1.32.5...v1.33.0) (2020-04-08)
 
 
