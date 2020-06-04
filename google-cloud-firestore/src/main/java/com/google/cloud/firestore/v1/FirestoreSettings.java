@@ -17,6 +17,7 @@ package com.google.cloud.firestore.v1;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
+import static com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.BetaApi;
@@ -34,6 +35,8 @@ import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -48,6 +51,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -160,6 +165,18 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return ((FirestoreStubSettings) getStubSettings()).listCollectionIdsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to partitionQuery. */
+  public PagedCallSettings<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      partitionQuerySettings() {
+    return ((FirestoreStubSettings) getStubSettings()).partitionQuerySettings();
+  }
+
+  /** Returns the object with the settings used for calls to batchWrite. */
+  public UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).batchWriteSettings();
   }
 
   public static final FirestoreSettings create(FirestoreStubSettings stub) throws IOException {
@@ -328,6 +345,18 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return getStubSettingsBuilder().listCollectionIdsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to partitionQuery. */
+    public PagedCallSettings.Builder<
+            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+        partitionQuerySettings() {
+      return getStubSettingsBuilder().partitionQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to batchWrite. */
+    public UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+      return getStubSettingsBuilder().batchWriteSettings();
     }
 
     @Override
