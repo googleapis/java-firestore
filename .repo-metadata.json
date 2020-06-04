@@ -9,5 +9,6 @@
   "repo": "googleapis/java-firestore",
   "repo_short": "java-firestore",
   "distribution_name": "com.google.cloud:google-cloud-firestore",
+  "codeowner_team": "@googleapis/firestore-dpe",
   "api_id": "firestore.googleapis.com"
 }
