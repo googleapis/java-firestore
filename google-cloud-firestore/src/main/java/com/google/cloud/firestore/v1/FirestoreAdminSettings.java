@@ -26,18 +26,24 @@ import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.ClientSettings;
+import com.google.api.gax.rpc.OperationCallSettings;
 import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
+import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
+import com.google.firestore.admin.v1.FieldOperationMetadata;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
+import com.google.firestore.admin.v1.IndexOperationMetadata;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
@@ -64,16 +70,16 @@ import javax.annotation.Generated;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of createIndex to 30 seconds:
+ * <p>For example, to set the total timeout of deleteIndex to 30 seconds:
  *
  * <pre>
  * <code>
  * FirestoreAdminSettings.Builder firestoreAdminSettingsBuilder =
  *     FirestoreAdminSettings.newBuilder();
  * firestoreAdminSettingsBuilder
- *     .createIndexSettings()
+ *     .deleteIndexSettings()
  *     .setRetrySettings(
- *         firestoreAdminSettingsBuilder.createIndexSettings().getRetrySettings().toBuilder()
+ *         firestoreAdminSettingsBuilder.deleteIndexSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreAdminSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
@@ -83,9 +89,35 @@ import javax.annotation.Generated;
 @Generated("by gapic-generator")
 @BetaApi
 public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSettings> {
+  /** Returns the object with the settings used for calls to deleteIndex. */
+  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteIndexSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldOperationSettings();
+  }
+
   /** Returns the object with the settings used for calls to createIndex. */
   public UnaryCallSettings<CreateIndexRequest, Operation> createIndexSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).createIndexSettings();
+  }
+
+  /** Returns the object with the settings used for calls to createIndex. */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public OperationCallSettings<CreateIndexRequest, Index, IndexOperationMetadata>
+      createIndexOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).createIndexOperationSettings();
   }
 
   /** Returns the object with the settings used for calls to listIndexes. */
@@ -99,21 +131,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).getIndexSettings();
   }
 
-  /** Returns the object with the settings used for calls to deleteIndex. */
-  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).deleteIndexSettings();
-  }
-
-  /** Returns the object with the settings used for calls to importDocuments. */
-  public UnaryCallSettings<ImportDocumentsRequest, Operation> importDocumentsSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsSettings();
-  }
-
-  /** Returns the object with the settings used for calls to exportDocuments. */
-  public UnaryCallSettings<ExportDocumentsRequest, Operation> exportDocumentsSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).exportDocumentsSettings();
-  }
-
   /** Returns the object with the settings used for calls to getField. */
   public UnaryCallSettings<GetFieldRequest, Field> getFieldSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).getFieldSettings();
@@ -125,9 +142,31 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).listFieldsSettings();
   }
 
-  /** Returns the object with the settings used for calls to updateField. */
-  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldSettings();
+  /** Returns the object with the settings used for calls to exportDocuments. */
+  public UnaryCallSettings<ExportDocumentsRequest, Operation> exportDocumentsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).exportDocumentsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to exportDocuments. */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public OperationCallSettings<
+          ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
+      exportDocumentsOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).exportDocumentsOperationSettings();
+  }
+
+  /** Returns the object with the settings used for calls to importDocuments. */
+  public UnaryCallSettings<ImportDocumentsRequest, Operation> importDocumentsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to importDocuments. */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
+      importDocumentsOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsOperationSettings();
   }
 
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
@@ -227,9 +266,35 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return this;
     }
 
+    /** Returns the builder for the settings used for calls to deleteIndex. */
+    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
+      return getStubSettingsBuilder().deleteIndexSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
+      return getStubSettingsBuilder().updateFieldSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    @BetaApi(
+        "The surface for long-running operations is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
+        updateFieldOperationSettings() {
+      return getStubSettingsBuilder().updateFieldOperationSettings();
+    }
+
     /** Returns the builder for the settings used for calls to createIndex. */
     public UnaryCallSettings.Builder<CreateIndexRequest, Operation> createIndexSettings() {
       return getStubSettingsBuilder().createIndexSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to createIndex. */
+    @BetaApi(
+        "The surface for long-running operations is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<CreateIndexRequest, Index, IndexOperationMetadata>
+        createIndexOperationSettings() {
+      return getStubSettingsBuilder().createIndexOperationSettings();
     }
 
     /** Returns the builder for the settings used for calls to listIndexes. */
@@ -244,21 +309,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return getStubSettingsBuilder().getIndexSettings();
     }
 
-    /** Returns the builder for the settings used for calls to deleteIndex. */
-    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
-      return getStubSettingsBuilder().deleteIndexSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to importDocuments. */
-    public UnaryCallSettings.Builder<ImportDocumentsRequest, Operation> importDocumentsSettings() {
-      return getStubSettingsBuilder().importDocumentsSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to exportDocuments. */
-    public UnaryCallSettings.Builder<ExportDocumentsRequest, Operation> exportDocumentsSettings() {
-      return getStubSettingsBuilder().exportDocumentsSettings();
-    }
-
     /** Returns the builder for the settings used for calls to getField. */
     public UnaryCallSettings.Builder<GetFieldRequest, Field> getFieldSettings() {
       return getStubSettingsBuilder().getFieldSettings();
@@ -270,9 +320,31 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return getStubSettingsBuilder().listFieldsSettings();
     }
 
-    /** Returns the builder for the settings used for calls to updateField. */
-    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
-      return getStubSettingsBuilder().updateFieldSettings();
+    /** Returns the builder for the settings used for calls to exportDocuments. */
+    public UnaryCallSettings.Builder<ExportDocumentsRequest, Operation> exportDocumentsSettings() {
+      return getStubSettingsBuilder().exportDocumentsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to exportDocuments. */
+    @BetaApi(
+        "The surface for long-running operations is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<
+            ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
+        exportDocumentsOperationSettings() {
+      return getStubSettingsBuilder().exportDocumentsOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to importDocuments. */
+    public UnaryCallSettings.Builder<ImportDocumentsRequest, Operation> importDocumentsSettings() {
+      return getStubSettingsBuilder().importDocumentsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to importDocuments. */
+    @BetaApi(
+        "The surface for long-running operations is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
+        importDocumentsOperationSettings() {
+      return getStubSettingsBuilder().importDocumentsOperationSettings();
     }
 
     @Override
