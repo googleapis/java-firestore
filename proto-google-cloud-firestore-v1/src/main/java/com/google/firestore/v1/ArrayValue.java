@@ -129,6 +129,7 @@ public final class ArrayValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value values = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.Value> getValuesList() {
     return values_;
   }
@@ -141,6 +142,7 @@ public final class ArrayValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value values = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.ValueOrBuilder> getValuesOrBuilderList() {
     return values_;
   }
@@ -153,6 +155,7 @@ public final class ArrayValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value values = 1;</code>
    */
+  @java.lang.Override
   public int getValuesCount() {
     return values_.size();
   }
@@ -165,6 +168,7 @@ public final class ArrayValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value values = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Value getValues(int index) {
     return values_.get(index);
   }
@@ -177,6 +181,7 @@ public final class ArrayValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value values = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.ValueOrBuilder getValuesOrBuilder(int index) {
     return values_.get(index);
   }
