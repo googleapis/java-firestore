@@ -274,6 +274,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
 
@@ -476,6 +480,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
 
@@ -826,6 +834,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
 
@@ -957,6 +969,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
 
@@ -1051,6 +1067,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The fieldPath.
      */
+    @java.lang.Override
     public java.lang.String getFieldPath() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
@@ -1075,6 +1092,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for fieldPath.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getFieldPathBytes() {
       java.lang.Object ref = fieldPath_;
       if (ref instanceof java.lang.String) {
@@ -1702,6 +1720,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The enum numeric value on the wire for order.
        */
+      @java.lang.Override
       public int getOrderValue() {
         if (valueModeCase_ == 2) {
           return ((java.lang.Integer) valueMode_).intValue();
@@ -1739,6 +1758,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The order.
        */
+      @java.lang.Override
       public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
         if (valueModeCase_ == 2) {
           @SuppressWarnings("deprecation")
@@ -1805,6 +1825,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The enum numeric value on the wire for arrayConfig.
        */
+      @java.lang.Override
       public int getArrayConfigValue() {
         if (valueModeCase_ == 3) {
           return ((java.lang.Integer) valueMode_).intValue();
@@ -1840,6 +1861,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The arrayConfig.
        */
+      @java.lang.Override
       public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
         if (valueModeCase_ == 3) {
           @SuppressWarnings("deprecation")
@@ -1962,6 +1984,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The name.
    */
+  @java.lang.Override
   public java.lang.String getName() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -1987,6 +2010,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for name.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -2017,6 +2041,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The enum numeric value on the wire for queryScope.
    */
+  @java.lang.Override
   public int getQueryScopeValue() {
     return queryScope_;
   }
@@ -2036,6 +2061,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The queryScope.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
     @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Index.QueryScope result =
@@ -2062,6 +2088,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.admin.v1.Index.IndexField> getFieldsList() {
     return fields_;
   }
@@ -2082,6 +2109,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
       getFieldsOrBuilderList() {
     return fields_;
@@ -2103,6 +2131,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
+  @java.lang.Override
   public int getFieldsCount() {
     return fields_.size();
   }
@@ -2123,6 +2152,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index.IndexField getFields(int index) {
     return fields_.get(index);
   }
@@ -2143,6 +2173,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index.IndexFieldOrBuilder getFieldsOrBuilder(int index) {
     return fields_.get(index);
   }
@@ -2160,6 +2191,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The enum numeric value on the wire for state.
    */
+  @java.lang.Override
   public int getStateValue() {
     return state_;
   }
@@ -2174,6 +2206,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The state.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index.State getState() {
     @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Index.State result =
@@ -2723,6 +2756,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The enum numeric value on the wire for queryScope.
      */
+    @java.lang.Override
     public int getQueryScopeValue() {
       return queryScope_;
     }
@@ -2744,6 +2778,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setQueryScopeValue(int value) {
+
       queryScope_ = value;
       onChanged();
       return this;
@@ -2764,6 +2799,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The queryScope.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
       @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Index.QueryScope result =
@@ -3325,6 +3361,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The enum numeric value on the wire for state.
      */
+    @java.lang.Override
     public int getStateValue() {
       return state_;
     }
@@ -3341,6 +3378,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setStateValue(int value) {
+
       state_ = value;
       onChanged();
       return this;
@@ -3356,6 +3394,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The state.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.Index.State getState() {
       @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Index.State result =

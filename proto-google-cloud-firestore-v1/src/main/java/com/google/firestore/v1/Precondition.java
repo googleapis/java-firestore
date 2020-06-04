@@ -183,6 +183,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The exists.
    */
+  @java.lang.Override
   public boolean getExists() {
     if (conditionTypeCase_ == 1) {
       return (java.lang.Boolean) conditionType_;
@@ -203,6 +204,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the updateTime field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateTime() {
     return conditionTypeCase_ == 2;
   }
@@ -218,6 +220,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The updateTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getUpdateTime() {
     if (conditionTypeCase_ == 2) {
       return (com.google.protobuf.Timestamp) conditionType_;
@@ -234,6 +237,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
     if (conditionTypeCase_ == 2) {
       return (com.google.protobuf.Timestamp) conditionType_;
@@ -695,6 +699,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the updateTime field is set.
      */
+    @java.lang.Override
     public boolean hasUpdateTime() {
       return conditionTypeCase_ == 2;
     }
@@ -710,6 +715,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The updateTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getUpdateTime() {
       if (updateTimeBuilder_ == null) {
         if (conditionTypeCase_ == 2) {
@@ -847,6 +853,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
       if ((conditionTypeCase_ == 2) && (updateTimeBuilder_ != null)) {
         return updateTimeBuilder_.getMessageOrBuilder();
