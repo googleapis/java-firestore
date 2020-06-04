@@ -26,18 +26,17 @@ import java.util.Map;
 
 /** AUTO-GENERATED DOCUMENTATION AND CLASS */
 @javax.annotation.Generated("by GAPIC protoc plugin")
-public class FieldName implements ResourceName {
+public class CollectionGroupName implements ResourceName {
 
   private static final PathTemplate PATH_TEMPLATE =
       PathTemplate.createWithoutUrlEncoding(
-          "projects/{project}/databases/{database}/collectionGroups/{collection}/fields/{field}");
+          "projects/{project}/databases/{database}/collectionGroups/{collection}");
 
   private volatile Map<String, String> fieldValuesMap;
 
   private final String project;
   private final String database;
   private final String collection;
-  private final String field;
 
   public String getProject() {
     return project;
@@ -51,10 +50,6 @@ public class FieldName implements ResourceName {
     return collection;
   }
 
-  public String getField() {
-    return field;
-  }
-
   public static Builder newBuilder() {
     return new Builder();
   }
@@ -63,57 +58,46 @@ public class FieldName implements ResourceName {
     return new Builder(this);
   }
 
-  private FieldName(Builder builder) {
+  private CollectionGroupName(Builder builder) {
     project = Preconditions.checkNotNull(builder.getProject());
     database = Preconditions.checkNotNull(builder.getDatabase());
     collection = Preconditions.checkNotNull(builder.getCollection());
-    field = Preconditions.checkNotNull(builder.getField());
   }
 
-  public static FieldName of(String project, String database, String collection, String field) {
+  public static CollectionGroupName of(String project, String database, String collection) {
+    return newBuilder().setProject(project).setDatabase(database).setCollection(collection).build();
+  }
+
+  public static String format(String project, String database, String collection) {
     return newBuilder()
         .setProject(project)
         .setDatabase(database)
         .setCollection(collection)
-        .setField(field)
-        .build();
-  }
-
-  public static String format(String project, String database, String collection, String field) {
-    return newBuilder()
-        .setProject(project)
-        .setDatabase(database)
-        .setCollection(collection)
-        .setField(field)
         .build()
         .toString();
   }
 
-  public static FieldName parse(String formattedString) {
+  public static CollectionGroupName parse(String formattedString) {
     if (formattedString.isEmpty()) {
       return null;
     }
     Map<String, String> matchMap =
         PATH_TEMPLATE.validatedMatch(
-            formattedString, "FieldName.parse: formattedString not in valid format");
-    return of(
-        matchMap.get("project"),
-        matchMap.get("database"),
-        matchMap.get("collection"),
-        matchMap.get("field"));
+            formattedString, "CollectionGroupName.parse: formattedString not in valid format");
+    return of(matchMap.get("project"), matchMap.get("database"), matchMap.get("collection"));
   }
 
-  public static List<FieldName> parseList(List<String> formattedStrings) {
-    List<FieldName> list = new ArrayList<>(formattedStrings.size());
+  public static List<CollectionGroupName> parseList(List<String> formattedStrings) {
+    List<CollectionGroupName> list = new ArrayList<>(formattedStrings.size());
     for (String formattedString : formattedStrings) {
       list.add(parse(formattedString));
     }
     return list;
   }
 
-  public static List<String> toStringList(List<FieldName> values) {
+  public static List<String> toStringList(List<CollectionGroupName> values) {
     List<String> list = new ArrayList<String>(values.size());
-    for (FieldName value : values) {
+    for (CollectionGroupName value : values) {
       if (value == null) {
         list.add("");
       } else {
@@ -135,7 +119,6 @@ public class FieldName implements ResourceName {
           fieldMapBuilder.put("project", project);
           fieldMapBuilder.put("database", database);
           fieldMapBuilder.put("collection", collection);
-          fieldMapBuilder.put("field", field);
           fieldValuesMap = fieldMapBuilder.build();
         }
       }
@@ -150,16 +133,15 @@ public class FieldName implements ResourceName {
   @Override
   public String toString() {
     return PATH_TEMPLATE.instantiate(
-        "project", project, "database", database, "collection", collection, "field", field);
+        "project", project, "database", database, "collection", collection);
   }
 
-  /** Builder for FieldName. */
+  /** Builder for CollectionGroupName. */
   public static class Builder {
 
     private String project;
     private String database;
     private String collection;
-    private String field;
 
     public String getProject() {
       return project;
@@ -171,10 +153,6 @@ public class FieldName implements ResourceName {
 
     public String getCollection() {
       return collection;
-    }
-
-    public String getField() {
-      return field;
     }
 
     public Builder setProject(String project) {
@@ -192,22 +170,16 @@ public class FieldName implements ResourceName {
       return this;
     }
 
-    public Builder setField(String field) {
-      this.field = field;
-      return this;
-    }
-
     private Builder() {}
 
-    private Builder(FieldName fieldName) {
-      project = fieldName.project;
-      database = fieldName.database;
-      collection = fieldName.collection;
-      field = fieldName.field;
+    private Builder(CollectionGroupName collectionGroupName) {
+      project = collectionGroupName.project;
+      database = collectionGroupName.database;
+      collection = collectionGroupName.collection;
     }
 
-    public FieldName build() {
-      return new FieldName(this);
+    public CollectionGroupName build() {
+      return new CollectionGroupName(this);
     }
   }
 
@@ -216,12 +188,11 @@ public class FieldName implements ResourceName {
     if (o == this) {
       return true;
     }
-    if (o instanceof FieldName) {
-      FieldName that = (FieldName) o;
+    if (o instanceof CollectionGroupName) {
+      CollectionGroupName that = (CollectionGroupName) o;
       return (this.project.equals(that.project))
           && (this.database.equals(that.database))
-          && (this.collection.equals(that.collection))
-          && (this.field.equals(that.field));
+          && (this.collection.equals(that.collection));
     }
     return false;
   }
@@ -235,8 +206,6 @@ public class FieldName implements ResourceName {
     h ^= database.hashCode();
     h *= 1000003;
     h ^= collection.hashCode();
-    h *= 1000003;
-    h ^= field.hashCode();
     return h;
   }
 }
