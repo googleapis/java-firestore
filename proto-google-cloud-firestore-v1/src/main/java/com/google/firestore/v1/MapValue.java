@@ -169,6 +169,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
+  @java.lang.Override
   public boolean containsFields(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -176,6 +177,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
     return internalGetFields().getMap().containsKey(key);
   }
   /** Use {@link #getFieldsMap()} instead. */
+  @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFields() {
     return getFieldsMap();
@@ -193,6 +195,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
+  @java.lang.Override
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFieldsMap() {
     return internalGetFields().getMap();
   }
@@ -209,6 +212,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Value getFieldsOrDefault(
       java.lang.String key, com.google.firestore.v1.Value defaultValue) {
     if (key == null) {
@@ -231,6 +235,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Value getFieldsOrThrow(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -623,6 +628,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
+    @java.lang.Override
     public boolean containsFields(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();
@@ -630,6 +636,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
       return internalGetFields().getMap().containsKey(key);
     }
     /** Use {@link #getFieldsMap()} instead. */
+    @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFields() {
       return getFieldsMap();
@@ -647,6 +654,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
+    @java.lang.Override
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFieldsMap() {
       return internalGetFields().getMap();
     }
@@ -663,6 +671,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.Value getFieldsOrDefault(
         java.lang.String key, com.google.firestore.v1.Value defaultValue) {
       if (key == null) {
@@ -685,6 +694,7 @@ public final class MapValue extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.Value getFieldsOrThrow(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();

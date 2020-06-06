@@ -174,6 +174,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The parent.
    */
+  @java.lang.Override
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -198,6 +199,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The bytes for parent.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -223,6 +225,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The collectionId.
    */
+  @java.lang.Override
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
     if (ref instanceof java.lang.String) {
@@ -245,6 +248,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The bytes for collectionId.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
     if (ref instanceof java.lang.String) {
@@ -271,6 +275,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The documentId.
    */
+  @java.lang.Override
   public java.lang.String getDocumentId() {
     java.lang.Object ref = documentId_;
     if (ref instanceof java.lang.String) {
@@ -294,6 +299,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The bytes for documentId.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDocumentIdBytes() {
     java.lang.Object ref = documentId_;
     if (ref instanceof java.lang.String) {
@@ -321,6 +327,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the document field is set.
    */
+  @java.lang.Override
   public boolean hasDocument() {
     return document_ != null;
   }
@@ -337,6 +344,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The document.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
         ? com.google.firestore.v1beta1.Document.getDefaultInstance()
@@ -353,6 +361,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    * .google.firestore.v1beta1.Document document = 4 [(.google.api.field_behavior) = REQUIRED];
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
   }
@@ -372,6 +381,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the mask field is set.
    */
+  @java.lang.Override
   public boolean hasMask() {
     return mask_ != null;
   }
@@ -388,6 +398,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The mask.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1beta1.DocumentMask.getDefaultInstance() : mask_;
   }
@@ -402,6 +413,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 5;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentMaskOrBuilder getMaskOrBuilder() {
     return getMask();
   }

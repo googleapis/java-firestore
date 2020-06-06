@@ -210,6 +210,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return Whether the startTime field is set.
    */
+  @java.lang.Override
   public boolean hasStartTime() {
     return startTime_ != null;
   }
@@ -224,6 +225,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The startTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getStartTime() {
     return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
   }
@@ -236,6 +238,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder() {
     return getStartTime();
   }
@@ -254,6 +257,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return Whether the endTime field is set.
    */
+  @java.lang.Override
   public boolean hasEndTime() {
     return endTime_ != null;
   }
@@ -269,6 +273,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The endTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getEndTime() {
     return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
   }
@@ -282,6 +287,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder() {
     return getEndTime();
   }
@@ -299,6 +305,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The enum numeric value on the wire for operationState.
    */
+  @java.lang.Override
   public int getOperationStateValue() {
     return operationState_;
   }
@@ -313,6 +320,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The operationState.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.OperationState getOperationState() {
     @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.OperationState result =
@@ -333,6 +341,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return Whether the progressDocuments field is set.
    */
+  @java.lang.Override
   public boolean hasProgressDocuments() {
     return progressDocuments_ != null;
   }
@@ -347,6 +356,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The progressDocuments.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Progress getProgressDocuments() {
     return progressDocuments_ == null
         ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
@@ -361,6 +371,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder() {
     return getProgressDocuments();
   }
@@ -378,6 +389,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return Whether the progressBytes field is set.
    */
+  @java.lang.Override
   public boolean hasProgressBytes() {
     return progressBytes_ != null;
   }
@@ -392,6 +404,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The progressBytes.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Progress getProgressBytes() {
     return progressBytes_ == null
         ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
@@ -406,6 +419,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressBytesOrBuilder() {
     return getProgressBytes();
   }
@@ -484,6 +498,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The outputUriPrefix.
    */
+  @java.lang.Override
   public java.lang.String getOutputUriPrefix() {
     java.lang.Object ref = outputUriPrefix_;
     if (ref instanceof java.lang.String) {
@@ -506,6 +521,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    * @return The bytes for outputUriPrefix.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
     java.lang.Object ref = outputUriPrefix_;
     if (ref instanceof java.lang.String) {
@@ -1382,6 +1398,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      * @return The enum numeric value on the wire for operationState.
      */
+    @java.lang.Override
     public int getOperationStateValue() {
       return operationState_;
     }
@@ -1398,6 +1415,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder setOperationStateValue(int value) {
+
       operationState_ = value;
       onChanged();
       return this;
@@ -1413,6 +1431,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      * @return The operationState.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.OperationState getOperationState() {
       @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.OperationState result =

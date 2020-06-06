@@ -141,6 +141,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    * @return The database.
    */
+  @java.lang.Override
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -164,6 +165,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    * @return The bytes for database.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -190,6 +192,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    * @return Whether the options field is set.
    */
+  @java.lang.Override
   public boolean hasOptions() {
     return options_ != null;
   }
@@ -205,6 +208,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    * @return The options.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions getOptions() {
     return options_ == null
         ? com.google.firestore.v1beta1.TransactionOptions.getDefaultInstance()
@@ -220,6 +224,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    * <code>.google.firestore.v1beta1.TransactionOptions options = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptionsOrBuilder getOptionsOrBuilder() {
     return getOptions();
   }
