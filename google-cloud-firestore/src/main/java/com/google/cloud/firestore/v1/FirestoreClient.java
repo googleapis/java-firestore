@@ -30,14 +30,16 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.v1.stub.FirestoreStub;
 import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.firestore.v1.AnyPathName;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
+import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
@@ -48,6 +50,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -194,9 +198,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String name = "";
    *   GetDocumentRequest request = GetDocumentRequest.newBuilder()
-   *     .setName(name.toString())
+   *     .setName(name)
    *     .build();
    *   Document response = firestoreClient.getDocument(request);
    * }
@@ -217,9 +221,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String name = "";
    *   GetDocumentRequest request = GetDocumentRequest.newBuilder()
-   *     .setName(name.toString())
+   *     .setName(name)
    *     .build();
    *   ApiFuture&lt;Document&gt; future = firestoreClient.getDocumentCallable().futureCall(request);
    *   // Do something
@@ -239,10 +243,10 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   String collectionId = "";
    *   ListDocumentsRequest request = ListDocumentsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .setCollectionId(collectionId)
    *     .build();
    *   for (Document element : firestoreClient.listDocuments(request).iterateAll()) {
@@ -266,10 +270,10 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   String collectionId = "";
    *   ListDocumentsRequest request = ListDocumentsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .setCollectionId(collectionId)
    *     .build();
    *   ApiFuture&lt;ListDocumentsPagedResponse&gt; future = firestoreClient.listDocumentsPagedCallable().futureCall(request);
@@ -293,10 +297,10 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   String collectionId = "";
    *   ListDocumentsRequest request = ListDocumentsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .setCollectionId(collectionId)
    *     .build();
    *   while (true) {
@@ -326,14 +330,12 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   String collectionId = "";
-   *   String documentId = "";
    *   Document document = Document.newBuilder().build();
    *   CreateDocumentRequest request = CreateDocumentRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .setCollectionId(collectionId)
-   *     .setDocumentId(documentId)
    *     .setDocument(document)
    *     .build();
    *   Document response = firestoreClient.createDocument(request);
@@ -355,14 +357,12 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   String collectionId = "";
-   *   String documentId = "";
    *   Document document = Document.newBuilder().build();
    *   CreateDocumentRequest request = CreateDocumentRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .setCollectionId(collectionId)
-   *     .setDocumentId(documentId)
    *     .setDocument(document)
    *     .build();
    *   ApiFuture&lt;Document&gt; future = firestoreClient.createDocumentCallable().futureCall(request);
@@ -413,10 +413,8 @@ public class FirestoreClient implements BackgroundResource {
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   Document document = Document.newBuilder().build();
-   *   DocumentMask updateMask = DocumentMask.newBuilder().build();
    *   UpdateDocumentRequest request = UpdateDocumentRequest.newBuilder()
    *     .setDocument(document)
-   *     .setUpdateMask(updateMask)
    *     .build();
    *   Document response = firestoreClient.updateDocument(request);
    * }
@@ -438,10 +436,8 @@ public class FirestoreClient implements BackgroundResource {
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   Document document = Document.newBuilder().build();
-   *   DocumentMask updateMask = DocumentMask.newBuilder().build();
    *   UpdateDocumentRequest request = UpdateDocumentRequest.newBuilder()
    *     .setDocument(document)
-   *     .setUpdateMask(updateMask)
    *     .build();
    *   ApiFuture&lt;Document&gt; future = firestoreClient.updateDocumentCallable().futureCall(request);
    *   // Do something
@@ -461,31 +457,8 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String name = "";
    *   firestoreClient.deleteDocument(name);
-   * }
-   * </code></pre>
-   *
-   * @param name Required. The resource name of the Document to delete. In the format:
-   *     `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final void deleteDocument(AnyPathName name) {
-    DeleteDocumentRequest request =
-        DeleteDocumentRequest.newBuilder().setName(name == null ? null : name.toString()).build();
-    deleteDocument(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Deletes a document.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
-   *   firestoreClient.deleteDocument(name.toString());
    * }
    * </code></pre>
    *
@@ -506,9 +479,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String name = "";
    *   DeleteDocumentRequest request = DeleteDocumentRequest.newBuilder()
-   *     .setName(name.toString())
+   *     .setName(name)
    *     .build();
    *   firestoreClient.deleteDocument(request);
    * }
@@ -529,9 +502,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   AnyPathName name = AnyPathName.of("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String name = "";
    *   DeleteDocumentRequest request = DeleteDocumentRequest.newBuilder()
-   *     .setName(name.toString())
+   *     .setName(name)
    *     .build();
    *   ApiFuture&lt;Void&gt; future = firestoreClient.deleteDocumentCallable().futureCall(request);
    *   // Do something
@@ -554,11 +527,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
-   *   List&lt;String&gt; documents = new ArrayList&lt;&gt;();
+   *   String database = "";
    *   BatchGetDocumentsRequest request = BatchGetDocumentsRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
-   *     .addAllDocuments(documents)
+   *     .setDatabase(database)
    *     .build();
    *
    *   ServerStream&lt;BatchGetDocumentsResponse&gt; stream = firestoreClient.batchGetDocumentsCallable().call(request);
@@ -581,8 +552,8 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
-   *   BeginTransactionResponse response = firestoreClient.beginTransaction(formattedDatabase);
+   *   String database = "";
+   *   BeginTransactionResponse response = firestoreClient.beginTransaction(database);
    * }
    * </code></pre>
    *
@@ -604,9 +575,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   BeginTransactionRequest request = BeginTransactionRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .build();
    *   BeginTransactionResponse response = firestoreClient.beginTransaction(request);
    * }
@@ -627,9 +598,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   BeginTransactionRequest request = BeginTransactionRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .build();
    *   ApiFuture&lt;BeginTransactionResponse&gt; future = firestoreClient.beginTransactionCallable().futureCall(request);
    *   // Do something
@@ -650,9 +621,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   List&lt;Write&gt; writes = new ArrayList&lt;&gt;();
-   *   CommitResponse response = firestoreClient.commit(formattedDatabase, writes);
+   *   CommitResponse response = firestoreClient.commit(database, writes);
    * }
    * </code></pre>
    *
@@ -676,11 +647,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
-   *   List&lt;Write&gt; writes = new ArrayList&lt;&gt;();
+   *   String database = "";
    *   CommitRequest request = CommitRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
-   *     .addAllWrites(writes)
+   *     .setDatabase(database)
    *     .build();
    *   CommitResponse response = firestoreClient.commit(request);
    * }
@@ -701,11 +670,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
-   *   List&lt;Write&gt; writes = new ArrayList&lt;&gt;();
+   *   String database = "";
    *   CommitRequest request = CommitRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
-   *     .addAllWrites(writes)
+   *     .setDatabase(database)
    *     .build();
    *   ApiFuture&lt;CommitResponse&gt; future = firestoreClient.commitCallable().futureCall(request);
    *   // Do something
@@ -725,9 +692,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   ByteString transaction = ByteString.copyFromUtf8("");
-   *   firestoreClient.rollback(formattedDatabase, transaction);
+   *   firestoreClient.rollback(database, transaction);
    * }
    * </code></pre>
    *
@@ -750,10 +717,10 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   ByteString transaction = ByteString.copyFromUtf8("");
    *   RollbackRequest request = RollbackRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .setTransaction(transaction)
    *     .build();
    *   firestoreClient.rollback(request);
@@ -775,10 +742,10 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   ByteString transaction = ByteString.copyFromUtf8("");
    *   RollbackRequest request = RollbackRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .setTransaction(transaction)
    *     .build();
    *   ApiFuture&lt;Void&gt; future = firestoreClient.rollbackCallable().futureCall(request);
@@ -799,9 +766,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   RunQueryRequest request = RunQueryRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .build();
    *
    *   ServerStream&lt;RunQueryResponse&gt; stream = firestoreClient.runQueryCallable().call(request);
@@ -826,9 +793,9 @@ public class FirestoreClient implements BackgroundResource {
    *   BidiStream&lt;WriteRequest, WriteResponse&gt; bidiStream =
    *       firestoreClient.writeCallable().call();
    *
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   WriteRequest request = WriteRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .build();
    *   bidiStream.send(request);
    *   for (WriteResponse response : bidiStream) {
@@ -852,9 +819,9 @@ public class FirestoreClient implements BackgroundResource {
    *   BidiStream&lt;ListenRequest, ListenResponse&gt; bidiStream =
    *       firestoreClient.listenCallable().call();
    *
-   *   String formattedDatabase = DatabaseRootName.format("[PROJECT]", "[DATABASE]");
+   *   String database = "";
    *   ListenRequest request = ListenRequest.newBuilder()
-   *     .setDatabase(formattedDatabase)
+   *     .setDatabase(database)
    *     .build();
    *   bidiStream.send(request);
    *   for (ListenResponse response : bidiStream) {
@@ -875,8 +842,8 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
-   *   for (String element : firestoreClient.listCollectionIds(formattedParent).iterateAll()) {
+   *   String parent = "";
+   *   for (String element : firestoreClient.listCollectionIds(parent).iterateAll()) {
    *     // doThingsWith(element);
    *   }
    * }
@@ -901,9 +868,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   ListCollectionIdsRequest request = ListCollectionIdsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .build();
    *   for (String element : firestoreClient.listCollectionIds(request).iterateAll()) {
    *     // doThingsWith(element);
@@ -926,9 +893,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   ListCollectionIdsRequest request = ListCollectionIdsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .build();
    *   ApiFuture&lt;ListCollectionIdsPagedResponse&gt; future = firestoreClient.listCollectionIdsPagedCallable().futureCall(request);
    *   // Do something
@@ -951,9 +918,9 @@ public class FirestoreClient implements BackgroundResource {
    *
    * <pre><code>
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String formattedParent = AnyPathName.format("[PROJECT]", "[DATABASE]", "[DOCUMENT]", "[ANY_PATH]");
+   *   String parent = "";
    *   ListCollectionIdsRequest request = ListCollectionIdsRequest.newBuilder()
-   *     .setParent(formattedParent)
+   *     .setParent(parent)
    *     .build();
    *   while (true) {
    *     ListCollectionIdsResponse response = firestoreClient.listCollectionIdsCallable().call(request);
@@ -973,6 +940,155 @@ public class FirestoreClient implements BackgroundResource {
   public final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return stub.listCollectionIdsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   for (Cursor element : firestoreClient.partitionQuery(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PartitionQueryPagedResponse partitionQuery(PartitionQueryRequest request) {
+    return partitionQueryPagedCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   ApiFuture&lt;PartitionQueryPagedResponse&gt; future = firestoreClient.partitionQueryPagedCallable().futureCall(request);
+   *   // Do something
+   *   for (Cursor element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return stub.partitionQueryPagedCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   while (true) {
+   *     PartitionQueryResponse response = firestoreClient.partitionQueryCallable().call(request);
+   *     for (Cursor element : response.getPartitionsList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryCallable() {
+    return stub.partitionQueryCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Applies a batch of write operations.
+   *
+   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
+   * of order. Method does not allow more than one write per document. Each write succeeds or fails
+   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+   * success status of each write.
+   *
+   * <p>If you require an atomically applied set of writes, use
+   * [Commit][google.firestore.v1.Firestore.Commit] instead.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String database = "";
+   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
+   *     .setDatabase(database)
+   *     .build();
+   *   BatchWriteResponse response = firestoreClient.batchWrite(request);
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BatchWriteResponse batchWrite(BatchWriteRequest request) {
+    return batchWriteCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Applies a batch of write operations.
+   *
+   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
+   * of order. Method does not allow more than one write per document. Each write succeeds or fails
+   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+   * success status of each write.
+   *
+   * <p>If you require an atomically applied set of writes, use
+   * [Commit][google.firestore.v1.Firestore.Commit] instead.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String database = "";
+   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
+   *     .setDatabase(database)
+   *     .build();
+   *   ApiFuture&lt;BatchWriteResponse&gt; future = firestoreClient.batchWriteCallable().futureCall(request);
+   *   // Do something
+   *   BatchWriteResponse response = future.get();
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return stub.batchWriteCallable();
   }
 
   @Override
@@ -1165,6 +1281,87 @@ public class FirestoreClient implements BackgroundResource {
     protected ListCollectionIdsFixedSizeCollection createCollection(
         List<ListCollectionIdsPage> pages, int collectionSize) {
       return new ListCollectionIdsFixedSizeCollection(pages, collectionSize);
+    }
+  }
+
+  public static class PartitionQueryPagedResponse
+      extends AbstractPagedListResponse<
+          PartitionQueryRequest,
+          PartitionQueryResponse,
+          Cursor,
+          PartitionQueryPage,
+          PartitionQueryFixedSizeCollection> {
+
+    public static ApiFuture<PartitionQueryPagedResponse> createAsync(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        ApiFuture<PartitionQueryResponse> futureResponse) {
+      ApiFuture<PartitionQueryPage> futurePage =
+          PartitionQueryPage.createEmptyPage().createPageAsync(context, futureResponse);
+      return ApiFutures.transform(
+          futurePage,
+          new ApiFunction<PartitionQueryPage, PartitionQueryPagedResponse>() {
+            @Override
+            public PartitionQueryPagedResponse apply(PartitionQueryPage input) {
+              return new PartitionQueryPagedResponse(input);
+            }
+          },
+          MoreExecutors.directExecutor());
+    }
+
+    private PartitionQueryPagedResponse(PartitionQueryPage page) {
+      super(page, PartitionQueryFixedSizeCollection.createEmptyCollection());
+    }
+  }
+
+  public static class PartitionQueryPage
+      extends AbstractPage<
+          PartitionQueryRequest, PartitionQueryResponse, Cursor, PartitionQueryPage> {
+
+    private PartitionQueryPage(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        PartitionQueryResponse response) {
+      super(context, response);
+    }
+
+    private static PartitionQueryPage createEmptyPage() {
+      return new PartitionQueryPage(null, null);
+    }
+
+    @Override
+    protected PartitionQueryPage createPage(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        PartitionQueryResponse response) {
+      return new PartitionQueryPage(context, response);
+    }
+
+    @Override
+    public ApiFuture<PartitionQueryPage> createPageAsync(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        ApiFuture<PartitionQueryResponse> futureResponse) {
+      return super.createPageAsync(context, futureResponse);
+    }
+  }
+
+  public static class PartitionQueryFixedSizeCollection
+      extends AbstractFixedSizeCollection<
+          PartitionQueryRequest,
+          PartitionQueryResponse,
+          Cursor,
+          PartitionQueryPage,
+          PartitionQueryFixedSizeCollection> {
+
+    private PartitionQueryFixedSizeCollection(List<PartitionQueryPage> pages, int collectionSize) {
+      super(pages, collectionSize);
+    }
+
+    private static PartitionQueryFixedSizeCollection createEmptyCollection() {
+      return new PartitionQueryFixedSizeCollection(null, 0);
+    }
+
+    @Override
+    protected PartitionQueryFixedSizeCollection createCollection(
+        List<PartitionQueryPage> pages, int collectionSize) {
+      return new PartitionQueryFixedSizeCollection(pages, collectionSize);
     }
   }
 }

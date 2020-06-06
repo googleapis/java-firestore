@@ -209,6 +209,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The name.
    */
+  @java.lang.Override
   public java.lang.String getName() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -232,6 +233,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The bytes for name.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -259,6 +261,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the mask field is set.
    */
+  @java.lang.Override
   public boolean hasMask() {
     return mask_ != null;
   }
@@ -275,6 +278,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The mask.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
@@ -289,6 +293,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
     return getMask();
   }
@@ -305,6 +310,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 3) {
       return (com.google.protobuf.ByteString) consistencySelector_;
@@ -318,13 +324,14 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 5;
   }
@@ -333,13 +340,14 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 5) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -351,11 +359,12 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     if (consistencySelectorCase_ == 5) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -1167,13 +1176,14 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
      *
      * @return Whether the readTime field is set.
      */
+    @java.lang.Override
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 5;
     }
@@ -1182,13 +1192,14 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
      *
      * @return The readTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
         if (consistencySelectorCase_ == 5) {
@@ -1207,7 +1218,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1230,7 +1241,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1250,7 +1261,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1282,7 +1293,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1308,7 +1319,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1321,11 +1332,12 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
       if ((consistencySelectorCase_ == 5) && (readTimeBuilder_ != null)) {
         return readTimeBuilder_.getMessageOrBuilder();
@@ -1341,7 +1353,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>

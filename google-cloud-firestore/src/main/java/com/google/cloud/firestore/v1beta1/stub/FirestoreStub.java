@@ -58,27 +58,6 @@ import javax.annotation.Generated;
 @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
 public abstract class FirestoreStub implements BackgroundResource {
 
-  public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
-    throw new UnsupportedOperationException("Not implemented: getDocumentCallable()");
-  }
-
-  public UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
-      listDocumentsPagedCallable() {
-    throw new UnsupportedOperationException("Not implemented: listDocumentsPagedCallable()");
-  }
-
-  public UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
-    throw new UnsupportedOperationException("Not implemented: listDocumentsCallable()");
-  }
-
-  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
-    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
-  }
-
-  public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
-    throw new UnsupportedOperationException("Not implemented: updateDocumentCallable()");
-  }
-
   public UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable() {
     throw new UnsupportedOperationException("Not implemented: deleteDocumentCallable()");
   }
@@ -91,10 +70,6 @@ public abstract class FirestoreStub implements BackgroundResource {
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     throw new UnsupportedOperationException("Not implemented: beginTransactionCallable()");
-  }
-
-  public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
-    throw new UnsupportedOperationException("Not implemented: commitCallable()");
   }
 
   public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
@@ -121,6 +96,31 @@ public abstract class FirestoreStub implements BackgroundResource {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     throw new UnsupportedOperationException("Not implemented: listCollectionIdsCallable()");
+  }
+
+  public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
+    throw new UnsupportedOperationException("Not implemented: getDocumentCallable()");
+  }
+
+  public UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
+      listDocumentsPagedCallable() {
+    throw new UnsupportedOperationException("Not implemented: listDocumentsPagedCallable()");
+  }
+
+  public UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
+    throw new UnsupportedOperationException("Not implemented: listDocumentsCallable()");
+  }
+
+  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
+    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
+  }
+
+  public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateDocumentCallable()");
+  }
+
+  public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
+    throw new UnsupportedOperationException("Not implemented: commitCallable()");
   }
 
   @Override
