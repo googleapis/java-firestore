@@ -87,8 +87,9 @@ public abstract class UpdateBuilder<T> {
   /**
    * Wraps the result of the write operation before it is returned.
    *
-   * <p>This method allows operations on Transaction and Writebatch to return the object for
-   * chaining, while also allowing BulkWriter operations to return the future directly.
+   * <p>This method is used to generate the return value for all public methods. It allows
+   * operations on Transaction and Writebatch to return the object for chaining, while also allowing
+   * BulkWriter operations to return the future directly.
    */
   abstract T wrapResult(ApiFuture<WriteResult> result);
 

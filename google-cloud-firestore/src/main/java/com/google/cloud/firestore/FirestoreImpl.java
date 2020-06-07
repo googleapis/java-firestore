@@ -103,7 +103,7 @@ class FirestoreImpl implements Firestore {
   @Nonnull
   @Override
   public BulkWriter bulkWriter(BulkWriterOptions options) {
-    return new BulkWriter(this, !options.getDisableThrottling());
+    return new BulkWriter(this, options.isThrottlingEnabled());
   }
 
   @Nonnull
