@@ -58,7 +58,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class WriteBatchTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
@@ -359,6 +359,7 @@ public class WriteBatchTest {
 
     assertEquals(2, batch.getMutationsSize());
 
+    batch.markReadyToSend();
     List<BatchWriteResult> batchWriteResults = batch.bulkCommit().get();
 
     assertEquals(Status.OK, batchWriteResults.get(0).getStatus());

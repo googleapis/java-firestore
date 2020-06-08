@@ -17,14 +17,19 @@
 package com.google.cloud.firestore;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doAnswer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.ArrayValue;
@@ -54,6 +59,8 @@ import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
+import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
 import java.io.IOException;
@@ -66,13 +73,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubber;
 import org.threeten.bp.Duration;
 
 public final class LocalFirestoreHelper {
@@ -89,6 +101,7 @@ public final class LocalFirestoreHelper {
   public static final String COLLECTION_ID;
   public static final String DOCUMENT_PATH;
   public static final String DOCUMENT_NAME;
+  public static final String DOCUMENT_ROOT;
   public static final String TRANSACTION_ID;
 
   public static final Map<String, Value> EMPTY_MAP_PROTO;
@@ -365,23 +378,36 @@ public final class LocalFirestoreHelper {
     return transforms;
   }
 
-  public static Write create(Map<String, Value> fields) {
+  public static Write create(Map<String, Value> fields, String docPath) {
     Write.Builder write = Write.newBuilder();
     Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_NAME);
+    document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
     write.getCurrentDocumentBuilder().setExists(false);
     return write.build();
   }
 
+  public static Write create(Map<String, Value> fields) {
+    return create(fields, DOCUMENT_PATH);
+  }
+
   public static Write set(Map<String, Value> fields) {
-    return set(fields, null);
+    return set(fields, null, DOCUMENT_PATH);
+  }
+
+  public static Write set(Map<String, Value> fields, String docPath) {
+    return set(fields, null, docPath);
   }
 
   public static Write set(Map<String, Value> fields, @Nullable List<String> fieldMap) {
+    return set(fields, fieldMap, DOCUMENT_PATH);
+  }
+
+  public static Write set(
+      Map<String, Value> fields, @Nullable List<String> fieldMap, String docPath) {
     Write.Builder write = Write.newBuilder();
     Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_NAME);
+    document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
 
     if (fieldMap != null) {
@@ -392,9 +418,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static Write delete() {
-    Write.Builder write = Write.newBuilder();
-    write.setDelete(DOCUMENT_NAME);
-    return write.build();
+    return delete(DOCUMENT_PATH);
   }
 
   public static Write delete(Precondition precondition) {
@@ -404,24 +428,38 @@ public final class LocalFirestoreHelper {
     return write.build();
   }
 
-  public static Write update(Map<String, Value> fields, List<String> fieldMap) {
+  public static Write delete(String docPath) {
     Write.Builder write = Write.newBuilder();
-    Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_NAME);
-    document.putAllFields(fields);
-    write.getUpdateMaskBuilder().addAllFieldPaths(fieldMap);
-    write.getCurrentDocumentBuilder().setExists(true);
+    write.setDelete(DOCUMENT_ROOT + docPath);
     return write.build();
   }
 
+  public static Write update(Map<String, Value> fields, List<String> fieldMap) {
+    return update(fields, fieldMap, UPDATE_PRECONDITION);
+  }
+
   public static Write update(
-      Map<String, Value> fields, @Nullable List<String> fieldMap, Precondition precondition) {
+      Map<String, Value> fields, List<String> fieldMap, @Nullable Precondition precondition) {
+    return update(fields, fieldMap, precondition, DOCUMENT_PATH);
+  }
+
+  public static Write update(Map<String, Value> fields, String docPath) {
+    return update(fields, Collections.singletonList("foo"), UPDATE_PRECONDITION, docPath);
+  }
+
+  public static Write update(
+      Map<String, Value> fields,
+      @Nullable List<String> fieldMap,
+      @Nullable Precondition precondition,
+      String docPath) {
     Write.Builder write = Write.newBuilder();
     Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_NAME);
+    document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
     write.getUpdateMaskBuilder().addAllFieldPaths(fieldMap);
-    write.getCurrentDocumentBuilder().mergeFrom(precondition);
+    if (precondition != null) {
+      write.getCurrentDocumentBuilder().mergeFrom(precondition);
+    }
     return write.build();
   }
 
@@ -726,6 +764,7 @@ public final class LocalFirestoreHelper {
     COLLECTION_ID = "coll";
     DOCUMENT_PATH = "coll/doc";
     DOCUMENT_NAME = DATABASE_NAME + "/documents/" + DOCUMENT_PATH;
+    DOCUMENT_ROOT = DATABASE_NAME + "/documents/";
 
     EMPTY_MAP_PROTO =
         map("inner", Value.newBuilder().setMapValue(MapValue.getDefaultInstance()).build());
@@ -888,5 +927,84 @@ public final class LocalFirestoreHelper {
 
   public static Map<String, Object> fromSingleQuotedString(String json) {
     return fromJsonString(json.replace("'", "\""));
+  }
+
+  /**
+   * Contains a map of request/response pairs that are used to create stub responses when
+   * `sendRequest()` is called.
+   */
+  static class ResponseStubber
+      extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {
+
+    /**
+     * Verifies the response before returning. This method can be overridden to perform logic before
+     * the stubbed response is returned.
+     */
+    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
+        ApiFuture<? extends GeneratedMessageV3> response) {
+      return response;
+    }
+
+    void initializeStub(
+        ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
+      Stubber stubber = null;
+      for (final ApiFuture<? extends GeneratedMessageV3> response : values()) {
+        Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
+            new Answer<ApiFuture<? extends GeneratedMessageV3>>() {
+              @Override
+              public ApiFuture<? extends GeneratedMessageV3> answer(
+                  InvocationOnMock invocationOnMock) throws Throwable {
+                return verifyResponse(response);
+              }
+            };
+        stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
+      }
+      Preconditions.checkNotNull(stubber, "Stubber should not be null");
+      stubber
+          .when(firestoreMock)
+          .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+    }
+  }
+
+  /**
+   * Contains a map of request/response pairs that are used to create stub responses when
+   * `sendRequest()` is called.
+   *
+   * <p>Enforces that only one active request can be pending at a time.
+   */
+  static class SerialResponseStubber extends ResponseStubber {
+    int activeRequestCounter = 0;
+    SettableApiFuture<Void> activeRequestComplete = SettableApiFuture.create();
+    Semaphore semaphore = new Semaphore(0);
+
+    void markAllRequestsComplete() {
+      activeRequestComplete.set(null);
+    }
+
+    void awaitRequest() {
+      activeRequestComplete = SettableApiFuture.create();
+      try {
+        semaphore.acquire();
+      } catch (Exception e) {
+        fail("sempahore.acquire() should not fail");
+      }
+    }
+
+    @Override
+    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
+        ApiFuture<? extends GeneratedMessageV3> response) {
+      ++activeRequestCounter;
+
+      // This assert is used to test that only one request is made at a time.
+      assertEquals(1, activeRequestCounter);
+      try {
+        semaphore.release();
+        activeRequestComplete.get();
+      } catch (Exception e) {
+        fail("activeRequestComplete.get() should not fail");
+      }
+      --activeRequestCounter;
+      return response;
+    }
   }
 }
