@@ -29,6 +29,7 @@ import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.ArrayValue;
@@ -934,7 +935,12 @@ public final class LocalFirestoreHelper {
    */
   static class ResponseStubber
       extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {
-    ApiFuture<? extends GeneratedMessageV3> checkOneActiveRequestAndReturnResponse(
+
+    /**
+     * Verifies the response before returning. This method can be overridden to perform logic before
+     * the stubbed response is returned.
+     */
+    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
         ApiFuture<? extends GeneratedMessageV3> response) {
       return response;
     }
@@ -948,16 +954,15 @@ public final class LocalFirestoreHelper {
               @Override
               public ApiFuture<? extends GeneratedMessageV3> answer(
                   InvocationOnMock invocationOnMock) throws Throwable {
-                return checkOneActiveRequestAndReturnResponse(response);
+                return verifyResponse(response);
               }
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
       }
-      if (stubber != null) {
-        stubber
-            .when(firestoreMock)
-            .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
-      }
+      Preconditions.checkNotNull(stubber, "Stubber should not be null");
+      stubber
+          .when(firestoreMock)
+          .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
     }
   }
 
@@ -986,7 +991,7 @@ public final class LocalFirestoreHelper {
     }
 
     @Override
-    ApiFuture<? extends GeneratedMessageV3> checkOneActiveRequestAndReturnResponse(
+    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
         ApiFuture<? extends GeneratedMessageV3> response) {
       ++activeRequestCounter;
 
