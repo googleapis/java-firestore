@@ -168,6 +168,12 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   WriteBatch batch();
 
+  @Nonnull
+  BulkWriter bulkWriter();
+
+  @Nonnull
+  BulkWriter bulkWriter(BulkWriterOptions options);
+
   /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This
    * method blocks until all channels are closed. Once this method is called, this Firestore client

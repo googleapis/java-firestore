@@ -42,7 +42,7 @@ class RateLimiter {
   private int availableTokens;
   private long lastRefillTimeMillis;
 
-  RateLimiter(int initialCapacity, int multiplier, int multiplierMillis) {
+  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis) {
     this(initialCapacity, multiplier, multiplierMillis, new Date().getTime());
   }
 
@@ -64,7 +64,7 @@ class RateLimiter {
   }
 
   public boolean tryMakeRequest(int numOperations) {
-    return tryMakeRequest(numOperations, new Date(0).getTime());
+    return tryMakeRequest(numOperations, new Date().getTime());
   }
 
   /**

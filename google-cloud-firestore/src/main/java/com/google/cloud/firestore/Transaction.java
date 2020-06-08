@@ -38,6 +38,10 @@ import javax.annotation.Nullable;
  */
 public final class Transaction extends UpdateBuilder<Transaction> {
 
+  Transaction wrapResult(ApiFuture<WriteResult> result) {
+    return this;
+  }
+
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
 
