@@ -356,11 +356,11 @@ public class DocumentReference {
 
   /**
    * Reads the document referenced by this DocumentReference. If the document doesn't exist, the
-   * get(FieldMask fieldMask) will return an an empty DocumentSnapshot.
+   * get(FieldMask fieldMask) will return an empty DocumentSnapshot.
    *
-   * @param fieldMask A FieldMask Object for retrieve field value.
+   * @param fieldMask A FieldMask object to retrieve the field value
    * @return An ApiFuture that will be resolved with the contents of the Document at this
-   *     DocumentReference, or a failure if the document does not exist.
+   *     DocumentReference, or a failure if the document does not exist
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {

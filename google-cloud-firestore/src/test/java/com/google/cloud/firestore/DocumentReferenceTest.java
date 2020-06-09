@@ -284,6 +284,7 @@ public class DocumentReferenceTest {
             streamObserverCapture.capture(),
             Matchers.<ServerStreamingCallable>any());
     DocumentSnapshot snapshot = documentReference.get(FieldMask.of(FieldPath.of("foo"))).get();
+    assertEquals("foo", getAllCapture.getValue().getMask().getFieldPaths(0));
     assertEquals("bar", snapshot.get("foo"));
   }
 
