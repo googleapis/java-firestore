@@ -148,8 +148,8 @@ public class BulkWriter {
    *
    * @param documentReference The DocumentReference to delete.
    * @param precondition Precondition to enforce for this delete.
-   * @return An ApiFuture containing the result of the delete. Contains an error if the delete
-   *     fails.
+   * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
+   *     Contains an error if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(
@@ -167,7 +167,8 @@ public class BulkWriter {
    *
    * @param documentReference A reference to the document to be set.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
+   *     Contains an error if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
