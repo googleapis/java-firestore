@@ -32,6 +32,7 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -1250,5 +1251,61 @@ public class ITSystemTest {
     assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
     assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
     assertEquals(3, documentSnapshots.size());
+  }
+
+  @Test
+  public void bulkWriterCreate() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+    assertNotNull(result.get().getUpdateTime());
+  }
+
+  @Test
+  public void bulkWriterSet() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.set(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+    assertNotNull(result.get().getUpdateTime());
+  }
+
+  @Test
+  public void bulkWriterUpdate() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "bar0")).get();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.update(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+    assertNotNull(result.get().getUpdateTime());
+  }
+
+  @Test
+  public void bulkWriterDelete() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "bar0")).get();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result = writer.delete(docRef);
+    writer.close().get();
+    assertNotNull(result.get().getUpdateTime());
+    // TODO(b/158502664): Remove this check once we can get write times.
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result.get().getUpdateTime());
+  }
+
+  @Test
+  public void bulkWriterWritesInOrder() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "bar0")).get();
+    BulkWriter writer = firestore.bulkWriter();
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar1"));
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar2"));
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar3"));
+    writer.close().get();
+    ApiFuture<DocumentSnapshot> result = docRef.get();
+    assertEquals(Collections.singletonMap("foo", "bar3"), result.get().getData());
   }
 }
