@@ -27,10 +27,12 @@ import javax.annotation.Nullable;
 public final class BatchWriteResult {
   @Nullable private final Timestamp writeTime;
   private final Status status;
+  private final String message;
 
-  BatchWriteResult(@Nullable Timestamp timestamp, Status status) {
+  BatchWriteResult(@Nullable Timestamp timestamp, Status status, String message) {
     this.writeTime = timestamp;
     this.status = status;
+    this.message = message;
   }
 
   @Nullable
@@ -41,4 +43,6 @@ public final class BatchWriteResult {
   public Status getStatus() {
     return status;
   }
+
+  public String getMessage() { return message; }
 }

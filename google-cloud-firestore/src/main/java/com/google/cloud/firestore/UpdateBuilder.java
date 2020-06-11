@@ -700,7 +700,7 @@ public abstract class UpdateBuilder<T> {
               Status code = Status.fromCodeValue(status.getCode());
               Timestamp updateTime =
                   code == Status.OK ? Timestamp.fromProto(writeResult.getUpdateTime()) : null;
-              result.add(new BatchWriteResult(updateTime, code));
+              result.add(new BatchWriteResult(updateTime, code, status.getMessage()));
             }
 
             return result;
@@ -764,7 +764,7 @@ public abstract class UpdateBuilder<T> {
     if (result.getWriteTime() != null) {
       future.set(new WriteResult(result.getWriteTime()));
     } else {
-      future.setException(FirestoreException.serverRejected(result.getStatus(), "Backend error"));
+      future.setException(FirestoreException.serverRejected(result.getStatus(), result.getMessage() ));
     }
   }
 
