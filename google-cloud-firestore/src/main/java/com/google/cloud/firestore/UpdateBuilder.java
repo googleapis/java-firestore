@@ -697,12 +697,10 @@ public abstract class UpdateBuilder<T> {
             for (int i = 0; i < writeResults.size(); ++i) {
               com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
               com.google.rpc.Status status = statuses.get(i);
-              result.add(
-                  new BatchWriteResult(
-                      writeResult.hasUpdateTime()
-                          ? Timestamp.fromProto(writeResult.getUpdateTime())
-                          : null,
-                      Status.fromCodeValue(status.getCode())));
+              Status code = Status.fromCodeValue(status.getCode());
+              Timestamp updateTime =
+                  code == Status.OK ? Timestamp.fromProto(writeResult.getUpdateTime()) : null;
+              result.add(new BatchWriteResult(updateTime, code));
             }
 
             return result;
