@@ -697,12 +697,21 @@ public abstract class UpdateBuilder<T> {
             for (int i = 0; i < writeResults.size(); ++i) {
               com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
               com.google.rpc.Status status = statuses.get(i);
-              result.add(
-                  new BatchWriteResult(
-                      writeResult.hasUpdateTime()
-                          ? Timestamp.fromProto(writeResult.getUpdateTime())
-                          : null,
-                      Status.fromCodeValue(status.getCode())));
+              Timestamp updateTime = null;
+
+              // Since delete operations currently do not have write times, use a
+              // sentinel Timestamp value.
+              // TODO(b/158502664): Use actual delete timestamp.
+              boolean isSuccessfulDelete =
+                  !writeResult.hasUpdateTime()
+                      && Status.fromCodeValue(status.getCode()) == Status.OK;
+              Timestamp DELETE_TIMESTAMP_SENTINEL = Timestamp.ofTimeSecondsAndNanos(0, 0);
+              if (isSuccessfulDelete) {
+                updateTime = DELETE_TIMESTAMP_SENTINEL;
+              } else if (writeResult.hasUpdateTime()) {
+                updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
+              }
+              result.add(new BatchWriteResult(updateTime, Status.fromCodeValue(status.getCode())));
             }
 
             return result;
