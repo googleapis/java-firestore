@@ -764,7 +764,8 @@ public abstract class UpdateBuilder<T> {
     if (result.getWriteTime() != null) {
       future.set(new WriteResult(result.getWriteTime()));
     } else {
-      future.setException(FirestoreException.serverRejected(result.getStatus(), result.getMessage() ));
+      future.setException(
+          FirestoreException.serverRejected(result.getStatus(), result.getMessage()));
     }
   }
 

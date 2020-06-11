@@ -44,5 +44,7 @@ public final class BatchWriteResult {
     return status;
   }
 
-  public String getMessage() { return message; }
+  public String getMessage() {
+    return message;
+  }
 }
