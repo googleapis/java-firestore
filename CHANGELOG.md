@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.34.1](https://www.github.com/googleapis/java-firestore/compare/v1.34.0...v1.34.1) (2020-06-12)
+
+
+### Dependencies
+
+* update core dependencies ([#254](https://www.github.com/googleapis/java-firestore/issues/254)) ([9b275ca](https://www.github.com/googleapis/java-firestore/commit/9b275ca5b3f2adbe18be77ea8c86d8446a5833d6))
+* update dependency com.google.api:api-common to v1.9.2 ([#238](https://www.github.com/googleapis/java-firestore/issues/238)) ([c47d327](https://www.github.com/googleapis/java-firestore/commit/c47d32705645a76d8f9598aa954dbc3b1c067c73))
+* update dependency io.grpc:grpc-bom to v1.30.0 ([#244](https://www.github.com/googleapis/java-firestore/issues/244)) ([b5749d4](https://www.github.com/googleapis/java-firestore/commit/b5749d4e9bac3628da66451fa070c1bf6f852614))
+
 ## [1.34.0](https://www.github.com/googleapis/java-firestore/compare/v1.33.0...v1.34.0) (2020-05-29)
 
 
