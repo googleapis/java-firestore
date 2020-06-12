@@ -1261,6 +1261,24 @@ public class ITSystemTest {
         writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
     writer.close().get();
     assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("bar", snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterCreateAddsPrecondition() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", (Object) "bar")).get();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+    try {
+      result.get();
+      fail("Create operation should have thrown exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Document already exists"));
+    }
   }
 
   @Test
@@ -1271,6 +1289,8 @@ public class ITSystemTest {
         writer.set(docRef, Collections.singletonMap("foo", (Object) "bar"));
     writer.close().get();
     assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("bar", snapshot.get("foo"));
   }
 
   @Test
@@ -1282,6 +1302,23 @@ public class ITSystemTest {
         writer.update(docRef, Collections.singletonMap("foo", (Object) "bar"));
     writer.close().get();
     assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("bar", snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterUpdateAddsPrecondition() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.update(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+    try {
+      result.get();
+      fail("Update operation should have thrown exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("No document to update"));
+    }
   }
 
   @Test
@@ -1294,6 +1331,8 @@ public class ITSystemTest {
     assertNotNull(result.get().getUpdateTime());
     // TODO(b/158502664): Remove this check once we can get write times.
     assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertNull(snapshot.get("foo"));
   }
 
   @Test
