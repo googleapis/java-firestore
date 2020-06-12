@@ -33,6 +33,7 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -1304,6 +1305,113 @@ public class ITSystemTest {
     documentReference.update(path, FieldValue.delete()).get();
     documentSnapshots = documentReference.get().get();
     assertNull(documentSnapshots.getData().get("c.d"));
+  }
+
+  @Test
+  public void bulkWriterCreate() throws Exception {
+    DocumentReference docRef = randomColl.document();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+
+    assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("bar", snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterCreateAddsPrecondition() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", (Object) "bar")).get();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+
+    try {
+      result.get();
+      fail("Create operation should have thrown exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Document already exists"));
+    }
+  }
+
+  @Test
+  public void bulkWriterSet() throws Exception {
+    DocumentReference docRef = randomColl.document();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result =
+        writer.set(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    writer.close().get();
+
+    assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("bar", snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterUpdate() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "oldValue")).get();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result = writer.update(docRef, "foo", "newValue");
+    writer.close().get();
+
+    assertNotNull(result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals("newValue", snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterUpdateAddsPrecondition() throws Exception {
+    DocumentReference docRef = randomColl.document();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result = writer.update(docRef, "foo", "newValue");
+    writer.close().get();
+
+    try {
+      result.get();
+      fail("Update operation should have thrown exception");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("No document to update"));
+    }
+  }
+
+  @Test
+  public void bulkWriterDelete() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "oldValue")).get();
+
+    BulkWriter writer = firestore.bulkWriter();
+    ApiFuture<WriteResult> result = writer.delete(docRef);
+    writer.close().get();
+
+    assertNotNull(result.get().getUpdateTime());
+    // TODO(b/158502664): Remove this check once we can get write times.
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 0), result.get().getUpdateTime());
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertNull(snapshot.get("foo"));
+  }
+
+  @Test
+  public void bulkWriterWritesInOrder() throws Exception {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("foo", "oldValue")).get();
+
+    BulkWriter writer = firestore.bulkWriter();
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar1"));
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar2"));
+    writer.set(docRef, Collections.singletonMap("foo", (Object) "bar3"));
+    writer.close().get();
+
+    ApiFuture<DocumentSnapshot> result = docRef.get();
+    assertEquals(Collections.singletonMap("foo", "bar3"), result.get().getData());
   }
 
   /** Wrapper around ApiStreamObserver that returns the results in a list. */
