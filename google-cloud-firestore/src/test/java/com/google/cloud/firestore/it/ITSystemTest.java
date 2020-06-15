@@ -161,8 +161,9 @@ public class ITSystemTest {
   public void getFieldMaskWithDocumentReference() throws Exception {
     DocumentReference ref = randomColl.document("doc1");
     ref.set(ALL_SUPPORTED_TYPES_MAP).get();
-    DocumentSnapshot documentSnapshots = ref.get(FieldMask.of("foo")).get();
+    DocumentSnapshot documentSnapshots = ref.get(FieldMask.of("foo", "foobar")).get();
     assertEquals("bar", documentSnapshots.get("foo"));
+    assertNull(documentSnapshots.get("foobar"));
   }
 
   @Test
