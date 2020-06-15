@@ -276,6 +276,19 @@ public class DocumentReferenceTest {
   }
 
   @Test
+  public void getFieldWithFieldMask() throws Exception {
+    doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
+        .when(firestoreMock)
+        .streamRequest(
+            getAllCapture.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+    DocumentSnapshot snapshot = documentReference.get(FieldMask.of(FieldPath.of("foo"))).get();
+    assertEquals("foo", getAllCapture.getValue().getMask().getFieldPaths(0));
+    assertEquals("bar", snapshot.get("foo"));
+  }
+
+  @Test
   public void deserializesDates() throws Exception {
     doAnswer(getAllResponse(ALL_SUPPORTED_TYPES_PROTO))
         .when(firestoreMock)

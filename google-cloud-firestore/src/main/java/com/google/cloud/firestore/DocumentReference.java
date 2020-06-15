@@ -355,6 +355,19 @@ public class DocumentReference {
   }
 
   /**
+   * Reads the document referenced by this DocumentReference. If the document doesn't exist, the
+   * get(FieldMask fieldMask) will return an empty DocumentSnapshot.
+   *
+   * @param fieldMask A FieldMask object to retrieve the field value
+   * @return An ApiFuture that will be resolved with the contents of the Document at this
+   *     DocumentReference, or a failure if the document does not exist
+   */
+  @Nonnull
+  public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
+    return extractFirst(firestore.getAll(new DocumentReference[] {this}, fieldMask));
+  }
+
+  /**
    * Fetches the subcollections that are direct children of this document.
    *
    * @throws FirestoreException if the Iterable could not be initialized.
