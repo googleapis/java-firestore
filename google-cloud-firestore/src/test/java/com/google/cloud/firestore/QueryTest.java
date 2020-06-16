@@ -37,13 +37,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 
-import com.google.api.client.util.Base64;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilter;
 import com.google.cloud.firestore.Query.FieldFilter;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.io.BaseEncoding;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredQuery;
@@ -935,11 +935,11 @@ public class QueryTest {
     // Code used to generate the below base64 encoded RunQueryRequest
     // RunQueryRequest proto = firestoreMock.collection("testing-collection")
     //     .whereEqualTo("enabled", true).toProto();
-    // String base64String = Base64.encodeBase64String(proto.toByteArray());
+    // String base64String = BaseEncoding.base64().encode(proto.toByteArray());
     String base64Proto =
         "CjNwcm9qZWN0cy90ZXN0LXByb2plY3QvZGF0YWJhc2VzLyhkZWZhdWx0KS9kb2N1bWVudHMSKxIUEhJ0ZXN0aW5nLWNvbGxlY3Rpb24aExIRCgkSB2VuYWJsZWQQBRoCCAE=";
 
-    byte[] bytes = Base64.decodeBase64(base64Proto);
+    byte[] bytes = BaseEncoding.base64().decode(base64Proto);
     RunQueryRequest runQueryRequest = RunQueryRequest.parseFrom(bytes);
 
     Query query = Query.fromProto((Firestore) o, runQueryRequest);
