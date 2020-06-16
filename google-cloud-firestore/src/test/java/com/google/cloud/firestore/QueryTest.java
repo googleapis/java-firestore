@@ -33,12 +33,16 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.string;
 import static com.google.cloud.firestore.LocalFirestoreHelper.unaryFilter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 
+import com.google.api.client.util.Base64;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Query.ComparisonFilter;
+import com.google.cloud.firestore.Query.FieldFilter;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.RunQueryRequest;
@@ -46,6 +50,10 @@ import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.Direction;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.Value;
+import com.google.protobuf.InvalidProtocolBufferException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -834,5 +842,119 @@ public class QueryTest {
   public void equalsTest() {
     assertEquals(query.limit(42).offset(1337), query.offset(1337).limit(42));
     assertEquals(query.limit(42).offset(1337).hashCode(), query.offset(1337).limit(42).hashCode());
+  }
+
+  @Test
+  public void serializationTest() {
+    assertSerialization(query);
+    query = query.whereEqualTo("a", null);
+    assertSerialization(query);
+    query = query.whereEqualTo("b", Double.NaN);
+    assertSerialization(query);
+    query = query.whereGreaterThan("c", 1);
+    assertSerialization(query);
+    query = query.whereGreaterThanOrEqualTo(FieldPath.of("d", ".e."), 2);
+    assertSerialization(query);
+    query = query.whereLessThan("f", 3);
+    assertSerialization(query);
+    query = query.whereLessThanOrEqualTo(FieldPath.of("g", ".h."), 4);
+    assertSerialization(query);
+    query = query.whereIn("i", Collections.singletonList(5));
+    assertSerialization(query);
+    query = query.whereArrayContains("j", Collections.singletonList(6));
+    assertSerialization(query);
+    query = query.whereArrayContainsAny("k", Collections.singletonList(7));
+    assertSerialization(query);
+    query = query.orderBy("l");
+    assertSerialization(query);
+    query = query.orderBy(FieldPath.of("m", ".n."), Query.Direction.DESCENDING);
+    assertSerialization(query);
+    query = query.startAt("o");
+    assertSerialization(query);
+    query = query.startAfter("p");
+    assertSerialization(query);
+    query = query.endBefore("q");
+    assertSerialization(query);
+    query = query.endAt("r");
+    assertSerialization(query);
+    query = query.limit(8);
+    assertSerialization(query);
+    query = query.offset(9);
+    assertSerialization(query);
+  }
+
+  private void assertSerialization(Query query) {
+    RunQueryRequest runQueryRequest = query.toProto();
+    Query deserializedQuery = Query.fromProto(firestoreMock, runQueryRequest);
+    assertEquals(runQueryRequest, deserializedQuery.toProto());
+    assertEquals(deserializedQuery, query);
+  }
+
+  @Test
+  public void serializationVerifiesDatabaseName() {
+    RunQueryRequest runQueryRequest = query.toProto();
+    runQueryRequest =
+        runQueryRequest.toBuilder().setParent("projects/foo/databases/(default)/documents").build();
+
+    try {
+      Query.fromProto(firestoreMock, runQueryRequest);
+      fail("Expected serializtion error");
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "Cannot deserialize query from different Firestore project "
+              + "(\"projects/test-project/databases/(default)\" vs "
+              + "\"projects/foo/databases/(default)\")",
+          e.getMessage());
+    }
+  }
+
+  @Test
+  public void ensureFromProtoWorksWithAProxy() throws InvalidProtocolBufferException {
+    Object o =
+        Proxy.newProxyInstance(
+            QueryTest.class.getClassLoader(),
+            new Class[] {Firestore.class, FirestoreRpcContext.class},
+            new InvocationHandler() {
+              @Override
+              public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                // use the reflection lookup of the method name so intellij will refactor it along
+                // with the method name if it ever happens.
+                Method getDatabaseNameMethod =
+                    FirestoreRpcContext.class.getDeclaredMethod("getDatabaseName");
+                if (method.equals(getDatabaseNameMethod)) {
+                  return "projects/test-project/databases/(default)";
+                } else {
+                  return null;
+                }
+              }
+            });
+
+    assertTrue(o instanceof Firestore);
+    assertTrue(o instanceof FirestoreRpcContext);
+
+    // Code used to generate the below base64 encoded RunQueryRequest
+    // RunQueryRequest proto = firestoreMock.collection("testing-collection")
+    //     .whereEqualTo("enabled", true).toProto();
+    // String base64String = Base64.encodeBase64String(proto.toByteArray());
+    String base64Proto =
+        "CjNwcm9qZWN0cy90ZXN0LXByb2plY3QvZGF0YWJhc2VzLyhkZWZhdWx0KS9kb2N1bWVudHMSKxIUEhJ0ZXN0aW5nLWNvbGxlY3Rpb24aExIRCgkSB2VuYWJsZWQQBRoCCAE=";
+
+    byte[] bytes = Base64.decodeBase64(base64Proto);
+    RunQueryRequest runQueryRequest = RunQueryRequest.parseFrom(bytes);
+
+    Query query = Query.fromProto((Firestore) o, runQueryRequest);
+    ResourcePath path = query.options.getParentPath();
+    assertEquals("projects/test-project/databases/(default)/documents", path.getName());
+    assertEquals("testing-collection", query.options.getCollectionId());
+    FieldFilter next = query.options.getFieldFilters().iterator().next();
+    assertEquals("enabled", next.fieldReference.getFieldPath());
+
+    if (next instanceof ComparisonFilter) {
+      ComparisonFilter comparisonFilter = (ComparisonFilter) next;
+      assertFalse(comparisonFilter.isInequalityFilter());
+      assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
+    } else {
+      fail("expect filter to be a comparison filter");
+    }
   }
 }

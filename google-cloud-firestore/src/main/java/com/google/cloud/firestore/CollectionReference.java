@@ -19,8 +19,11 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -40,16 +43,17 @@ import javax.annotation.Nullable;
  * test mocks. Subclassing is not supported in production code and new SDK releases may break code
  * that does so.
  */
+@InternalExtensionOnly
 public class CollectionReference extends Query {
 
   /**
    * Creates a CollectionReference from a complete collection path.
    *
-   * @param firestore The Firestore client.
+   * @param rpcContext The Firestore client.
    * @param collectionPath The Path of this collection.
    */
-  protected CollectionReference(FirestoreImpl firestore, ResourcePath collectionPath) {
-    super(firestore, collectionPath);
+  CollectionReference(FirestoreRpcContext<?> rpcContext, ResourcePath collectionPath) {
+    super(rpcContext, collectionPath);
   }
 
   /**
@@ -71,7 +75,7 @@ public class CollectionReference extends Query {
   @Nullable
   public DocumentReference getParent() {
     ResourcePath parent = options.getParentPath();
-    return parent.isDocument() ? new DocumentReference(firestore, parent) : null;
+    return parent.isDocument() ? new DocumentReference(rpcContext, parent) : null;
   }
 
   /**
@@ -109,7 +113,7 @@ public class CollectionReference extends Query {
     Preconditions.checkArgument(
         documentPath.isDocument(),
         String.format("Path should point to a Document Reference: %s", getPath()));
-    return new DocumentReference(firestore, documentPath);
+    return new DocumentReference(rpcContext, documentPath);
   }
 
   /**
@@ -133,10 +137,12 @@ public class CollectionReference extends Query {
     final ListDocumentsPagedResponse response;
 
     try {
-      response =
-          ApiExceptions.callAndTranslateApiException(
-              firestore.sendRequest(
-                  request.build(), firestore.getClient().listDocumentsPagedCallable()));
+      FirestoreRpc client = rpcContext.getClient();
+      UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse> callable =
+          client.listDocumentsPagedCallable();
+      ListDocumentsRequest build = request.build();
+      ApiFuture<ListDocumentsPagedResponse> future = rpcContext.sendRequest(build, callable);
+      response = ApiExceptions.callAndTranslateApiException(future);
     } catch (ApiException exception) {
       throw FirestoreException.apiException(exception);
     }

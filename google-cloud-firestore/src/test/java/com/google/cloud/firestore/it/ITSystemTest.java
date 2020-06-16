@@ -58,6 +58,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.v1.RunQueryRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1259,5 +1260,13 @@ public class ITSystemTest {
     assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
     assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
     assertEquals(3, documentSnapshots.size());
+  }
+
+  @Test
+  public void testInstanceReturnedByGetServiceCanBeUsedToDeserializeAQuery() throws Exception {
+    Firestore fs = FirestoreOptions.getDefaultInstance().getService();
+    RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
+    fs.close();
+    Query.fromProto(fs, proto);
   }
 }

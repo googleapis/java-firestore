@@ -55,7 +55,7 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
   static ResourcePath create(String resourceName) {
     String[] parts = resourceName.split("/");
 
-    if (parts.length >= 6 && parts[0].equals("projects") && parts[2].equals("databases")) {
+    if (parts.length >= 5 && parts[0].equals("projects") && parts[2].equals("databases")) {
       String[] path = Arrays.copyOfRange(parts, 5, parts.length);
       return create(
           DatabaseRootName.of(parts[1], parts[3]),

@@ -23,4 +23,17 @@
     <className>com/google/cloud/firestore/Firestore</className>
     <method>com.google.api.core.ApiFuture runAsyncTransaction(*)</method>
   </difference>
+
+  <difference>
+    <differenceType>7005</differenceType>
+    <className>com/google/cloud/firestore/*</className>
+    <method>*(com.google.cloud.firestore.FirestoreImpl, *)</method>
+    <to>*(com.google.cloud.firestore.FirestoreRpcContext, *)</to>
+  </difference>
+  <difference>
+    <differenceType>7009</differenceType>
+    <className>com/google/cloud/firestore/*</className>
+    <method>*(com.google.cloud.firestore.FirestoreImpl, *)</method>
+  </difference>
+
 </differences>
