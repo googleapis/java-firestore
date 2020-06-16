@@ -366,7 +366,8 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
-    return extractFirst(rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
+    return extractFirst(
+        rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
   }
 
   /**
