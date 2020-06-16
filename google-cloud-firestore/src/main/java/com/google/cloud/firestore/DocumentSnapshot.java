@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.common.base.Preconditions;
@@ -44,23 +45,24 @@ import javax.annotation.Nullable;
  * test mocks. Subclassing is not supported in production code and new SDK releases may break code
  * that does so.
  */
+@InternalExtensionOnly
 public class DocumentSnapshot {
 
-  private final FirestoreImpl firestore;
+  private final FirestoreRpcContext<?> rpcContext;
   private final DocumentReference docRef;
   @Nullable private final Map<String, Value> fields;
   @Nullable private final Timestamp readTime;
   @Nullable private final Timestamp updateTime;
   @Nullable private final Timestamp createTime;
 
-  protected DocumentSnapshot(
-      FirestoreImpl firestore,
+  DocumentSnapshot(
+      FirestoreRpcContext<?> rpcContext,
       DocumentReference docRef,
       @Nullable Map<String, Value> fields,
       @Nullable Timestamp readTime,
       @Nullable Timestamp updateTime,
       @Nullable Timestamp createTime) { // Elevated access level for mocking.
-    this.firestore = firestore;
+    this.rpcContext = rpcContext;
     this.docRef = docRef;
     this.fields = fields;
     this.readTime = readTime;
@@ -79,7 +81,7 @@ public class DocumentSnapshot {
   }
 
   static DocumentSnapshot fromObject(
-      FirestoreImpl firestore,
+      FirestoreRpcContext<?> rpcContext,
       DocumentReference docRef,
       Map<String, Object> values,
       EncodingOptions options) {
@@ -94,14 +96,14 @@ public class DocumentSnapshot {
         fields.put(entry.getKey(), encodedValue);
       }
     }
-    return new DocumentSnapshot(firestore, docRef, fields, null, null, null);
+    return new DocumentSnapshot(rpcContext, docRef, fields, null, null, null);
   }
 
   static DocumentSnapshot fromDocument(
-      FirestoreImpl firestore, Timestamp readTime, Document document) {
+      FirestoreRpcContext<?> rpcContext, Timestamp readTime, Document document) {
     return new DocumentSnapshot(
-        firestore,
-        new DocumentReference(firestore, ResourcePath.create(document.getName())),
+        rpcContext,
+        new DocumentReference(rpcContext, ResourcePath.create(document.getName())),
         document.getFieldsMap(),
         readTime,
         Timestamp.fromProto(document.getUpdateTime()),
@@ -109,8 +111,8 @@ public class DocumentSnapshot {
   }
 
   static DocumentSnapshot fromMissing(
-      FirestoreImpl firestore, DocumentReference documentReference, Timestamp readTime) {
-    return new DocumentSnapshot(firestore, documentReference, null, readTime, null, null);
+      FirestoreRpcContext<?> rpcContext, DocumentReference documentReference, Timestamp readTime) {
+    return new DocumentSnapshot(rpcContext, documentReference, null, readTime, null, null);
   }
 
   private Object decodeValue(Value v) {
@@ -132,7 +134,7 @@ public class DocumentSnapshot {
         return Blob.fromByteString(v.getBytesValue());
       case REFERENCE_VALUE:
         String pathName = v.getReferenceValue();
-        return new DocumentReference(firestore, ResourcePath.create(pathName));
+        return new DocumentReference(rpcContext, ResourcePath.create(pathName));
       case GEO_POINT_VALUE:
         return new GeoPoint(
             v.getGeoPointValue().getLatitude(), v.getGeoPointValue().getLongitude());
@@ -312,7 +314,7 @@ public class DocumentSnapshot {
 
   private Object convertToDateIfNecessary(Object decodedValue) {
     if (decodedValue instanceof Timestamp) {
-      if (!this.firestore.areTimestampsInSnapshotsEnabled()) {
+      if (!this.rpcContext.areTimestampsInSnapshotsEnabled()) {
         decodedValue = ((Timestamp) decodedValue).toDate();
       }
     }
@@ -487,13 +489,13 @@ public class DocumentSnapshot {
       return false;
     }
     DocumentSnapshot that = (DocumentSnapshot) obj;
-    return Objects.equals(firestore, that.firestore)
+    return Objects.equals(rpcContext, that.rpcContext)
         && Objects.equals(docRef, that.docRef)
         && Objects.equals(fields, that.fields);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firestore, docRef, fields);
+    return Objects.hash(rpcContext, docRef, fields);
   }
 }

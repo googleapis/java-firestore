@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
  * Main implementation of the Firestore client. This is the entry point for all Firestore
  * operations.
  */
-class FirestoreImpl implements Firestore {
+class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   private static final Random RANDOM = new SecureRandom();
   private static final int AUTO_ID_LENGTH = 20;
@@ -317,34 +317,40 @@ class FirestoreImpl implements Firestore {
   }
 
   /** Returns whether the user has opted into receiving dates as com.google.cloud.Timestamp. */
-  boolean areTimestampsInSnapshotsEnabled() {
+  @Override
+  public boolean areTimestampsInSnapshotsEnabled() {
     return this.firestoreOptions.areTimestampsInSnapshotsEnabled();
   }
 
   /** Returns the name of the Firestore project associated with this client. */
-  String getDatabaseName() {
+  @Override
+  public String getDatabaseName() {
     return databasePath.getDatabaseName().toString();
   }
 
   /** Returns a path to the Firestore project associated with this client. */
-  ResourcePath getResourcePath() {
+  @Override
+  public ResourcePath getResourcePath() {
     return databasePath;
   }
 
   /** Returns the underlying RPC client. */
-  FirestoreRpc getClient() {
+  @Override
+  public FirestoreRpc getClient() {
     return firestoreClient;
   }
 
   /** Request funnel for all read/write requests. */
-  <RequestT, ResponseT> ApiFuture<ResponseT> sendRequest(
+  @Override
+  public <RequestT, ResponseT> ApiFuture<ResponseT> sendRequest(
       RequestT requestT, UnaryCallable<RequestT, ResponseT> callable) {
     Preconditions.checkState(!closed, "Firestore client has already been closed");
     return callable.futureCall(requestT);
   }
 
   /** Request funnel for all unidirectional streaming requests. */
-  <RequestT, ResponseT> void streamRequest(
+  @Override
+  public <RequestT, ResponseT> void streamRequest(
       RequestT requestT,
       ApiStreamObserver<ResponseT> responseObserverT,
       ServerStreamingCallable<RequestT, ResponseT> callable) {
@@ -353,11 +359,17 @@ class FirestoreImpl implements Firestore {
   }
 
   /** Request funnel for all bidirectional streaming requests. */
-  <RequestT, ResponseT> ApiStreamObserver<RequestT> streamRequest(
+  @Override
+  public <RequestT, ResponseT> ApiStreamObserver<RequestT> streamRequest(
       ApiStreamObserver<ResponseT> responseObserverT,
       BidiStreamingCallable<RequestT, ResponseT> callable) {
     Preconditions.checkState(!closed, "Firestore client has already been closed");
     return callable.bidiStreamingCall(responseObserverT);
+  }
+
+  @Override
+  public FirestoreImpl getFirestore() {
+    return this;
   }
 
   @Override

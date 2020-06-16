@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.Document;
@@ -36,22 +37,23 @@ import javax.annotation.Nonnull;
  * test mocks. Subclassing is not supported in production code and new SDK releases may break code
  * that does so.
  */
+@InternalExtensionOnly
 public class QueryDocumentSnapshot extends DocumentSnapshot {
-  protected QueryDocumentSnapshot(
-      FirestoreImpl firestore,
+  QueryDocumentSnapshot(
+      FirestoreRpcContext<?> rpcContext,
       DocumentReference docRef,
       Map<String, Value> fields,
       Timestamp readTime,
       Timestamp updateTime,
       Timestamp createTime) { // Elevated access level for mocking.
-    super(firestore, docRef, fields, readTime, updateTime, createTime);
+    super(rpcContext, docRef, fields, readTime, updateTime, createTime);
   }
 
   static QueryDocumentSnapshot fromDocument(
-      FirestoreImpl firestore, Timestamp readTime, Document document) {
+      FirestoreRpcContext<?> rpcContext, Timestamp readTime, Document document) {
     return new QueryDocumentSnapshot(
-        firestore,
-        new DocumentReference(firestore, ResourcePath.create(document.getName())),
+        rpcContext,
+        new DocumentReference(rpcContext, ResourcePath.create(document.getName())),
         document.getFieldsMap(),
         readTime,
         Timestamp.fromProto(document.getUpdateTime()),

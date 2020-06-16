@@ -27,6 +27,7 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.LESS_
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.LESS_THAN_OR_EQUAL;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.auto.value.AutoValue;
@@ -63,9 +64,10 @@ import javax.annotation.Nullable;
  * A Query which you can read or listen to. You can also construct refined Query objects by adding
  * filters and ordering.
  */
+@InternalExtensionOnly
 public class Query {
 
-  final FirestoreImpl firestore;
+  final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
 
   /** The direction of a sort. */
@@ -85,23 +87,25 @@ public class Query {
   }
 
   abstract static class FieldFilter {
-    final FieldPath fieldPath;
-    final Object value;
+    protected final FieldReference fieldReference;
 
-    FieldFilter(FieldPath fieldPath, Object value) {
-      this.value = value;
-      this.fieldPath = fieldPath;
+    FieldFilter(FieldReference fieldReference) {
+      this.fieldReference = fieldReference;
     }
 
-    Value encodeValue() {
-      Object sanitizedObject = CustomClassMapper.serialize(value);
-      Value encodedValue =
-          UserDataConverter.encodeValue(fieldPath, sanitizedObject, UserDataConverter.ARGUMENT);
+    static FieldFilter fromProto(StructuredQuery.Filter filter) {
+      Preconditions.checkArgument(
+          !filter.hasCompositeFilter(), "Cannot deserialize nested composite filters");
 
-      if (encodedValue == null) {
-        throw FirestoreException.invalidState("Cannot use Firestore Sentinels in FieldFilter");
+      if (filter.hasFieldFilter()) {
+        return new ComparisonFilter(
+            filter.getFieldFilter().getField(),
+            filter.getFieldFilter().getOp(),
+            filter.getFieldFilter().getValue());
+      } else {
+        Preconditions.checkState(filter.hasUnaryFilter(), "Expected unary of field filter");
+        return new UnaryFilter(filter.getUnaryFilter().getField(), filter.getUnaryFilter().getOp());
       }
-      return encodedValue;
     }
 
     abstract boolean isInequalityFilter();
@@ -110,10 +114,12 @@ public class Query {
   }
 
   private static class UnaryFilter extends FieldFilter {
-    UnaryFilter(FieldPath fieldPath, Object value) {
-      super(fieldPath, value);
-      Preconditions.checkArgument(
-          isUnaryComparison(value), "Cannot use '%s' in unary comparison", value);
+
+    private final StructuredQuery.UnaryFilter.Operator operator;
+
+    UnaryFilter(FieldReference fieldReference, StructuredQuery.UnaryFilter.Operator operator) {
+      super(fieldReference);
+      this.operator = operator;
     }
 
     @Override
@@ -123,27 +129,32 @@ public class Query {
 
     Filter toProto() {
       Filter.Builder result = Filter.newBuilder();
-
-      result
-          .getUnaryFilterBuilder()
-          .setField(FieldReference.newBuilder().setFieldPath(fieldPath.getEncodedPath()))
-          .setOp(
-              value == null
-                  ? StructuredQuery.UnaryFilter.Operator.IS_NULL
-                  : StructuredQuery.UnaryFilter.Operator.IS_NAN);
-
+      result.getUnaryFilterBuilder().setField(fieldReference).setOp(operator);
       return result.build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof UnaryFilter)) {
+        return false;
+      }
+      UnaryFilter other = (UnaryFilter) o;
+      return Objects.equals(fieldReference, other.fieldReference)
+          && Objects.equals(operator, other.operator);
     }
   }
 
-  private static class ComparisonFilter extends FieldFilter {
+  static class ComparisonFilter extends FieldFilter {
     final StructuredQuery.FieldFilter.Operator operator;
+    final Value value;
 
     ComparisonFilter(
-        FieldPath fieldPath, StructuredQuery.FieldFilter.Operator operator, Object value) {
-      super(fieldPath, value);
-      Preconditions.checkArgument(
-          !isUnaryComparison(value), "Cannot use '%s' in field comparison", value);
+        FieldReference fieldReference, StructuredQuery.FieldFilter.Operator operator, Value value) {
+      super(fieldReference);
+      this.value = value;
       this.operator = operator;
     }
 
@@ -157,32 +168,50 @@ public class Query {
 
     Filter toProto() {
       Filter.Builder result = Filter.newBuilder();
-
-      Value encodedValue = encodeValue();
-
-      result
-          .getFieldFilterBuilder()
-          .setField(FieldReference.newBuilder().setFieldPath(fieldPath.getEncodedPath()))
-          .setValue(encodedValue)
-          .setOp(operator);
+      result.getFieldFilterBuilder().setField(fieldReference).setValue(value).setOp(operator);
       return result.build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof ComparisonFilter)) {
+        return false;
+      }
+      ComparisonFilter other = (ComparisonFilter) o;
+      return Objects.equals(fieldReference, other.fieldReference)
+          && Objects.equals(operator, other.operator)
+          && Objects.equals(value, other.value);
     }
   }
 
   static final class FieldOrder {
-    final FieldPath fieldPath;
-    final Direction direction;
+    private final FieldReference fieldReference;
+    private final Direction direction;
 
-    FieldOrder(FieldPath fieldPath, Direction direction) {
-      this.fieldPath = fieldPath;
+    FieldOrder(FieldReference fieldReference, Direction direction) {
+      this.fieldReference = fieldReference;
       this.direction = direction;
     }
 
     Order toProto() {
       Order.Builder result = Order.newBuilder();
-      result.setField(FieldReference.newBuilder().setFieldPath(fieldPath.getEncodedPath()));
+      result.setField(fieldReference);
       result.setDirection(direction.getDirection());
       return result.build();
+    }
+
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof FieldOrder)) {
+        return false;
+      }
+      FieldOrder filter = (FieldOrder) o;
+      return Objects.equals(toProto(), filter.toProto());
     }
   }
 
@@ -258,9 +287,9 @@ public class Query {
   }
 
   /** Creates a query for documents in a single collection */
-  Query(FirestoreImpl firestore, ResourcePath path) {
+  Query(FirestoreRpcContext<?> rpcContext, ResourcePath path) {
     this(
-        firestore,
+        rpcContext,
         QueryOptions.builder()
             .setParentPath(path.getParent())
             .setCollectionId(path.getId())
@@ -271,18 +300,18 @@ public class Query {
    * Creates a Collection Group query that matches all documents directly nested under a
    * specifically named collection
    */
-  Query(FirestoreImpl firestore, String collectionId) {
+  Query(FirestoreRpcContext<?> rpcContext, String collectionId) {
     this(
-        firestore,
+        rpcContext,
         QueryOptions.builder()
-            .setParentPath(firestore.getResourcePath())
+            .setParentPath(rpcContext.getResourcePath())
             .setCollectionId(collectionId)
             .setAllDescendants(true)
             .build());
   }
 
-  private Query(FirestoreImpl firestore, QueryOptions queryOptions) {
-    this.firestore = firestore;
+  private Query(FirestoreRpcContext<?> rpcContext, QueryOptions queryOptions) {
+    this.rpcContext = rpcContext;
     this.options = queryOptions;
   }
 
@@ -293,7 +322,7 @@ public class Query {
    */
   @Nonnull
   public Firestore getFirestore() {
-    return firestore;
+    return rpcContext.getFirestore();
   }
 
   /** Checks whether the provided object is NULL or NaN. */
@@ -310,13 +339,13 @@ public class Query {
       // If no explicit ordering is specified, use the first inequality to define an implicit order.
       for (FieldFilter fieldFilter : options.getFieldFilters()) {
         if (fieldFilter.isInequalityFilter()) {
-          implicitOrders.add(new FieldOrder(fieldFilter.fieldPath, Direction.ASCENDING));
+          implicitOrders.add(new FieldOrder(fieldFilter.fieldReference, Direction.ASCENDING));
           break;
         }
       }
     } else {
       for (FieldOrder fieldOrder : options.getFieldOrders()) {
-        if (fieldOrder.fieldPath.equals(FieldPath.DOCUMENT_ID)) {
+        if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
           hasDocumentId = true;
         }
       }
@@ -329,7 +358,7 @@ public class Query {
               ? Direction.ASCENDING
               : implicitOrders.get(implicitOrders.size() - 1).direction;
 
-      implicitOrders.add(new FieldOrder(FieldPath.documentId(), lastDirection));
+      implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
     }
 
     return ImmutableList.<FieldOrder>builder().addAll(implicitOrders).build();
@@ -340,13 +369,16 @@ public class Query {
     List<Object> fieldValues = new ArrayList<>();
 
     for (FieldOrder fieldOrder : order) {
-      if (fieldOrder.fieldPath.equals(FieldPath.DOCUMENT_ID)) {
+      String path = fieldOrder.fieldReference.getFieldPath();
+      if (FieldPath.isDocumentId(path)) {
         fieldValues.add(documentSnapshot.getReference());
       } else {
+        FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
         Preconditions.checkArgument(
-            documentSnapshot.contains(fieldOrder.fieldPath),
-            "Field '%s' is missing in the provided DocumentSnapshot. Please provide a document that contains values for all specified orderBy() and where() constraints.");
-        fieldValues.add(documentSnapshot.get(fieldOrder.fieldPath));
+            documentSnapshot.contains(fieldPath),
+            "Field '%s' is missing in the provided DocumentSnapshot. Please provide a document "
+                + "that contains values for all specified orderBy() and where() constraints.");
+        fieldValues.add(documentSnapshot.get(fieldPath));
       }
     }
 
@@ -369,16 +401,15 @@ public class Query {
     for (Object fieldValue : fieldValues) {
       Object sanitizedValue;
 
-      FieldPath fieldPath = fieldOrderIterator.next().fieldPath;
+      FieldReference fieldReference = fieldOrderIterator.next().fieldReference;
 
-      if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
+      if (FieldPath.isDocumentId(fieldReference.getFieldPath())) {
         sanitizedValue = convertReference(fieldValue);
       } else {
         sanitizedValue = CustomClassMapper.serialize(fieldValue);
       }
 
-      Value encodedValue =
-          UserDataConverter.encodeValue(fieldPath, sanitizedValue, UserDataConverter.ARGUMENT);
+      Value encodedValue = encodeValue(fieldReference, sanitizedValue);
 
       if (encodedValue == null) {
         throw FirestoreException.invalidState(
@@ -405,7 +436,7 @@ public class Query {
 
     DocumentReference reference;
     if (fieldValue instanceof String) {
-      reference = new DocumentReference(firestore, basePath.append((String) fieldValue));
+      reference = new DocumentReference(rpcContext, basePath.append((String) fieldValue));
     } else if (fieldValue instanceof DocumentReference) {
       reference = (DocumentReference) fieldValue;
     } else {
@@ -463,9 +494,13 @@ public class Query {
 
     if (isUnaryComparison(value)) {
       Builder newOptions = options.toBuilder();
-      UnaryFilter newFieldFilter = new UnaryFilter(fieldPath, value);
+      StructuredQuery.UnaryFilter.Operator op =
+          value == null
+              ? StructuredQuery.UnaryFilter.Operator.IS_NULL
+              : StructuredQuery.UnaryFilter.Operator.IS_NAN;
+      UnaryFilter newFieldFilter = new UnaryFilter(fieldPath.toProto(), op);
       newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
-      return new Query(firestore, newOptions.build());
+      return new Query(rpcContext, newOptions.build());
     } else {
       return whereHelper(fieldPath, EQUAL, value);
     }
@@ -713,6 +748,11 @@ public class Query {
 
   private Query whereHelper(
       FieldPath fieldPath, StructuredQuery.FieldFilter.Operator operator, Object value) {
+    Preconditions.checkArgument(
+        !isUnaryComparison(value),
+        "Cannot use '%s' in field comparison. Use an equality filter instead.",
+        value);
+
     if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
       if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
         throw new IllegalArgumentException(
@@ -738,9 +778,10 @@ public class Query {
     }
 
     Builder newOptions = options.toBuilder();
-    ComparisonFilter newFieldFilter = new ComparisonFilter(fieldPath, operator, value);
+    ComparisonFilter newFieldFilter =
+        new ComparisonFilter(fieldPath.toProto(), operator, encodeValue(fieldPath, value));
     newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -794,10 +835,10 @@ public class Query {
             + "startAfter(), endBefore() or endAt().");
 
     Builder newOptions = options.toBuilder();
-    FieldOrder newFieldOrder = new FieldOrder(fieldPath, direction);
+    FieldOrder newFieldOrder = new FieldOrder(fieldPath.toProto(), direction);
     newOptions.setFieldOrders(append(options.getFieldOrders(), newFieldOrder));
 
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -809,7 +850,7 @@ public class Query {
   @Nonnull
   public Query limit(int limit) {
     return new Query(
-        firestore, options.toBuilder().setLimit(limit).setLimitType(LimitType.First).build());
+        rpcContext, options.toBuilder().setLimit(limit).setLimitType(LimitType.First).build());
   }
 
   /**
@@ -827,7 +868,7 @@ public class Query {
   @Nonnull
   public Query limitToLast(int limit) {
     return new Query(
-        firestore, options.toBuilder().setLimit(limit).setLimitType(LimitType.Last).build());
+        rpcContext, options.toBuilder().setLimit(limit).setLimitType(LimitType.Last).build());
   }
 
   /**
@@ -838,7 +879,7 @@ public class Query {
    */
   @Nonnull
   public Query offset(int offset) {
-    return new Query(firestore, options.toBuilder().setOffset(offset).build());
+    return new Query(rpcContext, options.toBuilder().setOffset(offset).build());
   }
 
   /**
@@ -857,7 +898,7 @@ public class Query {
     Builder newOptions = options.toBuilder();
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setStartCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -873,7 +914,7 @@ public class Query {
 
     Builder newOptions = options.toBuilder();
     newOptions.setStartCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -918,7 +959,7 @@ public class Query {
     }
 
     Builder newOptions = options.toBuilder().setFieldProjections(fieldProjections.build());
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -937,7 +978,7 @@ public class Query {
     Builder newOptions = options.toBuilder();
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setStartCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -954,7 +995,7 @@ public class Query {
 
     Builder newOptions = options.toBuilder();
     newOptions.setStartCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -973,7 +1014,7 @@ public class Query {
     Builder newOptions = options.toBuilder();
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -990,7 +1031,7 @@ public class Query {
 
     Builder newOptions = options.toBuilder();
     newOptions.setEndCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -1006,7 +1047,7 @@ public class Query {
 
     Builder newOptions = options.toBuilder();
     newOptions.setEndCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -1025,7 +1066,7 @@ public class Query {
     Builder newOptions = options.toBuilder();
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
-    return new Query(firestore, newOptions.build());
+    return new Query(rpcContext, newOptions.build());
   }
 
   /** Build the final Firestore query. */
@@ -1067,7 +1108,7 @@ public class Query {
             // Flip the orderBy directions since we want the last results
             order =
                 new FieldOrder(
-                    order.fieldPath,
+                    order.fieldReference,
                     order.direction.equals(Direction.ASCENDING)
                         ? Direction.DESCENDING
                         : Direction.ASCENDING);
@@ -1162,6 +1203,120 @@ public class Query {
         null);
   }
 
+  /**
+   * Returns the {@link RunQueryRequest} that this Query instance represents. The request contains
+   * the serialized form of all Query constraints.
+   *
+   * <p>Runtime metadata (as required for `limitToLast()` queries) is not serialized and as such,
+   * the serialized request will return the results in the original backend order.
+   *
+   * @return the serialized RunQueryRequest
+   */
+  public RunQueryRequest toProto() {
+    RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
+    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+    return request.build();
+  }
+
+  /**
+   * Returns a Query instance that can be used to execute the provided {@link RunQueryRequest}.
+   *
+   * <p>Only RunQueryRequests that pertain to the same project as the Firestore instance can be
+   * deserialized.
+   *
+   * <p>Runtime metadata (as required for `limitToLast()` queries) is not restored and as such, the
+   * results for limitToLast() queries will be returned in the original backend order.
+   *
+   * @param firestore a Firestore instance to apply the query to
+   * @param proto the serialized RunQueryRequest
+   * @return a Query instance that can be used to execute the RunQueryRequest
+   */
+  public static Query fromProto(Firestore firestore, RunQueryRequest proto) {
+    Preconditions.checkState(
+        FirestoreRpcContext.class.isAssignableFrom(firestore.getClass()),
+        "The firestore instance passed to this method must also implement FirestoreRpcContext.");
+    return fromProto((FirestoreRpcContext<?>) firestore, proto);
+  }
+
+  private static Query fromProto(FirestoreRpcContext<?> rpcContext, RunQueryRequest proto) {
+    QueryOptions.Builder queryOptions = QueryOptions.builder();
+    StructuredQuery structuredQuery = proto.getStructuredQuery();
+
+    ResourcePath parentPath = ResourcePath.create(proto.getParent());
+    if (!rpcContext.getDatabaseName().equals(parentPath.getDatabaseName().toString())) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Cannot deserialize query from different Firestore project (\"%s\" vs \"%s\")",
+              rpcContext.getDatabaseName(), parentPath.getDatabaseName()));
+    }
+    queryOptions.setParentPath(parentPath);
+
+    Preconditions.checkArgument(
+        structuredQuery.getFromCount() == 1,
+        "Can only deserialize query with exactly one collection selector.");
+    queryOptions.setCollectionId(structuredQuery.getFrom(0).getCollectionId());
+    queryOptions.setAllDescendants(structuredQuery.getFrom(0).getAllDescendants());
+
+    if (structuredQuery.hasWhere()) {
+      Filter where = structuredQuery.getWhere();
+      if (where.hasCompositeFilter()) {
+        CompositeFilter compositeFilter = where.getCompositeFilter();
+        ImmutableList.Builder<FieldFilter> fieldFilters = ImmutableList.builder();
+        for (Filter filter : compositeFilter.getFiltersList()) {
+          fieldFilters.add(FieldFilter.fromProto(filter));
+        }
+        queryOptions.setFieldFilters(fieldFilters.build());
+      } else {
+        queryOptions.setFieldFilters(ImmutableList.of(FieldFilter.fromProto(where)));
+      }
+    }
+
+    ImmutableList.Builder<FieldOrder> fieldOrders = ImmutableList.builder();
+    for (Order order : structuredQuery.getOrderByList()) {
+      fieldOrders.add(
+          new FieldOrder(order.getField(), Direction.valueOf(order.getDirection().name())));
+    }
+    queryOptions.setFieldOrders(fieldOrders.build());
+
+    if (structuredQuery.hasLimit()) {
+      queryOptions.setLimit(structuredQuery.getLimit().getValue());
+    }
+
+    if (structuredQuery.getOffset() != 0) {
+      queryOptions.setOffset(structuredQuery.getOffset());
+    }
+
+    if (structuredQuery.hasSelect()) {
+      queryOptions.setFieldProjections(
+          ImmutableList.copyOf(structuredQuery.getSelect().getFieldsList()));
+    }
+
+    if (structuredQuery.hasStartAt()) {
+      queryOptions.setStartCursor(structuredQuery.getStartAt());
+    }
+
+    if (structuredQuery.hasEndAt()) {
+      queryOptions.setEndCursor(structuredQuery.getEndAt());
+    }
+
+    return new Query(rpcContext, queryOptions.build());
+  }
+
+  private Value encodeValue(FieldReference fieldReference, Object value) {
+    return encodeValue(FieldPath.fromDotSeparatedString(fieldReference.getFieldPath()), value);
+  }
+
+  private Value encodeValue(FieldPath fieldPath, Object value) {
+    Object sanitizedObject = CustomClassMapper.serialize(value);
+    Value encodedValue =
+        UserDataConverter.encodeValue(fieldPath, sanitizedObject, UserDataConverter.ARGUMENT);
+    if (encodedValue == null) {
+      throw FirestoreException.invalidState(
+          "Cannot use Firestore sentinels in FieldFilter or cursors");
+    }
+    return encodedValue;
+  }
+
   /** Stream observer that captures DocumentSnapshots as well as the Query read time. */
   private abstract static class QuerySnapshotObserver
       implements ApiStreamObserver<QueryDocumentSnapshot> {
@@ -1216,7 +1371,7 @@ public class Query {
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
-                      firestore, Timestamp.fromProto(response.getReadTime()), document);
+                      rpcContext, Timestamp.fromProto(response.getReadTime()), document);
               documentObserver.onNext(documentSnapshot);
             }
 
@@ -1243,7 +1398,7 @@ public class Query {
           }
         };
 
-    firestore.streamRequest(request.build(), observer, firestore.getClient().runQueryCallable());
+    rpcContext.streamRequest(request.build(), observer, rpcContext.getClient().runQueryCallable());
   }
 
   /**
@@ -1264,7 +1419,7 @@ public class Query {
    */
   @Nonnull
   public ListenerRegistration addSnapshotListener(@Nonnull EventListener<QuerySnapshot> listener) {
-    return addSnapshotListener(firestore.getClient().getExecutor(), listener);
+    return addSnapshotListener(rpcContext.getClient().getExecutor(), listener);
   }
 
   /**
@@ -1327,23 +1482,25 @@ public class Query {
                 : fieldOrders.get(fieldOrders.size() - 1).direction;
 
         List<FieldOrder> orderBys = new ArrayList<>(fieldOrders);
-        orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID, lastDirection));
+        orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID.toProto(), lastDirection));
 
         for (FieldOrder orderBy : orderBys) {
           int comp;
 
-          if (orderBy.fieldPath.equals(FieldPath.documentId())) {
+          String path = orderBy.fieldReference.getFieldPath();
+          if (FieldPath.isDocumentId(path)) {
             comp =
                 doc1.getReference()
                     .getResourcePath()
                     .compareTo(doc2.getReference().getResourcePath());
           } else {
+            FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
             Preconditions.checkState(
-                doc1.contains(orderBy.fieldPath) && doc2.contains(orderBy.fieldPath),
+                doc1.contains(fieldPath) && doc2.contains(fieldPath),
                 "Can only compare fields that exist in the DocumentSnapshot."
                     + " Please include the fields you are ordering on in your select() call.");
-            Value v1 = doc1.extractField(orderBy.fieldPath);
-            Value v2 = doc2.extractField(orderBy.fieldPath);
+            Value v1 = doc1.extractField(fieldPath);
+            Value v2 = doc2.extractField(fieldPath);
 
             comp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
           }
@@ -1385,11 +1542,11 @@ public class Query {
       return false;
     }
     Query query = (Query) obj;
-    return Objects.equals(firestore, query.firestore) && Objects.equals(options, query.options);
+    return Objects.equals(rpcContext, query.rpcContext) && Objects.equals(options, query.options);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firestore, options);
+    return Objects.hash(rpcContext, options);
   }
 }
