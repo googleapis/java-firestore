@@ -147,6 +147,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1beta1.WriteResult> getWriteResultsList() {
     return writeResults_;
   }
@@ -161,6 +162,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1beta1.WriteResultOrBuilder>
       getWriteResultsOrBuilderList() {
     return writeResults_;
@@ -176,6 +178,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public int getWriteResultsCount() {
     return writeResults_.size();
   }
@@ -190,6 +193,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.WriteResult getWriteResults(int index) {
     return writeResults_.get(index);
   }
@@ -204,6 +208,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.WriteResultOrBuilder getWriteResultsOrBuilder(int index) {
     return writeResults_.get(index);
   }
@@ -221,6 +226,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the commitTime field is set.
    */
+  @java.lang.Override
   public boolean hasCommitTime() {
     return commitTime_ != null;
   }
@@ -235,6 +241,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The commitTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getCommitTime() {
     return commitTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : commitTime_;
   }
@@ -247,6 +254,7 @@ public final class CommitResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp commit_time = 2;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCommitTimeOrBuilder() {
     return getCommitTime();
   }

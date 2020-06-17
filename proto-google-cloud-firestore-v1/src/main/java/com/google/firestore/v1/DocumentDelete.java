@@ -171,6 +171,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The document.
    */
+  @java.lang.Override
   public java.lang.String getDocument() {
     java.lang.Object ref = document_;
     if (ref instanceof java.lang.String) {
@@ -193,6 +194,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for document.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDocumentBytes() {
     java.lang.Object ref = document_;
     if (ref instanceof java.lang.String) {
@@ -218,6 +220,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * @return A list containing the removedTargetIds.
    */
+  @java.lang.Override
   public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
     return removedTargetIds_;
   }
@@ -267,6 +270,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return readTime_ != null;
   }
@@ -282,6 +286,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
@@ -295,6 +300,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     return getReadTime();
   }
