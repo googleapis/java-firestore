@@ -128,6 +128,24 @@ public class BulkWriter {
   }
 
   /**
+   * Create a document with the provided data. This single operation will fail if a document exists
+   * at its location.
+   *
+   * @param documentReference A reference to the document to be created.
+   * @param pojo The POJO that will be used to populate the document contents.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   */
+  @Nonnull
+  public ApiFuture<WriteResult> create(
+      @Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
+    verifyNotClosed();
+    BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
+    ApiFuture<WriteResult> future = bulkCommitBatch.create(documentReference, pojo);
+    sendReadyBatches();
+    return future;
+  }
+
+  /**
    * Delete a document from the database.
    *
    * @param documentReference The DocumentReference to delete.
@@ -198,6 +216,43 @@ public class BulkWriter {
     verifyNotClosed();
     BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
     ApiFuture<WriteResult> future = bulkCommitBatch.set(documentReference, fields, options);
+    sendReadyBatches();
+    return future;
+  }
+
+  /**
+   * Write to the document referred to by the provided DocumentReference. If the document does not
+   * exist yet, it will be created. If you pass a {@link SetOptions}, the provided data can be
+   * merged into an existing document.
+   *
+   * @param documentReference A reference to the document to be set.
+   * @param pojo The POJO that will be used to populate the document contents.
+   * @param options An object to configure the set behavior.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   */
+  @Nonnull
+  public ApiFuture<WriteResult> set(
+      @Nonnull DocumentReference documentReference, Object pojo, @Nonnull SetOptions options) {
+    verifyNotClosed();
+    BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
+    ApiFuture<WriteResult> future = bulkCommitBatch.set(documentReference, pojo, options);
+    sendReadyBatches();
+    return future;
+  }
+
+  /**
+   * Write to the document referred to by the provided DocumentReference. If the document does not
+   * exist yet, it will be created.
+   *
+   * @param documentReference A reference to the document to be set.
+   * @param pojo The POJO that will be used to populate the document contents.
+   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   */
+  @Nonnull
+  public ApiFuture<WriteResult> set(@Nonnull DocumentReference documentReference, Object pojo) {
+    verifyNotClosed();
+    BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference);
+    ApiFuture<WriteResult> future = bulkCommitBatch.set(documentReference, pojo);
     sendReadyBatches();
     return future;
   }
