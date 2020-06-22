@@ -150,3 +150,23 @@ s.replace(
   "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
   "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
 )
+
+bundle_v1 = gapic.java_library(
+    service='bundle',
+    version='v1',
+    proto_path='firestore',
+    bazel_target='//firestore:google-cloud-firestore-bundle-java',
+)
+bundle_v1 = bundle_v1 / f"google-cloud-firestore-bundle-java"
+s.replace(
+    bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src/**/*.java',
+    protobuf_header,
+    f'{license_header}{protobuf_header}'
+)
+s.replace(
+    bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src/**/*.java',
+    bad_license_header,
+    license_header
+)
+java.format_code(f'proto-google-cloud-firestore-bundle-java/src')
+s.copy(bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src', f'google-cloud-firestore/src')
