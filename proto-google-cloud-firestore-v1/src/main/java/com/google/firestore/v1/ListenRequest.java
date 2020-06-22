@@ -218,6 +218,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The database.
    */
+  @java.lang.Override
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -241,6 +242,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for database.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -265,6 +267,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the addTarget field is set.
    */
+  @java.lang.Override
   public boolean hasAddTarget() {
     return targetChangeCase_ == 2;
   }
@@ -279,6 +282,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The addTarget.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Target getAddTarget() {
     if (targetChangeCase_ == 2) {
       return (com.google.firestore.v1.Target) targetChange_;
@@ -294,6 +298,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Target add_target = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.TargetOrBuilder getAddTargetOrBuilder() {
     if (targetChangeCase_ == 2) {
       return (com.google.firestore.v1.Target) targetChange_;
@@ -313,6 +318,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The removeTarget.
    */
+  @java.lang.Override
   public int getRemoveTarget() {
     if (targetChangeCase_ == 3) {
       return (java.lang.Integer) targetChange_;
@@ -354,6 +360,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
+  @java.lang.Override
   public boolean containsLabels(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -361,6 +368,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     return internalGetLabels().getMap().containsKey(key);
   }
   /** Use {@link #getLabelsMap()} instead. */
+  @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, java.lang.String> getLabels() {
     return getLabelsMap();
@@ -374,6 +382,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
+  @java.lang.Override
   public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
     return internalGetLabels().getMap();
   }
@@ -386,6 +395,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
+  @java.lang.Override
   public java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -402,6 +412,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
+  @java.lang.Override
   public java.lang.String getLabelsOrThrow(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -980,6 +991,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the addTarget field is set.
      */
+    @java.lang.Override
     public boolean hasAddTarget() {
       return targetChangeCase_ == 2;
     }
@@ -994,6 +1006,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The addTarget.
      */
+    @java.lang.Override
     public com.google.firestore.v1.Target getAddTarget() {
       if (addTargetBuilder_ == null) {
         if (targetChangeCase_ == 2) {
@@ -1125,6 +1138,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.Target add_target = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.TargetOrBuilder getAddTargetOrBuilder() {
       if ((targetChangeCase_ == 2) && (addTargetBuilder_ != null)) {
         return addTargetBuilder_.getMessageOrBuilder();
@@ -1256,6 +1270,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, string&gt; labels = 4;</code>
      */
+    @java.lang.Override
     public boolean containsLabels(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();
@@ -1263,6 +1278,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       return internalGetLabels().getMap().containsKey(key);
     }
     /** Use {@link #getLabelsMap()} instead. */
+    @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getLabels() {
       return getLabelsMap();
@@ -1276,6 +1292,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, string&gt; labels = 4;</code>
      */
+    @java.lang.Override
     public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
       return internalGetLabels().getMap();
     }
@@ -1288,6 +1305,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, string&gt; labels = 4;</code>
      */
+    @java.lang.Override
     public java.lang.String getLabelsOrDefault(
         java.lang.String key, java.lang.String defaultValue) {
       if (key == null) {
@@ -1305,6 +1323,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, string&gt; labels = 4;</code>
      */
+    @java.lang.Override
     public java.lang.String getLabelsOrThrow(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();

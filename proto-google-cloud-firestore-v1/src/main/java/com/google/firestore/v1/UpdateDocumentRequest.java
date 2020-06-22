@@ -180,6 +180,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the document field is set.
    */
+  @java.lang.Override
   public boolean hasDocument() {
     return document_ != null;
   }
@@ -196,6 +197,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The document.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Document getDocument() {
     return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
@@ -210,6 +212,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    * <code>.google.firestore.v1.Document document = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
   }
@@ -232,6 +235,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the updateMask field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateMask() {
     return updateMask_ != null;
   }
@@ -251,6 +255,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The updateMask.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMask getUpdateMask() {
     return updateMask_ == null
         ? com.google.firestore.v1.DocumentMask.getDefaultInstance()
@@ -270,6 +275,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getUpdateMaskOrBuilder() {
     return getUpdateMask();
   }
@@ -289,6 +295,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the mask field is set.
    */
+  @java.lang.Override
   public boolean hasMask() {
     return mask_ != null;
   }
@@ -305,6 +312,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The mask.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
@@ -319,6 +327,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
     return getMask();
   }
@@ -337,6 +346,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the currentDocument field is set.
    */
+  @java.lang.Override
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
   }
@@ -352,6 +362,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The currentDocument.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Precondition getCurrentDocument() {
     return currentDocument_ == null
         ? com.google.firestore.v1.Precondition.getDefaultInstance()
@@ -367,6 +378,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
     return getCurrentDocument();
   }

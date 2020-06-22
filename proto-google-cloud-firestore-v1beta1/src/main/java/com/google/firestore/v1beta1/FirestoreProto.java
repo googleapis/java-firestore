@@ -335,12 +335,13 @@ public final class FirestoreProto {
           + "ds:\001*\332A\006parent\032v\312A\030firestore.googleapis."
           + "com\322AXhttps://www.googleapis.com/auth/cl"
           + "oud-platform,https://www.googleapis.com/"
-          + "auth/datastoreB\274\001\n\034com.google.firestore."
+          + "auth/datastoreB\340\001\n\034com.google.firestore."
           + "v1beta1B\016FirestoreProtoP\001ZAgoogle.golang"
           + ".org/genproto/googleapis/firestore/v1bet"
           + "a1;firestore\242\002\004GCFS\252\002\036Google.Cloud.Fires"
           + "tore.V1Beta1\312\002\036Google\\Cloud\\Firestore\\V1"
-          + "beta1b\006proto3"
+          + "beta1\352\002!Google::Cloud::Firestore::V1beta"
+          + "1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

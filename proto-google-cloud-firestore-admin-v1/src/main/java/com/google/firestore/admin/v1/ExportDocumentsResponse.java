@@ -126,6 +126,7 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    *
    * @return The outputUriPrefix.
    */
+  @java.lang.Override
   public java.lang.String getOutputUriPrefix() {
     java.lang.Object ref = outputUriPrefix_;
     if (ref instanceof java.lang.String) {
@@ -150,6 +151,7 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    *
    * @return The bytes for outputUriPrefix.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getOutputUriPrefixBytes() {
     java.lang.Object ref = outputUriPrefix_;
     if (ref instanceof java.lang.String) {

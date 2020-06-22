@@ -88,6 +88,14 @@ public final class FirestoreProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_RunQueryResponse_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_PartitionQueryRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_PartitionQueryRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_v1_WriteRequest_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable;
@@ -135,6 +143,18 @@ public final class FirestoreProto {
       internal_static_google_firestore_v1_ListCollectionIdsResponse_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_ListCollectionIdsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_BatchWriteRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_BatchWriteRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_BatchWriteResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_BatchWriteResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -215,122 +235,148 @@ public final class FirestoreProto {
           + "nse\022\023\n\013transaction\030\002 \001(\014\022/\n\010document\030\001 \001"
           + "(\0132\035.google.firestore.v1.Document\022-\n\trea"
           + "d_time\030\003 \001(\0132\032.google.protobuf.Timestamp"
-          + "\022\027\n\017skipped_results\030\004 \001(\005\"\350\001\n\014WriteReque"
-          + "st\022\025\n\010database\030\001 \001(\tB\003\340A\002\022\021\n\tstream_id\030\002"
-          + " \001(\t\022*\n\006writes\030\003 \003(\0132\032.google.firestore."
-          + "v1.Write\022\024\n\014stream_token\030\004 \001(\014\022=\n\006labels"
-          + "\030\005 \003(\0132-.google.firestore.v1.WriteReques"
-          + "t.LabelsEntry\032-\n\013LabelsEntry\022\013\n\003key\030\001 \001("
-          + "\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\242\001\n\rWriteResponse\022\021"
-          + "\n\tstream_id\030\001 \001(\t\022\024\n\014stream_token\030\002 \001(\014\022"
-          + "7\n\rwrite_results\030\003 \003(\0132 .google.firestor"
-          + "e.v1.WriteResult\022/\n\013commit_time\030\004 \001(\0132\032."
-          + "google.protobuf.Timestamp\"\362\001\n\rListenRequ"
-          + "est\022\025\n\010database\030\001 \001(\tB\003\340A\002\0221\n\nadd_target"
-          + "\030\002 \001(\0132\033.google.firestore.v1.TargetH\000\022\027\n"
-          + "\rremove_target\030\003 \001(\005H\000\022>\n\006labels\030\004 \003(\0132."
-          + ".google.firestore.v1.ListenRequest.Label"
-          + "sEntry\032-\n\013LabelsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va"
-          + "lue\030\002 \001(\t:\0028\001B\017\n\rtarget_change\"\325\002\n\016Liste"
-          + "nResponse\022:\n\rtarget_change\030\002 \001(\0132!.googl"
-          + "e.firestore.v1.TargetChangeH\000\022>\n\017documen"
-          + "t_change\030\003 \001(\0132#.google.firestore.v1.Doc"
-          + "umentChangeH\000\022>\n\017document_delete\030\004 \001(\0132#"
-          + ".google.firestore.v1.DocumentDeleteH\000\022>\n"
-          + "\017document_remove\030\006 \001(\0132#.google.firestor"
-          + "e.v1.DocumentRemoveH\000\0226\n\006filter\030\005 \001(\0132$."
-          + "google.firestore.v1.ExistenceFilterH\000B\017\n"
-          + "\rresponse_type\"\241\003\n\006Target\0228\n\005query\030\002 \001(\013"
-          + "2\'.google.firestore.v1.Target.QueryTarge"
-          + "tH\000\022@\n\tdocuments\030\003 \001(\0132+.google.firestor"
-          + "e.v1.Target.DocumentsTargetH\000\022\026\n\014resume_"
-          + "token\030\004 \001(\014H\001\022/\n\tread_time\030\013 \001(\0132\032.googl"
-          + "e.protobuf.TimestampH\001\022\021\n\ttarget_id\030\005 \001("
-          + "\005\022\014\n\004once\030\006 \001(\010\032$\n\017DocumentsTarget\022\021\n\tdo"
-          + "cuments\030\002 \003(\t\032m\n\013QueryTarget\022\016\n\006parent\030\001"
-          + " \001(\t\022@\n\020structured_query\030\002 \001(\0132$.google."
-          + "firestore.v1.StructuredQueryH\000B\014\n\nquery_"
-          + "typeB\r\n\013target_typeB\r\n\013resume_type\"\252\002\n\014T"
-          + "argetChange\022N\n\022target_change_type\030\001 \001(\0162"
-          + "2.google.firestore.v1.TargetChange.Targe"
-          + "tChangeType\022\022\n\ntarget_ids\030\002 \003(\005\022!\n\005cause"
-          + "\030\003 \001(\0132\022.google.rpc.Status\022\024\n\014resume_tok"
-          + "en\030\004 \001(\014\022-\n\tread_time\030\006 \001(\0132\032.google.pro"
-          + "tobuf.Timestamp\"N\n\020TargetChangeType\022\r\n\tN"
-          + "O_CHANGE\020\000\022\007\n\003ADD\020\001\022\n\n\006REMOVE\020\002\022\013\n\007CURRE"
-          + "NT\020\003\022\t\n\005RESET\020\004\"V\n\030ListCollectionIdsRequ"
-          + "est\022\023\n\006parent\030\001 \001(\tB\003\340A\002\022\021\n\tpage_size\030\002 "
-          + "\001(\005\022\022\n\npage_token\030\003 \001(\t\"L\n\031ListCollectio"
-          + "nIdsResponse\022\026\n\016collection_ids\030\001 \003(\t\022\027\n\017"
-          + "next_page_token\030\002 \001(\t2\327\023\n\tFirestore\022\217\001\n\013"
-          + "GetDocument\022\'.google.firestore.v1.GetDoc"
-          + "umentRequest\032\035.google.firestore.v1.Docum"
-          + "ent\"8\202\323\344\223\0022\0220/v1/{name=projects/*/databa"
-          + "ses/*/documents/*/**}\022\262\001\n\rListDocuments\022"
-          + ").google.firestore.v1.ListDocumentsReque"
-          + "st\032*.google.firestore.v1.ListDocumentsRe"
-          + "sponse\"J\202\323\344\223\002D\022B/v1/{parent=projects/*/d"
-          + "atabases/*/documents/*/**}/{collection_i"
-          + "d}\022\277\001\n\016UpdateDocument\022*.google.firestore"
-          + ".v1.UpdateDocumentRequest\032\035.google.fires"
-          + "tore.v1.Document\"b\202\323\344\223\002E29/v1/{document."
-          + "name=projects/*/databases/*/documents/*/"
-          + "**}:\010document\332A\024document,update_mask\022\225\001\n"
-          + "\016DeleteDocument\022*.google.firestore.v1.De"
-          + "leteDocumentRequest\032\026.google.protobuf.Em"
-          + "pty\"?\202\323\344\223\0022*0/v1/{name=projects/*/databa"
-          + "ses/*/documents/*/**}\332A\004name\022\271\001\n\021BatchGe"
-          + "tDocuments\022-.google.firestore.v1.BatchGe"
-          + "tDocumentsRequest\032..google.firestore.v1."
-          + "BatchGetDocumentsResponse\"C\202\323\344\223\002=\"8/v1/{"
-          + "database=projects/*/databases/*}/documen"
-          + "ts:batchGet:\001*0\001\022\307\001\n\020BeginTransaction\022,."
-          + "google.firestore.v1.BeginTransactionRequ"
-          + "est\032-.google.firestore.v1.BeginTransacti"
-          + "onResponse\"V\202\323\344\223\002E\"@/v1/{database=projec"
-          + "ts/*/databases/*}/documents:beginTransac"
-          + "tion:\001*\332A\010database\022\246\001\n\006Commit\022\".google.f"
-          + "irestore.v1.CommitRequest\032#.google.fires"
-          + "tore.v1.CommitResponse\"S\202\323\344\223\002;\"6/v1/{dat"
-          + "abase=projects/*/databases/*}/documents:"
-          + "commit:\001*\332A\017database,writes\022\244\001\n\010Rollback"
-          + "\022$.google.firestore.v1.RollbackRequest\032\026"
-          + ".google.protobuf.Empty\"Z\202\323\344\223\002=\"8/v1/{dat"
-          + "abase=projects/*/databases/*}/documents:"
-          + "rollback:\001*\332A\024database,transaction\022\337\001\n\010R"
-          + "unQuery\022$.google.firestore.v1.RunQueryRe"
-          + "quest\032%.google.firestore.v1.RunQueryResp"
-          + "onse\"\203\001\202\323\344\223\002}\"6/v1/{parent=projects/*/da"
-          + "tabases/*/documents}:runQuery:\001*Z@\";/v1/"
-          + "{parent=projects/*/databases/*/documents"
-          + "/*/**}:runQuery:\001*0\001\022\224\001\n\005Write\022!.google."
-          + "firestore.v1.WriteRequest\032\".google.fires"
-          + "tore.v1.WriteResponse\"@\202\323\344\223\002:\"5/v1/{data"
-          + "base=projects/*/databases/*}/documents:w"
-          + "rite:\001*(\0010\001\022\230\001\n\006Listen\022\".google.firestor"
-          + "e.v1.ListenRequest\032#.google.firestore.v1"
-          + ".ListenResponse\"A\202\323\344\223\002;\"6/v1/{database=p"
-          + "rojects/*/databases/*}/documents:listen:"
-          + "\001*(\0010\001\022\224\002\n\021ListCollectionIds\022-.google.fi"
-          + "restore.v1.ListCollectionIdsRequest\032..go"
-          + "ogle.firestore.v1.ListCollectionIdsRespo"
-          + "nse\"\237\001\202\323\344\223\002\217\001\"?/v1/{parent=projects/*/da"
-          + "tabases/*/documents}:listCollectionIds:\001"
-          + "*ZI\"D/v1/{parent=projects/*/databases/*/"
-          + "documents/*/**}:listCollectionIds:\001*\332A\006p"
-          + "arent\022\257\001\n\016CreateDocument\022*.google.firest"
-          + "ore.v1.CreateDocumentRequest\032\035.google.fi"
-          + "restore.v1.Document\"R\202\323\344\223\002L\"@/v1/{parent"
-          + "=projects/*/databases/*/documents/**}/{c"
-          + "ollection_id}:\010document\032v\312A\030firestore.go"
-          + "ogleapis.com\322AXhttps://www.googleapis.co"
-          + "m/auth/cloud-platform,https://www.google"
-          + "apis.com/auth/datastoreB\250\001\n\027com.google.f"
-          + "irestore.v1B\016FirestoreProtoP\001Z<google.go"
-          + "lang.org/genproto/googleapis/firestore/v"
-          + "1;firestore\242\002\004GCFS\252\002\031Google.Cloud.Firest"
-          + "ore.V1\312\002\031Google\\Cloud\\Firestore\\V1b\006prot"
-          + "o3"
+          + "\022\027\n\017skipped_results\030\004 \001(\005\"\274\001\n\025PartitionQ"
+          + "ueryRequest\022\023\n\006parent\030\001 \001(\tB\003\340A\002\022@\n\020stru"
+          + "ctured_query\030\002 \001(\0132$.google.firestore.v1"
+          + ".StructuredQueryH\000\022\027\n\017partition_count\030\003 "
+          + "\001(\003\022\022\n\npage_token\030\004 \001(\t\022\021\n\tpage_size\030\005 \001"
+          + "(\005B\014\n\nquery_type\"b\n\026PartitionQueryRespon"
+          + "se\022/\n\npartitions\030\001 \003(\0132\033.google.firestor"
+          + "e.v1.Cursor\022\027\n\017next_page_token\030\002 \001(\t\"\350\001\n"
+          + "\014WriteRequest\022\025\n\010database\030\001 \001(\tB\003\340A\002\022\021\n\t"
+          + "stream_id\030\002 \001(\t\022*\n\006writes\030\003 \003(\0132\032.google"
+          + ".firestore.v1.Write\022\024\n\014stream_token\030\004 \001("
+          + "\014\022=\n\006labels\030\005 \003(\0132-.google.firestore.v1."
+          + "WriteRequest.LabelsEntry\032-\n\013LabelsEntry\022"
+          + "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\242\001\n\rWrit"
+          + "eResponse\022\021\n\tstream_id\030\001 \001(\t\022\024\n\014stream_t"
+          + "oken\030\002 \001(\014\0227\n\rwrite_results\030\003 \003(\0132 .goog"
+          + "le.firestore.v1.WriteResult\022/\n\013commit_ti"
+          + "me\030\004 \001(\0132\032.google.protobuf.Timestamp\"\362\001\n"
+          + "\rListenRequest\022\025\n\010database\030\001 \001(\tB\003\340A\002\0221\n"
+          + "\nadd_target\030\002 \001(\0132\033.google.firestore.v1."
+          + "TargetH\000\022\027\n\rremove_target\030\003 \001(\005H\000\022>\n\006lab"
+          + "els\030\004 \003(\0132..google.firestore.v1.ListenRe"
+          + "quest.LabelsEntry\032-\n\013LabelsEntry\022\013\n\003key\030"
+          + "\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001B\017\n\rtarget_chang"
+          + "e\"\325\002\n\016ListenResponse\022:\n\rtarget_change\030\002 "
+          + "\001(\0132!.google.firestore.v1.TargetChangeH\000"
+          + "\022>\n\017document_change\030\003 \001(\0132#.google.fires"
+          + "tore.v1.DocumentChangeH\000\022>\n\017document_del"
+          + "ete\030\004 \001(\0132#.google.firestore.v1.Document"
+          + "DeleteH\000\022>\n\017document_remove\030\006 \001(\0132#.goog"
+          + "le.firestore.v1.DocumentRemoveH\000\0226\n\006filt"
+          + "er\030\005 \001(\0132$.google.firestore.v1.Existence"
+          + "FilterH\000B\017\n\rresponse_type\"\241\003\n\006Target\0228\n\005"
+          + "query\030\002 \001(\0132\'.google.firestore.v1.Target"
+          + ".QueryTargetH\000\022@\n\tdocuments\030\003 \001(\0132+.goog"
+          + "le.firestore.v1.Target.DocumentsTargetH\000"
+          + "\022\026\n\014resume_token\030\004 \001(\014H\001\022/\n\tread_time\030\013 "
+          + "\001(\0132\032.google.protobuf.TimestampH\001\022\021\n\ttar"
+          + "get_id\030\005 \001(\005\022\014\n\004once\030\006 \001(\010\032$\n\017DocumentsT"
+          + "arget\022\021\n\tdocuments\030\002 \003(\t\032m\n\013QueryTarget\022"
+          + "\016\n\006parent\030\001 \001(\t\022@\n\020structured_query\030\002 \001("
+          + "\0132$.google.firestore.v1.StructuredQueryH"
+          + "\000B\014\n\nquery_typeB\r\n\013target_typeB\r\n\013resume"
+          + "_type\"\252\002\n\014TargetChange\022N\n\022target_change_"
+          + "type\030\001 \001(\01622.google.firestore.v1.TargetC"
+          + "hange.TargetChangeType\022\022\n\ntarget_ids\030\002 \003"
+          + "(\005\022!\n\005cause\030\003 \001(\0132\022.google.rpc.Status\022\024\n"
+          + "\014resume_token\030\004 \001(\014\022-\n\tread_time\030\006 \001(\0132\032"
+          + ".google.protobuf.Timestamp\"N\n\020TargetChan"
+          + "geType\022\r\n\tNO_CHANGE\020\000\022\007\n\003ADD\020\001\022\n\n\006REMOVE"
+          + "\020\002\022\013\n\007CURRENT\020\003\022\t\n\005RESET\020\004\"V\n\030ListCollec"
+          + "tionIdsRequest\022\023\n\006parent\030\001 \001(\tB\003\340A\002\022\021\n\tp"
+          + "age_size\030\002 \001(\005\022\022\n\npage_token\030\003 \001(\t\"L\n\031Li"
+          + "stCollectionIdsResponse\022\026\n\016collection_id"
+          + "s\030\001 \003(\t\022\027\n\017next_page_token\030\002 \001(\t\"\311\001\n\021Bat"
+          + "chWriteRequest\022\025\n\010database\030\001 \001(\tB\003\340A\002\022*\n"
+          + "\006writes\030\002 \003(\0132\032.google.firestore.v1.Writ"
+          + "e\022B\n\006labels\030\003 \003(\01322.google.firestore.v1."
+          + "BatchWriteRequest.LabelsEntry\032-\n\013LabelsE"
+          + "ntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"q\n\022"
+          + "BatchWriteResponse\0227\n\rwrite_results\030\001 \003("
+          + "\0132 .google.firestore.v1.WriteResult\022\"\n\006s"
+          + "tatus\030\002 \003(\0132\022.google.rpc.Status2\375\026\n\tFire"
+          + "store\022\217\001\n\013GetDocument\022\'.google.firestore"
+          + ".v1.GetDocumentRequest\032\035.google.firestor"
+          + "e.v1.Document\"8\202\323\344\223\0022\0220/v1/{name=project"
+          + "s/*/databases/*/documents/*/**}\022\262\001\n\rList"
+          + "Documents\022).google.firestore.v1.ListDocu"
+          + "mentsRequest\032*.google.firestore.v1.ListD"
+          + "ocumentsResponse\"J\202\323\344\223\002D\022B/v1/{parent=pr"
+          + "ojects/*/databases/*/documents/*/**}/{co"
+          + "llection_id}\022\277\001\n\016UpdateDocument\022*.google"
+          + ".firestore.v1.UpdateDocumentRequest\032\035.go"
+          + "ogle.firestore.v1.Document\"b\202\323\344\223\002E29/v1/"
+          + "{document.name=projects/*/databases/*/do"
+          + "cuments/*/**}:\010document\332A\024document,updat"
+          + "e_mask\022\225\001\n\016DeleteDocument\022*.google.fires"
+          + "tore.v1.DeleteDocumentRequest\032\026.google.p"
+          + "rotobuf.Empty\"?\202\323\344\223\0022*0/v1/{name=project"
+          + "s/*/databases/*/documents/*/**}\332A\004name\022\271"
+          + "\001\n\021BatchGetDocuments\022-.google.firestore."
+          + "v1.BatchGetDocumentsRequest\032..google.fir"
+          + "estore.v1.BatchGetDocumentsResponse\"C\202\323\344"
+          + "\223\002=\"8/v1/{database=projects/*/databases/"
+          + "*}/documents:batchGet:\001*0\001\022\307\001\n\020BeginTran"
+          + "saction\022,.google.firestore.v1.BeginTrans"
+          + "actionRequest\032-.google.firestore.v1.Begi"
+          + "nTransactionResponse\"V\202\323\344\223\002E\"@/v1/{datab"
+          + "ase=projects/*/databases/*}/documents:be"
+          + "ginTransaction:\001*\332A\010database\022\246\001\n\006Commit\022"
+          + "\".google.firestore.v1.CommitRequest\032#.go"
+          + "ogle.firestore.v1.CommitResponse\"S\202\323\344\223\002;"
+          + "\"6/v1/{database=projects/*/databases/*}/"
+          + "documents:commit:\001*\332A\017database,writes\022\244\001"
+          + "\n\010Rollback\022$.google.firestore.v1.Rollbac"
+          + "kRequest\032\026.google.protobuf.Empty\"Z\202\323\344\223\002="
+          + "\"8/v1/{database=projects/*/databases/*}/"
+          + "documents:rollback:\001*\332A\024database,transac"
+          + "tion\022\337\001\n\010RunQuery\022$.google.firestore.v1."
+          + "RunQueryRequest\032%.google.firestore.v1.Ru"
+          + "nQueryResponse\"\203\001\202\323\344\223\002}\"6/v1/{parent=pro"
+          + "jects/*/databases/*/documents}:runQuery:"
+          + "\001*Z@\";/v1/{parent=projects/*/databases/*"
+          + "/documents/*/**}:runQuery:\001*0\001\022\374\001\n\016Parti"
+          + "tionQuery\022*.google.firestore.v1.Partitio"
+          + "nQueryRequest\032+.google.firestore.v1.Part"
+          + "itionQueryResponse\"\220\001\202\323\344\223\002\211\001\"</v1/{paren"
+          + "t=projects/*/databases/*/documents}:part"
+          + "itionQuery:\001*ZF\"A/v1/{parent=projects/*/"
+          + "databases/*/documents/*/**}:partitionQue"
+          + "ry:\001*\022\224\001\n\005Write\022!.google.firestore.v1.Wr"
+          + "iteRequest\032\".google.firestore.v1.WriteRe"
+          + "sponse\"@\202\323\344\223\002:\"5/v1/{database=projects/*"
+          + "/databases/*}/documents:write:\001*(\0010\001\022\230\001\n"
+          + "\006Listen\022\".google.firestore.v1.ListenRequ"
+          + "est\032#.google.firestore.v1.ListenResponse"
+          + "\"A\202\323\344\223\002;\"6/v1/{database=projects/*/datab"
+          + "ases/*}/documents:listen:\001*(\0010\001\022\224\002\n\021List"
+          + "CollectionIds\022-.google.firestore.v1.List"
+          + "CollectionIdsRequest\032..google.firestore."
+          + "v1.ListCollectionIdsResponse\"\237\001\202\323\344\223\002\217\001\"?"
+          + "/v1/{parent=projects/*/databases/*/docum"
+          + "ents}:listCollectionIds:\001*ZI\"D/v1/{paren"
+          + "t=projects/*/databases/*/documents/*/**}"
+          + ":listCollectionIds:\001*\332A\006parent\022\244\001\n\nBatch"
+          + "Write\022&.google.firestore.v1.BatchWriteRe"
+          + "quest\032\'.google.firestore.v1.BatchWriteRe"
+          + "sponse\"E\202\323\344\223\002?\":/v1/{database=projects/*"
+          + "/databases/*}/documents:batchWrite:\001*\022\257\001"
+          + "\n\016CreateDocument\022*.google.firestore.v1.C"
+          + "reateDocumentRequest\032\035.google.firestore."
+          + "v1.Document\"R\202\323\344\223\002L\"@/v1/{parent=project"
+          + "s/*/databases/*/documents/**}/{collectio"
+          + "n_id}:\010document\032v\312A\030firestore.googleapis"
+          + ".com\322AXhttps://www.googleapis.com/auth/c"
+          + "loud-platform,https://www.googleapis.com"
+          + "/auth/datastoreB\307\001\n\027com.google.firestore"
+          + ".v1B\016FirestoreProtoP\001Z<google.golang.org"
+          + "/genproto/googleapis/firestore/v1;firest"
+          + "ore\242\002\004GCFS\252\002\031Google.Cloud.Firestore.V1\312\002"
+          + "\031Google\\Cloud\\Firestore\\V1\352\002\034Google::Clo"
+          + "ud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -488,8 +534,24 @@ public final class FirestoreProto {
             new java.lang.String[] {
               "Transaction", "Document", "ReadTime", "SkippedResults",
             });
-    internal_static_google_firestore_v1_WriteRequest_descriptor =
+    internal_static_google_firestore_v1_PartitionQueryRequest_descriptor =
         getDescriptor().getMessageTypes().get(15);
+    internal_static_google_firestore_v1_PartitionQueryRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_PartitionQueryRequest_descriptor,
+            new java.lang.String[] {
+              "Parent", "StructuredQuery", "PartitionCount", "PageToken", "PageSize", "QueryType",
+            });
+    internal_static_google_firestore_v1_PartitionQueryResponse_descriptor =
+        getDescriptor().getMessageTypes().get(16);
+    internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_PartitionQueryResponse_descriptor,
+            new java.lang.String[] {
+              "Partitions", "NextPageToken",
+            });
+    internal_static_google_firestore_v1_WriteRequest_descriptor =
+        getDescriptor().getMessageTypes().get(17);
     internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_WriteRequest_descriptor,
@@ -505,7 +567,7 @@ public final class FirestoreProto {
               "Key", "Value",
             });
     internal_static_google_firestore_v1_WriteResponse_descriptor =
-        getDescriptor().getMessageTypes().get(16);
+        getDescriptor().getMessageTypes().get(18);
     internal_static_google_firestore_v1_WriteResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_WriteResponse_descriptor,
@@ -513,7 +575,7 @@ public final class FirestoreProto {
               "StreamId", "StreamToken", "WriteResults", "CommitTime",
             });
     internal_static_google_firestore_v1_ListenRequest_descriptor =
-        getDescriptor().getMessageTypes().get(17);
+        getDescriptor().getMessageTypes().get(19);
     internal_static_google_firestore_v1_ListenRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_ListenRequest_descriptor,
@@ -529,7 +591,7 @@ public final class FirestoreProto {
               "Key", "Value",
             });
     internal_static_google_firestore_v1_ListenResponse_descriptor =
-        getDescriptor().getMessageTypes().get(18);
+        getDescriptor().getMessageTypes().get(20);
     internal_static_google_firestore_v1_ListenResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_ListenResponse_descriptor,
@@ -542,7 +604,7 @@ public final class FirestoreProto {
               "ResponseType",
             });
     internal_static_google_firestore_v1_Target_descriptor =
-        getDescriptor().getMessageTypes().get(19);
+        getDescriptor().getMessageTypes().get(21);
     internal_static_google_firestore_v1_Target_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_Target_descriptor,
@@ -573,7 +635,7 @@ public final class FirestoreProto {
               "Parent", "StructuredQuery", "QueryType",
             });
     internal_static_google_firestore_v1_TargetChange_descriptor =
-        getDescriptor().getMessageTypes().get(20);
+        getDescriptor().getMessageTypes().get(22);
     internal_static_google_firestore_v1_TargetChange_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_TargetChange_descriptor,
@@ -581,7 +643,7 @@ public final class FirestoreProto {
               "TargetChangeType", "TargetIds", "Cause", "ResumeToken", "ReadTime",
             });
     internal_static_google_firestore_v1_ListCollectionIdsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(21);
+        getDescriptor().getMessageTypes().get(23);
     internal_static_google_firestore_v1_ListCollectionIdsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_ListCollectionIdsRequest_descriptor,
@@ -589,12 +651,36 @@ public final class FirestoreProto {
               "Parent", "PageSize", "PageToken",
             });
     internal_static_google_firestore_v1_ListCollectionIdsResponse_descriptor =
-        getDescriptor().getMessageTypes().get(22);
+        getDescriptor().getMessageTypes().get(24);
     internal_static_google_firestore_v1_ListCollectionIdsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_ListCollectionIdsResponse_descriptor,
             new java.lang.String[] {
               "CollectionIds", "NextPageToken",
+            });
+    internal_static_google_firestore_v1_BatchWriteRequest_descriptor =
+        getDescriptor().getMessageTypes().get(25);
+    internal_static_google_firestore_v1_BatchWriteRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_BatchWriteRequest_descriptor,
+            new java.lang.String[] {
+              "Database", "Writes", "Labels",
+            });
+    internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_descriptor =
+        internal_static_google_firestore_v1_BatchWriteRequest_descriptor.getNestedTypes().get(0);
+    internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_descriptor,
+            new java.lang.String[] {
+              "Key", "Value",
+            });
+    internal_static_google_firestore_v1_BatchWriteResponse_descriptor =
+        getDescriptor().getMessageTypes().get(26);
+    internal_static_google_firestore_v1_BatchWriteResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_BatchWriteResponse_descriptor,
+            new java.lang.String[] {
+              "WriteResults", "Status",
             });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();

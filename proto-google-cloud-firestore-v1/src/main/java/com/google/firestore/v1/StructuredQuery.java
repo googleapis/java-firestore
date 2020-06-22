@@ -341,6 +341,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
 
@@ -532,6 +536,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The collectionId.
      */
+    @java.lang.Override
     public java.lang.String getCollectionId() {
       java.lang.Object ref = collectionId_;
       if (ref instanceof java.lang.String) {
@@ -555,6 +560,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The bytes for collectionId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getCollectionIdBytes() {
       java.lang.Object ref = collectionId_;
       if (ref instanceof java.lang.String) {
@@ -582,6 +588,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The allDescendants.
      */
+    @java.lang.Override
     public boolean getAllDescendants() {
       return allDescendants_;
     }
@@ -1051,6 +1058,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The allDescendants.
        */
+      @java.lang.Override
       public boolean getAllDescendants() {
         return allDescendants_;
       }
@@ -1465,6 +1473,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return Whether the compositeFilter field is set.
      */
+    @java.lang.Override
     public boolean hasCompositeFilter() {
       return filterTypeCase_ == 1;
     }
@@ -1479,6 +1488,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The compositeFilter.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.CompositeFilter getCompositeFilter() {
       if (filterTypeCase_ == 1) {
         return (com.google.firestore.v1.StructuredQuery.CompositeFilter) filterType_;
@@ -1494,6 +1504,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.CompositeFilterOrBuilder
         getCompositeFilterOrBuilder() {
       if (filterTypeCase_ == 1) {
@@ -1514,6 +1525,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return Whether the fieldFilter field is set.
      */
+    @java.lang.Override
     public boolean hasFieldFilter() {
       return filterTypeCase_ == 2;
     }
@@ -1528,6 +1540,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The fieldFilter.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldFilter getFieldFilter() {
       if (filterTypeCase_ == 2) {
         return (com.google.firestore.v1.StructuredQuery.FieldFilter) filterType_;
@@ -1543,6 +1556,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldFilterOrBuilder getFieldFilterOrBuilder() {
       if (filterTypeCase_ == 2) {
         return (com.google.firestore.v1.StructuredQuery.FieldFilter) filterType_;
@@ -1562,6 +1576,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return Whether the unaryFilter field is set.
      */
+    @java.lang.Override
     public boolean hasUnaryFilter() {
       return filterTypeCase_ == 3;
     }
@@ -1576,6 +1591,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The unaryFilter.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.UnaryFilter getUnaryFilter() {
       if (filterTypeCase_ == 3) {
         return (com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_;
@@ -1591,6 +1607,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.UnaryFilterOrBuilder getUnaryFilterOrBuilder() {
       if (filterTypeCase_ == 3) {
         return (com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_;
@@ -2033,6 +2050,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return Whether the compositeFilter field is set.
        */
+      @java.lang.Override
       public boolean hasCompositeFilter() {
         return filterTypeCase_ == 1;
       }
@@ -2047,6 +2065,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The compositeFilter.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.CompositeFilter getCompositeFilter() {
         if (compositeFilterBuilder_ == null) {
           if (filterTypeCase_ == 1) {
@@ -2183,6 +2202,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <code>.google.firestore.v1.StructuredQuery.CompositeFilter composite_filter = 1;</code>
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.CompositeFilterOrBuilder
           getCompositeFilterOrBuilder() {
         if ((filterTypeCase_ == 1) && (compositeFilterBuilder_ != null)) {
@@ -2245,6 +2265,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return Whether the fieldFilter field is set.
        */
+      @java.lang.Override
       public boolean hasFieldFilter() {
         return filterTypeCase_ == 2;
       }
@@ -2259,6 +2280,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The fieldFilter.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.FieldFilter getFieldFilter() {
         if (fieldFilterBuilder_ == null) {
           if (filterTypeCase_ == 2) {
@@ -2392,6 +2414,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <code>.google.firestore.v1.StructuredQuery.FieldFilter field_filter = 2;</code>
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.FieldFilterOrBuilder
           getFieldFilterOrBuilder() {
         if ((filterTypeCase_ == 2) && (fieldFilterBuilder_ != null)) {
@@ -2453,6 +2476,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return Whether the unaryFilter field is set.
        */
+      @java.lang.Override
       public boolean hasUnaryFilter() {
         return filterTypeCase_ == 3;
       }
@@ -2467,6 +2491,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The unaryFilter.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.UnaryFilter getUnaryFilter() {
         if (unaryFilterBuilder_ == null) {
           if (filterTypeCase_ == 3) {
@@ -2600,6 +2625,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <code>.google.firestore.v1.StructuredQuery.UnaryFilter unary_filter = 3;</code>
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.UnaryFilterOrBuilder
           getUnaryFilterOrBuilder() {
         if ((filterTypeCase_ == 3) && (unaryFilterBuilder_ != null)) {
@@ -2994,6 +3020,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
 
@@ -3041,6 +3071,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The enum numeric value on the wire for op.
      */
+    @java.lang.Override
     public int getOpValue() {
       return op_;
     }
@@ -3055,6 +3086,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The op.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
       @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator result =
@@ -3076,6 +3108,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<com.google.firestore.v1.StructuredQuery.Filter> getFiltersList() {
       return filters_;
     }
@@ -3089,6 +3122,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends com.google.firestore.v1.StructuredQuery.FilterOrBuilder>
         getFiltersOrBuilderList() {
       return filters_;
@@ -3103,6 +3137,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
      */
+    @java.lang.Override
     public int getFiltersCount() {
       return filters_.size();
     }
@@ -3116,6 +3151,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.Filter getFilters(int index) {
       return filters_.get(index);
     }
@@ -3129,6 +3165,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FilterOrBuilder getFiltersOrBuilder(int index) {
       return filters_.get(index);
     }
@@ -3529,6 +3566,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The enum numeric value on the wire for op.
        */
+      @java.lang.Override
       public int getOpValue() {
         return op_;
       }
@@ -3545,6 +3583,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
+
         op_ = value;
         onChanged();
         return this;
@@ -3560,6 +3599,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The op.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
         @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator result =
@@ -4278,7 +4318,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Less than. Requires that the field come first in `order_by`.
+       * The given `field` is less than the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>LESS_THAN = 1;</code>
@@ -4288,7 +4330,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Less than or equal. Requires that the field come first in `order_by`.
+       * The given `field` is less than or equal to the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>LESS_THAN_OR_EQUAL = 2;</code>
@@ -4298,7 +4342,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Greater than. Requires that the field come first in `order_by`.
+       * The given `field` is greater than the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>GREATER_THAN = 3;</code>
@@ -4308,8 +4354,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Greater than or equal. Requires that the field come first in
-       * `order_by`.
+       * The given `field` is greater than or equal to the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>GREATER_THAN_OR_EQUAL = 4;</code>
@@ -4319,7 +4366,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Equal.
+       * The given `field` is equal to the given `value`.
        * </pre>
        *
        * <code>EQUAL = 5;</code>
@@ -4329,7 +4376,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Contains. Requires that the field is an array.
+       * The given `field` is an array that contains the given `value`.
        * </pre>
        *
        * <code>ARRAY_CONTAINS = 7;</code>
@@ -4339,8 +4386,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * In. Requires that `value` is a non-empty ArrayValue with at most 10
-       * values.
+       * The given `field` is equal to at least one value in the given array.
+       * Requires:
+       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
+       * * No other `IN`, `ARRAY_CONTAINS_ANY`, or `NOT_IN`.
        * </pre>
        *
        * <code>IN = 8;</code>
@@ -4350,8 +4399,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Contains any. Requires that the field is an array and
-       * `value` is a non-empty ArrayValue with at most 10 values.
+       * The given `field` is an array that contains any of the values in the
+       * given array.
+       * Requires:
+       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
+       * * No other `IN`, `ARRAY_CONTAINS_ANY`, or `NOT_IN`.
        * </pre>
        *
        * <code>ARRAY_CONTAINS_ANY = 9;</code>
@@ -4374,7 +4426,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Less than. Requires that the field come first in `order_by`.
+       * The given `field` is less than the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>LESS_THAN = 1;</code>
@@ -4384,7 +4438,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Less than or equal. Requires that the field come first in `order_by`.
+       * The given `field` is less than or equal to the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>LESS_THAN_OR_EQUAL = 2;</code>
@@ -4394,7 +4450,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Greater than. Requires that the field come first in `order_by`.
+       * The given `field` is greater than the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>GREATER_THAN = 3;</code>
@@ -4404,8 +4462,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Greater than or equal. Requires that the field come first in
-       * `order_by`.
+       * The given `field` is greater than or equal to the given `value`.
+       * Requires:
+       * * That `field` come first in `order_by`.
        * </pre>
        *
        * <code>GREATER_THAN_OR_EQUAL = 4;</code>
@@ -4415,7 +4474,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Equal.
+       * The given `field` is equal to the given `value`.
        * </pre>
        *
        * <code>EQUAL = 5;</code>
@@ -4425,7 +4484,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Contains. Requires that the field is an array.
+       * The given `field` is an array that contains the given `value`.
        * </pre>
        *
        * <code>ARRAY_CONTAINS = 7;</code>
@@ -4435,8 +4494,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * In. Requires that `value` is a non-empty ArrayValue with at most 10
-       * values.
+       * The given `field` is equal to at least one value in the given array.
+       * Requires:
+       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
+       * * No other `IN`, `ARRAY_CONTAINS_ANY`, or `NOT_IN`.
        * </pre>
        *
        * <code>IN = 8;</code>
@@ -4446,8 +4507,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * Contains any. Requires that the field is an array and
-       * `value` is a non-empty ArrayValue with at most 10 values.
+       * The given `field` is an array that contains any of the values in the
+       * given array.
+       * Requires:
+       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
+       * * No other `IN`, `ARRAY_CONTAINS_ANY`, or `NOT_IN`.
        * </pre>
        *
        * <code>ARRAY_CONTAINS_ANY = 9;</code>
@@ -4513,6 +4577,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
 
@@ -4560,6 +4628,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return Whether the field field is set.
      */
+    @java.lang.Override
     public boolean hasField() {
       return field_ != null;
     }
@@ -4574,6 +4643,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The field.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
       return field_ == null
           ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
@@ -4588,6 +4658,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
       return getField();
     }
@@ -4605,6 +4676,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The enum numeric value on the wire for op.
      */
+    @java.lang.Override
     public int getOpValue() {
       return op_;
     }
@@ -4619,6 +4691,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The op.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
       @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.FieldFilter.Operator result =
@@ -4641,6 +4714,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return Whether the value field is set.
      */
+    @java.lang.Override
     public boolean hasValue() {
       return value_ != null;
     }
@@ -4655,6 +4729,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The value.
      */
+    @java.lang.Override
     public com.google.firestore.v1.Value getValue() {
       return value_ == null ? com.google.firestore.v1.Value.getDefaultInstance() : value_;
     }
@@ -4667,6 +4742,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>.google.firestore.v1.Value value = 3;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.ValueOrBuilder getValueOrBuilder() {
       return getValue();
     }
@@ -5251,6 +5327,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The enum numeric value on the wire for op.
        */
+      @java.lang.Override
       public int getOpValue() {
         return op_;
       }
@@ -5267,6 +5344,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
+
         op_ = value;
         onChanged();
         return this;
@@ -5282,6 +5360,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * @return The op.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
         @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.FieldFilter.Operator result =
@@ -5560,6 +5639,2761 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
   }
 
+  public interface UnaryFilterOrBuilder
+      extends
+      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.UnaryFilter)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     *
+     *
+     * <pre>
+     * The unary operator to apply.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
+     */
+    int getOpValue();
+    /**
+     *
+     *
+     * <pre>
+     * The unary operator to apply.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The op.
+     */
+    com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp();
+
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return Whether the field field is set.
+     */
+    boolean hasField();
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return The field.
+     */
+    com.google.firestore.v1.StructuredQuery.FieldReference getField();
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     */
+    com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder();
+
+    public com.google.firestore.v1.StructuredQuery.UnaryFilter.OperandTypeCase getOperandTypeCase();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A filter with a single operand.
+   * </pre>
+   *
+   * Protobuf type {@code google.firestore.v1.StructuredQuery.UnaryFilter}
+   */
+  public static final class UnaryFilter extends com.google.protobuf.GeneratedMessageV3
+      implements
+      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.UnaryFilter)
+      UnaryFilterOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use UnaryFilter.newBuilder() to construct.
+    private UnaryFilter(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private UnaryFilter() {
+      op_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new UnaryFilter();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+      return this.unknownFields;
+    }
+
+    private UnaryFilter(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8:
+              {
+                int rawValue = input.readEnum();
+
+                op_ = rawValue;
+                break;
+              }
+            case 18:
+              {
+                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
+                if (operandTypeCase_ == 2) {
+                  subBuilder =
+                      ((com.google.firestore.v1.StructuredQuery.FieldReference) operandType_)
+                          .toBuilder();
+                }
+                operandType_ =
+                    input.readMessage(
+                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
+                        extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(
+                      (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
+                  operandType_ = subBuilder.buildPartial();
+                }
+                operandTypeCase_ = 2;
+                break;
+              }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.google.firestore.v1.StructuredQuery.UnaryFilter.class,
+              com.google.firestore.v1.StructuredQuery.UnaryFilter.Builder.class);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * A unary operator.
+     * </pre>
+     *
+     * Protobuf enum {@code google.firestore.v1.StructuredQuery.UnaryFilter.Operator}
+     */
+    public enum Operator implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       *
+       *
+       * <pre>
+       * Unspecified. This value must not be used.
+       * </pre>
+       *
+       * <code>OPERATOR_UNSPECIFIED = 0;</code>
+       */
+      OPERATOR_UNSPECIFIED(0),
+      /**
+       *
+       *
+       * <pre>
+       * The given `field` is equal to `NaN`.
+       * </pre>
+       *
+       * <code>IS_NAN = 2;</code>
+       */
+      IS_NAN(2),
+      /**
+       *
+       *
+       * <pre>
+       * The given `field` is equal to `NULL`.
+       * </pre>
+       *
+       * <code>IS_NULL = 3;</code>
+       */
+      IS_NULL(3),
+      UNRECOGNIZED(-1),
+      ;
+
+      /**
+       *
+       *
+       * <pre>
+       * Unspecified. This value must not be used.
+       * </pre>
+       *
+       * <code>OPERATOR_UNSPECIFIED = 0;</code>
+       */
+      public static final int OPERATOR_UNSPECIFIED_VALUE = 0;
+      /**
+       *
+       *
+       * <pre>
+       * The given `field` is equal to `NaN`.
+       * </pre>
+       *
+       * <code>IS_NAN = 2;</code>
+       */
+      public static final int IS_NAN_VALUE = 2;
+      /**
+       *
+       *
+       * <pre>
+       * The given `field` is equal to `NULL`.
+       * </pre>
+       *
+       * <code>IS_NULL = 3;</code>
+       */
+      public static final int IS_NULL_VALUE = 3;
+
+      public final int getNumber() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalArgumentException(
+              "Can't get the number of an unknown enum value.");
+        }
+        return value;
+      }
+
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static Operator valueOf(int value) {
+        return forNumber(value);
+      }
+
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
+      public static Operator forNumber(int value) {
+        switch (value) {
+          case 0:
+            return OPERATOR_UNSPECIFIED;
+          case 2:
+            return IS_NAN;
+          case 3:
+            return IS_NULL;
+          default:
+            return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Operator> internalGetValueMap() {
+        return internalValueMap;
+      }
+
+      private static final com.google.protobuf.Internal.EnumLiteMap<Operator> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<Operator>() {
+            public Operator findValueByNumber(int number) {
+              return Operator.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
+        return getDescriptor().getValues().get(ordinal());
+      }
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+        return getDescriptor();
+      }
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.google.firestore.v1.StructuredQuery.UnaryFilter.getDescriptor()
+            .getEnumTypes()
+            .get(0);
+      }
+
+      private static final Operator[] VALUES = values();
+
+      public static Operator valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+        }
+        if (desc.getIndex() == -1) {
+          return UNRECOGNIZED;
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int value;
+
+      private Operator(int value) {
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:google.firestore.v1.StructuredQuery.UnaryFilter.Operator)
+    }
+
+    private int operandTypeCase_ = 0;
+    private java.lang.Object operandType_;
+
+    public enum OperandTypeCase
+        implements
+            com.google.protobuf.Internal.EnumLite,
+            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+      FIELD(2),
+      OPERANDTYPE_NOT_SET(0);
+      private final int value;
+
+      private OperandTypeCase(int value) {
+        this.value = value;
+      }
+      /**
+       * @param value The number of the enum to look for.
+       * @return The enum associated with the given number.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static OperandTypeCase valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static OperandTypeCase forNumber(int value) {
+        switch (value) {
+          case 2:
+            return FIELD;
+          case 0:
+            return OPERANDTYPE_NOT_SET;
+          default:
+            return null;
+        }
+      }
+
+      public int getNumber() {
+        return this.value;
+      }
+    };
+
+    public OperandTypeCase getOperandTypeCase() {
+      return OperandTypeCase.forNumber(operandTypeCase_);
+    }
+
+    public static final int OP_FIELD_NUMBER = 1;
+    private int op_;
+    /**
+     *
+     *
+     * <pre>
+     * The unary operator to apply.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The enum numeric value on the wire for op.
+     */
+    @java.lang.Override
+    public int getOpValue() {
+      return op_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The unary operator to apply.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+     *
+     * @return The op.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
+      @SuppressWarnings("deprecation")
+      com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
+          com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
+      return result == null
+          ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
+          : result;
+    }
+
+    public static final int FIELD_FIELD_NUMBER = 2;
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return Whether the field field is set.
+     */
+    @java.lang.Override
+    public boolean hasField() {
+      return operandTypeCase_ == 2;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     *
+     * @return The field.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
+      if (operandTypeCase_ == 2) {
+        return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
+      }
+      return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The field to which to apply the operator.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
+      if (operandTypeCase_ == 2) {
+        return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
+      }
+      return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+      if (op_
+          != com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.OPERATOR_UNSPECIFIED
+              .getNumber()) {
+        output.writeEnum(1, op_);
+      }
+      if (operandTypeCase_ == 2) {
+        output.writeMessage(
+            2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (op_
+          != com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.OPERATOR_UNSPECIFIED
+              .getNumber()) {
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, op_);
+      }
+      if (operandTypeCase_ == 2) {
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.UnaryFilter)) {
+        return super.equals(obj);
+      }
+      com.google.firestore.v1.StructuredQuery.UnaryFilter other =
+          (com.google.firestore.v1.StructuredQuery.UnaryFilter) obj;
+
+      if (op_ != other.op_) return false;
+      if (!getOperandTypeCase().equals(other.getOperandTypeCase())) return false;
+      switch (operandTypeCase_) {
+        case 2:
+          if (!getField().equals(other.getField())) return false;
+          break;
+        case 0:
+        default:
+      }
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + OP_FIELD_NUMBER;
+      hash = (53 * hash) + op_;
+      switch (operandTypeCase_) {
+        case 2:
+          hash = (37 * hash) + FIELD_FIELD_NUMBER;
+          hash = (53 * hash) + getField().hashCode();
+          break;
+        case 0:
+        default:
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.google.firestore.v1.StructuredQuery.UnaryFilter prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A filter with a single operand.
+     * </pre>
+     *
+     * Protobuf type {@code google.firestore.v1.StructuredQuery.UnaryFilter}
+     */
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
+        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.UnaryFilter)
+        com.google.firestore.v1.StructuredQuery.UnaryFilterOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.google.firestore.v1.StructuredQuery.UnaryFilter.class,
+                com.google.firestore.v1.StructuredQuery.UnaryFilter.Builder.class);
+      }
+
+      // Construct using com.google.firestore.v1.StructuredQuery.UnaryFilter.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
+      }
+
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        op_ = 0;
+
+        operandTypeCase_ = 0;
+        operandType_ = null;
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstanceForType() {
+        return com.google.firestore.v1.StructuredQuery.UnaryFilter.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.UnaryFilter build() {
+        com.google.firestore.v1.StructuredQuery.UnaryFilter result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.UnaryFilter buildPartial() {
+        com.google.firestore.v1.StructuredQuery.UnaryFilter result =
+            new com.google.firestore.v1.StructuredQuery.UnaryFilter(this);
+        result.op_ = op_;
+        if (operandTypeCase_ == 2) {
+          if (fieldBuilder_ == null) {
+            result.operandType_ = operandType_;
+          } else {
+            result.operandType_ = fieldBuilder_.build();
+          }
+        }
+        result.operandTypeCase_ = operandTypeCase_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.setField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @java.lang.Override
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index,
+          java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.google.firestore.v1.StructuredQuery.UnaryFilter) {
+          return mergeFrom((com.google.firestore.v1.StructuredQuery.UnaryFilter) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.UnaryFilter other) {
+        if (other == com.google.firestore.v1.StructuredQuery.UnaryFilter.getDefaultInstance())
+          return this;
+        if (other.op_ != 0) {
+          setOpValue(other.getOpValue());
+        }
+        switch (other.getOperandTypeCase()) {
+          case FIELD:
+            {
+              mergeField(other.getField());
+              break;
+            }
+          case OPERANDTYPE_NOT_SET:
+            {
+              break;
+            }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.firestore.v1.StructuredQuery.UnaryFilter parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage =
+              (com.google.firestore.v1.StructuredQuery.UnaryFilter) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int operandTypeCase_ = 0;
+      private java.lang.Object operandType_;
+
+      public OperandTypeCase getOperandTypeCase() {
+        return OperandTypeCase.forNumber(operandTypeCase_);
+      }
+
+      public Builder clearOperandType() {
+        operandTypeCase_ = 0;
+        operandType_ = null;
+        onChanged();
+        return this;
+      }
+
+      private int op_ = 0;
+      /**
+       *
+       *
+       * <pre>
+       * The unary operator to apply.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return The enum numeric value on the wire for op.
+       */
+      @java.lang.Override
+      public int getOpValue() {
+        return op_;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The unary operator to apply.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @param value The enum numeric value on the wire for op to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOpValue(int value) {
+
+        op_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The unary operator to apply.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return The op.
+       */
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
+        @SuppressWarnings("deprecation")
+        com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
+            com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
+        return result == null
+            ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
+            : result;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The unary operator to apply.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @param value The op to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOp(com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        op_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The unary operator to apply.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearOp() {
+
+        op_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.v1.StructuredQuery.FieldReference,
+              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
+          fieldBuilder_;
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       *
+       * @return Whether the field field is set.
+       */
+      @java.lang.Override
+      public boolean hasField() {
+        return operandTypeCase_ == 2;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       *
+       * @return The field.
+       */
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
+        if (fieldBuilder_ == null) {
+          if (operandTypeCase_ == 2) {
+            return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
+          }
+          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+        } else {
+          if (operandTypeCase_ == 2) {
+            return fieldBuilder_.getMessage();
+          }
+          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      public Builder setField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
+        if (fieldBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          operandType_ = value;
+          onChanged();
+        } else {
+          fieldBuilder_.setMessage(value);
+        }
+        operandTypeCase_ = 2;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      public Builder setField(
+          com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
+        if (fieldBuilder_ == null) {
+          operandType_ = builderForValue.build();
+          onChanged();
+        } else {
+          fieldBuilder_.setMessage(builderForValue.build());
+        }
+        operandTypeCase_ = 2;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
+        if (fieldBuilder_ == null) {
+          if (operandTypeCase_ == 2
+              && operandType_
+                  != com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()) {
+            operandType_ =
+                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(
+                        (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_)
+                    .mergeFrom(value)
+                    .buildPartial();
+          } else {
+            operandType_ = value;
+          }
+          onChanged();
+        } else {
+          if (operandTypeCase_ == 2) {
+            fieldBuilder_.mergeFrom(value);
+          }
+          fieldBuilder_.setMessage(value);
+        }
+        operandTypeCase_ = 2;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      public Builder clearField() {
+        if (fieldBuilder_ == null) {
+          if (operandTypeCase_ == 2) {
+            operandTypeCase_ = 0;
+            operandType_ = null;
+            onChanged();
+          }
+        } else {
+          if (operandTypeCase_ == 2) {
+            operandTypeCase_ = 0;
+            operandType_ = null;
+          }
+          fieldBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
+        return getFieldFieldBuilder().getBuilder();
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
+        if ((operandTypeCase_ == 2) && (fieldBuilder_ != null)) {
+          return fieldBuilder_.getMessageOrBuilder();
+        } else {
+          if (operandTypeCase_ == 2) {
+            return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
+          }
+          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to which to apply the operator.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.v1.StructuredQuery.FieldReference,
+              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
+          getFieldFieldBuilder() {
+        if (fieldBuilder_ == null) {
+          if (!(operandTypeCase_ == 2)) {
+            operandType_ =
+                com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+          }
+          fieldBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.StructuredQuery.FieldReference,
+                  com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+                  com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>(
+                  (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_,
+                  getParentForChildren(),
+                  isClean());
+          operandType_ = null;
+        }
+        operandTypeCase_ = 2;
+        onChanged();
+        ;
+        return fieldBuilder_;
+      }
+
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.UnaryFilter)
+    }
+
+    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.UnaryFilter)
+    private static final com.google.firestore.v1.StructuredQuery.UnaryFilter DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.UnaryFilter();
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UnaryFilter> PARSER =
+        new com.google.protobuf.AbstractParser<UnaryFilter>() {
+          @java.lang.Override
+          public UnaryFilter parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new UnaryFilter(input, extensionRegistry);
+          }
+        };
+
+    public static com.google.protobuf.Parser<UnaryFilter> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UnaryFilter> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+  }
+
+  public interface OrderOrBuilder
+      extends
+      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.Order)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
+     */
+    boolean hasField();
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
+     */
+    com.google.firestore.v1.StructuredQuery.FieldReference getField();
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     */
+    com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder();
+
+    /**
+     *
+     *
+     * <pre>
+     * The direction to order by. Defaults to `ASCENDING`.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The enum numeric value on the wire for direction.
+     */
+    int getDirectionValue();
+    /**
+     *
+     *
+     * <pre>
+     * The direction to order by. Defaults to `ASCENDING`.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The direction.
+     */
+    com.google.firestore.v1.StructuredQuery.Direction getDirection();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * An order on a field.
+   * </pre>
+   *
+   * Protobuf type {@code google.firestore.v1.StructuredQuery.Order}
+   */
+  public static final class Order extends com.google.protobuf.GeneratedMessageV3
+      implements
+      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.Order)
+      OrderOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use Order.newBuilder() to construct.
+    private Order(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private Order() {
+      direction_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new Order();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+      return this.unknownFields;
+    }
+
+    private Order(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
+                if (field_ != null) {
+                  subBuilder = field_.toBuilder();
+                }
+                field_ =
+                    input.readMessage(
+                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
+                        extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(field_);
+                  field_ = subBuilder.buildPartial();
+                }
+
+                break;
+              }
+            case 16:
+              {
+                int rawValue = input.readEnum();
+
+                direction_ = rawValue;
+                break;
+              }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_Order_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.google.firestore.v1.StructuredQuery.Order.class,
+              com.google.firestore.v1.StructuredQuery.Order.Builder.class);
+    }
+
+    public static final int FIELD_FIELD_NUMBER = 1;
+    private com.google.firestore.v1.StructuredQuery.FieldReference field_;
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return Whether the field field is set.
+     */
+    @java.lang.Override
+    public boolean hasField() {
+      return field_ != null;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     *
+     * @return The field.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
+      return field_ == null
+          ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
+          : field_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The field to order by.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
+      return getField();
+    }
+
+    public static final int DIRECTION_FIELD_NUMBER = 2;
+    private int direction_;
+    /**
+     *
+     *
+     * <pre>
+     * The direction to order by. Defaults to `ASCENDING`.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The enum numeric value on the wire for direction.
+     */
+    @java.lang.Override
+    public int getDirectionValue() {
+      return direction_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The direction to order by. Defaults to `ASCENDING`.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+     *
+     * @return The direction.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
+      @SuppressWarnings("deprecation")
+      com.google.firestore.v1.StructuredQuery.Direction result =
+          com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
+      return result == null
+          ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
+          : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+      if (field_ != null) {
+        output.writeMessage(1, getField());
+      }
+      if (direction_
+          != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
+        output.writeEnum(2, direction_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (field_ != null) {
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getField());
+      }
+      if (direction_
+          != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(2, direction_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.Order)) {
+        return super.equals(obj);
+      }
+      com.google.firestore.v1.StructuredQuery.Order other =
+          (com.google.firestore.v1.StructuredQuery.Order) obj;
+
+      if (hasField() != other.hasField()) return false;
+      if (hasField()) {
+        if (!getField().equals(other.getField())) return false;
+      }
+      if (direction_ != other.direction_) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasField()) {
+        hash = (37 * hash) + FIELD_FIELD_NUMBER;
+        hash = (53 * hash) + getField().hashCode();
+      }
+      hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
+      hash = (53 * hash) + direction_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(com.google.firestore.v1.StructuredQuery.Order prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * An order on a field.
+     * </pre>
+     *
+     * Protobuf type {@code google.firestore.v1.StructuredQuery.Order}
+     */
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
+        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.Order)
+        com.google.firestore.v1.StructuredQuery.OrderOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_Order_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.google.firestore.v1.StructuredQuery.Order.class,
+                com.google.firestore.v1.StructuredQuery.Order.Builder.class);
+      }
+
+      // Construct using com.google.firestore.v1.StructuredQuery.Order.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
+      }
+
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (fieldBuilder_ == null) {
+          field_ = null;
+        } else {
+          field_ = null;
+          fieldBuilder_ = null;
+        }
+        direction_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.Order getDefaultInstanceForType() {
+        return com.google.firestore.v1.StructuredQuery.Order.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.Order build() {
+        com.google.firestore.v1.StructuredQuery.Order result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.Order buildPartial() {
+        com.google.firestore.v1.StructuredQuery.Order result =
+            new com.google.firestore.v1.StructuredQuery.Order(this);
+        if (fieldBuilder_ == null) {
+          result.field_ = field_;
+        } else {
+          result.field_ = fieldBuilder_.build();
+        }
+        result.direction_ = direction_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.setField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @java.lang.Override
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index,
+          java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.google.firestore.v1.StructuredQuery.Order) {
+          return mergeFrom((com.google.firestore.v1.StructuredQuery.Order) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.Order other) {
+        if (other == com.google.firestore.v1.StructuredQuery.Order.getDefaultInstance())
+          return this;
+        if (other.hasField()) {
+          mergeField(other.getField());
+        }
+        if (other.direction_ != 0) {
+          setDirectionValue(other.getDirectionValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.firestore.v1.StructuredQuery.Order parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.google.firestore.v1.StructuredQuery.Order) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.firestore.v1.StructuredQuery.FieldReference field_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.v1.StructuredQuery.FieldReference,
+              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
+          fieldBuilder_;
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return Whether the field field is set.
+       */
+      public boolean hasField() {
+        return fieldBuilder_ != null || field_ != null;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       *
+       * @return The field.
+       */
+      public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
+        if (fieldBuilder_ == null) {
+          return field_ == null
+              ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
+              : field_;
+        } else {
+          return fieldBuilder_.getMessage();
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public Builder setField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
+        if (fieldBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          field_ = value;
+          onChanged();
+        } else {
+          fieldBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public Builder setField(
+          com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
+        if (fieldBuilder_ == null) {
+          field_ = builderForValue.build();
+          onChanged();
+        } else {
+          fieldBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
+        if (fieldBuilder_ == null) {
+          if (field_ != null) {
+            field_ =
+                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(field_)
+                    .mergeFrom(value)
+                    .buildPartial();
+          } else {
+            field_ = value;
+          }
+          onChanged();
+        } else {
+          fieldBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public Builder clearField() {
+        if (fieldBuilder_ == null) {
+          field_ = null;
+          onChanged();
+        } else {
+          field_ = null;
+          fieldBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
+
+        onChanged();
+        return getFieldFieldBuilder().getBuilder();
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
+        if (fieldBuilder_ != null) {
+          return fieldBuilder_.getMessageOrBuilder();
+        } else {
+          return field_ == null
+              ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
+              : field_;
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The field to order by.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.v1.StructuredQuery.FieldReference,
+              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
+          getFieldFieldBuilder() {
+        if (fieldBuilder_ == null) {
+          fieldBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.StructuredQuery.FieldReference,
+                  com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
+                  com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>(
+                  getField(), getParentForChildren(), isClean());
+          field_ = null;
+        }
+        return fieldBuilder_;
+      }
+
+      private int direction_ = 0;
+      /**
+       *
+       *
+       * <pre>
+       * The direction to order by. Defaults to `ASCENDING`.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return The enum numeric value on the wire for direction.
+       */
+      @java.lang.Override
+      public int getDirectionValue() {
+        return direction_;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The direction to order by. Defaults to `ASCENDING`.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @param value The enum numeric value on the wire for direction to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDirectionValue(int value) {
+
+        direction_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The direction to order by. Defaults to `ASCENDING`.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return The direction.
+       */
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
+        @SuppressWarnings("deprecation")
+        com.google.firestore.v1.StructuredQuery.Direction result =
+            com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
+        return result == null
+            ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
+            : result;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The direction to order by. Defaults to `ASCENDING`.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @param value The direction to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDirection(com.google.firestore.v1.StructuredQuery.Direction value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        direction_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The direction to order by. Defaults to `ASCENDING`.
+       * </pre>
+       *
+       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearDirection() {
+
+        direction_ = 0;
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.Order)
+    }
+
+    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.Order)
+    private static final com.google.firestore.v1.StructuredQuery.Order DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.Order();
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.Order getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Order> PARSER =
+        new com.google.protobuf.AbstractParser<Order>() {
+          @java.lang.Override
+          public Order parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Order(input, extensionRegistry);
+          }
+        };
+
+    public static com.google.protobuf.Parser<Order> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Order> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.Order getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+  }
+
+  public interface FieldReferenceOrBuilder
+      extends
+      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.FieldReference)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The fieldPath.
+     */
+    java.lang.String getFieldPath();
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The bytes for fieldPath.
+     */
+    com.google.protobuf.ByteString getFieldPathBytes();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A reference to a field, such as `max(messages.time) as max_time`.
+   * </pre>
+   *
+   * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
+   */
+  public static final class FieldReference extends com.google.protobuf.GeneratedMessageV3
+      implements
+      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.FieldReference)
+      FieldReferenceOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use FieldReference.newBuilder() to construct.
+    private FieldReference(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private FieldReference() {
+      fieldPath_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new FieldReference();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+      return this.unknownFields;
+    }
+
+    private FieldReference(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 18:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+
+                fieldPath_ = s;
+                break;
+              }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredQuery_FieldReference_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.google.firestore.v1.StructuredQuery.FieldReference.class,
+              com.google.firestore.v1.StructuredQuery.FieldReference.Builder.class);
+    }
+
+    public static final int FIELD_PATH_FIELD_NUMBER = 2;
+    private volatile java.lang.Object fieldPath_;
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The fieldPath.
+     */
+    @java.lang.Override
+    public java.lang.String getFieldPath() {
+      java.lang.Object ref = fieldPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        fieldPath_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string field_path = 2;</code>
+     *
+     * @return The bytes for fieldPath.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getFieldPathBytes() {
+      java.lang.Object ref = fieldPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        fieldPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+      if (!getFieldPathBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fieldPath_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getFieldPathBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fieldPath_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.FieldReference)) {
+        return super.equals(obj);
+      }
+      com.google.firestore.v1.StructuredQuery.FieldReference other =
+          (com.google.firestore.v1.StructuredQuery.FieldReference) obj;
+
+      if (!getFieldPath().equals(other.getFieldPath())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + FIELD_PATH_FIELD_NUMBER;
+      hash = (53 * hash) + getFieldPath().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.google.firestore.v1.StructuredQuery.FieldReference prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A reference to a field, such as `max(messages.time) as max_time`.
+     * </pre>
+     *
+     * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
+     */
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
+        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.FieldReference)
+        com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.google.firestore.v1.StructuredQuery.FieldReference.class,
+                com.google.firestore.v1.StructuredQuery.FieldReference.Builder.class);
+      }
+
+      // Construct using com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
+      }
+
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        fieldPath_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstanceForType() {
+        return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.FieldReference build() {
+        com.google.firestore.v1.StructuredQuery.FieldReference result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.v1.StructuredQuery.FieldReference buildPartial() {
+        com.google.firestore.v1.StructuredQuery.FieldReference result =
+            new com.google.firestore.v1.StructuredQuery.FieldReference(this);
+        result.fieldPath_ = fieldPath_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.setField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @java.lang.Override
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index,
+          java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.google.firestore.v1.StructuredQuery.FieldReference) {
+          return mergeFrom((com.google.firestore.v1.StructuredQuery.FieldReference) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.FieldReference other) {
+        if (other == com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance())
+          return this;
+        if (!other.getFieldPath().isEmpty()) {
+          fieldPath_ = other.fieldPath_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.firestore.v1.StructuredQuery.FieldReference parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage =
+              (com.google.firestore.v1.StructuredQuery.FieldReference) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object fieldPath_ = "";
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return The fieldPath.
+       */
+      public java.lang.String getFieldPath() {
+        java.lang.Object ref = fieldPath_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          fieldPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return The bytes for fieldPath.
+       */
+      public com.google.protobuf.ByteString getFieldPathBytes() {
+        java.lang.Object ref = fieldPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          fieldPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @param value The fieldPath to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFieldPath(java.lang.String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        fieldPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearFieldPath() {
+
+        fieldPath_ = getDefaultInstance().getFieldPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string field_path = 2;</code>
+       *
+       * @param value The bytes for fieldPath to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        fieldPath_ = value;
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.FieldReference)
+    }
+
+    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.FieldReference)
+    private static final com.google.firestore.v1.StructuredQuery.FieldReference DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.FieldReference();
+    }
+
+    public static com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<FieldReference> PARSER =
+        new com.google.protobuf.AbstractParser<FieldReference>() {
+          @java.lang.Override
+          public FieldReference parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FieldReference(input, extensionRegistry);
+          }
+        };
+
+    public static com.google.protobuf.Parser<FieldReference> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<FieldReference> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+  }
+
   public interface ProjectionOrBuilder
       extends
       // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.Projection)
@@ -5744,6 +8578,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.FieldReference fields = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<com.google.firestore.v1.StructuredQuery.FieldReference> getFieldsList() {
       return fields_;
     }
@@ -5758,6 +8593,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.FieldReference fields = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
         getFieldsOrBuilderList() {
       return fields_;
@@ -5773,6 +8609,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.FieldReference fields = 2;</code>
      */
+    @java.lang.Override
     public int getFieldsCount() {
       return fields_.size();
     }
@@ -5787,6 +8624,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.FieldReference fields = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReference getFields(int index) {
       return fields_.get(index);
     }
@@ -5801,6 +8639,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.FieldReference fields = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldsOrBuilder(
         int index) {
       return fields_.get(index);
@@ -6622,2736 +9461,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
   }
 
-  public interface UnaryFilterOrBuilder
-      extends
-      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.UnaryFilter)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     *
-     *
-     * <pre>
-     * The unary operator to apply.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-     *
-     * @return The enum numeric value on the wire for op.
-     */
-    int getOpValue();
-    /**
-     *
-     *
-     * <pre>
-     * The unary operator to apply.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-     *
-     * @return The op.
-     */
-    com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp();
-
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     *
-     * @return Whether the field field is set.
-     */
-    boolean hasField();
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     *
-     * @return The field.
-     */
-    com.google.firestore.v1.StructuredQuery.FieldReference getField();
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     */
-    com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder();
-
-    public com.google.firestore.v1.StructuredQuery.UnaryFilter.OperandTypeCase getOperandTypeCase();
-  }
-  /**
-   *
-   *
-   * <pre>
-   * A filter with a single operand.
-   * </pre>
-   *
-   * Protobuf type {@code google.firestore.v1.StructuredQuery.UnaryFilter}
-   */
-  public static final class UnaryFilter extends com.google.protobuf.GeneratedMessageV3
-      implements
-      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.UnaryFilter)
-      UnaryFilterOrBuilder {
-    private static final long serialVersionUID = 0L;
-    // Use UnaryFilter.newBuilder() to construct.
-    private UnaryFilter(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-
-    private UnaryFilter() {
-      op_ = 0;
-    }
-
-    @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
-      return new UnaryFilter();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
-    private UnaryFilter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8:
-              {
-                int rawValue = input.readEnum();
-
-                op_ = rawValue;
-                break;
-              }
-            case 18:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
-                if (operandTypeCase_ == 2) {
-                  subBuilder =
-                      ((com.google.firestore.v1.StructuredQuery.FieldReference) operandType_)
-                          .toBuilder();
-                }
-                operandType_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(
-                      (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
-                  operandType_ = subBuilder.buildPartial();
-                }
-                operandTypeCase_ = 2;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
-    }
-
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.StructuredQuery.UnaryFilter.class,
-              com.google.firestore.v1.StructuredQuery.UnaryFilter.Builder.class);
-    }
-
-    /**
-     *
-     *
-     * <pre>
-     * A unary operator.
-     * </pre>
-     *
-     * Protobuf enum {@code google.firestore.v1.StructuredQuery.UnaryFilter.Operator}
-     */
-    public enum Operator implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       *
-       *
-       * <pre>
-       * Unspecified. This value must not be used.
-       * </pre>
-       *
-       * <code>OPERATOR_UNSPECIFIED = 0;</code>
-       */
-      OPERATOR_UNSPECIFIED(0),
-      /**
-       *
-       *
-       * <pre>
-       * Test if a field is equal to NaN.
-       * </pre>
-       *
-       * <code>IS_NAN = 2;</code>
-       */
-      IS_NAN(2),
-      /**
-       *
-       *
-       * <pre>
-       * Test if an expression evaluates to Null.
-       * </pre>
-       *
-       * <code>IS_NULL = 3;</code>
-       */
-      IS_NULL(3),
-      UNRECOGNIZED(-1),
-      ;
-
-      /**
-       *
-       *
-       * <pre>
-       * Unspecified. This value must not be used.
-       * </pre>
-       *
-       * <code>OPERATOR_UNSPECIFIED = 0;</code>
-       */
-      public static final int OPERATOR_UNSPECIFIED_VALUE = 0;
-      /**
-       *
-       *
-       * <pre>
-       * Test if a field is equal to NaN.
-       * </pre>
-       *
-       * <code>IS_NAN = 2;</code>
-       */
-      public static final int IS_NAN_VALUE = 2;
-      /**
-       *
-       *
-       * <pre>
-       * Test if an expression evaluates to Null.
-       * </pre>
-       *
-       * <code>IS_NULL = 3;</code>
-       */
-      public static final int IS_NULL_VALUE = 3;
-
-      public final int getNumber() {
-        if (this == UNRECOGNIZED) {
-          throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
-        }
-        return value;
-      }
-
-      /**
-       * @param value The numeric wire value of the corresponding enum entry.
-       * @return The enum associated with the given numeric wire value.
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static Operator valueOf(int value) {
-        return forNumber(value);
-      }
-
-      /**
-       * @param value The numeric wire value of the corresponding enum entry.
-       * @return The enum associated with the given numeric wire value.
-       */
-      public static Operator forNumber(int value) {
-        switch (value) {
-          case 0:
-            return OPERATOR_UNSPECIFIED;
-          case 2:
-            return IS_NAN;
-          case 3:
-            return IS_NULL;
-          default:
-            return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Operator> internalGetValueMap() {
-        return internalValueMap;
-      }
-
-      private static final com.google.protobuf.Internal.EnumLiteMap<Operator> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<Operator>() {
-            public Operator findValueByNumber(int number) {
-              return Operator.forNumber(number);
-            }
-          };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
-        return getDescriptor().getValues().get(ordinal());
-      }
-
-      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
-        return getDescriptor();
-      }
-
-      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-        return com.google.firestore.v1.StructuredQuery.UnaryFilter.getDescriptor()
-            .getEnumTypes()
-            .get(0);
-      }
-
-      private static final Operator[] VALUES = values();
-
-      public static Operator valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
-        }
-        if (desc.getIndex() == -1) {
-          return UNRECOGNIZED;
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int value;
-
-      private Operator(int value) {
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:google.firestore.v1.StructuredQuery.UnaryFilter.Operator)
-    }
-
-    private int operandTypeCase_ = 0;
-    private java.lang.Object operandType_;
-
-    public enum OperandTypeCase
-        implements
-            com.google.protobuf.Internal.EnumLite,
-            com.google.protobuf.AbstractMessage.InternalOneOfEnum {
-      FIELD(2),
-      OPERANDTYPE_NOT_SET(0);
-      private final int value;
-
-      private OperandTypeCase(int value) {
-        this.value = value;
-      }
-      /**
-       * @param value The number of the enum to look for.
-       * @return The enum associated with the given number.
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static OperandTypeCase valueOf(int value) {
-        return forNumber(value);
-      }
-
-      public static OperandTypeCase forNumber(int value) {
-        switch (value) {
-          case 2:
-            return FIELD;
-          case 0:
-            return OPERANDTYPE_NOT_SET;
-          default:
-            return null;
-        }
-      }
-
-      public int getNumber() {
-        return this.value;
-      }
-    };
-
-    public OperandTypeCase getOperandTypeCase() {
-      return OperandTypeCase.forNumber(operandTypeCase_);
-    }
-
-    public static final int OP_FIELD_NUMBER = 1;
-    private int op_;
-    /**
-     *
-     *
-     * <pre>
-     * The unary operator to apply.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-     *
-     * @return The enum numeric value on the wire for op.
-     */
-    public int getOpValue() {
-      return op_;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The unary operator to apply.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-     *
-     * @return The op.
-     */
-    public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
-      @SuppressWarnings("deprecation")
-      com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
-          com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
-      return result == null
-          ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
-          : result;
-    }
-
-    public static final int FIELD_FIELD_NUMBER = 2;
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     *
-     * @return Whether the field field is set.
-     */
-    public boolean hasField() {
-      return operandTypeCase_ == 2;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     *
-     * @return The field.
-     */
-    public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
-      if (operandTypeCase_ == 2) {
-        return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
-      }
-      return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The field to which to apply the operator.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-     */
-    public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-      if (operandTypeCase_ == 2) {
-        return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
-      }
-      return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-    }
-
-    private byte memoizedIsInitialized = -1;
-
-    @java.lang.Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-      if (op_
-          != com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.OPERATOR_UNSPECIFIED
-              .getNumber()) {
-        output.writeEnum(1, op_);
-      }
-      if (operandTypeCase_ == 2) {
-        output.writeMessage(
-            2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    @java.lang.Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (op_
-          != com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.OPERATOR_UNSPECIFIED
-              .getNumber()) {
-        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, op_);
-      }
-      if (operandTypeCase_ == 2) {
-        size +=
-            com.google.protobuf.CodedOutputStream.computeMessageSize(
-                2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-        return true;
-      }
-      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.UnaryFilter)) {
-        return super.equals(obj);
-      }
-      com.google.firestore.v1.StructuredQuery.UnaryFilter other =
-          (com.google.firestore.v1.StructuredQuery.UnaryFilter) obj;
-
-      if (op_ != other.op_) return false;
-      if (!getOperandTypeCase().equals(other.getOperandTypeCase())) return false;
-      switch (operandTypeCase_) {
-        case 2:
-          if (!getField().equals(other.getField())) return false;
-          break;
-        case 0:
-        default:
-      }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + OP_FIELD_NUMBER;
-      hash = (53 * hash) + op_;
-      switch (operandTypeCase_) {
-        case 2:
-          hash = (37 * hash) + FIELD_FIELD_NUMBER;
-          hash = (53 * hash) + getField().hashCode();
-          break;
-        case 0:
-        default:
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        java.io.InputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseDelimitedFrom(
-        java.io.InputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseDelimitedFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    @java.lang.Override
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-
-    public static Builder newBuilder(
-        com.google.firestore.v1.StructuredQuery.UnaryFilter prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-
-    @java.lang.Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * A filter with a single operand.
-     * </pre>
-     *
-     * Protobuf type {@code google.firestore.v1.StructuredQuery.UnaryFilter}
-     */
-    public static final class Builder
-        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
-        implements
-        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.UnaryFilter)
-        com.google.firestore.v1.StructuredQuery.UnaryFilterOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
-      }
-
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.StructuredQuery.UnaryFilter.class,
-                com.google.firestore.v1.StructuredQuery.UnaryFilter.Builder.class);
-      }
-
-      // Construct using com.google.firestore.v1.StructuredQuery.UnaryFilter.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
-      }
-
-      @java.lang.Override
-      public Builder clear() {
-        super.clear();
-        op_ = 0;
-
-        operandTypeCase_ = 0;
-        operandType_ = null;
-        return this;
-      }
-
-      @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_UnaryFilter_descriptor;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstanceForType() {
-        return com.google.firestore.v1.StructuredQuery.UnaryFilter.getDefaultInstance();
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.UnaryFilter build() {
-        com.google.firestore.v1.StructuredQuery.UnaryFilter result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.UnaryFilter buildPartial() {
-        com.google.firestore.v1.StructuredQuery.UnaryFilter result =
-            new com.google.firestore.v1.StructuredQuery.UnaryFilter(this);
-        result.op_ = op_;
-        if (operandTypeCase_ == 2) {
-          if (fieldBuilder_ == null) {
-            result.operandType_ = operandType_;
-          } else {
-            result.operandType_ = fieldBuilder_.build();
-          }
-        }
-        result.operandTypeCase_ = operandTypeCase_;
-        onBuilt();
-        return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.setField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-
-      @java.lang.Override
-      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index,
-          java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.google.firestore.v1.StructuredQuery.UnaryFilter) {
-          return mergeFrom((com.google.firestore.v1.StructuredQuery.UnaryFilter) other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.UnaryFilter other) {
-        if (other == com.google.firestore.v1.StructuredQuery.UnaryFilter.getDefaultInstance())
-          return this;
-        if (other.op_ != 0) {
-          setOpValue(other.getOpValue());
-        }
-        switch (other.getOperandTypeCase()) {
-          case FIELD:
-            {
-              mergeField(other.getField());
-              break;
-            }
-          case OPERANDTYPE_NOT_SET:
-            {
-              break;
-            }
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.UnaryFilter parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.UnaryFilter) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int operandTypeCase_ = 0;
-      private java.lang.Object operandType_;
-
-      public OperandTypeCase getOperandTypeCase() {
-        return OperandTypeCase.forNumber(operandTypeCase_);
-      }
-
-      public Builder clearOperandType() {
-        operandTypeCase_ = 0;
-        operandType_ = null;
-        onChanged();
-        return this;
-      }
-
-      private int op_ = 0;
-      /**
-       *
-       *
-       * <pre>
-       * The unary operator to apply.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-       *
-       * @return The enum numeric value on the wire for op.
-       */
-      public int getOpValue() {
-        return op_;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The unary operator to apply.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-       *
-       * @param value The enum numeric value on the wire for op to set.
-       * @return This builder for chaining.
-       */
-      public Builder setOpValue(int value) {
-        op_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The unary operator to apply.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-       *
-       * @return The op.
-       */
-      public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
-        @SuppressWarnings("deprecation")
-        com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
-            com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
-        return result == null
-            ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
-            : result;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The unary operator to apply.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-       *
-       * @param value The op to set.
-       * @return This builder for chaining.
-       */
-      public Builder setOp(com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-
-        op_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The unary operator to apply.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.UnaryFilter.Operator op = 1;</code>
-       *
-       * @return This builder for chaining.
-       */
-      public Builder clearOp() {
-
-        op_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.StructuredQuery.FieldReference,
-              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
-          fieldBuilder_;
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       *
-       * @return Whether the field field is set.
-       */
-      public boolean hasField() {
-        return operandTypeCase_ == 2;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       *
-       * @return The field.
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
-        if (fieldBuilder_ == null) {
-          if (operandTypeCase_ == 2) {
-            return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
-          }
-          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-        } else {
-          if (operandTypeCase_ == 2) {
-            return fieldBuilder_.getMessage();
-          }
-          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-        }
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public Builder setField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
-        if (fieldBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          operandType_ = value;
-          onChanged();
-        } else {
-          fieldBuilder_.setMessage(value);
-        }
-        operandTypeCase_ = 2;
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public Builder setField(
-          com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
-        if (fieldBuilder_ == null) {
-          operandType_ = builderForValue.build();
-          onChanged();
-        } else {
-          fieldBuilder_.setMessage(builderForValue.build());
-        }
-        operandTypeCase_ = 2;
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
-        if (fieldBuilder_ == null) {
-          if (operandTypeCase_ == 2
-              && operandType_
-                  != com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()) {
-            operandType_ =
-                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(
-                        (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_)
-                    .mergeFrom(value)
-                    .buildPartial();
-          } else {
-            operandType_ = value;
-          }
-          onChanged();
-        } else {
-          if (operandTypeCase_ == 2) {
-            fieldBuilder_.mergeFrom(value);
-          }
-          fieldBuilder_.setMessage(value);
-        }
-        operandTypeCase_ = 2;
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public Builder clearField() {
-        if (fieldBuilder_ == null) {
-          if (operandTypeCase_ == 2) {
-            operandTypeCase_ = 0;
-            operandType_ = null;
-            onChanged();
-          }
-        } else {
-          if (operandTypeCase_ == 2) {
-            operandTypeCase_ = 0;
-            operandType_ = null;
-          }
-          fieldBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
-        return getFieldFieldBuilder().getBuilder();
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-        if ((operandTypeCase_ == 2) && (fieldBuilder_ != null)) {
-          return fieldBuilder_.getMessageOrBuilder();
-        } else {
-          if (operandTypeCase_ == 2) {
-            return (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_;
-          }
-          return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-        }
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to which to apply the operator.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 2;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.StructuredQuery.FieldReference,
-              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
-          getFieldFieldBuilder() {
-        if (fieldBuilder_ == null) {
-          if (!(operandTypeCase_ == 2)) {
-            operandType_ =
-                com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-          }
-          fieldBuilder_ =
-              new com.google.protobuf.SingleFieldBuilderV3<
-                  com.google.firestore.v1.StructuredQuery.FieldReference,
-                  com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-                  com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>(
-                  (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_,
-                  getParentForChildren(),
-                  isClean());
-          operandType_ = null;
-        }
-        operandTypeCase_ = 2;
-        onChanged();
-        ;
-        return fieldBuilder_;
-      }
-
-      @java.lang.Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @java.lang.Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.UnaryFilter)
-    }
-
-    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.UnaryFilter)
-    private static final com.google.firestore.v1.StructuredQuery.UnaryFilter DEFAULT_INSTANCE;
-
-    static {
-      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.UnaryFilter();
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<UnaryFilter> PARSER =
-        new com.google.protobuf.AbstractParser<UnaryFilter>() {
-          @java.lang.Override
-          public UnaryFilter parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-            return new UnaryFilter(input, extensionRegistry);
-          }
-        };
-
-    public static com.google.protobuf.Parser<UnaryFilter> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<UnaryFilter> getParserForType() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.firestore.v1.StructuredQuery.UnaryFilter getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-  }
-
-  public interface FieldReferenceOrBuilder
-      extends
-      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.FieldReference)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>string field_path = 2;</code>
-     *
-     * @return The fieldPath.
-     */
-    java.lang.String getFieldPath();
-    /**
-     * <code>string field_path = 2;</code>
-     *
-     * @return The bytes for fieldPath.
-     */
-    com.google.protobuf.ByteString getFieldPathBytes();
-  }
-  /**
-   *
-   *
-   * <pre>
-   * A reference to a field, such as `max(messages.time) as max_time`.
-   * </pre>
-   *
-   * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
-   */
-  public static final class FieldReference extends com.google.protobuf.GeneratedMessageV3
-      implements
-      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.FieldReference)
-      FieldReferenceOrBuilder {
-    private static final long serialVersionUID = 0L;
-    // Use FieldReference.newBuilder() to construct.
-    private FieldReference(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-
-    private FieldReference() {
-      fieldPath_ = "";
-    }
-
-    @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
-      return new FieldReference();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
-    private FieldReference(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 18:
-              {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                fieldPath_ = s;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
-    }
-
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_FieldReference_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.StructuredQuery.FieldReference.class,
-              com.google.firestore.v1.StructuredQuery.FieldReference.Builder.class);
-    }
-
-    public static final int FIELD_PATH_FIELD_NUMBER = 2;
-    private volatile java.lang.Object fieldPath_;
-    /**
-     * <code>string field_path = 2;</code>
-     *
-     * @return The fieldPath.
-     */
-    public java.lang.String getFieldPath() {
-      java.lang.Object ref = fieldPath_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        fieldPath_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string field_path = 2;</code>
-     *
-     * @return The bytes for fieldPath.
-     */
-    public com.google.protobuf.ByteString getFieldPathBytes() {
-      java.lang.Object ref = fieldPath_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-        fieldPath_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-
-    @java.lang.Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-      if (!getFieldPathBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fieldPath_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    @java.lang.Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (!getFieldPathBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fieldPath_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-        return true;
-      }
-      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.FieldReference)) {
-        return super.equals(obj);
-      }
-      com.google.firestore.v1.StructuredQuery.FieldReference other =
-          (com.google.firestore.v1.StructuredQuery.FieldReference) obj;
-
-      if (!getFieldPath().equals(other.getFieldPath())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + FIELD_PATH_FIELD_NUMBER;
-      hash = (53 * hash) + getFieldPath().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        java.io.InputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseDelimitedFrom(
-        java.io.InputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseDelimitedFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    @java.lang.Override
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-
-    public static Builder newBuilder(
-        com.google.firestore.v1.StructuredQuery.FieldReference prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-
-    @java.lang.Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * A reference to a field, such as `max(messages.time) as max_time`.
-     * </pre>
-     *
-     * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
-     */
-    public static final class Builder
-        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
-        implements
-        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.FieldReference)
-        com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
-      }
-
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.StructuredQuery.FieldReference.class,
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder.class);
-      }
-
-      // Construct using com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
-      }
-
-      @java.lang.Override
-      public Builder clear() {
-        super.clear();
-        fieldPath_ = "";
-
-        return this;
-      }
-
-      @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstanceForType() {
-        return com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance();
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.FieldReference build() {
-        com.google.firestore.v1.StructuredQuery.FieldReference result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.FieldReference buildPartial() {
-        com.google.firestore.v1.StructuredQuery.FieldReference result =
-            new com.google.firestore.v1.StructuredQuery.FieldReference(this);
-        result.fieldPath_ = fieldPath_;
-        onBuilt();
-        return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.setField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-
-      @java.lang.Override
-      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index,
-          java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.google.firestore.v1.StructuredQuery.FieldReference) {
-          return mergeFrom((com.google.firestore.v1.StructuredQuery.FieldReference) other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.FieldReference other) {
-        if (other == com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance())
-          return this;
-        if (!other.getFieldPath().isEmpty()) {
-          fieldPath_ = other.fieldPath_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.FieldReference parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.FieldReference) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private java.lang.Object fieldPath_ = "";
-      /**
-       * <code>string field_path = 2;</code>
-       *
-       * @return The fieldPath.
-       */
-      public java.lang.String getFieldPath() {
-        java.lang.Object ref = fieldPath_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          fieldPath_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string field_path = 2;</code>
-       *
-       * @return The bytes for fieldPath.
-       */
-      public com.google.protobuf.ByteString getFieldPathBytes() {
-        java.lang.Object ref = fieldPath_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-              com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-          fieldPath_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string field_path = 2;</code>
-       *
-       * @param value The fieldPath to set.
-       * @return This builder for chaining.
-       */
-      public Builder setFieldPath(java.lang.String value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-
-        fieldPath_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string field_path = 2;</code>
-       *
-       * @return This builder for chaining.
-       */
-      public Builder clearFieldPath() {
-
-        fieldPath_ = getDefaultInstance().getFieldPath();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string field_path = 2;</code>
-       *
-       * @param value The bytes for fieldPath to set.
-       * @return This builder for chaining.
-       */
-      public Builder setFieldPathBytes(com.google.protobuf.ByteString value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
-        fieldPath_ = value;
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @java.lang.Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.FieldReference)
-    }
-
-    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.FieldReference)
-    private static final com.google.firestore.v1.StructuredQuery.FieldReference DEFAULT_INSTANCE;
-
-    static {
-      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.FieldReference();
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<FieldReference> PARSER =
-        new com.google.protobuf.AbstractParser<FieldReference>() {
-          @java.lang.Override
-          public FieldReference parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-            return new FieldReference(input, extensionRegistry);
-          }
-        };
-
-    public static com.google.protobuf.Parser<FieldReference> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<FieldReference> getParserForType() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.firestore.v1.StructuredQuery.FieldReference getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-  }
-
-  public interface OrderOrBuilder
-      extends
-      // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredQuery.Order)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     *
-     * @return Whether the field field is set.
-     */
-    boolean hasField();
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     *
-     * @return The field.
-     */
-    com.google.firestore.v1.StructuredQuery.FieldReference getField();
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     */
-    com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder();
-
-    /**
-     *
-     *
-     * <pre>
-     * The direction to order by. Defaults to `ASCENDING`.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-     *
-     * @return The enum numeric value on the wire for direction.
-     */
-    int getDirectionValue();
-    /**
-     *
-     *
-     * <pre>
-     * The direction to order by. Defaults to `ASCENDING`.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-     *
-     * @return The direction.
-     */
-    com.google.firestore.v1.StructuredQuery.Direction getDirection();
-  }
-  /**
-   *
-   *
-   * <pre>
-   * An order on a field.
-   * </pre>
-   *
-   * Protobuf type {@code google.firestore.v1.StructuredQuery.Order}
-   */
-  public static final class Order extends com.google.protobuf.GeneratedMessageV3
-      implements
-      // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredQuery.Order)
-      OrderOrBuilder {
-    private static final long serialVersionUID = 0L;
-    // Use Order.newBuilder() to construct.
-    private Order(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-
-    private Order() {
-      direction_ = 0;
-    }
-
-    @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
-      return new Order();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
-    private Order(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
-                if (field_ != null) {
-                  subBuilder = field_.toBuilder();
-                }
-                field_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(field_);
-                  field_ = subBuilder.buildPartial();
-                }
-
-                break;
-              }
-            case 16:
-              {
-                int rawValue = input.readEnum();
-
-                direction_ = rawValue;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
-    }
-
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.QueryProto
-          .internal_static_google_firestore_v1_StructuredQuery_Order_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.StructuredQuery.Order.class,
-              com.google.firestore.v1.StructuredQuery.Order.Builder.class);
-    }
-
-    public static final int FIELD_FIELD_NUMBER = 1;
-    private com.google.firestore.v1.StructuredQuery.FieldReference field_;
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     *
-     * @return Whether the field field is set.
-     */
-    public boolean hasField() {
-      return field_ != null;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     *
-     * @return The field.
-     */
-    public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
-      return field_ == null
-          ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
-          : field_;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The field to order by.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-     */
-    public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-      return getField();
-    }
-
-    public static final int DIRECTION_FIELD_NUMBER = 2;
-    private int direction_;
-    /**
-     *
-     *
-     * <pre>
-     * The direction to order by. Defaults to `ASCENDING`.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-     *
-     * @return The enum numeric value on the wire for direction.
-     */
-    public int getDirectionValue() {
-      return direction_;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * The direction to order by. Defaults to `ASCENDING`.
-     * </pre>
-     *
-     * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-     *
-     * @return The direction.
-     */
-    public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
-      @SuppressWarnings("deprecation")
-      com.google.firestore.v1.StructuredQuery.Direction result =
-          com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
-      return result == null
-          ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
-          : result;
-    }
-
-    private byte memoizedIsInitialized = -1;
-
-    @java.lang.Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-      if (field_ != null) {
-        output.writeMessage(1, getField());
-      }
-      if (direction_
-          != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
-        output.writeEnum(2, direction_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    @java.lang.Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (field_ != null) {
-        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getField());
-      }
-      if (direction_
-          != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream.computeEnumSize(2, direction_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-        return true;
-      }
-      if (!(obj instanceof com.google.firestore.v1.StructuredQuery.Order)) {
-        return super.equals(obj);
-      }
-      com.google.firestore.v1.StructuredQuery.Order other =
-          (com.google.firestore.v1.StructuredQuery.Order) obj;
-
-      if (hasField() != other.hasField()) return false;
-      if (hasField()) {
-        if (!getField().equals(other.getField())) return false;
-      }
-      if (direction_ != other.direction_) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasField()) {
-        hash = (37 * hash) + FIELD_FIELD_NUMBER;
-        hash = (53 * hash) + getField().hashCode();
-      }
-      hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
-      hash = (53 * hash) + direction_;
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseDelimitedFrom(
-        java.io.InputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseDelimitedFrom(
-        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
-          PARSER, input, extensionRegistry);
-    }
-
-    @java.lang.Override
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-
-    public static Builder newBuilder(com.google.firestore.v1.StructuredQuery.Order prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-
-    @java.lang.Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * An order on a field.
-     * </pre>
-     *
-     * Protobuf type {@code google.firestore.v1.StructuredQuery.Order}
-     */
-    public static final class Builder
-        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
-        implements
-        // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredQuery.Order)
-        com.google.firestore.v1.StructuredQuery.OrderOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
-      }
-
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_Order_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.StructuredQuery.Order.class,
-                com.google.firestore.v1.StructuredQuery.Order.Builder.class);
-      }
-
-      // Construct using com.google.firestore.v1.StructuredQuery.Order.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
-      }
-
-      @java.lang.Override
-      public Builder clear() {
-        super.clear();
-        if (fieldBuilder_ == null) {
-          field_ = null;
-        } else {
-          field_ = null;
-          fieldBuilder_ = null;
-        }
-        direction_ = 0;
-
-        return this;
-      }
-
-      @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.google.firestore.v1.QueryProto
-            .internal_static_google_firestore_v1_StructuredQuery_Order_descriptor;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.Order getDefaultInstanceForType() {
-        return com.google.firestore.v1.StructuredQuery.Order.getDefaultInstance();
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.Order build() {
-        com.google.firestore.v1.StructuredQuery.Order result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @java.lang.Override
-      public com.google.firestore.v1.StructuredQuery.Order buildPartial() {
-        com.google.firestore.v1.StructuredQuery.Order result =
-            new com.google.firestore.v1.StructuredQuery.Order(this);
-        if (fieldBuilder_ == null) {
-          result.field_ = field_;
-        } else {
-          result.field_ = fieldBuilder_.build();
-        }
-        result.direction_ = direction_;
-        onBuilt();
-        return result;
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.setField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-
-      @java.lang.Override
-      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index,
-          java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.google.firestore.v1.StructuredQuery.Order) {
-          return mergeFrom((com.google.firestore.v1.StructuredQuery.Order) other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.google.firestore.v1.StructuredQuery.Order other) {
-        if (other == com.google.firestore.v1.StructuredQuery.Order.getDefaultInstance())
-          return this;
-        if (other.hasField()) {
-          mergeField(other.getField());
-        }
-        if (other.direction_ != 0) {
-          setDirectionValue(other.getDirectionValue());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.Order parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.google.firestore.v1.StructuredQuery.Order) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private com.google.firestore.v1.StructuredQuery.FieldReference field_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.StructuredQuery.FieldReference,
-              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
-          fieldBuilder_;
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       *
-       * @return Whether the field field is set.
-       */
-      public boolean hasField() {
-        return fieldBuilder_ != null || field_ != null;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       *
-       * @return The field.
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReference getField() {
-        if (fieldBuilder_ == null) {
-          return field_ == null
-              ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
-              : field_;
-        } else {
-          return fieldBuilder_.getMessage();
-        }
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public Builder setField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
-        if (fieldBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          field_ = value;
-          onChanged();
-        } else {
-          fieldBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public Builder setField(
-          com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
-        if (fieldBuilder_ == null) {
-          field_ = builderForValue.build();
-          onChanged();
-        } else {
-          fieldBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
-        if (fieldBuilder_ == null) {
-          if (field_ != null) {
-            field_ =
-                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(field_)
-                    .mergeFrom(value)
-                    .buildPartial();
-          } else {
-            field_ = value;
-          }
-          onChanged();
-        } else {
-          fieldBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public Builder clearField() {
-        if (fieldBuilder_ == null) {
-          field_ = null;
-          onChanged();
-        } else {
-          field_ = null;
-          fieldBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
-
-        onChanged();
-        return getFieldFieldBuilder().getBuilder();
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-        if (fieldBuilder_ != null) {
-          return fieldBuilder_.getMessageOrBuilder();
-        } else {
-          return field_ == null
-              ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
-              : field_;
-        }
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The field to order by.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.StructuredQuery.FieldReference,
-              com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-              com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>
-          getFieldFieldBuilder() {
-        if (fieldBuilder_ == null) {
-          fieldBuilder_ =
-              new com.google.protobuf.SingleFieldBuilderV3<
-                  com.google.firestore.v1.StructuredQuery.FieldReference,
-                  com.google.firestore.v1.StructuredQuery.FieldReference.Builder,
-                  com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder>(
-                  getField(), getParentForChildren(), isClean());
-          field_ = null;
-        }
-        return fieldBuilder_;
-      }
-
-      private int direction_ = 0;
-      /**
-       *
-       *
-       * <pre>
-       * The direction to order by. Defaults to `ASCENDING`.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-       *
-       * @return The enum numeric value on the wire for direction.
-       */
-      public int getDirectionValue() {
-        return direction_;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The direction to order by. Defaults to `ASCENDING`.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-       *
-       * @param value The enum numeric value on the wire for direction to set.
-       * @return This builder for chaining.
-       */
-      public Builder setDirectionValue(int value) {
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The direction to order by. Defaults to `ASCENDING`.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-       *
-       * @return The direction.
-       */
-      public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
-        @SuppressWarnings("deprecation")
-        com.google.firestore.v1.StructuredQuery.Direction result =
-            com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
-        return result == null
-            ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
-            : result;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The direction to order by. Defaults to `ASCENDING`.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-       *
-       * @param value The direction to set.
-       * @return This builder for chaining.
-       */
-      public Builder setDirection(com.google.firestore.v1.StructuredQuery.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-
-        direction_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       *
-       *
-       * <pre>
-       * The direction to order by. Defaults to `ASCENDING`.
-       * </pre>
-       *
-       * <code>.google.firestore.v1.StructuredQuery.Direction direction = 2;</code>
-       *
-       * @return This builder for chaining.
-       */
-      public Builder clearDirection() {
-
-        direction_ = 0;
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @java.lang.Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-      // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredQuery.Order)
-    }
-
-    // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredQuery.Order)
-    private static final com.google.firestore.v1.StructuredQuery.Order DEFAULT_INSTANCE;
-
-    static {
-      DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredQuery.Order();
-    }
-
-    public static com.google.firestore.v1.StructuredQuery.Order getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<Order> PARSER =
-        new com.google.protobuf.AbstractParser<Order>() {
-          @java.lang.Override
-          public Order parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
-            return new Order(input, extensionRegistry);
-          }
-        };
-
-    public static com.google.protobuf.Parser<Order> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Order> getParserForType() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.firestore.v1.StructuredQuery.Order getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-  }
-
   public static final int SELECT_FIELD_NUMBER = 1;
   private com.google.firestore.v1.StructuredQuery.Projection select_;
   /**
@@ -9365,6 +9474,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return Whether the select field is set.
    */
+  @java.lang.Override
   public boolean hasSelect() {
     return select_ != null;
   }
@@ -9379,6 +9489,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The select.
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.Projection getSelect() {
     return select_ == null
         ? com.google.firestore.v1.StructuredQuery.Projection.getDefaultInstance()
@@ -9393,6 +9504,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.ProjectionOrBuilder getSelectOrBuilder() {
     return getSelect();
   }
@@ -9408,6 +9520,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.CollectionSelector from = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.StructuredQuery.CollectionSelector> getFromList() {
     return from_;
   }
@@ -9420,6 +9533,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.CollectionSelector from = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<
           ? extends com.google.firestore.v1.StructuredQuery.CollectionSelectorOrBuilder>
       getFromOrBuilderList() {
@@ -9434,6 +9548,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.CollectionSelector from = 2;</code>
    */
+  @java.lang.Override
   public int getFromCount() {
     return from_.size();
   }
@@ -9446,6 +9561,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.CollectionSelector from = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.CollectionSelector getFrom(int index) {
     return from_.get(index);
   }
@@ -9458,6 +9574,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.CollectionSelector from = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.CollectionSelectorOrBuilder getFromOrBuilder(
       int index) {
     return from_.get(index);
@@ -9476,6 +9593,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return Whether the where field is set.
    */
+  @java.lang.Override
   public boolean hasWhere() {
     return where_ != null;
   }
@@ -9490,6 +9608,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The where.
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.Filter getWhere() {
     return where_ == null
         ? com.google.firestore.v1.StructuredQuery.Filter.getDefaultInstance()
@@ -9504,6 +9623,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.FilterOrBuilder getWhereOrBuilder() {
     return getWhere();
   }
@@ -9532,6 +9652,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.StructuredQuery.Order> getOrderByList() {
     return orderBy_;
   }
@@ -9557,6 +9678,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.StructuredQuery.OrderOrBuilder>
       getOrderByOrBuilderList() {
     return orderBy_;
@@ -9583,6 +9705,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
    */
+  @java.lang.Override
   public int getOrderByCount() {
     return orderBy_.size();
   }
@@ -9608,6 +9731,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.Order getOrderBy(int index) {
     return orderBy_.get(index);
   }
@@ -9633,6 +9757,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.OrderOrBuilder getOrderByOrBuilder(int index) {
     return orderBy_.get(index);
   }
@@ -9650,6 +9775,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return Whether the startAt field is set.
    */
+  @java.lang.Override
   public boolean hasStartAt() {
     return startAt_ != null;
   }
@@ -9664,6 +9790,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The startAt.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Cursor getStartAt() {
     return startAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : startAt_;
   }
@@ -9676,6 +9803,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.CursorOrBuilder getStartAtOrBuilder() {
     return getStartAt();
   }
@@ -9693,6 +9821,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return Whether the endAt field is set.
    */
+  @java.lang.Override
   public boolean hasEndAt() {
     return endAt_ != null;
   }
@@ -9707,6 +9836,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The endAt.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Cursor getEndAt() {
     return endAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : endAt_;
   }
@@ -9719,6 +9849,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.CursorOrBuilder getEndAtOrBuilder() {
     return getEndAt();
   }
@@ -9738,6 +9869,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The offset.
    */
+  @java.lang.Override
   public int getOffset() {
     return offset_;
   }
@@ -9757,6 +9889,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return Whether the limit field is set.
    */
+  @java.lang.Override
   public boolean hasLimit() {
     return limit_ != null;
   }
@@ -9773,6 +9906,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * @return The limit.
    */
+  @java.lang.Override
   public com.google.protobuf.Int32Value getLimit() {
     return limit_ == null ? com.google.protobuf.Int32Value.getDefaultInstance() : limit_;
   }
@@ -9787,6 +9921,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.Int32ValueOrBuilder getLimitOrBuilder() {
     return getLimit();
   }
@@ -12050,6 +12185,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * @return The offset.
      */
+    @java.lang.Override
     public int getOffset() {
       return offset_;
     }

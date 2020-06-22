@@ -56,12 +56,13 @@ public final class FieldProto {
           + "tor_field\030\003 \001(\t\022\021\n\treverting\030\004 \001(\010:y\352Av\n"
           + "\036firestore.googleapis.com/Field\022Tproject"
           + "s/{project}/databases/{database}/collect"
-          + "ionGroups/{collection}/fields/{field}B\270\001"
+          + "ionGroups/{collection}/fields/{field}B\336\001"
           + "\n\035com.google.firestore.admin.v1B\nFieldPr"
           + "otoP\001Z>google.golang.org/genproto/google"
           + "apis/firestore/admin/v1;admin\242\002\004GCFS\252\002\037G"
           + "oogle.Cloud.Firestore.Admin.V1\312\002\037Google\\"
-          + "Cloud\\Firestore\\Admin\\V1b\006proto3"
+          + "Cloud\\Firestore\\Admin\\V1\352\002#Google::Cloud"
+          + "::Firestore::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

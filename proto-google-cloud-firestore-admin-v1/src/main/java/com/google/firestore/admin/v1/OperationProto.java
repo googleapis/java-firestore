@@ -117,12 +117,13 @@ public final class OperationProto {
           + "tionState\022\037\n\033OPERATION_STATE_UNSPECIFIED"
           + "\020\000\022\020\n\014INITIALIZING\020\001\022\016\n\nPROCESSING\020\002\022\016\n\n"
           + "CANCELLING\020\003\022\016\n\nFINALIZING\020\004\022\016\n\nSUCCESSF"
-          + "UL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\274\001\n\035com."
+          + "UL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\342\001\n\035com."
           + "google.firestore.admin.v1B\016OperationProt"
           + "oP\001Z>google.golang.org/genproto/googleap"
           + "is/firestore/admin/v1;admin\242\002\004GCFS\252\002\037Goo"
           + "gle.Cloud.Firestore.Admin.V1\312\002\037Google\\Cl"
-          + "oud\\Firestore\\Admin\\V1b\006proto3"
+          + "oud\\Firestore\\Admin\\V1\352\002#Google::Cloud::"
+          + "Firestore::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
