@@ -19,21 +19,24 @@
 package com.google.firestore.proto;
 
 /**
+ *
+ *
  * <pre>
  * Encodes a query saved in the bundle.
  * </pre>
  *
  * Protobuf type {@code firestore.BundledQuery}
  */
-public final class BundledQuery extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:firestore.BundledQuery)
     BundledQueryOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use BundledQuery.newBuilder() to construct.
   private BundledQuery(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private BundledQuery() {
     parent_ = "";
     limitType_ = 0;
@@ -41,16 +44,15 @@ private static final long serialVersionUID = 0L;
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BundledQuery();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private BundledQuery(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -69,65 +71,72 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            parent_ = s;
-            break;
-          }
-          case 18: {
-            com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
-            if (queryTypeCase_ == 2) {
-              subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
+              parent_ = s;
+              break;
             }
-            queryType_ =
-                input.readMessage(com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
-              queryType_ = subBuilder.buildPartial();
+          case 18:
+            {
+              com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
+              if (queryTypeCase_ == 2) {
+                subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
+              }
+              queryType_ =
+                  input.readMessage(
+                      com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
+                queryType_ = subBuilder.buildPartial();
+              }
+              queryTypeCase_ = 2;
+              break;
             }
-            queryTypeCase_ = 2;
-            break;
-          }
-          case 24: {
-            int rawValue = input.readEnum();
+          case 24:
+            {
+              int rawValue = input.readEnum();
 
-            limitType_ = rawValue;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              limitType_ = rawValue;
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.proto.BundleProto.internal_static_firestore_BundledQuery_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_BundledQuery_fieldAccessorTable
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_BundledQuery_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.proto.BundledQuery.class, com.google.firestore.proto.BundledQuery.Builder.class);
+            com.google.firestore.proto.BundledQuery.class,
+            com.google.firestore.proto.BundledQuery.Builder.class);
   }
 
   /**
+   *
+   *
    * <pre>
    * If the query is a limit query, should the limit be applied to the beginning or
    * the end of results.
@@ -135,28 +144,18 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf enum {@code firestore.BundledQuery.LimitType}
    */
-  public enum LimitType
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>FIRST = 0;</code>
-     */
+  public enum LimitType implements com.google.protobuf.ProtocolMessageEnum {
+    /** <code>FIRST = 0;</code> */
     FIRST(0),
-    /**
-     * <code>LAST = 1;</code>
-     */
+    /** <code>LAST = 1;</code> */
     LAST(1),
     UNRECOGNIZED(-1),
     ;
 
-    /**
-     * <code>FIRST = 0;</code>
-     */
+    /** <code>FIRST = 0;</code> */
     public static final int FIRST_VALUE = 0;
-    /**
-     * <code>LAST = 1;</code>
-     */
+    /** <code>LAST = 1;</code> */
     public static final int LAST_VALUE = 1;
-
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
@@ -182,48 +181,47 @@ private static final long serialVersionUID = 0L;
      */
     public static LimitType forNumber(int value) {
       switch (value) {
-        case 0: return FIRST;
-        case 1: return LAST;
-        default: return null;
+        case 0:
+          return FIRST;
+        case 1:
+          return LAST;
+        default:
+          return null;
       }
     }
 
-    public static com.google.protobuf.Internal.EnumLiteMap<LimitType>
-        internalGetValueMap() {
+    public static com.google.protobuf.Internal.EnumLiteMap<LimitType> internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        LimitType> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<LimitType>() {
-            public LimitType findValueByNumber(int number) {
-              return LimitType.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<LimitType> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<LimitType>() {
+          public LimitType findValueByNumber(int number) {
+            return LimitType.forNumber(number);
+          }
+        };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       if (this == UNRECOGNIZED) {
         throw new java.lang.IllegalStateException(
             "Can't get the descriptor of an unrecognized enum value.");
       }
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.google.firestore.proto.BundledQuery.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final LimitType[] VALUES = values();
 
-    public static LimitType valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+    public static LimitType valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
         return UNRECOGNIZED;
@@ -242,12 +240,15 @@ private static final long serialVersionUID = 0L;
 
   private int queryTypeCase_ = 0;
   private java.lang.Object queryType_;
+
   public enum QueryTypeCase
-      implements com.google.protobuf.Internal.EnumLite,
+      implements
+          com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     STRUCTURED_QUERY(2),
     QUERYTYPE_NOT_SET(0);
     private final int value;
+
     private QueryTypeCase(int value) {
       this.value = value;
     }
@@ -263,30 +264,35 @@ private static final long serialVersionUID = 0L;
 
     public static QueryTypeCase forNumber(int value) {
       switch (value) {
-        case 2: return STRUCTURED_QUERY;
-        case 0: return QUERYTYPE_NOT_SET;
-        default: return null;
+        case 2:
+          return STRUCTURED_QUERY;
+        case 0:
+          return QUERYTYPE_NOT_SET;
+        default:
+          return null;
       }
     }
+
     public int getNumber() {
       return this.value;
     }
   };
 
-  public QueryTypeCase
-  getQueryTypeCase() {
-    return QueryTypeCase.forNumber(
-        queryTypeCase_);
+  public QueryTypeCase getQueryTypeCase() {
+    return QueryTypeCase.forNumber(queryTypeCase_);
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
   private volatile java.lang.Object parent_;
   /**
+   *
+   *
    * <pre>
    * The parent resource name.
    * </pre>
    *
    * <code>string parent = 1;</code>
+   *
    * @return The parent.
    */
   @java.lang.Override
@@ -295,29 +301,29 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       parent_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * The parent resource name.
    * </pre>
    *
    * <code>string parent = 1;</code>
+   *
    * @return The bytes for parent.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getParentBytes() {
+  public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       parent_ = b;
       return b;
     } else {
@@ -327,11 +333,14 @@ private static final long serialVersionUID = 0L;
 
   public static final int STRUCTURED_QUERY_FIELD_NUMBER = 2;
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return Whether the structuredQuery field is set.
    */
   @java.lang.Override
@@ -339,21 +348,26 @@ private static final long serialVersionUID = 0L;
     return queryTypeCase_ == 2;
   }
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return The structuredQuery.
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
     if (queryTypeCase_ == 2) {
-       return (com.google.firestore.v1.StructuredQuery) queryType_;
+      return (com.google.firestore.v1.StructuredQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredQuery.getDefaultInstance();
   }
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
@@ -363,7 +377,7 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder() {
     if (queryTypeCase_ == 2) {
-       return (com.google.firestore.v1.StructuredQuery) queryType_;
+      return (com.google.firestore.v1.StructuredQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredQuery.getDefaultInstance();
   }
@@ -372,22 +386,28 @@ private static final long serialVersionUID = 0L;
   private int limitType_;
   /**
    * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+   *
    * @return The enum numeric value on the wire for limitType.
    */
-  @java.lang.Override public int getLimitTypeValue() {
+  @java.lang.Override
+  public int getLimitTypeValue() {
     return limitType_;
   }
   /**
    * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+   *
    * @return The limitType.
    */
-  @java.lang.Override public com.google.firestore.proto.BundledQuery.LimitType getLimitType() {
+  @java.lang.Override
+  public com.google.firestore.proto.BundledQuery.LimitType getLimitType() {
     @SuppressWarnings("deprecation")
-    com.google.firestore.proto.BundledQuery.LimitType result = com.google.firestore.proto.BundledQuery.LimitType.valueOf(limitType_);
+    com.google.firestore.proto.BundledQuery.LimitType result =
+        com.google.firestore.proto.BundledQuery.LimitType.valueOf(limitType_);
     return result == null ? com.google.firestore.proto.BundledQuery.LimitType.UNRECOGNIZED : result;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -399,8 +419,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getParentBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
@@ -423,12 +442,12 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
     }
     if (queryTypeCase_ == 2) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (com.google.firestore.v1.StructuredQuery) queryType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              2, (com.google.firestore.v1.StructuredQuery) queryType_);
     }
     if (limitType_ != com.google.firestore.proto.BundledQuery.LimitType.FIRST.getNumber()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(3, limitType_);
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(3, limitType_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -438,21 +457,19 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.proto.BundledQuery)) {
       return super.equals(obj);
     }
     com.google.firestore.proto.BundledQuery other = (com.google.firestore.proto.BundledQuery) obj;
 
-    if (!getParent()
-        .equals(other.getParent())) return false;
+    if (!getParent().equals(other.getParent())) return false;
     if (limitType_ != other.limitType_) return false;
     if (!getQueryTypeCase().equals(other.getQueryTypeCase())) return false;
     switch (queryTypeCase_) {
       case 2:
-        if (!getStructuredQuery()
-            .equals(other.getStructuredQuery())) return false;
+        if (!getStructuredQuery().equals(other.getStructuredQuery())) return false;
         break;
       case 0:
       default:
@@ -485,118 +502,127 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.proto.BundledQuery parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.proto.BundledQuery parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.proto.BundledQuery parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.proto.BundledQuery parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.proto.BundledQuery parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundledQuery parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.proto.BundledQuery prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * Encodes a query saved in the bundle.
    * </pre>
    *
    * Protobuf type {@code firestore.BundledQuery}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:firestore.BundledQuery)
       com.google.firestore.proto.BundledQueryOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundledQuery_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundledQuery_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundledQuery_fieldAccessorTable
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundledQuery_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.proto.BundledQuery.class, com.google.firestore.proto.BundledQuery.Builder.class);
+              com.google.firestore.proto.BundledQuery.class,
+              com.google.firestore.proto.BundledQuery.Builder.class);
     }
 
     // Construct using com.google.firestore.proto.BundledQuery.newBuilder()
@@ -604,16 +630,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -627,9 +652,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundledQuery_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundledQuery_descriptor;
     }
 
     @java.lang.Override
@@ -648,7 +673,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.proto.BundledQuery buildPartial() {
-      com.google.firestore.proto.BundledQuery result = new com.google.firestore.proto.BundledQuery(this);
+      com.google.firestore.proto.BundledQuery result =
+          new com.google.firestore.proto.BundledQuery(this);
       result.parent_ = parent_;
       if (queryTypeCase_ == 2) {
         if (structuredQueryBuilder_ == null) {
@@ -667,38 +693,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.proto.BundledQuery) {
-        return mergeFrom((com.google.firestore.proto.BundledQuery)other);
+        return mergeFrom((com.google.firestore.proto.BundledQuery) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -715,13 +742,15 @@ private static final long serialVersionUID = 0L;
         setLimitTypeValue(other.getLimitTypeValue());
       }
       switch (other.getQueryTypeCase()) {
-        case STRUCTURED_QUERY: {
-          mergeStructuredQuery(other.getStructuredQuery());
-          break;
-        }
-        case QUERYTYPE_NOT_SET: {
-          break;
-        }
+        case STRUCTURED_QUERY:
+          {
+            mergeStructuredQuery(other.getStructuredQuery());
+            break;
+          }
+        case QUERYTYPE_NOT_SET:
+          {
+            break;
+          }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -751,12 +780,12 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int queryTypeCase_ = 0;
     private java.lang.Object queryType_;
-    public QueryTypeCase
-        getQueryTypeCase() {
-      return QueryTypeCase.forNumber(
-          queryTypeCase_);
+
+    public QueryTypeCase getQueryTypeCase() {
+      return QueryTypeCase.forNumber(queryTypeCase_);
     }
 
     public Builder clearQueryType() {
@@ -766,21 +795,22 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-
     private java.lang.Object parent_ = "";
     /**
+     *
+     *
      * <pre>
      * The parent resource name.
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
      * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         parent_ = s;
         return s;
@@ -789,20 +819,21 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The parent resource name.
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
      * @return The bytes for parent.
      */
-    public com.google.protobuf.ByteString
-        getParentBytes() {
+    public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         parent_ = b;
         return b;
       } else {
@@ -810,67 +841,80 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The parent resource name.
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
      * @param value The parent to set.
      * @return This builder for chaining.
      */
-    public Builder setParent(
-        java.lang.String value) {
+    public Builder setParent(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       parent_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The parent resource name.
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-      
+
       parent_ = getDefaultInstance().getParent();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The parent resource name.
      * </pre>
      *
      * <code>string parent = 1;</code>
+     *
      * @param value The bytes for parent to set.
      * @return This builder for chaining.
      */
-    public Builder setParentBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       parent_ = value;
       onChanged();
       return this;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder> structuredQueryBuilder_;
+            com.google.firestore.v1.StructuredQuery,
+            com.google.firestore.v1.StructuredQuery.Builder,
+            com.google.firestore.v1.StructuredQueryOrBuilder>
+        structuredQueryBuilder_;
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+     *
      * @return Whether the structuredQuery field is set.
      */
     @java.lang.Override
@@ -878,11 +922,14 @@ private static final long serialVersionUID = 0L;
       return queryTypeCase_ == 2;
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+     *
      * @return The structuredQuery.
      */
     @java.lang.Override
@@ -900,6 +947,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -920,6 +969,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -938,6 +989,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -946,10 +999,13 @@ private static final long serialVersionUID = 0L;
      */
     public Builder mergeStructuredQuery(com.google.firestore.v1.StructuredQuery value) {
       if (structuredQueryBuilder_ == null) {
-        if (queryTypeCase_ == 2 &&
-            queryType_ != com.google.firestore.v1.StructuredQuery.getDefaultInstance()) {
-          queryType_ = com.google.firestore.v1.StructuredQuery.newBuilder((com.google.firestore.v1.StructuredQuery) queryType_)
-              .mergeFrom(value).buildPartial();
+        if (queryTypeCase_ == 2
+            && queryType_ != com.google.firestore.v1.StructuredQuery.getDefaultInstance()) {
+          queryType_ =
+              com.google.firestore.v1.StructuredQuery.newBuilder(
+                      (com.google.firestore.v1.StructuredQuery) queryType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           queryType_ = value;
         }
@@ -964,6 +1020,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -987,6 +1045,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -997,6 +1057,8 @@ private static final long serialVersionUID = 0L;
       return getStructuredQueryFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -1015,6 +1077,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * A structured query.
      * </pre>
@@ -1022,55 +1086,69 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder> 
+            com.google.firestore.v1.StructuredQuery,
+            com.google.firestore.v1.StructuredQuery.Builder,
+            com.google.firestore.v1.StructuredQueryOrBuilder>
         getStructuredQueryFieldBuilder() {
       if (structuredQueryBuilder_ == null) {
         if (!(queryTypeCase_ == 2)) {
           queryType_ = com.google.firestore.v1.StructuredQuery.getDefaultInstance();
         }
-        structuredQueryBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder>(
+        structuredQueryBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.StructuredQuery,
+                com.google.firestore.v1.StructuredQuery.Builder,
+                com.google.firestore.v1.StructuredQueryOrBuilder>(
                 (com.google.firestore.v1.StructuredQuery) queryType_,
                 getParentForChildren(),
                 isClean());
         queryType_ = null;
       }
       queryTypeCase_ = 2;
-      onChanged();;
+      onChanged();
+      ;
       return structuredQueryBuilder_;
     }
 
     private int limitType_ = 0;
     /**
      * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+     *
      * @return The enum numeric value on the wire for limitType.
      */
-    @java.lang.Override public int getLimitTypeValue() {
+    @java.lang.Override
+    public int getLimitTypeValue() {
       return limitType_;
     }
     /**
      * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+     *
      * @param value The enum numeric value on the wire for limitType to set.
      * @return This builder for chaining.
      */
     public Builder setLimitTypeValue(int value) {
-      
+
       limitType_ = value;
       onChanged();
       return this;
     }
     /**
      * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+     *
      * @return The limitType.
      */
     @java.lang.Override
     public com.google.firestore.proto.BundledQuery.LimitType getLimitType() {
       @SuppressWarnings("deprecation")
-      com.google.firestore.proto.BundledQuery.LimitType result = com.google.firestore.proto.BundledQuery.LimitType.valueOf(limitType_);
-      return result == null ? com.google.firestore.proto.BundledQuery.LimitType.UNRECOGNIZED : result;
+      com.google.firestore.proto.BundledQuery.LimitType result =
+          com.google.firestore.proto.BundledQuery.LimitType.valueOf(limitType_);
+      return result == null
+          ? com.google.firestore.proto.BundledQuery.LimitType.UNRECOGNIZED
+          : result;
     }
     /**
      * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+     *
      * @param value The limitType to set.
      * @return This builder for chaining.
      */
@@ -1078,24 +1156,25 @@ private static final long serialVersionUID = 0L;
       if (value == null) {
         throw new NullPointerException();
       }
-      
+
       limitType_ = value.getNumber();
       onChanged();
       return this;
     }
     /**
      * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearLimitType() {
-      
+
       limitType_ = 0;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1105,12 +1184,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:firestore.BundledQuery)
   }
 
   // @@protoc_insertion_point(class_scope:firestore.BundledQuery)
   private static final com.google.firestore.proto.BundledQuery DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.proto.BundledQuery();
   }
@@ -1119,16 +1198,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<BundledQuery>
-      PARSER = new com.google.protobuf.AbstractParser<BundledQuery>() {
-    @java.lang.Override
-    public BundledQuery parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new BundledQuery(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<BundledQuery> PARSER =
+      new com.google.protobuf.AbstractParser<BundledQuery>() {
+        @java.lang.Override
+        public BundledQuery parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new BundledQuery(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<BundledQuery> parser() {
     return PARSER;
@@ -1143,6 +1222,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.proto.BundledQuery getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

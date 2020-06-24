@@ -19,37 +19,39 @@
 package com.google.firestore.proto;
 
 /**
+ *
+ *
  * <pre>
  * Metadata describing the bundle file/stream.
  * </pre>
  *
  * Protobuf type {@code firestore.BundleMetadata}
  */
-public final class BundleMetadata extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:firestore.BundleMetadata)
     BundleMetadataOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use BundleMetadata.newBuilder() to construct.
   private BundleMetadata(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private BundleMetadata() {
     id_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BundleMetadata();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private BundleMetadata(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -68,80 +70,88 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            id_ = s;
-            break;
-          }
-          case 18: {
-            com.google.protobuf.Timestamp.Builder subBuilder = null;
-            if (createTime_ != null) {
-              subBuilder = createTime_.toBuilder();
+              id_ = s;
+              break;
             }
-            createTime_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(createTime_);
-              createTime_ = subBuilder.buildPartial();
+          case 18:
+            {
+              com.google.protobuf.Timestamp.Builder subBuilder = null;
+              if (createTime_ != null) {
+                subBuilder = createTime_.toBuilder();
+              }
+              createTime_ =
+                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(createTime_);
+                createTime_ = subBuilder.buildPartial();
+              }
+
+              break;
             }
-
-            break;
-          }
-          case 24: {
-
-            version_ = input.readUInt32();
-            break;
-          }
-          case 32: {
-
-            totalDocuments_ = input.readUInt32();
-            break;
-          }
-          case 40: {
-
-            totalBytes_ = input.readUInt64();
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+          case 24:
+            {
+              version_ = input.readUInt32();
+              break;
             }
-            break;
-          }
+          case 32:
+            {
+              totalDocuments_ = input.readUInt32();
+              break;
+            }
+          case 40:
+            {
+              totalBytes_ = input.readUInt64();
+              break;
+            }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleMetadata_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_BundleMetadata_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleMetadata_fieldAccessorTable
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_BundleMetadata_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.proto.BundleMetadata.class, com.google.firestore.proto.BundleMetadata.Builder.class);
+            com.google.firestore.proto.BundleMetadata.class,
+            com.google.firestore.proto.BundleMetadata.Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
   private volatile java.lang.Object id_;
   /**
+   *
+   *
    * <pre>
    * The ID of the bundle.
    * </pre>
    *
    * <code>string id = 1;</code>
+   *
    * @return The id.
    */
   @java.lang.Override
@@ -150,29 +160,29 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       id_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * The ID of the bundle.
    * </pre>
    *
    * <code>string id = 1;</code>
+   *
    * @return The bytes for id.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getIdBytes() {
+  public com.google.protobuf.ByteString getIdBytes() {
     java.lang.Object ref = id_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       id_ = b;
       return b;
     } else {
@@ -183,11 +193,14 @@ private static final long serialVersionUID = 0L;
   public static final int CREATE_TIME_FIELD_NUMBER = 2;
   private com.google.protobuf.Timestamp createTime_;
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 2;</code>
+   *
    * @return Whether the createTime field is set.
    */
   @java.lang.Override
@@ -195,11 +208,14 @@ private static final long serialVersionUID = 0L;
     return createTime_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 2;</code>
+   *
    * @return The createTime.
    */
   @java.lang.Override
@@ -207,6 +223,8 @@ private static final long serialVersionUID = 0L;
     return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
   }
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
@@ -221,11 +239,14 @@ private static final long serialVersionUID = 0L;
   public static final int VERSION_FIELD_NUMBER = 3;
   private int version_;
   /**
+   *
+   *
    * <pre>
    * The schema version of the bundle.
    * </pre>
    *
    * <code>uint32 version = 3;</code>
+   *
    * @return The version.
    */
   @java.lang.Override
@@ -236,11 +257,14 @@ private static final long serialVersionUID = 0L;
   public static final int TOTAL_DOCUMENTS_FIELD_NUMBER = 4;
   private int totalDocuments_;
   /**
+   *
+   *
    * <pre>
    * The number of documents in the bundle.
    * </pre>
    *
    * <code>uint32 total_documents = 4;</code>
+   *
    * @return The totalDocuments.
    */
   @java.lang.Override
@@ -251,11 +275,14 @@ private static final long serialVersionUID = 0L;
   public static final int TOTAL_BYTES_FIELD_NUMBER = 5;
   private long totalBytes_;
   /**
+   *
+   *
    * <pre>
    * The size of the bundle in bytes, excluding this `BundleMetadata`.
    * </pre>
    *
    * <code>uint64 total_bytes = 5;</code>
+   *
    * @return The totalBytes.
    */
   @java.lang.Override
@@ -264,6 +291,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -275,8 +303,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
     }
@@ -305,20 +332,16 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
     }
     if (createTime_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getCreateTime());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, getCreateTime());
     }
     if (version_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt32Size(3, version_);
+      size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3, version_);
     }
     if (totalDocuments_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt32Size(4, totalDocuments_);
+      size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4, totalDocuments_);
     }
     if (totalBytes_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeUInt64Size(5, totalBytes_);
+      size += com.google.protobuf.CodedOutputStream.computeUInt64Size(5, totalBytes_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -328,26 +351,22 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.proto.BundleMetadata)) {
       return super.equals(obj);
     }
-    com.google.firestore.proto.BundleMetadata other = (com.google.firestore.proto.BundleMetadata) obj;
+    com.google.firestore.proto.BundleMetadata other =
+        (com.google.firestore.proto.BundleMetadata) obj;
 
-    if (!getId()
-        .equals(other.getId())) return false;
+    if (!getId().equals(other.getId())) return false;
     if (hasCreateTime() != other.hasCreateTime()) return false;
     if (hasCreateTime()) {
-      if (!getCreateTime()
-          .equals(other.getCreateTime())) return false;
+      if (!getCreateTime().equals(other.getCreateTime())) return false;
     }
-    if (getVersion()
-        != other.getVersion()) return false;
-    if (getTotalDocuments()
-        != other.getTotalDocuments()) return false;
-    if (getTotalBytes()
-        != other.getTotalBytes()) return false;
+    if (getVersion() != other.getVersion()) return false;
+    if (getTotalDocuments() != other.getTotalDocuments()) return false;
+    if (getTotalBytes() != other.getTotalBytes()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -370,125 +389,133 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + TOTAL_DOCUMENTS_FIELD_NUMBER;
     hash = (53 * hash) + getTotalDocuments();
     hash = (37 * hash) + TOTAL_BYTES_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getTotalBytes());
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getTotalBytes());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static com.google.firestore.proto.BundleMetadata parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.proto.BundleMetadata parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.proto.BundleMetadata parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.proto.BundleMetadata parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.proto.BundleMetadata parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundleMetadata parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.proto.BundleMetadata prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * Metadata describing the bundle file/stream.
    * </pre>
    *
    * Protobuf type {@code firestore.BundleMetadata}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:firestore.BundleMetadata)
       com.google.firestore.proto.BundleMetadataOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleMetadata_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleMetadata_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleMetadata_fieldAccessorTable
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleMetadata_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.proto.BundleMetadata.class, com.google.firestore.proto.BundleMetadata.Builder.class);
+              com.google.firestore.proto.BundleMetadata.class,
+              com.google.firestore.proto.BundleMetadata.Builder.class);
     }
 
     // Construct using com.google.firestore.proto.BundleMetadata.newBuilder()
@@ -496,16 +523,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -527,9 +553,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleMetadata_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleMetadata_descriptor;
     }
 
     @java.lang.Override
@@ -548,7 +574,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.proto.BundleMetadata buildPartial() {
-      com.google.firestore.proto.BundleMetadata result = new com.google.firestore.proto.BundleMetadata(this);
+      com.google.firestore.proto.BundleMetadata result =
+          new com.google.firestore.proto.BundleMetadata(this);
       result.id_ = id_;
       if (createTimeBuilder_ == null) {
         result.createTime_ = createTime_;
@@ -566,38 +593,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.proto.BundleMetadata) {
-        return mergeFrom((com.google.firestore.proto.BundleMetadata)other);
+        return mergeFrom((com.google.firestore.proto.BundleMetadata) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -653,18 +681,20 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object id_ = "";
     /**
+     *
+     *
      * <pre>
      * The ID of the bundle.
      * </pre>
      *
      * <code>string id = 1;</code>
+     *
      * @return The id.
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         id_ = s;
         return s;
@@ -673,20 +703,21 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the bundle.
      * </pre>
      *
      * <code>string id = 1;</code>
+     *
      * @return The bytes for id.
      */
-    public com.google.protobuf.ByteString
-        getIdBytes() {
+    public com.google.protobuf.ByteString getIdBytes() {
       java.lang.Object ref = id_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         id_ = b;
         return b;
       } else {
@@ -694,54 +725,61 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the bundle.
      * </pre>
      *
      * <code>string id = 1;</code>
+     *
      * @param value The id to set.
      * @return This builder for chaining.
      */
-    public Builder setId(
-        java.lang.String value) {
+    public Builder setId(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       id_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the bundle.
      * </pre>
      *
      * <code>string id = 1;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearId() {
-      
+
       id_ = getDefaultInstance().getId();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the bundle.
      * </pre>
      *
      * <code>string id = 1;</code>
+     *
      * @param value The bytes for id to set.
      * @return This builder for chaining.
      */
-    public Builder setIdBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       id_ = value;
       onChanged();
       return this;
@@ -749,34 +787,47 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.Timestamp createTime_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> createTimeBuilder_;
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        createTimeBuilder_;
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
+     *
      * @return Whether the createTime field is set.
      */
     public boolean hasCreateTime() {
       return createTimeBuilder_ != null || createTime_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
+     *
      * @return The createTime.
      */
     public com.google.protobuf.Timestamp getCreateTime() {
       if (createTimeBuilder_ == null) {
-        return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
+        return createTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : createTime_;
       } else {
         return createTimeBuilder_.getMessage();
       }
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -797,14 +848,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
      */
-    public Builder setCreateTime(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
+    public Builder setCreateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (createTimeBuilder_ == null) {
         createTime_ = builderForValue.build();
         onChanged();
@@ -815,6 +867,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -825,7 +879,7 @@ private static final long serialVersionUID = 0L;
       if (createTimeBuilder_ == null) {
         if (createTime_ != null) {
           createTime_ =
-            com.google.protobuf.Timestamp.newBuilder(createTime_).mergeFrom(value).buildPartial();
+              com.google.protobuf.Timestamp.newBuilder(createTime_).mergeFrom(value).buildPartial();
         } else {
           createTime_ = value;
         }
@@ -837,6 +891,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -855,6 +911,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -862,11 +920,13 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
      */
     public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
-      
+
       onChanged();
       return getCreateTimeFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -877,11 +937,14 @@ private static final long serialVersionUID = 0L;
       if (createTimeBuilder_ != null) {
         return createTimeBuilder_.getMessageOrBuilder();
       } else {
-        return createTime_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
+        return createTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : createTime_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Time at which the documents snapshot is taken for this bundle.
      * </pre>
@@ -889,26 +952,32 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
         getCreateTimeFieldBuilder() {
       if (createTimeBuilder_ == null) {
-        createTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getCreateTime(),
-                getParentForChildren(),
-                isClean());
+        createTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getCreateTime(), getParentForChildren(), isClean());
         createTime_ = null;
       }
       return createTimeBuilder_;
     }
 
-    private int version_ ;
+    private int version_;
     /**
+     *
+     *
      * <pre>
      * The schema version of the bundle.
      * </pre>
      *
      * <code>uint32 version = 3;</code>
+     *
      * @return The version.
      */
     @java.lang.Override
@@ -916,42 +985,51 @@ private static final long serialVersionUID = 0L;
       return version_;
     }
     /**
+     *
+     *
      * <pre>
      * The schema version of the bundle.
      * </pre>
      *
      * <code>uint32 version = 3;</code>
+     *
      * @param value The version to set.
      * @return This builder for chaining.
      */
     public Builder setVersion(int value) {
-      
+
       version_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The schema version of the bundle.
      * </pre>
      *
      * <code>uint32 version = 3;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearVersion() {
-      
+
       version_ = 0;
       onChanged();
       return this;
     }
 
-    private int totalDocuments_ ;
+    private int totalDocuments_;
     /**
+     *
+     *
      * <pre>
      * The number of documents in the bundle.
      * </pre>
      *
      * <code>uint32 total_documents = 4;</code>
+     *
      * @return The totalDocuments.
      */
     @java.lang.Override
@@ -959,42 +1037,51 @@ private static final long serialVersionUID = 0L;
       return totalDocuments_;
     }
     /**
+     *
+     *
      * <pre>
      * The number of documents in the bundle.
      * </pre>
      *
      * <code>uint32 total_documents = 4;</code>
+     *
      * @param value The totalDocuments to set.
      * @return This builder for chaining.
      */
     public Builder setTotalDocuments(int value) {
-      
+
       totalDocuments_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The number of documents in the bundle.
      * </pre>
      *
      * <code>uint32 total_documents = 4;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearTotalDocuments() {
-      
+
       totalDocuments_ = 0;
       onChanged();
       return this;
     }
 
-    private long totalBytes_ ;
+    private long totalBytes_;
     /**
+     *
+     *
      * <pre>
      * The size of the bundle in bytes, excluding this `BundleMetadata`.
      * </pre>
      *
      * <code>uint64 total_bytes = 5;</code>
+     *
      * @return The totalBytes.
      */
     @java.lang.Override
@@ -1002,37 +1089,43 @@ private static final long serialVersionUID = 0L;
       return totalBytes_;
     }
     /**
+     *
+     *
      * <pre>
      * The size of the bundle in bytes, excluding this `BundleMetadata`.
      * </pre>
      *
      * <code>uint64 total_bytes = 5;</code>
+     *
      * @param value The totalBytes to set.
      * @return This builder for chaining.
      */
     public Builder setTotalBytes(long value) {
-      
+
       totalBytes_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The size of the bundle in bytes, excluding this `BundleMetadata`.
      * </pre>
      *
      * <code>uint64 total_bytes = 5;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearTotalBytes() {
-      
+
       totalBytes_ = 0L;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1042,12 +1135,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:firestore.BundleMetadata)
   }
 
   // @@protoc_insertion_point(class_scope:firestore.BundleMetadata)
   private static final com.google.firestore.proto.BundleMetadata DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.proto.BundleMetadata();
   }
@@ -1056,16 +1149,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<BundleMetadata>
-      PARSER = new com.google.protobuf.AbstractParser<BundleMetadata>() {
-    @java.lang.Override
-    public BundleMetadata parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new BundleMetadata(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<BundleMetadata> PARSER =
+      new com.google.protobuf.AbstractParser<BundleMetadata>() {
+        @java.lang.Override
+        public BundleMetadata parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new BundleMetadata(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<BundleMetadata> parser() {
     return PARSER;
@@ -1080,6 +1173,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.proto.BundleMetadata getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

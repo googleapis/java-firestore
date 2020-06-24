@@ -18,49 +18,63 @@
 
 package com.google.firestore.proto;
 
-public interface BundledQueryOrBuilder extends
+public interface BundledQueryOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:firestore.BundledQuery)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The parent resource name.
    * </pre>
    *
    * <code>string parent = 1;</code>
+   *
    * @return The parent.
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * The parent resource name.
    * </pre>
    *
    * <code>string parent = 1;</code>
+   *
    * @return The bytes for parent.
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return Whether the structuredQuery field is set.
    */
   boolean hasStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return The structuredQuery.
    */
   com.google.firestore.v1.StructuredQuery getStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * </pre>
@@ -71,11 +85,13 @@ public interface BundledQueryOrBuilder extends
 
   /**
    * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+   *
    * @return The enum numeric value on the wire for limitType.
    */
   int getLimitTypeValue();
   /**
    * <code>.firestore.BundledQuery.LimitType limit_type = 3;</code>
+   *
    * @return The limitType.
    */
   com.google.firestore.proto.BundledQuery.LimitType getLimitType();

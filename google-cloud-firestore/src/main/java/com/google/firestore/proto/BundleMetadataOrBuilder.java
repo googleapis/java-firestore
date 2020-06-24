@@ -18,49 +18,63 @@
 
 package com.google.firestore.proto;
 
-public interface BundleMetadataOrBuilder extends
+public interface BundleMetadataOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:firestore.BundleMetadata)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The ID of the bundle.
    * </pre>
    *
    * <code>string id = 1;</code>
+   *
    * @return The id.
    */
   java.lang.String getId();
   /**
+   *
+   *
    * <pre>
    * The ID of the bundle.
    * </pre>
    *
    * <code>string id = 1;</code>
+   *
    * @return The bytes for id.
    */
-  com.google.protobuf.ByteString
-      getIdBytes();
+  com.google.protobuf.ByteString getIdBytes();
 
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 2;</code>
+   *
    * @return Whether the createTime field is set.
    */
   boolean hasCreateTime();
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 2;</code>
+   *
    * @return The createTime.
    */
   com.google.protobuf.Timestamp getCreateTime();
   /**
+   *
+   *
    * <pre>
    * Time at which the documents snapshot is taken for this bundle.
    * </pre>
@@ -70,31 +84,40 @@ public interface BundleMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The schema version of the bundle.
    * </pre>
    *
    * <code>uint32 version = 3;</code>
+   *
    * @return The version.
    */
   int getVersion();
 
   /**
+   *
+   *
    * <pre>
    * The number of documents in the bundle.
    * </pre>
    *
    * <code>uint32 total_documents = 4;</code>
+   *
    * @return The totalDocuments.
    */
   int getTotalDocuments();
 
   /**
+   *
+   *
    * <pre>
    * The size of the bundle in bytes, excluding this `BundleMetadata`.
    * </pre>
    *
    * <code>uint64 total_bytes = 5;</code>
+   *
    * @return The totalBytes.
    */
   long getTotalBytes();

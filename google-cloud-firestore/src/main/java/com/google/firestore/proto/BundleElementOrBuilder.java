@@ -18,68 +18,69 @@
 
 package com.google.firestore.proto;
 
-public interface BundleElementOrBuilder extends
+public interface BundleElementOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:firestore.BundleElement)
     com.google.protobuf.MessageOrBuilder {
 
   /**
    * <code>.firestore.BundleMetadata metadata = 1;</code>
+   *
    * @return Whether the metadata field is set.
    */
   boolean hasMetadata();
   /**
    * <code>.firestore.BundleMetadata metadata = 1;</code>
+   *
    * @return The metadata.
    */
   com.google.firestore.proto.BundleMetadata getMetadata();
-  /**
-   * <code>.firestore.BundleMetadata metadata = 1;</code>
-   */
+  /** <code>.firestore.BundleMetadata metadata = 1;</code> */
   com.google.firestore.proto.BundleMetadataOrBuilder getMetadataOrBuilder();
 
   /**
    * <code>.firestore.NamedQuery named_query = 2;</code>
+   *
    * @return Whether the namedQuery field is set.
    */
   boolean hasNamedQuery();
   /**
    * <code>.firestore.NamedQuery named_query = 2;</code>
+   *
    * @return The namedQuery.
    */
   com.google.firestore.proto.NamedQuery getNamedQuery();
-  /**
-   * <code>.firestore.NamedQuery named_query = 2;</code>
-   */
+  /** <code>.firestore.NamedQuery named_query = 2;</code> */
   com.google.firestore.proto.NamedQueryOrBuilder getNamedQueryOrBuilder();
 
   /**
    * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+   *
    * @return Whether the documentMetadata field is set.
    */
   boolean hasDocumentMetadata();
   /**
    * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+   *
    * @return The documentMetadata.
    */
   com.google.firestore.proto.BundledDocumentMetadata getDocumentMetadata();
-  /**
-   * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-   */
+  /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
   com.google.firestore.proto.BundledDocumentMetadataOrBuilder getDocumentMetadataOrBuilder();
 
   /**
    * <code>.google.firestore.v1.Document document = 4;</code>
+   *
    * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
    * <code>.google.firestore.v1.Document document = 4;</code>
+   *
    * @return The document.
    */
   com.google.firestore.v1.Document getDocument();
-  /**
-   * <code>.google.firestore.v1.Document document = 4;</code>
-   */
+  /** <code>.google.firestore.v1.Document document = 4;</code> */
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 
   public com.google.firestore.proto.BundleElement.ElementTypeCase getElementTypeCase();

@@ -19,6 +19,8 @@
 package com.google.firestore.proto;
 
 /**
+ *
+ *
  * <pre>
  * A Query associated with a name, created as part of the bundle file, and can be read
  * by client SDKs once the bundle containing them is loaded.
@@ -26,31 +28,31 @@ package com.google.firestore.proto;
  *
  * Protobuf type {@code firestore.NamedQuery}
  */
-public final class NamedQuery extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:firestore.NamedQuery)
     NamedQueryOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use NamedQuery.newBuilder() to construct.
   private NamedQuery(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private NamedQuery() {
     name_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new NamedQuery();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private NamedQuery(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -69,73 +71,82 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            name_ = s;
-            break;
-          }
-          case 18: {
-            com.google.firestore.proto.BundledQuery.Builder subBuilder = null;
-            if (bundledQuery_ != null) {
-              subBuilder = bundledQuery_.toBuilder();
+              name_ = s;
+              break;
             }
-            bundledQuery_ = input.readMessage(com.google.firestore.proto.BundledQuery.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(bundledQuery_);
-              bundledQuery_ = subBuilder.buildPartial();
-            }
+          case 18:
+            {
+              com.google.firestore.proto.BundledQuery.Builder subBuilder = null;
+              if (bundledQuery_ != null) {
+                subBuilder = bundledQuery_.toBuilder();
+              }
+              bundledQuery_ =
+                  input.readMessage(
+                      com.google.firestore.proto.BundledQuery.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(bundledQuery_);
+                bundledQuery_ = subBuilder.buildPartial();
+              }
 
-            break;
-          }
-          case 26: {
-            com.google.protobuf.Timestamp.Builder subBuilder = null;
-            if (readTime_ != null) {
-              subBuilder = readTime_.toBuilder();
+              break;
             }
-            readTime_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(readTime_);
-              readTime_ = subBuilder.buildPartial();
-            }
+          case 26:
+            {
+              com.google.protobuf.Timestamp.Builder subBuilder = null;
+              if (readTime_ != null) {
+                subBuilder = readTime_.toBuilder();
+              }
+              readTime_ =
+                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(readTime_);
+                readTime_ = subBuilder.buildPartial();
+              }
 
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.proto.BundleProto.internal_static_firestore_NamedQuery_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_NamedQuery_fieldAccessorTable
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_NamedQuery_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.proto.NamedQuery.class, com.google.firestore.proto.NamedQuery.Builder.class);
+            com.google.firestore.proto.NamedQuery.class,
+            com.google.firestore.proto.NamedQuery.Builder.class);
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
+   *
+   *
    * <pre>
    * Name of the query, such that client can use the name to load this query
    * from bundle, and resume from when the query results are materialized
@@ -143,6 +154,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The name.
    */
   @java.lang.Override
@@ -151,14 +163,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       name_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Name of the query, such that client can use the name to load this query
    * from bundle, and resume from when the query results are materialized
@@ -166,16 +179,15 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The bytes for name.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getNameBytes() {
+  public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       name_ = b;
       return b;
     } else {
@@ -186,11 +198,14 @@ private static final long serialVersionUID = 0L;
   public static final int BUNDLED_QUERY_FIELD_NUMBER = 2;
   private com.google.firestore.proto.BundledQuery bundledQuery_;
   /**
+   *
+   *
    * <pre>
    * The query saved in the bundle.
    * </pre>
    *
    * <code>.firestore.BundledQuery bundled_query = 2;</code>
+   *
    * @return Whether the bundledQuery field is set.
    */
   @java.lang.Override
@@ -198,18 +213,25 @@ private static final long serialVersionUID = 0L;
     return bundledQuery_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * The query saved in the bundle.
    * </pre>
    *
    * <code>.firestore.BundledQuery bundled_query = 2;</code>
+   *
    * @return The bundledQuery.
    */
   @java.lang.Override
   public com.google.firestore.proto.BundledQuery getBundledQuery() {
-    return bundledQuery_ == null ? com.google.firestore.proto.BundledQuery.getDefaultInstance() : bundledQuery_;
+    return bundledQuery_ == null
+        ? com.google.firestore.proto.BundledQuery.getDefaultInstance()
+        : bundledQuery_;
   }
   /**
+   *
+   *
    * <pre>
    * The query saved in the bundle.
    * </pre>
@@ -224,12 +246,15 @@ private static final long serialVersionUID = 0L;
   public static final int READ_TIME_FIELD_NUMBER = 3;
   private com.google.protobuf.Timestamp readTime_;
   /**
+   *
+   *
    * <pre>
    * The read time of the query, when it is used to build the bundle. This is useful to
    * resume the query from the bundle, once it is loaded by client SDKs.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return Whether the readTime field is set.
    */
   @java.lang.Override
@@ -237,12 +262,15 @@ private static final long serialVersionUID = 0L;
     return readTime_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * The read time of the query, when it is used to build the bundle. This is useful to
    * resume the query from the bundle, once it is loaded by client SDKs.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return The readTime.
    */
   @java.lang.Override
@@ -250,6 +278,8 @@ private static final long serialVersionUID = 0L;
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
   /**
+   *
+   *
    * <pre>
    * The read time of the query, when it is used to build the bundle. This is useful to
    * resume the query from the bundle, once it is loaded by client SDKs.
@@ -263,6 +293,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -274,8 +305,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!getNameBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
@@ -298,12 +328,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
     }
     if (bundledQuery_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getBundledQuery());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, getBundledQuery());
     }
     if (readTime_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, getReadTime());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, getReadTime());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -313,24 +341,21 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.proto.NamedQuery)) {
       return super.equals(obj);
     }
     com.google.firestore.proto.NamedQuery other = (com.google.firestore.proto.NamedQuery) obj;
 
-    if (!getName()
-        .equals(other.getName())) return false;
+    if (!getName().equals(other.getName())) return false;
     if (hasBundledQuery() != other.hasBundledQuery()) return false;
     if (hasBundledQuery()) {
-      if (!getBundledQuery()
-          .equals(other.getBundledQuery())) return false;
+      if (!getBundledQuery().equals(other.getBundledQuery())) return false;
     }
     if (hasReadTime() != other.hasReadTime()) return false;
     if (hasReadTime()) {
-      if (!getReadTime()
-          .equals(other.getReadTime())) return false;
+      if (!getReadTime().equals(other.getReadTime())) return false;
     }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
@@ -358,97 +383,103 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.proto.NamedQuery parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.proto.NamedQuery parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.proto.NamedQuery parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.google.firestore.proto.NamedQuery parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.proto.NamedQuery parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.NamedQuery parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.NamedQuery parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.proto.NamedQuery prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * A Query associated with a name, created as part of the bundle file, and can be read
    * by client SDKs once the bundle containing them is loaded.
@@ -456,21 +487,22 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code firestore.NamedQuery}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:firestore.NamedQuery)
       com.google.firestore.proto.NamedQueryOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.proto.BundleProto.internal_static_firestore_NamedQuery_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_NamedQuery_fieldAccessorTable
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_NamedQuery_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.proto.NamedQuery.class, com.google.firestore.proto.NamedQuery.Builder.class);
+              com.google.firestore.proto.NamedQuery.class,
+              com.google.firestore.proto.NamedQuery.Builder.class);
     }
 
     // Construct using com.google.firestore.proto.NamedQuery.newBuilder()
@@ -478,16 +510,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -509,8 +540,7 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
       return com.google.firestore.proto.BundleProto.internal_static_firestore_NamedQuery_descriptor;
     }
 
@@ -530,7 +560,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.proto.NamedQuery buildPartial() {
-      com.google.firestore.proto.NamedQuery result = new com.google.firestore.proto.NamedQuery(this);
+      com.google.firestore.proto.NamedQuery result =
+          new com.google.firestore.proto.NamedQuery(this);
       result.name_ = name_;
       if (bundledQueryBuilder_ == null) {
         result.bundledQuery_ = bundledQuery_;
@@ -550,38 +581,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.proto.NamedQuery) {
-        return mergeFrom((com.google.firestore.proto.NamedQuery)other);
+        return mergeFrom((com.google.firestore.proto.NamedQuery) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -631,6 +663,8 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object name_ = "";
     /**
+     *
+     *
      * <pre>
      * Name of the query, such that client can use the name to load this query
      * from bundle, and resume from when the query results are materialized
@@ -638,13 +672,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
      * @return The name.
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
@@ -653,6 +687,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Name of the query, such that client can use the name to load this query
      * from bundle, and resume from when the query results are materialized
@@ -660,15 +696,14 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
      * @return The bytes for name.
      */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
+    public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -676,6 +711,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Name of the query, such that client can use the name to load this query
      * from bundle, and resume from when the query results are materialized
@@ -683,20 +720,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
      * @param value The name to set.
      * @return This builder for chaining.
      */
-    public Builder setName(
-        java.lang.String value) {
+    public Builder setName(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       name_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Name of the query, such that client can use the name to load this query
      * from bundle, and resume from when the query results are materialized
@@ -704,15 +743,18 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearName() {
-      
+
       name_ = getDefaultInstance().getName();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Name of the query, such that client can use the name to load this query
      * from bundle, and resume from when the query results are materialized
@@ -720,16 +762,16 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string name = 1;</code>
+     *
      * @param value The bytes for name to set.
      * @return This builder for chaining.
      */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setNameBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       name_ = value;
       onChanged();
       return this;
@@ -737,34 +779,47 @@ private static final long serialVersionUID = 0L;
 
     private com.google.firestore.proto.BundledQuery bundledQuery_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundledQuery, com.google.firestore.proto.BundledQuery.Builder, com.google.firestore.proto.BundledQueryOrBuilder> bundledQueryBuilder_;
+            com.google.firestore.proto.BundledQuery,
+            com.google.firestore.proto.BundledQuery.Builder,
+            com.google.firestore.proto.BundledQueryOrBuilder>
+        bundledQueryBuilder_;
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
      *
      * <code>.firestore.BundledQuery bundled_query = 2;</code>
+     *
      * @return Whether the bundledQuery field is set.
      */
     public boolean hasBundledQuery() {
       return bundledQueryBuilder_ != null || bundledQuery_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
      *
      * <code>.firestore.BundledQuery bundled_query = 2;</code>
+     *
      * @return The bundledQuery.
      */
     public com.google.firestore.proto.BundledQuery getBundledQuery() {
       if (bundledQueryBuilder_ == null) {
-        return bundledQuery_ == null ? com.google.firestore.proto.BundledQuery.getDefaultInstance() : bundledQuery_;
+        return bundledQuery_ == null
+            ? com.google.firestore.proto.BundledQuery.getDefaultInstance()
+            : bundledQuery_;
       } else {
         return bundledQueryBuilder_.getMessage();
       }
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -785,6 +840,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -803,6 +860,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -813,7 +872,9 @@ private static final long serialVersionUID = 0L;
       if (bundledQueryBuilder_ == null) {
         if (bundledQuery_ != null) {
           bundledQuery_ =
-            com.google.firestore.proto.BundledQuery.newBuilder(bundledQuery_).mergeFrom(value).buildPartial();
+              com.google.firestore.proto.BundledQuery.newBuilder(bundledQuery_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           bundledQuery_ = value;
         }
@@ -825,6 +886,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -843,6 +906,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -850,11 +915,13 @@ private static final long serialVersionUID = 0L;
      * <code>.firestore.BundledQuery bundled_query = 2;</code>
      */
     public com.google.firestore.proto.BundledQuery.Builder getBundledQueryBuilder() {
-      
+
       onChanged();
       return getBundledQueryFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -865,11 +932,14 @@ private static final long serialVersionUID = 0L;
       if (bundledQueryBuilder_ != null) {
         return bundledQueryBuilder_.getMessageOrBuilder();
       } else {
-        return bundledQuery_ == null ?
-            com.google.firestore.proto.BundledQuery.getDefaultInstance() : bundledQuery_;
+        return bundledQuery_ == null
+            ? com.google.firestore.proto.BundledQuery.getDefaultInstance()
+            : bundledQuery_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The query saved in the bundle.
      * </pre>
@@ -877,14 +947,17 @@ private static final long serialVersionUID = 0L;
      * <code>.firestore.BundledQuery bundled_query = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundledQuery, com.google.firestore.proto.BundledQuery.Builder, com.google.firestore.proto.BundledQueryOrBuilder> 
+            com.google.firestore.proto.BundledQuery,
+            com.google.firestore.proto.BundledQuery.Builder,
+            com.google.firestore.proto.BundledQueryOrBuilder>
         getBundledQueryFieldBuilder() {
       if (bundledQueryBuilder_ == null) {
-        bundledQueryBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.proto.BundledQuery, com.google.firestore.proto.BundledQuery.Builder, com.google.firestore.proto.BundledQueryOrBuilder>(
-                getBundledQuery(),
-                getParentForChildren(),
-                isClean());
+        bundledQueryBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.proto.BundledQuery,
+                com.google.firestore.proto.BundledQuery.Builder,
+                com.google.firestore.proto.BundledQueryOrBuilder>(
+                getBundledQuery(), getParentForChildren(), isClean());
         bundledQuery_ = null;
       }
       return bundledQueryBuilder_;
@@ -892,26 +965,35 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.Timestamp readTime_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> readTimeBuilder_;
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        readTimeBuilder_;
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
+     *
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
       return readTimeBuilder_ != null || readTime_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
+     *
      * @return The readTime.
      */
     public com.google.protobuf.Timestamp getReadTime() {
@@ -922,6 +1004,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -943,6 +1027,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -950,8 +1036,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
-    public Builder setReadTime(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
+    public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
         onChanged();
@@ -962,6 +1047,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -973,7 +1060,7 @@ private static final long serialVersionUID = 0L;
       if (readTimeBuilder_ == null) {
         if (readTime_ != null) {
           readTime_ =
-            com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
         } else {
           readTime_ = value;
         }
@@ -985,6 +1072,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -1004,6 +1093,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -1012,11 +1103,13 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-      
+
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -1028,11 +1121,12 @@ private static final long serialVersionUID = 0L;
       if (readTimeBuilder_ != null) {
         return readTimeBuilder_.getMessageOrBuilder();
       } else {
-        return readTime_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
+        return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The read time of the query, when it is used to build the bundle. This is useful to
      * resume the query from the bundle, once it is loaded by client SDKs.
@@ -1041,21 +1135,24 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
         getReadTimeFieldBuilder() {
       if (readTimeBuilder_ == null) {
-        readTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getReadTime(),
-                getParentForChildren(),
-                isClean());
+        readTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getReadTime(), getParentForChildren(), isClean());
         readTime_ = null;
       }
       return readTimeBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1065,12 +1162,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:firestore.NamedQuery)
   }
 
   // @@protoc_insertion_point(class_scope:firestore.NamedQuery)
   private static final com.google.firestore.proto.NamedQuery DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.proto.NamedQuery();
   }
@@ -1079,16 +1176,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<NamedQuery>
-      PARSER = new com.google.protobuf.AbstractParser<NamedQuery>() {
-    @java.lang.Override
-    public NamedQuery parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new NamedQuery(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<NamedQuery> PARSER =
+      new com.google.protobuf.AbstractParser<NamedQuery>() {
+        @java.lang.Override
+        public NamedQuery parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NamedQuery(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<NamedQuery> parser() {
     return PARSER;
@@ -1103,6 +1200,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.proto.NamedQuery getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

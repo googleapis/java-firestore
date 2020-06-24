@@ -18,49 +18,63 @@
 
 package com.google.firestore.proto;
 
-public interface BundledDocumentMetadataOrBuilder extends
+public interface BundledDocumentMetadataOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:firestore.BundledDocumentMetadata)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The document key of a bundled document.
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The name.
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * The document key of a bundled document.
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The bytes for name.
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * The snapshot version of the document data bundled.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 2;</code>
+   *
    * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * The snapshot version of the document data bundled.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 2;</code>
+   *
    * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * The snapshot version of the document data bundled.
    * </pre>
@@ -70,11 +84,14 @@ public interface BundledDocumentMetadataOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Whether the document exists.
    * </pre>
    *
    * <code>bool exists = 3;</code>
+   *
    * @return The exists.
    */
   boolean getExists();

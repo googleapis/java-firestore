@@ -19,8 +19,10 @@
 package com.google.firestore.proto;
 
 /**
+ *
+ *
  * <pre>
- * A Firestore bundle is a length-prefixed stream of JSON representations of 
+ * A Firestore bundle is a length-prefixed stream of JSON representations of
  * `BundleElement`.
  * Only one `BundleMetadata` is expected, and it should be the first element.
  * The named queries follow after `metadata`. Every `document_metadata` is
@@ -29,30 +31,29 @@ package com.google.firestore.proto;
  *
  * Protobuf type {@code firestore.BundleElement}
  */
-public final class BundleElement extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:firestore.BundleElement)
     BundleElementOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use BundleElement.newBuilder() to construct.
   private BundleElement(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private BundleElement() {
-  }
+
+  private BundleElement() {}
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BundleElement();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private BundleElement(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -71,98 +72,112 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            com.google.firestore.proto.BundleMetadata.Builder subBuilder = null;
-            if (elementTypeCase_ == 1) {
-              subBuilder = ((com.google.firestore.proto.BundleMetadata) elementType_).toBuilder();
+          case 10:
+            {
+              com.google.firestore.proto.BundleMetadata.Builder subBuilder = null;
+              if (elementTypeCase_ == 1) {
+                subBuilder = ((com.google.firestore.proto.BundleMetadata) elementType_).toBuilder();
+              }
+              elementType_ =
+                  input.readMessage(
+                      com.google.firestore.proto.BundleMetadata.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.firestore.proto.BundleMetadata) elementType_);
+                elementType_ = subBuilder.buildPartial();
+              }
+              elementTypeCase_ = 1;
+              break;
             }
-            elementType_ =
-                input.readMessage(com.google.firestore.proto.BundleMetadata.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.proto.BundleMetadata) elementType_);
-              elementType_ = subBuilder.buildPartial();
+          case 18:
+            {
+              com.google.firestore.proto.NamedQuery.Builder subBuilder = null;
+              if (elementTypeCase_ == 2) {
+                subBuilder = ((com.google.firestore.proto.NamedQuery) elementType_).toBuilder();
+              }
+              elementType_ =
+                  input.readMessage(
+                      com.google.firestore.proto.NamedQuery.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.firestore.proto.NamedQuery) elementType_);
+                elementType_ = subBuilder.buildPartial();
+              }
+              elementTypeCase_ = 2;
+              break;
             }
-            elementTypeCase_ = 1;
-            break;
-          }
-          case 18: {
-            com.google.firestore.proto.NamedQuery.Builder subBuilder = null;
-            if (elementTypeCase_ == 2) {
-              subBuilder = ((com.google.firestore.proto.NamedQuery) elementType_).toBuilder();
+          case 26:
+            {
+              com.google.firestore.proto.BundledDocumentMetadata.Builder subBuilder = null;
+              if (elementTypeCase_ == 3) {
+                subBuilder =
+                    ((com.google.firestore.proto.BundledDocumentMetadata) elementType_).toBuilder();
+              }
+              elementType_ =
+                  input.readMessage(
+                      com.google.firestore.proto.BundledDocumentMetadata.parser(),
+                      extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(
+                    (com.google.firestore.proto.BundledDocumentMetadata) elementType_);
+                elementType_ = subBuilder.buildPartial();
+              }
+              elementTypeCase_ = 3;
+              break;
             }
-            elementType_ =
-                input.readMessage(com.google.firestore.proto.NamedQuery.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.proto.NamedQuery) elementType_);
-              elementType_ = subBuilder.buildPartial();
+          case 34:
+            {
+              com.google.firestore.v1.Document.Builder subBuilder = null;
+              if (elementTypeCase_ == 4) {
+                subBuilder = ((com.google.firestore.v1.Document) elementType_).toBuilder();
+              }
+              elementType_ =
+                  input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.firestore.v1.Document) elementType_);
+                elementType_ = subBuilder.buildPartial();
+              }
+              elementTypeCase_ = 4;
+              break;
             }
-            elementTypeCase_ = 2;
-            break;
-          }
-          case 26: {
-            com.google.firestore.proto.BundledDocumentMetadata.Builder subBuilder = null;
-            if (elementTypeCase_ == 3) {
-              subBuilder = ((com.google.firestore.proto.BundledDocumentMetadata) elementType_).toBuilder();
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
             }
-            elementType_ =
-                input.readMessage(com.google.firestore.proto.BundledDocumentMetadata.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.proto.BundledDocumentMetadata) elementType_);
-              elementType_ = subBuilder.buildPartial();
-            }
-            elementTypeCase_ = 3;
-            break;
-          }
-          case 34: {
-            com.google.firestore.v1.Document.Builder subBuilder = null;
-            if (elementTypeCase_ == 4) {
-              subBuilder = ((com.google.firestore.v1.Document) elementType_).toBuilder();
-            }
-            elementType_ =
-                input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.v1.Document) elementType_);
-              elementType_ = subBuilder.buildPartial();
-            }
-            elementTypeCase_ = 4;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
-            }
-            break;
-          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleElement_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_BundleElement_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleElement_fieldAccessorTable
+    return com.google.firestore.proto.BundleProto
+        .internal_static_firestore_BundleElement_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.proto.BundleElement.class, com.google.firestore.proto.BundleElement.Builder.class);
+            com.google.firestore.proto.BundleElement.class,
+            com.google.firestore.proto.BundleElement.Builder.class);
   }
 
   private int elementTypeCase_ = 0;
   private java.lang.Object elementType_;
+
   public enum ElementTypeCase
-      implements com.google.protobuf.Internal.EnumLite,
+      implements
+          com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     METADATA(1),
     NAMED_QUERY(2),
@@ -170,6 +185,7 @@ private static final long serialVersionUID = 0L;
     DOCUMENT(4),
     ELEMENTTYPE_NOT_SET(0);
     private final int value;
+
     private ElementTypeCase(int value) {
       this.value = value;
     }
@@ -185,28 +201,34 @@ private static final long serialVersionUID = 0L;
 
     public static ElementTypeCase forNumber(int value) {
       switch (value) {
-        case 1: return METADATA;
-        case 2: return NAMED_QUERY;
-        case 3: return DOCUMENT_METADATA;
-        case 4: return DOCUMENT;
-        case 0: return ELEMENTTYPE_NOT_SET;
-        default: return null;
+        case 1:
+          return METADATA;
+        case 2:
+          return NAMED_QUERY;
+        case 3:
+          return DOCUMENT_METADATA;
+        case 4:
+          return DOCUMENT;
+        case 0:
+          return ELEMENTTYPE_NOT_SET;
+        default:
+          return null;
       }
     }
+
     public int getNumber() {
       return this.value;
     }
   };
 
-  public ElementTypeCase
-  getElementTypeCase() {
-    return ElementTypeCase.forNumber(
-        elementTypeCase_);
+  public ElementTypeCase getElementTypeCase() {
+    return ElementTypeCase.forNumber(elementTypeCase_);
   }
 
   public static final int METADATA_FIELD_NUMBER = 1;
   /**
    * <code>.firestore.BundleMetadata metadata = 1;</code>
+   *
    * @return Whether the metadata field is set.
    */
   @java.lang.Override
@@ -215,22 +237,21 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>.firestore.BundleMetadata metadata = 1;</code>
+   *
    * @return The metadata.
    */
   @java.lang.Override
   public com.google.firestore.proto.BundleMetadata getMetadata() {
     if (elementTypeCase_ == 1) {
-       return (com.google.firestore.proto.BundleMetadata) elementType_;
+      return (com.google.firestore.proto.BundleMetadata) elementType_;
     }
     return com.google.firestore.proto.BundleMetadata.getDefaultInstance();
   }
-  /**
-   * <code>.firestore.BundleMetadata metadata = 1;</code>
-   */
+  /** <code>.firestore.BundleMetadata metadata = 1;</code> */
   @java.lang.Override
   public com.google.firestore.proto.BundleMetadataOrBuilder getMetadataOrBuilder() {
     if (elementTypeCase_ == 1) {
-       return (com.google.firestore.proto.BundleMetadata) elementType_;
+      return (com.google.firestore.proto.BundleMetadata) elementType_;
     }
     return com.google.firestore.proto.BundleMetadata.getDefaultInstance();
   }
@@ -238,6 +259,7 @@ private static final long serialVersionUID = 0L;
   public static final int NAMED_QUERY_FIELD_NUMBER = 2;
   /**
    * <code>.firestore.NamedQuery named_query = 2;</code>
+   *
    * @return Whether the namedQuery field is set.
    */
   @java.lang.Override
@@ -246,22 +268,21 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>.firestore.NamedQuery named_query = 2;</code>
+   *
    * @return The namedQuery.
    */
   @java.lang.Override
   public com.google.firestore.proto.NamedQuery getNamedQuery() {
     if (elementTypeCase_ == 2) {
-       return (com.google.firestore.proto.NamedQuery) elementType_;
+      return (com.google.firestore.proto.NamedQuery) elementType_;
     }
     return com.google.firestore.proto.NamedQuery.getDefaultInstance();
   }
-  /**
-   * <code>.firestore.NamedQuery named_query = 2;</code>
-   */
+  /** <code>.firestore.NamedQuery named_query = 2;</code> */
   @java.lang.Override
   public com.google.firestore.proto.NamedQueryOrBuilder getNamedQueryOrBuilder() {
     if (elementTypeCase_ == 2) {
-       return (com.google.firestore.proto.NamedQuery) elementType_;
+      return (com.google.firestore.proto.NamedQuery) elementType_;
     }
     return com.google.firestore.proto.NamedQuery.getDefaultInstance();
   }
@@ -269,6 +290,7 @@ private static final long serialVersionUID = 0L;
   public static final int DOCUMENT_METADATA_FIELD_NUMBER = 3;
   /**
    * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+   *
    * @return Whether the documentMetadata field is set.
    */
   @java.lang.Override
@@ -277,22 +299,22 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+   *
    * @return The documentMetadata.
    */
   @java.lang.Override
   public com.google.firestore.proto.BundledDocumentMetadata getDocumentMetadata() {
     if (elementTypeCase_ == 3) {
-       return (com.google.firestore.proto.BundledDocumentMetadata) elementType_;
+      return (com.google.firestore.proto.BundledDocumentMetadata) elementType_;
     }
     return com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance();
   }
-  /**
-   * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-   */
+  /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
   @java.lang.Override
-  public com.google.firestore.proto.BundledDocumentMetadataOrBuilder getDocumentMetadataOrBuilder() {
+  public com.google.firestore.proto.BundledDocumentMetadataOrBuilder
+      getDocumentMetadataOrBuilder() {
     if (elementTypeCase_ == 3) {
-       return (com.google.firestore.proto.BundledDocumentMetadata) elementType_;
+      return (com.google.firestore.proto.BundledDocumentMetadata) elementType_;
     }
     return com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance();
   }
@@ -300,6 +322,7 @@ private static final long serialVersionUID = 0L;
   public static final int DOCUMENT_FIELD_NUMBER = 4;
   /**
    * <code>.google.firestore.v1.Document document = 4;</code>
+   *
    * @return Whether the document field is set.
    */
   @java.lang.Override
@@ -308,27 +331,27 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <code>.google.firestore.v1.Document document = 4;</code>
+   *
    * @return The document.
    */
   @java.lang.Override
   public com.google.firestore.v1.Document getDocument() {
     if (elementTypeCase_ == 4) {
-       return (com.google.firestore.v1.Document) elementType_;
+      return (com.google.firestore.v1.Document) elementType_;
     }
     return com.google.firestore.v1.Document.getDefaultInstance();
   }
-  /**
-   * <code>.google.firestore.v1.Document document = 4;</code>
-   */
+  /** <code>.google.firestore.v1.Document document = 4;</code> */
   @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
     if (elementTypeCase_ == 4) {
-       return (com.google.firestore.v1.Document) elementType_;
+      return (com.google.firestore.v1.Document) elementType_;
     }
     return com.google.firestore.v1.Document.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -340,8 +363,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (elementTypeCase_ == 1) {
       output.writeMessage(1, (com.google.firestore.proto.BundleMetadata) elementType_);
     }
@@ -364,20 +386,24 @@ private static final long serialVersionUID = 0L;
 
     size = 0;
     if (elementTypeCase_ == 1) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, (com.google.firestore.proto.BundleMetadata) elementType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              1, (com.google.firestore.proto.BundleMetadata) elementType_);
     }
     if (elementTypeCase_ == 2) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (com.google.firestore.proto.NamedQuery) elementType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              2, (com.google.firestore.proto.NamedQuery) elementType_);
     }
     if (elementTypeCase_ == 3) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, (com.google.firestore.proto.BundledDocumentMetadata) elementType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              3, (com.google.firestore.proto.BundledDocumentMetadata) elementType_);
     }
     if (elementTypeCase_ == 4) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, (com.google.firestore.v1.Document) elementType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              4, (com.google.firestore.v1.Document) elementType_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -387,7 +413,7 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.proto.BundleElement)) {
       return super.equals(obj);
@@ -397,20 +423,16 @@ private static final long serialVersionUID = 0L;
     if (!getElementTypeCase().equals(other.getElementTypeCase())) return false;
     switch (elementTypeCase_) {
       case 1:
-        if (!getMetadata()
-            .equals(other.getMetadata())) return false;
+        if (!getMetadata().equals(other.getMetadata())) return false;
         break;
       case 2:
-        if (!getNamedQuery()
-            .equals(other.getNamedQuery())) return false;
+        if (!getNamedQuery().equals(other.getNamedQuery())) return false;
         break;
       case 3:
-        if (!getDocumentMetadata()
-            .equals(other.getDocumentMetadata())) return false;
+        if (!getDocumentMetadata().equals(other.getDocumentMetadata())) return false;
         break;
       case 4:
-        if (!getDocument()
-            .equals(other.getDocument())) return false;
+        if (!getDocument().equals(other.getDocument())) return false;
         break;
       case 0:
       default:
@@ -451,99 +473,106 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.proto.BundleElement parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.proto.BundleElement parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.proto.BundleElement parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.proto.BundleElement parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.proto.BundleElement parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.proto.BundleElement parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.proto.BundleElement prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
-   * A Firestore bundle is a length-prefixed stream of JSON representations of 
+   * A Firestore bundle is a length-prefixed stream of JSON representations of
    * `BundleElement`.
    * Only one `BundleMetadata` is expected, and it should be the first element.
    * The named queries follow after `metadata`. Every `document_metadata` is
@@ -552,21 +581,23 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code firestore.BundleElement}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:firestore.BundleElement)
       com.google.firestore.proto.BundleElementOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleElement_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleElement_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleElement_fieldAccessorTable
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleElement_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.proto.BundleElement.class, com.google.firestore.proto.BundleElement.Builder.class);
+              com.google.firestore.proto.BundleElement.class,
+              com.google.firestore.proto.BundleElement.Builder.class);
     }
 
     // Construct using com.google.firestore.proto.BundleElement.newBuilder()
@@ -574,16 +605,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -593,9 +623,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.proto.BundleProto.internal_static_firestore_BundleElement_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.proto.BundleProto
+          .internal_static_firestore_BundleElement_descriptor;
     }
 
     @java.lang.Override
@@ -614,7 +644,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.proto.BundleElement buildPartial() {
-      com.google.firestore.proto.BundleElement result = new com.google.firestore.proto.BundleElement(this);
+      com.google.firestore.proto.BundleElement result =
+          new com.google.firestore.proto.BundleElement(this);
       if (elementTypeCase_ == 1) {
         if (metadataBuilder_ == null) {
           result.elementType_ = elementType_;
@@ -652,38 +683,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.proto.BundleElement) {
-        return mergeFrom((com.google.firestore.proto.BundleElement)other);
+        return mergeFrom((com.google.firestore.proto.BundleElement) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -693,25 +725,30 @@ private static final long serialVersionUID = 0L;
     public Builder mergeFrom(com.google.firestore.proto.BundleElement other) {
       if (other == com.google.firestore.proto.BundleElement.getDefaultInstance()) return this;
       switch (other.getElementTypeCase()) {
-        case METADATA: {
-          mergeMetadata(other.getMetadata());
-          break;
-        }
-        case NAMED_QUERY: {
-          mergeNamedQuery(other.getNamedQuery());
-          break;
-        }
-        case DOCUMENT_METADATA: {
-          mergeDocumentMetadata(other.getDocumentMetadata());
-          break;
-        }
-        case DOCUMENT: {
-          mergeDocument(other.getDocument());
-          break;
-        }
-        case ELEMENTTYPE_NOT_SET: {
-          break;
-        }
+        case METADATA:
+          {
+            mergeMetadata(other.getMetadata());
+            break;
+          }
+        case NAMED_QUERY:
+          {
+            mergeNamedQuery(other.getNamedQuery());
+            break;
+          }
+        case DOCUMENT_METADATA:
+          {
+            mergeDocumentMetadata(other.getDocumentMetadata());
+            break;
+          }
+        case DOCUMENT:
+          {
+            mergeDocument(other.getDocument());
+            break;
+          }
+        case ELEMENTTYPE_NOT_SET:
+          {
+            break;
+          }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -741,12 +778,12 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int elementTypeCase_ = 0;
     private java.lang.Object elementType_;
-    public ElementTypeCase
-        getElementTypeCase() {
-      return ElementTypeCase.forNumber(
-          elementTypeCase_);
+
+    public ElementTypeCase getElementTypeCase() {
+      return ElementTypeCase.forNumber(elementTypeCase_);
     }
 
     public Builder clearElementType() {
@@ -756,11 +793,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundleMetadata, com.google.firestore.proto.BundleMetadata.Builder, com.google.firestore.proto.BundleMetadataOrBuilder> metadataBuilder_;
+            com.google.firestore.proto.BundleMetadata,
+            com.google.firestore.proto.BundleMetadata.Builder,
+            com.google.firestore.proto.BundleMetadataOrBuilder>
+        metadataBuilder_;
     /**
      * <code>.firestore.BundleMetadata metadata = 1;</code>
+     *
      * @return Whether the metadata field is set.
      */
     @java.lang.Override
@@ -769,6 +809,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>.firestore.BundleMetadata metadata = 1;</code>
+     *
      * @return The metadata.
      */
     @java.lang.Override
@@ -785,9 +826,7 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.BundleMetadata.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     public Builder setMetadata(com.google.firestore.proto.BundleMetadata value) {
       if (metadataBuilder_ == null) {
         if (value == null) {
@@ -801,11 +840,8 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 1;
       return this;
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
-    public Builder setMetadata(
-        com.google.firestore.proto.BundleMetadata.Builder builderForValue) {
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
+    public Builder setMetadata(com.google.firestore.proto.BundleMetadata.Builder builderForValue) {
       if (metadataBuilder_ == null) {
         elementType_ = builderForValue.build();
         onChanged();
@@ -815,15 +851,16 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 1;
       return this;
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     public Builder mergeMetadata(com.google.firestore.proto.BundleMetadata value) {
       if (metadataBuilder_ == null) {
-        if (elementTypeCase_ == 1 &&
-            elementType_ != com.google.firestore.proto.BundleMetadata.getDefaultInstance()) {
-          elementType_ = com.google.firestore.proto.BundleMetadata.newBuilder((com.google.firestore.proto.BundleMetadata) elementType_)
-              .mergeFrom(value).buildPartial();
+        if (elementTypeCase_ == 1
+            && elementType_ != com.google.firestore.proto.BundleMetadata.getDefaultInstance()) {
+          elementType_ =
+              com.google.firestore.proto.BundleMetadata.newBuilder(
+                      (com.google.firestore.proto.BundleMetadata) elementType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           elementType_ = value;
         }
@@ -837,9 +874,7 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 1;
       return this;
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     public Builder clearMetadata() {
       if (metadataBuilder_ == null) {
         if (elementTypeCase_ == 1) {
@@ -856,15 +891,11 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     public com.google.firestore.proto.BundleMetadata.Builder getMetadataBuilder() {
       return getMetadataFieldBuilder().getBuilder();
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     @java.lang.Override
     public com.google.firestore.proto.BundleMetadataOrBuilder getMetadataOrBuilder() {
       if ((elementTypeCase_ == 1) && (metadataBuilder_ != null)) {
@@ -876,32 +907,40 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.BundleMetadata.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.BundleMetadata metadata = 1;</code>
-     */
+    /** <code>.firestore.BundleMetadata metadata = 1;</code> */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundleMetadata, com.google.firestore.proto.BundleMetadata.Builder, com.google.firestore.proto.BundleMetadataOrBuilder> 
+            com.google.firestore.proto.BundleMetadata,
+            com.google.firestore.proto.BundleMetadata.Builder,
+            com.google.firestore.proto.BundleMetadataOrBuilder>
         getMetadataFieldBuilder() {
       if (metadataBuilder_ == null) {
         if (!(elementTypeCase_ == 1)) {
           elementType_ = com.google.firestore.proto.BundleMetadata.getDefaultInstance();
         }
-        metadataBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.proto.BundleMetadata, com.google.firestore.proto.BundleMetadata.Builder, com.google.firestore.proto.BundleMetadataOrBuilder>(
+        metadataBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.proto.BundleMetadata,
+                com.google.firestore.proto.BundleMetadata.Builder,
+                com.google.firestore.proto.BundleMetadataOrBuilder>(
                 (com.google.firestore.proto.BundleMetadata) elementType_,
                 getParentForChildren(),
                 isClean());
         elementType_ = null;
       }
       elementTypeCase_ = 1;
-      onChanged();;
+      onChanged();
+      ;
       return metadataBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.NamedQuery, com.google.firestore.proto.NamedQuery.Builder, com.google.firestore.proto.NamedQueryOrBuilder> namedQueryBuilder_;
+            com.google.firestore.proto.NamedQuery,
+            com.google.firestore.proto.NamedQuery.Builder,
+            com.google.firestore.proto.NamedQueryOrBuilder>
+        namedQueryBuilder_;
     /**
      * <code>.firestore.NamedQuery named_query = 2;</code>
+     *
      * @return Whether the namedQuery field is set.
      */
     @java.lang.Override
@@ -910,6 +949,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>.firestore.NamedQuery named_query = 2;</code>
+     *
      * @return The namedQuery.
      */
     @java.lang.Override
@@ -926,9 +966,7 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.NamedQuery.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     public Builder setNamedQuery(com.google.firestore.proto.NamedQuery value) {
       if (namedQueryBuilder_ == null) {
         if (value == null) {
@@ -942,11 +980,8 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 2;
       return this;
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
-    public Builder setNamedQuery(
-        com.google.firestore.proto.NamedQuery.Builder builderForValue) {
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
+    public Builder setNamedQuery(com.google.firestore.proto.NamedQuery.Builder builderForValue) {
       if (namedQueryBuilder_ == null) {
         elementType_ = builderForValue.build();
         onChanged();
@@ -956,15 +991,16 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 2;
       return this;
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     public Builder mergeNamedQuery(com.google.firestore.proto.NamedQuery value) {
       if (namedQueryBuilder_ == null) {
-        if (elementTypeCase_ == 2 &&
-            elementType_ != com.google.firestore.proto.NamedQuery.getDefaultInstance()) {
-          elementType_ = com.google.firestore.proto.NamedQuery.newBuilder((com.google.firestore.proto.NamedQuery) elementType_)
-              .mergeFrom(value).buildPartial();
+        if (elementTypeCase_ == 2
+            && elementType_ != com.google.firestore.proto.NamedQuery.getDefaultInstance()) {
+          elementType_ =
+              com.google.firestore.proto.NamedQuery.newBuilder(
+                      (com.google.firestore.proto.NamedQuery) elementType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           elementType_ = value;
         }
@@ -978,9 +1014,7 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 2;
       return this;
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     public Builder clearNamedQuery() {
       if (namedQueryBuilder_ == null) {
         if (elementTypeCase_ == 2) {
@@ -997,15 +1031,11 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     public com.google.firestore.proto.NamedQuery.Builder getNamedQueryBuilder() {
       return getNamedQueryFieldBuilder().getBuilder();
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     @java.lang.Override
     public com.google.firestore.proto.NamedQueryOrBuilder getNamedQueryOrBuilder() {
       if ((elementTypeCase_ == 2) && (namedQueryBuilder_ != null)) {
@@ -1017,32 +1047,40 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.NamedQuery.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.NamedQuery named_query = 2;</code>
-     */
+    /** <code>.firestore.NamedQuery named_query = 2;</code> */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.NamedQuery, com.google.firestore.proto.NamedQuery.Builder, com.google.firestore.proto.NamedQueryOrBuilder> 
+            com.google.firestore.proto.NamedQuery,
+            com.google.firestore.proto.NamedQuery.Builder,
+            com.google.firestore.proto.NamedQueryOrBuilder>
         getNamedQueryFieldBuilder() {
       if (namedQueryBuilder_ == null) {
         if (!(elementTypeCase_ == 2)) {
           elementType_ = com.google.firestore.proto.NamedQuery.getDefaultInstance();
         }
-        namedQueryBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.proto.NamedQuery, com.google.firestore.proto.NamedQuery.Builder, com.google.firestore.proto.NamedQueryOrBuilder>(
+        namedQueryBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.proto.NamedQuery,
+                com.google.firestore.proto.NamedQuery.Builder,
+                com.google.firestore.proto.NamedQueryOrBuilder>(
                 (com.google.firestore.proto.NamedQuery) elementType_,
                 getParentForChildren(),
                 isClean());
         elementType_ = null;
       }
       elementTypeCase_ = 2;
-      onChanged();;
+      onChanged();
+      ;
       return namedQueryBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundledDocumentMetadata, com.google.firestore.proto.BundledDocumentMetadata.Builder, com.google.firestore.proto.BundledDocumentMetadataOrBuilder> documentMetadataBuilder_;
+            com.google.firestore.proto.BundledDocumentMetadata,
+            com.google.firestore.proto.BundledDocumentMetadata.Builder,
+            com.google.firestore.proto.BundledDocumentMetadataOrBuilder>
+        documentMetadataBuilder_;
     /**
      * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+     *
      * @return Whether the documentMetadata field is set.
      */
     @java.lang.Override
@@ -1051,6 +1089,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
+     *
      * @return The documentMetadata.
      */
     @java.lang.Override
@@ -1067,9 +1106,7 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     public Builder setDocumentMetadata(com.google.firestore.proto.BundledDocumentMetadata value) {
       if (documentMetadataBuilder_ == null) {
         if (value == null) {
@@ -1083,9 +1120,7 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 3;
       return this;
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     public Builder setDocumentMetadata(
         com.google.firestore.proto.BundledDocumentMetadata.Builder builderForValue) {
       if (documentMetadataBuilder_ == null) {
@@ -1097,15 +1132,17 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 3;
       return this;
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     public Builder mergeDocumentMetadata(com.google.firestore.proto.BundledDocumentMetadata value) {
       if (documentMetadataBuilder_ == null) {
-        if (elementTypeCase_ == 3 &&
-            elementType_ != com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance()) {
-          elementType_ = com.google.firestore.proto.BundledDocumentMetadata.newBuilder((com.google.firestore.proto.BundledDocumentMetadata) elementType_)
-              .mergeFrom(value).buildPartial();
+        if (elementTypeCase_ == 3
+            && elementType_
+                != com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance()) {
+          elementType_ =
+              com.google.firestore.proto.BundledDocumentMetadata.newBuilder(
+                      (com.google.firestore.proto.BundledDocumentMetadata) elementType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           elementType_ = value;
         }
@@ -1119,9 +1156,7 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 3;
       return this;
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     public Builder clearDocumentMetadata() {
       if (documentMetadataBuilder_ == null) {
         if (elementTypeCase_ == 3) {
@@ -1138,17 +1173,14 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     public com.google.firestore.proto.BundledDocumentMetadata.Builder getDocumentMetadataBuilder() {
       return getDocumentMetadataFieldBuilder().getBuilder();
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     @java.lang.Override
-    public com.google.firestore.proto.BundledDocumentMetadataOrBuilder getDocumentMetadataOrBuilder() {
+    public com.google.firestore.proto.BundledDocumentMetadataOrBuilder
+        getDocumentMetadataOrBuilder() {
       if ((elementTypeCase_ == 3) && (documentMetadataBuilder_ != null)) {
         return documentMetadataBuilder_.getMessageOrBuilder();
       } else {
@@ -1158,32 +1190,40 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance();
       }
     }
-    /**
-     * <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code>
-     */
+    /** <code>.firestore.BundledDocumentMetadata document_metadata = 3;</code> */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.proto.BundledDocumentMetadata, com.google.firestore.proto.BundledDocumentMetadata.Builder, com.google.firestore.proto.BundledDocumentMetadataOrBuilder> 
+            com.google.firestore.proto.BundledDocumentMetadata,
+            com.google.firestore.proto.BundledDocumentMetadata.Builder,
+            com.google.firestore.proto.BundledDocumentMetadataOrBuilder>
         getDocumentMetadataFieldBuilder() {
       if (documentMetadataBuilder_ == null) {
         if (!(elementTypeCase_ == 3)) {
           elementType_ = com.google.firestore.proto.BundledDocumentMetadata.getDefaultInstance();
         }
-        documentMetadataBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.proto.BundledDocumentMetadata, com.google.firestore.proto.BundledDocumentMetadata.Builder, com.google.firestore.proto.BundledDocumentMetadataOrBuilder>(
+        documentMetadataBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.proto.BundledDocumentMetadata,
+                com.google.firestore.proto.BundledDocumentMetadata.Builder,
+                com.google.firestore.proto.BundledDocumentMetadataOrBuilder>(
                 (com.google.firestore.proto.BundledDocumentMetadata) elementType_,
                 getParentForChildren(),
                 isClean());
         elementType_ = null;
       }
       elementTypeCase_ = 3;
-      onChanged();;
+      onChanged();
+      ;
       return documentMetadataBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> documentBuilder_;
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
+        documentBuilder_;
     /**
      * <code>.google.firestore.v1.Document document = 4;</code>
+     *
      * @return Whether the document field is set.
      */
     @java.lang.Override
@@ -1192,6 +1232,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <code>.google.firestore.v1.Document document = 4;</code>
+     *
      * @return The document.
      */
     @java.lang.Override
@@ -1208,9 +1249,7 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.v1.Document.getDefaultInstance();
       }
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     public Builder setDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
         if (value == null) {
@@ -1224,11 +1263,8 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 4;
       return this;
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
-    public Builder setDocument(
-        com.google.firestore.v1.Document.Builder builderForValue) {
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
+    public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
         elementType_ = builderForValue.build();
         onChanged();
@@ -1238,15 +1274,16 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 4;
       return this;
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     public Builder mergeDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
-        if (elementTypeCase_ == 4 &&
-            elementType_ != com.google.firestore.v1.Document.getDefaultInstance()) {
-          elementType_ = com.google.firestore.v1.Document.newBuilder((com.google.firestore.v1.Document) elementType_)
-              .mergeFrom(value).buildPartial();
+        if (elementTypeCase_ == 4
+            && elementType_ != com.google.firestore.v1.Document.getDefaultInstance()) {
+          elementType_ =
+              com.google.firestore.v1.Document.newBuilder(
+                      (com.google.firestore.v1.Document) elementType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           elementType_ = value;
         }
@@ -1260,9 +1297,7 @@ private static final long serialVersionUID = 0L;
       elementTypeCase_ = 4;
       return this;
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     public Builder clearDocument() {
       if (documentBuilder_ == null) {
         if (elementTypeCase_ == 4) {
@@ -1279,15 +1314,11 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
       return getDocumentFieldBuilder().getBuilder();
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     @java.lang.Override
     public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
       if ((elementTypeCase_ == 4) && (documentBuilder_ != null)) {
@@ -1299,30 +1330,32 @@ private static final long serialVersionUID = 0L;
         return com.google.firestore.v1.Document.getDefaultInstance();
       }
     }
-    /**
-     * <code>.google.firestore.v1.Document document = 4;</code>
-     */
+    /** <code>.google.firestore.v1.Document document = 4;</code> */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> 
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
         getDocumentFieldBuilder() {
       if (documentBuilder_ == null) {
         if (!(elementTypeCase_ == 4)) {
           elementType_ = com.google.firestore.v1.Document.getDefaultInstance();
         }
-        documentBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder>(
-                (com.google.firestore.v1.Document) elementType_,
-                getParentForChildren(),
-                isClean());
+        documentBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.Document,
+                com.google.firestore.v1.Document.Builder,
+                com.google.firestore.v1.DocumentOrBuilder>(
+                (com.google.firestore.v1.Document) elementType_, getParentForChildren(), isClean());
         elementType_ = null;
       }
       elementTypeCase_ = 4;
-      onChanged();;
+      onChanged();
+      ;
       return documentBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1332,12 +1365,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:firestore.BundleElement)
   }
 
   // @@protoc_insertion_point(class_scope:firestore.BundleElement)
   private static final com.google.firestore.proto.BundleElement DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.proto.BundleElement();
   }
@@ -1346,16 +1379,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<BundleElement>
-      PARSER = new com.google.protobuf.AbstractParser<BundleElement>() {
-    @java.lang.Override
-    public BundleElement parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new BundleElement(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<BundleElement> PARSER =
+      new com.google.protobuf.AbstractParser<BundleElement>() {
+        @java.lang.Override
+        public BundleElement parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new BundleElement(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<BundleElement> parser() {
     return PARSER;
@@ -1370,6 +1403,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.proto.BundleElement getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-
