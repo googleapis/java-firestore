@@ -379,6 +379,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<com.google.firestore.admin.v1.Index> getIndexesList() {
       return indexes_;
     }
@@ -391,6 +392,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends com.google.firestore.admin.v1.IndexOrBuilder>
         getIndexesOrBuilderList() {
       return indexes_;
@@ -404,6 +406,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
      */
+    @java.lang.Override
     public int getIndexesCount() {
       return indexes_.size();
     }
@@ -416,6 +419,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.Index getIndexes(int index) {
       return indexes_.get(index);
     }
@@ -428,6 +432,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.IndexOrBuilder getIndexesOrBuilder(int index) {
       return indexes_.get(index);
     }
@@ -447,6 +452,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The usesAncestorConfig.
      */
+    @java.lang.Override
     public boolean getUsesAncestorConfig() {
       return usesAncestorConfig_;
     }
@@ -467,6 +473,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The ancestorField.
      */
+    @java.lang.Override
     public java.lang.String getAncestorField() {
       java.lang.Object ref = ancestorField_;
       if (ref instanceof java.lang.String) {
@@ -492,6 +499,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for ancestorField.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getAncestorFieldBytes() {
       java.lang.Object ref = ancestorField_;
       if (ref instanceof java.lang.String) {
@@ -521,6 +529,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The reverting.
      */
+    @java.lang.Override
     public boolean getReverting() {
       return reverting_;
     }
@@ -1297,6 +1306,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The usesAncestorConfig.
        */
+      @java.lang.Override
       public boolean getUsesAncestorConfig() {
         return usesAncestorConfig_;
       }
@@ -1477,6 +1487,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The reverting.
        */
+      @java.lang.Override
       public boolean getReverting() {
         return reverting_;
       }
@@ -1610,6 +1621,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The name.
    */
+  @java.lang.Override
   public java.lang.String getName() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -1653,6 +1665,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for name.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -1681,6 +1694,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the indexConfig field is set.
    */
+  @java.lang.Override
   public boolean hasIndexConfig() {
     return indexConfig_ != null;
   }
@@ -1698,6 +1712,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The indexConfig.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Field.IndexConfig getIndexConfig() {
     return indexConfig_ == null
         ? com.google.firestore.admin.v1.Field.IndexConfig.getDefaultInstance()
@@ -1715,6 +1730,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Field.IndexConfigOrBuilder getIndexConfigOrBuilder() {
     return getIndexConfig();
   }

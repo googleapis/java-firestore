@@ -137,6 +137,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.Document> getDocumentsList() {
     return documents_;
   }
@@ -149,6 +150,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder>
       getDocumentsOrBuilderList() {
     return documents_;
@@ -162,6 +164,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
+  @java.lang.Override
   public int getDocumentsCount() {
     return documents_.size();
   }
@@ -174,6 +177,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Document getDocuments(int index) {
     return documents_.get(index);
   }
@@ -186,6 +190,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentsOrBuilder(int index) {
     return documents_.get(index);
   }
@@ -203,6 +208,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * @return The nextPageToken.
    */
+  @java.lang.Override
   public java.lang.String getNextPageToken() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {
@@ -225,6 +231,7 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    * @return The bytes for nextPageToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {

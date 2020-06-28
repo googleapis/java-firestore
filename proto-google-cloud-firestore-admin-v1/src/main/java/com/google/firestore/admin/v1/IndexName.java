@@ -30,14 +30,14 @@ public class IndexName implements ResourceName {
 
   private static final PathTemplate PATH_TEMPLATE =
       PathTemplate.createWithoutUrlEncoding(
-          "projects/{project}/databases/{database}/collectionGroups/{collection_id}/indexes/{index_id}");
+          "projects/{project}/databases/{database}/collectionGroups/{collection}/indexes/{index}");
 
   private volatile Map<String, String> fieldValuesMap;
 
   private final String project;
   private final String database;
-  private final String collectionId;
-  private final String indexId;
+  private final String collection;
+  private final String index;
 
   public String getProject() {
     return project;
@@ -47,12 +47,12 @@ public class IndexName implements ResourceName {
     return database;
   }
 
-  public String getCollectionId() {
-    return collectionId;
+  public String getCollection() {
+    return collection;
   }
 
-  public String getIndexId() {
-    return indexId;
+  public String getIndex() {
+    return index;
   }
 
   public static Builder newBuilder() {
@@ -66,26 +66,25 @@ public class IndexName implements ResourceName {
   private IndexName(Builder builder) {
     project = Preconditions.checkNotNull(builder.getProject());
     database = Preconditions.checkNotNull(builder.getDatabase());
-    collectionId = Preconditions.checkNotNull(builder.getCollectionId());
-    indexId = Preconditions.checkNotNull(builder.getIndexId());
+    collection = Preconditions.checkNotNull(builder.getCollection());
+    index = Preconditions.checkNotNull(builder.getIndex());
   }
 
-  public static IndexName of(String project, String database, String collectionId, String indexId) {
+  public static IndexName of(String project, String database, String collection, String index) {
     return newBuilder()
         .setProject(project)
         .setDatabase(database)
-        .setCollectionId(collectionId)
-        .setIndexId(indexId)
+        .setCollection(collection)
+        .setIndex(index)
         .build();
   }
 
-  public static String format(
-      String project, String database, String collectionId, String indexId) {
+  public static String format(String project, String database, String collection, String index) {
     return newBuilder()
         .setProject(project)
         .setDatabase(database)
-        .setCollectionId(collectionId)
-        .setIndexId(indexId)
+        .setCollection(collection)
+        .setIndex(index)
         .build()
         .toString();
   }
@@ -100,8 +99,8 @@ public class IndexName implements ResourceName {
     return of(
         matchMap.get("project"),
         matchMap.get("database"),
-        matchMap.get("collection_id"),
-        matchMap.get("index_id"));
+        matchMap.get("collection"),
+        matchMap.get("index"));
   }
 
   public static List<IndexName> parseList(List<String> formattedStrings) {
@@ -135,8 +134,8 @@ public class IndexName implements ResourceName {
           ImmutableMap.Builder<String, String> fieldMapBuilder = ImmutableMap.builder();
           fieldMapBuilder.put("project", project);
           fieldMapBuilder.put("database", database);
-          fieldMapBuilder.put("collectionId", collectionId);
-          fieldMapBuilder.put("indexId", indexId);
+          fieldMapBuilder.put("collection", collection);
+          fieldMapBuilder.put("index", index);
           fieldValuesMap = fieldMapBuilder.build();
         }
       }
@@ -151,14 +150,7 @@ public class IndexName implements ResourceName {
   @Override
   public String toString() {
     return PATH_TEMPLATE.instantiate(
-        "project",
-        project,
-        "database",
-        database,
-        "collection_id",
-        collectionId,
-        "index_id",
-        indexId);
+        "project", project, "database", database, "collection", collection, "index", index);
   }
 
   /** Builder for IndexName. */
@@ -166,8 +158,8 @@ public class IndexName implements ResourceName {
 
     private String project;
     private String database;
-    private String collectionId;
-    private String indexId;
+    private String collection;
+    private String index;
 
     public String getProject() {
       return project;
@@ -177,12 +169,12 @@ public class IndexName implements ResourceName {
       return database;
     }
 
-    public String getCollectionId() {
-      return collectionId;
+    public String getCollection() {
+      return collection;
     }
 
-    public String getIndexId() {
-      return indexId;
+    public String getIndex() {
+      return index;
     }
 
     public Builder setProject(String project) {
@@ -195,13 +187,13 @@ public class IndexName implements ResourceName {
       return this;
     }
 
-    public Builder setCollectionId(String collectionId) {
-      this.collectionId = collectionId;
+    public Builder setCollection(String collection) {
+      this.collection = collection;
       return this;
     }
 
-    public Builder setIndexId(String indexId) {
-      this.indexId = indexId;
+    public Builder setIndex(String index) {
+      this.index = index;
       return this;
     }
 
@@ -210,8 +202,8 @@ public class IndexName implements ResourceName {
     private Builder(IndexName indexName) {
       project = indexName.project;
       database = indexName.database;
-      collectionId = indexName.collectionId;
-      indexId = indexName.indexId;
+      collection = indexName.collection;
+      index = indexName.index;
     }
 
     public IndexName build() {
@@ -228,8 +220,8 @@ public class IndexName implements ResourceName {
       IndexName that = (IndexName) o;
       return (this.project.equals(that.project))
           && (this.database.equals(that.database))
-          && (this.collectionId.equals(that.collectionId))
-          && (this.indexId.equals(that.indexId));
+          && (this.collection.equals(that.collection))
+          && (this.index.equals(that.index));
     }
     return false;
   }
@@ -242,9 +234,9 @@ public class IndexName implements ResourceName {
     h *= 1000003;
     h ^= database.hashCode();
     h *= 1000003;
-    h ^= collectionId.hashCode();
+    h ^= collection.hashCode();
     h *= 1000003;
-    h ^= indexId.hashCode();
+    h ^= index.hashCode();
     return h;
   }
 }

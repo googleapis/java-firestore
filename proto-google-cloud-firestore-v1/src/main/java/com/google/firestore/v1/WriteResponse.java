@@ -162,6 +162,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The streamId.
    */
+  @java.lang.Override
   public java.lang.String getStreamId() {
     java.lang.Object ref = streamId_;
     if (ref instanceof java.lang.String) {
@@ -185,6 +186,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for streamId.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getStreamIdBytes() {
     java.lang.Object ref = streamId_;
     if (ref instanceof java.lang.String) {
@@ -212,6 +214,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The streamToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getStreamToken() {
     return streamToken_;
   }
@@ -229,6 +232,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 3;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.WriteResult> getWriteResultsList() {
     return writeResults_;
   }
@@ -243,6 +247,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 3;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.WriteResultOrBuilder>
       getWriteResultsOrBuilderList() {
     return writeResults_;
@@ -258,6 +263,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 3;</code>
    */
+  @java.lang.Override
   public int getWriteResultsCount() {
     return writeResults_.size();
   }
@@ -272,6 +278,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.WriteResult getWriteResults(int index) {
     return writeResults_.get(index);
   }
@@ -286,6 +293,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.WriteResultOrBuilder getWriteResultsOrBuilder(int index) {
     return writeResults_.get(index);
   }
@@ -304,6 +312,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the commitTime field is set.
    */
+  @java.lang.Override
   public boolean hasCommitTime() {
     return commitTime_ != null;
   }
@@ -319,6 +328,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The commitTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getCommitTime() {
     return commitTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : commitTime_;
   }
@@ -332,6 +342,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp commit_time = 4;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCommitTimeOrBuilder() {
     return getCommitTime();
   }
@@ -876,6 +887,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The streamToken.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getStreamToken() {
       return streamToken_;
     }
