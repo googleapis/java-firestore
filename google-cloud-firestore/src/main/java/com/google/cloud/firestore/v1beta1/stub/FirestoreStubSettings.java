@@ -89,16 +89,16 @@ import org.threeten.bp.Duration;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of updateDocument to 30 seconds:
+ * <p>For example, to set the total timeout of deleteDocument to 30 seconds:
  *
  * <pre>
  * <code>
  * FirestoreStubSettings.Builder firestoreSettingsBuilder =
  *     FirestoreStubSettings.newBuilder();
  * firestoreSettingsBuilder
- *     .updateDocumentSettings()
+ *     .deleteDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
+ *         firestoreSettingsBuilder.deleteDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreStubSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -115,18 +115,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           .add("https://www.googleapis.com/auth/datastore")
           .build();
 
-  private final UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings;
-  private final PagedCallSettings<
-          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-      listDocumentsSettings;
-  private final UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings;
-  private final UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings;
   private final UnaryCallSettings<DeleteDocumentRequest, Empty> deleteDocumentSettings;
   private final ServerStreamingCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsSettings;
   private final UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionSettings;
-  private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
   private final UnaryCallSettings<RollbackRequest, Empty> rollbackSettings;
   private final ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings;
   private final StreamingCallSettings<WriteRequest, WriteResponse> writeSettings;
@@ -134,27 +127,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final PagedCallSettings<
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings;
-
-  /** Returns the object with the settings used for calls to getDocument. */
-  public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
-    return getDocumentSettings;
-  }
-
-  /** Returns the object with the settings used for calls to listDocuments. */
-  public PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-      listDocumentsSettings() {
-    return listDocumentsSettings;
-  }
-
-  /** Returns the object with the settings used for calls to createDocument. */
-  public UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings() {
-    return createDocumentSettings;
-  }
-
-  /** Returns the object with the settings used for calls to updateDocument. */
-  public UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings() {
-    return updateDocumentSettings;
-  }
+  private final UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings;
+  private final PagedCallSettings<
+          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+      listDocumentsSettings;
+  private final UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings;
+  private final UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings;
+  private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
 
   /** Returns the object with the settings used for calls to deleteDocument. */
   public UnaryCallSettings<DeleteDocumentRequest, Empty> deleteDocumentSettings() {
@@ -171,11 +150,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   public UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionSettings() {
     return beginTransactionSettings;
-  }
-
-  /** Returns the object with the settings used for calls to commit. */
-  public UnaryCallSettings<CommitRequest, CommitResponse> commitSettings() {
-    return commitSettings;
   }
 
   /** Returns the object with the settings used for calls to rollback. */
@@ -203,6 +177,32 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return listCollectionIdsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to getDocument. */
+  public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
+    return getDocumentSettings;
+  }
+
+  /** Returns the object with the settings used for calls to listDocuments. */
+  public PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+      listDocumentsSettings() {
+    return listDocumentsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to createDocument. */
+  public UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings() {
+    return createDocumentSettings;
+  }
+
+  /** Returns the object with the settings used for calls to updateDocument. */
+  public UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings() {
+    return updateDocumentSettings;
+  }
+
+  /** Returns the object with the settings used for calls to commit. */
+  public UnaryCallSettings<CommitRequest, CommitResponse> commitSettings() {
+    return commitSettings;
   }
 
   @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
@@ -273,56 +273,20 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   protected FirestoreStubSettings(Builder settingsBuilder) throws IOException {
     super(settingsBuilder);
 
-    getDocumentSettings = settingsBuilder.getDocumentSettings().build();
-    listDocumentsSettings = settingsBuilder.listDocumentsSettings().build();
-    createDocumentSettings = settingsBuilder.createDocumentSettings().build();
-    updateDocumentSettings = settingsBuilder.updateDocumentSettings().build();
     deleteDocumentSettings = settingsBuilder.deleteDocumentSettings().build();
     batchGetDocumentsSettings = settingsBuilder.batchGetDocumentsSettings().build();
     beginTransactionSettings = settingsBuilder.beginTransactionSettings().build();
-    commitSettings = settingsBuilder.commitSettings().build();
     rollbackSettings = settingsBuilder.rollbackSettings().build();
     runQuerySettings = settingsBuilder.runQuerySettings().build();
     writeSettings = settingsBuilder.writeSettings().build();
     listenSettings = settingsBuilder.listenSettings().build();
     listCollectionIdsSettings = settingsBuilder.listCollectionIdsSettings().build();
+    getDocumentSettings = settingsBuilder.getDocumentSettings().build();
+    listDocumentsSettings = settingsBuilder.listDocumentsSettings().build();
+    createDocumentSettings = settingsBuilder.createDocumentSettings().build();
+    updateDocumentSettings = settingsBuilder.updateDocumentSettings().build();
+    commitSettings = settingsBuilder.commitSettings().build();
   }
-
-  private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
-      LIST_DOCUMENTS_PAGE_STR_DESC =
-          new PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>() {
-            @Override
-            public String emptyToken() {
-              return "";
-            }
-
-            @Override
-            public ListDocumentsRequest injectToken(ListDocumentsRequest payload, String token) {
-              return ListDocumentsRequest.newBuilder(payload).setPageToken(token).build();
-            }
-
-            @Override
-            public ListDocumentsRequest injectPageSize(ListDocumentsRequest payload, int pageSize) {
-              return ListDocumentsRequest.newBuilder(payload).setPageSize(pageSize).build();
-            }
-
-            @Override
-            public Integer extractPageSize(ListDocumentsRequest payload) {
-              return payload.getPageSize();
-            }
-
-            @Override
-            public String extractNextToken(ListDocumentsResponse payload) {
-              return payload.getNextPageToken();
-            }
-
-            @Override
-            public Iterable<Document> extractResources(ListDocumentsResponse payload) {
-              return payload.getDocumentsList() != null
-                  ? payload.getDocumentsList()
-                  : ImmutableList.<Document>of();
-            }
-          };
 
   private static final PagedListDescriptor<
           ListCollectionIdsRequest, ListCollectionIdsResponse, String>
@@ -363,20 +327,39 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             }
           };
 
-  private static final PagedListResponseFactory<
-          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-      LIST_DOCUMENTS_PAGE_STR_FACT =
-          new PagedListResponseFactory<
-              ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>() {
+  private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
+      LIST_DOCUMENTS_PAGE_STR_DESC =
+          new PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>() {
             @Override
-            public ApiFuture<ListDocumentsPagedResponse> getFuturePagedResponse(
-                UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> callable,
-                ListDocumentsRequest request,
-                ApiCallContext context,
-                ApiFuture<ListDocumentsResponse> futureResponse) {
-              PageContext<ListDocumentsRequest, ListDocumentsResponse, Document> pageContext =
-                  PageContext.create(callable, LIST_DOCUMENTS_PAGE_STR_DESC, request, context);
-              return ListDocumentsPagedResponse.createAsync(pageContext, futureResponse);
+            public String emptyToken() {
+              return "";
+            }
+
+            @Override
+            public ListDocumentsRequest injectToken(ListDocumentsRequest payload, String token) {
+              return ListDocumentsRequest.newBuilder(payload).setPageToken(token).build();
+            }
+
+            @Override
+            public ListDocumentsRequest injectPageSize(ListDocumentsRequest payload, int pageSize) {
+              return ListDocumentsRequest.newBuilder(payload).setPageSize(pageSize).build();
+            }
+
+            @Override
+            public Integer extractPageSize(ListDocumentsRequest payload) {
+              return payload.getPageSize();
+            }
+
+            @Override
+            public String extractNextToken(ListDocumentsResponse payload) {
+              return payload.getNextPageToken();
+            }
+
+            @Override
+            public Iterable<Document> extractResources(ListDocumentsResponse payload) {
+              return payload.getDocumentsList() != null
+                  ? payload.getDocumentsList()
+                  : ImmutableList.<Document>of();
             }
           };
 
@@ -399,23 +382,33 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             }
           };
 
+  private static final PagedListResponseFactory<
+          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+      LIST_DOCUMENTS_PAGE_STR_FACT =
+          new PagedListResponseFactory<
+              ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>() {
+            @Override
+            public ApiFuture<ListDocumentsPagedResponse> getFuturePagedResponse(
+                UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> callable,
+                ListDocumentsRequest request,
+                ApiCallContext context,
+                ApiFuture<ListDocumentsResponse> futureResponse) {
+              PageContext<ListDocumentsRequest, ListDocumentsResponse, Document> pageContext =
+                  PageContext.create(callable, LIST_DOCUMENTS_PAGE_STR_DESC, request, context);
+              return ListDocumentsPagedResponse.createAsync(pageContext, futureResponse);
+            }
+          };
+
   /** Builder for FirestoreStubSettings. */
   public static class Builder extends StubSettings.Builder<FirestoreStubSettings, Builder> {
     private final ImmutableList<UnaryCallSettings.Builder<?, ?>> unaryMethodSettingsBuilders;
 
-    private final UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings;
-    private final PagedCallSettings.Builder<
-            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-        listDocumentsSettings;
-    private final UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings;
-    private final UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings;
     private final UnaryCallSettings.Builder<DeleteDocumentRequest, Empty> deleteDocumentSettings;
     private final ServerStreamingCallSettings.Builder<
             BatchGetDocumentsRequest, BatchGetDocumentsResponse>
         batchGetDocumentsSettings;
     private final UnaryCallSettings.Builder<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionSettings;
-    private final UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings;
     private final UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings;
     private final ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings;
@@ -424,6 +417,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final PagedCallSettings.Builder<
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings;
+    private final UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings;
+    private final PagedCallSettings.Builder<
+            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+        listDocumentsSettings;
+    private final UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings;
+    private final UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings;
+    private final UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings;
 
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
@@ -477,21 +477,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     protected Builder(ClientContext clientContext) {
       super(clientContext);
 
-      getDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
-      listDocumentsSettings = PagedCallSettings.newBuilder(LIST_DOCUMENTS_PAGE_STR_FACT);
-
-      createDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
-      updateDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       deleteDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       batchGetDocumentsSettings = ServerStreamingCallSettings.newBuilder();
 
       beginTransactionSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
-      commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
@@ -503,17 +493,27 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
       listCollectionIdsSettings = PagedCallSettings.newBuilder(LIST_COLLECTION_IDS_PAGE_STR_FACT);
 
+      getDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
+      listDocumentsSettings = PagedCallSettings.newBuilder(LIST_DOCUMENTS_PAGE_STR_FACT);
+
+      createDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
+      updateDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
+      commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
+              deleteDocumentSettings,
+              beginTransactionSettings,
+              rollbackSettings,
+              listCollectionIdsSettings,
               getDocumentSettings,
               listDocumentsSettings,
               createDocumentSettings,
               updateDocumentSettings,
-              deleteDocumentSettings,
-              beginTransactionSettings,
-              commitSettings,
-              rollbackSettings,
-              listCollectionIdsSettings);
+              commitSettings);
 
       initDefaults(this);
     }
@@ -528,6 +528,36 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     }
 
     private static Builder initDefaults(Builder builder) {
+
+      builder
+          .deleteDocumentSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+
+      builder
+          .batchGetDocumentsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("streaming"));
+
+      builder
+          .beginTransactionSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+
+      builder
+          .rollbackSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+
+      builder
+          .runQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("streaming"));
+
+      builder
+          .listCollectionIdsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       builder
           .getDocumentSettings()
@@ -550,38 +580,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       builder
-          .deleteDocumentSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
-          .batchGetDocumentsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("streaming"));
-
-      builder
-          .beginTransactionSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
           .commitSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
-          .rollbackSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
-          .runQuerySettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("streaming"));
-
-      builder
-          .listCollectionIdsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       return builder;
@@ -590,31 +590,31 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     protected Builder(FirestoreStubSettings settings) {
       super(settings);
 
-      getDocumentSettings = settings.getDocumentSettings.toBuilder();
-      listDocumentsSettings = settings.listDocumentsSettings.toBuilder();
-      createDocumentSettings = settings.createDocumentSettings.toBuilder();
-      updateDocumentSettings = settings.updateDocumentSettings.toBuilder();
       deleteDocumentSettings = settings.deleteDocumentSettings.toBuilder();
       batchGetDocumentsSettings = settings.batchGetDocumentsSettings.toBuilder();
       beginTransactionSettings = settings.beginTransactionSettings.toBuilder();
-      commitSettings = settings.commitSettings.toBuilder();
       rollbackSettings = settings.rollbackSettings.toBuilder();
       runQuerySettings = settings.runQuerySettings.toBuilder();
       writeSettings = settings.writeSettings.toBuilder();
       listenSettings = settings.listenSettings.toBuilder();
       listCollectionIdsSettings = settings.listCollectionIdsSettings.toBuilder();
+      getDocumentSettings = settings.getDocumentSettings.toBuilder();
+      listDocumentsSettings = settings.listDocumentsSettings.toBuilder();
+      createDocumentSettings = settings.createDocumentSettings.toBuilder();
+      updateDocumentSettings = settings.updateDocumentSettings.toBuilder();
+      commitSettings = settings.commitSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
+              deleteDocumentSettings,
+              beginTransactionSettings,
+              rollbackSettings,
+              listCollectionIdsSettings,
               getDocumentSettings,
               listDocumentsSettings,
               createDocumentSettings,
               updateDocumentSettings,
-              deleteDocumentSettings,
-              beginTransactionSettings,
-              commitSettings,
-              rollbackSettings,
-              listCollectionIdsSettings);
+              commitSettings);
     }
 
     // NEXT_MAJOR_VER: remove 'throws Exception'
@@ -633,28 +633,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       return unaryMethodSettingsBuilders;
     }
 
-    /** Returns the builder for the settings used for calls to getDocument. */
-    public UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings() {
-      return getDocumentSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to listDocuments. */
-    public PagedCallSettings.Builder<
-            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-        listDocumentsSettings() {
-      return listDocumentsSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to createDocument. */
-    public UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings() {
-      return createDocumentSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to updateDocument. */
-    public UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings() {
-      return updateDocumentSettings;
-    }
-
     /** Returns the builder for the settings used for calls to deleteDocument. */
     public UnaryCallSettings.Builder<DeleteDocumentRequest, Empty> deleteDocumentSettings() {
       return deleteDocumentSettings;
@@ -670,11 +648,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     public UnaryCallSettings.Builder<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionSettings() {
       return beginTransactionSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to commit. */
-    public UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings() {
-      return commitSettings;
     }
 
     /** Returns the builder for the settings used for calls to rollback. */
@@ -703,6 +676,33 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return listCollectionIdsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to getDocument. */
+    public UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings() {
+      return getDocumentSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to listDocuments. */
+    public PagedCallSettings.Builder<
+            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+        listDocumentsSettings() {
+      return listDocumentsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to createDocument. */
+    public UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings() {
+      return createDocumentSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to updateDocument. */
+    public UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings() {
+      return updateDocumentSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to commit. */
+    public UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings() {
+      return commitSettings;
     }
 
     @Override

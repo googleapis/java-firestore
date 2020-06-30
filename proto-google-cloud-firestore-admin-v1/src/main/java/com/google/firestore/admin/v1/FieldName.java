@@ -30,14 +30,14 @@ public class FieldName implements ResourceName {
 
   private static final PathTemplate PATH_TEMPLATE =
       PathTemplate.createWithoutUrlEncoding(
-          "projects/{project}/databases/{database}/collectionGroups/{collection_id}/fields/{field_id}");
+          "projects/{project}/databases/{database}/collectionGroups/{collection}/fields/{field}");
 
   private volatile Map<String, String> fieldValuesMap;
 
   private final String project;
   private final String database;
-  private final String collectionId;
-  private final String fieldId;
+  private final String collection;
+  private final String field;
 
   public String getProject() {
     return project;
@@ -47,12 +47,12 @@ public class FieldName implements ResourceName {
     return database;
   }
 
-  public String getCollectionId() {
-    return collectionId;
+  public String getCollection() {
+    return collection;
   }
 
-  public String getFieldId() {
-    return fieldId;
+  public String getField() {
+    return field;
   }
 
   public static Builder newBuilder() {
@@ -66,26 +66,25 @@ public class FieldName implements ResourceName {
   private FieldName(Builder builder) {
     project = Preconditions.checkNotNull(builder.getProject());
     database = Preconditions.checkNotNull(builder.getDatabase());
-    collectionId = Preconditions.checkNotNull(builder.getCollectionId());
-    fieldId = Preconditions.checkNotNull(builder.getFieldId());
+    collection = Preconditions.checkNotNull(builder.getCollection());
+    field = Preconditions.checkNotNull(builder.getField());
   }
 
-  public static FieldName of(String project, String database, String collectionId, String fieldId) {
+  public static FieldName of(String project, String database, String collection, String field) {
     return newBuilder()
         .setProject(project)
         .setDatabase(database)
-        .setCollectionId(collectionId)
-        .setFieldId(fieldId)
+        .setCollection(collection)
+        .setField(field)
         .build();
   }
 
-  public static String format(
-      String project, String database, String collectionId, String fieldId) {
+  public static String format(String project, String database, String collection, String field) {
     return newBuilder()
         .setProject(project)
         .setDatabase(database)
-        .setCollectionId(collectionId)
-        .setFieldId(fieldId)
+        .setCollection(collection)
+        .setField(field)
         .build()
         .toString();
   }
@@ -100,8 +99,8 @@ public class FieldName implements ResourceName {
     return of(
         matchMap.get("project"),
         matchMap.get("database"),
-        matchMap.get("collection_id"),
-        matchMap.get("field_id"));
+        matchMap.get("collection"),
+        matchMap.get("field"));
   }
 
   public static List<FieldName> parseList(List<String> formattedStrings) {
@@ -135,8 +134,8 @@ public class FieldName implements ResourceName {
           ImmutableMap.Builder<String, String> fieldMapBuilder = ImmutableMap.builder();
           fieldMapBuilder.put("project", project);
           fieldMapBuilder.put("database", database);
-          fieldMapBuilder.put("collectionId", collectionId);
-          fieldMapBuilder.put("fieldId", fieldId);
+          fieldMapBuilder.put("collection", collection);
+          fieldMapBuilder.put("field", field);
           fieldValuesMap = fieldMapBuilder.build();
         }
       }
@@ -151,14 +150,7 @@ public class FieldName implements ResourceName {
   @Override
   public String toString() {
     return PATH_TEMPLATE.instantiate(
-        "project",
-        project,
-        "database",
-        database,
-        "collection_id",
-        collectionId,
-        "field_id",
-        fieldId);
+        "project", project, "database", database, "collection", collection, "field", field);
   }
 
   /** Builder for FieldName. */
@@ -166,8 +158,8 @@ public class FieldName implements ResourceName {
 
     private String project;
     private String database;
-    private String collectionId;
-    private String fieldId;
+    private String collection;
+    private String field;
 
     public String getProject() {
       return project;
@@ -177,12 +169,12 @@ public class FieldName implements ResourceName {
       return database;
     }
 
-    public String getCollectionId() {
-      return collectionId;
+    public String getCollection() {
+      return collection;
     }
 
-    public String getFieldId() {
-      return fieldId;
+    public String getField() {
+      return field;
     }
 
     public Builder setProject(String project) {
@@ -195,13 +187,13 @@ public class FieldName implements ResourceName {
       return this;
     }
 
-    public Builder setCollectionId(String collectionId) {
-      this.collectionId = collectionId;
+    public Builder setCollection(String collection) {
+      this.collection = collection;
       return this;
     }
 
-    public Builder setFieldId(String fieldId) {
-      this.fieldId = fieldId;
+    public Builder setField(String field) {
+      this.field = field;
       return this;
     }
 
@@ -210,8 +202,8 @@ public class FieldName implements ResourceName {
     private Builder(FieldName fieldName) {
       project = fieldName.project;
       database = fieldName.database;
-      collectionId = fieldName.collectionId;
-      fieldId = fieldName.fieldId;
+      collection = fieldName.collection;
+      field = fieldName.field;
     }
 
     public FieldName build() {
@@ -228,8 +220,8 @@ public class FieldName implements ResourceName {
       FieldName that = (FieldName) o;
       return (this.project.equals(that.project))
           && (this.database.equals(that.database))
-          && (this.collectionId.equals(that.collectionId))
-          && (this.fieldId.equals(that.fieldId));
+          && (this.collection.equals(that.collection))
+          && (this.field.equals(that.field));
     }
     return false;
   }
@@ -242,9 +234,9 @@ public class FieldName implements ResourceName {
     h *= 1000003;
     h ^= database.hashCode();
     h *= 1000003;
-    h ^= collectionId.hashCode();
+    h ^= collection.hashCode();
     h *= 1000003;
-    h ^= fieldId.hashCode();
+    h ^= field.hashCode();
     return h;
   }
 }

@@ -122,6 +122,7 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
   }
@@ -456,6 +457,7 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
      *
      * @return The transaction.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
     }
