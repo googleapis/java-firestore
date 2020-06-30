@@ -1264,7 +1264,6 @@ public class ITSystemTest {
   }
 
   @Test
-<<<<<<< HEAD
   public void bulkWriterCreate() throws Exception {
     DocumentReference docRef = randomColl.document();
 
