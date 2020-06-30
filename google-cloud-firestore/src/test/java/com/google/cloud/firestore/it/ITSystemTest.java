@@ -1369,12 +1369,13 @@ public class ITSystemTest {
 
     ApiFuture<DocumentSnapshot> result = docRef.get();
     assertEquals(Collections.singletonMap("foo", "bar3"), result.get().getData());
-=======
+  }
+
+  @Test
   public void testInstanceReturnedByGetServiceCanBeUsedToDeserializeAQuery() throws Exception {
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
     RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
     fs.close();
     Query.fromProto(fs, proto);
->>>>>>> master
   }
 }
