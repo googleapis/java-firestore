@@ -143,6 +143,7 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The parent.
    */
+  @java.lang.Override
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -168,6 +169,7 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The bytes for parent.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -194,6 +196,7 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the index field is set.
    */
+  @java.lang.Override
   public boolean hasIndex() {
     return index_ != null;
   }
@@ -209,6 +212,7 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The index.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index getIndex() {
     return index_ == null ? com.google.firestore.admin.v1.Index.getDefaultInstance() : index_;
   }
@@ -222,6 +226,7 @@ public final class CreateIndexRequest extends com.google.protobuf.GeneratedMessa
    * <code>.google.firestore.admin.v1.Index index = 2 [(.google.api.field_behavior) = REQUIRED];
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.IndexOrBuilder getIndexOrBuilder() {
     return getIndex();
   }

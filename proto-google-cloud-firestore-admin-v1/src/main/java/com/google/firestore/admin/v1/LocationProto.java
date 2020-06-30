@@ -43,12 +43,13 @@ public final class LocationProto {
       "\n(google/firestore/admin/v1/location.pro"
           + "to\022\031google.firestore.admin.v1\032\030google/ty"
           + "pe/latlng.proto\032\034google/api/annotations."
-          + "proto\"\022\n\020LocationMetadataB\273\001\n\035com.google"
+          + "proto\"\022\n\020LocationMetadataB\341\001\n\035com.google"
           + ".firestore.admin.v1B\rLocationProtoP\001Z>go"
           + "ogle.golang.org/genproto/googleapis/fire"
           + "store/admin/v1;admin\242\002\004GCFS\252\002\037Google.Clo"
           + "ud.Firestore.Admin.V1\312\002\037Google\\Cloud\\Fir"
-          + "estore\\Admin\\V1b\006proto3"
+          + "estore\\Admin\\V1\352\002#Google::Cloud::Firesto"
+          + "re::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

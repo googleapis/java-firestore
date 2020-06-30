@@ -127,6 +127,7 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The estimatedWork.
    */
+  @java.lang.Override
   public long getEstimatedWork() {
     return estimatedWork_;
   }
@@ -144,6 +145,7 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The completedWork.
    */
+  @java.lang.Override
   public long getCompletedWork() {
     return completedWork_;
   }
@@ -491,6 +493,7 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The estimatedWork.
      */
+    @java.lang.Override
     public long getEstimatedWork() {
       return estimatedWork_;
     }
@@ -542,6 +545,7 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The completedWork.
      */
+    @java.lang.Override
     public long getCompletedWork() {
       return completedWork_;
     }

@@ -22,7 +22,7 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response from [Firestore.BatchWrite][].
+ * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BatchWriteResponse}
@@ -145,6 +145,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.WriteResult> getWriteResultsList() {
     return writeResults_;
   }
@@ -159,6 +160,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.WriteResultOrBuilder>
       getWriteResultsOrBuilderList() {
     return writeResults_;
@@ -174,6 +176,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public int getWriteResultsCount() {
     return writeResults_.size();
   }
@@ -188,6 +191,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.WriteResult getWriteResults(int index) {
     return writeResults_.get(index);
   }
@@ -202,6 +206,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.WriteResultOrBuilder getWriteResultsOrBuilder(int index) {
     return writeResults_.get(index);
   }
@@ -219,6 +224,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.rpc.Status> getStatusList() {
     return status_;
   }
@@ -233,6 +239,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.rpc.StatusOrBuilder> getStatusOrBuilderList() {
     return status_;
   }
@@ -247,6 +254,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
+  @java.lang.Override
   public int getStatusCount() {
     return status_.size();
   }
@@ -261,6 +269,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
+  @java.lang.Override
   public com.google.rpc.Status getStatus(int index) {
     return status_.get(index);
   }
@@ -275,6 +284,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
+  @java.lang.Override
   public com.google.rpc.StatusOrBuilder getStatusOrBuilder(int index) {
     return status_.get(index);
   }
@@ -455,7 +465,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The response from [Firestore.BatchWrite][].
+   * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BatchWriteResponse}

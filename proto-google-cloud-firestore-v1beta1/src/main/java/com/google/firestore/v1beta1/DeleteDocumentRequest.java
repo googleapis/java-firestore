@@ -141,6 +141,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The name.
    */
+  @java.lang.Override
   public java.lang.String getName() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -164,6 +165,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The bytes for name.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -190,6 +192,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return Whether the currentDocument field is set.
    */
+  @java.lang.Override
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
   }
@@ -205,6 +208,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * @return The currentDocument.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Precondition getCurrentDocument() {
     return currentDocument_ == null
         ? com.google.firestore.v1beta1.Precondition.getDefaultInstance()
@@ -220,6 +224,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <code>.google.firestore.v1beta1.Precondition current_document = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
     return getCurrentDocument();
   }

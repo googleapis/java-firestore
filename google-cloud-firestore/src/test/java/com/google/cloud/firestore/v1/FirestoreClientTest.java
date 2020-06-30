@@ -17,6 +17,7 @@ package com.google.cloud.firestore.v1;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
+import static com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 
 import com.google.api.gax.core.NoCredentialsProvider;
 import com.google.api.gax.grpc.GaxGrpcProperties;
@@ -40,6 +41,7 @@ import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
+import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
@@ -50,6 +52,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -398,6 +402,46 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
+  public void batchWriteTest() {
+    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String database = "database1789464955";
+    BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+    BatchWriteResponse actualResponse = client.batchWrite(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
+
+    Assert.assertEquals(database, actualRequest.getDatabase());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void batchWriteExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String database = "database1789464955";
+      BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+      client.batchWrite(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
   public void beginTransactionTest() {
     ByteString transaction = ByteString.copyFromUtf8("-34");
     BeginTransactionResponse expectedResponse =
@@ -709,19 +753,31 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
-  public void batchWriteTest() {
-    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
+  public void partitionQueryTest() {
+    String nextPageToken = "";
+    Cursor partitionsElement = Cursor.newBuilder().build();
+    List<Cursor> partitions = Arrays.asList(partitionsElement);
+    PartitionQueryResponse expectedResponse =
+        PartitionQueryResponse.newBuilder()
+            .setNextPageToken(nextPageToken)
+            .addAllPartitions(partitions)
+            .build();
     mockFirestore.addResponse(expectedResponse);
 
-    BatchWriteRequest request = BatchWriteRequest.newBuilder().build();
+    String parent = "parent-995424086";
+    PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
 
-    BatchWriteResponse actualResponse = client.batchWrite(request);
-    Assert.assertEquals(expectedResponse, actualResponse);
+    PartitionQueryPagedResponse pagedListResponse = client.partitionQuery(request);
+
+    List<Cursor> resources = Lists.newArrayList(pagedListResponse.iterateAll());
+    Assert.assertEquals(1, resources.size());
+    Assert.assertEquals(expectedResponse.getPartitionsList().get(0), resources.get(0));
 
     List<AbstractMessage> actualRequests = mockFirestore.getRequests();
     Assert.assertEquals(1, actualRequests.size());
-    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
+    PartitionQueryRequest actualRequest = (PartitionQueryRequest) actualRequests.get(0);
 
+    Assert.assertEquals(parent, actualRequest.getParent());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
@@ -730,14 +786,15 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
-  public void batchWriteExceptionTest() throws Exception {
+  public void partitionQueryExceptionTest() throws Exception {
     StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
     mockFirestore.addException(exception);
 
     try {
-      BatchWriteRequest request = BatchWriteRequest.newBuilder().build();
+      String parent = "parent-995424086";
+      PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
 
-      client.batchWrite(request);
+      client.partitionQuery(request);
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception
