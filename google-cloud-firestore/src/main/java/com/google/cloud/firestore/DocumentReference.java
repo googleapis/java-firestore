@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
@@ -42,15 +43,16 @@ import javax.annotation.Nullable;
  * test mocks. Subclassing is not supported in production code and new SDK releases may break code
  * that does so.
  */
+@InternalExtensionOnly
 public class DocumentReference {
 
   private final ResourcePath path;
-  private final FirestoreImpl firestore;
+  private final FirestoreRpcContext<?> rpcContext;
 
-  protected DocumentReference(
-      FirestoreImpl firestore, ResourcePath path) { // Elevated access level for mocking.
+  DocumentReference(
+      FirestoreRpcContext<?> rpcContext, ResourcePath path) { // Elevated access level for mocking.
     this.path = path;
-    this.firestore = firestore;
+    this.rpcContext = rpcContext;
   }
 
   /*
@@ -60,7 +62,7 @@ public class DocumentReference {
    */
   @Nonnull
   public Firestore getFirestore() {
-    return firestore;
+    return rpcContext.getFirestore();
   }
 
   /**
@@ -102,7 +104,7 @@ public class DocumentReference {
    */
   @Nonnull
   public CollectionReference getParent() {
-    return new CollectionReference(firestore, path.getParent());
+    return new CollectionReference(rpcContext, path.getParent());
   }
 
   /**
@@ -114,7 +116,7 @@ public class DocumentReference {
    */
   @Nonnull
   public CollectionReference collection(@Nonnull String collectionPath) {
-    return new CollectionReference(firestore, path.append(collectionPath));
+    return new CollectionReference(rpcContext, path.append(collectionPath));
   }
 
   /**
@@ -144,7 +146,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.create(this, fields).commit());
   }
 
@@ -157,7 +159,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Object pojo) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.create(this, pojo).commit());
   }
 
@@ -170,7 +172,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.set(this, fields).commit());
   }
 
@@ -186,7 +188,7 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(
       @Nonnull Map<String, Object> fields, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.set(this, fields, options).commit());
   }
 
@@ -199,7 +201,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.set(this, pojo).commit());
   }
 
@@ -214,7 +216,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.set(this, pojo, options).commit());
   }
 
@@ -227,7 +229,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.update(this, fields).commit());
   }
 
@@ -241,7 +243,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields, Precondition options) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.update(this, fields, options).commit());
   }
 
@@ -257,7 +259,7 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull String field, @Nullable Object value, Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.update(this, field, value, moreFieldsAndValues).commit());
   }
 
@@ -273,7 +275,7 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull FieldPath fieldPath, @Nullable Object value, Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.update(this, fieldPath, value, moreFieldsAndValues).commit());
   }
 
@@ -293,7 +295,7 @@ public class DocumentReference {
       @Nonnull String field,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(
         writeBatch.update(this, options, field, value, moreFieldsAndValues).commit());
   }
@@ -314,7 +316,7 @@ public class DocumentReference {
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(
         writeBatch.update(this, options, fieldPath, value, moreFieldsAndValues).commit());
   }
@@ -327,7 +329,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull Precondition options) {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.delete(this, options).commit());
   }
 
@@ -338,7 +340,7 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> delete() {
-    WriteBatch writeBatch = firestore.batch();
+    WriteBatch writeBatch = rpcContext.getFirestore().batch();
     return extractFirst(writeBatch.delete(this).commit());
   }
 
@@ -351,7 +353,21 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
-    return extractFirst(firestore.getAll(this));
+    return extractFirst(rpcContext.getFirestore().getAll(this));
+  }
+
+  /**
+   * Reads the document referenced by this DocumentReference. If the document doesn't exist, the
+   * get(FieldMask fieldMask) will return an empty DocumentSnapshot.
+   *
+   * @param fieldMask A FieldMask object to retrieve the field value
+   * @return An ApiFuture that will be resolved with the contents of the Document at this
+   *     DocumentReference, or a failure if the document does not exist
+   */
+  @Nonnull
+  public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
+    return extractFirst(
+        rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
   }
 
   /**
@@ -369,8 +385,8 @@ public class DocumentReference {
     try {
       response =
           ApiExceptions.callAndTranslateApiException(
-              firestore.sendRequest(
-                  request.build(), firestore.getClient().listCollectionIdsPagedCallable()));
+              rpcContext.sendRequest(
+                  request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
     } catch (ApiException exception) {
       throw FirestoreException.apiException(exception);
     }
@@ -443,7 +459,7 @@ public class DocumentReference {
                 }
                 listener.onEvent(
                     DocumentSnapshot.fromMissing(
-                        firestore, DocumentReference.this, value.getReadTime()),
+                        rpcContext, DocumentReference.this, value.getReadTime()),
                     null);
               }
             });
@@ -458,7 +474,7 @@ public class DocumentReference {
   @Nonnull
   public ListenerRegistration addSnapshotListener(
       @Nonnull EventListener<DocumentSnapshot> listener) {
-    return addSnapshotListener(firestore.getClient().getExecutor(), listener);
+    return addSnapshotListener(rpcContext.getClient().getExecutor(), listener);
   }
 
   ResourcePath getResourcePath() {
@@ -485,11 +501,11 @@ public class DocumentReference {
       return false;
     }
     DocumentReference that = (DocumentReference) obj;
-    return Objects.equals(path, that.path) && Objects.equals(firestore, that.firestore);
+    return Objects.equals(path, that.path) && Objects.equals(rpcContext, that.rpcContext);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(path, firestore);
+    return Objects.hash(path, rpcContext);
   }
 }

@@ -59,6 +59,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.v1.RunQueryRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -156,6 +157,15 @@ public class ITSystemTest {
     List<DocumentSnapshot> documentSnapshots =
         firestore.getAll(new DocumentReference[] {ref}, FieldMask.of("foo")).get();
     assertEquals(map("foo", "bar"), documentSnapshots.get(0).getData());
+  }
+
+  @Test
+  public void getFieldMaskWithDocumentReference() throws Exception {
+    DocumentReference ref = randomColl.document("doc1");
+    ref.set(ALL_SUPPORTED_TYPES_MAP).get();
+    DocumentSnapshot documentSnapshots = ref.get(FieldMask.of("foo", "foobar")).get();
+    assertEquals("bar", documentSnapshots.get("foo"));
+    assertNull(documentSnapshots.get("foobar"));
   }
 
   @Test
@@ -1254,6 +1264,7 @@ public class ITSystemTest {
   }
 
   @Test
+<<<<<<< HEAD
   public void bulkWriterCreate() throws Exception {
     DocumentReference docRef = randomColl.document();
 
@@ -1358,5 +1369,12 @@ public class ITSystemTest {
 
     ApiFuture<DocumentSnapshot> result = docRef.get();
     assertEquals(Collections.singletonMap("foo", "bar3"), result.get().getData());
+=======
+  public void testInstanceReturnedByGetServiceCanBeUsedToDeserializeAQuery() throws Exception {
+    Firestore fs = FirestoreOptions.getDefaultInstance().getService();
+    RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
+    fs.close();
+    Query.fromProto(fs, proto);
+>>>>>>> master
   }
 }

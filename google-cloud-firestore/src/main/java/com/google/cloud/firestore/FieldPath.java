@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.StructuredQuery;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
@@ -30,11 +31,13 @@ import javax.annotation.Nonnull;
 @AutoValue
 public abstract class FieldPath extends BasePath<FieldPath> implements Comparable<FieldPath> {
 
+  private static final String DOCUMENT_ID_SENTINEL = "__name__";
+
   /**
    * A special sentinel FieldPath to refer to the ID of a document. It can be used in queries to
    * sort or filter by the document ID.
    */
-  static final FieldPath DOCUMENT_ID = FieldPath.of("__name__");
+  static final FieldPath DOCUMENT_ID = FieldPath.of(DOCUMENT_ID_SENTINEL);
 
   /** Regular expression to verify that dot-separated field paths do not contain ~*[]/. */
   private static final Pattern PROHIBITED_CHARACTERS = Pattern.compile(".*[~*/\\[\\]].*");
@@ -65,6 +68,11 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
    */
   public static FieldPath documentId() {
     return DOCUMENT_ID;
+  }
+
+  /** Verifies if the provided path matches the path that is used for the Document ID sentinel. */
+  static boolean isDocumentId(String path) {
+    return DOCUMENT_ID_SENTINEL.equals(path);
   }
 
   /** Returns a field path from a dot separated string. Does not support escaping. */
@@ -151,5 +159,9 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   @Override
   public String toString() {
     return getEncodedPath();
+  }
+
+  StructuredQuery.FieldReference toProto() {
+    return StructuredQuery.FieldReference.newBuilder().setFieldPath(getEncodedPath()).build();
   }
 }
