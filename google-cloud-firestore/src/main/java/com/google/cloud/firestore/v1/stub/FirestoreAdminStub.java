@@ -20,21 +20,28 @@ import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPage
 
 import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
+import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
+import com.google.firestore.admin.v1.FieldOperationMetadata;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
+import com.google.firestore.admin.v1.IndexOperationMetadata;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
+import com.google.longrunning.stub.OperationsStub;
 import com.google.protobuf.Empty;
 import javax.annotation.Generated;
 
@@ -47,6 +54,31 @@ import javax.annotation.Generated;
 @Generated("by gapic-generator")
 @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
 public abstract class FirestoreAdminStub implements BackgroundResource {
+
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationsStub getOperationsStub() {
+    throw new UnsupportedOperationException("Not implemented: getOperationsStub()");
+  }
+
+  public UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteIndexCallable()");
+  }
+
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateFieldOperationCallable()");
+  }
+
+  public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateFieldCallable()");
+  }
+
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
+      createIndexOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: createIndexOperationCallable()");
+  }
 
   public UnaryCallable<CreateIndexRequest, Operation> createIndexCallable() {
     throw new UnsupportedOperationException("Not implemented: createIndexCallable()");
@@ -64,18 +96,6 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: getIndexCallable()");
   }
 
-  public UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
-    throw new UnsupportedOperationException("Not implemented: deleteIndexCallable()");
-  }
-
-  public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
-    throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
-  }
-
-  public UnaryCallable<ExportDocumentsRequest, Operation> exportDocumentsCallable() {
-    throw new UnsupportedOperationException("Not implemented: exportDocumentsCallable()");
-  }
-
   public UnaryCallable<GetFieldRequest, Field> getFieldCallable() {
     throw new UnsupportedOperationException("Not implemented: getFieldCallable()");
   }
@@ -88,8 +108,24 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: listFieldsCallable()");
   }
 
-  public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
-    throw new UnsupportedOperationException("Not implemented: updateFieldCallable()");
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallable<ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
+      exportDocumentsOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: exportDocumentsOperationCallable()");
+  }
+
+  public UnaryCallable<ExportDocumentsRequest, Operation> exportDocumentsCallable() {
+    throw new UnsupportedOperationException("Not implemented: exportDocumentsCallable()");
+  }
+
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
+      importDocumentsOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: importDocumentsOperationCallable()");
+  }
+
+  public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
+    throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
   }
 
   @Override

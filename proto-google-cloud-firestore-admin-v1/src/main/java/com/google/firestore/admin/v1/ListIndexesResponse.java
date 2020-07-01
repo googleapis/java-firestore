@@ -138,6 +138,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.admin.v1.Index> getIndexesList() {
     return indexes_;
   }
@@ -150,6 +151,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.admin.v1.IndexOrBuilder>
       getIndexesOrBuilderList() {
     return indexes_;
@@ -163,6 +165,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
+  @java.lang.Override
   public int getIndexesCount() {
     return indexes_.size();
   }
@@ -175,6 +178,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Index getIndexes(int index) {
     return indexes_.get(index);
   }
@@ -187,6 +191,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * <code>repeated .google.firestore.admin.v1.Index indexes = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.IndexOrBuilder getIndexesOrBuilder(int index) {
     return indexes_.get(index);
   }
@@ -205,6 +210,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * @return The nextPageToken.
    */
+  @java.lang.Override
   public java.lang.String getNextPageToken() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {
@@ -228,6 +234,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    * @return The bytes for nextPageToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {

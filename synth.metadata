@@ -3,8 +3,8 @@
     {
       "git": {
         "name": ".",
-        "remote": "git@github.com:googleapis/java-firestore.git",
-        "sha": "dbb17be9bacd4876d5249678401f5fb38460b2af"
+        "remote": "https://github.com/googleapis/java-firestore.git",
+        "sha": "1065704f3e571f3f51b0e9ed13ec67eb7c662b88"
       }
     },
     {
