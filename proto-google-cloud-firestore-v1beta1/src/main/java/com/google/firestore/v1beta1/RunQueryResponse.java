@@ -161,6 +161,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
   }
@@ -179,6 +180,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return Whether the document field is set.
    */
+  @java.lang.Override
   public boolean hasDocument() {
     return document_ != null;
   }
@@ -194,6 +196,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return The document.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Document getDocument() {
     return document_ == null
         ? com.google.firestore.v1beta1.Document.getDefaultInstance()
@@ -209,6 +212,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * <code>.google.firestore.v1beta1.Document document = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
   }
@@ -231,6 +235,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return readTime_ != null;
   }
@@ -250,6 +255,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
@@ -267,6 +273,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     return getReadTime();
   }
@@ -285,6 +292,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    * @return The skippedResults.
    */
+  @java.lang.Override
   public int getSkippedResults() {
     return skippedResults_;
   }
@@ -690,6 +698,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      * @return The transaction.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
     }
@@ -1169,6 +1178,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      * @return The skippedResults.
      */
+    @java.lang.Override
     public int getSkippedResults() {
       return skippedResults_;
     }

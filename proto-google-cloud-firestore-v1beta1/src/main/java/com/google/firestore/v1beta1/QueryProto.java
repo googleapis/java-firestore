@@ -132,12 +132,13 @@ public final class QueryProto {
           + "n\022\031\n\025DIRECTION_UNSPECIFIED\020\000\022\r\n\tASCENDIN"
           + "G\020\001\022\016\n\nDESCENDING\020\002\"I\n\006Cursor\022/\n\006values\030"
           + "\001 \003(\0132\037.google.firestore.v1beta1.Value\022\016"
-          + "\n\006before\030\002 \001(\010B\270\001\n\034com.google.firestore."
+          + "\n\006before\030\002 \001(\010B\334\001\n\034com.google.firestore."
           + "v1beta1B\nQueryProtoP\001ZAgoogle.golang.org"
           + "/genproto/googleapis/firestore/v1beta1;f"
           + "irestore\242\002\004GCFS\252\002\036Google.Cloud.Firestore"
           + ".V1Beta1\312\002\036Google\\Cloud\\Firestore\\V1beta"
-          + "1b\006proto3"
+          + "1\352\002!Google::Cloud::Firestore::V1beta1b\006p"
+          + "roto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

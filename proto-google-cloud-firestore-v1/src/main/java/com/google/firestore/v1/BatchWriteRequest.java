@@ -22,7 +22,7 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.BatchWrite][].
+ * The request for [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BatchWriteRequest}
@@ -89,6 +89,19 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
                   input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry));
               break;
             }
+          case 26:
+            {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                labels_ =
+                    com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000002;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.String> labels__ =
+                  input.readMessage(
+                      LabelsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              labels_.getMutableMap().put(labels__.getKey(), labels__.getValue());
+              break;
+            }
           default:
             {
               if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
@@ -116,6 +129,17 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
         .internal_static_google_firestore_v1_BatchWriteRequest_descriptor;
   }
 
+  @SuppressWarnings({"rawtypes"})
+  @java.lang.Override
+  protected com.google.protobuf.MapField internalGetMapField(int number) {
+    switch (number) {
+      case 3:
+        return internalGetLabels();
+      default:
+        throw new RuntimeException("Invalid map field number: " + number);
+    }
+  }
+
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
@@ -132,14 +156,15 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The database.
    */
+  @java.lang.Override
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -155,14 +180,15 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The bytes for database.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -182,17 +208,14 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.Write> getWritesList() {
     return writes_;
   }
@@ -201,17 +224,14 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> getWritesOrBuilderList() {
     return writes_;
   }
@@ -220,17 +240,14 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public int getWritesCount() {
     return writes_.size();
   }
@@ -239,17 +256,14 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Write getWrites(int index) {
     return writes_.get(index);
   }
@@ -258,19 +272,114 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(int index) {
     return writes_.get(index);
+  }
+
+  public static final int LABELS_FIELD_NUMBER = 3;
+
+  private static final class LabelsDefaultEntryHolder {
+    static final com.google.protobuf.MapEntry<java.lang.String, java.lang.String> defaultEntry =
+        com.google.protobuf.MapEntry.<java.lang.String, java.lang.String>newDefaultInstance(
+            com.google.firestore.v1.FirestoreProto
+                .internal_static_google_firestore_v1_BatchWriteRequest_LabelsEntry_descriptor,
+            com.google.protobuf.WireFormat.FieldType.STRING,
+            "",
+            com.google.protobuf.WireFormat.FieldType.STRING,
+            "");
+  }
+
+  private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
+
+  private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
+    if (labels_ == null) {
+      return com.google.protobuf.MapField.emptyMapField(LabelsDefaultEntryHolder.defaultEntry);
+    }
+    return labels_;
+  }
+
+  public int getLabelsCount() {
+    return internalGetLabels().getMap().size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  @java.lang.Override
+  public boolean containsLabels(java.lang.String key) {
+    if (key == null) {
+      throw new java.lang.NullPointerException();
+    }
+    return internalGetLabels().getMap().containsKey(key);
+  }
+  /** Use {@link #getLabelsMap()} instead. */
+  @java.lang.Override
+  @java.lang.Deprecated
+  public java.util.Map<java.lang.String, java.lang.String> getLabels() {
+    return getLabelsMap();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  @java.lang.Override
+  public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
+    return internalGetLabels().getMap();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  @java.lang.Override
+  public java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+    if (key == null) {
+      throw new java.lang.NullPointerException();
+    }
+    java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
+    return map.containsKey(key) ? map.get(key) : defaultValue;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  @java.lang.Override
+  public java.lang.String getLabelsOrThrow(java.lang.String key) {
+    if (key == null) {
+      throw new java.lang.NullPointerException();
+    }
+    java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
+    if (!map.containsKey(key)) {
+      throw new java.lang.IllegalArgumentException();
+    }
+    return map.get(key);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -293,6 +402,8 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
     for (int i = 0; i < writes_.size(); i++) {
       output.writeMessage(2, writes_.get(i));
     }
+    com.google.protobuf.GeneratedMessageV3.serializeStringMapTo(
+        output, internalGetLabels(), LabelsDefaultEntryHolder.defaultEntry, 3);
     unknownFields.writeTo(output);
   }
 
@@ -307,6 +418,16 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
     }
     for (int i = 0; i < writes_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, writes_.get(i));
+    }
+    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry :
+        internalGetLabels().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, java.lang.String> labels__ =
+          LabelsDefaultEntryHolder.defaultEntry
+              .newBuilderForType()
+              .setKey(entry.getKey())
+              .setValue(entry.getValue())
+              .build();
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, labels__);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -326,6 +447,7 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
 
     if (!getDatabase().equals(other.getDatabase())) return false;
     if (!getWritesList().equals(other.getWritesList())) return false;
+    if (!internalGetLabels().equals(other.internalGetLabels())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -342,6 +464,10 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
     if (getWritesCount() > 0) {
       hash = (37 * hash) + WRITES_FIELD_NUMBER;
       hash = (53 * hash) + getWritesList().hashCode();
+    }
+    if (!internalGetLabels().getMap().isEmpty()) {
+      hash = (37 * hash) + LABELS_FIELD_NUMBER;
+      hash = (53 * hash) + internalGetLabels().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -447,7 +573,7 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
    *
    *
    * <pre>
-   * The request for [Firestore.BatchWrite][].
+   * The request for [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BatchWriteRequest}
@@ -459,6 +585,26 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.FirestoreProto
           .internal_static_google_firestore_v1_BatchWriteRequest_descriptor;
+    }
+
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMapField(int number) {
+      switch (number) {
+        case 3:
+          return internalGetLabels();
+        default:
+          throw new RuntimeException("Invalid map field number: " + number);
+      }
+    }
+
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMutableMapField(int number) {
+      switch (number) {
+        case 3:
+          return internalGetMutableLabels();
+        default:
+          throw new RuntimeException("Invalid map field number: " + number);
+      }
     }
 
     @java.lang.Override
@@ -498,6 +644,7 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
       } else {
         writesBuilder_.clear();
       }
+      internalGetMutableLabels().clear();
       return this;
     }
 
@@ -536,6 +683,8 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
       } else {
         result.writes_ = writesBuilder_.build();
       }
+      result.labels_ = internalGetLabels();
+      result.labels_.makeImmutable();
       onBuilt();
       return result;
     }
@@ -616,6 +765,7 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
           }
         }
       }
+      internalGetMutableLabels().mergeFrom(other.internalGetLabels());
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -652,11 +802,11 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return The database.
      */
@@ -675,11 +825,11 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return The bytes for database.
      */
@@ -698,11 +848,11 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @param value The database to set.
      * @return This builder for chaining.
@@ -720,11 +870,11 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return This builder for chaining.
      */
@@ -738,11 +888,11 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The database name. In the format:
+     * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
-     * <code>string database = 1;</code>
+     * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @param value The bytes for database to set.
      * @return This builder for chaining.
@@ -779,13 +929,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -802,13 +948,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -825,13 +967,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -848,13 +986,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -877,13 +1011,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -903,13 +1033,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -932,13 +1058,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -961,13 +1083,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -987,13 +1105,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1013,13 +1127,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1040,13 +1150,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1066,13 +1172,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1092,13 +1194,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1111,13 +1209,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1134,13 +1228,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1158,13 +1248,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1177,13 +1263,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1197,13 +1279,9 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The writes to apply.
-     * The writes are not applied atomically, and can be applied out of order.
-     * More than 1 write per document is not allowed.
-     * The success status of each write is independent of the other ones (some may
-     * fail and some may succeed) and is specified in the BatchWriteResponse.
-     * Note that the writes here are not applied atomically but the writes in the
-     * Write(stream WriteRequest) are applied atomically and they cannot be
-     * batched.
+     * Method does not apply writes atomically and does not guarantee ordering.
+     * Each write succeeds or fails independently. You cannot write to the same
+     * document more than once per request.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -1227,6 +1305,163 @@ public final class BatchWriteRequest extends com.google.protobuf.GeneratedMessag
         writes_ = null;
       }
       return writesBuilder_;
+    }
+
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
+
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
+      if (labels_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(LabelsDefaultEntryHolder.defaultEntry);
+      }
+      return labels_;
+    }
+
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+        internalGetMutableLabels() {
+      onChanged();
+      ;
+      if (labels_ == null) {
+        labels_ = com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
+      }
+      if (!labels_.isMutable()) {
+        labels_ = labels_.copy();
+      }
+      return labels_;
+    }
+
+    public int getLabelsCount() {
+      return internalGetLabels().getMap().size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    @java.lang.Override
+    public boolean containsLabels(java.lang.String key) {
+      if (key == null) {
+        throw new java.lang.NullPointerException();
+      }
+      return internalGetLabels().getMap().containsKey(key);
+    }
+    /** Use {@link #getLabelsMap()} instead. */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getLabels() {
+      return getLabelsMap();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    @java.lang.Override
+    public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
+      return internalGetLabels().getMap();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    @java.lang.Override
+    public java.lang.String getLabelsOrDefault(
+        java.lang.String key, java.lang.String defaultValue) {
+      if (key == null) {
+        throw new java.lang.NullPointerException();
+      }
+      java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    @java.lang.Override
+    public java.lang.String getLabelsOrThrow(java.lang.String key) {
+      if (key == null) {
+        throw new java.lang.NullPointerException();
+      }
+      java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    public Builder clearLabels() {
+      internalGetMutableLabels().getMutableMap().clear();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    public Builder removeLabels(java.lang.String key) {
+      if (key == null) {
+        throw new java.lang.NullPointerException();
+      }
+      internalGetMutableLabels().getMutableMap().remove(key);
+      return this;
+    }
+    /** Use alternate mutation accessors instead. */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getMutableLabels() {
+      return internalGetMutableLabels().getMutableMap();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    public Builder putLabels(java.lang.String key, java.lang.String value) {
+      if (key == null) {
+        throw new java.lang.NullPointerException();
+      }
+      if (value == null) {
+        throw new java.lang.NullPointerException();
+      }
+      internalGetMutableLabels().getMutableMap().put(key, value);
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Labels associated with this batch write.
+     * </pre>
+     *
+     * <code>map&lt;string, string&gt; labels = 3;</code>
+     */
+    public Builder putAllLabels(java.util.Map<java.lang.String, java.lang.String> values) {
+      internalGetMutableLabels().getMutableMap().putAll(values);
+      return this;
     }
 
     @java.lang.Override

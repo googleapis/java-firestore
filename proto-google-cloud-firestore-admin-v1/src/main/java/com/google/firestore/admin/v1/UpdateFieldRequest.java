@@ -147,6 +147,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the field field is set.
    */
+  @java.lang.Override
   public boolean hasField() {
     return field_ != null;
   }
@@ -162,6 +163,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The field.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Field getField() {
     return field_ == null ? com.google.firestore.admin.v1.Field.getDefaultInstance() : field_;
   }
@@ -175,6 +177,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    * <code>.google.firestore.admin.v1.Field field = 1 [(.google.api.field_behavior) = REQUIRED];
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder() {
     return getField();
   }
@@ -193,6 +196,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the updateMask field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateMask() {
     return updateMask_ != null;
   }
@@ -208,6 +212,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * @return The updateMask.
    */
+  @java.lang.Override
   public com.google.protobuf.FieldMask getUpdateMask() {
     return updateMask_ == null ? com.google.protobuf.FieldMask.getDefaultInstance() : updateMask_;
   }
@@ -221,6 +226,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.protobuf.FieldMask update_mask = 2;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.FieldMaskOrBuilder getUpdateMaskOrBuilder() {
     return getUpdateMask();
   }

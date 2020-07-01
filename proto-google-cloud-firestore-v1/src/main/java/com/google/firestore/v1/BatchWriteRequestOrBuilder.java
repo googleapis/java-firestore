@@ -27,11 +27,11 @@ public interface BatchWriteRequestOrBuilder
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The database.
    */
@@ -40,11 +40,11 @@ public interface BatchWriteRequestOrBuilder
    *
    *
    * <pre>
-   * The database name. In the format:
+   * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
-   * <code>string database = 1;</code>
+   * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The bytes for database.
    */
@@ -55,13 +55,9 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -72,13 +68,9 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -89,13 +81,9 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -106,13 +94,9 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
@@ -123,16 +107,66 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
-   * The writes are not applied atomically, and can be applied out of order.
-   * More than 1 write per document is not allowed.
-   * The success status of each write is independent of the other ones (some may
-   * fail and some may succeed) and is specified in the BatchWriteResponse.
-   * Note that the writes here are not applied atomically but the writes in the
-   * Write(stream WriteRequest) are applied atomically and they cannot be
-   * batched.
+   * Method does not apply writes atomically and does not guarantee ordering.
+   * Each write succeeds or fails independently. You cannot write to the same
+   * document more than once per request.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
   com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(int index);
+
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  int getLabelsCount();
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  boolean containsLabels(java.lang.String key);
+  /** Use {@link #getLabelsMap()} instead. */
+  @java.lang.Deprecated
+  java.util.Map<java.lang.String, java.lang.String> getLabels();
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  java.util.Map<java.lang.String, java.lang.String> getLabelsMap();
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue);
+  /**
+   *
+   *
+   * <pre>
+   * Labels associated with this batch write.
+   * </pre>
+   *
+   * <code>map&lt;string, string&gt; labels = 3;</code>
+   */
+  java.lang.String getLabelsOrThrow(java.lang.String key);
 }

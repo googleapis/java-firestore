@@ -67,12 +67,13 @@ public final class IndexProto {
           + "AIR\020\003:z\352Aw\n\036firestore.googleapis.com/Ind"
           + "ex\022Uprojects/{project}/databases/{databa"
           + "se}/collectionGroups/{collection}/indexe"
-          + "s/{index}B\270\001\n\035com.google.firestore.admin"
+          + "s/{index}B\336\001\n\035com.google.firestore.admin"
           + ".v1B\nIndexProtoP\001Z>google.golang.org/gen"
           + "proto/googleapis/firestore/admin/v1;admi"
           + "n\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin."
-          + "V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1b\006pr"
-          + "oto3"
+          + "V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#G"
+          + "oogle::Cloud::Firestore::Admin::V1b\006prot"
+          + "o3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

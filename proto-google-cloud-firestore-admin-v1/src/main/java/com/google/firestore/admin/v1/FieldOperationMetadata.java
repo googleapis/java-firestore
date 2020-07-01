@@ -503,6 +503,10 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
           };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
 
@@ -552,6 +556,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return The enum numeric value on the wire for changeType.
      */
+    @java.lang.Override
     public int getChangeTypeValue() {
       return changeType_;
     }
@@ -568,6 +573,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return The changeType.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta.ChangeType
         getChangeType() {
       @SuppressWarnings("deprecation")
@@ -593,6 +599,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return Whether the index field is set.
      */
+    @java.lang.Override
     public boolean hasIndex() {
       return index_ != null;
     }
@@ -607,6 +614,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return The index.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.Index getIndex() {
       return index_ == null ? com.google.firestore.admin.v1.Index.getDefaultInstance() : index_;
     }
@@ -619,6 +627,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * <code>.google.firestore.admin.v1.Index index = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.IndexOrBuilder getIndexOrBuilder() {
       return getIndex();
     }
@@ -1004,6 +1013,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
        *
        * @return The enum numeric value on the wire for changeType.
        */
+      @java.lang.Override
       public int getChangeTypeValue() {
         return changeType_;
       }
@@ -1022,6 +1032,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
        * @return This builder for chaining.
        */
       public Builder setChangeTypeValue(int value) {
+
         changeType_ = value;
         onChanged();
         return this;
@@ -1039,6 +1050,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
        *
        * @return The changeType.
        */
+      @java.lang.Override
       public com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta.ChangeType
           getChangeType() {
         @SuppressWarnings("deprecation")
@@ -1344,6 +1356,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return Whether the startTime field is set.
    */
+  @java.lang.Override
   public boolean hasStartTime() {
     return startTime_ != null;
   }
@@ -1358,6 +1371,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The startTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getStartTime() {
     return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
   }
@@ -1370,6 +1384,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * <code>.google.protobuf.Timestamp start_time = 1;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder() {
     return getStartTime();
   }
@@ -1388,6 +1403,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return Whether the endTime field is set.
    */
+  @java.lang.Override
   public boolean hasEndTime() {
     return endTime_ != null;
   }
@@ -1403,6 +1419,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The endTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getEndTime() {
     return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
   }
@@ -1416,6 +1433,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * <code>.google.protobuf.Timestamp end_time = 2;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder() {
     return getEndTime();
   }
@@ -1434,6 +1452,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The field.
    */
+  @java.lang.Override
   public java.lang.String getField() {
     java.lang.Object ref = field_;
     if (ref instanceof java.lang.String) {
@@ -1457,6 +1476,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The bytes for field.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getFieldBytes() {
     java.lang.Object ref = field_;
     if (ref instanceof java.lang.String) {
@@ -1484,6 +1504,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
    * </code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta>
       getIndexConfigDeltasList() {
     return indexConfigDeltas_;
@@ -1500,6 +1521,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
    * </code>
    */
+  @java.lang.Override
   public java.util.List<
           ? extends com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder>
       getIndexConfigDeltasOrBuilderList() {
@@ -1517,6 +1539,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
    * </code>
    */
+  @java.lang.Override
   public int getIndexConfigDeltasCount() {
     return indexConfigDeltas_.size();
   }
@@ -1532,6 +1555,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta getIndexConfigDeltas(
       int index) {
     return indexConfigDeltas_.get(index);
@@ -1548,6 +1572,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    * repeated .google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta index_config_deltas = 4;
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDeltaOrBuilder
       getIndexConfigDeltasOrBuilder(int index) {
     return indexConfigDeltas_.get(index);
@@ -1566,6 +1591,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The enum numeric value on the wire for state.
    */
+  @java.lang.Override
   public int getStateValue() {
     return state_;
   }
@@ -1580,6 +1606,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The state.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.OperationState getState() {
     @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.OperationState result =
@@ -1600,6 +1627,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return Whether the progressDocuments field is set.
    */
+  @java.lang.Override
   public boolean hasProgressDocuments() {
     return progressDocuments_ != null;
   }
@@ -1614,6 +1642,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The progressDocuments.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Progress getProgressDocuments() {
     return progressDocuments_ == null
         ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
@@ -1628,6 +1657,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * <code>.google.firestore.admin.v1.Progress progress_documents = 6;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder() {
     return getProgressDocuments();
   }
@@ -1645,6 +1675,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return Whether the progressBytes field is set.
    */
+  @java.lang.Override
   public boolean hasProgressBytes() {
     return progressBytes_ != null;
   }
@@ -1659,6 +1690,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * @return The progressBytes.
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.Progress getProgressBytes() {
     return progressBytes_ == null
         ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
@@ -1673,6 +1705,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 7;</code>
    */
+  @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressBytesOrBuilder() {
     return getProgressBytes();
   }
@@ -3108,6 +3141,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return The enum numeric value on the wire for state.
      */
+    @java.lang.Override
     public int getStateValue() {
       return state_;
     }
@@ -3124,6 +3158,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder setStateValue(int value) {
+
       state_ = value;
       onChanged();
       return this;
@@ -3139,6 +3174,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      * @return The state.
      */
+    @java.lang.Override
     public com.google.firestore.admin.v1.OperationState getState() {
       @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.OperationState result =

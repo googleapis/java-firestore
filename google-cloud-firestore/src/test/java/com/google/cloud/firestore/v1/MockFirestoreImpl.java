@@ -35,6 +35,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -214,6 +216,21 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   }
 
   @Override
+  public void partitionQuery(
+      PartitionQueryRequest request, StreamObserver<PartitionQueryResponse> responseObserver) {
+    Object response = responses.remove();
+    if (response instanceof PartitionQueryResponse) {
+      requests.add(request);
+      responseObserver.onNext((PartitionQueryResponse) response);
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError((Exception) response);
+    } else {
+      responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
+    }
+  }
+
+  @Override
   public StreamObserver<WriteRequest> write(final StreamObserver<WriteResponse> responseObserver) {
     StreamObserver<WriteRequest> requestObserver =
         new StreamObserver<WriteRequest>() {
@@ -291,12 +308,12 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   }
 
   @Override
-  public void createDocument(
-      CreateDocumentRequest request, StreamObserver<Document> responseObserver) {
+  public void batchWrite(
+      BatchWriteRequest request, StreamObserver<BatchWriteResponse> responseObserver) {
     Object response = responses.remove();
-    if (response instanceof Document) {
+    if (response instanceof BatchWriteResponse) {
       requests.add(request);
-      responseObserver.onNext((Document) response);
+      responseObserver.onNext((BatchWriteResponse) response);
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
       responseObserver.onError((Exception) response);
@@ -306,12 +323,12 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   }
 
   @Override
-  public void batchWrite(
-      BatchWriteRequest request, StreamObserver<BatchWriteResponse> responseObserver) {
+  public void createDocument(
+      CreateDocumentRequest request, StreamObserver<Document> responseObserver) {
     Object response = responses.remove();
-    if (response instanceof BatchWriteResponse) {
+    if (response instanceof Document) {
       requests.add(request);
-      responseObserver.onNext((BatchWriteResponse) response);
+      responseObserver.onNext((Document) response);
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
       responseObserver.onError((Exception) response);

@@ -69,12 +69,13 @@ public final class CommonProto {
           + "actionOptions.ReadWriteH\000\032&\n\tReadWrite\022\031"
           + "\n\021retry_transaction\030\001 \001(\014\032S\n\010ReadOnly\022/\n"
           + "\tread_time\030\002 \001(\0132\032.google.protobuf.Times"
-          + "tampH\000B\026\n\024consistency_selectorB\006\n\004modeB\245"
+          + "tampH\000B\026\n\024consistency_selectorB\006\n\004modeB\304"
           + "\001\n\027com.google.firestore.v1B\013CommonProtoP"
           + "\001Z<google.golang.org/genproto/googleapis"
           + "/firestore/v1;firestore\242\002\004GCFS\252\002\031Google."
           + "Cloud.Firestore.V1\312\002\031Google\\Cloud\\Firest"
-          + "ore\\V1b\006proto3"
+          + "ore\\V1\352\002\034Google::Cloud::Firestore::V1b\006p"
+          + "roto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
