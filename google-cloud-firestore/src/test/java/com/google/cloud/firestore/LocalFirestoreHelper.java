@@ -32,6 +32,7 @@ import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.proto.BundleElement;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
@@ -65,6 +66,9 @@ import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1008,5 +1012,56 @@ public final class LocalFirestoreHelper {
       --activeRequestCounter;
       return response;
     }
+  }
+
+  /**
+   * Naive implementation to read bundle buffers into a list of JSON strings.
+   */
+  public static List<String> bundleToElementList(ByteBuffer bundle) {
+    List<String> result = new ArrayList<>();
+    StringBuilder lengthStringBuilder = new StringBuilder();
+    while (bundle.hasRemaining()) {
+      char b = (char)bundle.get();
+      if(b >= '0' && b <= '9') {
+        lengthStringBuilder.append(b);
+      } else if (b == '{') {
+        // Rewind position for bulk reading.
+        bundle.position(bundle.position() - 1);
+        int length = Integer.parseInt(lengthStringBuilder.toString());
+        // Reset lengthStringBuilder
+        lengthStringBuilder = new StringBuilder();
+        byte[] element = new byte[length];
+        bundle.get(element, 0, length);
+        result.add(new String(element, StandardCharsets.UTF_8));
+      } else {
+        throw new RuntimeException("Bad bundle buffer.");
+      }
+    }
+
+    return result;
+  }
+
+  public static List<String> bundleToElementList1(ByteBuffer bundle) {
+    String bundleString = new String(bundle.array(), StandardCharsets.UTF_8);
+    int depth = 0;
+    StringBuilder elementBuilder = new StringBuilder();
+    List<String> result = new ArrayList<>();
+    for(char c : bundleString.toCharArray()) {
+      if(c == '{') {
+        elementBuilder.append(c);
+        depth++;
+      } else if(c == '}') {
+        elementBuilder.append(c);
+        depth--;
+        if(depth == 0) {
+          result.add(elementBuilder.toString());
+          elementBuilder = new StringBuilder();
+        }
+      } else if(depth > 0){
+        elementBuilder.append(c);
+      }
+    }
+
+    return result;
   }
 }
