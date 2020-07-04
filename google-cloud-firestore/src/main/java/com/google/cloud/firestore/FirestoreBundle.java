@@ -41,7 +41,7 @@ public final class FirestoreBundle {
   public static final class Builder {
     private String id;
     // Resulting documents for the bundle, keyed by full document path.
-    private Map<String, BundledDocument> documents  = new HashMap<>();
+    private Map<String, BundledDocument> documents = new HashMap<>();
     // Named queries saved in the bundle, keyed by query name.
     private Map<String, NamedQuery> namedQueries = new HashMap<>();
     // The latest read time among all bundled documents and queries.
@@ -54,15 +54,16 @@ public final class FirestoreBundle {
     }
 
     public Builder add(DocumentSnapshot documentSnap) {
-      BundledDocumentMetadata metadata = BundledDocumentMetadata.newBuilder()
-          .setName(documentSnap.getReference().getName())
-          .setReadTime(documentSnap.getReadTime().toProto())
-          .setExists(documentSnap.exists())
-          .build();
-      Document document = documentSnap.toPb().build().getUpdate();
+      BundledDocumentMetadata metadata =
+          BundledDocumentMetadata.newBuilder()
+              .setName(documentSnap.getReference().getName())
+              .setReadTime(documentSnap.getReadTime().toProto())
+              .setExists(documentSnap.exists())
+              .build();
+      Document document = documentSnap.toDocumentPb().build();
       documents.put(metadata.getName(), new BundledDocument(metadata, document));
 
-      if(documentSnap.getReadTime().compareTo(latestReadTime) > 0) {
+      if (documentSnap.getReadTime().compareTo(latestReadTime) > 0) {
         latestReadTime = documentSnap.getReadTime();
       }
 
@@ -72,21 +73,26 @@ public final class FirestoreBundle {
     public Builder add(String queryName, QuerySnapshot querySnap) {
       RunQueryRequest queryProto = querySnap.getQuery().toProto();
       LimitType limitType = querySnap.getQuery().options.getLimitType();
-      NamedQuery namedQuery = NamedQuery.newBuilder()
-          .setName(queryName)
-          .setReadTime(querySnap.getReadTime().toProto())
-          .setBundledQuery(BundledQuery.newBuilder()
-              .setParent(queryProto.getParent())
-              .setStructuredQuery(queryProto.getStructuredQuery())
-              .setLimitType(limitType.equals(LimitType.Last) ? BundledQuery.LimitType.LAST : BundledQuery.LimitType.FIRST)
-          ).build();
+      NamedQuery namedQuery =
+          NamedQuery.newBuilder()
+              .setName(queryName)
+              .setReadTime(querySnap.getReadTime().toProto())
+              .setBundledQuery(
+                  BundledQuery.newBuilder()
+                      .setParent(queryProto.getParent())
+                      .setStructuredQuery(queryProto.getStructuredQuery())
+                      .setLimitType(
+                          limitType.equals(LimitType.Last)
+                              ? BundledQuery.LimitType.LAST
+                              : BundledQuery.LimitType.FIRST))
+              .build();
       namedQueries.put(queryName, namedQuery);
 
-      for(QueryDocumentSnapshot snapshot : querySnap.getDocuments()) {
+      for (QueryDocumentSnapshot snapshot : querySnap.getDocuments()) {
         add(snapshot);
       }
 
-      if(querySnap.getReadTime().compareTo(latestReadTime) > 0) {
+      if (querySnap.getReadTime().compareTo(latestReadTime) > 0) {
         latestReadTime = querySnap.getReadTime();
       }
 
@@ -96,26 +102,35 @@ public final class FirestoreBundle {
     public FirestoreBundle build() {
       StringBuilder buffer = new StringBuilder();
 
-      for(NamedQuery namedQuery : namedQueries.values()) {
-        buffer.append(elementToLengthPrefixedStringBuilder(BundleElement.newBuilder().setNamedQuery(namedQuery).build()));
+      for (NamedQuery namedQuery : namedQueries.values()) {
+        buffer.append(
+            elementToLengthPrefixedStringBuilder(
+                BundleElement.newBuilder().setNamedQuery(namedQuery).build()));
       }
 
-      for(BundledDocument bundledDocument : documents.values()) {
-        buffer.append(elementToLengthPrefixedStringBuilder(BundleElement.newBuilder().setDocumentMetadata(bundledDocument.getMetadata()).build()));
-        if(bundledDocument.getDocument() != null) {
-          buffer.append(BundleElement.newBuilder().setDocument(bundledDocument.getDocument()).build());
+      for (BundledDocument bundledDocument : documents.values()) {
+        buffer.append(
+            elementToLengthPrefixedStringBuilder(
+                BundleElement.newBuilder()
+                    .setDocumentMetadata(bundledDocument.getMetadata())
+                    .build()));
+        if (bundledDocument.getDocument() != null) {
+          buffer.append(
+              elementToLengthPrefixedStringBuilder(
+                  BundleElement.newBuilder().setDocument(bundledDocument.getDocument()).build()));
         }
       }
 
-      BundleMetadata metadata = BundleMetadata.newBuilder()
-          .setId(id)
-          .setCreateTime(latestReadTime.toProto())
-          .setVersion(BUNDLE_SCHEMA_VERSION)
-          .setTotalDocuments(documents.size())
-          .setTotalBytes(buffer.toString().getBytes().length)
-          .build();
+      BundleMetadata metadata =
+          BundleMetadata.newBuilder()
+              .setId(id)
+              .setCreateTime(latestReadTime.toProto())
+              .setVersion(BUNDLE_SCHEMA_VERSION)
+              .setTotalDocuments(documents.size())
+              .setTotalBytes(buffer.toString().getBytes().length)
+              .build();
       BundleElement element = BundleElement.newBuilder().setMetadata(metadata).build();
-      buffer.append(elementToLengthPrefixedStringBuilder(element));
+      buffer.insert(0, elementToLengthPrefixedStringBuilder(element));
 
       return new FirestoreBundle(buffer.toString().getBytes(StandardCharsets.UTF_8));
     }
@@ -136,7 +151,7 @@ public final class FirestoreBundle {
   }
 
   public ByteBuffer toByteBuffer() {
-    return ByteBuffer.wrap(bundleData).asReadOnlyBuffer();
+    return ByteBuffer.wrap(bundleData) /*.asReadOnlyBuffer()*/;
   }
 }
 
@@ -144,7 +159,7 @@ class BundledDocument {
   private BundledDocumentMetadata metadata;
   private Document document;
 
-  BundledDocument(BundledDocumentMetadata metadata, Document document){
+  BundledDocument(BundledDocumentMetadata metadata, Document document) {
     this.metadata = metadata;
     this.document = document;
   }

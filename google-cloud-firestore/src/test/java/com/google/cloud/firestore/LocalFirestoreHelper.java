@@ -32,7 +32,6 @@ import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.firestore.proto.BundleElement;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
@@ -67,7 +66,6 @@ import com.google.type.LatLng;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -121,6 +119,7 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Value> UPDATED_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_SINGLE_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_POJO_PROTO;
+  public static final DocumentSnapshot UPDATED_SINGLE_FIELD_SNAPSHOT;
 
   public static final Map<String, Float> SINGLE_FLOAT_MAP;
   public static final Map<String, Value> SINGLE_FLOAT_PROTO;
@@ -817,6 +816,18 @@ public final class LocalFirestoreHelper {
                             .putFields("foo", Value.newBuilder().setStringValue("foobar").build()))
                     .build())
             .build();
+    UPDATED_SINGLE_FIELD_SNAPSHOT =
+        new DocumentSnapshot(
+            null,
+            new DocumentReference(
+                null,
+                ResourcePath.create(
+                    DatabaseRootName.of("test-project", "(default)"),
+                    ImmutableList.of("coll", "doc"))),
+            UPDATED_SINGLE_FIELD_PROTO,
+            Timestamp.ofTimeSecondsAndNanos(50, 6),
+            Timestamp.ofTimeSecondsAndNanos(30, 4),
+            Timestamp.ofTimeSecondsAndNanos(10, 2));
     SERVER_TIMESTAMP_MAP = new HashMap<>();
     SERVER_TIMESTAMP_MAP.put("foo", FieldValue.serverTimestamp());
     SERVER_TIMESTAMP_MAP.put("inner", new HashMap<String, Object>());
@@ -1016,13 +1027,15 @@ public final class LocalFirestoreHelper {
 
   /**
    * Naive implementation to read bundle buffers into a list of JSON strings.
+   *
+   * <p>Only works with UTF-8 encoded bundle buffer.
    */
   public static List<String> bundleToElementList(ByteBuffer bundle) {
     List<String> result = new ArrayList<>();
     StringBuilder lengthStringBuilder = new StringBuilder();
     while (bundle.hasRemaining()) {
-      char b = (char)bundle.get();
-      if(b >= '0' && b <= '9') {
+      char b = (char) bundle.get();
+      if (b >= '0' && b <= '9') {
         lengthStringBuilder.append(b);
       } else if (b == '{') {
         // Rewind position for bulk reading.
@@ -1035,30 +1048,6 @@ public final class LocalFirestoreHelper {
         result.add(new String(element, StandardCharsets.UTF_8));
       } else {
         throw new RuntimeException("Bad bundle buffer.");
-      }
-    }
-
-    return result;
-  }
-
-  public static List<String> bundleToElementList1(ByteBuffer bundle) {
-    String bundleString = new String(bundle.array(), StandardCharsets.UTF_8);
-    int depth = 0;
-    StringBuilder elementBuilder = new StringBuilder();
-    List<String> result = new ArrayList<>();
-    for(char c : bundleString.toCharArray()) {
-      if(c == '{') {
-        elementBuilder.append(c);
-        depth++;
-      } else if(c == '}') {
-        elementBuilder.append(c);
-        depth--;
-        if(depth == 0) {
-          result.add(elementBuilder.toString());
-          elementBuilder = new StringBuilder();
-        }
-      } else if(depth > 0){
-        elementBuilder.append(c);
       }
     }
 

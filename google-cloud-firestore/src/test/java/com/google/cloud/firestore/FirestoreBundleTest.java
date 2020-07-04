@@ -1,39 +1,252 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
+import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
+import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_SNAPSHOT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_SINGLE_FIELD_SNAPSHOT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.bundleToElementList;
-import static com.google.cloud.firestore.LocalFirestoreHelper.limit;
-import static com.google.cloud.firestore.LocalFirestoreHelper.query;
-import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doAnswer;
+import static org.junit.Assert.assertTrue;
 
-import com.google.api.gax.rpc.ServerStreamingCallable;
+import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.collect.Lists;
 import com.google.firestore.proto.BundleElement;
+import com.google.firestore.proto.BundleMetadata;
+import com.google.firestore.proto.BundledDocumentMetadata;
+import com.google.firestore.proto.BundledQuery;
+import com.google.firestore.proto.BundledQuery.LimitType;
+import com.google.firestore.proto.NamedQuery;
+import com.google.firestore.v1.Document;
+import com.google.firestore.v1.RunQueryRequest;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.JsonFormat;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FirestoreBundleTest {
+  private static final String TEST_BUNDLE_ID = "test-bundle";
+  private static final int TEST_BUNDLE_VERSION = 1;
+  private JsonFormat.Parser parser = JsonFormat.parser();
+
+  @Spy
+  private FirestoreImpl firestoreMock =
+      new FirestoreImpl(
+          FirestoreOptions.newBuilder().setProjectId("test-project").build(),
+          Mockito.mock(FirestoreRpc.class));
+
+  private Query query;
+
   @Before
   public void before() {
+    query = firestoreMock.collection(COLLECTION_ID);
+  }
+
+  private void verifyMetadata(
+      BundleMetadata meta, Timestamp createTime, int totalDocuments, boolean expectEmptyContent) {
+    if (!expectEmptyContent) {
+      assertTrue(meta.getTotalBytes() > 0);
+    } else {
+      assertEquals(0, meta.getTotalBytes());
+    }
+    assertEquals(TEST_BUNDLE_ID, meta.getId());
+    assertEquals(TEST_BUNDLE_VERSION, meta.getVersion());
+    assertEquals(totalDocuments, meta.getTotalDocuments());
+    assertEquals(createTime, meta.getCreateTime());
+  }
+
+  private void verifyDocumentAndMeta(
+      BundledDocumentMetadata documentMetadata,
+      Document document,
+      String expectedDocumentName,
+      DocumentSnapshot equivalentSnapshot) {
+    assertEquals(
+        BundledDocumentMetadata.newBuilder()
+            .setExists(true)
+            .setName(expectedDocumentName)
+            .setReadTime(equivalentSnapshot.getReadTime().toProto())
+            .build(),
+        documentMetadata);
+    assertEquals(
+        Document.newBuilder()
+            .putAllFields(equivalentSnapshot.getProtoFields())
+            .setCreateTime(equivalentSnapshot.getCreateTime().toProto())
+            .setUpdateTime(equivalentSnapshot.getUpdateTime().toProto())
+            .setName(expectedDocumentName)
+            .build(),
+        document);
   }
 
   @Test
-  public void testBundleToElementArrayWorks() throws Exception {
+  public void bundleToElementListWorks() {
     String bundleString =
         "20{\"a\":\"string value\"}9{\"b\":123}26{\"c\":{\"d\":\"nested value\"}}";
-    List<String> elements = bundleToElementList(ByteBuffer.wrap(bundleString.getBytes(
-        StandardCharsets.UTF_8)));
-    assertArrayEquals(elements.toArray(), new String[]{"{\"a\":\"string value\"}", "{\"b\":123}",
-        "{\"c\":{\"d\":\"nested value\"}}"});
+    List<String> elements =
+        bundleToElementList(ByteBuffer.wrap(bundleString.getBytes(StandardCharsets.UTF_8)));
+    assertArrayEquals(
+        new String[] {
+          "{\"a\":\"string value\"}", "{\"b\":123}", "{\"c\":{\"d\":\"nested value\"}}"
+        },
+        elements.toArray());
+  }
+
+  private List<BundleElement> toBundleElements(ByteBuffer bundleBuffer) {
+    ArrayList<BundleElement> result = new ArrayList<>();
+    for (String s : bundleToElementList(bundleBuffer)) {
+      BundleElement.Builder b = BundleElement.newBuilder();
+      try {
+        parser.merge(s, b);
+      } catch (InvalidProtocolBufferException e) {
+        throw new RuntimeException(e);
+      }
+      result.add(b.build());
+    }
+
+    return result;
+  }
+
+  @Test
+  public void bundleWithDocumentSnapshots() {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
+    bundleBuilder.add(UPDATED_SINGLE_FIELD_SNAPSHOT);
+    bundleBuilder.add(SINGLE_FIELD_SNAPSHOT);
+    ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata, meta of SINGLE_FIELD_SNAPSHOT,
+    // SINGLE_FIELD_SNAPSHOT]
+    // because SINGLE_FIELD_SNAPSHOT is added later.
+    List<BundleElement> elements = toBundleElements(bundleBuffer);
+    assertEquals(3, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        // Even this snapshot is not included, its read time is still used as create time
+        // because it is the largest read time came across.
+        UPDATED_SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        /*totalDocuments*/ 1,
+        /*expectEmptyContent*/ false);
+
+    verifyDocumentAndMeta(
+        elements.get(1).getDocumentMetadata(),
+        elements.get(2).getDocument(),
+        DOCUMENT_NAME,
+        SINGLE_FIELD_SNAPSHOT);
+  }
+
+  @Test
+  public void bundleWithQuerySnapshot() {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
+    QuerySnapshot snapshot =
+        QuerySnapshot.withDocuments(
+            query,
+            SINGLE_FIELD_SNAPSHOT.getReadTime(),
+            Lists.newArrayList(
+                QueryDocumentSnapshot.fromDocument(
+                    null,
+                    SINGLE_FIELD_SNAPSHOT.getReadTime(),
+                    SINGLE_FIELD_SNAPSHOT.toDocumentPb().build())));
+    bundleBuilder.add("test-query", snapshot);
+    ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata, named query, meta of SINGLE_FIELD_SNAPSHOT,
+    // SINGLE_FIELD_SNAPSHOT]
+    List<BundleElement> elements = toBundleElements(bundleBuffer);
+    assertEquals(4, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        /*totalDocuments*/ 1,
+        /*expectEmptyContent*/ false);
+
+    assertEquals(
+        NamedQuery.newBuilder()
+            .setName("test-query")
+            .setReadTime(SINGLE_FIELD_SNAPSHOT.getReadTime().toProto())
+            .setBundledQuery(
+                BundledQuery.newBuilder()
+                    .setParent(query.toProto().getParent())
+                    .setStructuredQuery(query.toProto().getStructuredQuery())
+                    .setLimitType(LimitType.FIRST)
+                    .build())
+            .build(),
+        elements.get(1).getNamedQuery());
+
+    verifyDocumentAndMeta(
+        elements.get(2).getDocumentMetadata(),
+        elements.get(3).getDocument(),
+        DOCUMENT_NAME,
+        SINGLE_FIELD_SNAPSHOT);
+  }
+
+  @Test
+  public void bundleBuiltMultipleTimes() {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
+    bundleBuilder.add(SINGLE_FIELD_SNAPSHOT);
+    ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata, meta of SINGLE_FIELD_SNAPSHOT,
+    // SINGLE_FIELD_SNAPSHOT]
+    List<BundleElement> elements = toBundleElements(bundleBuffer);
+    assertEquals(3, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        /*totalDocuments*/ 1,
+        /*expectEmptyContent*/ false);
+
+    verifyDocumentAndMeta(
+        elements.get(1).getDocumentMetadata(),
+        elements.get(2).getDocument(),
+        DOCUMENT_NAME,
+        SINGLE_FIELD_SNAPSHOT);
+
+    bundleBuilder.add(UPDATED_SINGLE_FIELD_SNAPSHOT);
+    bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata, meta of UPDATED_SINGLE_FIELD_SNAPSHOT,
+    // UPDATED_SINGLE_FIELD_SNAPSHOT]
+    elements = toBundleElements(bundleBuffer);
+    assertEquals(3, elements.size());
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        UPDATED_SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        /*totalDocuments*/ 1,
+        /*expectEmptyContent*/ false);
+    verifyDocumentAndMeta(
+        elements.get(1).getDocumentMetadata(),
+        elements.get(2).getDocument(),
+        DOCUMENT_NAME,
+        UPDATED_SINGLE_FIELD_SNAPSHOT);
+  }
+
+  @Test
+  public void bundleWithNothingAdded() {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
+    ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata]
+    List<BundleElement> elements = toBundleElements(bundleBuffer);
+    assertEquals(1, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        com.google.cloud.Timestamp.MIN_VALUE.toProto(),
+        /*totalDocuments*/ 0,
+        /*expectEmptyContent*/ true);
   }
 }

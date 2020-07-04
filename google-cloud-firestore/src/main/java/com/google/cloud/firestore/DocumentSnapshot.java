@@ -412,6 +412,16 @@ public class DocumentSnapshot {
     return write;
   }
 
+  Document.Builder toDocumentPb() {
+    Preconditions.checkState(exists(), "Can't call toDocument() on a document that doesn't exist");
+    Document.Builder document = Document.newBuilder();
+    return document
+        .setName(docRef.getName())
+        .putAllFields(fields)
+        .setCreateTime(createTime.toProto())
+        .setUpdateTime(updateTime.toProto());
+  }
+
   /**
    * Returns true if the document's data and path in this DocumentSnapshot equals the provided
    * snapshot.
