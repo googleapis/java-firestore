@@ -946,6 +946,13 @@ public final class LocalFirestoreHelper {
     return fromJsonString(json.replace("'", "\""));
   }
 
+  public static String fullPath(DocumentReference ref, FirestoreOptions options) {
+    return ResourcePath.create(
+            DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()),
+            ImmutableList.<String>copyOf(ref.getPath().split("/")))
+        .toString();
+  }
+
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.

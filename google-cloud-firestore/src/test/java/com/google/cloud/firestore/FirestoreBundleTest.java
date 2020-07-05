@@ -9,7 +9,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.Lists;
 import com.google.firestore.proto.BundleElement;
@@ -19,7 +18,6 @@ import com.google.firestore.proto.BundledQuery;
 import com.google.firestore.proto.BundledQuery.LimitType;
 import com.google.firestore.proto.NamedQuery;
 import com.google.firestore.v1.Document;
-import com.google.firestore.v1.RunQueryRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
@@ -30,8 +28,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -40,7 +36,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class FirestoreBundleTest {
   private static final String TEST_BUNDLE_ID = "test-bundle";
   private static final int TEST_BUNDLE_VERSION = 1;
-  private JsonFormat.Parser parser = JsonFormat.parser();
+  private static JsonFormat.Parser parser = JsonFormat.parser();
 
   @Spy
   private FirestoreImpl firestoreMock =
@@ -55,7 +51,7 @@ public class FirestoreBundleTest {
     query = firestoreMock.collection(COLLECTION_ID);
   }
 
-  private void verifyMetadata(
+  public static void verifyMetadata(
       BundleMetadata meta, Timestamp createTime, int totalDocuments, boolean expectEmptyContent) {
     if (!expectEmptyContent) {
       assertTrue(meta.getTotalBytes() > 0);
@@ -68,16 +64,30 @@ public class FirestoreBundleTest {
     assertEquals(createTime, meta.getCreateTime());
   }
 
-  private void verifyDocumentAndMeta(
+  public static void verifyDocumentAndMeta(
       BundledDocumentMetadata documentMetadata,
       Document document,
       String expectedDocumentName,
       DocumentSnapshot equivalentSnapshot) {
+    verifyDocumentAndMeta(
+        documentMetadata,
+        document,
+        expectedDocumentName,
+        equivalentSnapshot,
+        equivalentSnapshot.getReadTime().toProto());
+  }
+
+  public static void verifyDocumentAndMeta(
+      BundledDocumentMetadata documentMetadata,
+      Document document,
+      String expectedDocumentName,
+      DocumentSnapshot equivalentSnapshot,
+      Timestamp readTime) {
     assertEquals(
         BundledDocumentMetadata.newBuilder()
             .setExists(true)
             .setName(expectedDocumentName)
-            .setReadTime(equivalentSnapshot.getReadTime().toProto())
+            .setReadTime(readTime)
             .build(),
         documentMetadata);
     assertEquals(
@@ -88,6 +98,22 @@ public class FirestoreBundleTest {
             .setName(expectedDocumentName)
             .build(),
         document);
+  }
+
+  public static void verifyNamedQuery(
+      NamedQuery namedQuery, String name, Timestamp readTime, Query query, LimitType limitType) {
+    assertEquals(
+        NamedQuery.newBuilder()
+            .setName(name)
+            .setReadTime(readTime)
+            .setBundledQuery(
+                BundledQuery.newBuilder()
+                    .setParent(query.toProto().getParent())
+                    .setStructuredQuery(query.toProto().getStructuredQuery())
+                    .setLimitType(limitType)
+                    .build())
+            .build(),
+        namedQuery);
   }
 
   @Test
@@ -103,7 +129,7 @@ public class FirestoreBundleTest {
         elements.toArray());
   }
 
-  private List<BundleElement> toBundleElements(ByteBuffer bundleBuffer) {
+  public static List<BundleElement> toBundleElements(ByteBuffer bundleBuffer) {
     ArrayList<BundleElement> result = new ArrayList<>();
     for (String s : bundleToElementList(bundleBuffer)) {
       BundleElement.Builder b = BundleElement.newBuilder();
@@ -172,24 +198,47 @@ public class FirestoreBundleTest {
         /*totalDocuments*/ 1,
         /*expectEmptyContent*/ false);
 
-    assertEquals(
-        NamedQuery.newBuilder()
-            .setName("test-query")
-            .setReadTime(SINGLE_FIELD_SNAPSHOT.getReadTime().toProto())
-            .setBundledQuery(
-                BundledQuery.newBuilder()
-                    .setParent(query.toProto().getParent())
-                    .setStructuredQuery(query.toProto().getStructuredQuery())
-                    .setLimitType(LimitType.FIRST)
-                    .build())
-            .build(),
-        elements.get(1).getNamedQuery());
+    verifyNamedQuery(
+        elements.get(1).getNamedQuery(),
+        "test-query",
+        SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        query,
+        LimitType.FIRST);
 
     verifyDocumentAndMeta(
         elements.get(2).getDocumentMetadata(),
         elements.get(3).getDocument(),
         DOCUMENT_NAME,
         SINGLE_FIELD_SNAPSHOT);
+  }
+
+  @Test
+  public void bundleWithQueryReturningNoResult() {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
+    QuerySnapshot snapshot =
+        QuerySnapshot.withDocuments(
+            query,
+            SINGLE_FIELD_SNAPSHOT.getReadTime(),
+            Lists.<QueryDocumentSnapshot>newArrayList());
+    bundleBuilder.add("test-query", snapshot);
+    ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
+
+    // Expected bundle elements are [bundleMetadata, named query]
+    List<BundleElement> elements = toBundleElements(bundleBuffer);
+    assertEquals(2, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        /*totalDocuments*/ 0,
+        /*expectEmptyContent*/ false);
+
+    verifyNamedQuery(
+        elements.get(1).getNamedQuery(),
+        "test-query",
+        SINGLE_FIELD_SNAPSHOT.getReadTime().toProto(),
+        query,
+        LimitType.FIRST);
   }
 
   @Test

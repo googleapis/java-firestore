@@ -17,14 +17,12 @@
 package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Query.LimitType;
 import com.google.firestore.proto.BundleElement;
 import com.google.firestore.proto.BundleMetadata;
 import com.google.firestore.proto.BundledDocumentMetadata;
 import com.google.firestore.proto.BundledQuery;
 import com.google.firestore.proto.NamedQuery;
 import com.google.firestore.v1.Document;
-import com.google.firestore.v1.RunQueryRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import java.nio.ByteBuffer;
@@ -32,13 +30,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
 
   static int BUNDLE_SCHEMA_VERSION = 1;
 
+  // Raw byte array to hold the content of the bundle.
   private byte[] bundleData;
 
+  /** Builds a Firestore data bundle with results from the given document and query snapshots. */
   public static final class Builder {
+    // Id of the bundle.
     private String id;
     // Resulting documents for the bundle, keyed by full document path.
     private Map<String, BundledDocument> documents = new HashMap<>();
@@ -53,6 +55,13 @@ public final class FirestoreBundle {
       this.id = id;
     }
 
+    /**
+     * Adds a Firestore document snapshot to the bundle. Both the documents data and the document
+     * read time will be included in the bundle.
+     *
+     * @param documentSnap A document snapshot to add.
+     * @returns This instance.
+     */
     public Builder add(DocumentSnapshot documentSnap) {
       BundledDocumentMetadata metadata =
           BundledDocumentMetadata.newBuilder()
@@ -60,7 +69,7 @@ public final class FirestoreBundle {
               .setReadTime(documentSnap.getReadTime().toProto())
               .setExists(documentSnap.exists())
               .build();
-      Document document = documentSnap.toDocumentPb().build();
+      Document document = documentSnap.exists() ? documentSnap.toDocumentPb().build() : null;
       documents.put(metadata.getName(), new BundledDocument(metadata, document));
 
       if (documentSnap.getReadTime().compareTo(latestReadTime) > 0) {
@@ -70,21 +79,21 @@ public final class FirestoreBundle {
       return this;
     }
 
+    /**
+     * Adds a Firestore query snapshots to the bundle. Both the documents in the query snapshots and
+     * the query read time will be included in the bundle.
+     *
+     * @param queryName The name of the query to add.
+     * @param querySnap The query snapshot to add.
+     * @returns This instance.
+     */
     public Builder add(String queryName, QuerySnapshot querySnap) {
-      RunQueryRequest queryProto = querySnap.getQuery().toProto();
-      LimitType limitType = querySnap.getQuery().options.getLimitType();
+      BundledQuery query = querySnap.getQuery().toBundledQuery();
       NamedQuery namedQuery =
           NamedQuery.newBuilder()
               .setName(queryName)
               .setReadTime(querySnap.getReadTime().toProto())
-              .setBundledQuery(
-                  BundledQuery.newBuilder()
-                      .setParent(queryProto.getParent())
-                      .setStructuredQuery(queryProto.getStructuredQuery())
-                      .setLimitType(
-                          limitType.equals(LimitType.Last)
-                              ? BundledQuery.LimitType.LAST
-                              : BundledQuery.LimitType.FIRST))
+              .setBundledQuery(query)
               .build();
       namedQueries.put(queryName, namedQuery);
 
@@ -150,11 +159,15 @@ public final class FirestoreBundle {
     bundleData = data;
   }
 
+  /** Returns the bundle content as a readonly {@link ByteBuffer}. */
   public ByteBuffer toByteBuffer() {
-    return ByteBuffer.wrap(bundleData) /*.asReadOnlyBuffer()*/;
+    return ByteBuffer.wrap(bundleData).asReadOnlyBuffer();
   }
 }
 
+/**
+ * Convenient class to hold both the metadata and the actual content of a document to be bundled.
+ */
 class BundledDocument {
   private BundledDocumentMetadata metadata;
   private Document document;
