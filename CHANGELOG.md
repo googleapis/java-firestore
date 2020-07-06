@@ -1,17 +1,12 @@
 # Changelog
 
-## [1.36.0](https://www.github.com/googleapis/java-firestore/compare/v1.35.0...v1.36.0) (2020-07-01)
-
-
-### Features
-
-* **deps:** adopt flatten plugin and google-cloud-shared-dependencies ([#261](https://www.github.com/googleapis/java-firestore/issues/261)) ([78b2ebf](https://www.github.com/googleapis/java-firestore/commit/78b2ebf3c75c774f1ace386fa5f32e76b470ed9c))
-
+## [1.35.1](https://www.github.com/googleapis/java-firestore/compare/v1.35.0...v1.35.1) (2020-07-01)
 
 ### Dependencies
 
 * update dependency com.google.cloud:google-cloud-shared-dependencies to v0.8.2 ([#280](https://www.github.com/googleapis/java-firestore/issues/280)) ([9296f7a](https://www.github.com/googleapis/java-firestore/commit/9296f7a67c6194ea9e75b952d29b0f1aa486d194))
 * update jackson dependencies to v2.11.1 ([#272](https://www.github.com/googleapis/java-firestore/issues/272)) ([1065704](https://www.github.com/googleapis/java-firestore/commit/1065704f3e571f3f51b0e9ed13ec67eb7c662b88))
+* adopt flatten plugin and google-cloud-shared-dependencies ([#261](https://www.github.com/googleapis/java-firestore/issues/261)) ([78b2ebf](https://www.github.com/googleapis/java-firestore/commit/78b2ebf3c75c774f1ace386fa5f32e76b470ed9c))
 
 ## [1.35.0](https://www.github.com/googleapis/java-firestore/compare/v1.34.0...v1.35.0) (2020-06-17)
 
