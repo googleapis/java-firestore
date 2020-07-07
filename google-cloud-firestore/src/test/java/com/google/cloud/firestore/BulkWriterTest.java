@@ -49,7 +49,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +68,16 @@ import org.mockito.stubbing.Answer;
 public class BulkWriterTest {
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+
+  /** Executor that executes delayed tasks without delay. */
+  private final ScheduledExecutorService immediateExecutor =
+      new ScheduledThreadPoolExecutor(1) {
+        @Override
+        @Nonnull
+        public <V> ScheduledFuture<V> schedule(Callable<V> command, long delay, TimeUnit unit) {
+          return super.schedule(command, 0, TimeUnit.MILLISECONDS);
+        }
+      };
 
   @Spy
   private final FirestoreImpl firestoreMock =
@@ -85,11 +97,15 @@ public class BulkWriterTest {
     return ApiFutures.immediateFuture(response.build());
   }
 
-  private ApiFuture<BatchWriteResponse> failedResponse() {
+  private ApiFuture<BatchWriteResponse> failedResponse(int code) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().build();
-    response.addStatusBuilder().setCode(Code.UNAVAILABLE_VALUE).build();
+    response.addStatusBuilder().setCode(code).build();
     return ApiFutures.immediateFuture(response.build());
+  }
+
+  private ApiFuture<BatchWriteResponse> failedResponse() {
+    return failedResponse(Code.DEADLINE_EXCEEDED_VALUE);
   }
 
   private ApiFuture<BatchWriteResponse> mergeResponses(ApiFuture<BatchWriteResponse>... responses)
@@ -112,6 +128,7 @@ public class BulkWriterTest {
 
   @Before
   public void before() {
+    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     bulkWriter = firestoreMock.bulkWriter();
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
@@ -227,7 +244,7 @@ public class BulkWriterTest {
       fail("set() should have failed");
     } catch (Exception e) {
       assertTrue(e.getCause() instanceof FirestoreException);
-      assertEquals(Status.UNAVAILABLE, ((FirestoreException) e.getCause()).getStatus());
+      assertEquals(Status.DEADLINE_EXCEEDED, ((FirestoreException) e.getCause()).getStatus());
     }
   }
 
@@ -402,6 +419,52 @@ public class BulkWriterTest {
   }
 
   @Test
+  public void retriesIndividualWritesThatFailWithAborted() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                mergeResponses(
+                    failedResponse(),
+                    failedResponse(Code.UNAVAILABLE_VALUE),
+                    failedResponse(Code.ABORTED_VALUE)));
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                mergeResponses(successResponse(2), failedResponse(Code.ABORTED_VALUE)));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                successResponse(3));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result3 =
+        bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close().get();
+
+    try {
+      result1.get();
+      fail("set() should have failed");
+    } catch (Exception e) {
+      assertTrue(e.getCause() instanceof FirestoreException);
+      assertEquals(Status.DEADLINE_EXCEEDED, ((FirestoreException) e.getCause()).getStatus());
+    }
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
+
+    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
+    assertEquals(responseStubber.size(), requests.size());
+  }
+
+  @Test
   public void doesNotSendBatchesIfSameDocIsInFlight() throws Exception {
     final SerialResponseStubber responseStubber =
         new SerialResponseStubber() {
@@ -540,6 +603,31 @@ public class BulkWriterTest {
 
   @Test
   public void individualWritesErrorIfBulkCommitFails() throws Exception {
+    doThrow(
+            FirestoreException.serverRejected(
+                Status.DEADLINE_EXCEEDED, "Mock batchWrite failed in test"))
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+    int opCount = 0;
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close().get();
+
+    for (ApiFuture<WriteResult> result : Arrays.asList(result1, result2)) {
+      try {
+        result.get();
+      } catch (Exception e) {
+        assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
+        ++opCount;
+      }
+    }
+    assertEquals(2, opCount);
+  }
+
+  @Test
+  public void individualWritesErrorIfBulkCommitFailsWithNonFirestoreException() throws Exception {
     doThrow(new IllegalStateException("Mock batchWrite failed in test"))
         .when(firestoreMock)
         .sendRequest(
@@ -550,15 +638,59 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close().get();
 
-    String expected = "java.lang.IllegalStateException: Mock batchWrite failed in test";
     for (ApiFuture<WriteResult> result : Arrays.asList(result1, result2)) {
       try {
         result.get();
       } catch (Exception e) {
-        assertEquals(expected, e.getMessage());
+        assertTrue(
+            e.getMessage()
+                .contains("java.lang.IllegalStateException: Mock batchWrite failed in test"));
         ++opCount;
       }
     }
     assertEquals(2, opCount);
+  }
+
+  @Test
+  public void retriesWritesWhenBatchWriteFailsWithRetryableError() throws Exception {
+    FirestoreException retryableError =
+        FirestoreException.serverRejected(
+            Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test");
+
+    doThrow(retryableError)
+        .doThrow(retryableError)
+        .doThrow(retryableError)
+        .doReturn(successResponse(3))
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close().get();
+
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result.get().getUpdateTime());
+  }
+
+  @Test
+  public void failsWritesAfterAllRetryAttemptsFail() throws Exception {
+    doThrow(
+            FirestoreException.serverRejected(
+                Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test"))
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+    int opCount = 0;
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close().get();
+
+    try {
+      result.get();
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
+      ++opCount;
+    }
+    assertEquals(1, opCount);
   }
 }

@@ -18,7 +18,10 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.CurrentMillisClock;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
+import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.cloud.firestore.UpdateBuilder.BatchState;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -28,6 +31,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +59,8 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 public class BulkWriter {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 500;
+
+  private static final int MAX_RETRY_ATTEMPTS = 10;
 
   /**
    * The starting maximum number of operations per second as allowed by the 500/50/5 rule.
@@ -96,8 +103,16 @@ public class BulkWriter {
 
   private final FirestoreImpl firestore;
 
+  private final ExponentialRetryAlgorithm backoff;
+  private TimedAttemptSettings nextAttempt;
+
   BulkWriter(FirestoreImpl firestore, boolean enableThrottling) {
     this.firestore = firestore;
+    this.backoff =
+        new ExponentialRetryAlgorithm(
+            firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
+    this.nextAttempt = backoff.createFirstAttempt();
+
     if (enableThrottling) {
       rateLimiter =
           new RateLimiter(
@@ -493,7 +508,7 @@ public class BulkWriter {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
       if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN
-          && !lastBatch.getDocuments().contains(documentReference)) {
+          && !lastBatch.hasPath(documentReference.getPath())) {
         return lastBatch;
       }
     }
@@ -539,7 +554,7 @@ public class BulkWriter {
 
       // Send the batch if it is under the rate limit, or schedule another attempt after the
       // appropriate timeout.
-      long delayMs = rateLimiter.getNextRequestDelayMs(batch.getOperationCount());
+      long delayMs = rateLimiter.getNextRequestDelayMs(batch.getPendingOperationCount());
       Preconditions.checkState(delayMs != -1, "Batch size should be under capacity");
       if (delayMs == 0) {
         sendBatch(batch);
@@ -568,28 +583,84 @@ public class BulkWriter {
    * next group of ready batches.
    */
   private void sendBatch(final BulkCommitBatch batch) {
-    boolean success = rateLimiter.tryMakeRequest(batch.getOperationCount());
+    boolean success = rateLimiter.tryMakeRequest(batch.getPendingOperationCount());
     Preconditions.checkState(success, "Batch should be under rate limit to be sent.");
-    try {
-      final ApiFuture<List<BatchWriteResult>> commitFuture = batch.bulkCommit();
-      commitFuture.addListener(
-          new Runnable() {
-            public void run() {
-              try {
-                batch.processResults(commitFuture.get(), null);
-              } catch (Exception e) {
-                batch.processResults(new ArrayList<BatchWriteResult>(), e);
+    MoreExecutors.directExecutor()
+        .execute(
+            new Runnable() {
+              public void run() {
+                bulkCommit(batch);
+                boolean removed = batchQueue.remove(batch);
+                Preconditions.checkState(removed, "The batch should be in the BatchQueue.");
+                sendReadyBatches();
               }
-              // Remove the batch from BatchQueue after it has been processed.
-              boolean removed = batchQueue.remove(batch);
-              Preconditions.checkState(removed, "The batch should be in the BatchQueue.");
-              sendReadyBatches();
-            }
-          },
-          MoreExecutors.directExecutor());
-    } catch (Exception e) {
-      batch.processResults(new ArrayList<BatchWriteResult>(), e);
+            });
+  }
+
+  private void bulkCommit(BulkCommitBatch batch) {
+    List<BatchWriteResult> results = new ArrayList<>();
+    for (int attempt = 0; attempt < MAX_RETRY_ATTEMPTS; ++attempt) {
+      final BulkCommitBatch finalBatch = batch;
+      ScheduledFuture<List<BatchWriteResult>> attemptBulkCommit =
+          firestore
+              .getClient()
+              .getExecutor()
+              .schedule(
+                  new Callable<List<BatchWriteResult>>() {
+                    public List<BatchWriteResult> call() {
+                      List<BatchWriteResult> results = new ArrayList<>();
+                      try {
+                        return finalBatch.bulkCommit().get();
+                      } catch (Exception e) {
+                        // Map the failure to each individual write's result.
+                        for (String path : finalBatch.getPendingDocs()) {
+                          if (e instanceof FirestoreException) {
+                            results.add(
+                                new BatchWriteResult(
+                                    path,
+                                    null,
+                                    ((FirestoreException) e).getStatus(),
+                                    e.getMessage()));
+                          } else {
+                            results.add(new BatchWriteResult(path, null, null, e.getMessage(), e));
+                          }
+                        }
+                        return results;
+                      }
+                    }
+                  },
+                  nextAttempt.getRandomizedRetryDelay().toMillis(),
+                  TimeUnit.MILLISECONDS);
+
+      try {
+        results = attemptBulkCommit.get();
+        batch.processResults(results, null);
+      } catch (Exception e) {
+        for (String path : batch.getPendingDocs()) {
+          results.add(new BatchWriteResult(path, null, null, e.getMessage(), e));
+        }
+        batch.processResults(new ArrayList<BatchWriteResult>(), e);
+      }
+
+      if (batch.getPendingOperationCount() > 0) {
+        logger.log(
+            Level.WARNING,
+            String.format(
+                "Current batch failed at retry #%d. Num failures: %d",
+                attempt, batch.getPendingOperationCount()));
+        batch.sliceBatchForRetry(batch.getPendingDocs());
+        batch.markReadyToSend();
+
+      } else {
+        batch.markComplete();
+        return;
+      }
+
+      nextAttempt = backoff.createNextAttempt(nextAttempt);
     }
+
+    batch.failRemainingOperations(results);
+    batch.markComplete();
   }
 
   /**
@@ -601,15 +672,14 @@ public class BulkWriter {
       return false;
     }
 
-    for (final DocumentReference document : batch.getDocuments()) {
+    for (final String path : batch.getPendingDocs()) {
       boolean isRefInFlight =
           FluentIterable.from(batchQueue)
               .anyMatch(
                   new Predicate<BulkCommitBatch>() {
                     @Override
                     public boolean apply(BulkCommitBatch batch) {
-                      return batch.getState().equals(BatchState.SENT)
-                          && batch.getDocuments().contains(document);
+                      return batch.getState().equals(BatchState.SENT) && batch.hasPath(path);
                     }
                   });
 
@@ -620,7 +690,7 @@ public class BulkWriter {
                 "Duplicate write to document %s detected. Writing to the same document multiple"
                     + " times will slow down BulkWriter. Write to unique documents in order to "
                     + "maximize throughput.",
-                document));
+                path));
         return false;
       }
     }

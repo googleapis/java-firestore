@@ -25,14 +25,35 @@ import javax.annotation.Nullable;
  * BatchWriteRequests.
  */
 public final class BatchWriteResult {
+  private final String key;
   @Nullable private final Timestamp writeTime;
   private final Status status;
   private final String message;
+  @Nullable private final Exception exception;
 
-  BatchWriteResult(@Nullable Timestamp timestamp, Status status, String message) {
+  BatchWriteResult(String key, @Nullable Timestamp timestamp, Status status, String message) {
+    this.key = key;
     this.writeTime = timestamp;
     this.status = status;
     this.message = message;
+    this.exception = null;
+  }
+
+  BatchWriteResult(
+      String key,
+      @Nullable Timestamp timestamp,
+      Status status,
+      String message,
+      Exception exception) {
+    this.key = key;
+    this.writeTime = timestamp;
+    this.status = status;
+    this.message = message;
+    this.exception = exception;
+  }
+
+  public String getKey() {
+    return key;
   }
 
   @Nullable
@@ -40,11 +61,17 @@ public final class BatchWriteResult {
     return writeTime;
   }
 
+  @Nullable
   public Status getStatus() {
     return status;
   }
 
   public String getMessage() {
     return message;
+  }
+
+  @Nullable
+  public Exception getException() {
+    return exception;
   }
 }
