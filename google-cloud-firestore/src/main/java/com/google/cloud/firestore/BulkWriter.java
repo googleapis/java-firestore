@@ -18,7 +18,6 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.CurrentMillisClock;
 import com.google.api.core.SettableApiFuture;
@@ -33,7 +32,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +44,26 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
   BulkCommitBatch(FirestoreImpl firestore, int maxBatchSize) {
     super(firestore, maxBatchSize);
   }
+
+  //  BulkCommitBatch(
+  //      FirestoreImpl firestore,
+  //      BulkCommitBatch retryBatch,
+  //      final Set<DocumentReference> docsToRetry) {
+  //    super(firestore);
+  //    this.writes.addAll(
+  //        FluentIterable.from(retryBatch.writes)
+  //            .filter(
+  //                new Predicate<WriteOperation>() {
+  //                  @Override
+  //                  public boolean apply(WriteOperation writeOperation) {
+  //                    return docsToRetry.contains(writeOperation.documentReference);
+  //                  }
+  //                })
+  //            .toList());
+  //
+  //    this.state = BatchState.READY_TO_SEND;
+  //    // TODO: figure out how to pipe completeFuture through into the new batch
+  //  }
 
   ApiFuture<WriteResult> wrapResult(ApiFuture<WriteResult> result) {
     return result;
@@ -104,7 +122,7 @@ public class BulkWriter {
 
   private final FirestoreImpl firestore;
 
-//  private final ScheduledExecutorService firestoreExecutor;
+  //  private final ScheduledExecutorService firestoreExecutor;
 
   private final ExponentialRetryAlgorithm backoff;
   private TimedAttemptSettings nextAttempt;
@@ -115,7 +133,7 @@ public class BulkWriter {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextAttempt = backoff.createFirstAttempt();
-//    this.firestoreExecutor = firestore.getClient().getExecutor();
+    //    this.firestoreExecutor = firestore.getClient().getExecutor();
 
     if (enableThrottling) {
       rateLimiter =
@@ -563,15 +581,18 @@ public class BulkWriter {
       if (delayMs == 0) {
         sendBatch(batch);
       } else {
-        firestore.getClient().getExecutor().schedule(
-            new Runnable() {
-              @Override
-              public void run() {
-                sendBatch(batch);
-              }
-            },
-            delayMs,
-            TimeUnit.MILLISECONDS);
+        firestore
+            .getClient()
+            .getExecutor()
+            .schedule(
+                new Runnable() {
+                  @Override
+                  public void run() {
+                    sendBatch(batch);
+                  }
+                },
+                delayMs,
+                TimeUnit.MILLISECONDS);
         break;
       }
 
@@ -584,6 +605,7 @@ public class BulkWriter {
    * next group of ready batches.
    */
   private void sendBatch(final BulkCommitBatch batch) {
+    System.out.println("sending batch" + batch.getPendingDocuments().size());
     boolean success = rateLimiter.tryMakeRequest(batch.getPendingOperationCount());
     Preconditions.checkState(success, "Batch should be under rate limit to be sent.");
 
@@ -593,48 +615,52 @@ public class BulkWriter {
     commitFuture.addListener(
         new Runnable() {
           public void run() {
+            System.out.println("removing batch from batch queue. size: " + batchQueue.size());
             boolean removed = batchQueue.remove(batch);
-            Preconditions.checkState(removed, "The batch should be in the BatchQueue.");
+            Preconditions.checkState(
+                removed, "The batch should be in the BatchQueue." + batchQueue.size());
             sendReadyBatches();
           }
         },
+        // TODO: Replacing this with the firestoreExecutor will result in tests passing, but batches
+        // being removed multiple times. Using the directExecutor results in the precondition check
+        // above failing when all tests are run together (run sendBatchesWhenSizeLimitIsReached)
         MoreExecutors.directExecutor());
+  }
+
+  private ApiFuture<List<BatchWriteResult>> invokeBulkCommit(final BulkCommitBatch batch) {
+    return batch.bulkCommit();
   }
 
   private ApiFuture<Void> bulkCommit(BulkCommitBatch batch) {
     return bulkCommit(batch, 0);
   }
 
-  ApiFuture<List<BatchWriteResult>> invokeBulkCommit(final BulkCommitBatch batch) {
-    return batch.bulkCommit();
-  }
-
   private ApiFuture<Void> bulkCommit(final BulkCommitBatch batch, final int attempt) {
-    final BulkCommitBatch finalBatch = batch;
     final SettableApiFuture<Void> backoffFuture = SettableApiFuture.create();
 
     class ProcessBulkCommitCallback implements ApiAsyncFunction<List<BatchWriteResult>, Void> {
       @Override
       public ApiFuture<Void> apply(List<BatchWriteResult> results) {
-        finalBatch.processResults(results);
-        if (finalBatch.getPendingOperationCount() > 0) {
+        batch.processResults(results);
+        if (batch.getPendingOperationCount() > 0) {
           logger.log(
               Level.WARNING,
               String.format(
                   "Current batch failed at retry #%d. Num failures: %d",
-                  attempt, finalBatch.getPendingOperationCount()));
-          finalBatch.sliceBatchForRetry(finalBatch.getPendingDocuments());
-          finalBatch.markReadyToSend();
+                  attempt, batch.getPendingOperationCount()));
+          batch.sliceBatchForRetry(batch.getPendingDocuments());
+          batch.markReadyToSend();
 
           if (attempt < MAX_RETRY_ATTEMPTS) {
             nextAttempt = backoff.createNextAttempt(nextAttempt);
-            return bulkCommit(finalBatch, attempt + 1);
+            return bulkCommit(batch, attempt + 1);
           } else {
-            finalBatch.failRemainingOperations(results);
-            finalBatch.markComplete();
+            batch.failRemainingOperations(results);
+            batch.markComplete();
           }
         } else {
-          finalBatch.markComplete();
+          batch.markComplete();
         }
         return ApiFutures.immediateFuture(null);
       }
@@ -647,12 +673,12 @@ public class BulkWriter {
         // If the BatchWrite RPC fails, map the exception to each individual result.
         return ApiFutures.transformAsync(
             ApiFutures.catchingAsync(
-                invokeBulkCommit(finalBatch),
+                invokeBulkCommit(batch),
                 Exception.class,
                 new ApiAsyncFunction<Exception, List<BatchWriteResult>>() {
                   public ApiFuture<List<BatchWriteResult>> apply(Exception exception) {
                     List<BatchWriteResult> results = new ArrayList<>();
-                    for (DocumentReference documentReference : finalBatch.getPendingDocuments()) {
+                    for (DocumentReference documentReference : batch.getPendingDocuments()) {
                       results.add(new BatchWriteResult(documentReference, null, exception));
                     }
                     return ApiFutures.immediateFuture(results);
@@ -665,18 +691,21 @@ public class BulkWriter {
     }
 
     // Add a backoff delay. At first, this is 0.
-    firestore.getClient().getExecutor().schedule(
-        new Runnable() {
-          @Override
-          public void run() {
-            backoffFuture.set(null);
-          }
-        },
-        nextAttempt.getRandomizedRetryDelay().toMillis(),
-        TimeUnit.MILLISECONDS);
+    firestore
+        .getClient()
+        .getExecutor()
+        .schedule(
+            new Runnable() {
+              @Override
+              public void run() {
+                backoffFuture.set(null);
+              }
+            },
+            nextAttempt.getRandomizedRetryDelay().toMillis(),
+            TimeUnit.MILLISECONDS);
 
     return ApiFutures.transformAsync(
-        backoffFuture, new BackoffCallback(), MoreExecutors.directExecutor());
+        backoffFuture, new BackoffCallback(), firestore.getClient().getExecutor());
   }
 
   /**

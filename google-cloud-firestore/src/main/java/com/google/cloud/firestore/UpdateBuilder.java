@@ -64,11 +64,11 @@ public abstract class UpdateBuilder<T> {
   }
 
   final FirestoreImpl firestore;
-  private final List<WriteOperation> writes;
+  protected final List<WriteOperation> writes;
   private boolean committed;
   private final int maxBatchSize;
 
-  private BatchState state = BatchState.OPEN;
+  protected BatchState state = BatchState.OPEN;
   private final SettableApiFuture<Void> completeFuture = SettableApiFuture.create();
   private final Map<DocumentReference, SettableApiFuture<WriteResult>> pendingOperations =
       new HashMap<>();
@@ -666,9 +666,6 @@ public abstract class UpdateBuilder<T> {
 
   /**
    * Commits all pending operations to the database and verifies all preconditions.
-   *
-   * <p>If any of the writes in the batch fail with a retryable error, this method will retry the
-   * failed writes.
    *
    * <p>The writes in the batch are not applied atomically and can be applied out of order.
    */
