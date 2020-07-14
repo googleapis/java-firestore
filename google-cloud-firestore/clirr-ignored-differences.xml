@@ -17,23 +17,17 @@
 
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
-  <!-- TODO: Remove after release of 1.33.0 -->
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/cloud/firestore/Firestore</className>
-    <method>com.google.api.core.ApiFuture runAsyncTransaction(*)</method>
-  </difference>
 
+  <!-- v2.0.0 -->
   <difference>
-    <differenceType>7005</differenceType>
-    <className>com/google/cloud/firestore/*</className>
-    <method>*(com.google.cloud.firestore.FirestoreImpl, *)</method>
-    <to>*(com.google.cloud.firestore.FirestoreRpcContext, *)</to>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/DocumentReference</className>
+    <method>java.lang.Iterable getCollections()</method>
   </difference>
   <difference>
-    <differenceType>7009</differenceType>
-    <className>com/google/cloud/firestore/*</className>
-    <method>*(com.google.cloud.firestore.FirestoreImpl, *)</method>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
+    <method>java.lang.Iterable getCollections()</method>
   </difference>
 
   <!--

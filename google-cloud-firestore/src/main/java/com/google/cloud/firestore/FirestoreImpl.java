@@ -122,12 +122,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   @Override
-  public Iterable<CollectionReference> getCollections() {
-    return listCollections();
-  }
-
-  @Nonnull
-  @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
     return this.getAll(documentReferences, null, (ByteString) null);
