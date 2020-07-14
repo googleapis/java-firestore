@@ -310,12 +310,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return transactionRunner.run();
   }
 
-  /** Returns whether the user has opted into receiving dates as com.google.cloud.Timestamp. */
-  @Override
-  public boolean areTimestampsInSnapshotsEnabled() {
-    return this.firestoreOptions.areTimestampsInSnapshotsEnabled();
-  }
-
   /** Returns the name of the Firestore project associated with this client. */
   @Override
   public String getDatabaseName() {
