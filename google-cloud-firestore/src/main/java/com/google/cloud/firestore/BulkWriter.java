@@ -80,7 +80,7 @@ public class BulkWriter {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 500;
 
-  private static final int MAX_RETRY_ATTEMPTS = 10;
+  public static final int MAX_RETRY_ATTEMPTS = 10;
 
   /**
    * The starting maximum number of operations per second as allowed by the 500/50/5 rule.

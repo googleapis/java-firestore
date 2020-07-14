@@ -24,6 +24,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
 import com.google.api.core.ApiFuture;
@@ -56,7 +57,9 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
@@ -640,10 +643,16 @@ public class BulkWriterTest {
 
   @Test
   public void failsWritesAfterAllRetryAttemptsFail() throws Exception {
-    doReturn(
-            ApiFutures.immediateFailedFuture(
-                FirestoreException.serverRejected(
-                    Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test")))
+    final int[] retryAttempts = {0};
+    doAnswer(
+            new Answer() {
+              public ApiFuture<Object> answer(InvocationOnMock mock) {
+                retryAttempts[0]++;
+                return ApiFutures.immediateFailedFuture(
+                    FirestoreException.serverRejected(
+                        Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test"));
+              }
+            })
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -656,6 +665,7 @@ public class BulkWriterTest {
       Assert.fail("Expected set() operation to fail");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
+      assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS);
     }
   }
 }
