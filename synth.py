@@ -71,16 +71,18 @@ def generate_client(service, version, proto_path=None, bazel_target=None, packag
       protobuf_header,
       f'{license_header}{protobuf_header}'
   )
-  s.replace(
-      library / f'grpc-google-cloud-{service}-{version}-java/src/**/*.java',
-      bad_license_header,
-      license_header
-  )
-  s.replace(
-      library / f'proto-google-cloud-{service}-{version}-java/src/**/*.java',
-      bad_license_header,
-      license_header
-  )
+
+  if service == "firestore-admin":
+    s.replace(
+        library / f'grpc-google-cloud-{service}-{version}-java/src/**/*.java',
+        bad_license_header,
+        license_header
+    )
+    s.replace(
+        library / f'proto-google-cloud-{service}-{version}-java/src/**/*.java',
+        bad_license_header,
+        license_header
+    )
 
   pkg = package if package else f'com.google.{service}.{version}'
   s.replace(
@@ -115,12 +117,6 @@ firestore_v1 = generate_client(
     include_gapic=True
 )
 
-firestore_v1beta1 = generate_client(
-    service='firestore',
-    version='v1beta1',
-    include_gapic=True
-)
-
 java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
@@ -130,24 +126,3 @@ java.common_templates(excludes=[
     '.kokoro/nightly/samples.cfg'
 ])
 
-# Mark v1beta1 as deprecated
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
-  "public class FirestoreClient",
-  "@Deprecated\npublic class FirestoreClient"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
-  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead\n */\n@Generated(\"by gapic-generator\")"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
-  "public class FirestoreSettings",
-  "@Deprecated\npublic class FirestoreSettings"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
-  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
-)

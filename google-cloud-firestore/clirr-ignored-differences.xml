@@ -17,6 +17,7 @@
 
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
+
   <!-- v2.0.0 -->
   <difference>
     <differenceType>7002</differenceType>
@@ -32,6 +33,11 @@
     <differenceType>7002</differenceType>
     <className>com/google/cloud/firestore/FirestoreOptions$Builder</className>
     <method>com.google.cloud.firestore.FirestoreOptions$Builder setTimestampsInSnapshotsEnabled(boolean)</method>
+  </difference>
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/v1beta1/**/*</className>
+    <to>*</to>
   </difference>
 
   <!--
@@ -115,11 +121,6 @@
     <differenceType>7002</differenceType>
     <className>com/google/cloud/firestore/v1/FirestoreClient</className>
     <method>void deleteDocument(com.google.firestore.v1.AnyPathName)</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/cloud/firestore/v1beta1/FirestoreClient</className>
-    <method>void deleteDocument(com.google.firestore.v1beta1.AnyPathName)</method>
   </difference>
 
   <!--
