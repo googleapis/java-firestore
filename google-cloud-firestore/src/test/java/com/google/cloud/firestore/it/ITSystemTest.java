@@ -87,6 +87,8 @@ public class ITSystemTest {
   private final SingleField SINGLE_FIELD_OBJECT = LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
   private final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT =
       LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
+  private final Map<String, Object> SINGLE_FILED_MAP_WITH_DOT =
+      LocalFirestoreHelper.SINGLE_FILED_MAP_WITH_DOT;
 
   @Rule public TestName testName = new TestName();
 
@@ -1268,5 +1270,34 @@ public class ITSystemTest {
     RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
     fs.close();
     Query.fromProto(fs, proto);
+  }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    DocumentReference documentReference = randomColl.document("doc1");
+    Map<String, Object> dotKeyMap = new HashMap<>();
+    dotKeyMap.put("a.b", SINGLE_FILED_MAP_WITH_DOT);
+    documentReference.set(dotKeyMap).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    assertEquals(SINGLE_FILED_MAP_WITH_DOT, documentSnapshots.getData().get("a.b"));
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    documentSnapshots = documentReference.get().get();
+    assertNull(documentSnapshots.getData().get("c.d"));
+  }
+
+  @Test
+  public void deleteNestedFieldUsingDot() throws Exception {
+    DocumentReference documentReference = randomColl.document("doc1");
+    Map<String, Object> nestedMap = new HashMap<>();
+    nestedMap.put("baz", SINGLE_FIELD_MAP);
+    documentReference.set(nestedMap).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    assertEquals("bar", ((Map) documentSnapshots.getData().get("baz")).get("foo"));
+    Map<String, Object> deleteKeyValue = new HashMap<>();
+    deleteKeyValue.put("baz.foo", FieldValue.delete());
+    documentReference.update(deleteKeyValue).get();
+    documentSnapshots = documentReference.get().get();
+    assertNull(documentSnapshots.getData().get("foo"));
   }
 }

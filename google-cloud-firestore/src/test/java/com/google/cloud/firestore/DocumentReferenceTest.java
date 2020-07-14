@@ -1069,4 +1069,31 @@ public class DocumentReferenceTest {
       assertCommitEquals(expectedCommit, request);
     }
   }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    CommitRequest expectedCommit =
+        commit(update(new HashMap<String, Value>(), Arrays.asList("`a.b`.`c.d`")));
+    assertEquals(expectedCommit, commitCapture.getValue());
+  }
+
+  @Test
+  public void deleteNestedFieldUsingDot() throws ExecutionException, InterruptedException {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+    Map<String, Object> nestedMap = new HashMap<>();
+    nestedMap.put("a.b.c", FieldValue.delete());
+    documentReference.update(nestedMap).get();
+    CommitRequest expectedCommit =
+        commit(update(new HashMap<String, Value>(), Arrays.asList("a.b.c")));
+    assertEquals(expectedCommit, commitCapture.getValue());
+  }
 }

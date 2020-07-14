@@ -104,7 +104,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   String[] splitChildPath(String path) {
     // By default, split() doesn't return empty leading and trailing segments. This can be enabled
     // by passing "-1" as the  limit.
-    return path.split("\\.", -1);
+    return (getSegments().size() == 0) ? path.split("\\.", -1) : new String[] {path};
   }
 
   /**
