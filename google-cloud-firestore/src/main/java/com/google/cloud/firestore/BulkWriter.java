@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,7 +123,7 @@ public class BulkWriter {
 
   private final FirestoreImpl firestore;
 
-  //  private final ScheduledExecutorService firestoreExecutor;
+  private final ScheduledExecutorService firestoreExecutor;
 
   private final ExponentialRetryAlgorithm backoff;
   private TimedAttemptSettings nextAttempt;
@@ -133,7 +134,7 @@ public class BulkWriter {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextAttempt = backoff.createFirstAttempt();
-    //    this.firestoreExecutor = firestore.getClient().getExecutor();
+    this.firestoreExecutor = firestore.getClient().getExecutor();
 
     if (enableThrottling) {
       rateLimiter =
@@ -582,18 +583,15 @@ public class BulkWriter {
       if (delayMs == 0) {
         sendBatch(batch);
       } else {
-        firestore
-            .getClient()
-            .getExecutor()
-            .schedule(
-                new Runnable() {
-                  @Override
-                  public void run() {
-                    sendBatch(batch);
-                  }
-                },
-                delayMs,
-                TimeUnit.MILLISECONDS);
+        firestoreExecutor.schedule(
+            new Runnable() {
+              @Override
+              public void run() {
+                sendBatch(batch);
+              }
+            },
+            delayMs,
+            TimeUnit.MILLISECONDS);
         break;
       }
 
@@ -687,21 +685,17 @@ public class BulkWriter {
     }
 
     // Add a backoff delay. At first, this is 0.
-    firestore
-        .getClient()
-        .getExecutor()
-        .schedule(
-            new Runnable() {
-              @Override
-              public void run() {
-                backoffFuture.set(null);
-              }
-            },
-            nextAttempt.getRandomizedRetryDelay().toMillis(),
-            TimeUnit.MILLISECONDS);
+    firestoreExecutor.schedule(
+        new Runnable() {
+          @Override
+          public void run() {
+            backoffFuture.set(null);
+          }
+        },
+        nextAttempt.getRandomizedRetryDelay().toMillis(),
+        TimeUnit.MILLISECONDS);
 
-    return ApiFutures.transformAsync(
-        backoffFuture, new BackoffCallback(), firestore.getClient().getExecutor());
+    return ApiFutures.transformAsync(backoffFuture, new BackoffCallback(), firestoreExecutor);
   }
 
   /**

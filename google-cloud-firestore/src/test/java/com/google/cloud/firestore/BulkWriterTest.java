@@ -24,8 +24,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doReturn;
 
 import com.google.api.core.ApiFuture;
@@ -37,11 +35,9 @@ import com.google.cloud.firestore.LocalFirestoreHelper.SerialResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
-import com.google.firestore.v1.Write;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -60,9 +56,7 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
@@ -516,65 +510,28 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void doesNotSendBatchesIfDoingSoExceedsRateLimit() throws Exception {
-    // The test is considered a success if BulkWriter tries to send the second batch again after a
-    // timeout.
-
-    final List<Write> requests1 = new ArrayList<>();
-    final List<ApiFuture<BatchWriteResponse>> responses1 = new ArrayList<>();
-    for (int i = 0; i < 500; ++i) {
-      requests1.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i));
-      responses1.add(successResponse(i));
-    }
-    List<Integer> arrayRange2 = Arrays.asList(500, 501, 502, 503, 504);
-    final List<Write> requests2 = new ArrayList<>();
-    final List<ApiFuture<BatchWriteResponse>> responses2 = new ArrayList<>();
-    for (int i : arrayRange2) {
-      requests2.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i));
-      responses2.add(successResponse(i));
-    }
-
-    ResponseStubber responseStubber =
-        new ResponseStubber() {
-          {
-            put(
-                batchWrite(requests1.toArray(new Write[500])),
-                mergeResponses(responses1.toArray(new ApiFuture[500])));
-            put(
-                batchWrite(requests2.toArray(new Write[5])),
-                mergeResponses(responses2.toArray(new ApiFuture[5])));
+  public void doesNotSendBatchesIfDoingSoExceedsRateLimit() {
+    final boolean[] timeoutCalled = {false};
+    final ScheduledExecutorService timeoutExecutor =
+        new ScheduledThreadPoolExecutor(1) {
+          @Override
+          @Nonnull
+          public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            if (delay > 0) {
+              timeoutCalled[0] = true;
+            }
+            return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
         };
-    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+    doReturn(timeoutExecutor).when(firestoreRpc).getExecutor();
+    BulkWriter bulkWriter = firestoreMock.bulkWriter();
 
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 600; ++i) {
       bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
     }
     bulkWriter.flush();
 
-    final boolean[] mockCalled = {false};
-    ScheduledExecutorService mockScheduledExecutorService =
-        Mockito.mock(ScheduledExecutorService.class);
-    doReturn(mockScheduledExecutorService).when(firestoreRpc).getExecutor();
-    Mockito.doAnswer(
-            new Answer<ScheduledFuture<BatchWriteResponse>>() {
-              public ScheduledFuture<BatchWriteResponse> answer(InvocationOnMock invocation) {
-                // Calling this mocked method means that the batch was scheduled after a delay.
-                // Mark the test as success and verify that a delay was scheduled.
-                mockCalled[0] = true;
-                assertTrue(invocation.getArgumentAt(1, Long.class) > 0);
-                return null;
-              }
-            })
-        .when(mockScheduledExecutorService)
-        .schedule(any(Runnable.class), anyInt(), any(TimeUnit.class));
-
-    for (int i = 500; i < 505; ++i) {
-      bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    }
-    bulkWriter.flush();
-
-    assertTrue(mockCalled[0]);
+    assertTrue(timeoutCalled[0]);
   }
 
   @Test
