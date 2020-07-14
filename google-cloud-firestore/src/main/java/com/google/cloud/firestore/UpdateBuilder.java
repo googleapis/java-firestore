@@ -37,6 +37,7 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,7 +70,6 @@ public abstract class UpdateBuilder<T> {
   private final int maxBatchSize;
 
   protected BatchState state = BatchState.OPEN;
-  private final SettableApiFuture<Void> completeFuture = SettableApiFuture.create();
   private final Map<DocumentReference, SettableApiFuture<WriteResult>> pendingOperations =
       new HashMap<>();
 
@@ -676,11 +676,6 @@ public abstract class UpdateBuilder<T> {
             "CloudFirestore.BatchWrite",
             ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
 
-    Preconditions.checkState(
-        state == BatchState.READY_TO_SEND,
-        "The batch should be marked as READY_TO_SEND before committing");
-    state = BatchState.SENT;
-
     final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
@@ -746,8 +741,8 @@ public abstract class UpdateBuilder<T> {
     return this.pendingOperations.keySet();
   }
 
-  void markComplete() {
-    completeFuture.set(null);
+  Collection<SettableApiFuture<WriteResult>> getPendingFutures() {
+    return this.pendingOperations.values();
   }
 
   int getPendingOperationCount() {
@@ -822,12 +817,6 @@ public abstract class UpdateBuilder<T> {
     } else {
       future.setException(result.getException());
     }
-  }
-
-  /** Returns a future that returns when the batch has been sent, and a response is received. */
-  ApiFuture<Void> awaitBulkCommit() {
-    markReadyToSend();
-    return completeFuture;
   }
 
   void markReadyToSend() {
