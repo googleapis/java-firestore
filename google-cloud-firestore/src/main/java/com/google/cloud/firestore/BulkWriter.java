@@ -488,6 +488,7 @@ public class BulkWriter {
       writeFutures.addAll(batch.getPendingFutures());
     }
     sendReadyBatches();
+    // TODO: update to use `successfulAsList()` in order to handle exceptions.
     ApiFutures.allAsList(writeFutures)
         .addListener(
             new Runnable() {
