@@ -116,7 +116,7 @@ public class DocumentReference {
    */
   @Nonnull
   public CollectionReference collection(@Nonnull String collectionPath) {
-    return new CollectionReference(rpcContext, path.append(collectionPath));
+    return new CollectionReference(rpcContext, path.append(collectionPath, new AppendOptions.DefaultAppendOptions()));
   }
 
   /**

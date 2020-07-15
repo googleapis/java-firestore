@@ -109,7 +109,7 @@ public class CollectionReference extends Query {
    */
   @Nonnull
   public DocumentReference document(@Nonnull String childPath) {
-    ResourcePath documentPath = getResourcePath().append(childPath);
+    ResourcePath documentPath = getResourcePath().append(childPath, new AppendOptions.DefaultAppendOptions());
     Preconditions.checkArgument(
         documentPath.isDocument(),
         String.format("Path should point to a Document Reference: %s", getPath()));
@@ -217,6 +217,6 @@ public class CollectionReference extends Query {
 
   /** Returns a resource path pointing to this collection. */
   ResourcePath getResourcePath() {
-    return options.getParentPath().append(options.getCollectionId());
+    return options.getParentPath().append(options.getCollectionId(), new AppendOptions.DefaultAppendOptions());
   }
 }

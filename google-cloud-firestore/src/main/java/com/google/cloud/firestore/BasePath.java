@@ -52,13 +52,18 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * Returns a new path pointing to a child of this Path.
    *
    * @param path A relative path
+   * @param options Determines the append behaviour
    */
-  B append(String path) {
+  B append(String path, AppendOptions options) {
     Preconditions.checkArgument(
         path != null && !path.isEmpty(), "'path' must be a non-empty String");
     ImmutableList.Builder<String> components = ImmutableList.builder();
     components.addAll(this.getSegments());
-    components.add(splitChildPath(path));
+    if (options.splitPath()) {
+      components.add(splitChildPath(path));
+    } else {
+      components.add(path);
+    }
     return createPathWithSegments(components.build());
   }
 

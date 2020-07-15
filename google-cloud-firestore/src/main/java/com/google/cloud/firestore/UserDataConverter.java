@@ -138,7 +138,7 @@ class UserDataConverter {
       ArrayValue.Builder res = ArrayValue.newBuilder();
       int i = 0;
       for (Object child : (List) sanitizedObject) {
-        Value encodedValue = encodeValue(path.append(Integer.toString(i++)), child, options);
+        Value encodedValue = encodeValue(path.append(Integer.toString(i++), new AppendOptions.DefaultAppendOptions()), child, options);
         if (encodedValue != null) {
           res.addValues(encodedValue);
         }
@@ -160,7 +160,12 @@ class UserDataConverter {
       Map<String, Object> map = (Map<String, Object>) sanitizedObject;
 
       for (Map.Entry<String, Object> entry : map.entrySet()) {
-        Value encodedValue = encodeValue(path.append(entry.getKey()), entry.getValue(), options);
+        Value encodedValue = encodeValue(path.append(entry.getKey(), new AppendOptions() {
+          @Override
+          public boolean splitPath() {
+            return false;
+          }
+        }), entry.getValue(), options);
         if (encodedValue != null) {
           res.putFields(entry.getKey(), encodedValue);
         }

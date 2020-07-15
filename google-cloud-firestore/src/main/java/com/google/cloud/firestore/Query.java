@@ -432,11 +432,11 @@ public class Query {
     ResourcePath basePath =
         options.getAllDescendants()
             ? options.getParentPath()
-            : options.getParentPath().append(options.getCollectionId());
+            : options.getParentPath().append(options.getCollectionId(), new AppendOptions.DefaultAppendOptions());
 
     DocumentReference reference;
     if (fieldValue instanceof String) {
-      reference = new DocumentReference(rpcContext, basePath.append((String) fieldValue));
+      reference = new DocumentReference(rpcContext, basePath.append((String) fieldValue, new AppendOptions.DefaultAppendOptions()));
     } else if (fieldValue instanceof DocumentReference) {
       reference = (DocumentReference) fieldValue;
     } else {

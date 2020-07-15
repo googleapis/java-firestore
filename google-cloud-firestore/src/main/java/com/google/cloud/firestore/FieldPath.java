@@ -80,7 +80,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     if (PROHIBITED_CHARACTERS.matcher(field).matches()) {
       throw new IllegalArgumentException("Use FieldPath.of() for field names containing '˜*/[]'.");
     }
-    return empty().append(field);
+    return empty().append(field, new AppendOptions.DefaultAppendOptions());
   }
 
   /** Returns an empty field path. */

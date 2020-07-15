@@ -97,7 +97,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   @Override
   public CollectionReference collection(@Nonnull String collectionPath) {
-    ResourcePath path = databasePath.append(collectionPath);
+    ResourcePath path = databasePath.append(collectionPath, new AppendOptions.DefaultAppendOptions());
     Preconditions.checkArgument(
         path.isCollection(), "Invalid path specified. Path should point to a collection");
     return new CollectionReference(this, path);
@@ -106,7 +106,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   @Override
   public DocumentReference document(@Nonnull String documentPath) {
-    ResourcePath document = databasePath.append(documentPath);
+    ResourcePath document = databasePath.append(documentPath, new AppendOptions.DefaultAppendOptions());
     Preconditions.checkArgument(
         document.isDocument(),
         String.format("Path should point to a Document Reference: %s", documentPath));
