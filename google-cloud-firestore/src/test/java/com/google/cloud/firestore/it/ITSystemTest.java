@@ -1275,20 +1275,11 @@ public class ITSystemTest {
   @Test
   public void deleteNestedFieldUsingFieldPath() throws Exception {
     DocumentReference documentReference = randomColl.document("doc1");
-    Map<String, Object> dotKeyMap = new HashMap<>();
-    dotKeyMap.put("a.b", SINGLE_FILED_MAP_WITH_DOT);
-    documentReference.set(dotKeyMap).get();
+    documentReference.set(map("a.b", (Object) SINGLE_FILED_MAP_WITH_DOT)).get();
     DocumentSnapshot documentSnapshots = documentReference.get().get();
     assertEquals(SINGLE_FILED_MAP_WITH_DOT, documentSnapshots.getData().get("a.b"));
+
     FieldPath path = FieldPath.of("a.b", "c.d");
-    documentReference.update(path, FieldValue.delete()).get();
-    documentSnapshots = documentReference.get().get();
-    assertNull(documentSnapshots.getData().get("c.d"));
-    Map<String, Object> nestedMap = new HashMap<>();
-    nestedMap.put("e", SINGLE_FILED_MAP_WITH_DOT);
-    dotKeyMap.put("a.b", nestedMap);
-    documentReference.set(dotKeyMap).get();
-    path = FieldPath.of("a.b", "e", "c.d");
     documentReference.update(path, FieldValue.delete()).get();
     documentSnapshots = documentReference.get().get();
     assertNull(documentSnapshots.getData().get("c.d"));

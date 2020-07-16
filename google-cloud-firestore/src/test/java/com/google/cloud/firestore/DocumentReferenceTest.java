@@ -1079,7 +1079,9 @@ public class DocumentReferenceTest {
     FieldPath path = FieldPath.of("a.b", "c.d");
     documentReference.update(path, FieldValue.delete()).get();
     CommitRequest expectedCommit =
-        commit(update(new HashMap<String, Value>(), Arrays.asList("`a.b`.`c.d`")));
+        commit(
+            update(
+                Collections.<String, Value>emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
     assertEquals(expectedCommit, commitCapture.getValue());
   }
 }

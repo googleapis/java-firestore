@@ -161,7 +161,8 @@ class UserDataConverter {
 
       for (Map.Entry<String, Object> entry : map.entrySet()) {
         Value encodedValue =
-            encodeValue(path.append(entry.getKey(), false), entry.getValue(), options);
+            encodeValue(
+                path.append(entry.getKey(), /* splitPath= */ false), entry.getValue(), options);
         if (encodedValue != null) {
           res.putFields(entry.getKey(), encodedValue);
         }
