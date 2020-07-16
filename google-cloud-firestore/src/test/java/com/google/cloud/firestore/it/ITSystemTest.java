@@ -1284,20 +1284,13 @@ public class ITSystemTest {
     documentReference.update(path, FieldValue.delete()).get();
     documentSnapshots = documentReference.get().get();
     assertNull(documentSnapshots.getData().get("c.d"));
-  }
-
-  @Test
-  public void deleteNestedFieldUsingDot() throws Exception {
-    DocumentReference documentReference = randomColl.document("doc1");
     Map<String, Object> nestedMap = new HashMap<>();
-    nestedMap.put("baz", SINGLE_FIELD_MAP);
-    documentReference.set(nestedMap).get();
-    DocumentSnapshot documentSnapshots = documentReference.get().get();
-    assertEquals("bar", ((Map) documentSnapshots.getData().get("baz")).get("foo"));
-    Map<String, Object> deleteKeyValue = new HashMap<>();
-    deleteKeyValue.put("baz.foo", FieldValue.delete());
-    documentReference.update(deleteKeyValue).get();
+    nestedMap.put("e", SINGLE_FILED_MAP_WITH_DOT);
+    dotKeyMap.put("a.b", nestedMap);
+    documentReference.set(dotKeyMap).get();
+    path = FieldPath.of("a.b", "e", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
     documentSnapshots = documentReference.get().get();
-    assertNull(documentSnapshots.getData().get("foo"));
+    assertNull(documentSnapshots.getData().get("c.d"));
   }
 }
