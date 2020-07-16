@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
 import com.google.api.gax.rpc.TransportChannelProvider;
@@ -255,7 +256,9 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
                       }
                     })
                 .build());
-        this.setCredentials(new FakeCredentials());
+        // Use a `CredentialProvider` to match the Firebase Admin SDK, which prevents the Admin SDK
+        // from overwriting the Emulator credentials.
+        this.setCredentialsProvider(FixedCredentialsProvider.create(new FakeCredentials()));
       }
 
       return new FirestoreOptions(this);
