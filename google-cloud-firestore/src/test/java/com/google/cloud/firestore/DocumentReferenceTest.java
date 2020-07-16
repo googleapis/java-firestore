@@ -1069,4 +1069,19 @@ public class DocumentReferenceTest {
       assertCommitEquals(expectedCommit, request);
     }
   }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    CommitRequest expectedCommit =
+        commit(
+            update(
+                Collections.<String, Value>emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
+    assertEquals(expectedCommit, commitCapture.getValue());
+  }
 }

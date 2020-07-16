@@ -93,6 +93,7 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Value> EMPTY_MAP_PROTO;
 
   public static final Map<String, Object> SINGLE_FIELD_MAP;
+  public static final Map<String, Object> SINGLE_FILED_MAP_WITH_DOT;
   public static final SingleField SINGLE_FIELD_OBJECT;
   public static final Map<String, Value> SINGLE_FIELD_PROTO;
   public static final DocumentSnapshot SINGLE_FIELD_SNAPSHOT;
@@ -723,6 +724,7 @@ public final class LocalFirestoreHelper {
         map("inner", Value.newBuilder().setMapValue(MapValue.getDefaultInstance()).build());
 
     SINGLE_FIELD_MAP = map("foo", (Object) "bar");
+    SINGLE_FILED_MAP_WITH_DOT = map("c.d", (Object) "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     SINGLE_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
     UPDATED_POJO_PROTO =

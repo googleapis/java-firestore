@@ -87,6 +87,8 @@ public class ITSystemTest {
   private final SingleField SINGLE_FIELD_OBJECT = LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
   private final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT =
       LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
+  private final Map<String, Object> SINGLE_FILED_MAP_WITH_DOT =
+      LocalFirestoreHelper.SINGLE_FILED_MAP_WITH_DOT;
 
   @Rule public TestName testName = new TestName();
 
@@ -1268,5 +1270,18 @@ public class ITSystemTest {
     RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
     fs.close();
     Query.fromProto(fs, proto);
+  }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    DocumentReference documentReference = randomColl.document("doc1");
+    documentReference.set(map("a.b", (Object) SINGLE_FILED_MAP_WITH_DOT)).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    assertEquals(SINGLE_FILED_MAP_WITH_DOT, documentSnapshots.getData().get("a.b"));
+
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    documentSnapshots = documentReference.get().get();
+    assertNull(documentSnapshots.getData().get("c.d"));
   }
 }
