@@ -1,5 +1,19 @@
 # Changelog
 
+### [1.35.2](https://www.github.com/googleapis/java-firestore/compare/v1.35.1...v1.35.2) (2020-07-16)
+
+
+### Bug Fixes
+
+* add Internal#autoId() ([#292](https://www.github.com/googleapis/java-firestore/issues/292)) ([b91c57c](https://www.github.com/googleapis/java-firestore/commit/b91c57c4b2d3e92478ceaa1a39d467c40e1344dc))
+* add support for deleting nested fields that contain periods ([#295](https://www.github.com/googleapis/java-firestore/issues/295)) ([84f602e](https://www.github.com/googleapis/java-firestore/commit/84f602ef8be67e5748b77e549d46ea53d0c74335))
+* use test credentials when connecting to the Emulator from the Firebase Admin SDK ([#296](https://www.github.com/googleapis/java-firestore/issues/296)) ([a0a6e80](https://www.github.com/googleapis/java-firestore/commit/a0a6e806217693fc62a4cf432354c76e719aa140))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.8.3 ([#289](https://www.github.com/googleapis/java-firestore/issues/289)) ([2ddb8f1](https://www.github.com/googleapis/java-firestore/commit/2ddb8f133dd3bf31d28bf6bd67cddf8ba2e8846b))
+
 ## [1.35.1](https://www.github.com/googleapis/java-firestore/compare/v1.35.0...v1.35.1) (2020-07-01)
 
 ### Dependencies
