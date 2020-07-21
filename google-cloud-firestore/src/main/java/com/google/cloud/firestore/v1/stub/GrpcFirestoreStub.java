@@ -17,6 +17,7 @@ package com.google.cloud.firestore.v1.stub;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
+import static com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 
 import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
@@ -31,6 +32,8 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -45,6 +48,8 @@ import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -123,6 +128,14 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(BatchGetDocumentsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<BatchWriteRequest, BatchWriteResponse>
+      batchWriteMethodDescriptor =
+          MethodDescriptor.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/BatchWrite")
+              .setRequestMarshaller(ProtoUtils.marshaller(BatchWriteRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BatchWriteResponse.getDefaultInstance()))
+              .build();
   private static final MethodDescriptor<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionMethodDescriptor =
           MethodDescriptor.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
@@ -179,6 +192,16 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryMethodDescriptor =
+          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
+              .build();
 
   private final BackgroundResource backgroundResources;
 
@@ -191,6 +214,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
   private final UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable;
   private final ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable;
+  private final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable;
   private final UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable;
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
@@ -202,6 +226,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -302,6 +329,19 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
+        GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+            .setMethodDescriptor(batchWriteMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<BatchWriteRequest>() {
+                  @Override
+                  public Map<String, String> extract(BatchWriteRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("database", String.valueOf(request.getDatabase()));
+                    return params.build();
+                  }
+                })
+            .build();
     GrpcCallSettings<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionTransportSettings =
             GrpcCallSettings.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
@@ -377,6 +417,20 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
+        partitionQueryTransportSettings =
+            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+                .setMethodDescriptor(partitionQueryMethodDescriptor)
+                .setParamsExtractor(
+                    new RequestParamsExtractor<PartitionQueryRequest>() {
+                      @Override
+                      public Map<String, String> extract(PartitionQueryRequest request) {
+                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                        params.put("parent", String.valueOf(request.getParent()));
+                        return params.build();
+                      }
+                    })
+                .build();
 
     this.getDocumentCallable =
         callableFactory.createUnaryCallable(
@@ -401,6 +455,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
             batchGetDocumentsTransportSettings,
             settings.batchGetDocumentsSettings(),
             clientContext);
+    this.batchWriteCallable =
+        callableFactory.createUnaryCallable(
+            batchWriteTransportSettings, settings.batchWriteSettings(), clientContext);
     this.beginTransactionCallable =
         callableFactory.createUnaryCallable(
             beginTransactionTransportSettings, settings.beginTransactionSettings(), clientContext);
@@ -429,6 +486,12 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
+    this.partitionQueryCallable =
+        callableFactory.createUnaryCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
+    this.partitionQueryPagedCallable =
+        callableFactory.createPagedCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
@@ -461,6 +524,10 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable() {
     return batchGetDocumentsCallable;
+  }
+
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return batchWriteCallable;
   }
 
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
@@ -496,6 +563,15 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return partitionQueryPagedCallable;
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
+    return partitionQueryCallable;
   }
 
   @Override

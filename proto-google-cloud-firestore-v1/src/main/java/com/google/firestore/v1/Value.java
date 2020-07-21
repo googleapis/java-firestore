@@ -330,6 +330,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The booleanValue.
    */
+  @java.lang.Override
   public boolean getBooleanValue() {
     if (valueTypeCase_ == 1) {
       return (java.lang.Boolean) valueType_;
@@ -349,6 +350,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The integerValue.
    */
+  @java.lang.Override
   public long getIntegerValue() {
     if (valueTypeCase_ == 2) {
       return (java.lang.Long) valueType_;
@@ -368,6 +370,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The doubleValue.
    */
+  @java.lang.Override
   public double getDoubleValue() {
     if (valueTypeCase_ == 3) {
       return (java.lang.Double) valueType_;
@@ -389,6 +392,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the timestampValue field is set.
    */
+  @java.lang.Override
   public boolean hasTimestampValue() {
     return valueTypeCase_ == 10;
   }
@@ -405,6 +409,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The timestampValue.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getTimestampValue() {
     if (valueTypeCase_ == 10) {
       return (com.google.protobuf.Timestamp) valueType_;
@@ -422,6 +427,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getTimestampValueOrBuilder() {
     if (valueTypeCase_ == 10) {
       return (com.google.protobuf.Timestamp) valueType_;
@@ -505,6 +511,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytesValue.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getBytesValue() {
     if (valueTypeCase_ == 18) {
       return (com.google.protobuf.ByteString) valueType_;
@@ -582,6 +589,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the geoPointValue field is set.
    */
+  @java.lang.Override
   public boolean hasGeoPointValue() {
     return valueTypeCase_ == 8;
   }
@@ -596,6 +604,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The geoPointValue.
    */
+  @java.lang.Override
   public com.google.type.LatLng getGeoPointValue() {
     if (valueTypeCase_ == 8) {
       return (com.google.type.LatLng) valueType_;
@@ -611,6 +620,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.type.LatLng geo_point_value = 8;</code>
    */
+  @java.lang.Override
   public com.google.type.LatLngOrBuilder getGeoPointValueOrBuilder() {
     if (valueTypeCase_ == 8) {
       return (com.google.type.LatLng) valueType_;
@@ -632,6 +642,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the arrayValue field is set.
    */
+  @java.lang.Override
   public boolean hasArrayValue() {
     return valueTypeCase_ == 9;
   }
@@ -648,6 +659,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The arrayValue.
    */
+  @java.lang.Override
   public com.google.firestore.v1.ArrayValue getArrayValue() {
     if (valueTypeCase_ == 9) {
       return (com.google.firestore.v1.ArrayValue) valueType_;
@@ -665,6 +677,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.ArrayValueOrBuilder getArrayValueOrBuilder() {
     if (valueTypeCase_ == 9) {
       return (com.google.firestore.v1.ArrayValue) valueType_;
@@ -684,6 +697,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the mapValue field is set.
    */
+  @java.lang.Override
   public boolean hasMapValue() {
     return valueTypeCase_ == 6;
   }
@@ -698,6 +712,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The mapValue.
    */
+  @java.lang.Override
   public com.google.firestore.v1.MapValue getMapValue() {
     if (valueTypeCase_ == 6) {
       return (com.google.firestore.v1.MapValue) valueType_;
@@ -713,6 +728,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.MapValue map_value = 6;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.MapValueOrBuilder getMapValueOrBuilder() {
     if (valueTypeCase_ == 6) {
       return (com.google.firestore.v1.MapValue) valueType_;
@@ -1332,6 +1348,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The enum numeric value on the wire for nullValue.
      */
+    @java.lang.Override
     public int getNullValueValue() {
       if (valueTypeCase_ == 11) {
         return ((java.lang.Integer) valueType_).intValue();
@@ -1367,6 +1384,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The nullValue.
      */
+    @java.lang.Override
     public com.google.protobuf.NullValue getNullValue() {
       if (valueTypeCase_ == 11) {
         @SuppressWarnings("deprecation")
@@ -1600,6 +1618,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the timestampValue field is set.
      */
+    @java.lang.Override
     public boolean hasTimestampValue() {
       return valueTypeCase_ == 10;
     }
@@ -1616,6 +1635,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The timestampValue.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getTimestampValue() {
       if (timestampValueBuilder_ == null) {
         if (valueTypeCase_ == 10) {
@@ -1758,6 +1778,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.protobuf.Timestamp timestamp_value = 10;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getTimestampValueOrBuilder() {
       if ((valueTypeCase_ == 10) && (timestampValueBuilder_ != null)) {
         return timestampValueBuilder_.getMessageOrBuilder();
@@ -1816,6 +1837,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The stringValue.
      */
+    @java.lang.Override
     public java.lang.String getStringValue() {
       java.lang.Object ref = "";
       if (valueTypeCase_ == 17) {
@@ -1846,6 +1868,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for stringValue.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getStringValueBytes() {
       java.lang.Object ref = "";
       if (valueTypeCase_ == 17) {
@@ -2010,6 +2033,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The referenceValue.
      */
+    @java.lang.Override
     public java.lang.String getReferenceValue() {
       java.lang.Object ref = "";
       if (valueTypeCase_ == 5) {
@@ -2038,6 +2062,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for referenceValue.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getReferenceValueBytes() {
       java.lang.Object ref = "";
       if (valueTypeCase_ == 5) {
@@ -2134,6 +2159,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the geoPointValue field is set.
      */
+    @java.lang.Override
     public boolean hasGeoPointValue() {
       return valueTypeCase_ == 8;
     }
@@ -2148,6 +2174,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The geoPointValue.
      */
+    @java.lang.Override
     public com.google.type.LatLng getGeoPointValue() {
       if (geoPointValueBuilder_ == null) {
         if (valueTypeCase_ == 8) {
@@ -2277,6 +2304,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.type.LatLng geo_point_value = 8;</code>
      */
+    @java.lang.Override
     public com.google.type.LatLngOrBuilder getGeoPointValueOrBuilder() {
       if ((valueTypeCase_ == 8) && (geoPointValueBuilder_ != null)) {
         return geoPointValueBuilder_.getMessageOrBuilder();
@@ -2335,6 +2363,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the arrayValue field is set.
      */
+    @java.lang.Override
     public boolean hasArrayValue() {
       return valueTypeCase_ == 9;
     }
@@ -2351,6 +2380,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The arrayValue.
      */
+    @java.lang.Override
     public com.google.firestore.v1.ArrayValue getArrayValue() {
       if (arrayValueBuilder_ == null) {
         if (valueTypeCase_ == 9) {
@@ -2494,6 +2524,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.ArrayValue array_value = 9;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.ArrayValueOrBuilder getArrayValueOrBuilder() {
       if ((valueTypeCase_ == 9) && (arrayValueBuilder_ != null)) {
         return arrayValueBuilder_.getMessageOrBuilder();
@@ -2554,6 +2585,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the mapValue field is set.
      */
+    @java.lang.Override
     public boolean hasMapValue() {
       return valueTypeCase_ == 6;
     }
@@ -2568,6 +2600,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The mapValue.
      */
+    @java.lang.Override
     public com.google.firestore.v1.MapValue getMapValue() {
       if (mapValueBuilder_ == null) {
         if (valueTypeCase_ == 6) {
@@ -2699,6 +2732,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.MapValue map_value = 6;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.MapValueOrBuilder getMapValueOrBuilder() {
       if ((valueTypeCase_ == 6) && (mapValueBuilder_ != null)) {
         return mapValueBuilder_.getMessageOrBuilder();

@@ -247,6 +247,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The parent.
    */
+  @java.lang.Override
   public java.lang.String getParent() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -274,6 +275,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The bytes for parent.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
@@ -300,6 +302,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The collectionId.
    */
+  @java.lang.Override
   public java.lang.String getCollectionId() {
     java.lang.Object ref = collectionId_;
     if (ref instanceof java.lang.String) {
@@ -323,6 +326,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The bytes for collectionId.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getCollectionIdBytes() {
     java.lang.Object ref = collectionId_;
     if (ref instanceof java.lang.String) {
@@ -348,6 +352,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The pageSize.
    */
+  @java.lang.Override
   public int getPageSize() {
     return pageSize_;
   }
@@ -365,6 +370,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The pageToken.
    */
+  @java.lang.Override
   public java.lang.String getPageToken() {
     java.lang.Object ref = pageToken_;
     if (ref instanceof java.lang.String) {
@@ -387,6 +393,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The bytes for pageToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getPageTokenBytes() {
     java.lang.Object ref = pageToken_;
     if (ref instanceof java.lang.String) {
@@ -412,6 +419,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The orderBy.
    */
+  @java.lang.Override
   public java.lang.String getOrderBy() {
     java.lang.Object ref = orderBy_;
     if (ref instanceof java.lang.String) {
@@ -434,6 +442,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The bytes for orderBy.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getOrderByBytes() {
     java.lang.Object ref = orderBy_;
     if (ref instanceof java.lang.String) {
@@ -461,6 +470,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return Whether the mask field is set.
    */
+  @java.lang.Override
   public boolean hasMask() {
     return mask_ != null;
   }
@@ -477,6 +487,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The mask.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
@@ -491,6 +502,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
     return getMask();
   }
@@ -507,6 +519,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 8) {
       return (com.google.protobuf.ByteString) consistencySelector_;
@@ -520,13 +533,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 10;
   }
@@ -535,13 +549,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 10) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -553,11 +568,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 60 seconds.
+   * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     if (consistencySelectorCase_ == 10) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -583,6 +599,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * @return The showMissing.
    */
+  @java.lang.Override
   public boolean getShowMissing() {
     return showMissing_;
   }
@@ -1345,6 +1362,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * @return The pageSize.
      */
+    @java.lang.Override
     public int getPageSize() {
       return pageSize_;
     }
@@ -1863,13 +1881,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
      *
      * @return Whether the readTime field is set.
      */
+    @java.lang.Override
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 10;
     }
@@ -1878,13 +1897,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
      *
      * @return The readTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
         if (consistencySelectorCase_ == 10) {
@@ -1903,7 +1923,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -1926,7 +1946,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -1946,7 +1966,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -1978,7 +1998,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -2004,7 +2024,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -2017,11 +2037,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
       if ((consistencySelectorCase_ == 10) && (readTimeBuilder_ != null)) {
         return readTimeBuilder_.getMessageOrBuilder();
@@ -2037,7 +2058,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 60 seconds.
+     * This may not be older than 270 seconds.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -2084,6 +2105,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      * @return The showMissing.
      */
+    @java.lang.Override
     public boolean getShowMissing() {
       return showMissing_;
     }

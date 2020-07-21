@@ -246,6 +246,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The database.
    */
+  @java.lang.Override
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -269,6 +270,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The bytes for database.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -369,6 +371,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return Whether the mask field is set.
    */
+  @java.lang.Override
   public boolean hasMask() {
     return mask_ != null;
   }
@@ -385,6 +388,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The mask.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentMask getMask() {
     return mask_ == null ? com.google.firestore.v1beta1.DocumentMask.getDefaultInstance() : mask_;
   }
@@ -399,6 +403,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <code>.google.firestore.v1beta1.DocumentMask mask = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.DocumentMaskOrBuilder getMaskOrBuilder() {
     return getMask();
   }
@@ -415,6 +420,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     if (consistencySelectorCase_ == 4) {
       return (com.google.protobuf.ByteString) consistencySelector_;
@@ -437,6 +443,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return Whether the newTransaction field is set.
    */
+  @java.lang.Override
   public boolean hasNewTransaction() {
     return consistencySelectorCase_ == 5;
   }
@@ -454,6 +461,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The newTransaction.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions getNewTransaction() {
     if (consistencySelectorCase_ == 5) {
       return (com.google.firestore.v1beta1.TransactionOptions) consistencySelector_;
@@ -472,6 +480,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptionsOrBuilder getNewTransactionOrBuilder() {
     if (consistencySelectorCase_ == 5) {
       return (com.google.firestore.v1beta1.TransactionOptions) consistencySelector_;
@@ -492,6 +501,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 7;
   }
@@ -507,6 +517,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 7) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -523,6 +534,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     if (consistencySelectorCase_ == 7) {
       return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -1609,6 +1621,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * @return Whether the newTransaction field is set.
      */
+    @java.lang.Override
     public boolean hasNewTransaction() {
       return consistencySelectorCase_ == 5;
     }
@@ -1626,6 +1639,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * @return The newTransaction.
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptions getNewTransaction() {
       if (newTransactionBuilder_ == null) {
         if (consistencySelectorCase_ == 5) {
@@ -1777,6 +1791,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <code>.google.firestore.v1beta1.TransactionOptions new_transaction = 5;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptionsOrBuilder getNewTransactionOrBuilder() {
       if ((consistencySelectorCase_ == 5) && (newTransactionBuilder_ != null)) {
         return newTransactionBuilder_.getMessageOrBuilder();
@@ -1842,6 +1857,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * @return Whether the readTime field is set.
      */
+    @java.lang.Override
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 7;
     }
@@ -1857,6 +1873,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * @return The readTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
         if (consistencySelectorCase_ == 7) {
@@ -1994,6 +2011,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
       if ((consistencySelectorCase_ == 7) && (readTimeBuilder_ != null)) {
         return readTimeBuilder_.getMessageOrBuilder();

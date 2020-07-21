@@ -126,7 +126,9 @@ java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg',
-    '.kokoro/nightly/integration.cfg'
+    '.kokoro/presubmit/samples.cfg',
+    '.kokoro/nightly/integration.cfg',
+    '.kokoro/nightly/samples.cfg'
 ])
 
 # Mark v1beta1 as deprecated
