@@ -432,6 +432,50 @@ public final class FirestoreGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.PartitionQueryRequest,
+          com.google.firestore.v1.PartitionQueryResponse>
+      getPartitionQueryMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "PartitionQuery",
+      requestType = com.google.firestore.v1.PartitionQueryRequest.class,
+      responseType = com.google.firestore.v1.PartitionQueryResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.PartitionQueryRequest,
+          com.google.firestore.v1.PartitionQueryResponse>
+      getPartitionQueryMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.PartitionQueryRequest,
+            com.google.firestore.v1.PartitionQueryResponse>
+        getPartitionQueryMethod;
+    if ((getPartitionQueryMethod = FirestoreGrpc.getPartitionQueryMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getPartitionQueryMethod = FirestoreGrpc.getPartitionQueryMethod) == null) {
+          FirestoreGrpc.getPartitionQueryMethod =
+              getPartitionQueryMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.PartitionQueryRequest,
+                          com.google.firestore.v1.PartitionQueryResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "PartitionQuery"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.PartitionQueryRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.PartitionQueryResponse.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("PartitionQuery"))
+                      .build();
+        }
+      }
+    }
+    return getPartitionQueryMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.v1.WriteRequest, com.google.firestore.v1.WriteResponse>
       getWriteMethod;
 
@@ -557,6 +601,47 @@ public final class FirestoreGrpc {
       }
     }
     return getListCollectionIdsMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+      getBatchWriteMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "BatchWrite",
+      requestType = com.google.firestore.v1.BatchWriteRequest.class,
+      responseType = com.google.firestore.v1.BatchWriteResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+      getBatchWriteMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.BatchWriteRequest, com.google.firestore.v1.BatchWriteResponse>
+        getBatchWriteMethod;
+    if ((getBatchWriteMethod = FirestoreGrpc.getBatchWriteMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getBatchWriteMethod = FirestoreGrpc.getBatchWriteMethod) == null) {
+          FirestoreGrpc.getBatchWriteMethod =
+              getBatchWriteMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.BatchWriteRequest,
+                          com.google.firestore.v1.BatchWriteResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "BatchWrite"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.BatchWriteRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.BatchWriteResponse.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("BatchWrite"))
+                      .build();
+        }
+      }
+    }
+    return getBatchWriteMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<
@@ -781,6 +866,22 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Partitions a query by returning partition cursors that can be used to run
+     * the query in parallel. The returned partition cursors are split points that
+     * can be used by RunQuery as starting/end points for the query results.
+     * </pre>
+     */
+    public void partitionQuery(
+        com.google.firestore.v1.PartitionQueryRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.PartitionQueryResponse>
+            responseObserver) {
+      asyncUnimplementedUnaryCall(getPartitionQueryMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Streams batches of document updates and deletes, in order.
      * </pre>
      */
@@ -813,6 +914,25 @@ public final class FirestoreGrpc {
         io.grpc.stub.StreamObserver<com.google.firestore.v1.ListCollectionIdsResponse>
             responseObserver) {
       asyncUnimplementedUnaryCall(getListCollectionIdsMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Applies a batch of write operations.
+     * The BatchWrite method does not apply the write operations atomically
+     * and can apply them out of order. Method does not allow more than one write
+     * per document. Each write succeeds or fails independently. See the
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * If you require an atomically applied set of writes, use
+     * [Commit][google.firestore.v1.Firestore.Commit] instead.
+     * </pre>
+     */
+    public void batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getBatchWriteMethod(), responseObserver);
     }
 
     /**
@@ -889,6 +1009,13 @@ public final class FirestoreGrpc {
                       com.google.firestore.v1.RunQueryRequest,
                       com.google.firestore.v1.RunQueryResponse>(this, METHODID_RUN_QUERY)))
           .addMethod(
+              getPartitionQueryMethod(),
+              asyncUnaryCall(
+                  new MethodHandlers<
+                      com.google.firestore.v1.PartitionQueryRequest,
+                      com.google.firestore.v1.PartitionQueryResponse>(
+                      this, METHODID_PARTITION_QUERY)))
+          .addMethod(
               getWriteMethod(),
               asyncBidiStreamingCall(
                   new MethodHandlers<
@@ -907,6 +1034,12 @@ public final class FirestoreGrpc {
                       com.google.firestore.v1.ListCollectionIdsRequest,
                       com.google.firestore.v1.ListCollectionIdsResponse>(
                       this, METHODID_LIST_COLLECTION_IDS)))
+          .addMethod(
+              getBatchWriteMethod(),
+              asyncUnaryCall(
+                  new MethodHandlers<
+                      com.google.firestore.v1.BatchWriteRequest,
+                      com.google.firestore.v1.BatchWriteResponse>(this, METHODID_BATCH_WRITE)))
           .addMethod(
               getCreateDocumentMethod(),
               asyncUnaryCall(
@@ -1087,6 +1220,25 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Partitions a query by returning partition cursors that can be used to run
+     * the query in parallel. The returned partition cursors are split points that
+     * can be used by RunQuery as starting/end points for the query results.
+     * </pre>
+     */
+    public void partitionQuery(
+        com.google.firestore.v1.PartitionQueryRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.PartitionQueryResponse>
+            responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getPartitionQueryMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Streams batches of document updates and deletes, in order.
      * </pre>
      */
@@ -1124,6 +1276,26 @@ public final class FirestoreGrpc {
           getChannel().newCall(getListCollectionIdsMethod(), getCallOptions()),
           request,
           responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Applies a batch of write operations.
+     * The BatchWrite method does not apply the write operations atomically
+     * and can apply them out of order. Method does not allow more than one write
+     * per document. Each write succeeds or fails independently. See the
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * If you require an atomically applied set of writes, use
+     * [Commit][google.firestore.v1.Firestore.Commit] instead.
+     * </pre>
+     */
+    public void batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getBatchWriteMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -1284,6 +1456,20 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Partitions a query by returning partition cursors that can be used to run
+     * the query in parallel. The returned partition cursors are split points that
+     * can be used by RunQuery as starting/end points for the query results.
+     * </pre>
+     */
+    public com.google.firestore.v1.PartitionQueryResponse partitionQuery(
+        com.google.firestore.v1.PartitionQueryRequest request) {
+      return blockingUnaryCall(getChannel(), getPartitionQueryMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Lists all the collection IDs underneath a document.
      * </pre>
      */
@@ -1291,6 +1477,24 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.ListCollectionIdsRequest request) {
       return blockingUnaryCall(
           getChannel(), getListCollectionIdsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Applies a batch of write operations.
+     * The BatchWrite method does not apply the write operations atomically
+     * and can apply them out of order. Method does not allow more than one write
+     * per document. Each write succeeds or fails independently. See the
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * If you require an atomically applied set of writes, use
+     * [Commit][google.firestore.v1.Firestore.Commit] instead.
+     * </pre>
+     */
+    public com.google.firestore.v1.BatchWriteResponse batchWrite(
+        com.google.firestore.v1.BatchWriteRequest request) {
+      return blockingUnaryCall(getChannel(), getBatchWriteMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1426,6 +1630,22 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Partitions a query by returning partition cursors that can be used to run
+     * the query in parallel. The returned partition cursors are split points that
+     * can be used by RunQuery as starting/end points for the query results.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.v1.PartitionQueryResponse>
+        partitionQuery(com.google.firestore.v1.PartitionQueryRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getPartitionQueryMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Lists all the collection IDs underneath a document.
      * </pre>
      */
@@ -1434,6 +1654,26 @@ public final class FirestoreGrpc {
         listCollectionIds(com.google.firestore.v1.ListCollectionIdsRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getListCollectionIdsMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Applies a batch of write operations.
+     * The BatchWrite method does not apply the write operations atomically
+     * and can apply them out of order. Method does not allow more than one write
+     * per document. Each write succeeds or fails independently. See the
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * If you require an atomically applied set of writes, use
+     * [Commit][google.firestore.v1.Firestore.Commit] instead.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.v1.BatchWriteResponse>
+        batchWrite(com.google.firestore.v1.BatchWriteRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getBatchWriteMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1459,10 +1699,12 @@ public final class FirestoreGrpc {
   private static final int METHODID_COMMIT = 6;
   private static final int METHODID_ROLLBACK = 7;
   private static final int METHODID_RUN_QUERY = 8;
-  private static final int METHODID_LIST_COLLECTION_IDS = 9;
-  private static final int METHODID_CREATE_DOCUMENT = 10;
-  private static final int METHODID_WRITE = 11;
-  private static final int METHODID_LISTEN = 12;
+  private static final int METHODID_PARTITION_QUERY = 9;
+  private static final int METHODID_LIST_COLLECTION_IDS = 10;
+  private static final int METHODID_BATCH_WRITE = 11;
+  private static final int METHODID_CREATE_DOCUMENT = 12;
+  private static final int METHODID_WRITE = 13;
+  private static final int METHODID_LISTEN = 14;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1531,10 +1773,22 @@ public final class FirestoreGrpc {
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.RunQueryResponse>)
                   responseObserver);
           break;
+        case METHODID_PARTITION_QUERY:
+          serviceImpl.partitionQuery(
+              (com.google.firestore.v1.PartitionQueryRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.PartitionQueryResponse>)
+                  responseObserver);
+          break;
         case METHODID_LIST_COLLECTION_IDS:
           serviceImpl.listCollectionIds(
               (com.google.firestore.v1.ListCollectionIdsRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.ListCollectionIdsResponse>)
+                  responseObserver);
+          break;
+        case METHODID_BATCH_WRITE:
+          serviceImpl.batchWrite(
+              (com.google.firestore.v1.BatchWriteRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.BatchWriteResponse>)
                   responseObserver);
           break;
         case METHODID_CREATE_DOCUMENT:
@@ -1625,9 +1879,11 @@ public final class FirestoreGrpc {
                       .addMethod(getCommitMethod())
                       .addMethod(getRollbackMethod())
                       .addMethod(getRunQueryMethod())
+                      .addMethod(getPartitionQueryMethod())
                       .addMethod(getWriteMethod())
                       .addMethod(getListenMethod())
                       .addMethod(getListCollectionIdsMethod())
+                      .addMethod(getBatchWriteMethod())
                       .addMethod(getCreateDocumentMethod())
                       .build();
         }
