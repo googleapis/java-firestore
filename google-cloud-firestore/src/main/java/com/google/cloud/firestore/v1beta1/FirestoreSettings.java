@@ -74,16 +74,16 @@ import javax.annotation.Generated;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of updateDocument to 30 seconds:
+ * <p>For example, to set the total timeout of deleteDocument to 30 seconds:
  *
  * <pre>
  * <code>
  * FirestoreSettings.Builder firestoreSettingsBuilder =
  *     FirestoreSettings.newBuilder();
  * firestoreSettingsBuilder
- *     .updateDocumentSettings()
+ *     .deleteDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
+ *         firestoreSettingsBuilder.deleteDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -96,27 +96,6 @@ import javax.annotation.Generated;
 @BetaApi
 @Deprecated
 public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
-  /** Returns the object with the settings used for calls to getDocument. */
-  public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).getDocumentSettings();
-  }
-
-  /** Returns the object with the settings used for calls to listDocuments. */
-  public PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-      listDocumentsSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).listDocumentsSettings();
-  }
-
-  /** Returns the object with the settings used for calls to createDocument. */
-  public UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).createDocumentSettings();
-  }
-
-  /** Returns the object with the settings used for calls to updateDocument. */
-  public UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).updateDocumentSettings();
-  }
-
   /** Returns the object with the settings used for calls to deleteDocument. */
   public UnaryCallSettings<DeleteDocumentRequest, Empty> deleteDocumentSettings() {
     return ((FirestoreStubSettings) getStubSettings()).deleteDocumentSettings();
@@ -132,11 +111,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   public UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionSettings() {
     return ((FirestoreStubSettings) getStubSettings()).beginTransactionSettings();
-  }
-
-  /** Returns the object with the settings used for calls to commit. */
-  public UnaryCallSettings<CommitRequest, CommitResponse> commitSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).commitSettings();
   }
 
   /** Returns the object with the settings used for calls to rollback. */
@@ -164,6 +138,32 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return ((FirestoreStubSettings) getStubSettings()).listCollectionIdsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to getDocument. */
+  public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).getDocumentSettings();
+  }
+
+  /** Returns the object with the settings used for calls to listDocuments. */
+  public PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+      listDocumentsSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).listDocumentsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to createDocument. */
+  public UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).createDocumentSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateDocument. */
+  public UnaryCallSettings<UpdateDocumentRequest, Document> updateDocumentSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).updateDocumentSettings();
+  }
+
+  /** Returns the object with the settings used for calls to commit. */
+  public UnaryCallSettings<CommitRequest, CommitResponse> commitSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).commitSettings();
   }
 
   public static final FirestoreSettings create(FirestoreStubSettings stub) throws IOException {
@@ -262,28 +262,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
       return this;
     }
 
-    /** Returns the builder for the settings used for calls to getDocument. */
-    public UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings() {
-      return getStubSettingsBuilder().getDocumentSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to listDocuments. */
-    public PagedCallSettings.Builder<
-            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-        listDocumentsSettings() {
-      return getStubSettingsBuilder().listDocumentsSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to createDocument. */
-    public UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings() {
-      return getStubSettingsBuilder().createDocumentSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to updateDocument. */
-    public UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings() {
-      return getStubSettingsBuilder().updateDocumentSettings();
-    }
-
     /** Returns the builder for the settings used for calls to deleteDocument. */
     public UnaryCallSettings.Builder<DeleteDocumentRequest, Empty> deleteDocumentSettings() {
       return getStubSettingsBuilder().deleteDocumentSettings();
@@ -299,11 +277,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public UnaryCallSettings.Builder<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionSettings() {
       return getStubSettingsBuilder().beginTransactionSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to commit. */
-    public UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings() {
-      return getStubSettingsBuilder().commitSettings();
     }
 
     /** Returns the builder for the settings used for calls to rollback. */
@@ -332,6 +305,33 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return getStubSettingsBuilder().listCollectionIdsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to getDocument. */
+    public UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings() {
+      return getStubSettingsBuilder().getDocumentSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to listDocuments. */
+    public PagedCallSettings.Builder<
+            ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+        listDocumentsSettings() {
+      return getStubSettingsBuilder().listDocumentsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to createDocument. */
+    public UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings() {
+      return getStubSettingsBuilder().createDocumentSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateDocument. */
+    public UnaryCallSettings.Builder<UpdateDocumentRequest, Document> updateDocumentSettings() {
+      return getStubSettingsBuilder().updateDocumentSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to commit. */
+    public UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings() {
+      return getStubSettingsBuilder().commitSettings();
     }
 
     @Override
