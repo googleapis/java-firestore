@@ -402,6 +402,46 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
+  public void batchWriteTest() {
+    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String database = "database1789464955";
+    BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+    BatchWriteResponse actualResponse = client.batchWrite(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
+
+    Assert.assertEquals(database, actualRequest.getDatabase());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void batchWriteExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String database = "database1789464955";
+      BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+      client.batchWrite(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
   public void beginTransactionTest() {
     ByteString transaction = ByteString.copyFromUtf8("-34");
     BeginTransactionResponse expectedResponse =
@@ -755,46 +795,6 @@ public class FirestoreClientTest {
       PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
 
       client.partitionQuery(request);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void batchWriteTest() {
-    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
-    mockFirestore.addResponse(expectedResponse);
-
-    String database = "database1789464955";
-    BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
-
-    BatchWriteResponse actualResponse = client.batchWrite(request);
-    Assert.assertEquals(expectedResponse, actualResponse);
-
-    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
-
-    Assert.assertEquals(database, actualRequest.getDatabase());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void batchWriteExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestore.addException(exception);
-
-    try {
-      String database = "database1789464955";
-      BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
-
-      client.batchWrite(request);
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception

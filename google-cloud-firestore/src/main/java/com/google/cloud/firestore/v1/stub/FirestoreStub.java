@@ -93,6 +93,10 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: batchGetDocumentsCallable()");
   }
 
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
+  }
+
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     throw new UnsupportedOperationException("Not implemented: beginTransactionCallable()");
@@ -135,10 +139,6 @@ public abstract class FirestoreStub implements BackgroundResource {
 
   public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
     throw new UnsupportedOperationException("Not implemented: partitionQueryCallable()");
-  }
-
-  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
-    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
   }
 
   @Override

@@ -546,6 +546,67 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD
   /**
+   * Applies a batch of write operations.
+   *
+   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
+   * of order. Method does not allow more than one write per document. Each write succeeds or fails
+   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+   * success status of each write.
+   *
+   * <p>If you require an atomically applied set of writes, use
+   * [Commit][google.firestore.v1.Firestore.Commit] instead.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String database = "";
+   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
+   *     .setDatabase(database)
+   *     .build();
+   *   BatchWriteResponse response = firestoreClient.batchWrite(request);
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BatchWriteResponse batchWrite(BatchWriteRequest request) {
+    return batchWriteCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Applies a batch of write operations.
+   *
+   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
+   * of order. Method does not allow more than one write per document. Each write succeeds or fails
+   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+   * success status of each write.
+   *
+   * <p>If you require an atomically applied set of writes, use
+   * [Commit][google.firestore.v1.Firestore.Commit] instead.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String database = "";
+   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
+   *     .setDatabase(database)
+   *     .build();
+   *   ApiFuture&lt;BatchWriteResponse&gt; future = firestoreClient.batchWriteCallable().futureCall(request);
+   *   // Do something
+   *   BatchWriteResponse response = future.get();
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return stub.batchWriteCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
    * Starts a new transaction.
    *
    * <p>Sample code:
@@ -1028,67 +1089,6 @@ public class FirestoreClient implements BackgroundResource {
   public final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse>
       partitionQueryCallable() {
     return stub.partitionQueryCallable();
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Applies a batch of write operations.
-   *
-   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
-   * of order. Method does not allow more than one write per document. Each write succeeds or fails
-   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
-   * success status of each write.
-   *
-   * <p>If you require an atomically applied set of writes, use
-   * [Commit][google.firestore.v1.Firestore.Commit] instead.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String database = "";
-   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
-   *     .setDatabase(database)
-   *     .build();
-   *   BatchWriteResponse response = firestoreClient.batchWrite(request);
-   * }
-   * </code></pre>
-   *
-   * @param request The request object containing all of the parameters for the API call.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final BatchWriteResponse batchWrite(BatchWriteRequest request) {
-    return batchWriteCallable().call(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Applies a batch of write operations.
-   *
-   * <p>The BatchWrite method does not apply the write operations atomically and can apply them out
-   * of order. Method does not allow more than one write per document. Each write succeeds or fails
-   * independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
-   * success status of each write.
-   *
-   * <p>If you require an atomically applied set of writes, use
-   * [Commit][google.firestore.v1.Firestore.Commit] instead.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String database = "";
-   *   BatchWriteRequest request = BatchWriteRequest.newBuilder()
-   *     .setDatabase(database)
-   *     .build();
-   *   ApiFuture&lt;BatchWriteResponse&gt; future = firestoreClient.batchWriteCallable().futureCall(request);
-   *   // Do something
-   *   BatchWriteResponse response = future.get();
-   * }
-   * </code></pre>
-   */
-  public final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
-    return stub.batchWriteCallable();
   }
 
   @Override
