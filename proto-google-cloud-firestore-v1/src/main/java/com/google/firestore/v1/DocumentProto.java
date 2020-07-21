@@ -86,12 +86,13 @@ public final class DocumentProto {
           + ".Value\"\220\001\n\010MapValue\0229\n\006fields\030\001 \003(\0132).go"
           + "ogle.firestore.v1.MapValue.FieldsEntry\032I"
           + "\n\013FieldsEntry\022\013\n\003key\030\001 \001(\t\022)\n\005value\030\002 \001("
-          + "\0132\032.google.firestore.v1.Value:\0028\001B\247\001\n\027co"
+          + "\0132\032.google.firestore.v1.Value:\0028\001B\306\001\n\027co"
           + "m.google.firestore.v1B\rDocumentProtoP\001Z<"
           + "google.golang.org/genproto/googleapis/fi"
           + "restore/v1;firestore\242\002\004GCFS\252\002\031Google.Clo"
           + "ud.Firestore.V1\312\002\031Google\\Cloud\\Firestore"
-          + "\\V1b\006proto3"
+          + "\\V1\352\002\034Google::Cloud::Firestore::V1b\006prot"
+          + "o3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
