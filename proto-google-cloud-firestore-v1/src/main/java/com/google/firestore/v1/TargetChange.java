@@ -356,6 +356,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
             };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
 
@@ -402,6 +406,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The enum numeric value on the wire for targetChangeType.
    */
+  @java.lang.Override
   public int getTargetChangeTypeValue() {
     return targetChangeType_;
   }
@@ -416,6 +421,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The targetChangeType.
    */
+  @java.lang.Override
   public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
     @SuppressWarnings("deprecation")
     com.google.firestore.v1.TargetChange.TargetChangeType result =
@@ -440,6 +446,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return A list containing the targetIds.
    */
+  @java.lang.Override
   public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
   }
@@ -492,6 +499,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the cause field is set.
    */
+  @java.lang.Override
   public boolean hasCause() {
     return cause_ != null;
   }
@@ -506,6 +514,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The cause.
    */
+  @java.lang.Override
   public com.google.rpc.Status getCause() {
     return cause_ == null ? com.google.rpc.Status.getDefaultInstance() : cause_;
   }
@@ -518,6 +527,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.rpc.Status cause = 3;</code>
    */
+  @java.lang.Override
   public com.google.rpc.StatusOrBuilder getCauseOrBuilder() {
     return getCause();
   }
@@ -537,6 +547,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The resumeToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getResumeToken() {
     return resumeToken_;
   }
@@ -561,6 +572,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return readTime_ != null;
   }
@@ -582,6 +594,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
@@ -601,6 +614,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     return getReadTime();
   }
@@ -1048,6 +1062,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The enum numeric value on the wire for targetChangeType.
      */
+    @java.lang.Override
     public int getTargetChangeTypeValue() {
       return targetChangeType_;
     }
@@ -1064,6 +1079,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setTargetChangeTypeValue(int value) {
+
       targetChangeType_ = value;
       onChanged();
       return this;
@@ -1079,6 +1095,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The targetChangeType.
      */
+    @java.lang.Override
     public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
       @SuppressWarnings("deprecation")
       com.google.firestore.v1.TargetChange.TargetChangeType result =
@@ -1454,6 +1471,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The resumeToken.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getResumeToken() {
       return resumeToken_;
     }

@@ -262,6 +262,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return The retryTransaction.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getRetryTransaction() {
       return retryTransaction_;
     }
@@ -601,6 +602,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * @return The retryTransaction.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getRetryTransaction() {
         return retryTransaction_;
       }
@@ -897,6 +899,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return Whether the readTime field is set.
      */
+    @java.lang.Override
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 2;
     }
@@ -912,6 +915,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return The readTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getReadTime() {
       if (consistencySelectorCase_ == 2) {
         return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -928,6 +932,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
       if (consistencySelectorCase_ == 2) {
         return (com.google.protobuf.Timestamp) consistencySelector_;
@@ -1318,6 +1323,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * @return Whether the readTime field is set.
        */
+      @java.lang.Override
       public boolean hasReadTime() {
         return consistencySelectorCase_ == 2;
       }
@@ -1333,6 +1339,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * @return The readTime.
        */
+      @java.lang.Override
       public com.google.protobuf.Timestamp getReadTime() {
         if (readTimeBuilder_ == null) {
           if (consistencySelectorCase_ == 2) {
@@ -1470,6 +1477,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
        */
+      @java.lang.Override
       public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
         if ((consistencySelectorCase_ == 2) && (readTimeBuilder_ != null)) {
           return readTimeBuilder_.getMessageOrBuilder();
@@ -1626,6 +1634,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the readOnly field is set.
    */
+  @java.lang.Override
   public boolean hasReadOnly() {
     return modeCase_ == 2;
   }
@@ -1640,6 +1649,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * @return The readOnly.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions.ReadOnly getReadOnly() {
     if (modeCase_ == 2) {
       return (com.google.firestore.v1beta1.TransactionOptions.ReadOnly) mode_;
@@ -1655,6 +1665,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadOnly read_only = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions.ReadOnlyOrBuilder getReadOnlyOrBuilder() {
     if (modeCase_ == 2) {
       return (com.google.firestore.v1beta1.TransactionOptions.ReadOnly) mode_;
@@ -1674,6 +1685,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * @return Whether the readWrite field is set.
    */
+  @java.lang.Override
   public boolean hasReadWrite() {
     return modeCase_ == 3;
   }
@@ -1688,6 +1700,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * @return The readWrite.
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions.ReadWrite getReadWrite() {
     if (modeCase_ == 3) {
       return (com.google.firestore.v1beta1.TransactionOptions.ReadWrite) mode_;
@@ -1703,6 +1716,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * <code>.google.firestore.v1beta1.TransactionOptions.ReadWrite read_write = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.TransactionOptions.ReadWriteOrBuilder
       getReadWriteOrBuilder() {
     if (modeCase_ == 3) {
@@ -2114,6 +2128,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return Whether the readOnly field is set.
      */
+    @java.lang.Override
     public boolean hasReadOnly() {
       return modeCase_ == 2;
     }
@@ -2128,6 +2143,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return The readOnly.
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptions.ReadOnly getReadOnly() {
       if (readOnlyBuilder_ == null) {
         if (modeCase_ == 2) {
@@ -2261,6 +2277,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <code>.google.firestore.v1beta1.TransactionOptions.ReadOnly read_only = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptions.ReadOnlyOrBuilder
         getReadOnlyOrBuilder() {
       if ((modeCase_ == 2) && (readOnlyBuilder_ != null)) {
@@ -2322,6 +2339,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return Whether the readWrite field is set.
      */
+    @java.lang.Override
     public boolean hasReadWrite() {
       return modeCase_ == 3;
     }
@@ -2336,6 +2354,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * @return The readWrite.
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptions.ReadWrite getReadWrite() {
       if (readWriteBuilder_ == null) {
         if (modeCase_ == 3) {
@@ -2469,6 +2488,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <code>.google.firestore.v1beta1.TransactionOptions.ReadWrite read_write = 3;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.TransactionOptions.ReadWriteOrBuilder
         getReadWriteOrBuilder() {
       if ((modeCase_ == 3) && (readWriteBuilder_ != null)) {

@@ -183,6 +183,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The name.
    */
+  @java.lang.Override
   public java.lang.String getName() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -206,6 +207,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for name.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getNameBytes() {
     java.lang.Object ref = name_;
     if (ref instanceof java.lang.String) {
@@ -274,6 +276,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
    */
+  @java.lang.Override
   public boolean containsFields(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -281,6 +284,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     return internalGetFields().getMap().containsKey(key);
   }
   /** Use {@link #getFieldsMap()} instead. */
+  @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFields() {
     return getFieldsMap();
@@ -312,6 +316,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
    */
+  @java.lang.Override
   public java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFieldsMap() {
     return internalGetFields().getMap();
   }
@@ -342,6 +347,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Value getFieldsOrDefault(
       java.lang.String key, com.google.firestore.v1beta1.Value defaultValue) {
     if (key == null) {
@@ -378,6 +384,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Value getFieldsOrThrow(java.lang.String key) {
     if (key == null) {
       throw new java.lang.NullPointerException();
@@ -406,6 +413,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the createTime field is set.
    */
+  @java.lang.Override
   public boolean hasCreateTime() {
     return createTime_ != null;
   }
@@ -423,6 +431,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The createTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getCreateTime() {
     return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
   }
@@ -438,6 +447,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp create_time = 3;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
     return getCreateTime();
   }
@@ -458,6 +468,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the updateTime field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateTime() {
     return updateTime_ != null;
   }
@@ -475,6 +486,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The updateTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getUpdateTime() {
     return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
   }
@@ -490,6 +502,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp update_time = 4;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
     return getUpdateTime();
   }
@@ -1074,6 +1087,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
      */
+    @java.lang.Override
     public boolean containsFields(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();
@@ -1081,6 +1095,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
       return internalGetFields().getMap().containsKey(key);
     }
     /** Use {@link #getFieldsMap()} instead. */
+    @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFields() {
       return getFieldsMap();
@@ -1112,6 +1127,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
      */
+    @java.lang.Override
     public java.util.Map<java.lang.String, com.google.firestore.v1beta1.Value> getFieldsMap() {
       return internalGetFields().getMap();
     }
@@ -1142,6 +1158,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.Value getFieldsOrDefault(
         java.lang.String key, com.google.firestore.v1beta1.Value defaultValue) {
       if (key == null) {
@@ -1178,6 +1195,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>map&lt;string, .google.firestore.v1beta1.Value&gt; fields = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1beta1.Value getFieldsOrThrow(java.lang.String key) {
       if (key == null) {
         throw new java.lang.NullPointerException();

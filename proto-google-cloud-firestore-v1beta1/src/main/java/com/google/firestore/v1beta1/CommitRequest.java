@@ -147,6 +147,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The database.
    */
+  @java.lang.Override
   public java.lang.String getDatabase() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -170,6 +171,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The bytes for database.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
@@ -194,6 +196,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1beta1.Write> getWritesList() {
     return writes_;
   }
@@ -207,6 +210,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1beta1.WriteOrBuilder>
       getWritesOrBuilderList() {
     return writes_;
@@ -221,6 +225,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public int getWritesCount() {
     return writes_.size();
   }
@@ -234,6 +239,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.Write getWrites(int index) {
     return writes_.get(index);
   }
@@ -247,6 +253,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1beta1.Write writes = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1beta1.WriteOrBuilder getWritesOrBuilder(int index) {
     return writes_.get(index);
   }
@@ -264,6 +271,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The transaction.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getTransaction() {
     return transaction_;
   }
@@ -1146,6 +1154,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The transaction.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
     }

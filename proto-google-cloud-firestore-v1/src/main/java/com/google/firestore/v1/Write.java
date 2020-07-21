@@ -252,6 +252,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the update field is set.
    */
+  @java.lang.Override
   public boolean hasUpdate() {
     return operationCase_ == 1;
   }
@@ -266,6 +267,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The update.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Document getUpdate() {
     if (operationCase_ == 1) {
       return (com.google.firestore.v1.Document) operation_;
@@ -281,6 +283,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Document update = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getUpdateOrBuilder() {
     if (operationCase_ == 1) {
       return (com.google.firestore.v1.Document) operation_;
@@ -358,6 +361,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the transform field is set.
    */
+  @java.lang.Override
   public boolean hasTransform() {
     return operationCase_ == 6;
   }
@@ -372,6 +376,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The transform.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentTransform getTransform() {
     if (operationCase_ == 6) {
       return (com.google.firestore.v1.DocumentTransform) operation_;
@@ -387,6 +392,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.DocumentTransform transform = 6;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentTransformOrBuilder getTransformOrBuilder() {
     if (operationCase_ == 6) {
       return (com.google.firestore.v1.DocumentTransform) operation_;
@@ -415,6 +421,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the updateMask field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateMask() {
     return updateMask_ != null;
   }
@@ -437,6 +444,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The updateMask.
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMask getUpdateMask() {
     return updateMask_ == null
         ? com.google.firestore.v1.DocumentMask.getDefaultInstance()
@@ -459,6 +467,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.DocumentMask update_mask = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getUpdateMaskOrBuilder() {
     return getUpdateMask();
   }
@@ -479,6 +488,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform update_transforms = 7;
    * </code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform>
       getUpdateTransformsList() {
     return updateTransforms_;
@@ -496,6 +506,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform update_transforms = 7;
    * </code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>
       getUpdateTransformsOrBuilderList() {
     return updateTransforms_;
@@ -513,6 +524,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform update_transforms = 7;
    * </code>
    */
+  @java.lang.Override
   public int getUpdateTransformsCount() {
     return updateTransforms_.size();
   }
@@ -529,6 +541,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform update_transforms = 7;
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentTransform.FieldTransform getUpdateTransforms(int index) {
     return updateTransforms_.get(index);
   }
@@ -545,6 +558,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    * <code>repeated .google.firestore.v1.DocumentTransform.FieldTransform update_transforms = 7;
    * </code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder
       getUpdateTransformsOrBuilder(int index) {
     return updateTransforms_.get(index);
@@ -564,6 +578,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the currentDocument field is set.
    */
+  @java.lang.Override
   public boolean hasCurrentDocument() {
     return currentDocument_ != null;
   }
@@ -579,6 +594,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The currentDocument.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Precondition getCurrentDocument() {
     return currentDocument_ == null
         ? com.google.firestore.v1.Precondition.getDefaultInstance()
@@ -594,6 +610,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Precondition current_document = 4;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
     return getCurrentDocument();
   }
@@ -1133,6 +1150,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the update field is set.
      */
+    @java.lang.Override
     public boolean hasUpdate() {
       return operationCase_ == 1;
     }
@@ -1147,6 +1165,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The update.
      */
+    @java.lang.Override
     public com.google.firestore.v1.Document getUpdate() {
       if (updateBuilder_ == null) {
         if (operationCase_ == 1) {
@@ -1278,6 +1297,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.Document update = 1;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.DocumentOrBuilder getUpdateOrBuilder() {
       if ((operationCase_ == 1) && (updateBuilder_ != null)) {
         return updateBuilder_.getMessageOrBuilder();
@@ -1332,6 +1352,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The delete.
      */
+    @java.lang.Override
     public java.lang.String getDelete() {
       java.lang.Object ref = "";
       if (operationCase_ == 2) {
@@ -1360,6 +1381,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for delete.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getDeleteBytes() {
       java.lang.Object ref = "";
       if (operationCase_ == 2) {
@@ -1458,6 +1480,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the transform field is set.
      */
+    @java.lang.Override
     public boolean hasTransform() {
       return operationCase_ == 6;
     }
@@ -1472,6 +1495,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The transform.
      */
+    @java.lang.Override
     public com.google.firestore.v1.DocumentTransform getTransform() {
       if (transformBuilder_ == null) {
         if (operationCase_ == 6) {
@@ -1603,6 +1627,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.DocumentTransform transform = 6;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.DocumentTransformOrBuilder getTransformOrBuilder() {
       if ((operationCase_ == 6) && (transformBuilder_ != null)) {
         return transformBuilder_.getMessageOrBuilder();

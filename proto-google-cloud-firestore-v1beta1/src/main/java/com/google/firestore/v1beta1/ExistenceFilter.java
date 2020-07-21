@@ -125,6 +125,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    *
    * @return The targetId.
    */
+  @java.lang.Override
   public int getTargetId() {
     return targetId_;
   }
@@ -144,6 +145,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    *
    * @return The count.
    */
+  @java.lang.Override
   public int getCount() {
     return count_;
   }
@@ -490,6 +492,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      * @return The targetId.
      */
+    @java.lang.Override
     public int getTargetId() {
       return targetId_;
     }
@@ -543,6 +546,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      * @return The count.
      */
+    @java.lang.Override
     public int getCount() {
       return count_;
     }
