@@ -1242,6 +1242,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The parent.
      */
+    @java.lang.Override
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
       if (ref instanceof java.lang.String) {
@@ -1269,6 +1270,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The bytes for parent.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
       if (ref instanceof java.lang.String) {
@@ -1293,6 +1295,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the structuredQuery field is set.
      */
+    @java.lang.Override
     public boolean hasStructuredQuery() {
       return queryTypeCase_ == 2;
     }
@@ -1307,6 +1310,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The structuredQuery.
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
       if (queryTypeCase_ == 2) {
         return (com.google.firestore.v1.StructuredQuery) queryType_;
@@ -1322,6 +1326,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder() {
       if (queryTypeCase_ == 2) {
         return (com.google.firestore.v1.StructuredQuery) queryType_;
@@ -1855,6 +1860,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        *
        * @return Whether the structuredQuery field is set.
        */
+      @java.lang.Override
       public boolean hasStructuredQuery() {
         return queryTypeCase_ == 2;
       }
@@ -1869,6 +1875,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        *
        * @return The structuredQuery.
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
         if (structuredQueryBuilder_ == null) {
           if (queryTypeCase_ == 2) {
@@ -2001,6 +2008,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        *
        * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
        */
+      @java.lang.Override
       public com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder() {
         if ((queryTypeCase_ == 2) && (structuredQueryBuilder_ != null)) {
           return structuredQueryBuilder_.getMessageOrBuilder();
@@ -2203,6 +2211,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the query field is set.
    */
+  @java.lang.Override
   public boolean hasQuery() {
     return targetTypeCase_ == 2;
   }
@@ -2217,6 +2226,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The query.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Target.QueryTarget getQuery() {
     if (targetTypeCase_ == 2) {
       return (com.google.firestore.v1.Target.QueryTarget) targetType_;
@@ -2232,6 +2242,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Target.QueryTarget query = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Target.QueryTargetOrBuilder getQueryOrBuilder() {
     if (targetTypeCase_ == 2) {
       return (com.google.firestore.v1.Target.QueryTarget) targetType_;
@@ -2251,6 +2262,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the documents field is set.
    */
+  @java.lang.Override
   public boolean hasDocuments() {
     return targetTypeCase_ == 3;
   }
@@ -2265,6 +2277,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The documents.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Target.DocumentsTarget getDocuments() {
     if (targetTypeCase_ == 3) {
       return (com.google.firestore.v1.Target.DocumentsTarget) targetType_;
@@ -2280,6 +2293,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Target.DocumentsTarget documents = 3;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Target.DocumentsTargetOrBuilder getDocumentsOrBuilder() {
     if (targetTypeCase_ == 3) {
       return (com.google.firestore.v1.Target.DocumentsTarget) targetType_;
@@ -2300,6 +2314,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The resumeToken.
    */
+  @java.lang.Override
   public com.google.protobuf.ByteString getResumeToken() {
     if (resumeTypeCase_ == 4) {
       return (com.google.protobuf.ByteString) resumeType_;
@@ -2320,6 +2335,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the readTime field is set.
    */
+  @java.lang.Override
   public boolean hasReadTime() {
     return resumeTypeCase_ == 11;
   }
@@ -2335,6 +2351,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The readTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     if (resumeTypeCase_ == 11) {
       return (com.google.protobuf.Timestamp) resumeType_;
@@ -2351,6 +2368,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp read_time = 11;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     if (resumeTypeCase_ == 11) {
       return (com.google.protobuf.Timestamp) resumeType_;
@@ -2372,6 +2390,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The targetId.
    */
+  @java.lang.Override
   public int getTargetId() {
     return targetId_;
   }
@@ -2389,6 +2408,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The once.
    */
+  @java.lang.Override
   public boolean getOnce() {
     return once_;
   }
@@ -2903,6 +2923,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the query field is set.
      */
+    @java.lang.Override
     public boolean hasQuery() {
       return targetTypeCase_ == 2;
     }
@@ -2917,6 +2938,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The query.
      */
+    @java.lang.Override
     public com.google.firestore.v1.Target.QueryTarget getQuery() {
       if (queryBuilder_ == null) {
         if (targetTypeCase_ == 2) {
@@ -3048,6 +3070,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.Target.QueryTarget query = 2;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.Target.QueryTargetOrBuilder getQueryOrBuilder() {
       if ((targetTypeCase_ == 2) && (queryBuilder_ != null)) {
         return queryBuilder_.getMessageOrBuilder();
@@ -3108,6 +3131,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the documents field is set.
      */
+    @java.lang.Override
     public boolean hasDocuments() {
       return targetTypeCase_ == 3;
     }
@@ -3122,6 +3146,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The documents.
      */
+    @java.lang.Override
     public com.google.firestore.v1.Target.DocumentsTarget getDocuments() {
       if (documentsBuilder_ == null) {
         if (targetTypeCase_ == 3) {
@@ -3254,6 +3279,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.firestore.v1.Target.DocumentsTarget documents = 3;</code>
      */
+    @java.lang.Override
     public com.google.firestore.v1.Target.DocumentsTargetOrBuilder getDocumentsOrBuilder() {
       if ((targetTypeCase_ == 3) && (documentsBuilder_ != null)) {
         return documentsBuilder_.getMessageOrBuilder();
@@ -3376,6 +3402,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return Whether the readTime field is set.
      */
+    @java.lang.Override
     public boolean hasReadTime() {
       return resumeTypeCase_ == 11;
     }
@@ -3391,6 +3418,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The readTime.
      */
+    @java.lang.Override
     public com.google.protobuf.Timestamp getReadTime() {
       if (readTimeBuilder_ == null) {
         if (resumeTypeCase_ == 11) {
@@ -3527,6 +3555,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <code>.google.protobuf.Timestamp read_time = 11;</code>
      */
+    @java.lang.Override
     public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
       if ((resumeTypeCase_ == 11) && (readTimeBuilder_ != null)) {
         return readTimeBuilder_.getMessageOrBuilder();
@@ -3583,6 +3612,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The targetId.
      */
+    @java.lang.Override
     public int getTargetId() {
       return targetId_;
     }
@@ -3636,6 +3666,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * @return The once.
      */
+    @java.lang.Override
     public boolean getOnce() {
       return once_;
     }

@@ -149,6 +149,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the updateTime field is set.
    */
+  @java.lang.Override
   public boolean hasUpdateTime() {
     return updateTime_ != null;
   }
@@ -166,6 +167,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The updateTime.
    */
+  @java.lang.Override
   public com.google.protobuf.Timestamp getUpdateTime() {
     return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
   }
@@ -181,6 +183,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.protobuf.Timestamp update_time = 1;</code>
    */
+  @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
     return getUpdateTime();
   }
@@ -197,6 +200,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<com.google.firestore.v1.Value> getTransformResultsList() {
     return transformResults_;
   }
@@ -210,6 +214,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
    */
+  @java.lang.Override
   public java.util.List<? extends com.google.firestore.v1.ValueOrBuilder>
       getTransformResultsOrBuilderList() {
     return transformResults_;
@@ -224,6 +229,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
    */
+  @java.lang.Override
   public int getTransformResultsCount() {
     return transformResults_.size();
   }
@@ -237,6 +243,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.Value getTransformResults(int index) {
     return transformResults_.get(index);
   }
@@ -250,6 +257,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.ValueOrBuilder getTransformResultsOrBuilder(int index) {
     return transformResults_.get(index);
   }

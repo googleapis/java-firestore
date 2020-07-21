@@ -191,6 +191,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return Whether the document field is set.
    */
+  @java.lang.Override
   public boolean hasDocument() {
     return document_ != null;
   }
@@ -206,6 +207,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return The document.
    */
+  @java.lang.Override
   public com.google.firestore.v1.Document getDocument() {
     return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
@@ -219,6 +221,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
    */
+  @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
     return getDocument();
   }
@@ -236,6 +239,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return A list containing the targetIds.
    */
+  @java.lang.Override
   public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
   }
@@ -284,6 +288,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * @return A list containing the removedTargetIds.
    */
+  @java.lang.Override
   public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
     return removedTargetIds_;
   }
