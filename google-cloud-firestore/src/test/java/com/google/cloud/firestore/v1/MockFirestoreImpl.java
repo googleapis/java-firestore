@@ -213,11 +213,12 @@ public class MockFirestoreImpl extends FirestoreImplBase {
 
   @Override
   public StreamObserver<WriteRequest> write(final StreamObserver<WriteResponse> responseObserver) {
-    final Object response = responses.remove();
     StreamObserver<WriteRequest> requestObserver =
         new StreamObserver<WriteRequest>() {
           @Override
           public void onNext(WriteRequest value) {
+            requests.add(value);
+            final Object response = responses.remove();
             if (response instanceof WriteResponse) {
               responseObserver.onNext((WriteResponse) response);
             } else if (response instanceof Exception) {
@@ -243,11 +244,12 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public StreamObserver<ListenRequest> listen(
       final StreamObserver<ListenResponse> responseObserver) {
-    final Object response = responses.remove();
     StreamObserver<ListenRequest> requestObserver =
         new StreamObserver<ListenRequest>() {
           @Override
           public void onNext(ListenRequest value) {
+            requests.add(value);
+            final Object response = responses.remove();
             if (response instanceof ListenResponse) {
               responseObserver.onNext((ListenResponse) response);
             } else if (response instanceof Exception) {

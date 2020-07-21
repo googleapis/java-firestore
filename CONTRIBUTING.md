@@ -99,16 +99,7 @@ mvn -Penable-samples clean verify
     ```
 
 2. [Activate](#profile-activation) the profile.
-3. Define your samples in a normal Maven project in the `samples/` directory.
-
-### Code Formatting
-
-Code in this repo is formatted with
-[google-java-format](https://github.com/google/google-java-format).
-To run formatting on your project, you can run:
-```
-mvn com.coveo:fmt-maven-plugin:format
-```
+3. Define your samples in a normal Maven project in the `samples/` directory
 
 ### Profile Activation
 
