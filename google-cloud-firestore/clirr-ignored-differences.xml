@@ -36,4 +36,102 @@
     <method>*(com.google.cloud.firestore.FirestoreImpl, *)</method>
   </difference>
 
+  <!--
+  createIndex -> createIndexAsync
+  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation createIndex(com.google.firestore.admin.v1.ParentName, com.google.firestore.admin.v1.Index)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation createIndex(java.lang.String, com.google.firestore.admin.v1.Index)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation createIndex(com.google.firestore.admin.v1.CreateIndexRequest)</method>
+  </difference>
+
+  <!--
+  exportDocuments -> exportDocumentsAsync
+  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation exportDocuments(com.google.firestore.admin.v1.DatabaseName)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation exportDocuments(java.lang.String)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation exportDocuments(com.google.firestore.admin.v1.ExportDocumentsRequest)</method>
+  </difference>
+  <!--
+  importDocuments -> importDocumentsAsync
+  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation importDocuments(com.google.firestore.admin.v1.DatabaseName)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation importDocuments(java.lang.String)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation importDocuments(com.google.firestore.admin.v1.ImportDocumentsRequest)</method>
+  </difference>
+  <!--
+  updatedField -> updateFieldAsync
+  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation updateField(com.google.firestore.admin.v1.Field)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation updateField(com.google.firestore.admin.v1.UpdateFieldRequest)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient</className>
+    <method>com.google.longrunning.Operation updateField(com.google.firestore.admin.v1.UpdateFieldRequest)</method>
+  </difference>
+
+  <!--
+  deleteDocument(AnyPathName) -> deleteDocument(String)
+  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreClient</className>
+    <method>void deleteDocument(com.google.firestore.v1.AnyPathName)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1beta1/FirestoreClient</className>
+    <method>void deleteDocument(com.google.firestore.v1beta1.AnyPathName)</method>
+  </difference>
+
+  <!--
+  ParentName -> CollectionGroupName
+  -->
+  <difference>
+    <differenceType>7005</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreAdminClient*</className>
+    <method>com.google.cloud.firestore.v1.FirestoreAdminClient$List*PagedResponse list*(com.google.firestore.admin.v1.ParentName)</method>
+        <to>com.google.cloud.firestore.v1.FirestoreAdminClient$List*PagedResponse list*(com.google.firestore.admin.v1.CollectionGroupName)</to>
+  </difference>
+
 </differences>
