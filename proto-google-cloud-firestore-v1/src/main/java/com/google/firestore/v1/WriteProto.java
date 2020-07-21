@@ -109,11 +109,12 @@ public final class WriteProto {
           + "document\030\001 \001(\t\022\032\n\022removed_target_ids\030\002 \003"
           + "(\005\022-\n\tread_time\030\004 \001(\0132\032.google.protobuf."
           + "Timestamp\"3\n\017ExistenceFilter\022\021\n\ttarget_i"
-          + "d\030\001 \001(\005\022\r\n\005count\030\002 \001(\005B\244\001\n\027com.google.fi"
+          + "d\030\001 \001(\005\022\r\n\005count\030\002 \001(\005B\303\001\n\027com.google.fi"
           + "restore.v1B\nWriteProtoP\001Z<google.golang."
           + "org/genproto/googleapis/firestore/v1;fir"
           + "estore\242\002\004GCFS\252\002\031Google.Cloud.Firestore.V"
-          + "1\312\002\031Google\\Cloud\\Firestore\\V1b\006proto3"
+          + "1\312\002\031Google\\Cloud\\Firestore\\V1\352\002\034Google::"
+          + "Cloud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
