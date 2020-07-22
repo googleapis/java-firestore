@@ -417,19 +417,6 @@ public class DocumentReference {
   }
 
   /**
-   * Fetches the subcollections that are direct children of this document.
-   *
-   * @deprecated Use {@link #listCollections()}.
-   * @throws FirestoreException if the Iterable could not be initialized.
-   * @return An Iterable that can be used to fetch all subcollections.
-   */
-  @Deprecated
-  @Nonnull
-  public Iterable<CollectionReference> getCollections() {
-    return listCollections();
-  }
-
-  /**
    * Starts listening to the document referenced by this DocumentReference.
    *
    * @param executor The executor to use to call the listener.
