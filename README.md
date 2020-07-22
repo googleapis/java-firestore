@@ -38,7 +38,7 @@ If you are using Maven without BOM, add this to your dependencies:
 <dependency>
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>1.35.1</version>
+  <version>1.35.2</version>
 </dependency>
 
 ```
@@ -77,19 +77,11 @@ to add `google-cloud-firestore` as a dependency in your code.
 ## About Cloud Firestore
 
 
-[Cloud Firestore][product-docs] 
+[Cloud Firestore][product-docs] is a fully-managed NoSQL document database for mobile, web, and server development from Firebase and Google Cloud Platform.  It's backed by a multi-region replicated database that ensures once data is committed, it's durable even in the face of unexpected disasters. Not only that, but despite being a distributed database, it's also strongly consistent and offers seamless integration with other Firebase and Google Cloud Platform products, including Google Cloud Functions.
 
 See the [Cloud Firestore client library docs][javadocs] to learn how to
 use this Cloud Firestore Client Library.
 
-
-Cloud Firestore is a fully-managed NoSQL document database for mobile, web,
-and server development from Firebase and Google Cloud Platform.  It's backed
-by a multi-region replicated database that ensures once data is committed,
-it's durable even in the face of unexpected disasters. Not only that,
-but despite being a distributed database, it's also strongly consistent and
-offers seamless integration with other Firebase and Google Cloud Platform
-products, including Google Cloud Functions.
 
 
 
@@ -98,6 +90,10 @@ products, including Google Cloud Functions.
 ## Troubleshooting
 
 To get help, follow the instructions in the [shared Troubleshooting document][troubleshooting].
+
+## Transport
+
+Cloud Firestore uses gRPC for the transport layer.
 
 ## Java Versions
 

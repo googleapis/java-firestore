@@ -4,22 +4,22 @@
       "git": {
         "name": ".",
         "remote": "git@github.com:BenWhitehead/java-firestore.git",
-        "sha": "c9ed64a605de0ef9bca5b4b87c8b51028dccd307"
+        "sha": "1c89a1c28c865974cb702c1025ed7322600f639c"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "be0c5a9b1b88ca3bb8ad993ae7b2e6affde7fee2",
-        "internalRef": "322420178"
+        "sha": "1f8c042337a305fbf71db7fa768563fe7b9df60d",
+        "internalRef": "322592423"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "f221423c5c9d28a199c052eb4962afac4b749ea3"
+        "sha": "1f7dc35918f7ba2ca11b074d083ffe7d3856fa41"
       }
     }
   ],
