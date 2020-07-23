@@ -211,8 +211,6 @@ public class DocumentReferenceTest {
             streamObserverCapture.capture(),
             Matchers.<ServerStreamingCallable>any());
 
-    doReturn(true).when(firestoreMock).areTimestampsInSnapshotsEnabled();
-
     DocumentSnapshot snapshot = documentReference.get().get();
     assertEquals(snapshot.getData(), ALL_SUPPORTED_TYPES_MAP);
 
@@ -298,15 +296,6 @@ public class DocumentReferenceTest {
             Matchers.<ServerStreamingCallable>any());
 
     DocumentSnapshot snapshot = documentReference.get().get();
-
-    doReturn(false).when(firestoreMock).areTimestampsInSnapshotsEnabled();
-
-    assertEquals(DATE, snapshot.get("dateValue"));
-    assertEquals(TIMESTAMP.toDate(), snapshot.get("timestampValue"));
-    assertEquals(DATE, snapshot.getData().get("dateValue"));
-    assertEquals(TIMESTAMP.toDate(), snapshot.getData().get("timestampValue"));
-
-    doReturn(true).when(firestoreMock).areTimestampsInSnapshotsEnabled();
 
     assertEquals(Timestamp.of(DATE), snapshot.get("dateValue"));
     assertEquals(TIMESTAMP, snapshot.get("timestampValue"));

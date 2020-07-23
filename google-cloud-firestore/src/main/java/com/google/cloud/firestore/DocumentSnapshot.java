@@ -215,7 +215,6 @@ public class DocumentSnapshot {
     Map<String, Object> decodedFields = new HashMap<>();
     for (Map.Entry<String, Value> entry : fields.entrySet()) {
       Object decodedValue = decodeValue(entry.getValue());
-      decodedValue = convertToDateIfNecessary(decodedValue);
       decodedFields.put(entry.getKey(), decodedValue);
     }
     return decodedFields;
@@ -294,8 +293,7 @@ public class DocumentSnapshot {
       return null;
     }
 
-    Object decodedValue = decodeValue(value);
-    return convertToDateIfNecessary(decodedValue);
+    return decodeValue(value);
   }
 
   /**
@@ -310,15 +308,6 @@ public class DocumentSnapshot {
   public <T> T get(@Nonnull FieldPath fieldPath, Class<T> valueType) {
     Object data = get(fieldPath);
     return data == null ? null : CustomClassMapper.convertToCustomClass(data, valueType, docRef);
-  }
-
-  private Object convertToDateIfNecessary(Object decodedValue) {
-    if (decodedValue instanceof Timestamp) {
-      if (!this.rpcContext.areTimestampsInSnapshotsEnabled()) {
-        decodedValue = ((Timestamp) decodedValue).toDate();
-      }
-    }
-    return decodedValue;
   }
 
   /** Returns the Value Proto at 'fieldPath'. Returns null if the field was not found. */
@@ -394,9 +383,6 @@ public class DocumentSnapshot {
   /**
    * Returns the value of the field as a Date.
    *
-   * <p>This method ignores the global setting {@link
-   * FirestoreOptions#areTimestampsInSnapshotsEnabled}.
-   *
    * @param field The path to the field.
    * @throws RuntimeException if the value is not a Date.
    * @return The value of the field.
@@ -408,9 +394,6 @@ public class DocumentSnapshot {
 
   /**
    * Returns the value of the field as a {@link Timestamp}.
-   *
-   * <p>This method ignores the global setting {@link
-   * FirestoreOptions#areTimestampsInSnapshotsEnabled}.
    *
    * @param field The path to the field.
    * @throws RuntimeException if the value is not a Date.

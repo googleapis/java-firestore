@@ -17,7 +17,6 @@
 
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
-
   <!-- v2.0.0 -->
   <difference>
     <differenceType>7002</differenceType>
@@ -28,6 +27,11 @@
     <differenceType>7002</differenceType>
     <className>com/google/cloud/firestore/Firestore</className>
     <method>java.lang.Iterable getCollections()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/FirestoreOptions$Builder</className>
+    <method>com.google.cloud.firestore.FirestoreOptions$Builder setTimestampsInSnapshotsEnabled(boolean)</method>
   </difference>
 
   <!--
