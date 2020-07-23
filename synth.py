@@ -122,7 +122,6 @@ firestore_v1beta1 = generate_client(
 )
 
 java.common_templates(excludes=[
-    'README.md',
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg',
