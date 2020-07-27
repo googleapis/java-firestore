@@ -96,7 +96,10 @@ def generate_client(service, version, proto_path=None, bazel_target=None, packag
   java.format_code(f'grpc-google-cloud-{service}-{version}/src')
   java.format_code(f'proto-google-cloud-{service}-{version}/src')
 
-  if include_gapic:
+  if include_gapic and service == "firestore-admin":
+    s.copy(library / f'gapic-google-cloud-{service}-{version}-java/src', 'google-cloud-firestore-admin/src')
+    java.format_code(f'google-cloud-firestore-admin/src')
+  else:
     s.copy(library / f'gapic-google-cloud-{service}-{version}-java/src', 'google-cloud-firestore/src')
     java.format_code(f'google-cloud-firestore/src')
 

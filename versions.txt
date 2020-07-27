@@ -2,6 +2,7 @@
 # module:released-version:current-version
 
 google-cloud-firestore:1.35.2:1.35.3-SNAPSHOT
+google-cloud-firestore-admin:1.35.2:1.35.3-SNAPSHOT
 google-cloud-firestore-bom:1.35.2:1.35.3-SNAPSHOT
 google-cloud-firestore-parent:1.35.2:1.35.3-SNAPSHOT
 grpc-google-cloud-firestore-admin-v1:1.35.2:1.35.3-SNAPSHOT

@@ -133,4 +133,13 @@
         <to>com.google.cloud.firestore.v1.FirestoreAdminClient$List*PagedResponse list*(com.google.firestore.admin.v1.CollectionGroupName)</to>
   </difference>
 
+  <!--
+  Admin client migrated to com.google.cloud:google-cloud-firestore-admin artifact.
+  -->
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/v1/**/*FirestoreAdmin*</className>
+    <to>*</to>
+  </difference>
+
 </differences>
