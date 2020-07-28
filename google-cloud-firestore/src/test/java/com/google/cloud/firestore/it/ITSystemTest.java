@@ -19,6 +19,7 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -49,6 +50,7 @@ import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QueryPartition;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
@@ -549,6 +551,45 @@ public class ITSystemTest {
     QuerySnapshot querySnapshot = randomColl.orderBy("foo").endBefore(2).get().get();
     assertEquals(1, querySnapshot.size());
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
+  }
+
+  @Test
+  public void partionedQuery() throws Exception {
+    int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
+
+    WriteBatch batch = firestore.batch();
+    for (int i = 0; i < documentCount; ++i) {
+      batch.create(randomColl.document(), map("foo", i));
+    }
+    batch.commit().get();
+
+    StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
+    firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
+    final List<QueryPartition> partitions = consumer.consume().get();
+
+    assertNull(partitions.get(0).getStartAt());
+    for (int i = 0; i < partitions.size() - 1; ++i) {
+      assertArrayEquals(partitions.get(i).getEndBefore(), partitions.get(i + 1).getStartAt());
+    }
+    assertNull(partitions.get(partitions.size() - 1).getEndBefore());
+
+    // Validate that we can use the paritions to read the original documents.
+    int resultCount = 0;
+    for (QueryPartition partition : partitions) {
+      resultCount += partition.createQuery().get().get().size();
+    }
+    assertEquals(documentCount, resultCount);
+  }
+
+  @Test
+  public void emptyPartionedQuery() throws Exception {
+    StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
+    firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
+    final List<QueryPartition> partitions = consumer.consume().get();
+
+    assertEquals(1, partitions.size());
+    assertNull(partitions.get(0).getStartAt());
+    assertNull(partitions.get(0).getEndBefore());
   }
 
   @Test
@@ -1225,32 +1266,12 @@ public class ITSystemTest {
 
     DocumentReference ref3 = randomColl.document("doc3");
 
-    final List<DocumentSnapshot> documentSnapshots =
-        Collections.synchronizedList(new ArrayList<DocumentSnapshot>());
     final DocumentReference[] documentReferences = {ref1, ref2, ref3};
-    final SettableApiFuture<Void> future = SettableApiFuture.create();
-    firestore.getAll(
-        documentReferences,
-        FieldMask.of("foo"),
-        new ApiStreamObserver<DocumentSnapshot>() {
 
-          @Override
-          public void onNext(DocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
-          }
+    StreamConsumer<DocumentSnapshot> consumer = new StreamConsumer<>();
+    firestore.getAll(documentReferences, FieldMask.of("foo"), consumer);
 
-          @Override
-          public void onError(Throwable throwable) {
-            future.setException(throwable);
-          }
-
-          @Override
-          public void onCompleted() {
-            future.set(null);
-          }
-        });
-
-    future.get();
+    final List<DocumentSnapshot> documentSnapshots = consumer.consume().get();
 
     assertEquals(
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(0).toObject(AllSupportedTypes.class));
@@ -1283,5 +1304,30 @@ public class ITSystemTest {
     documentReference.update(path, FieldValue.delete()).get();
     documentSnapshots = documentReference.get().get();
     assertNull(documentSnapshots.getData().get("c.d"));
+  }
+
+  /** Wrapper around ApiStreamObserver that returns the results in a list. */
+  private static class StreamConsumer<T> implements ApiStreamObserver<T> {
+    SettableApiFuture<List<T>> done = SettableApiFuture.create();
+    List<T> results = new ArrayList<>();
+
+    @Override
+    public void onNext(T element) {
+      results.add(element);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+      done.setException(throwable);
+    }
+
+    @Override
+    public void onCompleted() {
+      done.set(results);
+    }
+
+    public ApiFuture<List<T>> consume() {
+      return done;
+    }
   }
 }

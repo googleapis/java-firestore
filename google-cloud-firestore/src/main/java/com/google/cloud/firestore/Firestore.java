@@ -56,14 +56,14 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   Iterable<CollectionReference> listCollections();
 
   /**
-   * Creates and returns a new @link{Query} that includes all documents in the database that are
-   * contained in a collection or subcollection with the given @code{collectionId}.
+   * Creates and returns a new {@link CollectionGroup} that includes all documents in the database
+   * that are contained in a collection or subcollection with the given @code{collectionId}.
    *
    * @param collectionId Identifies the collections to query over. Every collection or subcollection
    *     with this ID as the last segment of its path will be included. Cannot contain a slash.
    * @return The created Query.
    */
-  Query collectionGroup(@Nonnull String collectionId);
+  CollectionGroup collectionGroup(@Nonnull String collectionId);
 
   /**
    * Executes the given updateFunction and then attempts to commit the changes applied within the

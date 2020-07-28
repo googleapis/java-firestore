@@ -263,12 +263,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   @Override
-  public Query collectionGroup(@Nonnull final String collectionId) {
+  public CollectionGroup collectionGroup(@Nonnull final String collectionId) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
         String.format(
             "Invalid collectionId '%s'. Collection IDs must not contain '/'.", collectionId));
-    return new Query(this, collectionId);
+    return new CollectionGroup(this, collectionId);
   }
 
   @Nonnull

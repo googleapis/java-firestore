@@ -196,6 +196,12 @@ public class Query {
       this.direction = direction;
     }
 
+    /** Returns a FieldOrder that orders by __name__ ascending. */
+    static FieldOrder defaultOrder() {
+      return new FieldOrder(
+          FieldReference.newBuilder().setFieldPath("__name__").build(), Direction.ASCENDING);
+    }
+
     Order toProto() {
       Order.Builder result = Order.newBuilder();
       result.setField(fieldReference);
@@ -296,21 +302,7 @@ public class Query {
             .build());
   }
 
-  /**
-   * Creates a Collection Group query that matches all documents directly nested under a
-   * specifically named collection
-   */
-  Query(FirestoreRpcContext<?> rpcContext, String collectionId) {
-    this(
-        rpcContext,
-        QueryOptions.builder()
-            .setParentPath(rpcContext.getResourcePath())
-            .setCollectionId(collectionId)
-            .setAllDescendants(true)
-            .build());
-  }
-
-  private Query(FirestoreRpcContext<?> rpcContext, QueryOptions queryOptions) {
+  protected Query(FirestoreRpcContext<?> rpcContext, QueryOptions queryOptions) {
     this.rpcContext = rpcContext;
     this.options = queryOptions;
   }
