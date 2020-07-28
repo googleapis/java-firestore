@@ -554,7 +554,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void partionedQuery() throws Exception {
+  public void partitionedQuery() throws Exception {
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
 
     WriteBatch batch = firestore.batch();
@@ -582,7 +582,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void emptyPartionedQuery() throws Exception {
+  public void emptyPartitionedQuery() throws Exception {
     StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
     firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
     final List<QueryPartition> partitions = consumer.consume().get();
