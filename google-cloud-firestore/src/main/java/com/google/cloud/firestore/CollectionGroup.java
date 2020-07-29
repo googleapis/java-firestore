@@ -4,7 +4,6 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.v1.FirestoreClient;
-import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
 import javax.annotation.Nullable;
@@ -37,7 +36,7 @@ public class CollectionGroup extends Query {
       long desiredPartitionCount, ApiStreamObserver<QueryPartition> observer) {
     // Partition queries require explicit ordering by __name__.
     Query queryWithDefaultOrder = orderBy(FieldPath.DOCUMENT_ID);
-    
+
     PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
     request.setStructuredQuery(queryWithDefaultOrder.buildQuery());
     request.setParent(options.getParentPath().toString());
