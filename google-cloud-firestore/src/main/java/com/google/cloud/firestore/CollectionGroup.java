@@ -20,7 +20,6 @@ public class CollectionGroup extends Query {
         QueryOptions.builder()
             .setParentPath(rpcContext.getResourcePath())
             .setCollectionId(collectionId)
-            .setFieldOrders(ImmutableList.of(FieldOrder.defaultOrder()))
             .setAllDescendants(true)
             .build());
   }
@@ -36,8 +35,11 @@ public class CollectionGroup extends Query {
    */
   public void getPartitions(
       long desiredPartitionCount, ApiStreamObserver<QueryPartition> observer) {
+    // Partition queries require explicit ordering by __name__.
+    Query queryWithDefaultOrder = orderBy(FieldPath.DOCUMENT_ID);
+    
     PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
-    request.setStructuredQuery(buildQuery());
+    request.setStructuredQuery(queryWithDefaultOrder.buildQuery());
     request.setParent(options.getParentPath().toString());
 
     // Since we are always returning an extra partition (with en empty endBefore cursor), we
@@ -60,10 +62,10 @@ public class CollectionGroup extends Query {
       for (int i = 0; i < cursor.getValuesCount(); ++i) {
         decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
       }
-      observer.onNext(new QueryPartition(this, lastCursor, decodedCursorValue));
+      observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, decodedCursorValue));
       lastCursor = decodedCursorValue;
     }
-    observer.onNext(new QueryPartition(this, lastCursor, null));
+    observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, null));
     observer.onCompleted();
   }
 }

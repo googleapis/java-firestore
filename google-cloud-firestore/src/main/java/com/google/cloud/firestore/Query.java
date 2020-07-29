@@ -196,12 +196,6 @@ public class Query {
       this.direction = direction;
     }
 
-    /** Returns a FieldOrder that orders by __name__ ascending. */
-    static FieldOrder defaultOrder() {
-      return new FieldOrder(
-          FieldReference.newBuilder().setFieldPath("__name__").build(), Direction.ASCENDING);
-    }
-
     Order toProto() {
       Order.Builder result = Order.newBuilder();
       result.setField(fieldReference);
