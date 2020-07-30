@@ -187,6 +187,13 @@
         <version>0.88.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1beta1:current} -->
       </dependency>
 
+      <!-- Remove after google-cloud-shared-dependencies is up to v0.8.4 -->
+      <dependency>
+        <groupId>com.google.api</groupId>
+        <artifactId>api-common</artifactId>
+        <version>1.10.0</version>
+      </dependency>
+
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-shared-dependencies</artifactId>
