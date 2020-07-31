@@ -142,4 +142,14 @@
     <to>*</to>
   </difference>
 
+  <!--
+  Query Partition API Feature
+  -->
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
+    <method>com.google.api.gax.rpc.UnaryCallable partitionQueryPagedCallable()</method>
+  </difference>
+
+
 </differences>
