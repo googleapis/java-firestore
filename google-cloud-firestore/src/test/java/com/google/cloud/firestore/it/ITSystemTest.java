@@ -1309,7 +1309,7 @@ public class ITSystemTest {
   /** Wrapper around ApiStreamObserver that returns the results in a list. */
   private static class StreamConsumer<T> implements ApiStreamObserver<T> {
     SettableApiFuture<List<T>> done = SettableApiFuture.create();
-    List<T> results = new ArrayList<>();
+    List<T> results = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void onNext(T element) {

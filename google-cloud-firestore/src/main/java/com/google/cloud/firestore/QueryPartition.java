@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * A split point that can be used by in a query as a starting or end point for the query results.
+ * A split point that can be used in a query as a starting and/or end point for the query results.
  * The cursors returned by {@link #getStartAt()} and {@link #getEndBefore()} can only be used in a
  * query that matches the constraint of query that produced this partition.
  */
