@@ -41,8 +41,8 @@ public class CollectionGroup extends Query {
 
   /**
    * Partitions a query by returning partition cursors that can be used to run the query in
-   * parallel. The returned partition cursors are split points that can be used as starting/end points
-   * for the query results.
+   * parallel. The returned partition cursors are split points that can be used as starting/end
+   * points for the query results.
    *
    * @param desiredPartitionCount The desired maximum number of partition points. The number must be
    *     strictly positive. The actual number of partitions returned may be fewer.

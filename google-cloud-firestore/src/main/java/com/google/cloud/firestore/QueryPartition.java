@@ -16,9 +16,9 @@
 
 package com.google.cloud.firestore;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 /**
  * A split point that can be used in a query as a starting and/or end point for the query results.
@@ -82,9 +82,9 @@ public class QueryPartition {
     if (this == o) return true;
     if (!(o instanceof QueryPartition)) return false;
     QueryPartition partition = (QueryPartition) o;
-    return query.equals(partition.query) &&
-            Arrays.equals(startAt, partition.startAt) &&
-            Arrays.equals(endBefore, partition.endBefore);
+    return query.equals(partition.query)
+        && Arrays.equals(startAt, partition.startAt)
+        && Arrays.equals(endBefore, partition.endBefore);
   }
 
   @Override
