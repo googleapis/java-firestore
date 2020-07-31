@@ -46,7 +46,7 @@ public class QueryPartition {
   @Nullable private final Object[] startAt;
   @Nullable private final Object[] endBefore;
 
-  public QueryPartition(Query query, Object[] startAt, @Nullable Object[] endBefore) {
+  public QueryPartition(Query query, @Nullable Object[] startAt, @Nullable Object[] endBefore) {
     this.query = query;
     this.startAt = startAt;
     this.endBefore = endBefore;
