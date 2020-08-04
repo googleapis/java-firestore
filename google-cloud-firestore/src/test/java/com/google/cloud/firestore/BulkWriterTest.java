@@ -466,6 +466,35 @@ public class BulkWriterTest {
   }
 
   @Test
+  public void allWritesCompleteWhenFlushCompletes() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                mergeResponses(
+                    failedResponse(),
+                    successResponse(1),
+                    successResponse(1))
+            );
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result3 =
+        bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close().get();
+    assertTrue(result1.isDone());
+    assertTrue(result2.isDone());
+    assertTrue(result3.isDone());
+  }
+
+  @Test
   public void doesNotSendBatchesIfSameDocIsInFlight() throws Exception {
     final SerialResponseStubber responseStubber =
         new SerialResponseStubber() {
