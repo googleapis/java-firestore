@@ -296,21 +296,7 @@ public class Query {
             .build());
   }
 
-  /**
-   * Creates a Collection Group query that matches all documents directly nested under a
-   * specifically named collection
-   */
-  Query(FirestoreRpcContext<?> rpcContext, String collectionId) {
-    this(
-        rpcContext,
-        QueryOptions.builder()
-            .setParentPath(rpcContext.getResourcePath())
-            .setCollectionId(collectionId)
-            .setAllDescendants(true)
-            .build());
-  }
-
-  private Query(FirestoreRpcContext<?> rpcContext, QueryOptions queryOptions) {
+  protected Query(FirestoreRpcContext<?> rpcContext, QueryOptions queryOptions) {
     this.rpcContext = rpcContext;
     this.options = queryOptions;
   }
