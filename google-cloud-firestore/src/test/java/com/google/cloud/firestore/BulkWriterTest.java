@@ -475,11 +475,7 @@ public class BulkWriterTest {
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
-                mergeResponses(
-                    failedResponse(),
-                    successResponse(1),
-                    successResponse(1))
-            );
+                mergeResponses(failedResponse(), successResponse(1), successResponse(1)));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
