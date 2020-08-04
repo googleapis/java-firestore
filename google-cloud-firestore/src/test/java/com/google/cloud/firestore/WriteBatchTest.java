@@ -362,8 +362,7 @@ public class WriteBatchTest {
     batch.markReadyToSend();
     List<BatchWriteResult> batchWriteResults = batch.bulkCommit().get();
 
-    assertEquals(
-        Status.OK, ((FirestoreException) batchWriteResults.get(0).getException()).getStatus());
+    assertNull(batchWriteResults.get(0).getException());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(0, 1), batchWriteResults.get(0).getWriteTime());
     assertEquals(
         Status.UNAVAILABLE,

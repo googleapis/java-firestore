@@ -669,7 +669,7 @@ public class BulkWriterTest {
       Assert.fail("Expected set() operation to fail");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
-      assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS);
+      assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS + 1);
     }
   }
 }

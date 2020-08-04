@@ -70,7 +70,7 @@ public abstract class UpdateBuilder<T> {
   private final int maxBatchSize;
 
   protected BatchState state = BatchState.OPEN;
-  private final Map<DocumentReference, SettableApiFuture<WriteResult>> pendingOperations =
+  protected Map<DocumentReference, SettableApiFuture<WriteResult>> pendingOperations =
       new HashMap<>();
 
   /**
@@ -734,15 +734,15 @@ public abstract class UpdateBuilder<T> {
   }
 
   boolean hasDocument(DocumentReference documentReference) {
-    return this.pendingOperations.containsKey(documentReference);
+    return pendingOperations.containsKey(documentReference);
   }
 
   Set<DocumentReference> getPendingDocuments() {
-    return this.pendingOperations.keySet();
+    return pendingOperations.keySet();
   }
 
   Collection<SettableApiFuture<WriteResult>> getPendingFutures() {
-    return this.pendingOperations.values();
+    return pendingOperations.values();
   }
 
   int getPendingOperationCount() {

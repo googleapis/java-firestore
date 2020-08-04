@@ -64,6 +64,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
             .toList());
 
     this.state = retryBatch.state;
+    this.pendingOperations = retryBatch.pendingOperations;
   }
 
   ApiFuture<WriteResult> wrapResult(ApiFuture<WriteResult> result) {
@@ -488,8 +489,7 @@ public class BulkWriter {
       writeFutures.addAll(batch.getPendingFutures());
     }
     sendReadyBatches();
-    // TODO: update to use `successfulAsList()` in order to handle exceptions.
-    ApiFutures.allAsList(writeFutures)
+    ApiFutures.successfulAsList(writeFutures)
         .addListener(
             new Runnable() {
               public void run() {
