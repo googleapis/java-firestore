@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -63,6 +64,9 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
                 })
             .toList());
 
+    Preconditions.checkState(
+        retryBatch.state == BatchState.SENT,
+        "Batch should be SENT when creating a new BulkCommitBatch for retry");
     this.state = retryBatch.state;
     this.pendingOperations = retryBatch.pendingOperations;
   }
@@ -113,8 +117,11 @@ public class BulkWriter {
   /** The maximum number of writes that can be in a single batch. */
   private int maxBatchSize = MAX_BATCH_SIZE;
 
-  /** A queue of batches to be written. */
-  private final List<BulkCommitBatch> batchQueue = new ArrayList<>();
+  /**
+   * A queue of batches to be written. Use a synchronized list to avoid multi-thread concurrent
+   * modification errors.
+   */
+  private final List<BulkCommitBatch> batchQueue = new CopyOnWriteArrayList<>();
 
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
   private boolean closed = false;
@@ -616,7 +623,6 @@ public class BulkWriter {
     commitFuture.addListener(
         new Runnable() {
           public void run() {
-            System.out.println("removing batch from batch queue. size: " + batchQueue.size());
             boolean removed = batchQueue.remove(batch);
             Preconditions.checkState(
                 removed, "The batch should be in the BatchQueue." + batchQueue.size());
@@ -626,64 +632,12 @@ public class BulkWriter {
         MoreExecutors.directExecutor());
   }
 
-  private ApiFuture<List<BatchWriteResult>> invokeBulkCommit(final BulkCommitBatch batch) {
-    return batch.bulkCommit();
-  }
-
   private ApiFuture<Void> bulkCommit(BulkCommitBatch batch) {
     return bulkCommit(batch, 0);
   }
 
   private ApiFuture<Void> bulkCommit(final BulkCommitBatch batch, final int attempt) {
     final SettableApiFuture<Void> backoffFuture = SettableApiFuture.create();
-
-    class ProcessBulkCommitCallback implements ApiAsyncFunction<List<BatchWriteResult>, Void> {
-      @Override
-      public ApiFuture<Void> apply(List<BatchWriteResult> results) {
-        batch.processResults(results);
-        if (batch.getPendingOperationCount() > 0) {
-          logger.log(
-              Level.WARNING,
-              String.format(
-                  "Current batch failed at retry #%d. Num failures: %d",
-                  attempt, batch.getPendingOperationCount()));
-
-          if (attempt < MAX_RETRY_ATTEMPTS) {
-            nextAttempt = backoff.createNextAttempt(nextAttempt);
-            BulkCommitBatch newBatch =
-                new BulkCommitBatch(firestore, batch, batch.getPendingDocuments());
-            return bulkCommit(newBatch, attempt + 1);
-          } else {
-            batch.failRemainingOperations(results);
-          }
-        }
-        return ApiFutures.immediateFuture(null);
-      }
-    }
-
-    class BackoffCallback implements ApiAsyncFunction<Void, Void> {
-      @Override
-      public ApiFuture<Void> apply(Void ignored) {
-
-        // If the BatchWrite RPC fails, map the exception to each individual result.
-        return ApiFutures.transformAsync(
-            ApiFutures.catchingAsync(
-                invokeBulkCommit(batch),
-                Exception.class,
-                new ApiAsyncFunction<Exception, List<BatchWriteResult>>() {
-                  public ApiFuture<List<BatchWriteResult>> apply(Exception exception) {
-                    List<BatchWriteResult> results = new ArrayList<>();
-                    for (DocumentReference documentReference : batch.getPendingDocuments()) {
-                      results.add(new BatchWriteResult(documentReference, null, exception));
-                    }
-                    return ApiFutures.immediateFuture(results);
-                  }
-                },
-                MoreExecutors.directExecutor()),
-            new ProcessBulkCommitCallback(),
-            MoreExecutors.directExecutor());
-      }
-    }
 
     // Add a backoff delay. At first, this is 0.
     firestoreExecutor.schedule(
@@ -696,7 +650,72 @@ public class BulkWriter {
         nextAttempt.getRandomizedRetryDelay().toMillis(),
         TimeUnit.MILLISECONDS);
 
-    return ApiFutures.transformAsync(backoffFuture, new BackoffCallback(), firestoreExecutor);
+    return ApiFutures.transformAsync(
+        backoffFuture, new BackoffCallback(batch, attempt), firestoreExecutor);
+  }
+
+  private class BackoffCallback implements ApiAsyncFunction<Void, Void> {
+    final BulkCommitBatch batch;
+    final int attempt;
+
+    public BackoffCallback(BulkCommitBatch batch, int attempt) {
+      this.batch = batch;
+      this.attempt = attempt;
+    }
+
+    @Override
+    public ApiFuture<Void> apply(Void ignored) {
+
+      return ApiFutures.transformAsync(
+          ApiFutures.catchingAsync(
+              batch.bulkCommit(),
+              Exception.class,
+              new ApiAsyncFunction<Exception, List<BatchWriteResult>>() {
+                public ApiFuture<List<BatchWriteResult>> apply(Exception exception) {
+                  List<BatchWriteResult> results = new ArrayList<>();
+                  // If the BatchWrite RPC fails, map the exception to each individual result.
+                  for (DocumentReference documentReference : batch.getPendingDocuments()) {
+                    results.add(new BatchWriteResult(documentReference, null, exception));
+                  }
+                  return ApiFutures.immediateFuture(results);
+                }
+              },
+              MoreExecutors.directExecutor()),
+          new ProcessBulkCommitCallback(batch, attempt),
+          MoreExecutors.directExecutor());
+    }
+  }
+
+  private class ProcessBulkCommitCallback
+      implements ApiAsyncFunction<List<BatchWriteResult>, Void> {
+    final BulkCommitBatch batch;
+    final int attempt;
+
+    public ProcessBulkCommitCallback(BulkCommitBatch batch, int attempt) {
+      this.batch = batch;
+      this.attempt = attempt;
+    }
+
+    @Override
+    public ApiFuture<Void> apply(List<BatchWriteResult> results) {
+      batch.processResults(results);
+      Set<DocumentReference> pendingOps = batch.getPendingDocuments();
+      if (!pendingOps.isEmpty()) {
+        logger.log(
+            Level.WARNING,
+            String.format(
+                "Current batch failed at retry #%d. Num failures: %d", attempt, pendingOps.size()));
+
+        if (attempt < MAX_RETRY_ATTEMPTS) {
+          nextAttempt = backoff.createNextAttempt(nextAttempt);
+          BulkCommitBatch newBatch = new BulkCommitBatch(firestore, batch, pendingOps);
+          return bulkCommit(newBatch, attempt + 1);
+        } else {
+          batch.failRemainingOperations(results);
+        }
+      }
+      return ApiFutures.immediateFuture(null);
+    }
   }
 
   /**

@@ -39,7 +39,6 @@ import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -702,15 +701,17 @@ public abstract class UpdateBuilder<T> {
               com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
               com.google.rpc.Status status = statuses.get(i);
               Status code = Status.fromCodeValue(status.getCode());
-              Timestamp updateTime =
-                  code == Status.OK ? Timestamp.fromProto(writeResult.getUpdateTime()) : null;
+              @Nullable Timestamp updateTime;
+              @Nullable Exception exception;
+              if (code == Status.OK) {
+                updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
+                exception = null;
+              } else {
+                updateTime = null;
+                exception = FirestoreException.serverRejected(code, status.getMessage());
+              }
               result.add(
-                  new BatchWriteResult(
-                      writes.get(i).documentReference,
-                      updateTime,
-                      updateTime == null
-                          ? FirestoreException.serverRejected(code, status.getMessage())
-                          : null));
+                  new BatchWriteResult(writes.get(i).documentReference, updateTime, exception));
             }
 
             return result;
@@ -749,23 +750,6 @@ public abstract class UpdateBuilder<T> {
     return pendingOperations.size();
   }
 
-  /**
-   * Removes all operations not specified in documentsToRetry from the batch. Marks the batch as
-   * READY_TO_SEND in order to allow the next batch to be sent.
-   */
-  void sliceBatchForRetry(final Set<DocumentReference> documentsToRetry) {
-    Iterator<WriteOperation> iterator = writes.iterator();
-    while (iterator.hasNext()) {
-      WriteOperation operation = iterator.next();
-      if (!documentsToRetry.contains(operation.documentReference)) {
-        iterator.remove();
-      }
-    }
-
-    // Mark the batch as ready to send in order to allow the batch to be retried again.
-    state = BatchState.READY_TO_SEND;
-  }
-
   private ApiFuture<WriteResult> processOperation(DocumentReference documentReference) {
     Preconditions.checkState(
         allowDuplicateDocs() || !pendingOperations.containsKey(documentReference),
@@ -780,7 +764,10 @@ public abstract class UpdateBuilder<T> {
 
     return result;
   }
-  /** Resolves the individual operations in the batch with the results. */
+  /**
+   * Resolves the individual operations in the batch with the results and removes the entry from the
+   * pendingOperations map if the result is not retryable.
+   */
   void processResults(List<BatchWriteResult> results) {
     for (BatchWriteResult result : results) {
       if (result.getException() == null || !shouldRetry(result.getException())) {

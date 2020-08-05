@@ -29,7 +29,9 @@ public final class BatchWriteResult {
   @Nullable private final Exception exception;
 
   BatchWriteResult(
-      DocumentReference documentReference, @Nullable Timestamp timestamp, Exception exception) {
+      DocumentReference documentReference,
+      @Nullable Timestamp timestamp,
+      @Nullable Exception exception) {
     this.documentReference = documentReference;
     this.writeTime = timestamp;
     this.exception = exception;
