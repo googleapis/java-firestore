@@ -30,7 +30,6 @@ import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
-import io.grpc.Context;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -310,15 +308,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public <T> ApiFuture<T> runAsyncTransaction(
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
-    final Executor userCallbackExecutor =
-        Context.currentContextExecutor(
-            transactionOptions.getExecutor() != null
-                ? transactionOptions.getExecutor()
-                : firestoreClient.getExecutor());
 
     TransactionRunner<T> transactionRunner =
-        new TransactionRunner<>(
-            this, updateFunction, userCallbackExecutor, transactionOptions.getNumberOfAttempts());
+        new TransactionRunner<>(this, updateFunction, transactionOptions);
     return transactionRunner.run();
   }
 

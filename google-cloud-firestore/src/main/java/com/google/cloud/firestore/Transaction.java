@@ -19,11 +19,14 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import java.util.List;
@@ -61,12 +64,18 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
+  private final TransactionOptions originalTransactionOptions;
+  @Nullable private final ByteString previousTransactionId;
   private ByteString transactionId;
-  private @Nullable ByteString previousTransactionId;
 
-  Transaction(FirestoreImpl firestore, @Nullable Transaction previousTransaction) {
+  Transaction(
+      FirestoreImpl firestore,
+      TransactionOptions transactionOptions,
+      @Nullable Transaction previousTransaction) {
     super(firestore);
-    previousTransactionId = previousTransaction != null ? previousTransaction.transactionId : null;
+    this.originalTransactionOptions = transactionOptions;
+    this.previousTransactionId =
+        previousTransaction != null ? previousTransaction.transactionId : null;
   }
 
   Transaction wrapResult(ApiFuture<WriteResult> result) {
@@ -78,11 +87,15 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (previousTransactionId != null) {
+    final EitherReadOnlyOrReadWrite options = originalTransactionOptions.getOptions();
+    if (options.getType() == TransactionOptionsType.READ_WRITE && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
+    } else if (options.getType() == TransactionOptionsType.READ_ONLY) {
+      final ReadOnly.Builder builder = options.getReadOnly().toProtoBuilder();
+      beginTransaction.getOptionsBuilder().setReadOnly(builder);
     }
 
     ApiFuture<BeginTransactionResponse> transactionBeginFuture =

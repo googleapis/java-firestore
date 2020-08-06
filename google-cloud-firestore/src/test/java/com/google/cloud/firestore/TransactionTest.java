@@ -34,12 +34,14 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
 import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -51,9 +53,17 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
+import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
+import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptions;
+import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.ReadWriteOptions;
+import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
+import com.google.firestore.v1.TransactionOptions.ReadOnly;
+import com.google.firestore.v1.TransactionOptions.ReadWrite;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
@@ -64,6 +74,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,10 +85,10 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+@SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
 
@@ -86,7 +97,7 @@ public class TransactionTest {
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
-  @Spy private FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+  @Spy private FirestoreRpc firestoreRpc = mock(FirestoreRpc.class);
 
   @Spy
   private FirestoreImpl firestoreMock =
@@ -864,5 +875,114 @@ public class TransactionTest {
 
     assertEquals(begin(), requests.get(0));
     assertEquals(commit(TRANSACTION_ID, writes.toArray(new Write[] {})), requests.get(1));
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_setReadTime() {
+    Executor executor = mock(Executor.class);
+    final com.google.protobuf.Timestamp.Builder readTime =
+        com.google.protobuf.Timestamp.getDefaultInstance().toBuilder().setSeconds(1).setNanos(0);
+    final ReadOnlyOptionsBuilder builder =
+        TransactionOptions.readOnlyOptionsBuilder().setExecutor(executor).setReadTime(readTime);
+    final ReadOnly expectedReadOnly = ReadOnly.newBuilder().setReadTime(readTime).build();
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getReadTime()).isSameInstanceAs(readTime);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
+
+    assertThat(options.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
+    final ReadOnlyOptions readOnly = options.getReadOnly();
+    // actually build the builder so we get a useful .equals method
+    assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_defaults() {
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.readOnlyOptionsBuilder();
+    final ReadOnly expectedReadOnly = ReadOnly.newBuilder().build();
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isNull();
+    assertThat(builder.getReadTime()).isNull();
+
+    final ReadOnlyOptions readOnly = transactionOptions.getOptions().getReadOnly();
+    assertThat(readOnly.getReadTime()).isNull();
+    // actually build the builder so we get a useful .equals method
+    assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_errorWhenGettingReadWrite() {
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.readOnlyOptionsBuilder();
+    try {
+      //noinspection ResultOfMethodCallIgnored
+      builder.build().getOptions().getReadWrite();
+      fail("Error expected");
+    } catch (IllegalStateException ignore) {
+      // expected
+    }
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_setNumberOfAttempts() {
+    Executor executor = mock(Executor.class);
+    final ReadWriteOptionsBuilder builder =
+        TransactionOptions.readWriteOptionsBuilder().setExecutor(executor).setNumberOfAttempts(2);
+    final ReadWrite expectedReadWrite = ReadWrite.newBuilder().build();
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getNumberOfAttempts()).isEqualTo(2);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
+
+    assertThat(options.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
+    final ReadWriteOptions readWrite = options.getReadWrite();
+    // actually build the builder so we get a useful .equals method
+    assertThat(readWrite.toProtoBuilder().build()).isEqualTo(expectedReadWrite);
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_defaults() {
+    final ReadWrite expectedReadWrite = ReadWrite.newBuilder().build();
+
+    final TransactionOptions transactionOptions =
+        TransactionOptions.readWriteOptionsBuilder().build();
+    final ReadWriteOptions readWrite = transactionOptions.getOptions().getReadWrite();
+
+    assertThat(transactionOptions.getExecutor()).isNull();
+    assertThat(readWrite.getNumberOfAttempts()).isEqualTo(5);
+
+    // actually build the builder so we get a useful .equals method
+    assertThat(readWrite.toProtoBuilder().build()).isEqualTo(expectedReadWrite);
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_errorWhenGettingReadWrite() {
+    final ReadWriteOptionsBuilder builder = TransactionOptions.readWriteOptionsBuilder();
+    try {
+      //noinspection ResultOfMethodCallIgnored
+      builder.build().getOptions().getReadOnly();
+      fail("Error expected");
+    } catch (IllegalStateException ignore) {
+      // expected
+    }
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_errorAttemptingToSetNumAttemptsLessThanOne() {
+    try {
+      TransactionOptions.readWriteOptionsBuilder().setNumberOfAttempts(0);
+      fail("Error expected");
+    } catch (IllegalArgumentException ignore) {
+      // expected
+    }
   }
 }

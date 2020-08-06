@@ -16,7 +16,12 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.InternalApi;
 import com.google.common.base.Preconditions;
+import com.google.firestore.v1.TransactionOptions.ReadOnly;
+import com.google.firestore.v1.TransactionOptions.ReadWrite;
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.TimestampOrBuilder;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,34 +29,57 @@ import javax.annotation.Nullable;
 /** Options specifying the behavior of Firestore Transactions. */
 public final class TransactionOptions {
 
+  private static final TransactionOptions DEFAULT_READ_WRITE_TRANSACTION_OPTIONS =
+      readWriteOptionsBuilder().build();
+
   private static final int DEFAULT_NUM_ATTEMPTS = 5;
 
-  private final int numberOfAttempts;
   private final Executor executor;
+  private final EitherReadOnlyOrReadWrite options;
 
-  TransactionOptions(int maxAttempts, Executor executor) {
-    this.numberOfAttempts = maxAttempts;
+  TransactionOptions(Executor executor, EitherReadOnlyOrReadWrite options) {
     this.executor = executor;
+    this.options = options;
   }
 
+  /**
+   * @return int Representing the initial number of attempts a read-write transaction will be
+   *     attempted
+   * @deprecated As of v2.0.0, only applicable to Read-Write transactions. Use {@link
+   *     ReadWriteOptions#getNumberOfAttempts()} instead
+   */
+  @Deprecated
+  @InternalApi
   public int getNumberOfAttempts() {
-    return numberOfAttempts;
+    if (options.getType() == TransactionOptionsType.READ_WRITE) {
+      return options.getReadWrite().numberOfAttempts;
+    } else {
+      return 1;
+    }
   }
 
+  /** @return Executor Executor to be used to run user callbacks on */
   @Nullable
   public Executor getExecutor() {
     return executor;
   }
 
+  @Nonnull
+  @InternalApi
+  EitherReadOnlyOrReadWrite getOptions() {
+    return options;
+  }
+
   /**
-   * Create a default set of options suitable for most use cases. Transactions will be attempted 5
-   * times.
+   * Create a default set of ReadWrite options suitable for most use cases. Transactions will be
+   * attempted 5 times.
    *
    * @return The TransactionOptions object.
+   * @see #readWriteOptionsBuilder()
    */
   @Nonnull
   public static TransactionOptions create() {
-    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, null);
+    return DEFAULT_READ_WRITE_TRANSACTION_OPTIONS;
   }
 
   /**
@@ -59,11 +87,13 @@ public final class TransactionOptions {
    *
    * @param numberOfAttempts The number of execution attempts.
    * @return The TransactionOptions object.
+   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
+   * @see #readWriteOptionsBuilder()
    */
   @Nonnull
+  @Deprecated
   public static TransactionOptions create(int numberOfAttempts) {
-    Preconditions.checkArgument(numberOfAttempts > 0, "You must allow at least one attempt");
-    return new TransactionOptions(numberOfAttempts, null);
+    return readWriteOptionsBuilder().setNumberOfAttempts(numberOfAttempts).build();
   }
 
   /**
@@ -71,10 +101,13 @@ public final class TransactionOptions {
    *
    * @param executor The executor to run the user callback code on.
    * @return The TransactionOptions object.
+   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)}
+   * @see #readWriteOptionsBuilder()
    */
   @Nonnull
-  public static TransactionOptions create(@Nonnull Executor executor) {
-    return new TransactionOptions(DEFAULT_NUM_ATTEMPTS, executor);
+  @Deprecated
+  public static TransactionOptions create(@Nullable Executor executor) {
+    return readWriteOptionsBuilder().setExecutor(executor).build();
   }
 
   /**
@@ -83,10 +116,205 @@ public final class TransactionOptions {
    * @param executor The executor to run the user callback code on.
    * @param numberOfAttempts The number of execution attempts.
    * @return The TransactionOptions object.
+   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)} and
+   *     {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
+   * @see #readWriteOptionsBuilder()
    */
   @Nonnull
-  public static TransactionOptions create(@Nonnull Executor executor, int numberOfAttempts) {
-    Preconditions.checkArgument(numberOfAttempts > 0, "You must allow at least one attempt");
-    return new TransactionOptions(numberOfAttempts, executor);
+  @Deprecated
+  public static TransactionOptions create(@Nullable Executor executor, int numberOfAttempts) {
+    return readWriteOptionsBuilder()
+        .setExecutor(executor)
+        .setNumberOfAttempts(numberOfAttempts)
+        .build();
+  }
+
+  @Nonnull
+  public static ReadWriteOptionsBuilder readWriteOptionsBuilder() {
+    return Builder.readWriteBuilder();
+  }
+
+  @Nonnull
+  public static ReadOnlyOptionsBuilder readOnlyOptionsBuilder() {
+    return Builder.readOnlyBuilder();
+  }
+
+  public abstract static class Builder<T, B extends Builder<T, B>> {
+    @Nullable protected Executor executor;
+
+    protected Builder(@Nullable Executor executor) {
+      this.executor = executor;
+    }
+
+    @Nullable
+    public Executor getExecutor() {
+      return executor;
+    }
+
+    @Nonnull
+    @SuppressWarnings("unchecked")
+    public B setExecutor(@Nullable Executor executor) {
+      this.executor = executor;
+      return (B) this;
+    }
+
+    @Nonnull
+    public abstract TransactionOptions build();
+
+    static ReadOnlyOptionsBuilder readOnlyBuilder() {
+      return new ReadOnlyOptionsBuilder(null, null);
+    }
+
+    static ReadWriteOptionsBuilder readWriteBuilder() {
+      return new ReadWriteOptionsBuilder(null, DEFAULT_NUM_ATTEMPTS);
+    }
+  }
+
+  public static final class ReadOnlyOptionsBuilder
+      extends Builder<ReadOnlyOptions, ReadOnlyOptionsBuilder> {
+    @Nullable private TimestampOrBuilder readTime;
+
+    private ReadOnlyOptionsBuilder(@Nullable Executor executor, @Nullable Timestamp readTime) {
+      super(executor);
+      this.readTime = readTime;
+    }
+
+    @Nullable
+    public TimestampOrBuilder getReadTime() {
+      return readTime;
+    }
+
+    public ReadOnlyOptionsBuilder setReadTime(@Nullable TimestampOrBuilder readTime) {
+      this.readTime = readTime;
+      return this;
+    }
+
+    @Nonnull
+    @Override
+    public TransactionOptions build() {
+      final Timestamp timestamp;
+      if (readTime != null && readTime instanceof Timestamp.Builder) {
+        timestamp = ((Timestamp.Builder) readTime).build();
+      } else {
+        timestamp = (Timestamp) readTime;
+      }
+      return new TransactionOptions(
+          executor, EitherReadOnlyOrReadWrite.readOnly(new ReadOnlyOptions(timestamp)));
+    }
+  }
+
+  public static final class ReadWriteOptionsBuilder
+      extends Builder<ReadWriteOptions, ReadWriteOptionsBuilder> {
+    private int numberOfAttempts;
+
+    private ReadWriteOptionsBuilder(@Nullable Executor executor, int numberOfAttempts) {
+      super(executor);
+      this.numberOfAttempts = numberOfAttempts;
+    }
+
+    public int getNumberOfAttempts() {
+      return numberOfAttempts;
+    }
+
+    @Nonnull
+    public ReadWriteOptionsBuilder setNumberOfAttempts(int numberOfAttempts) {
+      Preconditions.checkArgument(numberOfAttempts > 0, "You must allow at least one attempt");
+      this.numberOfAttempts = numberOfAttempts;
+      return this;
+    }
+
+    @Nonnull
+    @Override
+    public TransactionOptions build() {
+      return new TransactionOptions(
+          executor, EitherReadOnlyOrReadWrite.readWrite(new ReadWriteOptions(numberOfAttempts)));
+    }
+  }
+
+  // TODO: Refactor to use Optional when java7 support is dropped
+  static final class EitherReadOnlyOrReadWrite {
+    private final TransactionOptionsType type;
+    private final ReadOnlyOptions readOnly;
+    private final ReadWriteOptions readWrite;
+
+    private EitherReadOnlyOrReadWrite(
+        TransactionOptionsType type, ReadOnlyOptions readOnly, ReadWriteOptions readWrite) {
+      this.type = type;
+      this.readOnly = readOnly;
+      this.readWrite = readWrite;
+    }
+
+    public TransactionOptionsType getType() {
+      return type;
+    }
+
+    ReadOnlyOptions getReadOnly() {
+      Preconditions.checkState(
+          readOnly != null && readWrite == null, "Unable to call getReadOnly for ReadWriteOptions");
+      return readOnly;
+    }
+
+    ReadWriteOptions getReadWrite() {
+      Preconditions.checkState(
+          readWrite != null && readOnly == null, "Unable to call getReadWrite for ReadOnlyOptions");
+      return readWrite;
+    }
+
+    static EitherReadOnlyOrReadWrite readOnly(ReadOnlyOptions readOnlyOptions) {
+      return new EitherReadOnlyOrReadWrite(TransactionOptionsType.READ_ONLY, readOnlyOptions, null);
+    }
+
+    static EitherReadOnlyOrReadWrite readWrite(ReadWriteOptions readWriteOptions) {
+      return new EitherReadOnlyOrReadWrite(
+          TransactionOptionsType.READ_WRITE, null, readWriteOptions);
+    }
+  }
+
+  enum TransactionOptionsType {
+    READ_ONLY,
+    READ_WRITE
+  }
+
+  interface ToProtoBuilder<ProtoBuilder> {
+    ProtoBuilder toProtoBuilder();
+  }
+
+  static final class ReadOnlyOptions implements ToProtoBuilder<ReadOnly.Builder> {
+    @Nullable private final Timestamp readTime;
+
+    private ReadOnlyOptions(@Nullable Timestamp readTime) {
+      this.readTime = readTime;
+    }
+
+    @Override
+    public ReadOnly.Builder toProtoBuilder() {
+      if (readTime != null) {
+        return ReadOnly.getDefaultInstance().toBuilder().setReadTime(readTime);
+      } else {
+        return ReadOnly.getDefaultInstance().toBuilder();
+      }
+    }
+
+    @Nullable
+    public Timestamp getReadTime() {
+      return readTime;
+    }
+  }
+
+  static final class ReadWriteOptions implements ToProtoBuilder<ReadWrite.Builder> {
+    private final int numberOfAttempts;
+
+    private ReadWriteOptions(int numberOfAttempts) {
+      this.numberOfAttempts = numberOfAttempts;
+    }
+
+    @Override
+    public ReadWrite.Builder toProtoBuilder() {
+      return ReadWrite.getDefaultInstance().toBuilder();
+    }
+
+    public int getNumberOfAttempts() {
+      return numberOfAttempts;
+    }
   }
 }

@@ -26,8 +26,10 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
+import io.grpc.Context;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Tracer;
@@ -58,10 +60,11 @@ class TransactionRunner<T> {
 
   private final Transaction.AsyncFunction<T> userCallback;
   private final Span span;
-  private final FirestoreImpl firestoreClient;
+  private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
   private final Executor userCallbackExecutor;
   private final ExponentialRetryAlgorithm backoffAlgorithm;
+  private final TransactionOptions transactionOptions;
   private TimedAttemptSettings nextBackoffAttempt;
   private Transaction transaction;
   private int attemptsRemaining;
@@ -69,20 +72,33 @@ class TransactionRunner<T> {
   /**
    * @param firestore The active Firestore instance
    * @param userCallback The user provided transaction callback
-   * @param userCallbackExecutor The executor to run the user callback on
-   * @param numberOfAttempts The total number of attempts for this transaction
+   * @param transactionOptions The set options determining which executor the {@code userCallback}
+   *     is run on, whether the transaction is read-write or read-only
    */
   TransactionRunner(
       FirestoreImpl firestore,
       Transaction.AsyncFunction<T> userCallback,
-      Executor userCallbackExecutor,
-      int numberOfAttempts) {
+      TransactionOptions transactionOptions) {
+    this.transactionOptions = transactionOptions;
     this.span = tracer.spanBuilder("CloudFirestore.Transaction").startSpan();
-    this.firestoreClient = firestore;
+    this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
     this.userCallback = userCallback;
-    this.attemptsRemaining = numberOfAttempts;
-    this.userCallbackExecutor = userCallbackExecutor;
+    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
+    switch (options.getType()) {
+      case READ_WRITE:
+        this.attemptsRemaining = options.getReadWrite().getNumberOfAttempts();
+        break;
+      case READ_ONLY:
+        this.attemptsRemaining = 1;
+        break;
+    }
+    this.userCallbackExecutor =
+        Context.currentContextExecutor(
+            transactionOptions.getExecutor() != null
+                ? transactionOptions.getExecutor()
+                : this.firestore.getClient().getExecutor());
+
     this.backoffAlgorithm =
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
@@ -90,7 +106,7 @@ class TransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    this.transaction = new Transaction(firestoreClient, this.transaction);
+    this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
     --attemptsRemaining;
 
@@ -186,7 +202,7 @@ class TransactionRunner<T> {
 
   /** The callback that is invoked after the Commit RPC returns. It returns the user result. */
   private class CommitTransactionCallback implements ApiFunction<List<WriteResult>, T> {
-    private T userFunctionResult;
+    private final T userFunctionResult;
 
     CommitTransactionCallback(T userFunctionResult) {
       this.userFunctionResult = userFunctionResult;
