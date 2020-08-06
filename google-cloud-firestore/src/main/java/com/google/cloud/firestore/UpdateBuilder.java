@@ -701,13 +701,11 @@ public abstract class UpdateBuilder<T> {
               com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
               com.google.rpc.Status status = statuses.get(i);
               Status code = Status.fromCodeValue(status.getCode());
-              @Nullable Timestamp updateTime;
-              @Nullable Exception exception;
+              @Nullable Timestamp updateTime = null;
+              @Nullable Exception exception = null;
               if (code == Status.OK) {
                 updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
-                exception = null;
               } else {
-                updateTime = null;
                 exception = FirestoreException.serverRejected(code, status.getMessage());
               }
               result.add(
@@ -764,6 +762,7 @@ public abstract class UpdateBuilder<T> {
 
     return result;
   }
+
   /**
    * Resolves the individual operations in the batch with the results and removes the entry from the
    * pendingOperations map if the result is not retryable.

@@ -119,7 +119,8 @@ public class BulkWriter {
 
   /**
    * A queue of batches to be written. Use a synchronized list to avoid multi-thread concurrent
-   * modification errors.
+   * modification errors (as this list is modified from both the user thread and the network
+   * thread).
    */
   private final List<BulkCommitBatch> batchQueue = new CopyOnWriteArrayList<>();
 
@@ -699,16 +700,17 @@ public class BulkWriter {
     @Override
     public ApiFuture<Void> apply(List<BatchWriteResult> results) {
       batch.processResults(results);
-      Set<DocumentReference> pendingOps = batch.getPendingDocuments();
-      if (!pendingOps.isEmpty()) {
+      Set<DocumentReference> remainingOps = batch.getPendingDocuments();
+      if (!remainingOps.isEmpty()) {
         logger.log(
             Level.WARNING,
             String.format(
-                "Current batch failed at retry #%d. Num failures: %d", attempt, pendingOps.size()));
+                "Current batch failed at retry #%d. Num failures: %d",
+                attempt, remainingOps.size()));
 
         if (attempt < MAX_RETRY_ATTEMPTS) {
           nextAttempt = backoff.createNextAttempt(nextAttempt);
-          BulkCommitBatch newBatch = new BulkCommitBatch(firestore, batch, pendingOps);
+          BulkCommitBatch newBatch = new BulkCommitBatch(firestore, batch, remainingOps);
           return bulkCommit(newBatch, attempt + 1);
         } else {
           batch.failRemainingOperations(results);

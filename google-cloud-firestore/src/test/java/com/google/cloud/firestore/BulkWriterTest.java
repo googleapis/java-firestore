@@ -29,6 +29,7 @@ import static org.mockito.Mockito.doReturn;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
@@ -39,6 +40,7 @@ import com.google.firestore.v1.BatchWriteResponse;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -466,7 +468,63 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void allWritesCompleteWhenFlushCompletes() throws Exception {
+  public void writesCompleteInCorrectOrderBeforeFlush() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                mergeResponses(successResponse(1), failedResponse(Code.ABORTED_VALUE)));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                successResponse(2));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+    final List<String> completions = new ArrayList<>();
+    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
+
+    bulkWriter
+        .set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .addListener(
+            new Runnable() {
+              public void run() {
+                completions.add("doc1");
+              }
+            },
+            executor);
+    bulkWriter
+        .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .addListener(
+            new Runnable() {
+              public void run() {
+                completions.add("doc2");
+              }
+            },
+            executor);
+    ;
+
+    ApiFuture<Void> flush = bulkWriter.flush();
+    flush.addListener(
+        new Runnable() {
+          public void run() {
+            completions.add("flush");
+            flushComplete.set(null);
+          }
+        },
+        executor);
+
+    flushComplete.get();
+    assertEquals("doc1", completions.get(0));
+    assertEquals("doc2", completions.get(1));
+    assertEquals("flush", completions.get(2));
+  }
+
+  @Test
+  public void flushCompletesWhenAllWritesComplete() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
