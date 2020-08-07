@@ -26,7 +26,6 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
@@ -84,10 +83,9 @@ class TransactionRunner<T> {
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
     this.userCallback = userCallback;
-    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
-    switch (options.getType()) {
+    switch (transactionOptions.getType()) {
       case READ_WRITE:
-        this.attemptsRemaining = options.getReadWrite().getNumberOfAttempts();
+        this.attemptsRemaining = transactionOptions.getReadWrite().getNumberOfAttempts();
         break;
       case READ_ONLY:
         this.attemptsRemaining = 1;

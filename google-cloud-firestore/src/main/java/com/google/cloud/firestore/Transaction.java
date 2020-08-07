@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -87,14 +86,13 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    final EitherReadOnlyOrReadWrite options = originalTransactionOptions.getOptions();
-    if (options.getType() == TransactionOptionsType.READ_WRITE && previousTransactionId != null) {
+    if (originalTransactionOptions.getType() == TransactionOptionsType.READ_WRITE && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
-    } else if (options.getType() == TransactionOptionsType.READ_ONLY) {
-      final ReadOnly.Builder builder = options.getReadOnly().toProtoBuilder();
+    } else if (originalTransactionOptions.getType() == TransactionOptionsType.READ_ONLY) {
+      final ReadOnly.Builder builder = originalTransactionOptions.getReadOnly().toProtoBuilder();
       beginTransaction.getOptionsBuilder().setReadOnly(builder);
     }
 

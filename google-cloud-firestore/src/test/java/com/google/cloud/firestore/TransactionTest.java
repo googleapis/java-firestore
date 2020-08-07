@@ -53,7 +53,6 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
-import com.google.cloud.firestore.TransactionOptions.EitherReadOnlyOrReadWrite;
 import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptions;
 import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
 import com.google.cloud.firestore.TransactionOptions.ReadWriteOptions;
@@ -71,6 +70,7 @@ import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -87,6 +87,7 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Stubber;
 
 @SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
@@ -892,9 +893,8 @@ public class TransactionTest {
     assertThat(builder.getReadTime()).isSameInstanceAs(readTime);
 
     assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
-    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
 
-    assertThat(options.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
     final ReadOnlyOptions readOnly = options.getReadOnly();
     // actually build the builder so we get a useful .equals method
     assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
@@ -910,7 +910,7 @@ public class TransactionTest {
     assertThat(builder.getExecutor()).isNull();
     assertThat(builder.getReadTime()).isNull();
 
-    final ReadOnlyOptions readOnly = transactionOptions.getOptions().getReadOnly();
+    final ReadOnlyOptions readOnly = transactionOptions.getReadOnly();
     assertThat(readOnly.getReadTime()).isNull();
     // actually build the builder so we get a useful .equals method
     assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
@@ -921,7 +921,7 @@ public class TransactionTest {
     final ReadOnlyOptionsBuilder builder = TransactionOptions.readOnlyOptionsBuilder();
     try {
       //noinspection ResultOfMethodCallIgnored
-      builder.build().getOptions().getReadWrite();
+      builder.build().getReadWrite();
       fail("Error expected");
     } catch (IllegalStateException ignore) {
       // expected
@@ -941,9 +941,8 @@ public class TransactionTest {
     assertThat(builder.getNumberOfAttempts()).isEqualTo(2);
 
     assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
-    final EitherReadOnlyOrReadWrite options = transactionOptions.getOptions();
 
-    assertThat(options.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
     final ReadWriteOptions readWrite = options.getReadWrite();
     // actually build the builder so we get a useful .equals method
     assertThat(readWrite.toProtoBuilder().build()).isEqualTo(expectedReadWrite);
@@ -955,7 +954,7 @@ public class TransactionTest {
 
     final TransactionOptions transactionOptions =
         TransactionOptions.readWriteOptionsBuilder().build();
-    final ReadWriteOptions readWrite = transactionOptions.getOptions().getReadWrite();
+    final ReadWriteOptions readWrite = transactionOptions.getReadWrite();
 
     assertThat(transactionOptions.getExecutor()).isNull();
     assertThat(readWrite.getNumberOfAttempts()).isEqualTo(5);
@@ -969,7 +968,7 @@ public class TransactionTest {
     final ReadWriteOptionsBuilder builder = TransactionOptions.readWriteOptionsBuilder();
     try {
       //noinspection ResultOfMethodCallIgnored
-      builder.build().getOptions().getReadOnly();
+      builder.build().getReadOnly();
       fail("Error expected");
     } catch (IllegalStateException ignore) {
       // expected

@@ -35,11 +35,18 @@ public final class TransactionOptions {
   private static final int DEFAULT_NUM_ATTEMPTS = 5;
 
   private final Executor executor;
-  private final EitherReadOnlyOrReadWrite options;
+  private final TransactionOptionsType type;
+  private final ReadOnlyOptions readOnly;
+  private final ReadWriteOptions readWrite;
 
-  TransactionOptions(Executor executor, EitherReadOnlyOrReadWrite options) {
+  TransactionOptions(Executor executor,
+      TransactionOptionsType type,
+      ReadOnlyOptions readOnly,
+      ReadWriteOptions readWrite) {
     this.executor = executor;
-    this.options = options;
+    this.type = type;
+    this.readOnly = readOnly;
+    this.readWrite = readWrite;
   }
 
   /**
@@ -51,8 +58,8 @@ public final class TransactionOptions {
   @Deprecated
   @InternalApi
   public int getNumberOfAttempts() {
-    if (options.getType() == TransactionOptionsType.READ_WRITE) {
-      return options.getReadWrite().numberOfAttempts;
+    if (type == TransactionOptionsType.READ_WRITE) {
+      return readWrite.numberOfAttempts;
     } else {
       return 1;
     }
@@ -66,8 +73,24 @@ public final class TransactionOptions {
 
   @Nonnull
   @InternalApi
-  EitherReadOnlyOrReadWrite getOptions() {
-    return options;
+  TransactionOptionsType getType() {
+    return type;
+  }
+
+  @Nonnull
+  @InternalApi
+  ReadOnlyOptions getReadOnly() {
+    Preconditions.checkState(
+        readOnly != null && readWrite == null, "Unable to call getReadOnly for ReadWriteOptions");
+    return readOnly;
+  }
+
+  @Nonnull
+  @InternalApi
+  ReadWriteOptions getReadWrite() {
+    Preconditions.checkState(
+        readWrite != null && readOnly == null, "Unable to call getReadWrite for ReadOnlyOptions");
+    return readWrite;
   }
 
   /**
@@ -198,7 +221,7 @@ public final class TransactionOptions {
         timestamp = (Timestamp) readTime;
       }
       return new TransactionOptions(
-          executor, EitherReadOnlyOrReadWrite.readOnly(new ReadOnlyOptions(timestamp)));
+          executor, TransactionOptionsType.READ_ONLY, new ReadOnlyOptions(timestamp), null);
     }
   }
 
@@ -226,46 +249,7 @@ public final class TransactionOptions {
     @Override
     public TransactionOptions build() {
       return new TransactionOptions(
-          executor, EitherReadOnlyOrReadWrite.readWrite(new ReadWriteOptions(numberOfAttempts)));
-    }
-  }
-
-  // TODO: Refactor to use Optional when java7 support is dropped
-  static final class EitherReadOnlyOrReadWrite {
-    private final TransactionOptionsType type;
-    private final ReadOnlyOptions readOnly;
-    private final ReadWriteOptions readWrite;
-
-    private EitherReadOnlyOrReadWrite(
-        TransactionOptionsType type, ReadOnlyOptions readOnly, ReadWriteOptions readWrite) {
-      this.type = type;
-      this.readOnly = readOnly;
-      this.readWrite = readWrite;
-    }
-
-    public TransactionOptionsType getType() {
-      return type;
-    }
-
-    ReadOnlyOptions getReadOnly() {
-      Preconditions.checkState(
-          readOnly != null && readWrite == null, "Unable to call getReadOnly for ReadWriteOptions");
-      return readOnly;
-    }
-
-    ReadWriteOptions getReadWrite() {
-      Preconditions.checkState(
-          readWrite != null && readOnly == null, "Unable to call getReadWrite for ReadOnlyOptions");
-      return readWrite;
-    }
-
-    static EitherReadOnlyOrReadWrite readOnly(ReadOnlyOptions readOnlyOptions) {
-      return new EitherReadOnlyOrReadWrite(TransactionOptionsType.READ_ONLY, readOnlyOptions, null);
-    }
-
-    static EitherReadOnlyOrReadWrite readWrite(ReadWriteOptions readWriteOptions) {
-      return new EitherReadOnlyOrReadWrite(
-          TransactionOptionsType.READ_WRITE, null, readWriteOptions);
+          executor, TransactionOptionsType.READ_WRITE, null, new ReadWriteOptions(numberOfAttempts));
     }
   }
 
