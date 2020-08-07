@@ -39,7 +39,8 @@ public final class TransactionOptions {
   private final ReadOnlyOptions readOnly;
   private final ReadWriteOptions readWrite;
 
-  TransactionOptions(Executor executor,
+  TransactionOptions(
+      Executor executor,
       TransactionOptionsType type,
       ReadOnlyOptions readOnly,
       ReadWriteOptions readWrite) {
@@ -50,8 +51,7 @@ public final class TransactionOptions {
   }
 
   /**
-   * @return the initial number of attempts a read-write transaction will be
-   *     attempted
+   * @return the initial number of attempts a read-write transaction will be attempted
    * @deprecated as of v2.0.0, only applicable to Read-Write transactions. Use {@link
    *     ReadWriteOptions#getNumberOfAttempts()} instead
    */
@@ -94,7 +94,8 @@ public final class TransactionOptions {
   }
 
   /**
-   * Create a default set of options suitable for most use cases. Transactions will be opened as ReadWrite transactions and attempted up to 5 times.
+   * Create a default set of options suitable for most use cases. Transactions will be opened as
+   * ReadWrite transactions and attempted up to 5 times.
    *
    * @return The TransactionOptions object.
    * @see #readWriteOptionsBuilder()
@@ -249,7 +250,10 @@ public final class TransactionOptions {
     @Override
     public TransactionOptions build() {
       return new TransactionOptions(
-          executor, TransactionOptionsType.READ_WRITE, null, new ReadWriteOptions(numberOfAttempts));
+          executor,
+          TransactionOptionsType.READ_WRITE,
+          null,
+          new ReadWriteOptions(numberOfAttempts));
     }
   }
 

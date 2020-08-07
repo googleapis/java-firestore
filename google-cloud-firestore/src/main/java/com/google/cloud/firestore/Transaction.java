@@ -86,7 +86,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (originalTransactionOptions.getType() == TransactionOptionsType.READ_WRITE && previousTransactionId != null) {
+    if (originalTransactionOptions.getType() == TransactionOptionsType.READ_WRITE
+        && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()

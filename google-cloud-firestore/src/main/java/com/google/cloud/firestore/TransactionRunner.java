@@ -71,8 +71,8 @@ class TransactionRunner<T> {
   /**
    * @param firestore The active Firestore instance
    * @param userCallback The user provided transaction callback
-   * @param transactionOptions The options determining which executor the {@code userCallback}
-   *     is run on and whether the transaction is read-write or read-only
+   * @param transactionOptions The options determining which executor the {@code userCallback} is
+   *     run on and whether the transaction is read-write or read-only
    */
   TransactionRunner(
       FirestoreImpl firestore,
