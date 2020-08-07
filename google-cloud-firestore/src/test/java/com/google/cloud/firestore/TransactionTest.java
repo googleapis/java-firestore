@@ -895,7 +895,7 @@ public class TransactionTest {
     assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
 
     assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
-    final ReadOnlyOptions readOnly = options.getReadOnly();
+    final ReadOnlyOptions readOnly = transactionOptions.getReadOnly();
     // actually build the builder so we get a useful .equals method
     assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
   }
