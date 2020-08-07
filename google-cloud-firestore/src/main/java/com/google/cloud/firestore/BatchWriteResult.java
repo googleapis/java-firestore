@@ -17,7 +17,6 @@
 package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
-import io.grpc.Status;
 import javax.annotation.Nullable;
 
 /**
@@ -25,14 +24,21 @@ import javax.annotation.Nullable;
  * BatchWriteRequests.
  */
 public final class BatchWriteResult {
+  private final DocumentReference documentReference;
   @Nullable private final Timestamp writeTime;
-  private final Status status;
-  private final String message;
+  @Nullable private final Exception exception;
 
-  BatchWriteResult(@Nullable Timestamp timestamp, Status status, String message) {
+  BatchWriteResult(
+      DocumentReference documentReference,
+      @Nullable Timestamp timestamp,
+      @Nullable Exception exception) {
+    this.documentReference = documentReference;
     this.writeTime = timestamp;
-    this.status = status;
-    this.message = message;
+    this.exception = exception;
+  }
+
+  public DocumentReference getDocumentReference() {
+    return documentReference;
   }
 
   @Nullable
@@ -40,11 +46,8 @@ public final class BatchWriteResult {
     return writeTime;
   }
 
-  public Status getStatus() {
-    return status;
-  }
-
-  public String getMessage() {
-    return message;
+  @Nullable
+  public Exception getException() {
+    return exception;
   }
 }
