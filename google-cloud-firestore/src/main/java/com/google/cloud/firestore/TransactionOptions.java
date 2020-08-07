@@ -43,9 +43,9 @@ public final class TransactionOptions {
   }
 
   /**
-   * @return int Representing the initial number of attempts a read-write transaction will be
+   * @return the initial number of attempts a read-write transaction will be
    *     attempted
-   * @deprecated As of v2.0.0, only applicable to Read-Write transactions. Use {@link
+   * @deprecated as of v2.0.0, only applicable to Read-Write transactions. Use {@link
    *     ReadWriteOptions#getNumberOfAttempts()} instead
    */
   @Deprecated
@@ -58,7 +58,7 @@ public final class TransactionOptions {
     }
   }
 
-  /** @return Executor Executor to be used to run user callbacks on */
+  /** @return Executor to be used to run user callbacks on */
   @Nullable
   public Executor getExecutor() {
     return executor;
@@ -71,8 +71,7 @@ public final class TransactionOptions {
   }
 
   /**
-   * Create a default set of ReadWrite options suitable for most use cases. Transactions will be
-   * attempted 5 times.
+   * Create a default set of options suitable for most use cases. Transactions will be opened as ReadWrite transactions and attempted up to 5 times.
    *
    * @return The TransactionOptions object.
    * @see #readWriteOptionsBuilder()
@@ -87,7 +86,7 @@ public final class TransactionOptions {
    *
    * @param numberOfAttempts The number of execution attempts.
    * @return The TransactionOptions object.
-   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
+   * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
    * @see #readWriteOptionsBuilder()
    */
   @Nonnull
@@ -101,7 +100,7 @@ public final class TransactionOptions {
    *
    * @param executor The executor to run the user callback code on.
    * @return The TransactionOptions object.
-   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)}
+   * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)}
    * @see #readWriteOptionsBuilder()
    */
   @Nonnull
@@ -116,7 +115,7 @@ public final class TransactionOptions {
    * @param executor The executor to run the user callback code on.
    * @param numberOfAttempts The number of execution attempts.
    * @return The TransactionOptions object.
-   * @deprecated As of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)} and
+   * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)} and
    *     {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
    * @see #readWriteOptionsBuilder()
    */
