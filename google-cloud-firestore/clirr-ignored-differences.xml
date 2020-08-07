@@ -156,5 +156,43 @@
     <method>com.google.cloud.firestore.Query collectionGroup(java.lang.String)</method>
     <to>com.google.cloud.firestore.CollectionGroup</to>
   </difference>
+  
+  <!--
+  BulkWriter
+  -->
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
+    <method>com.google.cloud.firestore.BulkWriter bulkWriter(*)</method>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <method>com.google.cloud.firestore.UpdateBuilder create(*)</method>
+    <to>java.lang.Object</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <method>com.google.cloud.firestore.UpdateBuilder delete(*)</method>
+    <to>java.lang.Object</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <method>com.google.cloud.firestore.UpdateBuilder set(*)</method>
+    <to>java.lang.Object</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <method>com.google.cloud.firestore.UpdateBuilder update(*)</method>
+    <to>java.lang.Object</to>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
+    <method>com.google.api.gax.rpc.UnaryCallable batchWriteCallable()</method>
+  </difference>
 
 </differences>
