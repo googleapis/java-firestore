@@ -1441,7 +1441,7 @@ public class ITSystemTest {
                 return null;
               }
             },
-            TransactionOptions.readOnlyOptionsBuilder().build());
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
 
     runTransaction.get(10, TimeUnit.SECONDS);
     assertEquals("bar", ref.get().get("foo"));
@@ -1461,7 +1461,7 @@ public class ITSystemTest {
                 return null;
               }
             },
-            TransactionOptions.readOnlyOptionsBuilder().build());
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
 
     try {
       runTransaction.get(10, TimeUnit.SECONDS);
@@ -1483,7 +1483,7 @@ public class ITSystemTest {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
     final TransactionOptions options =
-        TransactionOptions.readOnlyOptionsBuilder()
+        TransactionOptions.createReadOnlyOptionsBuilder()
             .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(0))
             .build();
 

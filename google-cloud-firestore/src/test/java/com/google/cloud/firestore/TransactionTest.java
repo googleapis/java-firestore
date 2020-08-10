@@ -884,7 +884,7 @@ public class TransactionTest {
     final com.google.protobuf.Timestamp.Builder readTime =
         com.google.protobuf.Timestamp.getDefaultInstance().toBuilder().setSeconds(1).setNanos(0);
     final ReadOnlyOptionsBuilder builder =
-        TransactionOptions.readOnlyOptionsBuilder().setExecutor(executor).setReadTime(readTime);
+        TransactionOptions.createReadOnlyOptionsBuilder().setExecutor(executor).setReadTime(readTime);
     final ReadOnly expectedReadOnly = ReadOnly.newBuilder().setReadTime(readTime).build();
 
     final TransactionOptions transactionOptions = builder.build();
@@ -902,7 +902,7 @@ public class TransactionTest {
 
   @Test
   public void readOnlyTransactionOptionsBuilder_defaults() {
-    final ReadOnlyOptionsBuilder builder = TransactionOptions.readOnlyOptionsBuilder();
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.createReadOnlyOptionsBuilder();
     final ReadOnly expectedReadOnly = ReadOnly.newBuilder().build();
 
     final TransactionOptions transactionOptions = builder.build();
@@ -918,7 +918,7 @@ public class TransactionTest {
 
   @Test
   public void readOnlyTransactionOptionsBuilder_errorWhenGettingReadWrite() {
-    final ReadOnlyOptionsBuilder builder = TransactionOptions.readOnlyOptionsBuilder();
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.createReadOnlyOptionsBuilder();
     try {
       //noinspection ResultOfMethodCallIgnored
       builder.build().getReadWrite();
@@ -932,7 +932,7 @@ public class TransactionTest {
   public void readWriteTransactionOptionsBuilder_setNumberOfAttempts() {
     Executor executor = mock(Executor.class);
     final ReadWriteOptionsBuilder builder =
-        TransactionOptions.readWriteOptionsBuilder().setExecutor(executor).setNumberOfAttempts(2);
+        TransactionOptions.createReadWriteOptionsBuilder().setExecutor(executor).setNumberOfAttempts(2);
     final ReadWrite expectedReadWrite = ReadWrite.newBuilder().build();
 
     final TransactionOptions transactionOptions = builder.build();
@@ -953,7 +953,7 @@ public class TransactionTest {
     final ReadWrite expectedReadWrite = ReadWrite.newBuilder().build();
 
     final TransactionOptions transactionOptions =
-        TransactionOptions.readWriteOptionsBuilder().build();
+        TransactionOptions.createReadWriteOptionsBuilder().build();
     final ReadWriteOptions readWrite = transactionOptions.getReadWrite();
 
     assertThat(transactionOptions.getExecutor()).isNull();
@@ -965,7 +965,7 @@ public class TransactionTest {
 
   @Test
   public void readWriteTransactionOptionsBuilder_errorWhenGettingReadWrite() {
-    final ReadWriteOptionsBuilder builder = TransactionOptions.readWriteOptionsBuilder();
+    final ReadWriteOptionsBuilder builder = TransactionOptions.createReadWriteOptionsBuilder();
     try {
       //noinspection ResultOfMethodCallIgnored
       builder.build().getReadOnly();
@@ -978,7 +978,7 @@ public class TransactionTest {
   @Test
   public void readWriteTransactionOptionsBuilder_errorAttemptingToSetNumAttemptsLessThanOne() {
     try {
-      TransactionOptions.readWriteOptionsBuilder().setNumberOfAttempts(0);
+      TransactionOptions.createReadWriteOptionsBuilder().setNumberOfAttempts(0);
       fail("Error expected");
     } catch (IllegalArgumentException ignore) {
       // expected

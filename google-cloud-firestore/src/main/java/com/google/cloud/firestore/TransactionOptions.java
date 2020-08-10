@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 public final class TransactionOptions {
 
   private static final TransactionOptions DEFAULT_READ_WRITE_TRANSACTION_OPTIONS =
-      readWriteOptionsBuilder().build();
+      createReadWriteOptionsBuilder().build();
 
   private static final int DEFAULT_NUM_ATTEMPTS = 5;
 
@@ -95,7 +95,7 @@ public final class TransactionOptions {
    * ReadWrite transactions and attempted up to 5 times.
    *
    * @return The TransactionOptions object.
-   * @see #readWriteOptionsBuilder()
+   * @see #createReadWriteOptionsBuilder()
    */
   @Nonnull
   public static TransactionOptions create() {
@@ -108,12 +108,12 @@ public final class TransactionOptions {
    * @param numberOfAttempts The number of execution attempts.
    * @return The TransactionOptions object.
    * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
-   * @see #readWriteOptionsBuilder()
+   * @see #createReadWriteOptionsBuilder()
    */
   @Nonnull
   @Deprecated
   public static TransactionOptions create(int numberOfAttempts) {
-    return readWriteOptionsBuilder().setNumberOfAttempts(numberOfAttempts).build();
+    return createReadWriteOptionsBuilder().setNumberOfAttempts(numberOfAttempts).build();
   }
 
   /**
@@ -122,12 +122,12 @@ public final class TransactionOptions {
    * @param executor The executor to run the user callback code on.
    * @return The TransactionOptions object.
    * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)}
-   * @see #readWriteOptionsBuilder()
+   * @see #createReadWriteOptionsBuilder()
    */
   @Nonnull
   @Deprecated
   public static TransactionOptions create(@Nullable Executor executor) {
-    return readWriteOptionsBuilder().setExecutor(executor).build();
+    return createReadWriteOptionsBuilder().setExecutor(executor).build();
   }
 
   /**
@@ -138,24 +138,24 @@ public final class TransactionOptions {
    * @return The TransactionOptions object.
    * @deprecated as of 2.0.0, replaced by {@link ReadWriteOptionsBuilder#setExecutor(Executor)} and
    *     {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
-   * @see #readWriteOptionsBuilder()
+   * @see #createReadWriteOptionsBuilder()
    */
   @Nonnull
   @Deprecated
   public static TransactionOptions create(@Nullable Executor executor, int numberOfAttempts) {
-    return readWriteOptionsBuilder()
+    return createReadWriteOptionsBuilder()
         .setExecutor(executor)
         .setNumberOfAttempts(numberOfAttempts)
         .build();
   }
 
   @Nonnull
-  public static ReadWriteOptionsBuilder readWriteOptionsBuilder() {
+  public static ReadWriteOptionsBuilder createReadWriteOptionsBuilder() {
     return Builder.readWriteBuilder();
   }
 
   @Nonnull
-  public static ReadOnlyOptionsBuilder readOnlyOptionsBuilder() {
+  public static ReadOnlyOptionsBuilder createReadOnlyOptionsBuilder() {
     return Builder.readOnlyBuilder();
   }
 
