@@ -72,22 +72,19 @@ public final class TransactionOptions {
   }
 
   @Nonnull
-  @InternalApi
-  TransactionOptionsType getType() {
+  public TransactionOptionsType getType() {
     return type;
   }
 
   @Nonnull
-  @InternalApi
-  ReadOnlyOptions getReadOnly() {
+  public ReadOnlyOptions getReadOnly() {
     Preconditions.checkState(
         readOnly != null && readWrite == null, "Unable to call getReadOnly for ReadWriteOptions");
     return readOnly;
   }
 
   @Nonnull
-  @InternalApi
-  ReadWriteOptions getReadWrite() {
+  public ReadWriteOptions getReadWrite() {
     Preconditions.checkState(
         readWrite != null && readOnly == null, "Unable to call getReadWrite for ReadOnlyOptions");
     return readWrite;
@@ -162,7 +159,7 @@ public final class TransactionOptions {
     return Builder.readOnlyBuilder();
   }
 
-  public abstract static class Builder<T, B extends Builder<T, B>> {
+  public abstract static class Builder<B extends Builder<B>> {
     @Nullable protected Executor executor;
 
     protected Builder(@Nullable Executor executor) {
@@ -193,8 +190,7 @@ public final class TransactionOptions {
     }
   }
 
-  public static final class ReadOnlyOptionsBuilder
-      extends Builder<ReadOnlyOptions, ReadOnlyOptionsBuilder> {
+  public static final class ReadOnlyOptionsBuilder extends Builder<ReadOnlyOptionsBuilder> {
     @Nullable private TimestampOrBuilder readTime;
 
     private ReadOnlyOptionsBuilder(@Nullable Executor executor, @Nullable Timestamp readTime) {
@@ -226,8 +222,7 @@ public final class TransactionOptions {
     }
   }
 
-  public static final class ReadWriteOptionsBuilder
-      extends Builder<ReadWriteOptions, ReadWriteOptionsBuilder> {
+  public static final class ReadWriteOptionsBuilder extends Builder<ReadWriteOptionsBuilder> {
     private int numberOfAttempts;
 
     private ReadWriteOptionsBuilder(@Nullable Executor executor, int numberOfAttempts) {
@@ -257,16 +252,12 @@ public final class TransactionOptions {
     }
   }
 
-  enum TransactionOptionsType {
+  public enum TransactionOptionsType {
     READ_ONLY,
     READ_WRITE
   }
 
-  interface ToProtoBuilder<ProtoBuilder> {
-    ProtoBuilder toProtoBuilder();
-  }
-
-  static final class ReadOnlyOptions implements ToProtoBuilder<ReadOnly.Builder> {
+  public static final class ReadOnlyOptions implements ToProtoBuilder<ReadOnly.Builder> {
     @Nullable private final Timestamp readTime;
 
     private ReadOnlyOptions(@Nullable Timestamp readTime) {
@@ -288,7 +279,7 @@ public final class TransactionOptions {
     }
   }
 
-  static final class ReadWriteOptions implements ToProtoBuilder<ReadWrite.Builder> {
+  public static final class ReadWriteOptions implements ToProtoBuilder<ReadWrite.Builder> {
     private final int numberOfAttempts;
 
     private ReadWriteOptions(int numberOfAttempts) {
@@ -303,5 +294,9 @@ public final class TransactionOptions {
     public int getNumberOfAttempts() {
       return numberOfAttempts;
     }
+  }
+
+  interface ToProtoBuilder<ProtoBuilder> {
+    ProtoBuilder toProtoBuilder();
   }
 }
