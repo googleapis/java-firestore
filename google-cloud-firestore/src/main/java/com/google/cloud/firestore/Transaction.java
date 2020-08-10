@@ -86,13 +86,13 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (transactionOptions.getType() == TransactionOptionsType.READ_WRITE
+    if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
         && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
-    } else if (transactionOptions.getType() == TransactionOptionsType.READ_ONLY) {
+    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
       final ReadOnly.Builder builder = transactionOptions.getReadOnly().toProtoBuilder();
       beginTransaction.getOptionsBuilder().setReadOnly(builder);
     }
