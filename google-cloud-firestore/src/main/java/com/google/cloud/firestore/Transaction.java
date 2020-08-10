@@ -63,7 +63,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
-  private final TransactionOptions originalTransactionOptions;
+  private final TransactionOptions transactionOptions;
   @Nullable private final ByteString previousTransactionId;
   private ByteString transactionId;
 
@@ -72,7 +72,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       TransactionOptions transactionOptions,
       @Nullable Transaction previousTransaction) {
     super(firestore);
-    this.originalTransactionOptions = transactionOptions;
+    this.transactionOptions = transactionOptions;
     this.previousTransactionId =
         previousTransaction != null ? previousTransaction.transactionId : null;
   }
@@ -86,14 +86,14 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (originalTransactionOptions.getType() == TransactionOptionsType.READ_WRITE
+    if (transactionOptions.getType() == TransactionOptionsType.READ_WRITE
         && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
-    } else if (originalTransactionOptions.getType() == TransactionOptionsType.READ_ONLY) {
-      final ReadOnly.Builder builder = originalTransactionOptions.getReadOnly().toProtoBuilder();
+    } else if (transactionOptions.getType() == TransactionOptionsType.READ_ONLY) {
+      final ReadOnly.Builder builder = transactionOptions.getReadOnly().toProtoBuilder();
       beginTransaction.getOptionsBuilder().setReadOnly(builder);
     }
 
