@@ -884,7 +884,9 @@ public class TransactionTest {
     final com.google.protobuf.Timestamp.Builder readTime =
         com.google.protobuf.Timestamp.getDefaultInstance().toBuilder().setSeconds(1).setNanos(0);
     final ReadOnlyOptionsBuilder builder =
-        TransactionOptions.createReadOnlyOptionsBuilder().setExecutor(executor).setReadTime(readTime);
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setExecutor(executor)
+            .setReadTime(readTime);
     final ReadOnly expectedReadOnly = ReadOnly.newBuilder().setReadTime(readTime).build();
 
     final TransactionOptions transactionOptions = builder.build();
@@ -896,8 +898,7 @@ public class TransactionTest {
 
     assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
     final ReadOnlyOptions readOnly = transactionOptions.getReadOnly();
-    // actually build the builder so we get a useful .equals method
-    assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
+    assertThat(readOnly.toProto()).isEqualTo(expectedReadOnly);
   }
 
   @Test
@@ -912,8 +913,7 @@ public class TransactionTest {
 
     final ReadOnlyOptions readOnly = transactionOptions.getReadOnly();
     assertThat(readOnly.getReadTime()).isNull();
-    // actually build the builder so we get a useful .equals method
-    assertThat(readOnly.toProtoBuilder().build()).isEqualTo(expectedReadOnly);
+    assertThat(readOnly.toProto()).isEqualTo(expectedReadOnly);
   }
 
   @Test
@@ -932,7 +932,9 @@ public class TransactionTest {
   public void readWriteTransactionOptionsBuilder_setNumberOfAttempts() {
     Executor executor = mock(Executor.class);
     final ReadWriteOptionsBuilder builder =
-        TransactionOptions.createReadWriteOptionsBuilder().setExecutor(executor).setNumberOfAttempts(2);
+        TransactionOptions.createReadWriteOptionsBuilder()
+            .setExecutor(executor)
+            .setNumberOfAttempts(2);
     final ReadWrite expectedReadWrite = ReadWrite.newBuilder().build();
 
     final TransactionOptions transactionOptions = builder.build();
@@ -944,8 +946,7 @@ public class TransactionTest {
 
     assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
     final ReadWriteOptions readWrite = options.getReadWrite();
-    // actually build the builder so we get a useful .equals method
-    assertThat(readWrite.toProtoBuilder().build()).isEqualTo(expectedReadWrite);
+    assertThat(readWrite.toProto()).isEqualTo(expectedReadWrite);
   }
 
   @Test
@@ -959,8 +960,7 @@ public class TransactionTest {
     assertThat(transactionOptions.getExecutor()).isNull();
     assertThat(readWrite.getNumberOfAttempts()).isEqualTo(5);
 
-    // actually build the builder so we get a useful .equals method
-    assertThat(readWrite.toProtoBuilder().build()).isEqualTo(expectedReadWrite);
+    assertThat(readWrite.toProto()).isEqualTo(expectedReadWrite);
   }
 
   @Test

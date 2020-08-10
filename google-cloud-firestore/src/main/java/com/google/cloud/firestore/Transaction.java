@@ -93,7 +93,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
     } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
-      final ReadOnly.Builder builder = transactionOptions.getReadOnly().toProtoBuilder();
+      final ReadOnly builder = transactionOptions.getReadOnly().toProto();
       beginTransaction.getOptionsBuilder().setReadOnly(builder);
     }
 
