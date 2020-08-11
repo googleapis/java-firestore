@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.Timestamp;
@@ -52,6 +53,7 @@ import javax.annotation.Nullable;
  * Abstract class that collects and bundles all write operations for {@link Transaction} and {@link
  * WriteBatch}.
  */
+@InternalExtensionOnly
 public abstract class UpdateBuilder<T> {
   static class WriteOperation {
     Write.Builder write;

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.InternalApi;
 import com.google.cloud.Timestamp;
 import javax.annotation.Nullable;
 
@@ -23,6 +24,7 @@ import javax.annotation.Nullable;
  * A BatchWriteResult wraps the write time and status returned by Firestore when making
  * BatchWriteRequests.
  */
+@InternalApi
 public final class BatchWriteResult {
   private final DocumentReference documentReference;
   @Nullable private final Timestamp writeTime;

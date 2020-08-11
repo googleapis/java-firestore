@@ -150,7 +150,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -172,7 +172,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.update(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -192,7 +192,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.delete(doc1);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -214,7 +214,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -236,7 +236,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -274,7 +274,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result1 = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush();
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -286,13 +286,13 @@ public class BulkWriterTest {
 
   @Test
   public void closeResolvesImmediatelyIfNoWrites() throws Exception {
-    bulkWriter.close().get();
+    bulkWriter.close();
   }
 
   @Test
   public void cannotCallMethodsAfterClose() throws Exception {
     String expected = "BulkWriter has already been closed.";
-    bulkWriter.close().get();
+    bulkWriter.close();
     try {
       bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
       fail("set() should have failed");
@@ -351,7 +351,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 =
         bulkWriter.update(sameDoc, LocalFirestoreHelper.UPDATED_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -377,7 +377,7 @@ public class BulkWriterTest {
 
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.update(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -451,7 +451,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result3 =
         bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     try {
       result1.get();
@@ -542,7 +542,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result3 =
         bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
     assertTrue(result1.isDone());
     assertTrue(result2.isDone());
     assertTrue(result3.isDone());
@@ -591,7 +591,7 @@ public class BulkWriterTest {
     responseStubber.markAllRequestsComplete();
     flush1.get().get();
     flush2.get();
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
     assertEquals(responseStubber.size(), requests.size());
@@ -649,7 +649,7 @@ public class BulkWriterTest {
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
   }
 
   @Test
@@ -665,7 +665,7 @@ public class BulkWriterTest {
     int opCount = 0;
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     for (ApiFuture<WriteResult> result : Arrays.asList(result1, result2)) {
       try {
@@ -690,7 +690,7 @@ public class BulkWriterTest {
     int opCount = 0;
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     for (ApiFuture<WriteResult> result : Arrays.asList(result1, result2)) {
       try {
@@ -723,7 +723,7 @@ public class BulkWriterTest {
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result.get().getUpdateTime());
   }
@@ -745,7 +745,7 @@ public class BulkWriterTest {
             batchWriteCapture.capture(),
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close().get();
+    bulkWriter.close();
 
     try {
       result.get();

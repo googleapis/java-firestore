@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -41,47 +42,7 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Used to represent a batch on the BatchQueue. */
-class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
-
-  BulkCommitBatch(FirestoreImpl firestore, int maxBatchSize) {
-    super(firestore, maxBatchSize);
-  }
-
-  BulkCommitBatch(
-      FirestoreImpl firestore,
-      BulkCommitBatch retryBatch,
-      final Set<DocumentReference> docsToRetry) {
-    super(firestore);
-    this.writes.addAll(
-        FluentIterable.from(retryBatch.writes)
-            .filter(
-                new Predicate<WriteOperation>() {
-                  @Override
-                  public boolean apply(WriteOperation writeOperation) {
-                    return docsToRetry.contains(writeOperation.documentReference);
-                  }
-                })
-            .toList());
-
-    Preconditions.checkState(
-        retryBatch.state == BatchState.SENT,
-        "Batch should be SENT when creating a new BulkCommitBatch for retry");
-    this.state = retryBatch.state;
-    this.pendingOperations = retryBatch.pendingOperations;
-  }
-
-  ApiFuture<WriteResult> wrapResult(ApiFuture<WriteResult> result) {
-    return result;
-  }
-
-  @Override
-  boolean allowDuplicateDocs() {
-    return false;
-  }
-}
-
-public class BulkWriter {
+public final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 500;
 
@@ -513,18 +474,13 @@ public class BulkWriter {
    *
    * <p>After calling `close()`, calling any method wil return an error.
    *
-   * <p>Returns an ApiFuture that completes when there are no more pending writes. The ApiFuture
-   * will never error. Calling this method will send all requests. The ApiFuture completes
-   * immediately if there are no pending writes.
-   *
-   * @return An ApiFuture that completes when all enqueued writes up to this point have been
-   *     committed.
+   * <p>This method completes when there are no more pending writes. Calling this method will send
+   * all requests.
    */
-  @Nonnull
-  public ApiFuture<Void> close() {
+  public void close() throws InterruptedException, ExecutionException {
     ApiFuture<Void> flushFuture = flush();
     closed = true;
-    return flushFuture;
+    flushFuture.get();
   }
 
   private void verifyNotClosed() {
