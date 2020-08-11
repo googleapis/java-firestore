@@ -157,4 +157,14 @@
     <to>com.google.cloud.firestore.CollectionGroup</to>
   </difference>
 
+  <!--
+  FakeCredentials Refactor
+  com.google.cloud.firestore.FirestoreOptions$Builder$FakeCredentials -> com.google.cloud.firestore.FirestoreOptions$EmulatorCredentials
+  -->
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/FirestoreOptions$Builder$FakeCredentials</className>
+    <to>*</to>
+  </difference>
+
 </differences>
