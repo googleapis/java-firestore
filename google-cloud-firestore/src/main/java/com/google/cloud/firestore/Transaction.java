@@ -69,6 +69,10 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     previousTransactionId = previousTransaction != null ? previousTransaction.transactionId : null;
   }
 
+  Transaction wrapResult(ApiFuture<WriteResult> result) {
+    return this;
+  }
+
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();

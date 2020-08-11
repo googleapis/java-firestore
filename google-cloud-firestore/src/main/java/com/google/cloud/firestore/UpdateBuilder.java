@@ -19,21 +19,31 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalExtensionOnly;
+import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.rpc.StatusCode.Code;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
+import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
@@ -43,15 +53,61 @@ import javax.annotation.Nullable;
  * Abstract class that collects and bundles all write operations for {@link Transaction} and {@link
  * WriteBatch}.
  */
-public abstract class UpdateBuilder<T extends UpdateBuilder> {
+@InternalExtensionOnly
+public abstract class UpdateBuilder<T> {
+  static class WriteOperation {
+    Write.Builder write;
+    DocumentReference documentReference;
+
+    WriteOperation(DocumentReference documentReference, Write.Builder write) {
+      this.documentReference = documentReference;
+      this.write = write;
+    }
+  }
 
   final FirestoreImpl firestore;
-  private final List<Write.Builder> writes;
+  protected final List<WriteOperation> writes;
   private boolean committed;
+  private final int maxBatchSize;
+
+  protected BatchState state = BatchState.OPEN;
+  protected Map<DocumentReference, SettableApiFuture<WriteResult>> pendingOperations =
+      new HashMap<>();
+
+  /**
+   * Used to represent the state of batch.
+   *
+   * <p>Writes can only be added while the batch is OPEN. For a batch to be sent, the batch must be
+   * READY_TO_SEND. After a batch is sent, it is marked as SENT.
+   */
+  enum BatchState {
+    OPEN,
+    READY_TO_SEND,
+    SENT,
+  }
 
   UpdateBuilder(FirestoreImpl firestore) {
+    this(firestore, BulkWriter.MAX_BATCH_SIZE);
+  }
+
+  UpdateBuilder(FirestoreImpl firestore, int maxBatchSize) {
     this.firestore = firestore;
+    this.maxBatchSize = maxBatchSize;
     this.writes = new ArrayList<>();
+  }
+
+  /**
+   * Wraps the result of the write operation before it is returned.
+   *
+   * <p>This method is used to generate the return value for all public methods. It allows
+   * operations on Transaction and Writebatch to return the object for chaining, while also allowing
+   * BulkWriter operations to return the future directly.
+   */
+  abstract T wrapResult(ApiFuture<WriteResult> result);
+
+  /** Whether to allow multiple writes to the same document in a batch. */
+  boolean allowDuplicateDocs() {
+    return true;
   }
 
   /**
@@ -124,9 +180,9 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    writes.add(write);
+    writes.add(new WriteOperation(documentReference, write));
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   private void verifyNotCommitted() {
@@ -254,9 +310,9 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       write.setUpdateMask(documentMask.toPb());
     }
 
-    writes.add(write);
+    writes.add(new WriteOperation(documentReference, write));
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -339,18 +395,18 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
    *
    * @param documentReference The DocumentReference to update.
    * @param fields A Map containing the fields and values with which to update the document.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @return The instance for chaining.
    */
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
-      Precondition options) {
+      Precondition precondition) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
     return performUpdate(
-        documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), options);
+        documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), precondition);
   }
 
   /**
@@ -402,7 +458,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
    * doesn't exist yet, the update will fail.
    *
    * @param documentReference The DocumentReference to update.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
@@ -411,15 +467,15 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull String field,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
     return performUpdate(
         documentReference,
-        options,
+        precondition,
         FieldPath.fromDotSeparatedString(field),
         value,
         moreFieldsAndValues);
@@ -430,7 +486,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
    * doesn't exist yet, the update will fail.
    *
    * @param documentReference The DocumentReference to update.
-   * @param options Preconditions to enforce on this update.
+   * @param precondition Precondition to enforce on this update.
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
@@ -439,18 +495,18 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
   @Nonnull
   public T update(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !options.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
-    return performUpdate(documentReference, options, fieldPath, value, moreFieldsAndValues);
+        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+    return performUpdate(documentReference, precondition, fieldPath, value, moreFieldsAndValues);
   }
 
   private T performUpdate(
       @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition options,
+      @Nonnull Precondition precondition,
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object[] moreFieldsAndValues) {
@@ -483,7 +539,7 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
       fields.put(currentPath, objectValue);
     }
 
-    return performUpdate(documentReference, fields, options);
+    return performUpdate(documentReference, fields, precondition);
   }
 
   private T performUpdate(
@@ -523,9 +579,9 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     if (!documentTransform.isEmpty()) {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
-    writes.add(write);
+    writes.add(new WriteOperation(documentReference, write));
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /**
@@ -560,9 +616,9 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     if (!precondition.isEmpty()) {
       write.setCurrentDocument(precondition.toPb());
     }
-    writes.add(write);
+    writes.add(new WriteOperation(documentReference, write));
 
-    return (T) this;
+    return wrapResult(processOperation(documentReference));
   }
 
   /** Commit the current batch. */
@@ -576,8 +632,8 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
     final CommitRequest.Builder request = CommitRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
-    for (Write.Builder write : writes) {
-      request.addWrites(write);
+    for (WriteOperation writeOperation : writes) {
+      request.addWrites(writeOperation.write);
     }
 
     if (transactionId != null) {
@@ -609,6 +665,61 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
         MoreExecutors.directExecutor());
   }
 
+  /**
+   * Commits all pending operations to the database and verifies all preconditions.
+   *
+   * <p>The writes in the batch are not applied atomically and can be applied out of order.
+   */
+  ApiFuture<List<BatchWriteResult>> bulkCommit() {
+    Tracing.getTracer()
+        .getCurrentSpan()
+        .addAnnotation(
+            "CloudFirestore.BatchWrite",
+            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
+
+    final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
+    request.setDatabase(firestore.getDatabaseName());
+
+    for (WriteOperation writeOperation : writes) {
+      request.addWrites(writeOperation.write);
+    }
+
+    ApiFuture<BatchWriteResponse> response =
+        firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable());
+
+    return ApiFutures.transform(
+        response,
+        new ApiFunction<BatchWriteResponse, List<BatchWriteResult>>() {
+          @Override
+          public List<BatchWriteResult> apply(BatchWriteResponse batchWriteResponse) {
+            List<com.google.firestore.v1.WriteResult> writeResults =
+                batchWriteResponse.getWriteResultsList();
+
+            List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
+
+            List<BatchWriteResult> result = new ArrayList<>();
+
+            for (int i = 0; i < writeResults.size(); ++i) {
+              com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
+              com.google.rpc.Status status = statuses.get(i);
+              Status code = Status.fromCodeValue(status.getCode());
+              @Nullable Timestamp updateTime = null;
+              @Nullable Exception exception = null;
+              if (code == Status.OK) {
+                updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
+              } else {
+                exception = FirestoreException.serverRejected(code, status.getMessage());
+              }
+              result.add(
+                  new BatchWriteResult(writes.get(i).documentReference, updateTime, exception));
+            }
+
+            return result;
+          }
+        },
+        MoreExecutors.directExecutor());
+  }
+
   /** Checks whether any updates have been queued. */
   boolean isEmpty() {
     return writes.isEmpty();
@@ -617,5 +728,88 @@ public abstract class UpdateBuilder<T extends UpdateBuilder> {
   /** Get the number of writes. */
   public int getMutationsSize() {
     return writes.size();
+  }
+
+  BatchState getState() {
+    return state;
+  }
+
+  boolean hasDocument(DocumentReference documentReference) {
+    return pendingOperations.containsKey(documentReference);
+  }
+
+  Set<DocumentReference> getPendingDocuments() {
+    return pendingOperations.keySet();
+  }
+
+  Collection<SettableApiFuture<WriteResult>> getPendingFutures() {
+    return pendingOperations.values();
+  }
+
+  int getPendingOperationCount() {
+    return pendingOperations.size();
+  }
+
+  private ApiFuture<WriteResult> processOperation(DocumentReference documentReference) {
+    Preconditions.checkState(
+        allowDuplicateDocs() || !pendingOperations.containsKey(documentReference),
+        "Batch should not contain writes to the same document");
+    Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
+    SettableApiFuture<WriteResult> result = SettableApiFuture.create();
+    pendingOperations.put(documentReference, result);
+
+    if (getPendingOperationCount() == maxBatchSize) {
+      state = BatchState.READY_TO_SEND;
+    }
+
+    return result;
+  }
+
+  /**
+   * Resolves the individual operations in the batch with the results and removes the entry from the
+   * pendingOperations map if the result is not retryable.
+   */
+  void processResults(List<BatchWriteResult> results) {
+    for (BatchWriteResult result : results) {
+      if (result.getException() == null || !shouldRetry(result.getException())) {
+        convertBatchWriteResult(result, pendingOperations.get(result.getDocumentReference()));
+        pendingOperations.remove(result.getDocumentReference());
+      }
+    }
+  }
+
+  void failRemainingOperations(List<BatchWriteResult> results) {
+    for (BatchWriteResult result : results) {
+      convertBatchWriteResult(result, pendingOperations.get(result.getDocumentReference()));
+    }
+  }
+
+  private boolean shouldRetry(Exception exception) {
+    if (!(exception instanceof FirestoreException)) {
+      return false;
+    }
+    Set<Code> codes = FirestoreSettings.newBuilder().batchWriteSettings().getRetryableCodes();
+    Status status = ((FirestoreException) exception).getStatus();
+    for (Code code : codes) {
+      if (code.equals(Code.valueOf(status.getCode().name()))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void convertBatchWriteResult(
+      BatchWriteResult result, SettableApiFuture<WriteResult> future) {
+    if (result.getWriteTime() != null) {
+      future.set(new WriteResult(result.getWriteTime()));
+    } else {
+      future.setException(result.getException());
+    }
+  }
+
+  void markReadyToSend() {
+    if (state == BatchState.OPEN) {
+      state = BatchState.READY_TO_SEND;
+    }
   }
 }
