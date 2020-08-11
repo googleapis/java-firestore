@@ -226,39 +226,39 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
                 .build());
         // Use a `CredentialProvider` to match the Firebase Admin SDK, which prevents the Admin SDK
         // from overwriting the Emulator credentials.
-        this.setCredentialsProvider(FixedCredentialsProvider.create(new FakeCredentials()));
+        this.setCredentialsProvider(FixedCredentialsProvider.create(new EmulatorCredentials()));
       }
 
       return new FirestoreOptions(this);
     }
+  }
 
-    public class FakeCredentials extends Credentials {
-      private final Map<String, List<String>> HEADERS =
-          ImmutableMap.of("Authorization", Arrays.asList("Bearer owner"));
+  public static class EmulatorCredentials extends Credentials {
+    private final Map<String, List<String>> HEADERS =
+        ImmutableMap.of("Authorization", Arrays.asList("Bearer owner"));
 
-      @Override
-      public String getAuthenticationType() {
-        throw new IllegalArgumentException("Not supported");
-      }
-
-      @Override
-      public Map<String, List<String>> getRequestMetadata(URI uri) {
-        return HEADERS;
-      }
-
-      @Override
-      public boolean hasRequestMetadata() {
-        return true;
-      }
-
-      @Override
-      public boolean hasRequestMetadataOnly() {
-        return true;
-      }
-
-      @Override
-      public void refresh() {}
+    @Override
+    public String getAuthenticationType() {
+      throw new IllegalArgumentException("Not supported");
     }
+
+    @Override
+    public Map<String, List<String>> getRequestMetadata(URI uri) {
+      return HEADERS;
+    }
+
+    @Override
+    public boolean hasRequestMetadata() {
+      return true;
+    }
+
+    @Override
+    public boolean hasRequestMetadataOnly() {
+      return true;
+    }
+
+    @Override
+    public void refresh() {}
   }
 
   @InternalApi("This class should only be extended within google-cloud-java")
