@@ -35,6 +35,11 @@
     <method>com.google.cloud.firestore.FirestoreOptions$Builder setTimestampsInSnapshotsEnabled(boolean)</method>
   </difference>
   <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/FirestoreOptions</className>
+    <method>boolean areTimestampsInSnapshotsEnabled()</method>
+  </difference>
+  <difference>
     <differenceType>8001</differenceType>
     <className>com/google/cloud/firestore/v1beta1/**/*</className>
     <to>*</to>

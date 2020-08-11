@@ -53,14 +53,11 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
           .add("https://www.googleapis.com/auth/cloud-platform")
           .add("https://www.googleapis.com/auth/datastore")
           .build();
-  private static final boolean DEFAULT_TIMESTAMPS_IN_SNAPSHOTS_ENABLED = true;
-
   private static final long serialVersionUID = -5853552236134770090L;
 
   private static final String FIRESTORE_EMULATOR_SYSTEM_VARIABLE = "FIRESTORE_EMULATOR_HOST";
 
   private final String databaseId;
-  private final boolean timestampsInSnapshotsEnabled;
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
 
@@ -120,7 +117,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
-    @Nullable private Boolean timestampsInSnapshotsEnabled = null;
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
 
@@ -129,7 +125,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     private Builder(FirestoreOptions options) {
       super(options);
       this.databaseId = options.databaseId;
-      this.timestampsInSnapshotsEnabled = options.timestampsInSnapshotsEnabled;
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
     }
@@ -275,11 +270,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
-    this.timestampsInSnapshotsEnabled =
-        builder.timestampsInSnapshotsEnabled != null
-            ? builder.timestampsInSnapshotsEnabled
-            : DEFAULT_TIMESTAMPS_IN_SNAPSHOTS_ENABLED;
-
     this.channelProvider =
         builder.channelProvider != null
             ? builder.channelProvider
@@ -342,14 +332,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @Nonnull
   public static GoogleCredentialsProvider.Builder getDefaultCredentialsProviderBuilder() {
     return FirestoreSettings.defaultCredentialsProviderBuilder();
-  }
-
-  /**
-   * Returns whether or not {@link DocumentSnapshot DocumentSnapshots} return timestamp fields as
-   * {@link com.google.cloud.Timestamp Timestamps}.
-   */
-  public boolean areTimestampsInSnapshotsEnabled() {
-    return timestampsInSnapshotsEnabled;
   }
 
   @Override
