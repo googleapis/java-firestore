@@ -83,14 +83,7 @@ class TransactionRunner<T> {
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
     this.userCallback = userCallback;
-    switch (transactionOptions.getType()) {
-      case READ_WRITE:
-        this.attemptsRemaining = transactionOptions.getReadWrite().getNumberOfAttempts();
-        break;
-      case READ_ONLY:
-        this.attemptsRemaining = 1;
-        break;
-    }
+    this.attemptsRemaining = transactionOptions.getNumberOfAttempts();
     this.userCallbackExecutor =
         Context.currentContextExecutor(
             transactionOptions.getExecutor() != null

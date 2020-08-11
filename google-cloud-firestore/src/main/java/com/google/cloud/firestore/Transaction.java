@@ -25,7 +25,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.RollbackRequest;
-import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import java.util.List;
@@ -92,9 +91,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
-    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
-      final ReadOnly builder = transactionOptions.getReadOnly().toProto();
-      beginTransaction.getOptionsBuilder().setReadOnly(builder);
+    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType()) && transactionOptions.getReadTime()!= null) {
+        beginTransaction.getOptionsBuilder().getReadOnlyBuilder().setReadTime(transactionOptions.getReadTime());
     }
 
     ApiFuture<BeginTransactionResponse> transactionBeginFuture =

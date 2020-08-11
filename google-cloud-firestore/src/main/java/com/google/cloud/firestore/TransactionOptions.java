@@ -16,14 +16,10 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.InternalApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.common.base.Preconditions;
-import com.google.firestore.v1.TransactionOptions.ReadOnly;
-import com.google.firestore.v1.TransactionOptions.ReadWrite;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.TimestampOrBuilder;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,33 +48,26 @@ public final class TransactionOptions {
 
   private final Executor executor;
   private final TransactionOptionsType type;
-  private final ReadOnlyOptions readOnly;
-  private final ReadWriteOptions readWrite;
+  private final int numberOfAttempts;
+  @Nullable
+  private final Timestamp readTime;
 
   TransactionOptions(
       Executor executor,
       TransactionOptionsType type,
-      ReadOnlyOptions readOnly,
-      ReadWriteOptions readWrite) {
+      int numberOfAttempts,
+      @Nullable Timestamp readTime) {
     this.executor = executor;
     this.type = type;
-    this.readOnly = readOnly;
-    this.readWrite = readWrite;
+    this.numberOfAttempts = numberOfAttempts;
+    this.readTime = readTime;
   }
 
   /**
    * @return the initial number of attempts a read-write transaction will be attempted
-   * @deprecated as of v2.0.0, only applicable to Read-Write transactions. Use {@link
-   *     ReadWriteOptions#getNumberOfAttempts()} instead
    */
-  @Deprecated
-  @InternalApi
   public int getNumberOfAttempts() {
-    if (type == TransactionOptionsType.READ_WRITE) {
-      return readWrite.numberOfAttempts;
-    } else {
-      return 1;
-    }
+    return numberOfAttempts;
   }
 
   /** @return Executor to be used to run user callbacks on */
@@ -88,9 +77,7 @@ public final class TransactionOptions {
   }
 
   /**
-   * A type flag indicating the type of transaction represented. This method should be called before
-   * any call to {@link #getReadOnly()} or {@link #getReadWrite()} to determine with method to call.
-   * If a miss-matched {@code get} method is called an {@link IllegalStateException} will be thrown.
+   * A type flag indicating the type of transaction represented.
    *
    * @return The type of transaction this represents. Either read-only or read-write.
    */
@@ -100,37 +87,18 @@ public final class TransactionOptions {
   }
 
   /**
-   * Get the set of read-only options for this instance. Before calling this method {@link
-   * #getType()} should be called, and the return value should be {@link
-   * TransactionOptionsType#READ_ONLY}.
+   * Specify to read documents at the given time. This may not be more than 60 in the past from
+   * when the request is processed by the server.
    *
-   * @return The instance of {@link ReadOnlyOptions} held in this instance if this instance in fact
-   *     read-only.
-   * @throws IllegalStateException if the type of this instance is {@link
-   *     TransactionOptionsType#READ_WRITE}
+   * @return The specific time to read documents at. A null value means read most up to date data.
    */
-  @Nonnull
-  public ReadOnlyOptions getReadOnly() {
-    Preconditions.checkState(
-        readOnly != null && readWrite == null, "Unable to call getReadOnly for ReadWriteOptions");
-    return readOnly;
-  }
-
-  /**
-   * Get the set of read-write options for this instance. Before calling this method {@link
-   * #getType()} should be called, and the return value should be {@link
-   * TransactionOptionsType#READ_WRITE}.
-   *
-   * @return The instance of {@link ReadWriteOptions} held in this instance if this instance in fact
-   *     read-write.
-   * @throws IllegalStateException if the type of this instance is {@link
-   *     TransactionOptionsType#READ_ONLY}
-   */
-  @Nonnull
-  public ReadWriteOptions getReadWrite() {
-    Preconditions.checkState(
-        readWrite != null && readOnly == null, "Unable to call getReadWrite for ReadOnlyOptions");
-    return readWrite;
+  @Nullable
+  public Timestamp getReadTime() {
+    if (TransactionOptionsType.READ_ONLY.equals(type)) {
+      return readTime;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -287,7 +255,7 @@ public final class TransactionOptions {
         timestamp = (Timestamp) readTime;
       }
       return new TransactionOptions(
-          executor, TransactionOptionsType.READ_ONLY, new ReadOnlyOptions(timestamp), null);
+          executor, TransactionOptionsType.READ_ONLY, 1, timestamp);
     }
   }
 
@@ -336,8 +304,8 @@ public final class TransactionOptions {
       return new TransactionOptions(
           executor,
           TransactionOptionsType.READ_WRITE,
-          null,
-          new ReadWriteOptions(numberOfAttempts));
+          numberOfAttempts,
+          null);
     }
   }
 
@@ -346,97 +314,4 @@ public final class TransactionOptions {
     READ_WRITE
   }
 
-  /**
-   * A typesafe options class representing those options that are applicable when configuring a
-   * transaction to be read-only.
-   */
-  public static final class ReadOnlyOptions {
-    @Nullable private final Timestamp readTime;
-
-    private ReadOnlyOptions(@Nullable Timestamp readTime) {
-      this.readTime = readTime;
-    }
-
-    ReadOnly toProto() {
-      final ReadOnly.Builder builder = ReadOnly.getDefaultInstance().toBuilder();
-      if (readTime != null) {
-        builder.setReadTime(readTime);
-      }
-      return builder.build();
-    }
-
-    /**
-     * Specify to read documents at the given time. This may not be more than 60 in the past from
-     * when the request is processed by the server.
-     *
-     * @return The specific time to read documents at. Must not be older than 60 seconds. A null
-     *     value means read most up to date data.
-     */
-    @Nullable
-    public Timestamp getReadTime() {
-      return readTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      ReadOnlyOptions that = (ReadOnlyOptions) o;
-      return Objects.equals(readTime, that.readTime);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(readTime);
-    }
-  }
-
-  /**
-   * A typesafe options class representing those options that are applicable when configuring a
-   * transaction to be read-write. By default, a read-write transaction will be attempted a max of 5
-   * times.
-   */
-  public static final class ReadWriteOptions {
-    private static final ReadWrite PROTO = ReadWrite.getDefaultInstance().toBuilder().build();
-    private final int numberOfAttempts;
-
-    private ReadWriteOptions(int numberOfAttempts) {
-      this.numberOfAttempts = numberOfAttempts;
-    }
-
-    ReadWrite toProto() {
-      return PROTO;
-    }
-
-    /**
-     * Specify the max number of attempts a transaction will be attempted before resulting in an
-     * error.
-     *
-     * @return The max number of attempts to try and commit the transaction.
-     */
-    public int getNumberOfAttempts() {
-      return numberOfAttempts;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      ReadWriteOptions that = (ReadWriteOptions) o;
-      return numberOfAttempts == that.numberOfAttempts;
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(numberOfAttempts);
-    }
-  }
 }
