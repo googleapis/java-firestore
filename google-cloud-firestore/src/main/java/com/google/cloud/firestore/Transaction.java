@@ -91,8 +91,12 @@ public final class Transaction extends UpdateBuilder<Transaction> {
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
-    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType()) && transactionOptions.getReadTime()!= null) {
-        beginTransaction.getOptionsBuilder().getReadOnlyBuilder().setReadTime(transactionOptions.getReadTime());
+    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())
+        && transactionOptions.getReadTime() != null) {
+      beginTransaction
+          .getOptionsBuilder()
+          .getReadOnlyBuilder()
+          .setReadTime(transactionOptions.getReadTime());
     }
 
     ApiFuture<BeginTransactionResponse> transactionBeginFuture =

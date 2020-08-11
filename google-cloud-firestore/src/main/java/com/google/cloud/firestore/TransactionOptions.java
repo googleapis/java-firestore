@@ -29,10 +29,10 @@ import javax.annotation.Nullable;
  *
  * <p>A transaction in Firestore can be either read-write or read-only.
  *
- * <p>The default set of options is a read-write transaction with a max attempt count of 5. This
- * attempt count can be customized via the {@link ReadWriteOptionsBuilder#setNumberOfAttempts(int)}
- * method. A new instance of a builder can be created by calling {@link
- * #createReadWriteOptionsBuilder()}.
+ * <p>The default set of options is a read-write transaction with a maximum number of 5 attempts.
+ * This attempt count can be customized via the {@link
+ * ReadWriteOptionsBuilder#setNumberOfAttempts(int)} method. A new instance of a builder can be
+ * created by calling {@link #createReadWriteOptionsBuilder()}.
  *
  * <p>A read-only transaction can be configured via the {@link ReadOnlyOptionsBuilder} class. A new
  * instance can be created by calling {@link #createReadOnlyOptionsBuilder()}.
@@ -49,8 +49,7 @@ public final class TransactionOptions {
   private final Executor executor;
   private final TransactionOptionsType type;
   private final int numberOfAttempts;
-  @Nullable
-  private final Timestamp readTime;
+  @Nullable private final Timestamp readTime;
 
   TransactionOptions(
       Executor executor,
@@ -64,7 +63,10 @@ public final class TransactionOptions {
   }
 
   /**
-   * @return the initial number of attempts a read-write transaction will be attempted
+   * Returns the maximum number of times a transaction will be attempted before resulting in an
+   * error.
+   *
+   * @return The max number of attempts to try and commit the transaction.
    */
   public int getNumberOfAttempts() {
     return numberOfAttempts;
@@ -87,8 +89,10 @@ public final class TransactionOptions {
   }
 
   /**
-   * Specify to read documents at the given time. This may not be more than 60 in the past from
-   * when the request is processed by the server.
+   * A {@link Timestamp} specifying the time documents are to be read at. If null, the server will
+   * read documents at the most up to date available. If nonnull, the specified {@code Timestamp}
+   * may not be more than 60 seconds in the past (evaluated when the request is processed by the
+   * server).
    *
    * @return The specific time to read documents at. A null value means read most up to date data.
    */
@@ -161,7 +165,7 @@ public final class TransactionOptions {
   }
 
   /**
-   * @return a new builder with default values applicable to configuring options for a read-write
+   * @return a new Builder with default values applicable to configuring options for a read-write
    *     transaction.
    */
   @Nonnull
@@ -170,7 +174,7 @@ public final class TransactionOptions {
   }
 
   /**
-   * @return a new builder with default values applicable to configuring options for a read-only
+   * @return a new Builder with default values applicable to configuring options for a read-only
    *     transaction.
    */
   @Nonnull
@@ -232,8 +236,8 @@ public final class TransactionOptions {
     }
 
     /**
-     * Specify to read documents at the given time. This may not be more than 60 in the past from
-     * when the request is processed by the server.
+     * Specify to read documents at the given time. This may not be more than 60 seconds in the past
+     * from when the request is processed by the server.
      *
      * @param readTime The specific time to read documents at. Must not be older than 60 seconds. A
      *     null value means read most up to date data.
@@ -254,8 +258,7 @@ public final class TransactionOptions {
       } else {
         timestamp = (Timestamp) readTime;
       }
-      return new TransactionOptions(
-          executor, TransactionOptionsType.READ_ONLY, 1, timestamp);
+      return new TransactionOptions(executor, TransactionOptionsType.READ_ONLY, 1, timestamp);
     }
   }
 
@@ -302,10 +305,7 @@ public final class TransactionOptions {
     @Override
     public TransactionOptions build() {
       return new TransactionOptions(
-          executor,
-          TransactionOptionsType.READ_WRITE,
-          numberOfAttempts,
-          null);
+          executor, TransactionOptionsType.READ_WRITE, numberOfAttempts, null);
     }
   }
 
@@ -313,5 +313,4 @@ public final class TransactionOptions {
     READ_ONLY,
     READ_WRITE
   }
-
 }
