@@ -90,14 +90,17 @@ public final class TransactionOptions {
 
   /**
    * A {@link Timestamp} specifying the time documents are to be read at. If null, the server will
-   * read documents at the most up to date available. If nonnull, the specified {@code Timestamp}
+   * read documents at the most up to date available. If non-null, the specified {@code Timestamp}
    * may not be more than 60 seconds in the past (evaluated when the request is processed by the
    * server).
    *
-   * @return The specific time to read documents at. A null value means read most up to date data.
+   * @return The specific time to read documents at. A null value means reading the most up to date
+   *     data.
    */
   @Nullable
   public Timestamp getReadTime() {
+    // This if statement is not strictly necessary, however is kept here for clarity sake to show
+    // that readTime is only applicable to a read-only transaction type.
     if (TransactionOptionsType.READ_ONLY.equals(type)) {
       return readTime;
     } else {

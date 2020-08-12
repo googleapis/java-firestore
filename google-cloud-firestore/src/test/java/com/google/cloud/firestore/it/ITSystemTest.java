@@ -1448,7 +1448,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void readOnlyTransaction_faliureWhenAttemptingWrite()
+  public void readOnlyTransaction_failureWhenAttemptingWrite()
       throws InterruptedException, TimeoutException {
 
     final DocumentReference documentReference = randomColl.document("tx/ro/writeShouldFail");
