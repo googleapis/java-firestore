@@ -18,6 +18,7 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -56,12 +57,16 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
+import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunQueryRequest;
+import io.grpc.Status;
+import io.grpc.Status.Code;
+import io.grpc.StatusRuntimeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,8 +77,12 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -1412,6 +1421,93 @@ public class ITSystemTest {
 
     ApiFuture<DocumentSnapshot> result = docRef.get();
     assertEquals(Collections.singletonMap("foo", "bar3"), result.get().getData());
+  }
+
+  @Test
+  public void readOnlyTransaction_successfulGet()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    final AtomicReference<DocumentSnapshot> ref = new AtomicReference<>();
+
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) throws Exception {
+                final DocumentSnapshot snapshot =
+                    transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+                ref.compareAndSet(null, snapshot);
+                return null;
+              }
+            },
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
+
+    runTransaction.get(10, TimeUnit.SECONDS);
+    assertEquals("bar", ref.get().get("foo"));
+  }
+
+  @Test
+  public void readOnlyTransaction_failureWhenAttemptingWrite()
+      throws InterruptedException, TimeoutException {
+
+    final DocumentReference documentReference = randomColl.document("tx/ro/writeShouldFail");
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) {
+                transaction.set(documentReference, SINGLE_FIELD_MAP);
+                return null;
+              }
+            },
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
+
+    try {
+      runTransaction.get(10, TimeUnit.SECONDS);
+    } catch (ExecutionException e) {
+      final Throwable cause = e.getCause();
+      assertThat(cause).isInstanceOf(FirestoreException.class);
+      final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+      final Status status = invalidArgument.getStatus();
+      assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
+      assertThat(status.getDescription()).contains("read-only");
+    }
+  }
+
+  @Test
+  public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    final TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(0))
+            .build();
+
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) throws Exception {
+                transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+                return null;
+              }
+            },
+            options);
+
+    try {
+      runTransaction.get(10, TimeUnit.SECONDS);
+    } catch (ExecutionException e) {
+      final Throwable rootCause = ExceptionUtils.getRootCause(e);
+      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+      final Status status = invalidArgument.getStatus();
+      assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
+      assertThat(status.getDescription()).contains("old");
+    }
   }
 
   /** Wrapper around ApiStreamObserver that returns the results in a list. */

@@ -34,12 +34,14 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
 import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -51,6 +53,9 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
+import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
@@ -64,6 +69,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,10 +80,10 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+@SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
 
@@ -86,7 +92,7 @@ public class TransactionTest {
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
-  @Spy private FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+  @Spy private FirestoreRpc firestoreRpc = mock(FirestoreRpc.class);
 
   @Spy
   private FirestoreImpl firestoreMock =
@@ -864,5 +870,80 @@ public class TransactionTest {
 
     assertEquals(begin(), requests.get(0));
     assertEquals(commit(TRANSACTION_ID, writes.toArray(new Write[] {})), requests.get(1));
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_setReadTime() {
+    Executor executor = mock(Executor.class);
+    final com.google.protobuf.Timestamp.Builder readTime =
+        com.google.protobuf.Timestamp.getDefaultInstance().toBuilder().setSeconds(1).setNanos(0);
+    final ReadOnlyOptionsBuilder builder =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setExecutor(executor)
+            .setReadTime(readTime);
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getReadTime()).isSameInstanceAs(readTime);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
+    assertThat(transactionOptions.getReadTime()).isEqualTo(readTime.build());
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(1);
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_defaults() {
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.createReadOnlyOptionsBuilder();
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isNull();
+    assertThat(builder.getReadTime()).isNull();
+
+    assertThat(transactionOptions.getReadTime()).isNull();
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(1);
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_setNumberOfAttempts() {
+    Executor executor = mock(Executor.class);
+    final ReadWriteOptionsBuilder builder =
+        TransactionOptions.createReadWriteOptionsBuilder()
+            .setExecutor(executor)
+            .setNumberOfAttempts(2);
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getNumberOfAttempts()).isEqualTo(2);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(2);
+    assertThat(transactionOptions.getReadTime()).isNull();
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_defaults() {
+    final TransactionOptions transactionOptions =
+        TransactionOptions.createReadWriteOptionsBuilder().build();
+
+    assertThat(transactionOptions.getExecutor()).isNull();
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(5);
+    assertThat(transactionOptions.getReadTime()).isNull();
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_errorAttemptingToSetNumAttemptsLessThanOne() {
+    try {
+      TransactionOptions.createReadWriteOptionsBuilder().setNumberOfAttempts(0);
+      fail("Error expected");
+    } catch (IllegalArgumentException ignore) {
+      // expected
+    }
   }
 }
