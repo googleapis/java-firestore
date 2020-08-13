@@ -19,7 +19,7 @@ package com.google.cloud.firestore;
 import javax.annotation.Nonnull;
 
 /** Options used to disable request throttling in BulkWriter. */
-public final class BulkWriterOptions {
+final class BulkWriterOptions {
 
   private final boolean enableThrottling;
 
