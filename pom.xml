@@ -216,4 +216,13 @@
     <module>google-cloud-firestore-bom</module>
   </modules>
 
+  <profiles>
+    <profile>
+      <id>enable-samples</id>
+      <modules>
+        <module>samples</module>
+      </modules>
+    </profile>
+  </profiles>
+
 </project>
