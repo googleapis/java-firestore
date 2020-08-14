@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class BulkWriter implements AutoCloseable {
+final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 500;
 
