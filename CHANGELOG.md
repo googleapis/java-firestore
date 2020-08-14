@@ -1,5 +1,44 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/googleapis/java-firestore/compare/v1.35.2...v2.0.0) (2020-08-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* add support for the Query Partition API (#202)
+* move FirestoreAdminClient and associated classes to new artifact google-cloud-firestore-admin (#311)
+* remove deprecated v1beta1 protos and grpc client (#305)
+* remove deprecated FirestoreOptions#setTimestampsInSnapshotsEnabled (#308)
+* remove deprecated getCollections() methods (#307)
+* various renames due to generator changes
+
+### Features
+
+* add BulkWriter ([#323](https://www.github.com/googleapis/java-firestore/issues/323)) ([e7054df](https://www.github.com/googleapis/java-firestore/commit/e7054df79b4139fdfd0cc6aa0620fbfa1a10a6b0)), closes [/github.com/googleapis/googleapis/blob/393d03088e368d79c8f4cd5e3610c7df0bb118bf/google/firestore/v1/firestore.proto#L866-L881](https://www.github.com/googleapis//github.com/googleapis/googleapis/blob/393d03088e368d79c8f4cd5e3610c7df0bb118bf/google/firestore/v1/firestore.proto/issues/L866-L881)
+* add support for read-only transactions in TransactionOptions ([#320](https://www.github.com/googleapis/java-firestore/issues/320)) ([c25dca3](https://www.github.com/googleapis/java-firestore/commit/c25dca3ed6ca0c156ec60569ebc9f3a481bd4fee))
+* add support for the Query Partition API ([#202](https://www.github.com/googleapis/java-firestore/issues/202)) ([3996548](https://www.github.com/googleapis/java-firestore/commit/39965489cbc836af573e500d57007c88241d7eb6))
+
+
+### Bug Fixes
+
+* refactor FakeCredentials ([#325](https://www.github.com/googleapis/java-firestore/issues/325)) ([269e62c](https://www.github.com/googleapis/java-firestore/commit/269e62c6b8031d48e7f2e282b09b5ffcfadae547)), closes [#190](https://www.github.com/googleapis/java-firestore/issues/190)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.8.5 ([#322](https://www.github.com/googleapis/java-firestore/issues/322)) ([1b21350](https://www.github.com/googleapis/java-firestore/commit/1b21350c0bc4a21cee2b281f944cbd061b1f8898))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.8.6 ([#324](https://www.github.com/googleapis/java-firestore/issues/324)) ([b945fdb](https://www.github.com/googleapis/java-firestore/commit/b945fdb04da76a1e007d012c809449c5a43bb990))
+* update jackson dependencies to v2.11.2 ([#314](https://www.github.com/googleapis/java-firestore/issues/314)) ([15d68cd](https://www.github.com/googleapis/java-firestore/commit/15d68cd93ac1fd206895fd37155a9ba82b9196ca))
+
+
+### Miscellaneous Chores
+
+* enable gapicv2 ([#188](https://www.github.com/googleapis/java-firestore/issues/188)) ([92224bc](https://www.github.com/googleapis/java-firestore/commit/92224bcd52aa88cc6eb1da28747de0535d776a0f)), closes [/github.com/googleapis/googleapis/blob/6f8350c0df231d7e742fa10dbf929f33047715c9/google/firestore/admin/v1/firestore_gapic.yaml#L24-L29](https://www.github.com/googleapis//github.com/googleapis/googleapis/blob/6f8350c0df231d7e742fa10dbf929f33047715c9/google/firestore/admin/v1/firestore_gapic.yaml/issues/L24-L29) [/github.com/googleapis/googleapis/blob/6f8350c0df231d7e742fa10dbf929f33047715c9/google/firestore/admin/v1/field.proto#L39](https://www.github.com/googleapis//github.com/googleapis/googleapis/blob/6f8350c0df231d7e742fa10dbf929f33047715c9/google/firestore/admin/v1/field.proto/issues/L39)
+* move FirestoreAdminClient and associated classes to new artifact google-cloud-firestore-admin ([#311](https://www.github.com/googleapis/java-firestore/issues/311)) ([03ef755](https://www.github.com/googleapis/java-firestore/commit/03ef755dd164e6f1ec749f3f985b913b5ae23d14))
+* remove deprecated FirestoreOptions#setTimestampsInSnapshotsEnabled ([#308](https://www.github.com/googleapis/java-firestore/issues/308)) ([7255a42](https://www.github.com/googleapis/java-firestore/commit/7255a42bcee3a6938dd5fafaef3465f948f39600))
+* remove deprecated getCollections() methods ([#307](https://www.github.com/googleapis/java-firestore/issues/307)) ([bb4ddf1](https://www.github.com/googleapis/java-firestore/commit/bb4ddf1ce3cc3bd2e06a4ad5097bd18060e4467b))
+* remove deprecated v1beta1 protos and grpc client ([#305](https://www.github.com/googleapis/java-firestore/issues/305)) ([96adacb](https://www.github.com/googleapis/java-firestore/commit/96adacbf52ace27e54b7a210d7c73b46922fbcbd))
+
 ### [1.35.2](https://www.github.com/googleapis/java-firestore/compare/v1.35.1...v1.35.2) (2020-07-16)
 
 
