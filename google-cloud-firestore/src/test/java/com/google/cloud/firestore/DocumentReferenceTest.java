@@ -24,6 +24,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.DATE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FIELD_TRANSFORM_COMMIT_RESPONSE;
+import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_LIST;
 import static com.google.cloud.firestore.LocalFirestoreHelper.GEO_POINT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.NESTED_CLASS_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SERVER_TIMESTAMP_PROTO;
@@ -69,10 +70,13 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.InvalidPOJO;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
+import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -1072,5 +1076,34 @@ public class DocumentReferenceTest {
             update(
                 Collections.<String, Value>emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
     assertEquals(expectedCommit, commitCapture.getValue());
+  }
+
+  @Test
+  public void deserializeCustomList() throws ExecutionException, InterruptedException {
+    ImmutableMap CUSTOM_LIST_PROTO =
+        ImmutableMap.<String, Value>builder()
+            .put(
+                "fooList",
+                Value.newBuilder()
+                    .setArrayValue(
+                        ArrayValue.newBuilder()
+                            .addValues(
+                                Value.newBuilder()
+                                    .setMapValue(
+                                        MapValue.newBuilder().putAllFields(SINGLE_FIELD_PROTO))
+                                    .build()))
+                    .build())
+            .build();
+    doAnswer(getAllResponse(CUSTOM_LIST_PROTO))
+        .when(firestoreMock)
+        .streamRequest(
+            getAllCapture.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+    DocumentSnapshot snapshot = documentReference.get().get();
+    LocalFirestoreHelper.CustomList customList =
+        snapshot.toObject(LocalFirestoreHelper.CustomList.class);
+
+    assertEquals(FOO_LIST, customList.fooList);
   }
 }

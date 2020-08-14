@@ -266,7 +266,18 @@ class CustomClassMapper {
       Type genericType = type.getActualTypeArguments()[0];
       if (o instanceof List) {
         List<Object> list = (List<Object>) o;
-        List<Object> result = new ArrayList<>(list.size());
+        List<Object> result = null;
+        try {
+          result =
+              (rawType == List.class)
+                  ? new ArrayList<>(list.size())
+                  : (List<Object>) rawType.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException
+            | IllegalAccessException
+            | NoSuchMethodException
+            | InvocationTargetException e) {
+          throw new RuntimeException(e);
+        }
         for (int i = 0; i < list.size(); i++) {
           result.add(
               deserializeToType(
