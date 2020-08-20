@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_LIST;
+import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.common.truth.Truth.assertThat;
@@ -1412,7 +1413,23 @@ public class ITSystemTest {
     DocumentSnapshot documentSnapshots = documentReference.get().get();
     LocalFirestoreHelper.CustomList targetCustomList =
         documentSnapshots.toObject(LocalFirestoreHelper.CustomList.class);
+
     assertEquals(FOO_LIST, targetCustomList.fooList);
+    assertEquals(SINGLE_FIELD_OBJECT, targetCustomList.fooList.get(0));
+  }
+
+  @Test
+  public void deserializeCustomMap() throws Exception {
+    LocalFirestoreHelper.CustomMap customMap = new LocalFirestoreHelper.CustomMap();
+    customMap.fooMap = FOO_MAP;
+    DocumentReference documentReference = randomColl.document("doc1");
+    documentReference.set(customMap).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    LocalFirestoreHelper.CustomMap targetCustomMap =
+        documentSnapshots.toObject(LocalFirestoreHelper.CustomMap.class);
+
+    assertEquals(FOO_MAP, targetCustomMap.fooMap);
+    assertEquals(SINGLE_FIELD_OBJECT, targetCustomMap.fooMap.get("customMap"));
   }
 
   /** Wrapper around ApiStreamObserver that returns the results in a list. */

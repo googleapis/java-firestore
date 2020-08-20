@@ -144,6 +144,7 @@ public final class LocalFirestoreHelper {
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
   public static final FooList<SingleField> FOO_LIST = new FooList<>();
+  public static final FooMap<String, SingleField> FOO_MAP = new FooMap<>();
 
   public static final Precondition UPDATE_PRECONDITION;
 
@@ -176,6 +177,18 @@ public final class LocalFirestoreHelper {
     public CustomList() {}
 
     public FooList<SingleField> fooList;
+  }
+
+  public static class FooMap<K, V> extends HashMap<K, V> {
+    public FooMap() {
+      super();
+    }
+  }
+
+  public static class CustomMap {
+    public CustomMap() {}
+
+    public FooMap<String, SingleField> fooMap;
   }
 
   public static class NestedClass {
@@ -787,6 +800,7 @@ public final class LocalFirestoreHelper {
     SINGLE_FILED_MAP_WITH_DOT = map("c.d", (Object) "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     FOO_LIST.add(SINGLE_FIELD_OBJECT);
+    FOO_MAP.put("customMap", SINGLE_FIELD_OBJECT);
     SINGLE_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
     UPDATED_POJO_PROTO =
         map(

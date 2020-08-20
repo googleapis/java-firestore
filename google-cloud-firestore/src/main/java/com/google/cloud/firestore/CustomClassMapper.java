@@ -266,7 +266,7 @@ class CustomClassMapper {
       Type genericType = type.getActualTypeArguments()[0];
       if (o instanceof List) {
         List<Object> list = (List<Object>) o;
-        List<Object> result = null;
+        List<Object> result;
         try {
           result =
               (rawType == List.class)
@@ -276,7 +276,11 @@ class CustomClassMapper {
             | IllegalAccessException
             | NoSuchMethodException
             | InvocationTargetException e) {
-          throw new RuntimeException(e);
+          throw deserializeError(
+              context.errorPath,
+              String.format(
+                  "Unable to deserialize to the %s type: %s",
+                  rawType.getSimpleName(), e.toString()));
         }
         for (int i = 0; i < list.size(); i++) {
           result.add(
@@ -298,7 +302,21 @@ class CustomClassMapper {
             "Only Maps with string keys are supported, but found Map with key type " + keyType);
       }
       Map<String, Object> map = expectMap(o, context);
-      HashMap<String, Object> result = new HashMap<>();
+      HashMap<String, Object> result;
+      try {
+        result =
+            (rawType == Map.class)
+                ? new HashMap<String, Object>()
+                : (HashMap<String, Object>) rawType.getDeclaredConstructor().newInstance();
+      } catch (InstantiationException
+          | IllegalAccessException
+          | NoSuchMethodException
+          | InvocationTargetException e) {
+        throw deserializeError(
+            context.errorPath,
+            String.format(
+                "Unable to deserialize to the %s type: %s", rawType.getSimpleName(), e.toString()));
+      }
       for (Map.Entry<String, Object> entry : map.entrySet()) {
         result.put(
             entry.getKey(),

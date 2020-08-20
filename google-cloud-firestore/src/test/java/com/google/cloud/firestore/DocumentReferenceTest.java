@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FIELD_TRANSFORM_COMMIT_RESPONSE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_LIST;
+import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.GEO_POINT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.NESTED_CLASS_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SERVER_TIMESTAMP_PROTO;
@@ -1105,5 +1106,38 @@ public class DocumentReferenceTest {
         snapshot.toObject(LocalFirestoreHelper.CustomList.class);
 
     assertEquals(FOO_LIST, customList.fooList);
+    assertEquals(SINGLE_FIELD_OBJECT, customList.fooList.get(0));
+  }
+
+  @Test
+  public void deserializeCustomMap() throws ExecutionException, InterruptedException {
+    ImmutableMap CUSTOM_MAP_PROTO =
+        ImmutableMap.<String, Value>builder()
+            .put(
+                "fooMap",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "customMap",
+                                Value.newBuilder()
+                                    .setMapValue(
+                                        MapValue.newBuilder().putAllFields(SINGLE_FIELD_PROTO))
+                                    .build())
+                            .build())
+                    .build())
+            .build();
+    doAnswer(getAllResponse(CUSTOM_MAP_PROTO))
+        .when(firestoreMock)
+        .streamRequest(
+            getAllCapture.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+    DocumentSnapshot snapshot = documentReference.get().get();
+    LocalFirestoreHelper.CustomMap customMap =
+        snapshot.toObject(LocalFirestoreHelper.CustomMap.class);
+
+    assertEquals(FOO_MAP, customMap.fooMap);
+    assertEquals(SINGLE_FIELD_OBJECT, customMap.fooMap.get("customMap"));
   }
 }
