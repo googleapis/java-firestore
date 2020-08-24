@@ -37,7 +37,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.proto.BundledQuery;
-import com.google.firestore.proto.BundledQuery.LimitType;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.RunQueryRequest;
