@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.client.util.Lists;
 import com.google.cloud.Timestamp;
 import com.google.firestore.proto.BundleElement;
 import com.google.firestore.proto.BundleMetadata;
@@ -28,7 +29,9 @@ import com.google.protobuf.util.JsonFormat;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
@@ -59,21 +62,55 @@ public final class FirestoreBundle {
      * Adds a Firestore document snapshot to the bundle. Both the documents data and the document
      * read time will be included in the bundle.
      *
-     * @param documentSnap A document snapshot to add.
+     * @param documentSnapshot A document snapshot to add.
      * @returns This instance.
      */
-    public Builder add(DocumentSnapshot documentSnap) {
-      BundledDocumentMetadata metadata =
-          BundledDocumentMetadata.newBuilder()
-              .setName(documentSnap.getReference().getName())
-              .setReadTime(documentSnap.getReadTime().toProto())
-              .setExists(documentSnap.exists())
-              .build();
-      Document document = documentSnap.exists() ? documentSnap.toDocumentPb().build() : null;
-      documents.put(metadata.getName(), new BundledDocument(metadata, document));
+    public Builder add(DocumentSnapshot documentSnapshot) {
+      return add(documentSnapshot, Optional.empty());
+    }
 
-      if (documentSnap.getReadTime().compareTo(latestReadTime) > 0) {
-        latestReadTime = documentSnap.getReadTime();
+    private Builder add(DocumentSnapshot documentSnapshot, Optional<String> queryName) {
+      String documentName = documentSnapshot.getReference().getName();
+      BundledDocument originalDocument = documents.get(documentSnapshot.getReference().getName());
+      List<String> queries =
+          originalDocument == null
+              ? Lists.newArrayList()
+              : Lists.newArrayList(originalDocument.getMetadata().getQueriesList());
+
+      // Update with document built from `documentSnapshot` because it is newer.
+      if (originalDocument == null
+          || documentSnapshot
+                  .getReadTime()
+                  .compareTo(Timestamp.fromProto(originalDocument.getMetadata().getReadTime()))
+              > 0) {
+        BundledDocumentMetadata metadata =
+            BundledDocumentMetadata.newBuilder()
+                .setName(documentName)
+                .setReadTime(documentSnapshot.getReadTime().toProto())
+                .setExists(documentSnapshot.exists())
+                .build();
+        Document document =
+            documentSnapshot.exists() ? documentSnapshot.toDocumentPb().build() : null;
+        documents.put(documentName, new BundledDocument(metadata, document));
+      }
+
+      // Update queries to include all queries whose results include this document.
+      if (queryName.isPresent()) {
+        queries.add(queryName.get());
+      }
+      documents
+          .get(documentName)
+          .setMetadata(
+              documents
+                  .get(documentName)
+                  .getMetadata()
+                  .toBuilder()
+                  .clearQueries()
+                  .addAllQueries(queries)
+                  .build());
+
+      if (documentSnapshot.getReadTime().compareTo(latestReadTime) > 0) {
+        latestReadTime = documentSnapshot.getReadTime();
       }
 
       return this;
@@ -98,7 +135,7 @@ public final class FirestoreBundle {
       namedQueries.put(queryName, namedQuery);
 
       for (QueryDocumentSnapshot snapshot : querySnap.getDocuments()) {
-        add(snapshot);
+        add(snapshot, Optional.of(queryName));
       }
 
       if (querySnap.getReadTime().compareTo(latestReadTime) > 0) {
@@ -179,6 +216,10 @@ class BundledDocument {
 
   public BundledDocumentMetadata getMetadata() {
     return metadata;
+  }
+
+  void setMetadata(BundledDocumentMetadata metadata) {
+    this.metadata = metadata;
   }
 
   public Document getDocument() {

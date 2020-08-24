@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
@@ -85,11 +84,13 @@ public class FirestoreBundleTest {
       BundledDocumentMetadata documentMetadata,
       Document document,
       String expectedDocumentName,
+      List<String> expectedQueries,
       DocumentSnapshot equivalentSnapshot) {
     verifyDocumentAndMeta(
         documentMetadata,
         document,
         expectedDocumentName,
+        expectedQueries,
         equivalentSnapshot,
         equivalentSnapshot.getReadTime().toProto());
   }
@@ -98,6 +99,7 @@ public class FirestoreBundleTest {
       BundledDocumentMetadata documentMetadata,
       Document document,
       String expectedDocumentName,
+      List<String> expectedQueries,
       DocumentSnapshot equivalentSnapshot,
       Timestamp readTime) {
     assertEquals(
@@ -105,6 +107,7 @@ public class FirestoreBundleTest {
             .setExists(true)
             .setName(expectedDocumentName)
             .setReadTime(readTime)
+            .addAllQueries(expectedQueries)
             .build(),
         documentMetadata);
     assertEquals(
@@ -168,9 +171,9 @@ public class FirestoreBundleTest {
     bundleBuilder.add(SINGLE_FIELD_SNAPSHOT);
     ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
 
-    // Expected bundle elements are [bundleMetadata, meta of SINGLE_FIELD_SNAPSHOT,
-    // SINGLE_FIELD_SNAPSHOT]
-    // because SINGLE_FIELD_SNAPSHOT is added later.
+    // Expected bundle elements are [bundleMetadata, meta of UPDATED_SINGLE_FIELD_SNAPSHOT,
+    // UPDATED_SINGLE_FIELD_SNAPSHOT]
+    // because UPDATED_SINGLE_FIELD_SNAPSHOT is newer.
     List<BundleElement> elements = toBundleElements(bundleBuffer);
     assertEquals(3, elements.size());
 
@@ -186,7 +189,8 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        SINGLE_FIELD_SNAPSHOT);
+        Lists.newArrayList(),
+        UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 
   @Test
@@ -226,6 +230,7 @@ public class FirestoreBundleTest {
         elements.get(2).getDocumentMetadata(),
         elements.get(3).getDocument(),
         DOCUMENT_NAME,
+        Lists.newArrayList("test-query"),
         SINGLE_FIELD_SNAPSHOT);
   }
 
@@ -279,6 +284,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
+        Lists.newArrayList(),
         SINGLE_FIELD_SNAPSHOT);
 
     bundleBuilder.add(UPDATED_SINGLE_FIELD_SNAPSHOT);
@@ -297,6 +303,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
+        Lists.newArrayList(),
         UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 

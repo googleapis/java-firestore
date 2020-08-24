@@ -69,6 +69,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.firestore.proto.BundleElement;
 import com.google.firestore.proto.BundledDocumentMetadata;
 import com.google.firestore.proto.BundledQuery.LimitType;
@@ -1509,6 +1510,7 @@ public class ITSystemTest {
         elements.get(3).getDocumentMetadata(),
         elements.get(4).getDocument(),
         fullPath(randomColl.document("doc2"), firestore.getOptions()),
+        Lists.newArrayList("limit", "limitToLast"),
         randomColl.document("doc2").get().get(),
         limitToLastQuerySnap.getReadTime().toProto());
   }
