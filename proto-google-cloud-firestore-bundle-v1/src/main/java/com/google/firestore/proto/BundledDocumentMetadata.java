@@ -39,6 +39,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
 
   private BundledDocumentMetadata() {
     name_ = "";
+    queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @java.lang.Override
@@ -60,6 +61,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
+    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -97,6 +99,16 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
               exists_ = input.readBool();
               break;
             }
+          case 34:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                queries_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              queries_.add(s);
+              break;
+            }
           default:
             {
               if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
@@ -111,6 +123,9 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        queries_ = queries_.getUnmodifiableView();
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -244,6 +259,67 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     return exists_;
   }
 
+  public static final int QUERIES_FIELD_NUMBER = 4;
+  private com.google.protobuf.LazyStringList queries_;
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @return A list containing the queries.
+   */
+  public com.google.protobuf.ProtocolStringList getQueriesList() {
+    return queries_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @return The count of queries.
+   */
+  public int getQueriesCount() {
+    return queries_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The queries at the given index.
+   */
+  public java.lang.String getQueries(int index) {
+    return queries_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the queries at the given index.
+   */
+  public com.google.protobuf.ByteString getQueriesBytes(int index) {
+    return queries_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -267,6 +343,9 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     if (exists_ != false) {
       output.writeBool(3, exists_);
     }
+    for (int i = 0; i < queries_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, queries_.getRaw(i));
+    }
     unknownFields.writeTo(output);
   }
 
@@ -284,6 +363,14 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     }
     if (exists_ != false) {
       size += com.google.protobuf.CodedOutputStream.computeBoolSize(3, exists_);
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < queries_.size(); i++) {
+        dataSize += computeStringSizeNoTag(queries_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getQueriesList().size();
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -307,6 +394,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       if (!getReadTime().equals(other.getReadTime())) return false;
     }
     if (getExists() != other.getExists()) return false;
+    if (!getQueriesList().equals(other.getQueriesList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -326,6 +414,10 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     }
     hash = (37 * hash) + EXISTS_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getExists());
+    if (getQueriesCount() > 0) {
+      hash = (37 * hash) + QUERIES_FIELD_NUMBER;
+      hash = (53 * hash) + getQueriesList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -481,6 +573,8 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       }
       exists_ = false;
 
+      queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
       return this;
     }
 
@@ -508,6 +602,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     public com.google.firestore.proto.BundledDocumentMetadata buildPartial() {
       com.google.firestore.proto.BundledDocumentMetadata result =
           new com.google.firestore.proto.BundledDocumentMetadata(this);
+      int from_bitField0_ = bitField0_;
       result.name_ = name_;
       if (readTimeBuilder_ == null) {
         result.readTime_ = readTime_;
@@ -515,6 +610,11 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
         result.readTime_ = readTimeBuilder_.build();
       }
       result.exists_ = exists_;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        queries_ = queries_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000001);
+      }
+      result.queries_ = queries_;
       onBuilt();
       return result;
     }
@@ -575,6 +675,16 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       if (other.getExists() != false) {
         setExists(other.getExists());
       }
+      if (!other.queries_.isEmpty()) {
+        if (queries_.isEmpty()) {
+          queries_ = other.queries_;
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          ensureQueriesIsMutable();
+          queries_.addAll(other.queries_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -604,6 +714,8 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       }
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -938,6 +1050,174 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     public Builder clearExists() {
 
       exists_ = false;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList queries_ =
+        com.google.protobuf.LazyStringArrayList.EMPTY;
+
+    private void ensureQueriesIsMutable() {
+      if (!((bitField0_ & 0x00000001) != 0)) {
+        queries_ = new com.google.protobuf.LazyStringArrayList(queries_);
+        bitField0_ |= 0x00000001;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @return A list containing the queries.
+     */
+    public com.google.protobuf.ProtocolStringList getQueriesList() {
+      return queries_.getUnmodifiableView();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @return The count of queries.
+     */
+    public int getQueriesCount() {
+      return queries_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The queries at the given index.
+     */
+    public java.lang.String getQueries(int index) {
+      return queries_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the queries at the given index.
+     */
+    public com.google.protobuf.ByteString getQueriesBytes(int index) {
+      return queries_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The queries to set.
+     * @return This builder for chaining.
+     */
+    public Builder setQueries(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureQueriesIsMutable();
+      queries_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param value The queries to add.
+     * @return This builder for chaining.
+     */
+    public Builder addQueries(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureQueriesIsMutable();
+      queries_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param values The queries to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllQueries(java.lang.Iterable<java.lang.String> values) {
+      ensureQueriesIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, queries_);
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearQueries() {
+      queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The names of the queries in this bundle that this document matches to.
+     * </pre>
+     *
+     * <code>repeated string queries = 4;</code>
+     *
+     * @param value The bytes of the queries to add.
+     * @return This builder for chaining.
+     */
+    public Builder addQueriesBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureQueriesIsMutable();
+      queries_.add(value);
       onChanged();
       return this;
     }

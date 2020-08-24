@@ -95,4 +95,55 @@ public interface BundledDocumentMetadataOrBuilder
    * @return The exists.
    */
   boolean getExists();
+
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @return A list containing the queries.
+   */
+  java.util.List<java.lang.String> getQueriesList();
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @return The count of queries.
+   */
+  int getQueriesCount();
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The queries at the given index.
+   */
+  java.lang.String getQueries(int index);
+  /**
+   *
+   *
+   * <pre>
+   * The names of the queries in this bundle that this document matches to.
+   * </pre>
+   *
+   * <code>repeated string queries = 4;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the queries at the given index.
+   */
+  com.google.protobuf.ByteString getQueriesBytes(int index);
 }

@@ -67,23 +67,24 @@ public final class BundleProto {
           + "AST\020\001B\014\n\nquery_type\"y\n\nNamedQuery\022\014\n\004nam"
           + "e\030\001 \001(\t\022.\n\rbundled_query\030\002 \001(\0132\027.firesto"
           + "re.BundledQuery\022-\n\tread_time\030\003 \001(\0132\032.goo"
-          + "gle.protobuf.Timestamp\"f\n\027BundledDocumen"
+          + "gle.protobuf.Timestamp\"w\n\027BundledDocumen"
           + "tMetadata\022\014\n\004name\030\001 \001(\t\022-\n\tread_time\030\002 \001"
           + "(\0132\032.google.protobuf.Timestamp\022\016\n\006exists"
-          + "\030\003 \001(\010\"\214\001\n\016BundleMetadata\022\n\n\002id\030\001 \001(\t\022/\n"
-          + "\013create_time\030\002 \001(\0132\032.google.protobuf.Tim"
-          + "estamp\022\017\n\007version\030\003 \001(\r\022\027\n\017total_documen"
-          + "ts\030\004 \001(\r\022\023\n\013total_bytes\030\005 \001(\004\"\360\001\n\rBundle"
-          + "Element\022-\n\010metadata\030\001 \001(\0132\031.firestore.Bu"
-          + "ndleMetadataH\000\022,\n\013named_query\030\002 \001(\0132\025.fi"
-          + "restore.NamedQueryH\000\022?\n\021document_metadat"
-          + "a\030\003 \001(\0132\".firestore.BundledDocumentMetad"
-          + "ataH\000\0221\n\010document\030\004 \001(\0132\035.google.firesto"
-          + "re.v1.DocumentH\000B\016\n\014element_typeB\215\001\n\032com"
-          + ".google.firestore.protoB\013BundleProtoP\001Z4"
-          + "google.golang.org/genproto/firestore/pro"
-          + "to;firestore\242\002\005FSTPB\252\002\017Firestore.Proto\312\002"
-          + "\017Firestore\\Protob\006proto3"
+          + "\030\003 \001(\010\022\017\n\007queries\030\004 \003(\t\"\214\001\n\016BundleMetada"
+          + "ta\022\n\n\002id\030\001 \001(\t\022/\n\013create_time\030\002 \001(\0132\032.go"
+          + "ogle.protobuf.Timestamp\022\017\n\007version\030\003 \001(\r"
+          + "\022\027\n\017total_documents\030\004 \001(\r\022\023\n\013total_bytes"
+          + "\030\005 \001(\004\"\360\001\n\rBundleElement\022-\n\010metadata\030\001 \001"
+          + "(\0132\031.firestore.BundleMetadataH\000\022,\n\013named"
+          + "_query\030\002 \001(\0132\025.firestore.NamedQueryH\000\022?\n"
+          + "\021document_metadata\030\003 \001(\0132\".firestore.Bun"
+          + "dledDocumentMetadataH\000\0221\n\010document\030\004 \001(\013"
+          + "2\035.google.firestore.v1.DocumentH\000B\016\n\014ele"
+          + "ment_typeB\215\001\n\032com.google.firestore.proto"
+          + "B\013BundleProtoP\001Z4google.golang.org/genpr"
+          + "oto/firestore/proto;firestore\242\002\005FSTPB\252\002\017"
+          + "Firestore.Proto\312\002\017Firestore\\Protob\006proto"
+          + "3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -113,7 +114,7 @@ public final class BundleProto {
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_firestore_BundledDocumentMetadata_descriptor,
             new java.lang.String[] {
-              "Name", "ReadTime", "Exists",
+              "Name", "ReadTime", "Exists", "Queries",
             });
     internal_static_firestore_BundleMetadata_descriptor = getDescriptor().getMessageTypes().get(3);
     internal_static_firestore_BundleMetadata_fieldAccessorTable =
