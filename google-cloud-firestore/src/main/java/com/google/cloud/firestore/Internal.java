@@ -65,4 +65,9 @@ public class Internal {
   public Map<String, Value> protoFromSnapshot(DocumentSnapshot snapshot) {
     return snapshot.getProtoFields();
   }
+
+  @InternalApi
+  public static String autoId() {
+    return FirestoreImpl.autoId();
+  }
 }

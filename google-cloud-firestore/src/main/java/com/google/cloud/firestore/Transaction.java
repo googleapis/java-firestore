@@ -19,11 +19,13 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import java.util.List;
@@ -61,12 +63,22 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
+  private final TransactionOptions transactionOptions;
+  @Nullable private final ByteString previousTransactionId;
   private ByteString transactionId;
-  private @Nullable ByteString previousTransactionId;
 
-  Transaction(FirestoreImpl firestore, @Nullable Transaction previousTransaction) {
+  Transaction(
+      FirestoreImpl firestore,
+      TransactionOptions transactionOptions,
+      @Nullable Transaction previousTransaction) {
     super(firestore);
-    previousTransactionId = previousTransaction != null ? previousTransaction.transactionId : null;
+    this.transactionOptions = transactionOptions;
+    this.previousTransactionId =
+        previousTransaction != null ? previousTransaction.transactionId : null;
+  }
+
+  Transaction wrapResult(ApiFuture<WriteResult> result) {
+    return this;
   }
 
   /** Starts a transaction and obtains the transaction id. */
@@ -74,11 +86,18 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (previousTransactionId != null) {
+    if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
+        && previousTransactionId != null) {
       beginTransaction
           .getOptionsBuilder()
           .getReadWriteBuilder()
           .setRetryTransaction(previousTransactionId);
+    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
+      final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
+      if (transactionOptions.getReadTime() != null) {
+        readOnlyBuilder.setReadTime(transactionOptions.getReadTime());
+      }
+      beginTransaction.getOptionsBuilder().setReadOnly(readOnlyBuilder);
     }
 
     ApiFuture<BeginTransactionResponse> transactionBeginFuture =

@@ -40,4 +40,8 @@ public class WriteBatch extends UpdateBuilder<WriteBatch> {
   public ApiFuture<List<WriteResult>> commit() {
     return super.commit(null);
   }
+
+  WriteBatch wrapResult(ApiFuture<WriteResult> result) {
+    return this;
+  }
 }

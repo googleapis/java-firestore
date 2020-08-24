@@ -22,7 +22,9 @@ import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -160,7 +162,9 @@ class UserDataConverter {
       Map<String, Object> map = (Map<String, Object>) sanitizedObject;
 
       for (Map.Entry<String, Object> entry : map.entrySet()) {
-        Value encodedValue = encodeValue(path.append(entry.getKey()), entry.getValue(), options);
+        Value encodedValue =
+            encodeValue(
+                path.append(entry.getKey(), /* splitPath= */ false), entry.getValue(), options);
         if (encodedValue != null) {
           res.putFields(entry.getKey(), encodedValue);
         }
@@ -178,5 +182,47 @@ class UserDataConverter {
     }
 
     throw FirestoreException.invalidState("Cannot convert %s to Firestore Value", sanitizedObject);
+  }
+
+  static Object decodeValue(FirestoreRpcContext<?> rpcContext, Value v) {
+    Value.ValueTypeCase typeCase = v.getValueTypeCase();
+    switch (typeCase) {
+      case NULL_VALUE:
+        return null;
+      case BOOLEAN_VALUE:
+        return v.getBooleanValue();
+      case INTEGER_VALUE:
+        return v.getIntegerValue();
+      case DOUBLE_VALUE:
+        return v.getDoubleValue();
+      case TIMESTAMP_VALUE:
+        return Timestamp.fromProto(v.getTimestampValue());
+      case STRING_VALUE:
+        return v.getStringValue();
+      case BYTES_VALUE:
+        return Blob.fromByteString(v.getBytesValue());
+      case REFERENCE_VALUE:
+        String pathName = v.getReferenceValue();
+        return new DocumentReference(rpcContext, ResourcePath.create(pathName));
+      case GEO_POINT_VALUE:
+        return new GeoPoint(
+            v.getGeoPointValue().getLatitude(), v.getGeoPointValue().getLongitude());
+      case ARRAY_VALUE:
+        List<Object> list = new ArrayList<>();
+        List<Value> lv = v.getArrayValue().getValuesList();
+        for (Value iv : lv) {
+          list.add(decodeValue(rpcContext, iv));
+        }
+        return list;
+      case MAP_VALUE:
+        Map<String, Object> outputMap = new HashMap<>();
+        Map<String, Value> inputMap = v.getMapValue().getFieldsMap();
+        for (Map.Entry<String, Value> entry : inputMap.entrySet()) {
+          outputMap.put(entry.getKey(), decodeValue(rpcContext, entry.getValue()));
+        }
+        return outputMap;
+      default:
+        throw FirestoreException.invalidState(String.format("Unknown Value Type: %s", typeCase));
+    }
   }
 }

@@ -23,11 +23,9 @@ import com.google.common.base.Preconditions;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -115,48 +113,6 @@ public class DocumentSnapshot {
     return new DocumentSnapshot(rpcContext, documentReference, null, readTime, null, null);
   }
 
-  private Object decodeValue(Value v) {
-    Value.ValueTypeCase typeCase = v.getValueTypeCase();
-    switch (typeCase) {
-      case NULL_VALUE:
-        return null;
-      case BOOLEAN_VALUE:
-        return v.getBooleanValue();
-      case INTEGER_VALUE:
-        return v.getIntegerValue();
-      case DOUBLE_VALUE:
-        return v.getDoubleValue();
-      case TIMESTAMP_VALUE:
-        return Timestamp.fromProto(v.getTimestampValue());
-      case STRING_VALUE:
-        return v.getStringValue();
-      case BYTES_VALUE:
-        return Blob.fromByteString(v.getBytesValue());
-      case REFERENCE_VALUE:
-        String pathName = v.getReferenceValue();
-        return new DocumentReference(rpcContext, ResourcePath.create(pathName));
-      case GEO_POINT_VALUE:
-        return new GeoPoint(
-            v.getGeoPointValue().getLatitude(), v.getGeoPointValue().getLongitude());
-      case ARRAY_VALUE:
-        List<Object> list = new ArrayList<>();
-        List<Value> lv = v.getArrayValue().getValuesList();
-        for (Value iv : lv) {
-          list.add(decodeValue(iv));
-        }
-        return list;
-      case MAP_VALUE:
-        Map<String, Object> outputMap = new HashMap<>();
-        Map<String, Value> inputMap = v.getMapValue().getFieldsMap();
-        for (Map.Entry<String, Value> entry : inputMap.entrySet()) {
-          outputMap.put(entry.getKey(), decodeValue(entry.getValue()));
-        }
-        return outputMap;
-      default:
-        throw FirestoreException.invalidState(String.format("Unknown Value Type: %s", typeCase));
-    }
-  }
-
   /**
    * Returns the time at which this snapshot was read.
    *
@@ -214,8 +170,7 @@ public class DocumentSnapshot {
 
     Map<String, Object> decodedFields = new HashMap<>();
     for (Map.Entry<String, Value> entry : fields.entrySet()) {
-      Object decodedValue = decodeValue(entry.getValue());
-      decodedValue = convertToDateIfNecessary(decodedValue);
+      Object decodedValue = UserDataConverter.decodeValue(rpcContext, entry.getValue());
       decodedFields.put(entry.getKey(), decodedValue);
     }
     return decodedFields;
@@ -294,8 +249,7 @@ public class DocumentSnapshot {
       return null;
     }
 
-    Object decodedValue = decodeValue(value);
-    return convertToDateIfNecessary(decodedValue);
+    return UserDataConverter.decodeValue(rpcContext, value);
   }
 
   /**
@@ -310,15 +264,6 @@ public class DocumentSnapshot {
   public <T> T get(@Nonnull FieldPath fieldPath, Class<T> valueType) {
     Object data = get(fieldPath);
     return data == null ? null : CustomClassMapper.convertToCustomClass(data, valueType, docRef);
-  }
-
-  private Object convertToDateIfNecessary(Object decodedValue) {
-    if (decodedValue instanceof Timestamp) {
-      if (!this.rpcContext.areTimestampsInSnapshotsEnabled()) {
-        decodedValue = ((Timestamp) decodedValue).toDate();
-      }
-    }
-    return decodedValue;
   }
 
   /** Returns the Value Proto at 'fieldPath'. Returns null if the field was not found. */
@@ -394,9 +339,6 @@ public class DocumentSnapshot {
   /**
    * Returns the value of the field as a Date.
    *
-   * <p>This method ignores the global setting {@link
-   * FirestoreOptions#areTimestampsInSnapshotsEnabled}.
-   *
    * @param field The path to the field.
    * @throws RuntimeException if the value is not a Date.
    * @return The value of the field.
@@ -408,9 +350,6 @@ public class DocumentSnapshot {
 
   /**
    * Returns the value of the field as a {@link Timestamp}.
-   *
-   * <p>This method ignores the global setting {@link
-   * FirestoreOptions#areTimestampsInSnapshotsEnabled}.
    *
    * @param field The path to the field.
    * @throws RuntimeException if the value is not a Date.

@@ -31,8 +31,6 @@ interface FirestoreRpcContext<FS extends Firestore> {
 
   FS getFirestore();
 
-  boolean areTimestampsInSnapshotsEnabled();
-
   String getDatabaseName();
 
   ResourcePath getResourcePath();

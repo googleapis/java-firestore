@@ -34,12 +34,14 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
 import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -50,6 +52,10 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
+import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
@@ -60,10 +66,10 @@ import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,11 +80,10 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Stubber;
 
+@SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
 
@@ -87,7 +92,7 @@ public class TransactionTest {
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
-  @Spy private FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+  @Spy private FirestoreRpc firestoreRpc = mock(FirestoreRpc.class);
 
   @Spy
   private FirestoreImpl firestoreMock =
@@ -338,8 +343,8 @@ public class TransactionTest {
 
   @Test
   public void limitsRetriesWithFailure() {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
           {
             put(begin(), beginResponse("foo1"));
             put(commit("foo1"), RETRYABLE_API_EXCEPTION);
@@ -359,7 +364,7 @@ public class TransactionTest {
           }
         };
 
-    initializeStub(requestResponseMap);
+    responseStubber.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -381,18 +386,18 @@ public class TransactionTest {
     }
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(responseStubber.size(), requests.size());
 
     int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
+    for (GeneratedMessageV3 request : responseStubber.keySet()) {
       assertEquals(request, requests.get(index++));
     }
   }
 
   @Test
   public void limitsRetriesWithSuccess() throws Exception {
-    RequestResponseMap requestResponseMap =
-        new RequestResponseMap() {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
           {
             put(begin(), beginResponse("foo1"));
             put(commit("foo1"), RETRYABLE_API_EXCEPTION);
@@ -414,7 +419,7 @@ public class TransactionTest {
           }
         };
 
-    initializeStub(requestResponseMap);
+    responseStubber.initializeStub(requestCapture, firestoreMock);
 
     final AtomicInteger retryCount = new AtomicInteger(1);
 
@@ -431,10 +436,10 @@ public class TransactionTest {
     assertEquals("foo6", transaction.get());
 
     List<Message> requests = requestCapture.getAllValues();
-    assertEquals(requestResponseMap.size(), requests.size());
+    assertEquals(responseStubber.size(), requests.size());
 
     int index = 0;
-    for (GeneratedMessageV3 request : requestResponseMap.keySet()) {
+    for (GeneratedMessageV3 request : responseStubber.keySet()) {
       assertEquals(request, requests.get(index++));
     }
   }
@@ -470,8 +475,8 @@ public class TransactionTest {
           new ApiException(new Exception("Test Exception"), code, shouldRetry);
 
       if (shouldRetry) {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
+        ResponseStubber responseStubber =
+            new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
                 put(
@@ -482,7 +487,7 @@ public class TransactionTest {
                 put(commit("foo2"), commitResponse(0, 0));
               }
             };
-        initializeStub(requestResponseMap);
+        responseStubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
@@ -500,8 +505,8 @@ public class TransactionTest {
 
         assertEquals(2, attempts[0]);
       } else {
-        RequestResponseMap requestResponseMap =
-            new RequestResponseMap() {
+        ResponseStubber responseStubber =
+            new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
                 put(
@@ -511,7 +516,7 @@ public class TransactionTest {
               }
             };
 
-        initializeStub(requestResponseMap);
+        responseStubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
@@ -867,16 +872,78 @@ public class TransactionTest {
     assertEquals(commit(TRANSACTION_ID, writes.toArray(new Write[] {})), requests.get(1));
   }
 
-  static class RequestResponseMap
-      extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {}
+  @Test
+  public void readOnlyTransactionOptionsBuilder_setReadTime() {
+    Executor executor = mock(Executor.class);
+    final com.google.protobuf.Timestamp.Builder readTime =
+        com.google.protobuf.Timestamp.getDefaultInstance().toBuilder().setSeconds(1).setNanos(0);
+    final ReadOnlyOptionsBuilder builder =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setExecutor(executor)
+            .setReadTime(readTime);
 
-  private void initializeStub(RequestResponseMap requestResponseMap) {
-    Stubber stubber = null;
-    for (ApiFuture<? extends GeneratedMessageV3> response : requestResponseMap.values()) {
-      stubber = (stubber != null) ? stubber.doReturn(response) : doReturn(response);
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getReadTime()).isSameInstanceAs(readTime);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_ONLY);
+    assertThat(transactionOptions.getReadTime()).isEqualTo(readTime.build());
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(1);
+  }
+
+  @Test
+  public void readOnlyTransactionOptionsBuilder_defaults() {
+    final ReadOnlyOptionsBuilder builder = TransactionOptions.createReadOnlyOptionsBuilder();
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isNull();
+    assertThat(builder.getReadTime()).isNull();
+
+    assertThat(transactionOptions.getReadTime()).isNull();
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(1);
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_setNumberOfAttempts() {
+    Executor executor = mock(Executor.class);
+    final ReadWriteOptionsBuilder builder =
+        TransactionOptions.createReadWriteOptionsBuilder()
+            .setExecutor(executor)
+            .setNumberOfAttempts(2);
+
+    final TransactionOptions transactionOptions = builder.build();
+
+    assertThat(builder.getExecutor()).isSameInstanceAs(executor);
+    assertThat(builder.getNumberOfAttempts()).isEqualTo(2);
+
+    assertThat(transactionOptions.getExecutor()).isSameInstanceAs(executor);
+
+    assertThat(transactionOptions.getType()).isEqualTo(TransactionOptionsType.READ_WRITE);
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(2);
+    assertThat(transactionOptions.getReadTime()).isNull();
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_defaults() {
+    final TransactionOptions transactionOptions =
+        TransactionOptions.createReadWriteOptionsBuilder().build();
+
+    assertThat(transactionOptions.getExecutor()).isNull();
+    assertThat(transactionOptions.getNumberOfAttempts()).isEqualTo(5);
+    assertThat(transactionOptions.getReadTime()).isNull();
+  }
+
+  @Test
+  public void readWriteTransactionOptionsBuilder_errorAttemptingToSetNumAttemptsLessThanOne() {
+    try {
+      TransactionOptions.createReadWriteOptionsBuilder().setNumberOfAttempts(0);
+      fail("Error expected");
+    } catch (IllegalArgumentException ignore) {
+      // expected
     }
-    stubber
-        .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
   }
 }

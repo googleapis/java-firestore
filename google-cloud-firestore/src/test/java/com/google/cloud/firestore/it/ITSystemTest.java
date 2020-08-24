@@ -18,7 +18,9 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -49,16 +51,21 @@ import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QueryPartition;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
+import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunQueryRequest;
+import io.grpc.Status;
+import io.grpc.Status.Code;
+import io.grpc.StatusRuntimeException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,8 +76,12 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -87,6 +98,8 @@ public class ITSystemTest {
   private final SingleField SINGLE_FIELD_OBJECT = LocalFirestoreHelper.SINGLE_FIELD_OBJECT;
   private final AllSupportedTypes ALL_SUPPORTED_TYPES_OBJECT =
       LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
+  private final Map<String, Object> SINGLE_FILED_MAP_WITH_DOT =
+      LocalFirestoreHelper.SINGLE_FILED_MAP_WITH_DOT;
 
   @Rule public TestName testName = new TestName();
 
@@ -547,6 +560,45 @@ public class ITSystemTest {
     QuerySnapshot querySnapshot = randomColl.orderBy("foo").endBefore(2).get().get();
     assertEquals(1, querySnapshot.size());
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
+  }
+
+  @Test
+  public void partitionedQuery() throws Exception {
+    int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
+
+    WriteBatch batch = firestore.batch();
+    for (int i = 0; i < documentCount; ++i) {
+      batch.create(randomColl.document(), map("foo", i));
+    }
+    batch.commit().get();
+
+    StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
+    firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
+    final List<QueryPartition> partitions = consumer.consume().get();
+
+    assertNull(partitions.get(0).getStartAt());
+    for (int i = 0; i < partitions.size() - 1; ++i) {
+      assertArrayEquals(partitions.get(i).getEndBefore(), partitions.get(i + 1).getStartAt());
+    }
+    assertNull(partitions.get(partitions.size() - 1).getEndBefore());
+
+    // Validate that we can use the paritions to read the original documents.
+    int resultCount = 0;
+    for (QueryPartition partition : partitions) {
+      resultCount += partition.createQuery().get().get().size();
+    }
+    assertEquals(documentCount, resultCount);
+  }
+
+  @Test
+  public void emptyPartitionedQuery() throws Exception {
+    StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
+    firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
+    final List<QueryPartition> partitions = consumer.consume().get();
+
+    assertEquals(1, partitions.size());
+    assertNull(partitions.get(0).getStartAt());
+    assertNull(partitions.get(0).getEndBefore());
   }
 
   @Test
@@ -1223,32 +1275,12 @@ public class ITSystemTest {
 
     DocumentReference ref3 = randomColl.document("doc3");
 
-    final List<DocumentSnapshot> documentSnapshots =
-        Collections.synchronizedList(new ArrayList<DocumentSnapshot>());
     final DocumentReference[] documentReferences = {ref1, ref2, ref3};
-    final SettableApiFuture<Void> future = SettableApiFuture.create();
-    firestore.getAll(
-        documentReferences,
-        FieldMask.of("foo"),
-        new ApiStreamObserver<DocumentSnapshot>() {
 
-          @Override
-          public void onNext(DocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
-          }
+    StreamConsumer<DocumentSnapshot> consumer = new StreamConsumer<>();
+    firestore.getAll(documentReferences, FieldMask.of("foo"), consumer);
 
-          @Override
-          public void onError(Throwable throwable) {
-            future.setException(throwable);
-          }
-
-          @Override
-          public void onCompleted() {
-            future.set(null);
-          }
-        });
-
-    future.get();
+    final List<DocumentSnapshot> documentSnapshots = consumer.consume().get();
 
     assertEquals(
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(0).toObject(AllSupportedTypes.class));
@@ -1268,5 +1300,130 @@ public class ITSystemTest {
     RunQueryRequest proto = fs.collection("coll").whereEqualTo("bob", "alice").toProto();
     fs.close();
     Query.fromProto(fs, proto);
+  }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    DocumentReference documentReference = randomColl.document("doc1");
+    documentReference.set(map("a.b", (Object) SINGLE_FILED_MAP_WITH_DOT)).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    assertEquals(SINGLE_FILED_MAP_WITH_DOT, documentSnapshots.getData().get("a.b"));
+
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    documentSnapshots = documentReference.get().get();
+    assertNull(documentSnapshots.getData().get("c.d"));
+  }
+
+  @Test
+  public void readOnlyTransaction_successfulGet()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    final AtomicReference<DocumentSnapshot> ref = new AtomicReference<>();
+
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) throws Exception {
+                final DocumentSnapshot snapshot =
+                    transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+                ref.compareAndSet(null, snapshot);
+                return null;
+              }
+            },
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
+
+    runTransaction.get(10, TimeUnit.SECONDS);
+    assertEquals("bar", ref.get().get("foo"));
+  }
+
+  @Test
+  public void readOnlyTransaction_failureWhenAttemptingWrite()
+      throws InterruptedException, TimeoutException {
+
+    final DocumentReference documentReference = randomColl.document("tx/ro/writeShouldFail");
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) {
+                transaction.set(documentReference, SINGLE_FIELD_MAP);
+                return null;
+              }
+            },
+            TransactionOptions.createReadOnlyOptionsBuilder().build());
+
+    try {
+      runTransaction.get(10, TimeUnit.SECONDS);
+    } catch (ExecutionException e) {
+      final Throwable cause = e.getCause();
+      assertThat(cause).isInstanceOf(FirestoreException.class);
+      final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+      final Status status = invalidArgument.getStatus();
+      assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
+      assertThat(status.getDescription()).contains("read-only");
+    }
+  }
+
+  @Test
+  public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    final TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(0))
+            .build();
+
+    final ApiFuture<Void> runTransaction =
+        firestore.runTransaction(
+            new Function<Void>() {
+              @Override
+              public Void updateCallback(Transaction transaction) throws Exception {
+                transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+                return null;
+              }
+            },
+            options);
+
+    try {
+      runTransaction.get(10, TimeUnit.SECONDS);
+    } catch (ExecutionException e) {
+      final Throwable rootCause = ExceptionUtils.getRootCause(e);
+      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+      final Status status = invalidArgument.getStatus();
+      assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
+      assertThat(status.getDescription()).contains("old");
+    }
+  }
+
+  /** Wrapper around ApiStreamObserver that returns the results in a list. */
+  private static class StreamConsumer<T> implements ApiStreamObserver<T> {
+    SettableApiFuture<List<T>> done = SettableApiFuture.create();
+    List<T> results = Collections.synchronizedList(new ArrayList<T>());
+
+    @Override
+    public void onNext(T element) {
+      results.add(element);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+      done.setException(throwable);
+    }
+
+    @Override
+    public void onCompleted() {
+      done.set(results);
+    }
+
+    public ApiFuture<List<T>> consume() {
+      return done;
+    }
   }
 }

@@ -211,8 +211,6 @@ public class DocumentReferenceTest {
             streamObserverCapture.capture(),
             Matchers.<ServerStreamingCallable>any());
 
-    doReturn(true).when(firestoreMock).areTimestampsInSnapshotsEnabled();
-
     DocumentSnapshot snapshot = documentReference.get().get();
     assertEquals(snapshot.getData(), ALL_SUPPORTED_TYPES_MAP);
 
@@ -298,15 +296,6 @@ public class DocumentReferenceTest {
             Matchers.<ServerStreamingCallable>any());
 
     DocumentSnapshot snapshot = documentReference.get().get();
-
-    doReturn(false).when(firestoreMock).areTimestampsInSnapshotsEnabled();
-
-    assertEquals(DATE, snapshot.get("dateValue"));
-    assertEquals(TIMESTAMP.toDate(), snapshot.get("timestampValue"));
-    assertEquals(DATE, snapshot.getData().get("dateValue"));
-    assertEquals(TIMESTAMP.toDate(), snapshot.getData().get("timestampValue"));
-
-    doReturn(true).when(firestoreMock).areTimestampsInSnapshotsEnabled();
 
     assertEquals(Timestamp.of(DATE), snapshot.get("dateValue"));
     assertEquals(TIMESTAMP, snapshot.get("timestampValue"));
@@ -1068,5 +1057,20 @@ public class DocumentReferenceTest {
     for (CommitRequest request : commitCapture.getAllValues()) {
       assertCommitEquals(expectedCommit, request);
     }
+  }
+
+  @Test
+  public void deleteNestedFieldUsingFieldPath() throws Exception {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+    FieldPath path = FieldPath.of("a.b", "c.d");
+    documentReference.update(path, FieldValue.delete()).get();
+    CommitRequest expectedCommit =
+        commit(
+            update(
+                Collections.<String, Value>emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
+    assertEquals(expectedCommit, commitCapture.getValue());
   }
 }

@@ -4,7 +4,7 @@
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
+  <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
   <name>Google Cloud Firestore Parent</name>
   <url>https://github.com/googleapis/java-firestore</url>
   <description>
@@ -14,7 +14,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-shared-config</artifactId>
-    <version>0.8.1</version>
+    <version>0.9.2</version>
   </parent>
 
   <developers>
@@ -159,38 +159,28 @@
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-admin-v1</artifactId>
-        <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
+        <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-v1</artifactId>
-        <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
-      </dependency>
-      <dependency>
-        <groupId>com.google.api.grpc</groupId>
-        <artifactId>proto-google-cloud-firestore-v1beta1</artifactId>
-        <version>0.88.1-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1beta1:current} -->
+        <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-admin-v1</artifactId>
-        <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
+        <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-v1</artifactId>
-        <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
-      </dependency>
-      <dependency>
-        <groupId>com.google.api.grpc</groupId>
-        <artifactId>grpc-google-cloud-firestore-v1beta1</artifactId>
-        <version>0.88.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1beta1:current} -->
+        <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
       </dependency>
 
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-shared-dependencies</artifactId>
-        <version>0.8.1</version>
+        <version>0.8.6</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -198,7 +188,7 @@
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
-        <version>2.11.0</version>
+        <version>2.11.2</version>
       </dependency>
 
       <dependency>
@@ -216,29 +206,23 @@
     </dependencies>
   </dependencyManagement>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <configuration>
-            <ignoredUnusedDeclaredDependencies>org.objenesis:objenesis</ignoredUnusedDeclaredDependencies>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-
   <modules>
     <module>proto-google-cloud-firestore-admin-v1</module>
     <module>proto-google-cloud-firestore-v1</module>
-    <module>proto-google-cloud-firestore-v1beta1</module>
     <module>grpc-google-cloud-firestore-admin-v1</module>
     <module>grpc-google-cloud-firestore-v1</module>
-    <module>grpc-google-cloud-firestore-v1beta1</module>
+    <module>google-cloud-firestore-admin</module>
     <module>google-cloud-firestore</module>
     <module>google-cloud-firestore-bom</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>enable-samples</id>
+      <modules>
+        <module>samples</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>

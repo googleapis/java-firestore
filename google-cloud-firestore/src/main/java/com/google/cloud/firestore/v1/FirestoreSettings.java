@@ -129,6 +129,11 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return ((FirestoreStubSettings) getStubSettings()).batchGetDocumentsSettings();
   }
 
+  /** Returns the object with the settings used for calls to batchWrite. */
+  public UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).batchWriteSettings();
+  }
+
   /** Returns the object with the settings used for calls to beginTransaction. */
   public UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionSettings() {
@@ -172,11 +177,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
       partitionQuerySettings() {
     return ((FirestoreStubSettings) getStubSettings()).partitionQuerySettings();
-  }
-
-  /** Returns the object with the settings used for calls to batchWrite. */
-  public UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
-    return ((FirestoreStubSettings) getStubSettings()).batchWriteSettings();
   }
 
   public static final FirestoreSettings create(FirestoreStubSettings stub) throws IOException {
@@ -308,6 +308,11 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
       return getStubSettingsBuilder().batchGetDocumentsSettings();
     }
 
+    /** Returns the builder for the settings used for calls to batchWrite. */
+    public UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
+      return getStubSettingsBuilder().batchWriteSettings();
+    }
+
     /** Returns the builder for the settings used for calls to beginTransaction. */
     public UnaryCallSettings.Builder<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionSettings() {
@@ -352,11 +357,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
             PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
         partitionQuerySettings() {
       return getStubSettingsBuilder().partitionQuerySettings();
-    }
-
-    /** Returns the builder for the settings used for calls to batchWrite. */
-    public UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse> batchWriteSettings() {
-      return getStubSettingsBuilder().batchWriteSettings();
     }
 
     @Override

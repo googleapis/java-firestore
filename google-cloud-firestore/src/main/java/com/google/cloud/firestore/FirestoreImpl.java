@@ -30,7 +30,6 @@ import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
-import io.grpc.Context;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -95,6 +93,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   @Nonnull
+  BulkWriter bulkWriter() {
+    return new BulkWriter(this, /* enableThrottling= */ true);
+  }
+
+  @Nonnull
+  BulkWriter bulkWriter(BulkWriterOptions options) {
+    return new BulkWriter(this, options.isThrottlingEnabled());
+  }
+
+  @Nonnull
   @Override
   public CollectionReference collection(@Nonnull String collectionPath) {
     ResourcePath path = databasePath.append(collectionPath);
@@ -118,12 +126,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public Iterable<CollectionReference> listCollections() {
     DocumentReference rootDocument = new DocumentReference(this, this.databasePath);
     return rootDocument.listCollections();
-  }
-
-  @Nonnull
-  @Override
-  public Iterable<CollectionReference> getCollections() {
-    return listCollections();
   }
 
   @Nonnull
@@ -269,12 +271,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   @Override
-  public Query collectionGroup(@Nonnull final String collectionId) {
+  public CollectionGroup collectionGroup(@Nonnull final String collectionId) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
         String.format(
             "Invalid collectionId '%s'. Collection IDs must not contain '/'.", collectionId));
-    return new Query(this, collectionId);
+    return new CollectionGroup(this, collectionId);
   }
 
   @Nonnull
@@ -304,22 +306,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public <T> ApiFuture<T> runAsyncTransaction(
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
-    final Executor userCallbackExecutor =
-        Context.currentContextExecutor(
-            transactionOptions.getExecutor() != null
-                ? transactionOptions.getExecutor()
-                : firestoreClient.getExecutor());
 
     TransactionRunner<T> transactionRunner =
-        new TransactionRunner<>(
-            this, updateFunction, userCallbackExecutor, transactionOptions.getNumberOfAttempts());
+        new TransactionRunner<>(this, updateFunction, transactionOptions);
     return transactionRunner.run();
-  }
-
-  /** Returns whether the user has opted into receiving dates as com.google.cloud.Timestamp. */
-  @Override
-  public boolean areTimestampsInSnapshotsEnabled() {
-    return this.firestoreOptions.areTimestampsInSnapshotsEnabled();
   }
 
   /** Returns the name of the Firestore project associated with this client. */

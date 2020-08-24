@@ -71,16 +71,18 @@ def generate_client(service, version, proto_path=None, bazel_target=None, packag
       protobuf_header,
       f'{license_header}{protobuf_header}'
   )
-  s.replace(
-      library / f'grpc-google-cloud-{service}-{version}-java/src/**/*.java',
-      bad_license_header,
-      license_header
-  )
-  s.replace(
-      library / f'proto-google-cloud-{service}-{version}-java/src/**/*.java',
-      bad_license_header,
-      license_header
-  )
+
+  if service == "firestore-admin":
+    s.replace(
+        library / f'grpc-google-cloud-{service}-{version}-java/src/**/*.java',
+        bad_license_header,
+        license_header
+    )
+    s.replace(
+        library / f'proto-google-cloud-{service}-{version}-java/src/**/*.java',
+        bad_license_header,
+        license_header
+    )
 
   pkg = package if package else f'com.google.{service}.{version}'
   s.replace(
@@ -94,7 +96,10 @@ def generate_client(service, version, proto_path=None, bazel_target=None, packag
   java.format_code(f'grpc-google-cloud-{service}-{version}/src')
   java.format_code(f'proto-google-cloud-{service}-{version}/src')
 
-  if include_gapic:
+  if include_gapic and service == "firestore-admin":
+    s.copy(library / f'gapic-google-cloud-{service}-{version}-java/src', 'google-cloud-firestore-admin/src')
+    java.format_code(f'google-cloud-firestore-admin/src')
+  else:
     s.copy(library / f'gapic-google-cloud-{service}-{version}-java/src', 'google-cloud-firestore/src')
     java.format_code(f'google-cloud-firestore/src')
 
@@ -115,58 +120,12 @@ firestore_v1 = generate_client(
     include_gapic=True
 )
 
-firestore_v1beta1 = generate_client(
-    service='firestore',
-    version='v1beta1',
-    include_gapic=True
-)
-
 java.common_templates(excludes=[
-    'README.md',
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg',
-    '.kokoro/nightly/integration.cfg'
+    '.kokoro/presubmit/samples.cfg',
+    '.kokoro/nightly/integration.cfg',
+    '.kokoro/nightly/samples.cfg'
 ])
 
-# Mark v1beta1 as deprecated
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
-  "public class FirestoreClient",
-  "@Deprecated\npublic class FirestoreClient"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreClient.java", 
-  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreClient instead\n */\n@Generated(\"by gapic-generator\")"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
-  "public class FirestoreSettings",
-  "@Deprecated\npublic class FirestoreSettings"
-)
-s.replace(
-  "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1beta1/FirestoreSettings.java", 
-  "\\*\\/\\n@Generated\\(\"by gapic-generator\"\\)",
-  "*\n * @deprecated Use com.google.cloud.firestore.v1.FirestoreSettings instead\n */\n@Generated(\"by gapic-generator\")"
-)
-
-bundle_v1 = gapic.java_library(
-    service='bundle',
-    version='v1',
-    proto_path='firestore',
-    bazel_target='//firestore:google-cloud-firestore-bundle-java',
-)
-bundle_v1 = bundle_v1 / f"google-cloud-firestore-bundle-java"
-s.replace(
-    bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src/**/*.java',
-    protobuf_header,
-    f'{license_header}{protobuf_header}'
-)
-s.replace(
-    bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src/**/*.java',
-    bad_license_header,
-    license_header
-)
-java.format_code(f'proto-google-cloud-firestore-bundle-java/src')
-s.copy(bundle_v1 / f'proto-google-cloud-firestore-bundle-java/src', f'google-cloud-firestore/src')

@@ -33,6 +33,7 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.ServiceOptions;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.v1.FirestoreClient;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -43,6 +44,8 @@ import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.cloud.grpc.GrpcTransportOptions.ExecutorFactory;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
@@ -52,6 +55,7 @@ import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
@@ -162,6 +166,11 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   }
 
   @Override
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return firestoreStub.batchWriteCallable();
+  }
+
+  @Override
   public ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable() {
     return firestoreStub.batchGetDocumentsCallable();
@@ -187,6 +196,12 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable() {
     return firestoreStub.listCollectionIdsPagedCallable();
+  }
+
+  @Override
+  public UnaryCallable<PartitionQueryRequest, FirestoreClient.PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return firestoreStub.partitionQueryPagedCallable();
   }
 
   @Override

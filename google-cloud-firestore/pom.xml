@@ -4,18 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
-  <url>https://github.com/googleapis/java-firestore/tree/master
-  </url>
+  <url>https://github.com/googleapis/java-firestore</url>
   <description>
     Java idiomatic client for Google Cloud Firestore.
   </description>
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>1.35.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
+    <version>2.0.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
@@ -27,15 +26,7 @@
     </dependency>
     <dependency>
       <groupId>com.google.api.grpc</groupId>
-      <artifactId>proto-google-cloud-firestore-admin-v1</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
       <artifactId>proto-google-cloud-firestore-v1</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>proto-google-cloud-firestore-v1beta1</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.auto.value</groupId>
@@ -43,17 +34,7 @@
     </dependency>
     <dependency>
       <groupId>com.google.api.grpc</groupId>
-      <artifactId>grpc-google-cloud-firestore-admin-v1</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
       <artifactId>grpc-google-cloud-firestore-v1</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>grpc-google-cloud-firestore-v1beta1</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -167,7 +148,13 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.11.0</version>
+      <version>2.11.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -199,14 +186,6 @@
             <offlineLink>
               <url>${project.javadoc.protobufBaseURL}</url>
               <location>../../../../../google-api-grpc/grpc-google-cloud-firestore-v1/target/site/apidocs/</location>
-            </offlineLink>
-            <offlineLink>
-              <url>${project.javadoc.protobufBaseURL}</url>
-              <location>../../../../../google-api-grpc/proto-google-cloud-firestore-v1beta1/target/site/apidocs/</location>
-            </offlineLink>
-            <offlineLink>
-              <url>${project.javadoc.protobufBaseURL}</url>
-              <location>../../../../../google-api-grpc/grpc-google-cloud-firestore-v1beta1/target/site/apidocs/</location>
             </offlineLink>
           </offlineLinks>
         </configuration>
