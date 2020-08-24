@@ -35,7 +35,7 @@ cd "$TEMP_DIR"
 git clone --depth 1 https://github.com/googleapis/googleapis.git
 
 # Tell synthtool to use the cloned googleapi repo.
-SYNTHTOOL_GOOGLEAPIS="$TEMP_DIR/googleapis"
+export SYNTHTOOL_GOOGLEAPIS="$TEMP_DIR/googleapis"
 
 # Patch bundle.proto to local googleapi repo.
 mkdir "$SYNTHTOOL_GOOGLEAPIS/firestore"
