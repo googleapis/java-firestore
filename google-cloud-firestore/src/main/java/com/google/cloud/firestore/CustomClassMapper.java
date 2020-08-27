@@ -279,8 +279,7 @@ class CustomClassMapper {
           throw deserializeError(
               context.errorPath,
               String.format(
-                  "Unable to deserialize to the %s type: %s",
-                  rawType.getSimpleName(), e.toString()));
+                  "Unable to deserialize to %s: %s", rawType.getSimpleName(), e.toString()));
         }
         for (int i = 0; i < list.size(); i++) {
           result.add(
@@ -315,7 +314,7 @@ class CustomClassMapper {
         throw deserializeError(
             context.errorPath,
             String.format(
-                "Unable to deserialize to the %s type: %s", rawType.getSimpleName(), e.toString()));
+                "Unable to deserialize to %s: %s", rawType.getSimpleName(), e.toString()));
       }
       for (Map.Entry<String, Object> entry : map.entrySet()) {
         result.put(
