@@ -1219,7 +1219,40 @@ public class ITSystemTest {
   }
 
   @Test
-  public void inQueriesWithDocumentId() throws Exception {
+  public void notEqualQueries() throws Exception {
+    setDocument("a", map("zip", Double.NaN));
+    setDocument("b", map("zip", 91102));
+    setDocument("c", map("zip", 98101));
+    setDocument("d", map("zip", 98103));
+    setDocument("e", map("zip", asList(98101)));
+    setDocument("f", map("zip", asList("98101", map("zip", 98101))));
+    setDocument("g", map("zip", map("zip", 98101)));
+    setDocument("h", map("zip", null));
+
+    QuerySnapshot querySnapshot = randomColl.whereNotEqualTo("zip", 98101).get().get();
+    assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotEqualTo("zip", Double.NaN).get().get();
+    assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotEqualTo("zip", null).get().get();
+    assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notEqualQueriesWithDocumentId() throws Exception {
+    DocumentReference doc1 = setDocument("a", map("count", 1));
+    DocumentReference doc2 = setDocument("b", map("count", 2));
+    setDocument("c", map("count", 3));
+
+    QuerySnapshot querySnapshot =
+        randomColl.whereNotEqualTo(FieldPath.documentId(), doc1.getId()).get().get();
+
+    assertEquals(asList("b", "c"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notInQueriesWithDocumentId() throws Exception {
     DocumentReference doc1 = setDocument("a", map("count", 1));
     DocumentReference doc2 = setDocument("b", map("count", 2));
     setDocument("c", map("count", 3));
@@ -1231,6 +1264,36 @@ public class ITSystemTest {
             .get();
 
     assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notInQueries() throws Exception {
+    setDocument("a", map("zip", 98101));
+    setDocument("b", map("zip", 91102));
+    setDocument("c", map("zip", 98103));
+    setDocument("d", map("zip", asList(98101)));
+    setDocument("e", map("zip", asList("98101", map("zip", 98101))));
+    setDocument("f", map("zip", map("code", 500)));
+
+    QuerySnapshot querySnapshot =
+        randomColl.whereNotIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
+
+    assertEquals(asList("b", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void inQueriesWithDocumentId() throws Exception {
+    DocumentReference doc1 = setDocument("a", map("count", 1));
+    DocumentReference doc2 = setDocument("b", map("count", 2));
+    setDocument("c", map("count", 3));
+
+    QuerySnapshot querySnapshot =
+        randomColl
+            .whereNotIn(FieldPath.documentId(), Arrays.<Object>asList(doc1.getId(), doc2))
+            .get()
+            .get();
+
+    assertEquals(asList("c"), querySnapshotToIds(querySnapshot));
   }
 
   @Test
