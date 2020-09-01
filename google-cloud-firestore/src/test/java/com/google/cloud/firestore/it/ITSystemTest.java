@@ -1277,8 +1277,15 @@ public class ITSystemTest {
 
     QuerySnapshot querySnapshot =
         randomColl.whereNotIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
-
     assertEquals(asList("b", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotIn("zip", Arrays.<Object>asList(Double.NaN)).get().get();
+    assertEquals(asList("b", "a", "c", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+
+    List<Object> nullArray = new ArrayList<>();
+    nullArray.add(null);
+    querySnapshot = randomColl.whereNotIn("zip", nullArray).get().get();
+    assertEquals(new ArrayList<>(), querySnapshotToIds(querySnapshot));
   }
 
   @Test
