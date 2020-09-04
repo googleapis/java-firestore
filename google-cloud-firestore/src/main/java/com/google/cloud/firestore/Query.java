@@ -1331,7 +1331,7 @@ public class Query {
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
-            "Firestore.Query: Start",
+            TraceUtil.SPAN_NAME_RUNQUERY + ": Start",
             ImmutableMap.of(
                 "transactional", AttributeValue.booleanAttributeValue(transactionId != null)));
 

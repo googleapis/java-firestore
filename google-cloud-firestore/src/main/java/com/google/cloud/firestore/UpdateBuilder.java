@@ -166,6 +166,7 @@ public abstract class UpdateBuilder<T> {
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     verifyNotCommitted();
+    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_CREATEDOCUMENT);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, fields, UserDataConverter.NO_DELETES);
@@ -548,7 +549,7 @@ public abstract class UpdateBuilder<T> {
       @Nonnull Precondition precondition) {
     verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
-
+    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_UPDATEDOCUMENT);
     Map<String, Object> deconstructedMap = expandObject(fields);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
@@ -611,6 +612,7 @@ public abstract class UpdateBuilder<T> {
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
     verifyNotCommitted();
+    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_DELETEDOCUMENT);
     Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
     if (!precondition.isEmpty()) {
@@ -626,7 +628,7 @@ public abstract class UpdateBuilder<T> {
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
-            "CloudFirestore.Commit",
+            TraceUtil.SPAN_NAME_COMMIT,
             ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
 
     final CommitRequest.Builder request = CommitRequest.newBuilder();
@@ -674,7 +676,7 @@ public abstract class UpdateBuilder<T> {
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
-            "CloudFirestore.BatchWrite",
+            TraceUtil.SPAN_NAME_BATCHWRITE,
             ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
 
     final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
