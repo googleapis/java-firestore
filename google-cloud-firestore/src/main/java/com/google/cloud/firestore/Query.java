@@ -496,7 +496,7 @@ public class Query {
 
   /**
    * Creates and returns a new Query with the additional filter that documents must contain the
-   * specified field and the value does not equal the specified value.
+   * specified field and its value does not equal the specified value.
    *
    * @param field The name of the field to compare.
    * @param value The value for comparison.
