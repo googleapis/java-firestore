@@ -1252,7 +1252,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void notInQueriesWithDocumentId() throws Exception {
+  public void inQueriesWithDocumentId() throws Exception {
     DocumentReference doc1 = setDocument("a", map("count", 1));
     DocumentReference doc2 = setDocument("b", map("count", 2));
     setDocument("c", map("count", 3));
