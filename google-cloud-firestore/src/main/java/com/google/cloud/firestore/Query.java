@@ -782,7 +782,7 @@ public class Query {
    * Creates and returns a new Query with the additional filter that documents must contain the
    * specified field and the value does not equal any of the values from the provided list.
    *
-   * <p>A Query can have only one whereNotIn() filter, and it cannot be combined with
+   * <p>A Query can have only one whereNotIn() filter and it cannot be combined with
    * whereArrayContains(), whereArrayContainsAny(), whereIn(), or whereNotEqualTo().
    *
    * @param field The name of the field to search.
