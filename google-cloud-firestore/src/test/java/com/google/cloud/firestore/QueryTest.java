@@ -219,6 +219,10 @@ public class QueryTest {
     query.whereEqualTo("foo", null).get().get();
     query.whereEqualTo("foo", Double.NaN).get().get();
     query.whereEqualTo("foo", Float.NaN).get().get();
+    query.whereNotEqualTo("foo", "bar").get().get();
+    query.whereNotEqualTo("foo", null).get().get();
+    query.whereNotEqualTo("foo", Double.NaN).get().get();
+    query.whereNotEqualTo("foo", Float.NaN).get().get();
     query.whereGreaterThan("foo", "bar").get().get();
     query.whereGreaterThanOrEqualTo("foo", "bar").get().get();
     query.whereLessThan("foo", "bar").get().get();
@@ -226,6 +230,7 @@ public class QueryTest {
     query.whereArrayContains("foo", "bar").get().get();
     query.whereIn("foo", Collections.<Object>singletonList("bar"));
     query.whereArrayContainsAny("foo", Collections.<Object>singletonList("bar"));
+    query.whereNotIn("foo", Collections.<Object>singletonList("bar"));
 
     Iterator<RunQueryRequest> expected =
         Arrays.asList(
@@ -233,13 +238,18 @@ public class QueryTest {
                 query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NULL)),
                 query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NAN)),
                 query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NAN)),
+                query(filter(StructuredQuery.FieldFilter.Operator.NOT_EQUAL)),
+                query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL)),
+                query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN)),
+                query(unaryFilter(StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.GREATER_THAN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.GREATER_THAN_OR_EQUAL)),
                 query(filter(StructuredQuery.FieldFilter.Operator.LESS_THAN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.LESS_THAN_OR_EQUAL)),
                 query(filter(StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS)),
                 query(filter(StructuredQuery.FieldFilter.Operator.IN)),
-                query(filter(StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY)))
+                query(filter(StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY)),
+                query(filter(StructuredQuery.FieldFilter.Operator.NOT_IN)))
             .iterator();
 
     for (RunQueryRequest actual : runQuery.getAllValues()) {
@@ -257,23 +267,27 @@ public class QueryTest {
             Matchers.<ServerStreamingCallable>any());
 
     query.whereEqualTo(FieldPath.of("foo"), "bar").get().get();
+    query.whereNotEqualTo(FieldPath.of("foo"), "bar").get().get();
     query.whereGreaterThan(FieldPath.of("foo"), "bar").get().get();
     query.whereGreaterThanOrEqualTo(FieldPath.of("foo"), "bar").get().get();
     query.whereLessThan(FieldPath.of("foo"), "bar").get().get();
     query.whereLessThanOrEqualTo(FieldPath.of("foo"), "bar").get().get();
     query.whereArrayContains(FieldPath.of("foo"), "bar").get().get();
     query.whereIn(FieldPath.of("foo"), Collections.<Object>singletonList("bar"));
+    query.whereNotIn(FieldPath.of("foo"), Collections.<Object>singletonList("bar"));
     query.whereArrayContainsAny(FieldPath.of("foo"), Collections.<Object>singletonList("bar"));
 
     Iterator<RunQueryRequest> expected =
         Arrays.asList(
                 query(filter(StructuredQuery.FieldFilter.Operator.EQUAL)),
+                query(filter(StructuredQuery.FieldFilter.Operator.NOT_EQUAL)),
                 query(filter(StructuredQuery.FieldFilter.Operator.GREATER_THAN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.GREATER_THAN_OR_EQUAL)),
                 query(filter(StructuredQuery.FieldFilter.Operator.LESS_THAN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.LESS_THAN_OR_EQUAL)),
                 query(filter(StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS)),
                 query(filter(StructuredQuery.FieldFilter.Operator.IN)),
+                query(filter(StructuredQuery.FieldFilter.Operator.NOT_IN)),
                 query(filter(StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY)))
             .iterator();
 
@@ -362,6 +376,56 @@ public class QueryTest {
     } catch (IllegalArgumentException e) {
       assertEquals(
           "Invalid Query. A non-empty array is required for 'IN' filters.", e.getMessage());
+    }
+  }
+
+  @Test
+  public void notInQueriesWithReferenceArray() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    query
+        .whereNotIn(
+            FieldPath.documentId(),
+            Arrays.<Object>asList("doc", firestoreMock.document("coll/doc")))
+        .get()
+        .get();
+
+    Value value =
+        Value.newBuilder()
+            .setArrayValue(
+                ArrayValue.newBuilder()
+                    .addValues(reference(DOCUMENT_NAME))
+                    .addValues(reference(DOCUMENT_NAME))
+                    .build())
+            .build();
+    RunQueryRequest expectedRequest = query(filter(Operator.NOT_IN, "__name__", value));
+
+    assertEquals(expectedRequest, runQuery.getValue());
+  }
+
+  @Test
+  public void validatesNotInQueries() {
+    try {
+      query.whereNotIn(FieldPath.documentId(), Arrays.<Object>asList("foo", 42)).get();
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "The corresponding value for FieldPath.documentId() must be a String or a "
+              + "DocumentReference, but was: 42.",
+          e.getMessage());
+    }
+
+    try {
+      query.whereNotIn(FieldPath.documentId(), Arrays.<Object>asList()).get();
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals(
+          "Invalid Query. A non-empty array is required for 'NOT_IN' filters.", e.getMessage());
     }
   }
 
