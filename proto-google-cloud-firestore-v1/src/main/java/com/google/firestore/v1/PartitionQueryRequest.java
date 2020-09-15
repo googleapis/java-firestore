@@ -250,8 +250,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * A structured query.
-   * Filters, order bys, limits, offsets, and start/end cursors are not
-   * supported.
+   * Query must specify collection with all descendants and be ordered by name
+   * ascending. Other filters, order bys, limits, offsets, and start/end
+   * cursors are not supported.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -267,8 +268,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * A structured query.
-   * Filters, order bys, limits, offsets, and start/end cursors are not
-   * supported.
+   * Query must specify collection with all descendants and be ordered by name
+   * ascending. Other filters, order bys, limits, offsets, and start/end
+   * cursors are not supported.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -287,8 +289,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * A structured query.
-   * Filters, order bys, limits, offsets, and start/end cursors are not
-   * supported.
+   * Query must specify collection with all descendants and be ordered by name
+   * ascending. Other filters, order bys, limits, offsets, and start/end
+   * cursors are not supported.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -309,7 +312,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    * <pre>
    * The desired maximum number of partition points.
    * The partitions may be returned across multiple pages of results.
-   * The number must be strictly positive. The actual number of partitions
+   * The number must be positive. The actual number of partitions
    * returned may be fewer.
    * For example, this may be set to one fewer than the number of parallel
    * queries to be run, or in running a data pipeline job, one fewer than the
@@ -967,8 +970,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -984,8 +988,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1011,8 +1016,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1035,8 +1041,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1057,8 +1064,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1090,8 +1098,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1117,8 +1126,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1131,8 +1141,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1153,8 +1164,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * A structured query.
-     * Filters, order bys, limits, offsets, and start/end cursors are not
-     * supported.
+     * Query must specify collection with all descendants and be ordered by name
+     * ascending. Other filters, order bys, limits, offsets, and start/end
+     * cursors are not supported.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
@@ -1191,7 +1203,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The desired maximum number of partition points.
      * The partitions may be returned across multiple pages of results.
-     * The number must be strictly positive. The actual number of partitions
+     * The number must be positive. The actual number of partitions
      * returned may be fewer.
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the
@@ -1212,7 +1224,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The desired maximum number of partition points.
      * The partitions may be returned across multiple pages of results.
-     * The number must be strictly positive. The actual number of partitions
+     * The number must be positive. The actual number of partitions
      * returned may be fewer.
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the
@@ -1236,7 +1248,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The desired maximum number of partition points.
      * The partitions may be returned across multiple pages of results.
-     * The number must be strictly positive. The actual number of partitions
+     * The number must be positive. The actual number of partitions
      * returned may be fewer.
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the

@@ -21,6 +21,9 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Define a default empty value property which can be overridden on the command line if
+        necessary by passing `-Dfirestore.project.id="some-id"` when running maven exec -->
+    <firestore.project.id/>
   </properties>
 
 
@@ -30,7 +33,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>9.1.0</version>
+        <version>10.1.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -57,4 +60,30 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-classpath</argument>
+            <classpath/>
+            <argument>com.example.firestore.Quickstart</argument>
+            <argument>${firestore.project.id}</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
