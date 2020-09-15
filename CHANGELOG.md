@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/googleapis/java-firestore/compare/v2.0.0...v2.1.0) (2020-09-10)
+
+
+### Features
+
+* add method to set emulator host programmatically ([#319](https://www.github.com/googleapis/java-firestore/issues/319)) ([#336](https://www.github.com/googleapis/java-firestore/issues/336)) ([97037f4](https://www.github.com/googleapis/java-firestore/commit/97037f42f76e9df3ae458d4e2b04336e64b834c3)), closes [#210](https://www.github.com/googleapis/java-firestore/issues/210) [#190](https://www.github.com/googleapis/java-firestore/issues/190)
+* add opencensus tracing support ([#360](https://www.github.com/googleapis/java-firestore/issues/360)) ([edaa539](https://www.github.com/googleapis/java-firestore/commit/edaa5395be0353fb261d954429c624623bc4e346))
+* add support for != and NOT_IN queries ([#350](https://www.github.com/googleapis/java-firestore/issues/350)) ([68aff5b](https://www.github.com/googleapis/java-firestore/commit/68aff5b406fb2732951750f3d5f9768df6ee12b5))
+* generate protos to add NOT_EQUAL, NOT_IN, IS_NOT_NAN, IS_NOT_NULL query operators ([#343](https://www.github.com/googleapis/java-firestore/issues/343)) ([3fb1b63](https://www.github.com/googleapis/java-firestore/commit/3fb1b631f8dd087f0f3e1c43363e9642f497993a))
+
+
+### Bug Fixes
+
+* **samples:** re-add maven exec config for Quickstart sample ([#347](https://www.github.com/googleapis/java-firestore/issues/347)) ([4c2329b](https://www.github.com/googleapis/java-firestore/commit/4c2329bf89ffab4bd3060e16e1cf231b7caf4653))
+* add support to deserialize to custom Lists and Maps ([#337](https://www.github.com/googleapis/java-firestore/issues/337)) ([dc897e0](https://www.github.com/googleapis/java-firestore/commit/dc897e00a85e745f57f615460b29d17b7dd247c6))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.9.0 ([#352](https://www.github.com/googleapis/java-firestore/issues/352)) ([783d41e](https://www.github.com/googleapis/java-firestore/commit/783d41e167c7c79957faeeebd7a76ab72b5b157d))
+
 ## [2.0.0](https://www.github.com/googleapis/java-firestore/compare/v1.35.2...v2.0.0) (2020-08-14)
 
 
