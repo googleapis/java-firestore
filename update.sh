@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
+# It is an error if a variable is not set.
+set -u
 IFS=$'\n\t'
 
 # Variables
