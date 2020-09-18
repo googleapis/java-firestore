@@ -26,6 +26,15 @@
   "destinations": [
     {
       "client": {
+      "source": "googleapis",
+      "apiName": "firestore-bundle",
+      "apiVersion": "v1",
+      "language": "java",
+      "generator": "bazel"
+      }
+    },
+    {
+      "client": {
         "source": "googleapis",
         "apiName": "firestore-admin",
         "apiVersion": "v1",

@@ -120,6 +120,13 @@ firestore_v1 = generate_client(
     include_gapic=True
 )
 
+bundle_v1 = generate_client(
+    service='firestore-bundle',
+    version='v1',
+    proto_path='firestore',
+    bazel_target='//firestore:google-cloud-firestore-bundle-v1-java',
+)
+
 java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
     # due to the default project running datastore

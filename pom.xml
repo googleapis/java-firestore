@@ -209,6 +209,7 @@
   <modules>
     <module>proto-google-cloud-firestore-admin-v1</module>
     <module>proto-google-cloud-firestore-v1</module>
+    <module>proto-google-cloud-firestore-bundle-v1</module>
     <module>grpc-google-cloud-firestore-admin-v1</module>
     <module>grpc-google-cloud-firestore-v1</module>
     <module>google-cloud-firestore-admin</module>
