@@ -248,6 +248,22 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void testQueryNotEquals() throws Exception {
+    Query query = queryDataSnippets.notEqualsQuery();
+    Set<String> expected = newHashSet("DC", "TOK", "BJ");
+    Set<String> actual = getResultsAsSet(query);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testFilterNotIn() throws Exception {
+    Query query = queryDataSnippets.filterNotIn();
+    Set<String> expected = newHashSet("BJ");
+    Set<String> actual = getResultsAsSet(query);
+    assertEquals(expected, actual);
+  }
+
   private Set<String> getResultsAsSet(Query query) throws Exception {
     List<String> docIds = getResults(query);
     return new HashSet<>(docIds);
