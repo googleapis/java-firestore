@@ -120,7 +120,7 @@ firestore_v1 = generate_client(
     include_gapic=True
 )
 
-# TODO(wuandy): Add `bundle.proto` to googleapis/googleapis.
+# TODO(wu-hui): Add `bundle.proto` to googleapis/googleapis.
 # The target below points to a local file, but synthtool only works against the
 # googleapis repo.
 # bundle_v1 = generate_client(
