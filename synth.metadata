@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "8cbe5d105bf2efa75c0bb6ad618056b46cf2c98f"
+        "sha": "cb39ee820c2f67e22da623f5a6eaa7ee6bf351e2"
       }
     },
     {
@@ -19,20 +19,11 @@
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "538a68019eb4a36a0cdfa4021f324dd01b784395"
+        "sha": "916c10e8581804df2b48a0f0457d848f3faa582e"
       }
     }
   ],
   "destinations": [
-    {
-      "client": {
-      "source": "googleapis",
-      "apiName": "firestore-bundle",
-      "apiVersion": "v1",
-      "language": "java",
-      "generator": "bazel"
-      }
-    },
     {
       "client": {
         "source": "googleapis",
