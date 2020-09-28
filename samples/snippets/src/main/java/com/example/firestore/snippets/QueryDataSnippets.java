@@ -572,4 +572,22 @@ class QueryDataSnippets {
     // [END fs_query_filter_in_with_array]
     return query;
   }
+
+  Query notEqualsQuery() {
+    // [START fs_query_not_equals]
+    CollectionReference citiesRef = db.collection("cities");
+
+    Query query = citiesRef.whereNotEqualTo("capital", false);
+    // [END fs_query_not_equals]
+    return query;
+  }
+
+  Query filterNotIn() {
+    // [START fs_filter_not_in]
+    CollectionReference citiesRef = db.collection("cities");
+
+    Query query = citiesRef.whereNotIn("country", Arrays.asList("USA", "Japan"));
+    // [END fs_filter_not_in]
+    return query;
+  }
 }
