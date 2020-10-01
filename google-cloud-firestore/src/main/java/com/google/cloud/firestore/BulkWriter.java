@@ -630,8 +630,8 @@ final class BulkWriter implements AutoCloseable {
                 public ApiFuture<List<BatchWriteResult>> apply(Exception exception) {
                   List<BatchWriteResult> results = new ArrayList<>();
                   // If the BatchWrite RPC fails, map the exception to each individual result.
-                  for (String documentPath : batch.getPendingDocumentPaths()) {
-                    results.add(new BatchWriteResult(documentPath, null, exception));
+                  for (int i = 0; i < batch.getPendingDocumentPaths().size(); ++i) {
+                    results.add(new BatchWriteResult(null, exception));
                   }
                   return ApiFutures.immediateFuture(results);
                 }

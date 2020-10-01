@@ -725,9 +725,7 @@ public abstract class UpdateBuilder<T> {
               } else {
                 exception = FirestoreException.serverRejected(code, status.getMessage());
               }
-              result.add(
-                  new BatchWriteResult(
-                      writes.get(i).documentReference.getPath(), updateTime, exception));
+              result.add(new BatchWriteResult(updateTime, exception));
             }
 
             return result;
