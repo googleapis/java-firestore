@@ -200,6 +200,10 @@
     <method>com.google.api.gax.rpc.UnaryCallable batchWriteCallable()</method>
   </difference>
   <difference>
+    <differenceType>1001</differenceType>
+    <className>com/google/cloud/firestore/BatchWriteResult</className>
+  </difference>
+  <difference>
     <differenceType>6004</differenceType>
     <className>com/google/cloud/firestore/UpdateBuilder</className>
     <field>pendingOperations</field>
