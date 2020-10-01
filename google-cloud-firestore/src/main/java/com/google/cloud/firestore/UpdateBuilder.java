@@ -73,12 +73,13 @@ public abstract class UpdateBuilder<T> {
    */
   static class PendingOperation {
     int writeBatchIndex;
-    String key;
+    String documentKey;
     SettableApiFuture<WriteResult> future;
 
-    PendingOperation(int writeBatchIndex, String key, SettableApiFuture<WriteResult> future) {
+    PendingOperation(
+        int writeBatchIndex, String documentKey, SettableApiFuture<WriteResult> future) {
       this.writeBatchIndex = writeBatchIndex;
-      this.key = key;
+      this.documentKey = documentKey;
       this.future = future;
     }
   }
@@ -755,7 +756,7 @@ public abstract class UpdateBuilder<T> {
             new Function<PendingOperation, String>() {
               @Override
               public String apply(PendingOperation input) {
-                return input.key;
+                return input.documentKey;
               }
             })
         .toList();
@@ -792,8 +793,9 @@ public abstract class UpdateBuilder<T> {
   private ApiFuture<WriteResult> processOperation(DocumentReference documentReference) {
     Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
     SettableApiFuture<WriteResult> result = SettableApiFuture.create();
+    int nextBatchIndex = getPendingOperationCount();
     pendingOperations.add(
-        new PendingOperation(getPendingOperationCount(), documentReference.getPath(), result));
+        new PendingOperation(nextBatchIndex, documentReference.getPath(), result));
 
     if (getPendingOperationCount() == maxBatchSize) {
       state = BatchState.READY_TO_SEND;
@@ -820,7 +822,7 @@ public abstract class UpdateBuilder<T> {
         // Retry the operation if it has not been processed. Store the current index of
         // pendingOperations to preserve the mapping of this operation's index in the underlying
         // writes array.
-        newPendingOperations.add(new PendingOperation(i, operation.key, operation.future));
+        newPendingOperations.add(new PendingOperation(i, operation.documentKey, operation.future));
       }
     }
     pendingOperations = newPendingOperations;
