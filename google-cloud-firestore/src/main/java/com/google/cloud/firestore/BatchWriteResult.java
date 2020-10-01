@@ -26,21 +26,18 @@ import javax.annotation.Nullable;
  */
 @InternalApi
 public final class BatchWriteResult {
-  private final DocumentReference documentReference;
+  private final String key;
   @Nullable private final Timestamp writeTime;
   @Nullable private final Exception exception;
 
-  BatchWriteResult(
-      DocumentReference documentReference,
-      @Nullable Timestamp timestamp,
-      @Nullable Exception exception) {
-    this.documentReference = documentReference;
+  BatchWriteResult(String key, @Nullable Timestamp timestamp, @Nullable Exception exception) {
+    this.key = key;
     this.writeTime = timestamp;
     this.exception = exception;
   }
 
-  public DocumentReference getDocumentReference() {
-    return documentReference;
+  public String getKey() {
+    return key;
   }
 
   @Nullable
