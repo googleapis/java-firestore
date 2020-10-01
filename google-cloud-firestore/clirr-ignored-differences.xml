@@ -161,7 +161,7 @@
     <method>com.google.cloud.firestore.Query collectionGroup(java.lang.String)</method>
     <to>com.google.cloud.firestore.CollectionGroup</to>
   </difference>
-  
+
   <!--
   BulkWriter
   -->
@@ -198,6 +198,18 @@
     <differenceType>7012</differenceType>
     <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
     <method>com.google.api.gax.rpc.UnaryCallable batchWriteCallable()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/BatchWriteResult</className>
+    <method>com.google.cloud.firestore.DocumentReference getDocumentReference()</method>
+  </difference>
+  <difference>
+    <differenceType>6004</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <field>pendingOperations</field>
+    <from>java.util.Map</from>
+    <to>java.util.List</to>
   </difference>
 
   <!--
