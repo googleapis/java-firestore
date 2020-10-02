@@ -584,7 +584,7 @@ public class ITSystemTest {
     }
     assertNull(partitions.get(partitions.size() - 1).getEndBefore());
 
-    // Validate that we can use the paritions to read the original documents.
+    // Validate that we can use the partitions to read the original documents.
     int resultCount = 0;
     for (QueryPartition partition : partitions) {
       resultCount += partition.createQuery().get().get().size();
