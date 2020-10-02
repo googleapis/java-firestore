@@ -53,7 +53,7 @@ final class BulkWriter implements AutoCloseable {
    * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    */
-  private static final int STARTING_MAXIMUM_OPS_PER_SECOND = 500;
+  static final int DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND = 500;
 
   /**
    * The rate by which to increase the capacity as specified by the 500/50/5 rule.
@@ -97,7 +97,8 @@ final class BulkWriter implements AutoCloseable {
   private final ExponentialRetryAlgorithm backoff;
   private TimedAttemptSettings nextAttempt;
 
-  BulkWriter(FirestoreImpl firestore, boolean enableThrottling) {
+  BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
+    validateBulkWriterOptions(options);
     this.firestore = firestore;
     this.backoff =
         new ExponentialRetryAlgorithm(
@@ -105,14 +106,35 @@ final class BulkWriter implements AutoCloseable {
     this.nextAttempt = backoff.createFirstAttempt();
     this.firestoreExecutor = firestore.getClient().getExecutor();
 
-    if (enableThrottling) {
-      rateLimiter =
+    if (!options.isThrottlingEnabled()) {
+      this.rateLimiter =
           new RateLimiter(
-              STARTING_MAXIMUM_OPS_PER_SECOND,
-              RATE_LIMITER_MULTIPLIER,
-              RATE_LIMITER_MULTIPLIER_MILLIS);
+              Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     } else {
-      rateLimiter = new RateLimiter(Integer.MAX_VALUE, Double.MAX_VALUE, Integer.MAX_VALUE);
+      double startingRate = DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND;
+      double maxRate = Integer.MAX_VALUE;
+
+      if (options.getInitialOpsPerSecond() != BulkWriterOptions.DEFAULT_UNSET_VALUE) {
+        startingRate = options.getInitialOpsPerSecond();
+      }
+
+      if (options.getMaxOpsPerSecond() != BulkWriterOptions.DEFAULT_UNSET_VALUE) {
+        maxRate = options.getMaxOpsPerSecond();
+      }
+
+      // The initial validation step ensures that the maxOpsPerSecond is
+      // greater than initialOpsPerSecond. If this inequality is true, that
+      // means initialOpsPerSecond was not set and maxOpsPerSecond is less
+      // than the default starting rate.
+      if (maxRate < startingRate) {
+        startingRate = maxRate;
+      }
+      this.rateLimiter =
+          new RateLimiter(
+              (int) startingRate,
+              RATE_LIMITER_MULTIPLIER,
+              RATE_LIMITER_MULTIPLIER_MILLIS,
+              (int) maxRate);
     }
   }
 
@@ -678,5 +700,34 @@ final class BulkWriter implements AutoCloseable {
   @VisibleForTesting
   void setMaxBatchSize(int size) {
     maxBatchSize = size;
+  }
+
+  @VisibleForTesting
+  RateLimiter getRateLimiter() {
+    return rateLimiter;
+  }
+
+  private void validateBulkWriterOptions(BulkWriterOptions options) {
+    double initialRate = options.getInitialOpsPerSecond();
+    double maxRate = options.getMaxOpsPerSecond();
+
+    if (initialRate < 1) {
+      throw FirestoreException.invalidState(
+          "Value for argument 'initialOpsPerSecond' must be an integer within [1, Infinity], but was: "
+              + (int) initialRate);
+    }
+
+    if (maxRate < 1) {
+      throw FirestoreException.invalidState(
+          "Value for argument 'maxOpsPerSecond' must be an integer within [1, Infinity], but was: "
+              + (int) maxRate);
+    }
+
+    if (initialRate != BulkWriterOptions.DEFAULT_UNSET_VALUE
+        && maxRate != BulkWriterOptions.DEFAULT_UNSET_VALUE
+        && initialRate > maxRate) {
+      throw FirestoreException.invalidState(
+          "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
+    }
   }
 }

@@ -38,29 +38,46 @@ class RateLimiter {
   private final double multiplier;
   private final int multiplierMillis;
   private final long startTimeMillis;
+  private final int maximumCapacity;
 
   private int availableTokens;
   private long lastRefillTimeMillis;
 
-  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis) {
-    this(initialCapacity, multiplier, multiplierMillis, new Date().getTime());
+  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis, int maximumCapacity) {
+    this(initialCapacity, multiplier, multiplierMillis, maximumCapacity, new Date().getTime());
   }
 
   /**
    * @param initialCapacity Initial maximum number of operations per second.
    * @param multiplier Rate by which to increase the capacity.
    * @param multiplierMillis How often the capacity should increase in milliseconds.
+   * @param maximumCapacity Maximum number of allowed operations per second. The number of tokens
+   *     added per second will never exceed this number.
    * @param startTimeMillis The starting time in epoch milliseconds that the rate limit is based on.
    *     Used for testing the limiter.
    */
-  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis, long startTimeMillis) {
+  RateLimiter(
+      int initialCapacity,
+      double multiplier,
+      int multiplierMillis,
+      int maximumCapacity,
+      long startTimeMillis) {
     this.initialCapacity = initialCapacity;
     this.multiplier = multiplier;
     this.multiplierMillis = multiplierMillis;
+    this.maximumCapacity = maximumCapacity;
     this.startTimeMillis = startTimeMillis;
 
     this.availableTokens = initialCapacity;
     this.lastRefillTimeMillis = startTimeMillis;
+  }
+
+  public int getInitialCapacity() {
+    return initialCapacity;
+  }
+
+  public int getMaximumCapacity() {
+    return maximumCapacity;
   }
 
   public boolean tryMakeRequest(int numOperations) {
@@ -132,7 +149,10 @@ class RateLimiter {
   public int calculateCapacity(long requestTimeMillis) {
     long millisElapsed = requestTimeMillis - startTimeMillis;
     int operationsPerSecond =
-        (int) (Math.pow(multiplier, (int) (millisElapsed / multiplierMillis)) * initialCapacity);
+        Math.min(
+            (int)
+                (Math.pow(multiplier, (int) (millisElapsed / multiplierMillis)) * initialCapacity),
+            maximumCapacity);
     return operationsPerSecond;
   }
 }

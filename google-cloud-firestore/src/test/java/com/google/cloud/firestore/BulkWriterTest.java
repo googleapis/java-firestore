@@ -706,4 +706,65 @@ public class BulkWriterTest {
       assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS + 1);
     }
   }
+
+  @Test
+  public void optionsRequiresPositiveInteger() throws Exception {
+    try {
+      firestoreMock.bulkWriter(BulkWriterOptions.withInitialOpsPerSecondThrottling(-1));
+      fail("bulkWriter() call should have failed");
+    } catch (Exception e) {
+      assertEquals(
+          e.getMessage(),
+          "Value for argument 'initialOpsPerSecond' must be an integer within [1, Infinity], but was: -1");
+    }
+
+    try {
+      firestoreMock.bulkWriter(BulkWriterOptions.withMaxOpsPerSecondThrottling(-1));
+      fail("bulkWriter() call should have failed");
+    } catch (Exception e) {
+      assertEquals(
+          e.getMessage(),
+          "Value for argument 'maxOpsPerSecond' must be an integer within [1, Infinity], but was: -1");
+    }
+  }
+
+  @Test
+  public void optionsRequiresMaxGreaterThanInitial() throws Exception {
+    try {
+      firestoreMock.bulkWriter(BulkWriterOptions.withCustomThrottling(550, 500));
+      fail("bulkWriter() call should have failed");
+    } catch (Exception e) {
+      assertEquals(e.getMessage(), "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
+    }
+  }
+
+  @Test
+  public void optionsInitialAndMaxRatesAreProperlySet() throws Exception {
+    BulkWriter bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.withCustomThrottling(500, 550));
+    assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), 500);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), 550);
+
+    bulkWriter = firestoreMock.bulkWriter(BulkWriterOptions.withMaxOpsPerSecondThrottling(1000));
+    assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), 500);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), 1000);
+
+    bulkWriter = firestoreMock.bulkWriter(BulkWriterOptions.withInitialOpsPerSecondThrottling(100));
+    assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), 100);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), Integer.MAX_VALUE);
+
+    bulkWriter = firestoreMock.bulkWriter(BulkWriterOptions.withMaxOpsPerSecondThrottling(100));
+    assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), 100);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), 100);
+
+    bulkWriter = firestoreMock.bulkWriter();
+    assertEquals(
+        bulkWriter.getRateLimiter().getInitialCapacity(),
+        BulkWriter.DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), Integer.MAX_VALUE);
+
+    bulkWriter = firestoreMock.bulkWriter(BulkWriterOptions.withThrottlingDisabled());
+    assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), Integer.MAX_VALUE);
+    assertEquals(bulkWriter.getRateLimiter().getMaximumCapacity(), Integer.MAX_VALUE);
+  }
 }
