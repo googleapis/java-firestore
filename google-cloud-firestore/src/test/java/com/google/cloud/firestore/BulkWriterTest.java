@@ -50,7 +50,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -549,8 +548,6 @@ public class BulkWriterTest {
   }
 
   @Test
-  @Ignore
-  // TODO(chenbrian): Fix this test after throttling options are added.
   public void doesNotSendBatchesIfDoingSoExceedsRateLimit() {
     final boolean[] timeoutCalled = {false};
     final ScheduledExecutorService timeoutExecutor =
@@ -565,7 +562,8 @@ public class BulkWriterTest {
           }
         };
     doReturn(timeoutExecutor).when(firestoreRpc).getExecutor();
-    BulkWriter bulkWriter = firestoreMock.bulkWriter();
+    BulkWriter bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.withInitialOpsPerSecondThrottling(5));
 
     for (int i = 0; i < 600; ++i) {
       bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
