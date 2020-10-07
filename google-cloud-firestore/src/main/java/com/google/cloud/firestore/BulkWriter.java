@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 
 final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
-  public static final int MAX_BATCH_SIZE = 20;
+  public static final int MAX_BATCH_SIZE = 25;
 
   public static final int MAX_RETRY_ATTEMPTS = 10;
 
