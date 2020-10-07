@@ -16,88 +16,70 @@
 
 package com.google.cloud.firestore;
 
-import javax.annotation.Nonnull;
+import com.google.auto.value.AutoValue;
 
-/** Options used to disable request throttling in BulkWriter. */
-final class BulkWriterOptions {
-  static final double DEFAULT_UNSET_VALUE = 1.1;
-  private final boolean throttling;
-  private double initialOpsPerSecond = DEFAULT_UNSET_VALUE;
-  private double maxOpsPerSecond = DEFAULT_UNSET_VALUE;
-
-  BulkWriterOptions(boolean enableThrottling) {
-    this.throttling = enableThrottling;
-  }
-
-  private BulkWriterOptions(double initialOpsPerSecond, double maxOpsPerSecond) {
-    this.throttling = true;
-    this.initialOpsPerSecond = initialOpsPerSecond;
-    this.maxOpsPerSecond = maxOpsPerSecond;
-  }
-
-  boolean isThrottlingEnabled() {
-    return throttling;
-  }
-
-  double getInitialOpsPerSecond() {
-    return initialOpsPerSecond;
-  }
-
-  double getMaxOpsPerSecond() {
-    return maxOpsPerSecond;
-  }
+/** Options used to configure request throttling in BulkWriter. */
+@AutoValue
+abstract class BulkWriterOptions {
+  /**
+   * Return whether throttling is enabled.
+   *
+   * @return Whether throttling is enabled.
+   */
+  abstract boolean getThrottlingEnabled();
 
   /**
-   * An options object that will disable throttling in the created BulkWriter.
+   * Returns the initial maximum number of operations per second allowed by the throttler.
    *
-   * @return The BulkWriterOptions object.
+   * @return The initial maximum number of operations per second allowed by the throttler.
    */
-  @Nonnull
-  public static BulkWriterOptions withThrottlingDisabled() {
-    return new BulkWriterOptions(false);
-  }
+  abstract double getInitialOpsPerSecond();
 
   /**
-   * An options object that will enable throttling in the created BulkWriter with the provided
-   * starting rate.
+   * Returns the maximum number of operations per second allowed by the throttler.
    *
-   * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
-   *     throttler.
-   * @return The BulkWriterOptions object.
+   * <p>The throttler's allowed operations per second does not ramp up past the specified operations
+   * per second.
+   *
+   * @return The maximum number of operations per second allowed by the throttler.
    */
-  @Nonnull
-  public static BulkWriterOptions withInitialOpsPerSecondThrottling(int initialOpsPerSecond) {
-    return new BulkWriterOptions(initialOpsPerSecond, DEFAULT_UNSET_VALUE);
+  abstract double getMaxOpsPerSecond();
+
+  static Builder builder() {
+    return new AutoValue_BulkWriterOptions.Builder()
+        .setMaxOpsPerSecond(Double.NaN)
+        .setInitialOpsPerSecond(Double.NaN)
+        .setThrottlingEnabled(true);
   }
 
-  /**
-   * An options object that will enable throttling in the created BulkWriter with the provided
-   * maximum rate.
-   *
-   * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
-   *     The throttler's allowed operations per second does not ramp up past the specified
-   *     operations per second.
-   * @return The BulkWriterOptions object.
-   */
-  @Nonnull
-  public static BulkWriterOptions withMaxOpsPerSecondThrottling(int maxOpsPerSecond) {
-    return new BulkWriterOptions(DEFAULT_UNSET_VALUE, maxOpsPerSecond);
-  }
+  abstract Builder toBuilder();
 
-  /**
-   * An options object that will enable throttling in the created BulkWriter with the provided
-   * starting and maximum rate.
-   *
-   * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
-   *     throttler.
-   * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
-   *     The throttler's allowed operations per second does not ramp up past the specified
-   *     operations per second.
-   * @return The BulkWriterOptions object.
-   */
-  @Nonnull
-  public static BulkWriterOptions withCustomThrottling(
-      int initialOpsPerSecond, int maxOpsPerSecond) {
-    return new BulkWriterOptions(initialOpsPerSecond, maxOpsPerSecond);
+  @AutoValue.Builder
+  abstract static class Builder {
+    /**
+     * Sets whether throttling should be enabled. By default, throttling is enabled.
+     *
+     * @param enabled Whether throttling should be enabled.
+     */
+    abstract Builder setThrottlingEnabled(boolean enabled);
+
+    /**
+     * Set the initial maximum number of operations per second allowed by the throttler.
+     *
+     * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
+     *     throttler.
+     */
+    abstract Builder setInitialOpsPerSecond(double initialOpsPerSecond);
+
+    /**
+     * Set the maximum number of operations per second allowed by the throttler.
+     *
+     * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
+     *     The throttler's allowed operations per second does not ramp up past the specified
+     *     operations per second.
+     */
+    abstract Builder setMaxOpsPerSecond(double maxOpsPerSecond);
+
+    abstract BulkWriterOptions build();
   }
 }

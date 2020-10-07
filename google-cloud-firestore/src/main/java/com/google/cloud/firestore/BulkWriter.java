@@ -106,7 +106,7 @@ final class BulkWriter implements AutoCloseable {
     this.nextAttempt = backoff.createFirstAttempt();
     this.firestoreExecutor = firestore.getClient().getExecutor();
 
-    if (!options.isThrottlingEnabled()) {
+    if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
           new RateLimiter(
               Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -114,18 +114,17 @@ final class BulkWriter implements AutoCloseable {
       double startingRate = DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND;
       double maxRate = Integer.MAX_VALUE;
 
-      if (options.getInitialOpsPerSecond() != BulkWriterOptions.DEFAULT_UNSET_VALUE) {
+      if (!Double.isNaN(options.getInitialOpsPerSecond())) {
         startingRate = options.getInitialOpsPerSecond();
       }
 
-      if (options.getMaxOpsPerSecond() != BulkWriterOptions.DEFAULT_UNSET_VALUE) {
+      if (!Double.isNaN(options.getMaxOpsPerSecond())) {
         maxRate = options.getMaxOpsPerSecond();
       }
 
-      // The initial validation step ensures that the maxOpsPerSecond is
-      // greater than initialOpsPerSecond. If this inequality is true, that
-      // means initialOpsPerSecond was not set and maxOpsPerSecond is less
-      // than the default starting rate.
+      // The initial validation step ensures that the maxOpsPerSecond is greater than
+      // initialOpsPerSecond. If this inequality is true, that means initialOpsPerSecond was not
+      // set and maxOpsPerSecond is less than the default starting rate.
       if (maxRate < startingRate) {
         startingRate = maxRate;
       }
@@ -720,21 +719,23 @@ final class BulkWriter implements AutoCloseable {
 
     if (initialRate < 1) {
       throw FirestoreException.invalidState(
-          "Value for argument 'initialOpsPerSecond' must be an integer within [1, Infinity], but was: "
+          "Value for argument 'initialOpsPerSecond' must be greater than 1, but was: "
               + (int) initialRate);
     }
 
     if (maxRate < 1) {
       throw FirestoreException.invalidState(
-          "Value for argument 'maxOpsPerSecond' must be an integer within [1, Infinity], but was: "
-              + (int) maxRate);
+          "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: " + (int) maxRate);
     }
 
-    if (initialRate != BulkWriterOptions.DEFAULT_UNSET_VALUE
-        && maxRate != BulkWriterOptions.DEFAULT_UNSET_VALUE
-        && initialRate > maxRate) {
+    if (!Double.isNaN(initialRate) && !Double.isNaN(maxRate) && initialRate > maxRate) {
       throw FirestoreException.invalidState(
           "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
+    }
+
+    if (!options.getThrottlingEnabled() && (!Double.isNaN(initialRate) || !Double.isNaN(maxRate))) {
+      throw FirestoreException.invalidState(
+          "Cannot set 'initialRate' or 'maxRate' when 'throttlingEnabled' is set to false.");
     }
   }
 }
