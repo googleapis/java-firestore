@@ -120,15 +120,12 @@ firestore_v1 = generate_client(
     include_gapic=True
 )
 
-# TODO(wu-hui): Add `bundle.proto` to googleapis/googleapis.
-# The target below points to a local file, but synthtool only works against the
-# googleapis repo.
-# bundle_v1 = generate_client(
-#     service='firestore-bundle',
-#     version='v1',
-#     proto_path='firestore',
-#     bazel_target='//firestore:google-cloud-firestore-bundle-v1-java',
-# )
+bundle_v1 = generate_client(
+    service='firestore-bundle',
+    version='v1',
+    proto_path='google/firestore/bundle',
+    bazel_target='//google/firestore/bundle:google-cloud-firestore-bundle-v1-java',
+)
 
 java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
