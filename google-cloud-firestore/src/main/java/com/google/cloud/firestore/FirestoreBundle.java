@@ -18,12 +18,12 @@ package com.google.cloud.firestore;
 
 import com.google.api.client.util.Lists;
 import com.google.cloud.Timestamp;
-import com.google.common.base.Preconditions;
-import com.google.firestore.proto.BundleElement;
-import com.google.firestore.proto.BundleMetadata;
-import com.google.firestore.proto.BundledDocumentMetadata;
-import com.google.firestore.proto.BundledQuery;
-import com.google.firestore.proto.NamedQuery;
+import com.google.common.base.Optional;
+import com.google.firestore.bundle.BundleElement;
+import com.google.firestore.bundle.BundleMetadata;
+import com.google.firestore.bundle.BundledDocumentMetadata;
+import com.google.firestore.bundle.BundledQuery;
+import com.google.firestore.bundle.NamedQuery;
 import com.google.firestore.v1.Document;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -32,7 +32,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.google.common.base.Optional;
 
 /** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
@@ -227,4 +226,3 @@ public final class FirestoreBundle {
     }
   }
 }
-

@@ -30,6 +30,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.ListDocumentsRequest;
+import io.opencensus.common.Scope;
+import io.opencensus.trace.Span;
+import io.opencensus.trace.Status;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -135,8 +138,9 @@ public class CollectionReference extends Query {
     request.setShowMissing(true);
 
     final ListDocumentsPagedResponse response;
-
-    try {
+    final TraceUtil traceUtil = TraceUtil.getInstance();
+    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_LISTDOCUMENTS);
+    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
       FirestoreRpc client = rpcContext.getClient();
       UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse> callable =
           client.listDocumentsPagedCallable();
@@ -144,7 +148,10 @@ public class CollectionReference extends Query {
       ApiFuture<ListDocumentsPagedResponse> future = rpcContext.sendRequest(build, callable);
       response = ApiExceptions.callAndTranslateApiException(future);
     } catch (ApiException exception) {
+      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
       throw FirestoreException.apiException(exception);
+    } finally {
+      span.end(TraceUtil.END_SPAN_OPTIONS);
     }
 
     return new Iterable<DocumentReference>() {

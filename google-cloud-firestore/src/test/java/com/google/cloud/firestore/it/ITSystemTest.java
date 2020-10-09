@@ -20,6 +20,8 @@ import static com.google.cloud.firestore.FirestoreBundleTest.toBundleElements;
 import static com.google.cloud.firestore.FirestoreBundleTest.verifyDocumentAndMeta;
 import static com.google.cloud.firestore.FirestoreBundleTest.verifyMetadata;
 import static com.google.cloud.firestore.FirestoreBundleTest.verifyNamedQuery;
+import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_LIST;
+import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
@@ -70,10 +72,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.firestore.proto.BundleElement;
-import com.google.firestore.proto.BundledDocumentMetadata;
-import com.google.firestore.proto.BundledQuery.LimitType;
-import com.google.firestore.proto.NamedQuery;
+import com.google.firestore.bundle.BundleElement;
+import com.google.firestore.bundle.BundledDocumentMetadata;
+import com.google.firestore.bundle.BundledQuery.LimitType;
+import com.google.firestore.bundle.NamedQuery;
 import com.google.firestore.v1.RunQueryRequest;
 import io.grpc.Status;
 import io.grpc.Status.Code;
@@ -594,7 +596,7 @@ public class ITSystemTest {
     }
     assertNull(partitions.get(partitions.size() - 1).getEndBefore());
 
-    // Validate that we can use the paritions to read the original documents.
+    // Validate that we can use the partitions to read the original documents.
     int resultCount = 0;
     for (QueryPartition partition : partitions) {
       resultCount += partition.createQuery().get().get().size();
@@ -1229,6 +1231,39 @@ public class ITSystemTest {
   }
 
   @Test
+  public void notEqualQueries() throws Exception {
+    setDocument("a", map("zip", Double.NaN));
+    setDocument("b", map("zip", 91102));
+    setDocument("c", map("zip", 98101));
+    setDocument("d", map("zip", 98103));
+    setDocument("e", map("zip", asList(98101)));
+    setDocument("f", map("zip", asList("98101", map("zip", 98101))));
+    setDocument("g", map("zip", map("zip", 98101)));
+    setDocument("h", map("zip", null));
+
+    QuerySnapshot querySnapshot = randomColl.whereNotEqualTo("zip", 98101).get().get();
+    assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotEqualTo("zip", Double.NaN).get().get();
+    assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotEqualTo("zip", null).get().get();
+    assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notEqualQueriesWithDocumentId() throws Exception {
+    DocumentReference doc1 = setDocument("a", map("count", 1));
+    DocumentReference doc2 = setDocument("b", map("count", 2));
+    setDocument("c", map("count", 3));
+
+    QuerySnapshot querySnapshot =
+        randomColl.whereNotEqualTo(FieldPath.documentId(), doc1.getId()).get().get();
+
+    assertEquals(asList("b", "c"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
   public void inQueriesWithDocumentId() throws Exception {
     DocumentReference doc1 = setDocument("a", map("count", 1));
     DocumentReference doc2 = setDocument("b", map("count", 2));
@@ -1241,6 +1276,43 @@ public class ITSystemTest {
             .get();
 
     assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notInQueries() throws Exception {
+    setDocument("a", map("zip", 98101));
+    setDocument("b", map("zip", 91102));
+    setDocument("c", map("zip", 98103));
+    setDocument("d", map("zip", asList(98101)));
+    setDocument("e", map("zip", asList("98101", map("zip", 98101))));
+    setDocument("f", map("zip", map("code", 500)));
+
+    QuerySnapshot querySnapshot =
+        randomColl.whereNotIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
+    assertEquals(asList("b", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+
+    querySnapshot = randomColl.whereNotIn("zip", Arrays.<Object>asList(Double.NaN)).get().get();
+    assertEquals(asList("b", "a", "c", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+
+    List<Object> nullArray = new ArrayList<>();
+    nullArray.add(null);
+    querySnapshot = randomColl.whereNotIn("zip", nullArray).get().get();
+    assertEquals(new ArrayList<>(), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void notInQueriesWithDocumentId() throws Exception {
+    DocumentReference doc1 = setDocument("a", map("count", 1));
+    DocumentReference doc2 = setDocument("b", map("count", 2));
+    setDocument("c", map("count", 3));
+
+    QuerySnapshot querySnapshot =
+        randomColl
+            .whereNotIn(FieldPath.documentId(), Arrays.<Object>asList(doc1.getId(), doc2))
+            .get()
+            .get();
+
+    assertEquals(asList("c"), querySnapshotToIds(querySnapshot));
   }
 
   @Test
@@ -1412,6 +1484,34 @@ public class ITSystemTest {
       assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
       assertThat(status.getDescription()).contains("old");
     }
+  }
+
+  @Test
+  public void deserializeCustomList() throws Exception {
+    LocalFirestoreHelper.CustomList customList = new LocalFirestoreHelper.CustomList();
+    customList.fooList = FOO_LIST;
+    DocumentReference documentReference = randomColl.document("doc1");
+    documentReference.set(customList).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    LocalFirestoreHelper.CustomList targetCustomList =
+        documentSnapshots.toObject(LocalFirestoreHelper.CustomList.class);
+
+    assertEquals(FOO_LIST, targetCustomList.fooList);
+    assertEquals(SINGLE_FIELD_OBJECT, targetCustomList.fooList.get(0));
+  }
+
+  @Test
+  public void deserializeCustomMap() throws Exception {
+    LocalFirestoreHelper.CustomMap customMap = new LocalFirestoreHelper.CustomMap();
+    customMap.fooMap = FOO_MAP;
+    DocumentReference documentReference = randomColl.document("doc1");
+    documentReference.set(customMap).get();
+    DocumentSnapshot documentSnapshots = documentReference.get().get();
+    LocalFirestoreHelper.CustomMap targetCustomMap =
+        documentSnapshots.toObject(LocalFirestoreHelper.CustomMap.class);
+
+    assertEquals(FOO_MAP, targetCustomMap.fooMap);
+    assertEquals(SINGLE_FIELD_OBJECT, targetCustomMap.fooMap.get("customMap"));
   }
 
   /** Wrapper around ApiStreamObserver that returns the results in a list. */

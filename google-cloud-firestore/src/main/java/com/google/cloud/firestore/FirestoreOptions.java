@@ -60,6 +60,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final String databaseId;
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
+  private final String emulatorHost;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -114,11 +115,16 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return channelProvider;
   }
 
+  public String getEmulatorHost() {
+    return emulatorHost;
+  }
+
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
+    @Nullable private String emulatorHost = null;
 
     private Builder() {}
 
@@ -127,6 +133,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.databaseId = options.databaseId;
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
+      this.emulatorHost = options.emulatorHost;
     }
 
     /**
@@ -175,6 +182,17 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     }
 
     /**
+     * Sets the emulator host to use with this Firestore client. The value passed to this method
+     * will take precedent if the {@code FIRESTORE_EMULATOR_HOST} environment variable is also set.
+     *
+     * @param emulatorHost The Firestore emulator host to use with this client.
+     */
+    public Builder setEmulatorHost(@Nonnull String emulatorHost) {
+      this.emulatorHost = emulatorHost;
+      return this;
+    }
+
+    /**
      * Sets the database ID to use with this Firestore client.
      *
      * @param databaseId The Firestore database ID to use with this client.
@@ -196,7 +214,9 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       }
 
       // Override credentials and channel provider if we are using the emulator.
-      String emulatorHost = System.getenv(FIRESTORE_EMULATOR_SYSTEM_VARIABLE);
+      if (emulatorHost == null) {
+        emulatorHost = System.getenv(FIRESTORE_EMULATOR_SYSTEM_VARIABLE);
+      }
       if (emulatorHost != null) {
         // Try creating a host in order to validate that the host name is valid.
         try {
@@ -280,6 +300,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         builder.credentialsProvider != null
             ? builder.credentialsProvider
             : GrpcTransportOptions.setUpCredentialsProvider(this);
+
+    this.emulatorHost = builder.emulatorHost;
   }
 
   private static class FirestoreDefaults implements ServiceDefaults<Firestore, FirestoreOptions> {

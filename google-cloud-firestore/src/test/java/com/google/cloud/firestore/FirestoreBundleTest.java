@@ -27,12 +27,12 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.Lists;
-import com.google.firestore.proto.BundleElement;
-import com.google.firestore.proto.BundleMetadata;
-import com.google.firestore.proto.BundledDocumentMetadata;
-import com.google.firestore.proto.BundledQuery;
-import com.google.firestore.proto.BundledQuery.LimitType;
-import com.google.firestore.proto.NamedQuery;
+import com.google.firestore.bundle.BundleElement;
+import com.google.firestore.bundle.BundleMetadata;
+import com.google.firestore.bundle.BundledDocumentMetadata;
+import com.google.firestore.bundle.BundledQuery;
+import com.google.firestore.bundle.BundledQuery.LimitType;
+import com.google.firestore.bundle.NamedQuery;
 import com.google.firestore.v1.Document;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Timestamp;

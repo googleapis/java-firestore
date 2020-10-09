@@ -18,9 +18,6 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import java.util.Set;
 
 /** Used to represent a batch on the BatchQueue. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
@@ -29,21 +26,13 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     super(firestore, maxBatchSize);
   }
 
-  BulkCommitBatch(
-      FirestoreImpl firestore,
-      BulkCommitBatch retryBatch,
-      final Set<DocumentReference> docsToRetry) {
+  BulkCommitBatch(FirestoreImpl firestore, BulkCommitBatch retryBatch) {
     super(firestore);
-    this.writes.addAll(
-        FluentIterable.from(retryBatch.writes)
-            .filter(
-                new Predicate<WriteOperation>() {
-                  @Override
-                  public boolean apply(WriteOperation writeOperation) {
-                    return docsToRetry.contains(writeOperation.documentReference);
-                  }
-                })
-            .toList());
+
+    // Create a new BulkCommitBatch containing only the indexes from the provided indexes to retry.
+    for (int index : retryBatch.getPendingIndexes()) {
+      this.writes.add(retryBatch.writes.get(index));
+    }
 
     Preconditions.checkState(
         retryBatch.state == BatchState.SENT,
@@ -54,10 +43,5 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
   ApiFuture<WriteResult> wrapResult(ApiFuture<WriteResult> result) {
     return result;
-  }
-
-  @Override
-  boolean allowDuplicateDocs() {
-    return false;
   }
 }

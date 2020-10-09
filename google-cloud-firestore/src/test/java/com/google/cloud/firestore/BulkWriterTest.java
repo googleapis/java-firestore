@@ -33,7 +33,6 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
-import com.google.cloud.firestore.LocalFirestoreHelper.SerialResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
@@ -43,7 +42,6 @@ import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -52,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -332,16 +331,15 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void sendsWritesToSameDocInSeparateBatches() throws Exception {
+  public void canSendWritesToSameDocInSameBatch() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
             put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                successResponse(1));
-            put(
-                batchWrite(update(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1")),
-                successResponse(2));
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                mergeResponses(successResponse(1), successResponse(2)));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
@@ -350,7 +348,7 @@ public class BulkWriterTest {
     DocumentReference sameDoc = firestoreMock.document(doc1.getPath());
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 =
-        bulkWriter.update(sameDoc, LocalFirestoreHelper.UPDATED_FIELD_MAP);
+        bulkWriter.update(sameDoc, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
     List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
@@ -429,7 +427,7 @@ public class BulkWriterTest {
             put(
                 batchWrite(
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
                 mergeResponses(
                     failedResponse(),
@@ -437,7 +435,7 @@ public class BulkWriterTest {
                     failedResponse(Code.ABORTED_VALUE)));
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
                 mergeResponses(successResponse(2), failedResponse(Code.ABORTED_VALUE)));
             put(
@@ -447,8 +445,10 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
+    // Test writes to the same document in order to verify that retry logic unaffected by document
+    // key.
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc1, LocalFirestoreHelper.UPDATED_FIELD_MAP);
     ApiFuture<WriteResult> result3 =
         bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
@@ -549,57 +549,8 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void doesNotSendBatchesIfSameDocIsInFlight() throws Exception {
-    final SerialResponseStubber responseStubber =
-        new SerialResponseStubber() {
-          {
-            put(
-                batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
-                mergeResponses(successResponse(1), successResponse(2)));
-            put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                successResponse(3));
-          }
-        };
-    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
-    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-
-    // Schedule flush on separate thread to avoid blocking main thread while waiting for
-    // activeRequestComplete.
-    ScheduledFuture<ApiFuture<Void>> flush1 =
-        Executors.newSingleThreadScheduledExecutor()
-            .schedule(
-                new Callable<ApiFuture<Void>>() {
-                  public ApiFuture<Void> call() {
-                    return bulkWriter.flush();
-                  }
-                },
-                0,
-                TimeUnit.MILLISECONDS);
-
-    // Wait for flush() to perform logic and reach the stubbed response. This simulates a first
-    // batch that has been sent with its response still pending.
-    responseStubber.awaitRequest();
-
-    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    ApiFuture<Void> flush2 = bulkWriter.flush();
-
-    // Wait for flush() to receive its response and process the batch.
-    responseStubber.markAllRequestsComplete();
-    flush1.get().get();
-    flush2.get();
-    bulkWriter.close();
-
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
-  }
-
-  @Test
+  @Ignore
+  // TODO(chenbrian): Fix this test after throttling options are added.
   public void doesNotSendBatchesIfDoingSoExceedsRateLimit() {
     final boolean[] timeoutCalled = {false};
     final ScheduledExecutorService timeoutExecutor =

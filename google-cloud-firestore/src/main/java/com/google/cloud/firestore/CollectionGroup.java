@@ -22,6 +22,9 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.v1.FirestoreClient;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
+import io.opencensus.common.Scope;
+import io.opencensus.trace.Span;
+import io.opencensus.trace.Status;
 import javax.annotation.Nullable;
 
 /**
@@ -62,13 +65,18 @@ public class CollectionGroup extends Query {
     request.setPartitionCount(desiredPartitionCount - 1);
 
     final FirestoreClient.PartitionQueryPagedResponse response;
-    try {
+    final TraceUtil traceUtil = TraceUtil.getInstance();
+    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
+    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
       response =
           ApiExceptions.callAndTranslateApiException(
               rpcContext.sendRequest(
                   request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
     } catch (ApiException exception) {
+      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
       throw FirestoreException.apiException(exception);
+    } finally {
+      span.end(TraceUtil.END_SPAN_OPTIONS);
     }
 
     @Nullable Object[] lastCursor = null;

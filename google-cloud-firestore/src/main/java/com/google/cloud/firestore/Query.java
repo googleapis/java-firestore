@@ -25,6 +25,8 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.GREAT
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.IN;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.LESS_THAN;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.LESS_THAN_OR_EQUAL;
+import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_EQUAL;
+import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
@@ -36,7 +38,7 @@ import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.firestore.proto.BundledQuery;
+import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.RunQueryRequest;
@@ -495,6 +497,48 @@ public class Query {
 
   /**
    * Creates and returns a new Query with the additional filter that documents must contain the
+   * specified field and its value does not equal the specified value.
+   *
+   * @param field The name of the field to compare.
+   * @param value The value for comparison.
+   * @return The created Query.
+   */
+  @Nonnull
+  public Query whereNotEqualTo(@Nonnull String field, @Nullable Object value) {
+    return whereNotEqualTo(FieldPath.fromDotSeparatedString(field), value);
+  }
+
+  /**
+   * Creates and returns a new Query with the additional filter that documents must contain the
+   * specified field and the value does not equal the specified value.
+   *
+   * @param fieldPath The path of the field to compare.
+   * @param value The value for comparison.
+   * @return The created Query.
+   */
+  @Nonnull
+  public Query whereNotEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
+    Preconditions.checkState(
+        options.getStartCursor() == null && options.getEndCursor() == null,
+        "Cannot call whereNotEqualTo() after defining a boundary with startAt(), "
+            + "startAfter(), endBefore() or endAt().");
+
+    if (isUnaryComparison(value)) {
+      Builder newOptions = options.toBuilder();
+      StructuredQuery.UnaryFilter.Operator op =
+          value == null
+              ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
+              : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN;
+      UnaryFilter newFieldFilter = new UnaryFilter(fieldPath.toProto(), op);
+      newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
+      return new Query(rpcContext, newOptions.build());
+    } else {
+      return whereHelper(fieldPath, NOT_EQUAL, value);
+    }
+  }
+
+  /**
+   * Creates and returns a new Query with the additional filter that documents must contain the
    * specified field and the value should be less than the specified value.
    *
    * @param field The name of the field to compare.
@@ -618,7 +662,8 @@ public class Query {
    * specified field, the value must be an array, and that the array must contain the provided
    * value.
    *
-   * <p>A Query can have only one whereArrayContains() filter.
+   * <p>A Query can have only one whereArrayContains() filter and it cannot be combined with
+   * whereArrayContainsAny().
    *
    * @param field The name of the field containing an array to search
    * @param value The value that must be contained in the array
@@ -634,7 +679,8 @@ public class Query {
    * specified field, the value must be an array, and that the array must contain the provided
    * value.
    *
-   * <p>A Query can have only one whereArrayContains() filter.
+   * <p>A Query can have only one whereArrayContains() filter and it cannot be combined with
+   * whereArrayContainsAny().
    *
    * @param fieldPath The path of the field containing an array to search
    * @param value The value that must be contained in the array
@@ -733,6 +779,46 @@ public class Query {
     return whereHelper(fieldPath, IN, values);
   }
 
+  /**
+   * Creates and returns a new Query with the additional filter that documents must contain the
+   * specified field and the value does not equal any of the values from the provided list.
+   *
+   * <p>A Query can have only one whereNotIn() filter and it cannot be combined with
+   * whereArrayContains(), whereArrayContainsAny(), whereIn(), or whereNotEqualTo().
+   *
+   * @param field The name of the field to search.
+   * @param values The list that contains the values to match.
+   * @return The created Query.
+   */
+  @Nonnull
+  public Query whereNotIn(@Nonnull String field, @Nonnull List<? extends Object> values) {
+    Preconditions.checkState(
+        options.getStartCursor() == null && options.getEndCursor() == null,
+        "Cannot call whereNotIn() after defining a boundary with startAt(), "
+            + "startAfter(), endBefore() or endAt().");
+    return whereHelper(FieldPath.fromDotSeparatedString(field), NOT_IN, values);
+  }
+
+  /**
+   * Creates and returns a new Query with the additional filter that documents must contain the
+   * specified field and the value does not equal any of the values from the provided list.
+   *
+   * <p>A Query can have only one whereNotIn() filter, and it cannot be combined with
+   * whereArrayContains(), whereArrayContainsAny(), whereIn(), or whereNotEqualTo().
+   *
+   * @param fieldPath The path of the field to search.
+   * @param values The list that contains the values to match.
+   * @return The created Query.
+   */
+  @Nonnull
+  public Query whereNotIn(@Nonnull FieldPath fieldPath, @Nonnull List<? extends Object> values) {
+    Preconditions.checkState(
+        options.getStartCursor() == null && options.getEndCursor() == null,
+        "Cannot call whereNotIn() after defining a boundary with startAt(), "
+            + "startAfter(), endBefore() or endAt().");
+    return whereHelper(fieldPath, NOT_IN, values);
+  }
+
   private Query whereHelper(
       FieldPath fieldPath, StructuredQuery.FieldFilter.Operator operator, Object value) {
     Preconditions.checkArgument(
@@ -746,7 +832,7 @@ public class Query {
             String.format(
                 "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
                 operator.toString()));
-      } else if (operator == IN) {
+      } else if (operator == IN | operator == NOT_IN) {
         if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
           throw new IllegalArgumentException(
               String.format(
@@ -1356,7 +1442,7 @@ public class Query {
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
-            "Firestore.Query: Start",
+            TraceUtil.SPAN_NAME_RUNQUERY + ": Start",
             ImmutableMap.of(
                 "transactional", AttributeValue.booleanAttributeValue(transactionId != null)));
 

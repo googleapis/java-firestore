@@ -123,8 +123,8 @@ firestore_v1 = generate_client(
 bundle_v1 = generate_client(
     service='firestore-bundle',
     version='v1',
-    proto_path='firestore',
-    bazel_target='//firestore:google-cloud-firestore-bundle-v1-java',
+    proto_path='google/firestore/bundle',
+    bazel_target='//google/firestore/bundle:google-cloud-firestore-bundle-v1-java',
 )
 
 java.common_templates(excludes=[

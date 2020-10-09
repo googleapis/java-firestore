@@ -168,9 +168,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
             numResponses++;
             if (numResponses == 1) {
-              tracer.getCurrentSpan().addAnnotation("Firestore.BatchGet: First response");
+              tracer
+                  .getCurrentSpan()
+                  .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": First response");
             } else if (numResponses % 100 == 0) {
-              tracer.getCurrentSpan().addAnnotation("Firestore.BatchGet: Received 100 responses");
+              tracer
+                  .getCurrentSpan()
+                  .addAnnotation(
+                      TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Received 100 responses");
             }
 
             switch (response.getResultCase()) {
@@ -199,13 +204,17 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onError(Throwable throwable) {
-            tracer.getCurrentSpan().addAnnotation("Firestore.BatchGet: Error");
+            tracer
+                .getCurrentSpan()
+                .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Error");
             apiStreamObserver.onError(throwable);
           }
 
           @Override
           public void onCompleted() {
-            tracer.getCurrentSpan().addAnnotation("Firestore.BatchGet: Complete");
+            tracer
+                .getCurrentSpan()
+                .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
             apiStreamObserver.onCompleted();
           }
         };
@@ -228,7 +237,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     tracer
         .getCurrentSpan()
         .addAnnotation(
-            "Firestore.BatchGet: Start",
+            TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Start",
             ImmutableMap.of(
                 "numDocuments", AttributeValue.longAttributeValue(documentReferences.length)));
 
