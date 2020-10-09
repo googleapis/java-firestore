@@ -16,28 +16,123 @@
 
 package com.google.cloud.firestore;
 
-import javax.annotation.Nonnull;
+import com.google.auto.value.AutoValue;
+import javax.annotation.Nullable;
 
-/** Options used to disable request throttling in BulkWriter. */
-final class BulkWriterOptions {
-
-  private final boolean enableThrottling;
-
-  private BulkWriterOptions(boolean enableThrottling) {
-    this.enableThrottling = enableThrottling;
-  }
-
-  boolean isThrottlingEnabled() {
-    return enableThrottling;
-  }
+/** Options used to configure request throttling in BulkWriter. */
+@AutoValue
+abstract class BulkWriterOptions {
+  /**
+   * Return whether throttling is enabled.
+   *
+   * @return Whether throttling is enabled.
+   */
+  abstract boolean getThrottlingEnabled();
 
   /**
-   * An options object that will disable throttling in the created BulkWriter.
+   * Returns the initial maximum number of operations per second allowed by the throttler.
    *
-   * @return The BulkWriterOptions object.
+   * @return The initial maximum number of operations per second allowed by the throttler.
    */
-  @Nonnull
-  public static BulkWriterOptions withThrottlingDisabled() {
-    return new BulkWriterOptions(false);
+  @Nullable
+  abstract Double getInitialOpsPerSecond();
+
+  /**
+   * Returns the maximum number of operations per second allowed by the throttler.
+   *
+   * <p>The throttler's allowed operations per second does not ramp up past the specified operations
+   * per second.
+   *
+   * @return The maximum number of operations per second allowed by the throttler.
+   */
+  @Nullable
+  abstract Double getMaxOpsPerSecond();
+
+  static Builder builder() {
+    return new AutoValue_BulkWriterOptions.Builder()
+        .setMaxOpsPerSecond(null)
+        .setInitialOpsPerSecond(null)
+        .setThrottlingEnabled(true);
+  }
+
+  abstract Builder toBuilder();
+
+  @AutoValue.Builder
+  abstract static class Builder {
+    /**
+     * Sets whether throttling should be enabled. By default, throttling is enabled.
+     *
+     * @param enabled Whether throttling should be enabled.
+     */
+    abstract Builder setThrottlingEnabled(boolean enabled);
+
+    /**
+     * Set the initial maximum number of operations per second allowed by the throttler.
+     *
+     * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
+     *     throttler.
+     */
+    abstract Builder setInitialOpsPerSecond(@Nullable Double initialOpsPerSecond);
+
+    /**
+     * Set the initial maximum number of operations per second allowed by the throttler.
+     *
+     * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
+     *     throttler.
+     */
+    Builder setInitialOpsPerSecond(int initialOpsPerSecond) {
+      return setInitialOpsPerSecond(new Double(initialOpsPerSecond));
+    }
+
+    /**
+     * Set the maximum number of operations per second allowed by the throttler.
+     *
+     * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
+     *     The throttler's allowed operations per second does not ramp up past the specified
+     *     operations per second.
+     */
+    abstract Builder setMaxOpsPerSecond(@Nullable Double maxOpsPerSecond);
+
+    /**
+     * Set the maximum number of operations per second allowed by the throttler.
+     *
+     * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
+     *     The throttler's allowed operations per second does not ramp up past the specified
+     *     operations per second.
+     */
+    Builder setMaxOpsPerSecond(int maxOpsPerSecond) {
+      return setMaxOpsPerSecond(new Double(maxOpsPerSecond));
+    }
+
+    abstract BulkWriterOptions autoBuild();
+
+    BulkWriterOptions build() {
+      BulkWriterOptions options = autoBuild();
+      Double initialRate = options.getInitialOpsPerSecond();
+      Double maxRate = options.getMaxOpsPerSecond();
+
+      if (initialRate != null && initialRate < 1) {
+        throw FirestoreException.invalidState(
+            "Value for argument 'initialOpsPerSecond' must be greater than 1, but was: "
+                + initialRate.intValue());
+      }
+
+      if (maxRate != null && maxRate < 1) {
+        throw FirestoreException.invalidState(
+            "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: "
+                + maxRate.intValue());
+      }
+
+      if (maxRate != null && initialRate != null && initialRate > maxRate) {
+        throw FirestoreException.invalidState(
+            "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
+      }
+
+      if (!options.getThrottlingEnabled() && (maxRate != null || initialRate != null)) {
+        throw FirestoreException.invalidState(
+            "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
+      }
+      return options;
+    }
   }
 }

@@ -94,12 +94,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   BulkWriter bulkWriter() {
-    return new BulkWriter(this, /* enableThrottling= */ true);
+    return new BulkWriter(this, BulkWriterOptions.builder().setThrottlingEnabled(true).build());
   }
 
   @Nonnull
   BulkWriter bulkWriter(BulkWriterOptions options) {
-    return new BulkWriter(this, options.isThrottlingEnabled());
+    return new BulkWriter(this, options);
   }
 
   @Nonnull

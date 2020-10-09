@@ -38,6 +38,7 @@ public class RateLimiterTest {
             /* initialCapacity= */ 500,
             /* multiplier= */ 1.5,
             /* multiplierMillis= */ 5 * 60 * 1000,
+            /* maximumCapacity= */ 1000000,
             /* startTime= */ new Date(0).getTime());
   }
 
@@ -108,5 +109,8 @@ public class RateLimiterTest {
     assertEquals(1125, limiter.calculateCapacity(new Date(10 * 60 * 1000).getTime()));
     assertEquals(1687, limiter.calculateCapacity(new Date(15 * 60 * 1000).getTime()));
     assertEquals(738945, limiter.calculateCapacity(new Date(90 * 60 * 1000).getTime()));
+
+    // Check that maximum rate limit is enforced.
+    assertEquals(1000000, limiter.calculateCapacity(new Date(1000 * 60 * 1000).getTime()));
   }
 }
