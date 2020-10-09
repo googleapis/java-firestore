@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.api.client.util.Lists;
 import com.google.cloud.Timestamp;
+import com.google.common.base.Preconditions;
 import com.google.firestore.proto.BundleElement;
 import com.google.firestore.proto.BundleMetadata;
 import com.google.firestore.proto.BundledDocumentMetadata;
@@ -31,12 +32,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import com.google.common.base.Optional;
 
 /** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
 
   static int BUNDLE_SCHEMA_VERSION = 1;
+  // Printer to encode protobuf objects into JSON string.
+  private static JsonFormat.Printer PRINTER = JsonFormat.printer();
 
   // Raw byte array to hold the content of the bundle.
   private byte[] bundleData;
@@ -51,8 +54,6 @@ public final class FirestoreBundle {
     private Map<String, NamedQuery> namedQueries = new HashMap<>();
     // The latest read time among all bundled documents and queries.
     private Timestamp latestReadTime = Timestamp.MIN_VALUE;
-    // Printer to encode protobuf objects into JSON string.
-    private JsonFormat.Printer printer = JsonFormat.printer();
 
     public Builder(String id) {
       this.id = id;
@@ -66,7 +67,7 @@ public final class FirestoreBundle {
      * @returns This instance.
      */
     public Builder add(DocumentSnapshot documentSnapshot) {
-      return add(documentSnapshot, Optional.empty());
+      return add(documentSnapshot, Optional.<String>absent());
     }
 
     private Builder add(DocumentSnapshot documentSnapshot, Optional<String> queryName) {
@@ -74,7 +75,7 @@ public final class FirestoreBundle {
       BundledDocument originalDocument = documents.get(documentSnapshot.getReference().getName());
       List<String> queries =
           originalDocument == null
-              ? Lists.newArrayList()
+              ? Lists.<String>newArrayList()
               : Lists.newArrayList(originalDocument.getMetadata().getQueriesList());
 
       // Update with document built from `documentSnapshot` because it is newer.
@@ -184,7 +185,7 @@ public final class FirestoreBundle {
     private StringBuilder elementToLengthPrefixedStringBuilder(BundleElement element) {
       String elementJson = null;
       try {
-        elementJson = printer.print(element);
+        elementJson = PRINTER.print(element);
       } catch (InvalidProtocolBufferException e) {
         throw new RuntimeException(e);
       }
@@ -200,29 +201,30 @@ public final class FirestoreBundle {
   public ByteBuffer toByteBuffer() {
     return ByteBuffer.wrap(bundleData).asReadOnlyBuffer();
   }
+
+  /**
+   * Convenient class to hold both the metadata and the actual content of a document to be bundled.
+   */
+  private static class BundledDocument {
+    private BundledDocumentMetadata metadata;
+    private final Document document;
+
+    BundledDocument(BundledDocumentMetadata metadata, Document document) {
+      this.metadata = metadata;
+      this.document = document;
+    }
+
+    public BundledDocumentMetadata getMetadata() {
+      return metadata;
+    }
+
+    void setMetadata(BundledDocumentMetadata metadata) {
+      this.metadata = metadata;
+    }
+
+    public Document getDocument() {
+      return document;
+    }
+  }
 }
 
-/**
- * Convenient class to hold both the metadata and the actual content of a document to be bundled.
- */
-class BundledDocument {
-  private BundledDocumentMetadata metadata;
-  private Document document;
-
-  BundledDocument(BundledDocumentMetadata metadata, Document document) {
-    this.metadata = metadata;
-    this.document = document;
-  }
-
-  public BundledDocumentMetadata getMetadata() {
-    return metadata;
-  }
-
-  void setMetadata(BundledDocumentMetadata metadata) {
-    this.metadata = metadata;
-  }
-
-  public Document getDocument() {
-    return document;
-  }
-}

@@ -1105,9 +1105,10 @@ public class Query {
   }
 
   /**
-   * Builds a query to saved in a bundle file.
+   * Builds a {@link BundledQuery} that is able to be saved in a bundle file.
    *
-   * <p>This will not do client translation (limitToLast order flip, for example),
+   * <p>This will not perform any limitToLast order flip, as {@link BundledQuery} has first class
+   * representation via {@link BundledQuery.LimitType}.
    */
   BundledQuery toBundledQuery() {
     StructuredQuery.Builder structuredQuery = buildWithoutClientTranslation();

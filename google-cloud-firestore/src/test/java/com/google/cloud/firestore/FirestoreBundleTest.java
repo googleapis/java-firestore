@@ -189,7 +189,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.newArrayList(),
+        Lists.<String>newArrayList(),
         UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 
@@ -284,7 +284,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.newArrayList(),
+        Lists.<String>newArrayList(),
         SINGLE_FIELD_SNAPSHOT);
 
     bundleBuilder.add(UPDATED_SINGLE_FIELD_SNAPSHOT);
@@ -303,7 +303,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.newArrayList(),
+        Lists.<String>newArrayList(),
         UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 
