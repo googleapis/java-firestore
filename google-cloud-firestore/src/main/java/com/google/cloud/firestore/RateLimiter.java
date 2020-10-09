@@ -38,21 +38,21 @@ class RateLimiter {
   private final double multiplier;
   private final int multiplierMillis;
   private final long startTimeMillis;
-  private final int maximumCapacity;
+  private final int maximumRate;
 
   private int availableTokens;
   private long lastRefillTimeMillis;
 
-  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis, int maximumCapacity) {
-    this(initialCapacity, multiplier, multiplierMillis, maximumCapacity, new Date().getTime());
+  RateLimiter(int initialCapacity, double multiplier, int multiplierMillis, int maximumRate) {
+    this(initialCapacity, multiplier, multiplierMillis, maximumRate, new Date().getTime());
   }
 
   /**
    * @param initialCapacity Initial maximum number of operations per second.
    * @param multiplier Rate by which to increase the capacity.
    * @param multiplierMillis How often the capacity should increase in milliseconds.
-   * @param maximumCapacity Maximum number of allowed operations per second. The number of tokens
-   *     added per second will never exceed this number.
+   * @param maximumRate Maximum number of allowed operations per second. The number of tokens added
+   *     per second will never exceed this number.
    * @param startTimeMillis The starting time in epoch milliseconds that the rate limit is based on.
    *     Used for testing the limiter.
    */
@@ -60,12 +60,12 @@ class RateLimiter {
       int initialCapacity,
       double multiplier,
       int multiplierMillis,
-      int maximumCapacity,
+      int maximumRate,
       long startTimeMillis) {
     this.initialCapacity = initialCapacity;
     this.multiplier = multiplier;
     this.multiplierMillis = multiplierMillis;
-    this.maximumCapacity = maximumCapacity;
+    this.maximumRate = maximumRate;
     this.startTimeMillis = startTimeMillis;
 
     this.availableTokens = initialCapacity;
@@ -76,8 +76,8 @@ class RateLimiter {
     return initialCapacity;
   }
 
-  public int getMaximumCapacity() {
-    return maximumCapacity;
+  public int getMaximumRate() {
+    return maximumRate;
   }
 
   public boolean tryMakeRequest(int numOperations) {
@@ -152,7 +152,7 @@ class RateLimiter {
         Math.min(
             (int)
                 (Math.pow(multiplier, (int) (millisElapsed / multiplierMillis)) * initialCapacity),
-            maximumCapacity);
+            maximumRate);
     return operationsPerSecond;
   }
 }

@@ -98,7 +98,6 @@ final class BulkWriter implements AutoCloseable {
   private TimedAttemptSettings nextAttempt;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
-    validateBulkWriterOptions(options);
     this.firestore = firestore;
     this.backoff =
         new ExponentialRetryAlgorithm(
@@ -112,13 +111,13 @@ final class BulkWriter implements AutoCloseable {
               Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     } else {
       double startingRate = DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND;
-      double maxRate = Integer.MAX_VALUE;
+      double maxRate = Double.POSITIVE_INFINITY;
 
-      if (!Double.isNaN(options.getInitialOpsPerSecond())) {
+      if (options.getInitialOpsPerSecond() != null) {
         startingRate = options.getInitialOpsPerSecond();
       }
 
-      if (!Double.isNaN(options.getMaxOpsPerSecond())) {
+      if (options.getMaxOpsPerSecond() != null) {
         maxRate = options.getMaxOpsPerSecond();
       }
 
@@ -711,31 +710,5 @@ final class BulkWriter implements AutoCloseable {
   @VisibleForTesting
   RateLimiter getRateLimiter() {
     return rateLimiter;
-  }
-
-  private void validateBulkWriterOptions(BulkWriterOptions options) {
-    double initialRate = options.getInitialOpsPerSecond();
-    double maxRate = options.getMaxOpsPerSecond();
-
-    if (initialRate < 1) {
-      throw FirestoreException.invalidState(
-          "Value for argument 'initialOpsPerSecond' must be greater than 1, but was: "
-              + (int) initialRate);
-    }
-
-    if (maxRate < 1) {
-      throw FirestoreException.invalidState(
-          "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: " + (int) maxRate);
-    }
-
-    if (!Double.isNaN(initialRate) && !Double.isNaN(maxRate) && initialRate > maxRate) {
-      throw FirestoreException.invalidState(
-          "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
-    }
-
-    if (!options.getThrottlingEnabled() && (!Double.isNaN(initialRate) || !Double.isNaN(maxRate))) {
-      throw FirestoreException.invalidState(
-          "Cannot set 'initialRate' or 'maxRate' when 'throttlingEnabled' is set to false.");
-    }
   }
 }
