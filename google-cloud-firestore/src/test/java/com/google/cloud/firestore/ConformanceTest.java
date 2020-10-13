@@ -554,6 +554,9 @@ public class ConformanceTest {
             case ">":
               query = query.whereGreaterThan(fieldPath, value);
               break;
+            case "!=":
+              query = query.whereNotEqualTo(fieldPath, value);
+              break;
             default:
               throw new UnsupportedOperationException();
           }
