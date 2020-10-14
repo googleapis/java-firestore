@@ -543,6 +543,17 @@ public class ITSystemTest {
   }
 
   @Test
+  public void startAfterAddsAnImplicitOrderByForDocumentReferences() throws Exception {
+    DocumentReference doc1 = addDocument("foo", 1);
+    DocumentReference doc2 = addDocument("foo", 2);
+
+    QuerySnapshot querySnapshot = randomColl.startAfter(doc1).get().get();
+    assertEquals(1, querySnapshot.size());
+    Iterator<QueryDocumentSnapshot> documents = querySnapshot.iterator();
+    assertEquals(doc2, documents.next().getReference());
+  }
+
+  @Test
   public void endAt() throws Exception {
     addDocument("foo", 1);
     addDocument("foo", 2);

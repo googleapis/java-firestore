@@ -982,9 +982,14 @@ public class Query {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
-    Cursor cursor = createCursor(options.getFieldOrders(), fieldValues, true);
+    ImmutableList<FieldOrder> fieldOrders =
+        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
+            ? createImplicitOrderBy()
+            : options.getFieldOrders();
+    Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
+    newOptions.setFieldOrders(fieldOrders);
     newOptions.setStartCursor(cursor);
     return new Query(rpcContext, newOptions.build());
   }
@@ -1063,9 +1068,14 @@ public class Query {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
-    Cursor cursor = createCursor(options.getFieldOrders(), fieldValues, false);
+    ImmutableList<FieldOrder> fieldOrders =
+        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
+            ? createImplicitOrderBy()
+            : options.getFieldOrders();
+    Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();
+    newOptions.setFieldOrders(fieldOrders);
     newOptions.setStartCursor(cursor);
     return new Query(rpcContext, newOptions.build());
   }
@@ -1099,9 +1109,14 @@ public class Query {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
-    Cursor cursor = createCursor(options.getFieldOrders(), fieldValues, true);
+    ImmutableList<FieldOrder> fieldOrders =
+        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
+            ? createImplicitOrderBy()
+            : options.getFieldOrders();
+    Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
+    newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
   }
@@ -1115,9 +1130,14 @@ public class Query {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
-    Cursor cursor = createCursor(options.getFieldOrders(), fieldValues, false);
+    ImmutableList<FieldOrder> fieldOrders =
+        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
+            ? createImplicitOrderBy()
+            : options.getFieldOrders();
+    Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();
+    newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
   }
