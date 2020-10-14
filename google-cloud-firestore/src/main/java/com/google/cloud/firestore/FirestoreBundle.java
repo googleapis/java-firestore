@@ -36,9 +36,9 @@ import java.util.Map;
 /** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
 
-  static int BUNDLE_SCHEMA_VERSION = 1;
+  static final int BUNDLE_SCHEMA_VERSION = 1;
   // Printer to encode protobuf objects into JSON string.
-  private static JsonFormat.Printer PRINTER = JsonFormat.printer();
+  private static final JsonFormat.Printer PRINTER = JsonFormat.printer();
 
   // Raw byte array to hold the content of the bundle.
   private byte[] bundleData;
@@ -78,15 +78,19 @@ public final class FirestoreBundle {
               : Lists.newArrayList(originalDocument.getMetadata().getQueriesList());
 
       // Update with document built from `documentSnapshot` because it is newer.
+      Timestamp snapReadTime =
+          documentSnapshot.getReadTime() == null
+              ? Timestamp.MIN_VALUE
+              : documentSnapshot.getReadTime();
       if (originalDocument == null
-          || documentSnapshot
-                  .getReadTime()
-                  .compareTo(Timestamp.fromProto(originalDocument.getMetadata().getReadTime()))
+          || originalDocument.getMetadata().getReadTime() == null
+          || snapReadTime.compareTo(
+                  Timestamp.fromProto(originalDocument.getMetadata().getReadTime()))
               > 0) {
         BundledDocumentMetadata metadata =
             BundledDocumentMetadata.newBuilder()
                 .setName(documentName)
-                .setReadTime(documentSnapshot.getReadTime().toProto())
+                .setReadTime(snapReadTime.toProto())
                 .setExists(documentSnapshot.exists())
                 .build();
         Document document =

@@ -1564,34 +1564,23 @@ public class ITSystemTest {
   }
 
   @Test
-  public void testBuildingBundleWithLimitAndLimitToLastQueries() throws Exception {
+  public void testBuildingBundleWithLimitQuery() throws Exception {
     setDocument("doc1", Collections.singletonMap("counter", 1));
     setDocument("doc2", Collections.singletonMap("counter", 2));
 
     Query limitQuery = randomColl.orderBy("counter", Direction.DESCENDING).limit(1);
     QuerySnapshot limitQuerySnap = limitQuery.get().get();
-    Query limitToLastQuery = randomColl.orderBy("counter").limitToLast(1);
-    QuerySnapshot limitToLastQuerySnap = limitToLastQuery.get().get();
     FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
     bundleBuilder.add("limit", limitQuerySnap);
-    bundleBuilder.add("limitToLast", limitToLastQuerySnap);
 
-    // Expected bundle elements are [bundleMetadata, limitQuery, limitToLastQuery,
+    // Expected bundle elements are [bundleMetadata, limitQuery,
     // documentMetadata, document]
     List<BundleElement> elements = toBundleElements(bundleBuilder.build().toByteBuffer());
-    assertEquals(5, elements.size());
+    assertEquals(4, elements.size());
 
-    verifyMetadata(
-        elements.get(0).getMetadata(), limitToLastQuerySnap.getReadTime().toProto(), 1, false);
+    verifyMetadata(elements.get(0).getMetadata(), limitQuerySnap.getReadTime().toProto(), 1, false);
 
     NamedQuery namedLimitQuery = elements.get(1).getNamedQuery();
-    NamedQuery namedLimitToLastQuery = elements.get(2).getNamedQuery();
-    // We might need a swap.
-    if (!namedLimitQuery.getName().equals("limit")) {
-      NamedQuery q = namedLimitQuery;
-      namedLimitQuery = namedLimitToLastQuery;
-      namedLimitToLastQuery = q;
-    }
 
     verifyNamedQuery(
         namedLimitQuery,
@@ -1599,6 +1588,36 @@ public class ITSystemTest {
         limitQuerySnap.getReadTime().toProto(),
         limitQuery,
         LimitType.FIRST);
+
+    verifyDocumentAndMeta(
+        elements.get(2).getDocumentMetadata(),
+        elements.get(3).getDocument(),
+        fullPath(randomColl.document("doc2"), firestore.getOptions()),
+        Lists.newArrayList("limit"),
+        randomColl.document("doc2").get().get(),
+        limitQuerySnap.getReadTime().toProto());
+  }
+
+  @Test
+  public void testBuildingBundleWithLimitToLastQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+
+    Query limitToLastQuery = randomColl.orderBy("counter").limitToLast(1);
+    QuerySnapshot limitToLastQuerySnap = limitToLastQuery.get().get();
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    bundleBuilder.add("limitToLast", limitToLastQuerySnap);
+
+    // Expected bundle elements are [bundleMetadata, limitToLastQuery,
+    // documentMetadata, document]
+    List<BundleElement> elements = toBundleElements(bundleBuilder.build().toByteBuffer());
+    assertEquals(4, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(), limitToLastQuerySnap.getReadTime().toProto(), 1, false);
+
+    NamedQuery namedLimitToLastQuery = elements.get(1).getNamedQuery();
+
     verifyNamedQuery(
         namedLimitToLastQuery,
         "limitToLast",
@@ -1607,10 +1626,10 @@ public class ITSystemTest {
         LimitType.LAST);
 
     verifyDocumentAndMeta(
-        elements.get(3).getDocumentMetadata(),
-        elements.get(4).getDocument(),
+        elements.get(2).getDocumentMetadata(),
+        elements.get(3).getDocument(),
         fullPath(randomColl.document("doc2"), firestore.getOptions()),
-        Lists.newArrayList("limit", "limitToLast"),
+        Lists.newArrayList("limitToLast"),
         randomColl.document("doc2").get().get(),
         limitToLastQuerySnap.getReadTime().toProto());
   }
