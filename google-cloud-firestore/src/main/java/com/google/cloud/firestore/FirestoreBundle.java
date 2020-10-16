@@ -16,9 +16,9 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.client.util.Lists;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.google.firestore.bundle.BundleElement;
 import com.google.firestore.bundle.BundleMetadata;
 import com.google.firestore.bundle.BundledDocumentMetadata;
