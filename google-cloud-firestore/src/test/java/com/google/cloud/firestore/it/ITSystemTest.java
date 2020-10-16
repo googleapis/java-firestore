@@ -16,9 +16,14 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.FirestoreBundleTest.toBundleElements;
+import static com.google.cloud.firestore.FirestoreBundleTest.verifyDocumentAndMeta;
+import static com.google.cloud.firestore.FirestoreBundleTest.verifyMetadata;
+import static com.google.cloud.firestore.FirestoreBundleTest.verifyNamedQuery;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_LIST;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
@@ -44,6 +49,7 @@ import com.google.cloud.firestore.FieldMask;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreBundle;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.ListenerRegistration;
@@ -52,6 +58,7 @@ import com.google.cloud.firestore.LocalFirestoreHelper.AllSupportedTypes;
 import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QueryPartition;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -64,6 +71,11 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.firestore.bundle.BundleElement;
+import com.google.firestore.bundle.BundledDocumentMetadata;
+import com.google.firestore.bundle.BundledQuery.LimitType;
+import com.google.firestore.bundle.NamedQuery;
 import com.google.firestore.v1.RunQueryRequest;
 import io.grpc.Status;
 import io.grpc.Status.Code;
@@ -1525,5 +1537,100 @@ public class ITSystemTest {
     public ApiFuture<List<T>> consume() {
       return done;
     }
+  }
+
+  @Test
+  public void testBuildingBundleWhenDocumentDoesNotExist() throws Exception {
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    DocumentSnapshot snapshot = randomDoc.get().get();
+    bundleBuilder.add(snapshot);
+
+    // Expected bundle elements are [bundleMetadata, documentMetadata]
+    List<BundleElement> elements = toBundleElements(bundleBuilder.build().toByteBuffer());
+    assertEquals(2, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(),
+        snapshot.getReadTime().toProto(),
+        /*totalDocuments*/ 1,
+        /*expectEmptyContent*/ false);
+    assertEquals(
+        BundledDocumentMetadata.newBuilder()
+            .setExists(false)
+            .setName(fullPath(randomDoc, firestore.getOptions()))
+            .setReadTime(snapshot.getReadTime().toProto())
+            .build(),
+        elements.get(1).getDocumentMetadata());
+  }
+
+  @Test
+  public void testBuildingBundleWithLimitQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+
+    Query limitQuery = randomColl.orderBy("counter", Direction.DESCENDING).limit(1);
+    QuerySnapshot limitQuerySnap = limitQuery.get().get();
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    bundleBuilder.add("limit", limitQuerySnap);
+
+    // Expected bundle elements are [bundleMetadata, limitQuery,
+    // documentMetadata, document]
+    List<BundleElement> elements = toBundleElements(bundleBuilder.build().toByteBuffer());
+    assertEquals(4, elements.size());
+
+    verifyMetadata(elements.get(0).getMetadata(), limitQuerySnap.getReadTime().toProto(), 1, false);
+
+    NamedQuery namedLimitQuery = elements.get(1).getNamedQuery();
+
+    verifyNamedQuery(
+        namedLimitQuery,
+        "limit",
+        limitQuerySnap.getReadTime().toProto(),
+        limitQuery,
+        LimitType.FIRST);
+
+    verifyDocumentAndMeta(
+        elements.get(2).getDocumentMetadata(),
+        elements.get(3).getDocument(),
+        fullPath(randomColl.document("doc2"), firestore.getOptions()),
+        Lists.newArrayList("limit"),
+        randomColl.document("doc2").get().get(),
+        limitQuerySnap.getReadTime().toProto());
+  }
+
+  @Test
+  public void testBuildingBundleWithLimitToLastQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+
+    Query limitToLastQuery = randomColl.orderBy("counter").limitToLast(1);
+    QuerySnapshot limitToLastQuerySnap = limitToLastQuery.get().get();
+    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    bundleBuilder.add("limitToLast", limitToLastQuerySnap);
+
+    // Expected bundle elements are [bundleMetadata, limitToLastQuery,
+    // documentMetadata, document]
+    List<BundleElement> elements = toBundleElements(bundleBuilder.build().toByteBuffer());
+    assertEquals(4, elements.size());
+
+    verifyMetadata(
+        elements.get(0).getMetadata(), limitToLastQuerySnap.getReadTime().toProto(), 1, false);
+
+    NamedQuery namedLimitToLastQuery = elements.get(1).getNamedQuery();
+
+    verifyNamedQuery(
+        namedLimitToLastQuery,
+        "limitToLast",
+        limitToLastQuerySnap.getReadTime().toProto(),
+        randomColl.orderBy("counter").limit(1),
+        LimitType.LAST);
+
+    verifyDocumentAndMeta(
+        elements.get(2).getDocumentMetadata(),
+        elements.get(3).getDocument(),
+        fullPath(randomColl.document("doc2"), firestore.getOptions()),
+        Lists.newArrayList("limitToLast"),
+        randomColl.document("doc2").get().get(),
+        limitToLastQuerySnap.getReadTime().toProto());
   }
 }

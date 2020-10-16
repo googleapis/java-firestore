@@ -38,6 +38,7 @@ import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.RunQueryRequest;
@@ -1143,6 +1144,72 @@ public class Query {
 
   /** Build the final Firestore query. */
   StructuredQuery.Builder buildQuery() {
+    StructuredQuery.Builder structuredQuery = buildWithoutClientTranslation();
+    if (options.getLimitType().equals(LimitType.Last)) {
+      // Apply client translation for limitToLast.
+
+      if (!options.getFieldOrders().isEmpty()) {
+        structuredQuery.clearOrderBy();
+        for (FieldOrder order : options.getFieldOrders()) {
+          // Flip the orderBy directions since we want the last results
+          order =
+              new FieldOrder(
+                  order.fieldReference,
+                  order.direction.equals(Direction.ASCENDING)
+                      ? Direction.DESCENDING
+                      : Direction.ASCENDING);
+          structuredQuery.addOrderBy(order.toProto());
+        }
+      }
+
+      if (options.getStartCursor() != null) {
+        structuredQuery.clearEndAt();
+        // Swap the cursors to match the flipped query ordering.
+        Cursor cursor =
+            options
+                .getStartCursor()
+                .toBuilder()
+                .setBefore(!options.getStartCursor().getBefore())
+                .build();
+        structuredQuery.setEndAt(cursor);
+      }
+
+      if (options.getEndCursor() != null) {
+        structuredQuery.clearStartAt();
+        // Swap the cursors to match the flipped query ordering.
+        Cursor cursor =
+            options
+                .getEndCursor()
+                .toBuilder()
+                .setBefore(!options.getEndCursor().getBefore())
+                .build();
+        structuredQuery.setStartAt(cursor);
+      }
+    }
+
+    return structuredQuery;
+  }
+
+  /**
+   * Builds a {@link BundledQuery} that is able to be saved in a bundle file.
+   *
+   * <p>This will not perform any limitToLast order flip, as {@link BundledQuery} has first class
+   * representation via {@link BundledQuery.LimitType}.
+   */
+  BundledQuery toBundledQuery() {
+    StructuredQuery.Builder structuredQuery = buildWithoutClientTranslation();
+
+    return BundledQuery.newBuilder()
+        .setStructuredQuery(structuredQuery)
+        .setParent(options.getParentPath().toString())
+        .setLimitType(
+            options.getLimitType().equals(LimitType.Last)
+                ? BundledQuery.LimitType.LAST
+                : BundledQuery.LimitType.FIRST)
+        .build();
+  }
+
+  private StructuredQuery.Builder buildWithoutClientTranslation() {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
     CollectionSelector.Builder collectionSelector = CollectionSelector.newBuilder();
     collectionSelector.setCollectionId(options.getCollectionId());
@@ -1172,21 +1239,7 @@ public class Query {
 
     if (!options.getFieldOrders().isEmpty()) {
       for (FieldOrder order : options.getFieldOrders()) {
-        switch (options.getLimitType()) {
-          case First:
-            structuredQuery.addOrderBy(order.toProto());
-            break;
-          case Last:
-            // Flip the orderBy directions since we want the last results
-            order =
-                new FieldOrder(
-                    order.fieldReference,
-                    order.direction.equals(Direction.ASCENDING)
-                        ? Direction.DESCENDING
-                        : Direction.ASCENDING);
-            structuredQuery.addOrderBy(order.toProto());
-            break;
-        }
+        structuredQuery.addOrderBy(order.toProto());
       }
     } else if (LimitType.Last.equals(options.getLimitType())) {
       throw new IllegalStateException(
@@ -1206,39 +1259,11 @@ public class Query {
     }
 
     if (options.getStartCursor() != null) {
-      switch (options.getLimitType()) {
-        case First:
-          structuredQuery.setStartAt(options.getStartCursor());
-          break;
-        case Last:
-          // Swap the cursors to match the flipped query ordering.
-          Cursor cursor =
-              options
-                  .getStartCursor()
-                  .toBuilder()
-                  .setBefore(!options.getStartCursor().getBefore())
-                  .build();
-          structuredQuery.setEndAt(cursor);
-          break;
-      }
+      structuredQuery.setStartAt(options.getStartCursor());
     }
 
     if (options.getEndCursor() != null) {
-      switch (options.getLimitType()) {
-        case First:
-          structuredQuery.setEndAt(options.getEndCursor());
-          break;
-        case Last:
-          // Swap the cursors to match the flipped query ordering.
-          Cursor cursor =
-              options
-                  .getEndCursor()
-                  .toBuilder()
-                  .setBefore(!options.getEndCursor().getBefore())
-                  .build();
-          structuredQuery.setStartAt(cursor);
-          break;
-      }
+      structuredQuery.setEndAt(options.getEndCursor());
     }
 
     return structuredQuery;

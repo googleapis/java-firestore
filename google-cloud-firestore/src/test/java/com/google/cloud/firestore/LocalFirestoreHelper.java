@@ -65,6 +65,8 @@ import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -117,6 +119,7 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Value> UPDATED_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_SINGLE_FIELD_PROTO;
   public static final Map<String, Value> UPDATED_POJO_PROTO;
+  public static final DocumentSnapshot UPDATED_SINGLE_FIELD_SNAPSHOT;
 
   public static final Map<String, Float> SINGLE_FLOAT_MAP;
   public static final Map<String, Value> SINGLE_FLOAT_PROTO;
@@ -841,6 +844,18 @@ public final class LocalFirestoreHelper {
                             .putFields("foo", Value.newBuilder().setStringValue("foobar").build()))
                     .build())
             .build();
+    UPDATED_SINGLE_FIELD_SNAPSHOT =
+        new DocumentSnapshot(
+            null,
+            new DocumentReference(
+                null,
+                ResourcePath.create(
+                    DatabaseRootName.of("test-project", "(default)"),
+                    ImmutableList.of("coll", "doc"))),
+            UPDATED_SINGLE_FIELD_PROTO,
+            Timestamp.ofTimeSecondsAndNanos(50, 6),
+            Timestamp.ofTimeSecondsAndNanos(30, 4),
+            Timestamp.ofTimeSecondsAndNanos(10, 2));
     SERVER_TIMESTAMP_MAP = new HashMap<>();
     SERVER_TIMESTAMP_MAP.put("foo", FieldValue.serverTimestamp());
     SERVER_TIMESTAMP_MAP.put("inner", new HashMap<String, Object>());
@@ -959,6 +974,13 @@ public final class LocalFirestoreHelper {
     return fromJsonString(json.replace("'", "\""));
   }
 
+  public static String fullPath(DocumentReference ref, FirestoreOptions options) {
+    return ResourcePath.create(
+            DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()),
+            ImmutableList.<String>copyOf(ref.getPath().split("/")))
+        .toString();
+  }
+
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.
@@ -1036,5 +1058,34 @@ public final class LocalFirestoreHelper {
       --activeRequestCounter;
       return response;
     }
+  }
+
+  /**
+   * Naive implementation to read bundle buffers into a list of JSON strings.
+   *
+   * <p>Only works with UTF-8 encoded bundle buffer.
+   */
+  public static List<String> bundleToElementList(ByteBuffer bundle) {
+    List<String> result = new ArrayList<>();
+    StringBuilder lengthStringBuilder = new StringBuilder();
+    while (bundle.hasRemaining()) {
+      char b = (char) bundle.get();
+      if (b >= '0' && b <= '9') {
+        lengthStringBuilder.append(b);
+      } else if (b == '{') {
+        // Rewind position for bulk reading.
+        bundle.position(bundle.position() - 1);
+        int length = Integer.parseInt(lengthStringBuilder.toString());
+        // Reset lengthStringBuilder
+        lengthStringBuilder = new StringBuilder();
+        byte[] element = new byte[length];
+        bundle.get(element, 0, length);
+        result.add(new String(element, StandardCharsets.UTF_8));
+      } else {
+        throw new RuntimeException("Bad bundle buffer.");
+      }
+    }
+
+    return result;
   }
 }
