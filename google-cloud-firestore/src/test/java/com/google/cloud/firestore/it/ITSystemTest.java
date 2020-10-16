@@ -604,6 +604,17 @@ public class ITSystemTest {
   }
 
   @Test
+  public void validatesPartitionCount() {
+    StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
+    try {
+      firestore.collectionGroup(randomColl.getId()).getPartitions(0, consumer);
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertEquals("Desired partition count must be one or greater", e.getMessage());
+    }
+  }
+
+  @Test
   public void failedTransaction() {
     try {
       firestore
