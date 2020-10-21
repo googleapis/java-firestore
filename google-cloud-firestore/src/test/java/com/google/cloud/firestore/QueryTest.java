@@ -46,17 +46,20 @@ import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.io.BaseEncoding;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.RunQueryRequest;
+import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.Direction;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.InvalidProtocolBufferException;
+import io.grpc.Status;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +69,9 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryTest {
@@ -900,6 +905,113 @@ public class QueryTest {
         });
 
     semaphore.acquire();
+  }
+
+  @Test
+  public void retriesAfterRetryableError() throws Exception {
+    final boolean[] returnError = new boolean[] {true};
+
+    doAnswer(
+            new Answer<RunQueryResponse>() {
+              public RunQueryResponse answer(InvocationOnMock invocation) throws Throwable {
+                if (returnError[0]) {
+                  returnError[0] = false;
+                  return queryResponse(
+                          FirestoreException.serverRejected(
+                              Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                          DOCUMENT_NAME + "1",
+                          DOCUMENT_NAME + "2")
+                      .answer(invocation);
+                } else {
+                  return queryResponse(DOCUMENT_NAME + "3").answer(invocation);
+                }
+              }
+            })
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2", "doc3").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+
+    // Verify the requests
+    List<RunQueryRequest> requests = runQuery.getAllValues();
+    assertEquals(2, requests.size());
+
+    assertFalse(requests.get(0).hasReadTime());
+    assertFalse(requests.get(0).getStructuredQuery().hasStartAt());
+
+    assertEquals(
+        com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2).build(),
+        requests.get(1).getReadTime());
+    assertFalse(requests.get(1).getStructuredQuery().getStartAt().getBefore());
+    assertEquals(
+        DOCUMENT_NAME + "2",
+        requests.get(1).getStructuredQuery().getStartAt().getValues(0).getReferenceValue());
+  }
+
+  @Test
+  public void doesNotRetryAfterNonRetryableError() throws Exception {
+    doAnswer(
+            queryResponse(
+                FirestoreException.serverRejected(
+                    Status.PERMISSION_DENIED, "Simulated test failure"),
+                DOCUMENT_NAME + "1",
+                DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            semaphore.release();
+          }
+
+          @Override
+          public void onCompleted() {}
+        });
+
+    semaphore.acquire();
+
+    // Verify the request count
+    List<RunQueryRequest> requests = runQuery.getAllValues();
+    assertEquals(1, runQuery.getAllValues().size());
   }
 
   @Test

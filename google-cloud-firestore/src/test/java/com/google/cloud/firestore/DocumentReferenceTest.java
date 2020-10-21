@@ -347,7 +347,10 @@ public class DocumentReferenceTest {
     getDocumentResponse.setReadTime(
         com.google.protobuf.Timestamp.newBuilder().setSeconds(5).setNanos(6));
 
-    doAnswer(streamingResponse(getDocumentResponse.build()))
+    doAnswer(
+            streamingResponse(
+                new BatchGetDocumentsResponse[] {getDocumentResponse.build()},
+                /* throwable= */ null))
         .when(firestoreMock)
         .streamRequest(
             getAllCapture.capture(),

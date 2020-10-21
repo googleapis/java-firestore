@@ -279,7 +279,7 @@ public final class LocalFirestoreHelper {
       responses[i] = response.build();
     }
 
-    return streamingResponse(responses);
+    return streamingResponse(responses, null);
   }
 
   public static ApiFuture<Empty> rollbackResponse() {
@@ -291,6 +291,12 @@ public final class LocalFirestoreHelper {
   }
 
   public static Answer<RunQueryResponse> queryResponse(String... documentNames) {
+    return queryResponse(/* throwable= */ null, documentNames);
+  }
+
+  /** Returns a stream of documents followed by an optional exception. */
+  public static Answer<RunQueryResponse> queryResponse(
+      @Nullable Throwable throwable, String... documentNames) {
     RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
 
     for (int i = 0; i < documentNames.length; ++i) {
@@ -301,16 +307,22 @@ public final class LocalFirestoreHelper {
           com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
       responses[i] = runQueryResponse.build();
     }
-    return streamingResponse(responses);
+
+    return streamingResponse(responses, throwable);
   }
 
-  public static <T> Answer<T> streamingResponse(final T... response) {
+  /** Returns a stream of responses followed by an optional exception. */
+  public static <T> Answer<T> streamingResponse(
+      final T[] response, @Nullable final Throwable throwable) {
     return new Answer<T>() {
       public T answer(InvocationOnMock invocation) {
         Object[] args = invocation.getArguments();
         ApiStreamObserver<T> observer = (ApiStreamObserver<T>) args[1];
         for (T resp : response) {
           observer.onNext(resp);
+        }
+        if (throwable != null) {
+          observer.onError(throwable);
         }
         observer.onCompleted();
         return null;

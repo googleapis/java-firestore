@@ -32,9 +32,11 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.StatusCode;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -52,6 +54,7 @@ import com.google.firestore.v1.StructuredQuery.Order;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
+import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -59,7 +62,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -1297,7 +1302,8 @@ public class Query {
             responseObserver.onCompleted();
           }
         },
-        null);
+        /* transactionId= */ null,
+        /* readTime= */ null);
   }
 
   /**
@@ -1431,12 +1437,17 @@ public class Query {
   }
 
   private void internalStream(
-      final QuerySnapshotObserver documentObserver, @Nullable ByteString transactionId) {
+      final QuerySnapshotObserver documentObserver,
+      @Nullable final ByteString transactionId,
+      @Nullable final Timestamp readTime) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
+    }
+    if (readTime != null) {
+      request.setReadTime(readTime.toProto());
     }
 
     Tracing.getTracer()
@@ -1445,6 +1456,8 @@ public class Query {
             TraceUtil.SPAN_NAME_RUNQUERY + ": Start",
             ImmutableMap.of(
                 "transactional", AttributeValue.booleanAttributeValue(transactionId != null)));
+
+    final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
     ApiStreamObserver<RunQueryResponse> observer =
         new ApiStreamObserver<RunQueryResponse>() {
@@ -1470,6 +1483,7 @@ public class Query {
                   QueryDocumentSnapshot.fromDocument(
                       rpcContext, Timestamp.fromProto(response.getReadTime()), document);
               documentObserver.onNext(documentSnapshot);
+              lastReceivedDocument.set(documentSnapshot);
             }
 
             if (readTime == null) {
@@ -1479,8 +1493,27 @@ public class Query {
 
           @Override
           public void onError(Throwable throwable) {
-            Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
-            documentObserver.onError(throwable);
+            // If a non-transactional query failed, attempt to restart.
+            // Transactional queries are retried via the transaction runner.
+            if (transactionId == null && isRetryableError(throwable)) {
+              Tracing.getTracer()
+                  .getCurrentSpan()
+                  .addAnnotation("Firestore.Query: Retryable Error");
+
+              // Restart the query but use the last document we received as the
+              // query cursor. Note that this it is ok to not use backoff here
+              // since we are requiring at least a single document result.
+              QueryDocumentSnapshot cursor = lastReceivedDocument.get();
+              if (cursor != null) {
+                Query.this
+                    .startAfter(cursor)
+                    .internalStream(
+                        documentObserver, /* transactionId= */ null, cursor.getReadTime());
+              }
+            } else {
+              Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
+              documentObserver.onError(throwable);
+            }
           }
 
           @Override
@@ -1562,7 +1595,8 @@ public class Query {
             result.set(querySnapshot);
           }
         },
-        transactionId);
+        transactionId,
+        /* readTime= */ null);
 
     return result;
   }
@@ -1622,6 +1656,22 @@ public class Query {
     builder.addAll(existingList);
     builder.add(newElement);
     return builder.build();
+  }
+
+  /** Verifies whether the given exception is retryable based on the RunQuery configuration. */
+  private boolean isRetryableError(Throwable throwable) {
+    if (!(throwable instanceof FirestoreException)) {
+      return false;
+    }
+    Set<StatusCode.Code> codes =
+        FirestoreSettings.newBuilder().runQuerySettings().getRetryableCodes();
+    Status status = ((FirestoreException) throwable).getStatus();
+    for (StatusCode.Code code : codes) {
+      if (code.equals(StatusCode.Code.valueOf(status.getCode().name()))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
