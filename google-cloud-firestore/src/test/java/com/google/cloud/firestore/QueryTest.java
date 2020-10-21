@@ -908,7 +908,7 @@ public class QueryTest {
   }
 
   @Test
-  public void retriesAfterError() throws Exception {
+  public void retriesAfterRetryableError() throws Exception {
     final boolean[] returnError = new boolean[] {true};
 
     doAnswer(
@@ -971,6 +971,47 @@ public class QueryTest {
     assertEquals(
         DOCUMENT_NAME + "2",
         requests.get(1).getStructuredQuery().getStartAt().getValues(0).getReferenceValue());
+  }
+
+  @Test
+  public void doesNotRetryAfterNonRetryableError() throws Exception {
+    doAnswer(
+            queryResponse(
+                FirestoreException.serverRejected(
+                    Status.PERMISSION_DENIED, "Simulated test failure"),
+                DOCUMENT_NAME + "1",
+                DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            semaphore.release();
+          }
+
+          @Override
+          public void onCompleted() {}
+        });
+
+    semaphore.acquire();
+
+    // Verify the request count
+    List<RunQueryRequest> requests = runQuery.getAllValues();
+    assertEquals(1, runQuery.getAllValues().size());
   }
 
   @Test
