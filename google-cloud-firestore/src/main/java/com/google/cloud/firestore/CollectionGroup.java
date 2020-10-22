@@ -20,6 +20,7 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.v1.FirestoreClient;
+import com.google.common.base.Preconditions;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
 import io.opencensus.common.Scope;
@@ -53,42 +54,51 @@ public class CollectionGroup extends Query {
    */
   public void getPartitions(
       long desiredPartitionCount, ApiStreamObserver<QueryPartition> observer) {
+    Preconditions.checkArgument(
+        desiredPartitionCount > 0, "Desired partition count must be one or greater");
+
     // Partition queries require explicit ordering by __name__.
     Query queryWithDefaultOrder = orderBy(FieldPath.DOCUMENT_ID);
 
-    PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
-    request.setStructuredQuery(queryWithDefaultOrder.buildQuery());
-    request.setParent(options.getParentPath().toString());
+    if (desiredPartitionCount == 1) {
+      // Short circuit if the user only requested a single partition.
+      observer.onNext(new QueryPartition(queryWithDefaultOrder, null, null));
+    } else {
+      PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
+      request.setStructuredQuery(queryWithDefaultOrder.buildQuery());
+      request.setParent(options.getParentPath().toString());
 
-    // Since we are always returning an extra partition (with en empty endBefore cursor), we
-    // reduce the desired partition count by one.
-    request.setPartitionCount(desiredPartitionCount - 1);
+      // Since we are always returning an extra partition (with en empty endBefore cursor), we
+      // reduce the desired partition count by one.
+      request.setPartitionCount(desiredPartitionCount - 1);
 
-    final FirestoreClient.PartitionQueryPagedResponse response;
-    final TraceUtil traceUtil = TraceUtil.getInstance();
-    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
-    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
-      response =
-          ApiExceptions.callAndTranslateApiException(
-              rpcContext.sendRequest(
-                  request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
-    } catch (ApiException exception) {
-      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
-      throw FirestoreException.apiException(exception);
-    } finally {
-      span.end(TraceUtil.END_SPAN_OPTIONS);
-    }
-
-    @Nullable Object[] lastCursor = null;
-    for (Cursor cursor : response.iterateAll()) {
-      Object[] decodedCursorValue = new Object[cursor.getValuesCount()];
-      for (int i = 0; i < cursor.getValuesCount(); ++i) {
-        decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
+      final FirestoreClient.PartitionQueryPagedResponse response;
+      final TraceUtil traceUtil = TraceUtil.getInstance();
+      Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
+      try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+        response =
+            ApiExceptions.callAndTranslateApiException(
+                rpcContext.sendRequest(
+                    request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
+      } catch (ApiException exception) {
+        span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
+        throw FirestoreException.apiException(exception);
+      } finally {
+        span.end(TraceUtil.END_SPAN_OPTIONS);
       }
-      observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, decodedCursorValue));
-      lastCursor = decodedCursorValue;
+
+      @Nullable Object[] lastCursor = null;
+      for (Cursor cursor : response.iterateAll()) {
+        Object[] decodedCursorValue = new Object[cursor.getValuesCount()];
+        for (int i = 0; i < cursor.getValuesCount(); ++i) {
+          decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
+        }
+        observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, decodedCursorValue));
+        lastCursor = decodedCursorValue;
+      }
+      observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, null));
     }
-    observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, null));
+
     observer.onCompleted();
   }
 }
