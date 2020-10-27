@@ -747,6 +747,94 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD
   /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   for (Cursor element : firestoreClient.partitionQuery(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PartitionQueryPagedResponse partitionQuery(PartitionQueryRequest request) {
+    return partitionQueryPagedCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   ApiFuture&lt;PartitionQueryPagedResponse&gt; future = firestoreClient.partitionQueryPagedCallable().futureCall(request);
+   *   // Do something
+   *   for (Cursor element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return stub.partitionQueryPagedCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used by RunQuery as
+   * starting/end points for the query results.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   String parent = "";
+   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
+   *     .setParent(parent)
+   *     .build();
+   *   while (true) {
+   *     PartitionQueryResponse response = firestoreClient.partitionQueryCallable().call(request);
+   *     for (Cursor element : response.getPartitionsList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryCallable() {
+    return stub.partitionQueryCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
    * Rolls back a transaction.
    *
    * <p>Sample code:
@@ -1003,94 +1091,6 @@ public class FirestoreClient implements BackgroundResource {
     return stub.listCollectionIdsCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Partitions a query by returning partition cursors that can be used to run the query in
-   * parallel. The returned partition cursors are split points that can be used by RunQuery as
-   * starting/end points for the query results.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String parent = "";
-   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
-   *     .setParent(parent)
-   *     .build();
-   *   for (Cursor element : firestoreClient.partitionQuery(request).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
-   *
-   * @param request The request object containing all of the parameters for the API call.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final PartitionQueryPagedResponse partitionQuery(PartitionQueryRequest request) {
-    return partitionQueryPagedCallable().call(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Partitions a query by returning partition cursors that can be used to run the query in
-   * parallel. The returned partition cursors are split points that can be used by RunQuery as
-   * starting/end points for the query results.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String parent = "";
-   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
-   *     .setParent(parent)
-   *     .build();
-   *   ApiFuture&lt;PartitionQueryPagedResponse&gt; future = firestoreClient.partitionQueryPagedCallable().futureCall(request);
-   *   // Do something
-   *   for (Cursor element : future.get().iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
-   */
-  public final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
-      partitionQueryPagedCallable() {
-    return stub.partitionQueryPagedCallable();
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Partitions a query by returning partition cursors that can be used to run the query in
-   * parallel. The returned partition cursors are split points that can be used by RunQuery as
-   * starting/end points for the query results.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   String parent = "";
-   *   PartitionQueryRequest request = PartitionQueryRequest.newBuilder()
-   *     .setParent(parent)
-   *     .build();
-   *   while (true) {
-   *     PartitionQueryResponse response = firestoreClient.partitionQueryCallable().call(request);
-   *     for (Cursor element : response.getPartitionsList()) {
-   *       // doThingsWith(element);
-   *     }
-   *     String nextPageToken = response.getNextPageToken();
-   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
-   *       request = request.toBuilder().setPageToken(nextPageToken).build();
-   *     } else {
-   *       break;
-   *     }
-   *   }
-   * }
-   * </code></pre>
-   */
-  public final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse>
-      partitionQueryCallable() {
-    return stub.partitionQueryCallable();
-  }
-
   @Override
   public final void close() {
     stub.close();
@@ -1202,6 +1202,87 @@ public class FirestoreClient implements BackgroundResource {
     }
   }
 
+  public static class PartitionQueryPagedResponse
+      extends AbstractPagedListResponse<
+          PartitionQueryRequest,
+          PartitionQueryResponse,
+          Cursor,
+          PartitionQueryPage,
+          PartitionQueryFixedSizeCollection> {
+
+    public static ApiFuture<PartitionQueryPagedResponse> createAsync(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        ApiFuture<PartitionQueryResponse> futureResponse) {
+      ApiFuture<PartitionQueryPage> futurePage =
+          PartitionQueryPage.createEmptyPage().createPageAsync(context, futureResponse);
+      return ApiFutures.transform(
+          futurePage,
+          new ApiFunction<PartitionQueryPage, PartitionQueryPagedResponse>() {
+            @Override
+            public PartitionQueryPagedResponse apply(PartitionQueryPage input) {
+              return new PartitionQueryPagedResponse(input);
+            }
+          },
+          MoreExecutors.directExecutor());
+    }
+
+    private PartitionQueryPagedResponse(PartitionQueryPage page) {
+      super(page, PartitionQueryFixedSizeCollection.createEmptyCollection());
+    }
+  }
+
+  public static class PartitionQueryPage
+      extends AbstractPage<
+          PartitionQueryRequest, PartitionQueryResponse, Cursor, PartitionQueryPage> {
+
+    private PartitionQueryPage(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        PartitionQueryResponse response) {
+      super(context, response);
+    }
+
+    private static PartitionQueryPage createEmptyPage() {
+      return new PartitionQueryPage(null, null);
+    }
+
+    @Override
+    protected PartitionQueryPage createPage(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        PartitionQueryResponse response) {
+      return new PartitionQueryPage(context, response);
+    }
+
+    @Override
+    public ApiFuture<PartitionQueryPage> createPageAsync(
+        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
+        ApiFuture<PartitionQueryResponse> futureResponse) {
+      return super.createPageAsync(context, futureResponse);
+    }
+  }
+
+  public static class PartitionQueryFixedSizeCollection
+      extends AbstractFixedSizeCollection<
+          PartitionQueryRequest,
+          PartitionQueryResponse,
+          Cursor,
+          PartitionQueryPage,
+          PartitionQueryFixedSizeCollection> {
+
+    private PartitionQueryFixedSizeCollection(List<PartitionQueryPage> pages, int collectionSize) {
+      super(pages, collectionSize);
+    }
+
+    private static PartitionQueryFixedSizeCollection createEmptyCollection() {
+      return new PartitionQueryFixedSizeCollection(null, 0);
+    }
+
+    @Override
+    protected PartitionQueryFixedSizeCollection createCollection(
+        List<PartitionQueryPage> pages, int collectionSize) {
+      return new PartitionQueryFixedSizeCollection(pages, collectionSize);
+    }
+  }
+
   public static class ListCollectionIdsPagedResponse
       extends AbstractPagedListResponse<
           ListCollectionIdsRequest,
@@ -1281,87 +1362,6 @@ public class FirestoreClient implements BackgroundResource {
     protected ListCollectionIdsFixedSizeCollection createCollection(
         List<ListCollectionIdsPage> pages, int collectionSize) {
       return new ListCollectionIdsFixedSizeCollection(pages, collectionSize);
-    }
-  }
-
-  public static class PartitionQueryPagedResponse
-      extends AbstractPagedListResponse<
-          PartitionQueryRequest,
-          PartitionQueryResponse,
-          Cursor,
-          PartitionQueryPage,
-          PartitionQueryFixedSizeCollection> {
-
-    public static ApiFuture<PartitionQueryPagedResponse> createAsync(
-        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
-        ApiFuture<PartitionQueryResponse> futureResponse) {
-      ApiFuture<PartitionQueryPage> futurePage =
-          PartitionQueryPage.createEmptyPage().createPageAsync(context, futureResponse);
-      return ApiFutures.transform(
-          futurePage,
-          new ApiFunction<PartitionQueryPage, PartitionQueryPagedResponse>() {
-            @Override
-            public PartitionQueryPagedResponse apply(PartitionQueryPage input) {
-              return new PartitionQueryPagedResponse(input);
-            }
-          },
-          MoreExecutors.directExecutor());
-    }
-
-    private PartitionQueryPagedResponse(PartitionQueryPage page) {
-      super(page, PartitionQueryFixedSizeCollection.createEmptyCollection());
-    }
-  }
-
-  public static class PartitionQueryPage
-      extends AbstractPage<
-          PartitionQueryRequest, PartitionQueryResponse, Cursor, PartitionQueryPage> {
-
-    private PartitionQueryPage(
-        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
-        PartitionQueryResponse response) {
-      super(context, response);
-    }
-
-    private static PartitionQueryPage createEmptyPage() {
-      return new PartitionQueryPage(null, null);
-    }
-
-    @Override
-    protected PartitionQueryPage createPage(
-        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
-        PartitionQueryResponse response) {
-      return new PartitionQueryPage(context, response);
-    }
-
-    @Override
-    public ApiFuture<PartitionQueryPage> createPageAsync(
-        PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> context,
-        ApiFuture<PartitionQueryResponse> futureResponse) {
-      return super.createPageAsync(context, futureResponse);
-    }
-  }
-
-  public static class PartitionQueryFixedSizeCollection
-      extends AbstractFixedSizeCollection<
-          PartitionQueryRequest,
-          PartitionQueryResponse,
-          Cursor,
-          PartitionQueryPage,
-          PartitionQueryFixedSizeCollection> {
-
-    private PartitionQueryFixedSizeCollection(List<PartitionQueryPage> pages, int collectionSize) {
-      super(pages, collectionSize);
-    }
-
-    private static PartitionQueryFixedSizeCollection createEmptyCollection() {
-      return new PartitionQueryFixedSizeCollection(null, 0);
-    }
-
-    @Override
-    protected PartitionQueryFixedSizeCollection createCollection(
-        List<PartitionQueryPage> pages, int collectionSize) {
-      return new PartitionQueryFixedSizeCollection(pages, collectionSize);
     }
   }
 }

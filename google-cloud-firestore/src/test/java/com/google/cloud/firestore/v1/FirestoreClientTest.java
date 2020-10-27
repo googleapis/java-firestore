@@ -523,6 +523,56 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
+  public void partitionQueryTest() {
+    String nextPageToken = "";
+    Cursor partitionsElement = Cursor.newBuilder().build();
+    List<Cursor> partitions = Arrays.asList(partitionsElement);
+    PartitionQueryResponse expectedResponse =
+        PartitionQueryResponse.newBuilder()
+            .setNextPageToken(nextPageToken)
+            .addAllPartitions(partitions)
+            .build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+    PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
+
+    PartitionQueryPagedResponse pagedListResponse = client.partitionQuery(request);
+
+    List<Cursor> resources = Lists.newArrayList(pagedListResponse.iterateAll());
+    Assert.assertEquals(1, resources.size());
+    Assert.assertEquals(expectedResponse.getPartitionsList().get(0), resources.get(0));
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    PartitionQueryRequest actualRequest = (PartitionQueryRequest) actualRequests.get(0);
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void partitionQueryExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
+
+      client.partitionQuery(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
   public void rollbackTest() {
     Empty expectedResponse = Empty.newBuilder().build();
     mockFirestore.addResponse(expectedResponse);
@@ -745,56 +795,6 @@ public class FirestoreClientTest {
       String parent = "parent-995424086";
 
       client.listCollectionIds(parent);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void partitionQueryTest() {
-    String nextPageToken = "";
-    Cursor partitionsElement = Cursor.newBuilder().build();
-    List<Cursor> partitions = Arrays.asList(partitionsElement);
-    PartitionQueryResponse expectedResponse =
-        PartitionQueryResponse.newBuilder()
-            .setNextPageToken(nextPageToken)
-            .addAllPartitions(partitions)
-            .build();
-    mockFirestore.addResponse(expectedResponse);
-
-    String parent = "parent-995424086";
-    PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
-
-    PartitionQueryPagedResponse pagedListResponse = client.partitionQuery(request);
-
-    List<Cursor> resources = Lists.newArrayList(pagedListResponse.iterateAll());
-    Assert.assertEquals(1, resources.size());
-    Assert.assertEquals(expectedResponse.getPartitionsList().get(0), resources.get(0));
-
-    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    PartitionQueryRequest actualRequest = (PartitionQueryRequest) actualRequests.get(0);
-
-    Assert.assertEquals(parent, actualRequest.getParent());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void partitionQueryExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestore.addException(exception);
-
-    try {
-      String parent = "parent-995424086";
-      PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
-
-      client.partitionQuery(request);
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception

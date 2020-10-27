@@ -145,6 +145,13 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return ((FirestoreStubSettings) getStubSettings()).commitSettings();
   }
 
+  /** Returns the object with the settings used for calls to partitionQuery. */
+  public PagedCallSettings<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      partitionQuerySettings() {
+    return ((FirestoreStubSettings) getStubSettings()).partitionQuerySettings();
+  }
+
   /** Returns the object with the settings used for calls to rollback. */
   public UnaryCallSettings<RollbackRequest, Empty> rollbackSettings() {
     return ((FirestoreStubSettings) getStubSettings()).rollbackSettings();
@@ -170,13 +177,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return ((FirestoreStubSettings) getStubSettings()).listCollectionIdsSettings();
-  }
-
-  /** Returns the object with the settings used for calls to partitionQuery. */
-  public PagedCallSettings<
-          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-      partitionQuerySettings() {
-    return ((FirestoreStubSettings) getStubSettings()).partitionQuerySettings();
   }
 
   public static final FirestoreSettings create(FirestoreStubSettings stub) throws IOException {
@@ -324,6 +324,13 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
       return getStubSettingsBuilder().commitSettings();
     }
 
+    /** Returns the builder for the settings used for calls to partitionQuery. */
+    public PagedCallSettings.Builder<
+            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+        partitionQuerySettings() {
+      return getStubSettingsBuilder().partitionQuerySettings();
+    }
+
     /** Returns the builder for the settings used for calls to rollback. */
     public UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings() {
       return getStubSettingsBuilder().rollbackSettings();
@@ -350,13 +357,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return getStubSettingsBuilder().listCollectionIdsSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to partitionQuery. */
-    public PagedCallSettings.Builder<
-            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-        partitionQuerySettings() {
-      return getStubSettingsBuilder().partitionQuerySettings();
     }
 
     @Override
