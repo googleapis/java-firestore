@@ -72,7 +72,7 @@ import javax.annotation.Generated;
  * <code>
  * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
  *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
- *   firestoreAdminClient.deleteIndex(name);
+ *   Index response = firestoreAdminClient.getIndex(name);
  * }
  * </code>
  * </pre>
@@ -192,239 +192,6 @@ public class FirestoreAdminClient implements BackgroundResource {
       "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationsClient getOperationsClient() {
     return operationsClient;
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   firestoreAdminClient.deleteIndex(name);
-   * }
-   * </code></pre>
-   *
-   * @param name Required. A name of the form
-   *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final void deleteIndex(IndexName name) {
-    DeleteIndexRequest request =
-        DeleteIndexRequest.newBuilder().setName(name == null ? null : name.toString()).build();
-    deleteIndex(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   firestoreAdminClient.deleteIndex(name.toString());
-   * }
-   * </code></pre>
-   *
-   * @param name Required. A name of the form
-   *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final void deleteIndex(String name) {
-    DeleteIndexRequest request = DeleteIndexRequest.newBuilder().setName(name).build();
-    deleteIndex(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   firestoreAdminClient.deleteIndex(request);
-   * }
-   * </code></pre>
-   *
-   * @param request The request object containing all of the parameters for the API call.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  public final void deleteIndex(DeleteIndexRequest request) {
-    deleteIndexCallable().call(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Void&gt; future = firestoreAdminClient.deleteIndexCallable().futureCall(request);
-   *   // Do something
-   *   future.get();
-   * }
-   * </code></pre>
-   */
-  public final UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
-    return stub.deleteIndexCallable();
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Updates a field configuration. Currently, field updates apply only to single field index
-   * configuration. However, calls to
-   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
-   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
-   * field mask should be specified as: `{ paths: "index_config" }`.
-   *
-   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
-   * be used to track the status of the field update. The metadata for the operation will be the
-   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
-   *
-   * <p>To configure the default field settings for the database, use the special `Field` with
-   * resource name:
-   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   Field response = firestoreAdminClient.updateFieldAsync(field).get();
-   * }
-   * </code></pre>
-   *
-   * @param field Required. The field to be updated.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
-  public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(Field field) {
-    UpdateFieldRequest request = UpdateFieldRequest.newBuilder().setField(field).build();
-    return updateFieldAsync(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Updates a field configuration. Currently, field updates apply only to single field index
-   * configuration. However, calls to
-   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
-   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
-   * field mask should be specified as: `{ paths: "index_config" }`.
-   *
-   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
-   * be used to track the status of the field update. The metadata for the operation will be the
-   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
-   *
-   * <p>To configure the default field settings for the database, use the special `Field` with
-   * resource name:
-   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   Field response = firestoreAdminClient.updateFieldAsync(request).get();
-   * }
-   * </code></pre>
-   *
-   * @param request The request object containing all of the parameters for the API call.
-   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
-   */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
-  public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(
-      UpdateFieldRequest request) {
-    return updateFieldOperationCallable().futureCall(request);
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Updates a field configuration. Currently, field updates apply only to single field index
-   * configuration. However, calls to
-   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
-   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
-   * field mask should be specified as: `{ paths: "index_config" }`.
-   *
-   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
-   * be used to track the status of the field update. The metadata for the operation will be the
-   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
-   *
-   * <p>To configure the default field settings for the database, use the special `Field` with
-   * resource name:
-   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   OperationFuture&lt;Field, FieldOperationMetadata&gt; future = firestoreAdminClient.updateFieldOperationCallable().futureCall(request);
-   *   // Do something
-   *   Field response = future.get();
-   * }
-   * </code></pre>
-   */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public final OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationCallable() {
-    return stub.updateFieldOperationCallable();
-  }
-
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
-  /**
-   * Updates a field configuration. Currently, field updates apply only to single field index
-   * configuration. However, calls to
-   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
-   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
-   * field mask should be specified as: `{ paths: "index_config" }`.
-   *
-   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
-   * be used to track the status of the field update. The metadata for the operation will be the
-   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
-   *
-   * <p>To configure the default field settings for the database, use the special `Field` with
-   * resource name:
-   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.updateFieldCallable().futureCall(request);
-   *   // Do something
-   *   Operation response = future.get();
-   * }
-   * </code></pre>
-   */
-  public final UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
-    return stub.updateFieldCallable();
   }
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD
@@ -803,6 +570,96 @@ public class FirestoreAdminClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD
   /**
+   * Deletes a composite index.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+   *   firestoreAdminClient.deleteIndex(name);
+   * }
+   * </code></pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteIndex(IndexName name) {
+    DeleteIndexRequest request =
+        DeleteIndexRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    deleteIndex(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Deletes a composite index.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+   *   firestoreAdminClient.deleteIndex(name.toString());
+   * }
+   * </code></pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteIndex(String name) {
+    DeleteIndexRequest request = DeleteIndexRequest.newBuilder().setName(name).build();
+    deleteIndex(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Deletes a composite index.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
+   *     .setName(name.toString())
+   *     .build();
+   *   firestoreAdminClient.deleteIndex(request);
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteIndex(DeleteIndexRequest request) {
+    deleteIndexCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Deletes a composite index.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
+   *     .setName(name.toString())
+   *     .build();
+   *   ApiFuture&lt;Void&gt; future = firestoreAdminClient.deleteIndexCallable().futureCall(request);
+   *   // Do something
+   *   future.get();
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
+    return stub.deleteIndexCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
    * Gets the metadata and configuration for a Field.
    *
    * <p>Sample code:
@@ -889,6 +746,149 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<GetFieldRequest, Field> getFieldCallable() {
     return stub.getFieldCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Updates a field configuration. Currently, field updates apply only to single field index
+   * configuration. However, calls to
+   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
+   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
+   * field mask should be specified as: `{ paths: "index_config" }`.
+   *
+   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
+   * be used to track the status of the field update. The metadata for the operation will be the
+   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+   *
+   * <p>To configure the default field settings for the database, use the special `Field` with
+   * resource name:
+   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Field field = Field.newBuilder().build();
+   *   Field response = firestoreAdminClient.updateFieldAsync(field).get();
+   * }
+   * </code></pre>
+   *
+   * @param field Required. The field to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(Field field) {
+    UpdateFieldRequest request = UpdateFieldRequest.newBuilder().setField(field).build();
+    return updateFieldAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Updates a field configuration. Currently, field updates apply only to single field index
+   * configuration. However, calls to
+   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
+   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
+   * field mask should be specified as: `{ paths: "index_config" }`.
+   *
+   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
+   * be used to track the status of the field update. The metadata for the operation will be the
+   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+   *
+   * <p>To configure the default field settings for the database, use the special `Field` with
+   * resource name:
+   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Field field = Field.newBuilder().build();
+   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
+   *     .setField(field)
+   *     .build();
+   *   Field response = firestoreAdminClient.updateFieldAsync(request).get();
+   * }
+   * </code></pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(
+      UpdateFieldRequest request) {
+    return updateFieldOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Updates a field configuration. Currently, field updates apply only to single field index
+   * configuration. However, calls to
+   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
+   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
+   * field mask should be specified as: `{ paths: "index_config" }`.
+   *
+   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
+   * be used to track the status of the field update. The metadata for the operation will be the
+   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+   *
+   * <p>To configure the default field settings for the database, use the special `Field` with
+   * resource name:
+   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Field field = Field.newBuilder().build();
+   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
+   *     .setField(field)
+   *     .build();
+   *   OperationFuture&lt;Field, FieldOperationMetadata&gt; future = firestoreAdminClient.updateFieldOperationCallable().futureCall(request);
+   *   // Do something
+   *   Field response = future.get();
+   * }
+   * </code></pre>
+   */
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public final OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationCallable() {
+    return stub.updateFieldOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  /**
+   * Updates a field configuration. Currently, field updates apply only to single field index
+   * configuration. However, calls to
+   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should
+   * provide a field mask to avoid changing any configuration that the caller isn't aware of. The
+   * field mask should be specified as: `{ paths: "index_config" }`.
+   *
+   * <p>This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may
+   * be used to track the status of the field update. The metadata for the operation will be the
+   * type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+   *
+   * <p>To configure the default field settings for the database, use the special `Field` with
+   * resource name:
+   * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
+   *
+   * <p>Sample code:
+   *
+   * <pre><code>
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Field field = Field.newBuilder().build();
+   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
+   *     .setField(field)
+   *     .build();
+   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.updateFieldCallable().futureCall(request);
+   *   // Do something
+   *   Operation response = future.get();
+   * }
+   * </code></pre>
+   */
+  public final UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
+    return stub.updateFieldCallable();
   }
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD

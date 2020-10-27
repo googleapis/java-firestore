@@ -91,15 +91,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListDocumentsResponse.getDefaultInstance()))
               .build();
-  private static final MethodDescriptor<CreateDocumentRequest, Document>
-      createDocumentMethodDescriptor =
-          MethodDescriptor.<CreateDocumentRequest, Document>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1.Firestore/CreateDocument")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(CreateDocumentRequest.getDefaultInstance()))
-              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
-              .build();
   private static final MethodDescriptor<UpdateDocumentRequest, Document>
       updateDocumentMethodDescriptor =
           MethodDescriptor.<UpdateDocumentRequest, Document>newBuilder()
@@ -128,14 +119,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(BatchGetDocumentsResponse.getDefaultInstance()))
               .build();
-  private static final MethodDescriptor<BatchWriteRequest, BatchWriteResponse>
-      batchWriteMethodDescriptor =
-          MethodDescriptor.<BatchWriteRequest, BatchWriteResponse>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1.Firestore/BatchWrite")
-              .setRequestMarshaller(ProtoUtils.marshaller(BatchWriteRequest.getDefaultInstance()))
-              .setResponseMarshaller(ProtoUtils.marshaller(BatchWriteResponse.getDefaultInstance()))
-              .build();
   private static final MethodDescriptor<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionMethodDescriptor =
           MethodDescriptor.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
@@ -153,16 +136,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
           .setRequestMarshaller(ProtoUtils.marshaller(CommitRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(CommitResponse.getDefaultInstance()))
           .build();
-  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
-      partitionQueryMethodDescriptor =
-          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
-              .setResponseMarshaller(
-                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
-              .build();
   private static final MethodDescriptor<RollbackRequest, Empty> rollbackMethodDescriptor =
       MethodDescriptor.<RollbackRequest, Empty>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -177,6 +150,16 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setFullMethodName("google.firestore.v1.Firestore/RunQuery")
               .setRequestMarshaller(ProtoUtils.marshaller(RunQueryRequest.getDefaultInstance()))
               .setResponseMarshaller(ProtoUtils.marshaller(RunQueryResponse.getDefaultInstance()))
+              .build();
+  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryMethodDescriptor =
+          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
               .build();
   private static final MethodDescriptor<WriteRequest, WriteResponse> writeMethodDescriptor =
       MethodDescriptor.<WriteRequest, WriteResponse>newBuilder()
@@ -202,6 +185,23 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
+  private static final MethodDescriptor<BatchWriteRequest, BatchWriteResponse>
+      batchWriteMethodDescriptor =
+          MethodDescriptor.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/BatchWrite")
+              .setRequestMarshaller(ProtoUtils.marshaller(BatchWriteRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BatchWriteResponse.getDefaultInstance()))
+              .build();
+  private static final MethodDescriptor<CreateDocumentRequest, Document>
+      createDocumentMethodDescriptor =
+          MethodDescriptor.<CreateDocumentRequest, Document>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/CreateDocument")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(CreateDocumentRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Document.getDefaultInstance()))
+              .build();
 
   private final BackgroundResource backgroundResources;
 
@@ -209,26 +209,26 @@ public class GrpcFirestoreStub extends FirestoreStub {
   private final UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable;
   private final UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
       listDocumentsPagedCallable;
-  private final UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable;
   private final UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable;
   private final UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable;
   private final ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable;
-  private final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable;
   private final UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable;
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
+  private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
+  private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable;
-  private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
-  private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
   private final BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable;
   private final BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
+  private final UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable;
+  private final UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -285,10 +285,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
         GrpcCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
             .setMethodDescriptor(listDocumentsMethodDescriptor)
             .build();
-    GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
-        GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
-            .setMethodDescriptor(createDocumentMethodDescriptor)
-            .build();
     GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
         GrpcCallSettings.<UpdateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(updateDocumentMethodDescriptor)
@@ -329,19 +325,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
-    GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
-        GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
-            .setMethodDescriptor(batchWriteMethodDescriptor)
-            .setParamsExtractor(
-                new RequestParamsExtractor<BatchWriteRequest>() {
-                  @Override
-                  public Map<String, String> extract(BatchWriteRequest request) {
-                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                    params.put("database", String.valueOf(request.getDatabase()));
-                    return params.build();
-                  }
-                })
-            .build();
     GrpcCallSettings<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionTransportSettings =
             GrpcCallSettings.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
@@ -369,20 +352,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   }
                 })
             .build();
-    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
-        partitionQueryTransportSettings =
-            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
-                .setMethodDescriptor(partitionQueryMethodDescriptor)
-                .setParamsExtractor(
-                    new RequestParamsExtractor<PartitionQueryRequest>() {
-                      @Override
-                      public Map<String, String> extract(PartitionQueryRequest request) {
-                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                        params.put("parent", String.valueOf(request.getParent()));
-                        return params.build();
-                      }
-                    })
-                .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         GrpcCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
@@ -409,6 +378,20 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   }
                 })
             .build();
+    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
+        partitionQueryTransportSettings =
+            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+                .setMethodDescriptor(partitionQueryMethodDescriptor)
+                .setParamsExtractor(
+                    new RequestParamsExtractor<PartitionQueryRequest>() {
+                      @Override
+                      public Map<String, String> extract(PartitionQueryRequest request) {
+                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                        params.put("parent", String.valueOf(request.getParent()));
+                        return params.build();
+                      }
+                    })
+                .build();
     GrpcCallSettings<WriteRequest, WriteResponse> writeTransportSettings =
         GrpcCallSettings.<WriteRequest, WriteResponse>newBuilder()
             .setMethodDescriptor(writeMethodDescriptor)
@@ -431,6 +414,23 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
+    GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
+        GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
+            .setMethodDescriptor(batchWriteMethodDescriptor)
+            .setParamsExtractor(
+                new RequestParamsExtractor<BatchWriteRequest>() {
+                  @Override
+                  public Map<String, String> extract(BatchWriteRequest request) {
+                    ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                    params.put("database", String.valueOf(request.getDatabase()));
+                    return params.build();
+                  }
+                })
+            .build();
+    GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
+        GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
+            .setMethodDescriptor(createDocumentMethodDescriptor)
+            .build();
 
     this.getDocumentCallable =
         callableFactory.createUnaryCallable(
@@ -441,9 +441,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this.listDocumentsPagedCallable =
         callableFactory.createPagedCallable(
             listDocumentsTransportSettings, settings.listDocumentsSettings(), clientContext);
-    this.createDocumentCallable =
-        callableFactory.createUnaryCallable(
-            createDocumentTransportSettings, settings.createDocumentSettings(), clientContext);
     this.updateDocumentCallable =
         callableFactory.createUnaryCallable(
             updateDocumentTransportSettings, settings.updateDocumentSettings(), clientContext);
@@ -455,27 +452,24 @@ public class GrpcFirestoreStub extends FirestoreStub {
             batchGetDocumentsTransportSettings,
             settings.batchGetDocumentsSettings(),
             clientContext);
-    this.batchWriteCallable =
-        callableFactory.createUnaryCallable(
-            batchWriteTransportSettings, settings.batchWriteSettings(), clientContext);
     this.beginTransactionCallable =
         callableFactory.createUnaryCallable(
             beginTransactionTransportSettings, settings.beginTransactionSettings(), clientContext);
     this.commitCallable =
         callableFactory.createUnaryCallable(
             commitTransportSettings, settings.commitSettings(), clientContext);
-    this.partitionQueryCallable =
-        callableFactory.createUnaryCallable(
-            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
-    this.partitionQueryPagedCallable =
-        callableFactory.createPagedCallable(
-            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
     this.rollbackCallable =
         callableFactory.createUnaryCallable(
             rollbackTransportSettings, settings.rollbackSettings(), clientContext);
     this.runQueryCallable =
         callableFactory.createServerStreamingCallable(
             runQueryTransportSettings, settings.runQuerySettings(), clientContext);
+    this.partitionQueryCallable =
+        callableFactory.createUnaryCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
+    this.partitionQueryPagedCallable =
+        callableFactory.createPagedCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
     this.writeCallable =
         callableFactory.createBidiStreamingCallable(
             writeTransportSettings, settings.writeSettings(), clientContext);
@@ -492,6 +486,12 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
+    this.batchWriteCallable =
+        callableFactory.createUnaryCallable(
+            batchWriteTransportSettings, settings.batchWriteSettings(), clientContext);
+    this.createDocumentCallable =
+        callableFactory.createUnaryCallable(
+            createDocumentTransportSettings, settings.createDocumentSettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
@@ -509,10 +509,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
     return listDocumentsCallable;
   }
 
-  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
-    return createDocumentCallable;
-  }
-
   public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
     return updateDocumentCallable;
   }
@@ -526,10 +522,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
     return batchGetDocumentsCallable;
   }
 
-  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
-    return batchWriteCallable;
-  }
-
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     return beginTransactionCallable;
@@ -539,6 +531,14 @@ public class GrpcFirestoreStub extends FirestoreStub {
     return commitCallable;
   }
 
+  public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
+    return rollbackCallable;
+  }
+
+  public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
+    return runQueryCallable;
+  }
+
   public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable() {
     return partitionQueryPagedCallable;
@@ -546,14 +546,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
 
   public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
     return partitionQueryCallable;
-  }
-
-  public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
-    return rollbackCallable;
-  }
-
-  public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
-    return runQueryCallable;
   }
 
   public BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable() {
@@ -572,6 +564,14 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
+  }
+
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    return batchWriteCallable;
+  }
+
+  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
+    return createDocumentCallable;
   }
 
   @Override

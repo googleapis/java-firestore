@@ -60,20 +60,6 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: getOperationsStub()");
   }
 
-  public UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
-    throw new UnsupportedOperationException("Not implemented: deleteIndexCallable()");
-  }
-
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationCallable() {
-    throw new UnsupportedOperationException("Not implemented: updateFieldOperationCallable()");
-  }
-
-  public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
-    throw new UnsupportedOperationException("Not implemented: updateFieldCallable()");
-  }
-
   @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable() {
@@ -96,8 +82,22 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: getIndexCallable()");
   }
 
+  public UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteIndexCallable()");
+  }
+
   public UnaryCallable<GetFieldRequest, Field> getFieldCallable() {
     throw new UnsupportedOperationException("Not implemented: getFieldCallable()");
+  }
+
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateFieldOperationCallable()");
+  }
+
+  public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateFieldCallable()");
   }
 
   public UnaryCallable<ListFieldsRequest, ListFieldsPagedResponse> listFieldsPagedCallable() {
