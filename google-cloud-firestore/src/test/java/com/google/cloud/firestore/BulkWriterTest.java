@@ -36,7 +36,6 @@ import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
@@ -120,13 +119,6 @@ public class BulkWriterTest {
     return ApiFutures.immediateFuture(response.build());
   }
 
-  private void verifyRequests(List<BatchWriteRequest> requests, ResponseStubber responseStubber) {
-    int index = 0;
-    for (GeneratedMessageV3 request : responseStubber.keySet()) {
-      assertEquals(request, requests.get(index++));
-    }
-  }
-
   @Before
   public void before() {
     doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
@@ -150,10 +142,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
@@ -172,10 +161,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result = bulkWriter.update(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
@@ -192,10 +178,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result = bulkWriter.delete(doc1);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
@@ -214,10 +197,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
   }
 
@@ -236,10 +216,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     try {
       result.get();
       fail("set() should have failed");
@@ -274,10 +251,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
@@ -350,10 +324,7 @@ public class BulkWriterTest {
         bulkWriter.update(sameDoc, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
@@ -376,10 +347,7 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.update(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
   }
@@ -413,9 +381,7 @@ public class BulkWriterTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-    verifyRequests(requests, responseStubber);
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
@@ -462,8 +428,7 @@ public class BulkWriterTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
 
-    List<BatchWriteRequest> requests = batchWriteCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
