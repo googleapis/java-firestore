@@ -292,7 +292,7 @@ class TransactionRunner<T> {
       } else {
         failedTransaction.setException(throwable);
       }
-      
+
       span.end();
       return failedTransaction;
     }
