@@ -36,8 +36,10 @@ public class References {
    */
   public CollectionReference getACollectionRef() {
     // [START fs_collection_ref]
+    // [START firestore_data_reference_collection]
     // Reference to the collection "users"
     CollectionReference collection = db.collection("users");
+    // [END firestore_data_reference_collection]
     // [END fs_collection_ref]
     return collection;
   }
@@ -49,8 +51,10 @@ public class References {
    */
   public DocumentReference getADocumentRef() {
     // [START fs_document_ref]
+    // [START firestore_data_reference_document]
     // Reference to a document with id "alovelace" in the collection "users"
     DocumentReference document = db.collection("users").document("alovelace");
+    // [END firestore_data_reference_document]
     // [END fs_document_ref]
     return document;
   }
@@ -62,8 +66,10 @@ public class References {
    */
   public DocumentReference getADocumentRefUsingPath() {
     // [START fs_document_path_ref]
+    // [START firestore_data_reference_document_path]
     // Reference to a document with id "alovelace" in the collection "users"
     DocumentReference document = db.document("users/alovelace");
+    // [END firestore_data_reference_document_path]
     // [END fs_document_path_ref]
     return document;
   }
@@ -75,9 +81,11 @@ public class References {
    */
   public DocumentReference getASubCollectionDocumentRef() {
     // [START fs_subcollection_ref]
+    // [START firestore_data_reference_subcollection]
     // Reference to a document in subcollection "messages"
     DocumentReference document =
         db.collection("rooms").document("roomA").collection("messages").document("message1");
+    // [END firestore_data_reference_subcollection]
     // [END fs_subcollection_ref]
     return document;
   }

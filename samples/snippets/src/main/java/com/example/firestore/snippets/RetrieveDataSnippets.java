@@ -43,6 +43,7 @@ public class RetrieveDataSnippets {
   /** Create cities collection and add sample documents. */
   void prepareExamples() throws Exception {
     // [START fs_retrieve_create_examples]
+    // [START firestore_data_get_dataset]
     CollectionReference cities = db.collection("cities");
     List<ApiFuture<WriteResult>> futures = new ArrayList<>();
     futures.add(cities.document("SF").set(new City("San Francisco", "CA", "USA", false, 860000L,
@@ -57,6 +58,7 @@ public class RetrieveDataSnippets {
         Arrays.asList("jingjinji", "hebei"))));
     // (optional) block on operation
     ApiFutures.allAsList(futures).get();
+    // [END firestore_data_get_dataset]
     // [END fs_retrieve_create_examples]
   }
 
@@ -67,6 +69,7 @@ public class RetrieveDataSnippets {
    */
   public Map<String, Object> getDocumentAsMap() throws Exception {
     // [START fs_get_doc_as_map]
+    // [START firestore_data_get_as_map]
     DocumentReference docRef = db.collection("cities").document("SF");
     // asynchronously retrieve the document
     ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -78,6 +81,7 @@ public class RetrieveDataSnippets {
     } else {
       System.out.println("No such document!");
     }
+    // [END firestore_data_get_as_map]
     // [END fs_get_doc_as_map]
     return (document.exists()) ? document.getData() : null;
   }
@@ -89,6 +93,7 @@ public class RetrieveDataSnippets {
    */
   public City getDocumentAsEntity() throws Exception {
     // [START fs_get_doc_as_entity]
+    // [START firestore_data_get_as_custom_type]
     DocumentReference docRef = db.collection("cities").document("BJ");
     // asynchronously retrieve the document
     ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -102,6 +107,7 @@ public class RetrieveDataSnippets {
     } else {
       System.out.println("No such document!");
     }
+    // [END firestore_data_get_as_custom_type]
     // [END fs_get_doc_as_entity]
     return city;
   }
@@ -113,6 +119,7 @@ public class RetrieveDataSnippets {
    */
   public List<QueryDocumentSnapshot> getQueryResults() throws Exception {
     // [START fs_get_multiple_docs]
+    // [START firestore_data_query]
     //asynchronously retrieve multiple documents
     ApiFuture<QuerySnapshot> future =
         db.collection("cities").whereEqualTo("capital", true).get();
@@ -121,6 +128,7 @@ public class RetrieveDataSnippets {
     for (DocumentSnapshot document : documents) {
       System.out.println(document.getId() + " => " + document.toObject(City.class));
     }
+    // [END firestore_data_query]
     // [END fs_get_multiple_docs]
     return documents;
   }
@@ -132,6 +140,7 @@ public class RetrieveDataSnippets {
    */
   public List<QueryDocumentSnapshot> getAllDocuments() throws Exception {
     // [START fs_get_all_docs]
+    // [START firestore_data_get_all_documents]
     //asynchronously retrieve all documents
     ApiFuture<QuerySnapshot> future = db.collection("cities").get();
     // future.get() blocks on response
@@ -139,6 +148,7 @@ public class RetrieveDataSnippets {
     for (QueryDocumentSnapshot document : documents) {
       System.out.println(document.getId() + " => " + document.toObject(City.class));
     }
+    // [END firestore_data_get_all_documents]
     // [END fs_get_all_docs]
     return documents;
   }
@@ -150,12 +160,14 @@ public class RetrieveDataSnippets {
    */
   public Iterable<CollectionReference> listCollections() throws Exception {
     // [START fs_get_collections]
+    // [START firestore_data_get_sub_collections]
     Iterable<CollectionReference> collections =
         db.collection("cities").document("SF").listCollections();
 
     for (CollectionReference collRef : collections) {
       System.out.println("Found subcollection with id: " + collRef.getId());
     }
+    // [END firestore_data_get_sub_collections]
     // [END fs_get_collections]
     return collections;
   }

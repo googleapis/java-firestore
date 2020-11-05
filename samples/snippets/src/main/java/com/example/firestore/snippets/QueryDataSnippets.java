@@ -52,6 +52,7 @@ class QueryDataSnippets {
   void prepareExamples() throws Exception {
 
     // [START fs_query_create_examples]
+    // [START firestore_query_filter_dataset]
     CollectionReference cities = db.collection("cities");
     List<ApiFuture<WriteResult>> futures = new ArrayList<>();
     futures.add(
@@ -101,6 +102,7 @@ class QueryDataSnippets {
                     Arrays.asList("jingjinji", "hebei"))));
     // (optional) block on documents successfully added
     ApiFutures.allAsList(futures).get();
+    // [END firestore_query_filter_dataset]
     // [END fs_query_create_examples]
   }
 
@@ -111,6 +113,7 @@ class QueryDataSnippets {
    */
   Query createAQuery() throws Exception {
     // [START fs_create_query]
+    // [START firestore_query_filter_eq_boolean]
     // Create a reference to the cities collection
     CollectionReference cities = db.collection("cities");
     // Create a query against the collection.
@@ -121,6 +124,7 @@ class QueryDataSnippets {
     for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
       System.out.println(document.getId());
     }
+    // [END firestore_query_filter_eq_boolean]
     // [END fs_create_query]
     return query;
   }
@@ -132,6 +136,7 @@ class QueryDataSnippets {
    */
   Query createAQueryAlternate() throws Exception {
     // [START fs_create_query_country]
+    // [START firestore_query_filter_eq_string]
     // Create a reference to the cities collection
     CollectionReference cities = db.collection("cities");
     // Create a query against the collection.
@@ -142,6 +147,7 @@ class QueryDataSnippets {
     for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
       System.out.println(document.getId());
     }
+    // [END firestore_query_filter_eq_string]
     // [END fs_create_query_country]
     return query;
   }
@@ -156,9 +162,11 @@ class QueryDataSnippets {
     CollectionReference cities = db.collection("cities");
 
     // [START fs_simple_queries]
+    // [START firestore_query_filter_single_examples]
     Query stateQuery = cities.whereEqualTo("state", "CA");
     Query populationQuery = cities.whereLessThan("population", 1000000L);
     Query nameQuery = cities.whereGreaterThanOrEqualTo("name", "San Francisco");
+    // [END firestore_query_filter_single_examples]
     // [END fs_simple_queries]
 
     querys.add(stateQuery);
@@ -174,8 +182,10 @@ class QueryDataSnippets {
    */
   Query createArrayQuery() {
     // [START fs_array_contains_filter]
+    // [START firestore_query_filter_array_contains]
     CollectionReference citiesRef = db.collection("cities");
     Query westCoastQuery = citiesRef.whereArrayContains("regions", "west_coast");
+    // [END firestore_query_filter_array_contains]
     // [END fs_array_contains_filter]
 
     return westCoastQuery;
@@ -191,7 +201,9 @@ class QueryDataSnippets {
   Query createChainedQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_chained_query]
+    // [START firestore_query_filter_compound_multi_eq]
     Query chainedQuery1 = cities.whereEqualTo("state", "CO").whereEqualTo("name", "Denver");
+    // [END firestore_query_filter_compound_multi_eq]
     // [END fs_chained_query]
     return chainedQuery1;
   }
@@ -205,7 +217,9 @@ class QueryDataSnippets {
   Query createCompositeIndexChainedQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_composite_index_chained_query]
+    // [START firestore_query_filter_compound_multi_eq_lt]
     Query chainedQuery2 = cities.whereEqualTo("state", "CA").whereLessThan("population", 1000000L);
+    // [END firestore_query_filter_compound_multi_eq_lt]
     // [END fs_composite_index_chained_query]
     return chainedQuery2;
   }
@@ -218,9 +232,11 @@ class QueryDataSnippets {
   Query createRangeQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_range_query]
+    // [START firestore_query_filter_range_valid]
     Query validQuery1 =
         cities.whereGreaterThanOrEqualTo("state", "CA").whereLessThanOrEqualTo("state", "IN");
     Query validQuery2 = cities.whereEqualTo("state", "CA").whereGreaterThan("population", 1000000);
+    // [END firestore_query_filter_range_valid]
     // [END fs_range_query]
     return validQuery1;
   }
@@ -234,8 +250,10 @@ class QueryDataSnippets {
     CollectionReference cities = db.collection("cities");
     // Violates constraint : range operators are limited to a single field
     // [START fs_invalid_range_query]
+    // [START firestore_query_filter_range_invalid]
     Query invalidRangeQuery =
         cities.whereGreaterThanOrEqualTo("state", "CA").whereGreaterThan("population", 100000);
+    // [END firestore_query_filter_range_invalid]
     // [END fs_invalid_range_query]
     return invalidRangeQuery;
   }
@@ -248,7 +266,9 @@ class QueryDataSnippets {
   Query createOrderByNameWithLimitQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_order_by_name_limit_query]
+    // [START firestore_query_order_limit]
     Query query = cities.orderBy("name").limit(3);
+    // [END firestore_query_order_limit]
     // [END fs_order_by_name_limit_query]
     return query;
   }
@@ -261,7 +281,9 @@ class QueryDataSnippets {
   Query createOrderByNameWithLimitToLastQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_order_by_name_limit_query]
+    // [START firestore_query_order_limit]
     Query query = cities.orderBy("name").limitToLast(3);
+    // [END firestore_query_order_limit]
     // [END fs_order_by_name_limit_query]
     return query;
   }
@@ -274,7 +296,9 @@ class QueryDataSnippets {
   Query createOrderByCountryAndPopulation() {
     CollectionReference cities = db.collection("cities");
     // [START fs_order_by_country_population]
+    // [START firestore_query_order_multi]
     Query query = cities.orderBy("state").orderBy("population", Direction.DESCENDING);
+    // [END firestore_query_order_multi]
     // [END fs_order_by_country_population]
     return query;
   }
@@ -287,7 +311,9 @@ class QueryDataSnippets {
   Query createOrderByNameDescWithLimitQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_order_by_name_desc_limit_query]
+    // [START firestore_query_order_desc_limit]
     Query query = cities.orderBy("name", Direction.DESCENDING).limit(3);
+    // [END firestore_query_order_desc_limit]
     // [END fs_order_by_name_desc_limit_query]
     return query;
   }
@@ -300,7 +326,9 @@ class QueryDataSnippets {
   Query createWhereWithOrderByAndLimitQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_where_order_by_limit_query]
+    // [START firestore_query_order_limit_field_valid]
     Query query = cities.whereGreaterThan("population", 2500000L).orderBy("population").limit(2);
+    // [END firestore_query_order_limit_field_valid]
     // [END fs_where_order_by_limit_query]
     return query;
   }
@@ -329,7 +357,9 @@ class QueryDataSnippets {
     CollectionReference cities = db.collection("cities");
     // Violates the constraint that range and order by are required to be on the same field
     // [START fs_invalid_range_order_by_query]
+    // [START firestore_query_order_field_invalid]
     Query query = cities.whereGreaterThan("population", 2500000L).orderBy("country");
+    // [END firestore_query_order_field_invalid]
     // [END fs_invalid_range_order_by_query]
     return query;
   }
@@ -342,7 +372,9 @@ class QueryDataSnippets {
   Query createStartAtFieldQueryCursor() {
     CollectionReference cities = db.collection("cities");
     // [START fs_start_at_field_query_cursor]
+    // [START firestore_query_cursor_start_at_field_value_single]
     Query query = cities.orderBy("population").startAt(4921000L);
+    // [END firestore_query_cursor_start_at_field_value_single]
     // [END fs_start_at_field_query_cursor]
     return query;
   }
@@ -355,7 +387,9 @@ class QueryDataSnippets {
   Query createEndAtFieldQueryCursor() {
     CollectionReference cities = db.collection("cities");
     // [START fs_end_at_field_query_cursor]
+    // [START firestore_query_cursor_end_at_field_value_single]
     Query query = cities.orderBy("population").endAt(4921000L);
+    // [END firestore_query_cursor_end_at_field_value_single]
     // [END fs_end_at_field_query_cursor]
     return query;
   }
@@ -363,12 +397,14 @@ class QueryDataSnippets {
   /* Create queries with multiple cursor conditions. */
   void createMultipleCursorConditionsQuery() {
     // [START fs_multiple_cursor_conditions]
+    // [START firestore_query_cursor_start_at_field_value_multi]
     // Will return all Springfields
     Query query1 = db.collection("cities").orderBy("name").orderBy("state").startAt("Springfield");
 
     // Will return "Springfield, Missouri" and "Springfield, Wisconsin"
     Query query2 =
         db.collection("cities").orderBy("name").orderBy("state").startAt("Springfield", "Missouri");
+    // [END firestore_query_cursor_start_at_field_value_multi]
     // [END fs_multiple_cursor_conditions]
   }
 
@@ -380,12 +416,14 @@ class QueryDataSnippets {
   Query createStartAtSnapshotQueryCursor()
       throws InterruptedException, ExecutionException, TimeoutException {
     // [START fs_document_snapshot_cursor]
+    // [START firestore_query_cursor_start_at_document]
     // Fetch the snapshot with an API call, waiting for a maximum of 30 seconds for a result.
     ApiFuture<DocumentSnapshot> future = db.collection("cities").document("SF").get();
     DocumentSnapshot snapshot = future.get(30, TimeUnit.SECONDS);
 
     // Construct the query
     Query query = db.collection("cities").orderBy("population").startAt(snapshot);
+    // [END firestore_query_cursor_start_at_document]
     // [END fs_document_snapshot_cursor]
     return query;
   }
@@ -393,6 +431,7 @@ class QueryDataSnippets {
   /** Example of a paginated query. */
   List<Query> paginateCursor() throws InterruptedException, ExecutionException, TimeoutException {
     // [START fs_paginate_cursor]
+    // [START firestore_query_cursor_pagination]
     // Construct query for first 25 cities, ordered by population.
     CollectionReference cities = db.collection("cities");
     Query firstPage = cities.orderBy("population").limit(25);
@@ -407,6 +446,7 @@ class QueryDataSnippets {
 
     future = secondPage.get();
     docs = future.get(30, TimeUnit.SECONDS).getDocuments();
+    // [END firestore_query_cursor_pagination]
     // [END fs_paginate_cursor]
     return Arrays.asList(firstPage, secondPage);
   }
@@ -415,6 +455,7 @@ class QueryDataSnippets {
     // CHECKSTYLE OFF: Indentation
     // CHECKSTYLE OFF: RightCurlyAlone
     // [START fs_collection_group_query_data_setup]
+    // [START firestore_query_collection_group_dataset]
     CollectionReference cities = db.collection("cities");
 
     final List<ApiFuture<WriteResult>> futures =
@@ -530,14 +571,17 @@ class QueryDataSnippets {
                       }
                     }));
     final List<WriteResult> landmarks = ApiFutures.allAsList(futures).get();
+    // [END firestore_query_collection_group_dataset]
     // [END fs_collection_group_query_data_setup]
 
     // [START fs_collection_group_query]
+    // [START firestore_query_collection_group_filter_eq]
     final Query museums = db.collectionGroup("landmarks").whereEqualTo("type", "museum");
     final ApiFuture<QuerySnapshot> querySnapshot = museums.get();
     for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
       System.out.println(document.getId());
     }
+    // [END firestore_query_collection_group_filter_eq]
     // [END fs_collection_group_query]
     // CHECKSTYLE ON: RightCurlyAlone
     // CHECKSTYLE ON: Indentation
@@ -545,48 +589,58 @@ class QueryDataSnippets {
 
   public Query arrayContainsAnyQueries() {
     // [START fs_query_filter_array_contains_any]
+    // [START firestore_query_filter_array_contains_any]
     CollectionReference citiesRef = db.collection("cities");
 
     Query query =
         citiesRef.whereArrayContainsAny("regions", Arrays.asList("west_coast", "east_coast"));
+    // [END firestore_query_filter_array_contains_any]
     // [END fs_query_filter_array_contains_any]
     return query;
   }
 
   public Query inQueryWithoutArray() {
     // [START fs_query_filter_in]
+    // [START firestore_query_filter_in]
     CollectionReference citiesRef = db.collection("cities");
 
     Query query = citiesRef.whereIn("country", Arrays.asList("USA", "Japan"));
+    // [END firestore_query_filter_in]
     // [END fs_query_filter_in]
     return query;
   }
 
   public Query inQueryWithArray() {
     // [START fs_query_filter_in_with_array]
+    // [START firestore_query_filter_in_with_array]
     CollectionReference citiesRef = db.collection("cities");
 
     Query query =
         citiesRef.whereIn(
             "regions", Arrays.asList(Arrays.asList("west_coast"), Arrays.asList("east_coast")));
+    // [END firestore_query_filter_in_with_array]
     // [END fs_query_filter_in_with_array]
     return query;
   }
 
   Query notEqualsQuery() {
     // [START fs_query_not_equals]
+    // [START firestore_query_filter_not_eq]
     CollectionReference citiesRef = db.collection("cities");
 
     Query query = citiesRef.whereNotEqualTo("capital", false);
+    // [END firestore_query_filter_not_eq]
     // [END fs_query_not_equals]
     return query;
   }
 
   Query filterNotIn() {
     // [START fs_filter_not_in]
+    // [START firestore_query_filter_not_in]
     CollectionReference citiesRef = db.collection("cities");
 
     Query query = citiesRef.whereNotIn("country", Arrays.asList("USA", "Japan"));
+    // [END firestore_query_filter_not_in]
     // [END fs_filter_not_in]
     return query;
   }
