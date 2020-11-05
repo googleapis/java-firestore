@@ -30,6 +30,7 @@ public class City {
   private List<String> regions;
 
   // [START fs_class_definition]
+  // [START firestore_data_custom_type_definition]
   public City() {
     // Must have a public no-argument constructor
   }
@@ -44,6 +45,7 @@ public class City {
     this.population = population;
     this.regions = regions;
   }
+  // [END firestore_data_custom_type_definition]
   // [END fs_class_definition]
 
   public City(String name) {

@@ -20,8 +20,10 @@ import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.DocumentReference;
 // [START fs_include_dependencies]
+// [START firestore_setup_dependencies]
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+// [END firestore_setup_dependencies]
 // [END fs_include_dependencies]
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -44,19 +46,23 @@ public class Quickstart {
    */
   public Quickstart() {
     // [START fs_initialize]
+    // [START firestore_setup_client_create]
     Firestore db = FirestoreOptions.getDefaultInstance().getService();
+    // [END firestore_setup_client_create]
     // [END fs_initialize]
     this.db = db;
   }
 
   public Quickstart(String projectId) throws Exception {
     // [START fs_initialize_project_id]
+    // [START firestore_setup_client_create_with_project_id]
     FirestoreOptions firestoreOptions =
         FirestoreOptions.getDefaultInstance().toBuilder()
             .setProjectId(projectId)
             .setCredentials(GoogleCredentials.getApplicationDefault())
             .build();
     Firestore db = firestoreOptions.getService();
+    // [END firestore_setup_client_create_with_project_id]
     // [END fs_initialize_project_id]
     this.db = db;
   }
@@ -74,6 +80,7 @@ public class Quickstart {
     switch (docName) {
       case "alovelace": {
         // [START fs_add_data_1]
+        // [START firestore_setup_dataset_pt1]
         DocumentReference docRef = db.collection("users").document("alovelace");
         // Add document data  with id "alovelace" using a hashmap
         Map<String, Object> data = new HashMap<>();
@@ -85,11 +92,13 @@ public class Quickstart {
         // ...
         // result.get() blocks on response
         System.out.println("Update time : " + result.get().getUpdateTime());
+        // [END firestore_setup_dataset_pt1]
         // [END fs_add_data_1]
         break;
       }
       case "aturing": {
         // [START fs_add_data_2]
+        // [START firestore_setup_dataset_pt2]
         DocumentReference docRef = db.collection("users").document("aturing");
         // Add document data with an additional field ("middle")
         Map<String, Object> data = new HashMap<>();
@@ -100,6 +109,7 @@ public class Quickstart {
 
         ApiFuture<WriteResult> result = docRef.set(data);
         System.out.println("Update time : " + result.get().getUpdateTime());
+        // [END firestore_setup_dataset_pt2]
         // [END fs_add_data_2]
         break;
       }

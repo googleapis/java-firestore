@@ -54,6 +54,7 @@ public class ListenDataSnippets {
     final SettableApiFuture<Map<String, Object>> future = SettableApiFuture.create();
 
     // [START listen_to_document]
+    // [START firestore_listen_document]
     DocumentReference docRef = db.collection("cities").document("SF");
     docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
       @Override
@@ -76,6 +77,7 @@ public class ListenDataSnippets {
         // [END_EXCLUDE]
       }
     });
+    // [END firestore_listen_document]
     // [END listen_to_document]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -88,6 +90,7 @@ public class ListenDataSnippets {
     final SettableApiFuture<List<String>> future = SettableApiFuture.create();
 
     // [START listen_to_multiple]
+    // [START firestore_listen_query_snapshots]
     db.collection("cities")
         .whereEqualTo("state", "CA")
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -113,6 +116,7 @@ public class ListenDataSnippets {
             // [END_EXCLUDE]
           }
         });
+    // [END firestore_listen_query_snapshots]
     // [END listen_to_multiple]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -125,6 +129,7 @@ public class ListenDataSnippets {
     SettableApiFuture<List<DocumentChange>> future = SettableApiFuture.create();
 
     // [START listen_for_changes]
+    // [START firestore_listen_query_changes]
     db.collection("cities")
         .whereEqualTo("state", "CA")
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -158,6 +163,7 @@ public class ListenDataSnippets {
             // [END_EXCLUDE]
           }
         });
+    // [END firestore_listen_query_changes]
     // [END listen_for_changes]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -168,6 +174,7 @@ public class ListenDataSnippets {
    */
   void detachListener() {
     // [START detach_errors]
+    // [START firestore_listen_detach]
     Query query = db.collection("cities");
     ListenerRegistration registration = query.addSnapshotListener(
         new EventListener<QuerySnapshot>() {
@@ -184,6 +191,7 @@ public class ListenDataSnippets {
 
     // Stop listening to changes
     registration.remove();
+    // [END firestore_listen_detach]
     // [END detach_errors]
   }
 
@@ -192,6 +200,7 @@ public class ListenDataSnippets {
    */
   void listenErrors() {
     // [START listen_errors]
+    // [START firestore_listen_handle_error]
     db.collection("cities")
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
           @Override
@@ -209,6 +218,7 @@ public class ListenDataSnippets {
             }
           }
         });
+    // [END firestore_listen_handle_error]
     // [END listen_errors]
   }
 
