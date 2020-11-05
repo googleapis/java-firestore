@@ -49,7 +49,6 @@ import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
-import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
@@ -57,6 +56,7 @@ import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
 import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.base.Function;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.Write;
@@ -65,9 +65,7 @@ import com.google.protobuf.Message;
 import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -385,13 +383,7 @@ public class TransactionTest {
       assertTrue(e.getMessage().endsWith("Transaction was cancelled because of too many retries."));
     }
 
-    List<Message> requests = requestCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    int index = 0;
-    for (GeneratedMessageV3 request : responseStubber.keySet()) {
-      assertEquals(request, requests.get(index++));
-    }
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
@@ -435,96 +427,68 @@ public class TransactionTest {
 
     assertEquals("foo6", transaction.get());
 
-    List<Message> requests = requestCapture.getAllValues();
-    assertEquals(responseStubber.size(), requests.size());
-
-    int index = 0;
-    for (GeneratedMessageV3 request : responseStubber.keySet()) {
-      assertEquals(request, requests.get(index++));
-    }
+    responseStubber.verifyAllRequestsSent();
   }
 
-  @Test
-  public void retriesBasedOnErrorCode() throws Exception {
-    Map<Status.Code, Boolean> retryBehavior =
-        new HashMap<Status.Code, Boolean>() {
-          {
-            put(Status.Code.CANCELLED, true);
-            put(Status.Code.UNKNOWN, true);
-            put(Status.Code.INVALID_ARGUMENT, false);
-            put(Status.Code.DEADLINE_EXCEEDED, true);
-            put(Status.Code.NOT_FOUND, false);
-            put(Status.Code.ALREADY_EXISTS, false);
-            put(Status.Code.RESOURCE_EXHAUSTED, true);
-            put(Status.Code.FAILED_PRECONDITION, false);
-            put(Status.Code.ABORTED, true);
-            put(Status.Code.OUT_OF_RANGE, false);
-            put(Status.Code.UNIMPLEMENTED, false);
-            put(Status.Code.INTERNAL, true);
-            put(Status.Code.UNAVAILABLE, true);
-            put(Status.Code.DATA_LOSS, false);
-            put(Status.Code.UNAUTHENTICATED, true);
-          }
+  private void verifyRetries(
+      Function<ApiException, ResponseStubber> expectedSequenceWithRetry,
+      Function<ApiException, ResponseStubber> expectedSequenceWithoutRetry)
+      throws ExecutionException, InterruptedException {
+    ApiException[] exceptionWithRetryBehavior =
+        new ApiException[] {
+          (exception(Status.Code.CANCELLED, true)),
+          (exception(Status.Code.UNKNOWN, true)),
+          (exception(Status.Code.INVALID_ARGUMENT, false)),
+          (exception(
+              Status.Code.INVALID_ARGUMENT,
+              "The referenced transaction has expired or is no longer valid.",
+              true)),
+          (exception(Status.Code.DEADLINE_EXCEEDED, true)),
+          (exception(Status.Code.NOT_FOUND, false)),
+          (exception(Status.Code.ALREADY_EXISTS, false)),
+          (exception(Status.Code.RESOURCE_EXHAUSTED, true)),
+          (exception(Status.Code.FAILED_PRECONDITION, false)),
+          (exception(Status.Code.ABORTED, true)),
+          (exception(Status.Code.OUT_OF_RANGE, false)),
+          (exception(Status.Code.UNIMPLEMENTED, false)),
+          (exception(Status.Code.INTERNAL, true)),
+          (exception(Status.Code.UNAVAILABLE, true)),
+          (exception(Status.Code.DATA_LOSS, false)),
+          (exception(Status.Code.UNAUTHENTICATED, true))
         };
 
-    for (Map.Entry<Status.Code, Boolean> entry : retryBehavior.entrySet()) {
-      StatusCode code = GrpcStatusCode.of(entry.getKey());
-      boolean shouldRetry = entry.getValue();
-
-      final ApiException apiException =
-          new ApiException(new Exception("Test Exception"), code, shouldRetry);
-
-      if (shouldRetry) {
-        ResponseStubber responseStubber =
-            new ResponseStubber() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(apiException));
-                put(rollback("foo1"), rollbackResponse());
-                put(begin("foo1"), beginResponse("foo2"));
-                put(commit("foo2"), commitResponse(0, 0));
-              }
-            };
-        responseStubber.initializeStub(requestCapture, firestoreMock);
+    for (ApiException apiException : exceptionWithRetryBehavior) {
+      if (apiException.isRetryable()) {
+        ResponseStubber stubber = expectedSequenceWithRetry.apply(apiException);
+        stubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
-        ApiFuture<String> transaction =
+        ApiFuture<Void> transaction =
             firestoreMock.runTransaction(
-                new Transaction.Function<String>() {
+                new Transaction.Function<Void>() {
                   @Override
-                  public String updateCallback(Transaction transaction) {
+                  public Void updateCallback(Transaction transaction) {
                     ++attempts[0];
                     return null;
                   }
                 });
 
         transaction.get();
+        stubber.verifyAllRequestsSent();
 
         assertEquals(2, attempts[0]);
       } else {
-        ResponseStubber responseStubber =
-            new ResponseStubber() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(apiException));
-                put(rollback("foo1"), rollbackResponse());
-              }
-            };
-
-        responseStubber.initializeStub(requestCapture, firestoreMock);
+        ResponseStubber stubber = expectedSequenceWithoutRetry.apply(apiException);
+        stubber.initializeStub(requestCapture, firestoreMock);
 
         final int[] attempts = new int[] {0};
 
-        ApiFuture<String> transaction =
+        ApiFuture<Void> transaction =
             firestoreMock.runTransaction(
-                new Transaction.Function<String>() {
+                new Transaction.Function<Void>() {
                   @Override
-                  public String updateCallback(Transaction transaction) {
+                  public Void updateCallback(Transaction transaction) {
                     ++attempts[0];
                     return null;
                   }
@@ -536,9 +500,84 @@ public class TransactionTest {
         } catch (Exception ignored) {
         }
 
+        stubber.verifyAllRequestsSent();
         assertEquals(1, attempts[0]);
       }
     }
+  }
+
+  @Test
+  public void retriesCommitBasedOnErrorCode() throws Exception {
+    verifyRetries(
+        /* expectedSequenceWithRetry= */ new Function<ApiException, ResponseStubber>() {
+          @Override
+          public ResponseStubber apply(final ApiException e) {
+            return new ResponseStubber() {
+              {
+                put(begin(), beginResponse("foo1"));
+                put(commit("foo1"), ApiFutures.<GeneratedMessageV3>immediateFailedFuture(e));
+                put(rollback("foo1"), rollbackResponse());
+                put(begin("foo1"), beginResponse("foo2"));
+                put(commit("foo2"), commitResponse(0, 0));
+              }
+            };
+          }
+        },
+        /* expectedSequenceWithoutRetry= */ new Function<ApiException, ResponseStubber>() {
+          @Override
+          public ResponseStubber apply(final ApiException e) {
+            return new ResponseStubber() {
+              {
+                put(begin(), beginResponse("foo1"));
+                put(commit("foo1"), ApiFutures.<GeneratedMessageV3>immediateFailedFuture(e));
+                put(rollback("foo1"), rollbackResponse());
+              }
+            };
+          }
+        });
+  }
+
+  @Test
+  public void retriesRollbackBasedOnErrorCode() throws Exception {
+    final ApiException commitException = exception(Status.Code.ABORTED, true);
+
+    verifyRetries(
+        /* expectedSequenceWithRetry= */ new Function<ApiException, ResponseStubber>() {
+          @Override
+          public ResponseStubber apply(final ApiException e) {
+            final ApiFuture<GeneratedMessageV3> rollbackException =
+                ApiFutures.immediateFailedFuture(e);
+            return new ResponseStubber() {
+              {
+                put(begin(), beginResponse("foo1"));
+                put(
+                    commit("foo1"),
+                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(commitException));
+                put(rollback("foo1"), rollbackException);
+                put(rollback("foo1"), rollbackResponse());
+                put(begin("foo1"), beginResponse("foo2"));
+                put(commit("foo2"), commitResponse(0, 0));
+              }
+            };
+          }
+        },
+        /* expectedSequenceWithoutRetry= */ new Function<ApiException, ResponseStubber>() {
+          @Override
+          public ResponseStubber apply(final ApiException e) {
+            final ApiFuture<GeneratedMessageV3> rollbackException =
+                ApiFutures.immediateFailedFuture(e);
+            return new ResponseStubber() {
+              {
+                put(begin(), beginResponse("foo1"));
+                put(
+                    commit("foo1"),
+                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(commitException));
+                put(rollback("foo1"), rollbackException);
+                put(rollback("foo1"), rollbackResponse());
+              }
+            };
+          }
+        });
   }
 
   @Test
@@ -945,5 +984,13 @@ public class TransactionTest {
     } catch (IllegalArgumentException ignore) {
       // expected
     }
+  }
+
+  private ApiException exception(Status.Code code, boolean shouldRetry) {
+    return exception(code, "Test exception", shouldRetry);
+  }
+
+  private ApiException exception(Status.Code code, String message, boolean shouldRetry) {
+    return new ApiException(new Exception(message), GrpcStatusCode.of(code), shouldRetry);
   }
 }

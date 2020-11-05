@@ -17,14 +17,12 @@
 package com.google.cloud.firestore;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.UnaryCallable;
@@ -75,11 +73,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
@@ -993,32 +989,41 @@ public final class LocalFirestoreHelper {
         .toString();
   }
 
+  static class RequestResponsePair {
+    GeneratedMessageV3 request;
+    ApiFuture<? extends GeneratedMessageV3> response;
+
+    public RequestResponsePair(
+        GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+      this.request = request;
+      this.response = response;
+    }
+  }
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.
    */
-  static class ResponseStubber
-      extends LinkedHashMap<GeneratedMessageV3, ApiFuture<? extends GeneratedMessageV3>> {
+  static class ResponseStubber {
+    int requestCount = 0;
 
-    /**
-     * Verifies the response before returning. This method can be overridden to perform logic before
-     * the stubbed response is returned.
-     */
-    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
-        ApiFuture<? extends GeneratedMessageV3> response) {
-      return response;
+    List<RequestResponsePair> operationList = new ArrayList<>();
+
+    void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+      operationList.add(new RequestResponsePair(request, response));
     }
 
     void initializeStub(
         ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
       Stubber stubber = null;
-      for (final ApiFuture<? extends GeneratedMessageV3> response : values()) {
+      for (final RequestResponsePair entry : operationList) {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
             new Answer<ApiFuture<? extends GeneratedMessageV3>>() {
               @Override
               public ApiFuture<? extends GeneratedMessageV3> answer(
                   InvocationOnMock invocationOnMock) throws Throwable {
-                return verifyResponse(response);
+                ++requestCount;
+                assertEquals(entry.request, invocationOnMock.getArguments()[0]);
+                return entry.response;
               }
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
@@ -1028,47 +1033,12 @@ public final class LocalFirestoreHelper {
           .when(firestoreMock)
           .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
     }
-  }
 
-  /**
-   * Contains a map of request/response pairs that are used to create stub responses when
-   * `sendRequest()` is called.
-   *
-   * <p>Enforces that only one active request can be pending at a time.
-   */
-  static class SerialResponseStubber extends ResponseStubber {
-    int activeRequestCounter = 0;
-    SettableApiFuture<Void> activeRequestComplete = SettableApiFuture.create();
-    Semaphore semaphore = new Semaphore(0);
-
-    void markAllRequestsComplete() {
-      activeRequestComplete.set(null);
-    }
-
-    void awaitRequest() {
-      activeRequestComplete = SettableApiFuture.create();
-      try {
-        semaphore.acquire();
-      } catch (Exception e) {
-        fail("sempahore.acquire() should not fail");
-      }
-    }
-
-    @Override
-    ApiFuture<? extends GeneratedMessageV3> verifyResponse(
-        ApiFuture<? extends GeneratedMessageV3> response) {
-      ++activeRequestCounter;
-
-      // This assert is used to test that only one request is made at a time.
-      assertEquals(1, activeRequestCounter);
-      try {
-        semaphore.release();
-        activeRequestComplete.get();
-      } catch (Exception e) {
-        fail("activeRequestComplete.get() should not fail");
-      }
-      --activeRequestCounter;
-      return response;
+    public void verifyAllRequestsSent() {
+      assertEquals(
+          String.format("Expected %d requests, but got %d", operationList.size(), requestCount),
+          operationList.size(),
+          requestCount);
     }
   }
 

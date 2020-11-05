@@ -105,23 +105,40 @@ class TransactionRunner<T> {
         "Start runTransaction",
         ImmutableMap.of("attemptsRemaining", AttributeValue.longAttributeValue(attemptsRemaining)));
 
-    final SettableApiFuture<Void> backoff = SettableApiFuture.create();
+    return ApiFutures.catchingAsync(
+        ApiFutures.transformAsync(
+            maybeRollback(), new RollbackCallback(), MoreExecutors.directExecutor()),
+        Throwable.class,
+        new RestartTransactionCallback(),
+        MoreExecutors.directExecutor());
+  }
 
-    // Add a backoff delay. At first, this is 0.
-    this.firestoreExecutor.schedule(
-        new Runnable() {
-          @Override
-          public void run() {
-            backoff.set(null);
-          }
-        },
-        nextBackoffAttempt.getRandomizedRetryDelay().toMillis(),
-        TimeUnit.MILLISECONDS);
+  private ApiFuture<Void> maybeRollback() {
+    return transaction.hasTransactionId()
+        ? transaction.rollback()
+        : ApiFutures.<Void>immediateFuture(null);
+  }
 
-    nextBackoffAttempt = backoffAlgorithm.createNextAttempt(nextBackoffAttempt);
+  /** A callback that invokes the BeginTransaction callback. */
+  private class RollbackCallback implements ApiAsyncFunction<Void, T> {
+    @Override
+    public ApiFuture<T> apply(Void input) {
+      final SettableApiFuture<Void> backoff = SettableApiFuture.create();
+      // Add a backoff delay. At first, this is 0.
+      firestoreExecutor.schedule(
+          new Runnable() {
+            @Override
+            public void run() {
+              backoff.set(null);
+            }
+          },
+          nextBackoffAttempt.getRandomizedRetryDelay().toMillis(),
+          TimeUnit.MILLISECONDS);
 
-    return ApiFutures.transformAsync(
-        backoff, new BackoffCallback(), MoreExecutors.directExecutor());
+      nextBackoffAttempt = backoffAlgorithm.createNextAttempt(nextBackoffAttempt);
+      return ApiFutures.transformAsync(
+          backoff, new BackoffCallback(), MoreExecutors.directExecutor());
+    }
   }
 
   /**
@@ -138,7 +155,6 @@ class TransactionRunner<T> {
                 new ApiFutureCallback<T>() {
                   @Override
                   public void onFailure(Throwable t) {
-
                     callbackResult.setException(t);
                   }
 
@@ -168,12 +184,8 @@ class TransactionRunner<T> {
    */
   private class BeginTransactionCallback implements ApiAsyncFunction<Void, T> {
     public ApiFuture<T> apply(Void ignored) {
-      return ApiFutures.catchingAsync(
-          ApiFutures.transformAsync(
-              invokeUserCallback(), new UserFunctionCallback(), MoreExecutors.directExecutor()),
-          Throwable.class,
-          new RestartTransactionCallback(),
-          MoreExecutors.directExecutor());
+      return ApiFutures.transformAsync(
+          invokeUserCallback(), new UserFunctionCallback(), MoreExecutors.directExecutor());
     }
   }
 
@@ -217,10 +229,10 @@ class TransactionRunner<T> {
       }
 
       ApiException apiException = (ApiException) throwable;
-      if (isRetryableTransactionError(apiException)) {
+      if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
         if (attemptsRemaining > 0) {
           span.addAnnotation("retrying");
-          return rollbackAndContinue();
+          return run();
         } else {
           span.setStatus(TOO_MANY_RETRIES_STATUS);
           final FirestoreException firestoreException =
@@ -251,39 +263,36 @@ class TransactionRunner<T> {
         case UNAUTHENTICATED:
         case RESOURCE_EXHAUSTED:
           return true;
+        case INVALID_ARGUMENT:
+          // The Firestore backend uses "INVALID_ARGUMENT" for transactions IDs that have expired.
+          // While INVALID_ARGUMENT is generally not retryable, we retry this specific case.
+          return exception.getMessage().contains("transaction has expired");
         default:
           return false;
       }
     }
 
-    /** Rolls the transaction back and attempts it again. */
-    private ApiFuture<T> rollbackAndContinue() {
-      return ApiFutures.transformAsync(
-          transaction.rollback(),
-          new ApiAsyncFunction<Void, T>() {
-            @Override
-            public ApiFuture<T> apply(Void input) {
-              return run();
-            }
-          },
-          MoreExecutors.directExecutor());
-    }
-
     /** Rolls the transaction back and returns the error. */
     private ApiFuture<T> rollbackAndReject(final Throwable throwable) {
       final SettableApiFuture<T> failedTransaction = SettableApiFuture.create();
-      // We use `addListener()` since we want to return the original exception regardless of whether
-      // rollback() succeeds.
-      transaction
-          .rollback()
-          .addListener(
-              new Runnable() {
-                @Override
-                public void run() {
-                  failedTransaction.setException(throwable);
-                }
-              },
-              MoreExecutors.directExecutor());
+
+      if (transaction.hasTransactionId()) {
+        // We use `addListener()` since we want to return the original exception regardless of
+        // whether rollback() succeeds.
+        transaction
+            .rollback()
+            .addListener(
+                new Runnable() {
+                  @Override
+                  public void run() {
+                    failedTransaction.setException(throwable);
+                  }
+                },
+                MoreExecutors.directExecutor());
+      } else {
+        failedTransaction.setException(throwable);
+      }
+
       span.end();
       return failedTransaction;
     }

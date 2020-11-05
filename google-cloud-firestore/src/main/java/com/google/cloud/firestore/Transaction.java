@@ -65,7 +65,6 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   }
 
   private final TransactionOptions transactionOptions;
-  @Nullable private final ByteString previousTransactionId;
   private ByteString transactionId;
 
   Transaction(
@@ -74,8 +73,11 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       @Nullable Transaction previousTransaction) {
     super(firestore);
     this.transactionOptions = transactionOptions;
-    this.previousTransactionId =
-        previousTransaction != null ? previousTransaction.transactionId : null;
+    this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
+  }
+
+  public boolean hasTransactionId() {
+    return transactionId != null;
   }
 
   Transaction wrapResult(ApiFuture<WriteResult> result) {
@@ -89,11 +91,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
     if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
-        && previousTransactionId != null) {
-      beginTransaction
-          .getOptionsBuilder()
-          .getReadWriteBuilder()
-          .setRetryTransaction(previousTransactionId);
+        && transactionId != null) {
+      beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
     } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
       final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
       if (transactionOptions.getReadTime() != null) {
