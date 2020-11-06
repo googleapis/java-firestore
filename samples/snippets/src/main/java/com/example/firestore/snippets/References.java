@@ -34,7 +34,7 @@ public class References {
    *
    * @return collection reference
    */
-  public CollectionReference getACollectionRef() {
+  public CollectionReference getCollectionRef() {
     // [START fs_collection_ref]
     // Reference to the collection "users"
     CollectionReference collection = db.collection("users");
@@ -47,7 +47,7 @@ public class References {
    *
    * @return document reference
    */
-  public DocumentReference getADocumentRef() {
+  public DocumentReference getDocumentRef() {
     // [START fs_document_ref]
     // Reference to a document with id "alovelace" in the collection "users"
     DocumentReference document = db.collection("users").document("alovelace");
@@ -60,7 +60,7 @@ public class References {
    *
    * @return document reference
    */
-  public DocumentReference getADocumentRefUsingPath() {
+  public DocumentReference getDocumentRefUsingPath() {
     // [START fs_document_path_ref]
     // Reference to a document with id "alovelace" in the collection "users"
     DocumentReference document = db.document("users/alovelace");
@@ -73,7 +73,7 @@ public class References {
    *
    * @return document reference in a subcollection
    */
-  public DocumentReference getASubCollectionDocumentRef() {
+  public DocumentReference getSubCollectionDocumentRef() {
     // [START fs_subcollection_ref]
     // Reference to a document in subcollection "messages"
     DocumentReference document =

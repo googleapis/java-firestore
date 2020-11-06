@@ -53,8 +53,8 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
   }
 
   @Test
-  public void testCreateAQuery() throws Exception {
-    Query q = queryDataSnippets.createAQuery();
+  public void testCreateQuery() throws Exception {
+    Query q = queryDataSnippets.createQuery();
     Set<String> result = getResultsAsSet(q);
     Set<String> expectedResults = new HashSet<>(Arrays.asList("DC", "TOK", "BJ"));
     assertTrue(Objects.equals(result, expectedResults));

@@ -412,7 +412,7 @@ class ManageDataSnippets {
     ApiFuture<List<WriteResult>> future = batch.commit();
     // ...
     // future.get() blocks on batch commit operation
-    for (WriteResult result :future.get()) {
+    for (WriteResult result : future.get()) {
       System.out.println("Update time : " + result.getUpdateTime());
     }
     // [END fs_write_batch]
