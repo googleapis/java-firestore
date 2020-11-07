@@ -41,8 +41,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -87,6 +89,9 @@ public abstract class UpdateBuilder<T> {
 
   protected BatchState state = BatchState.OPEN;
   protected List<SettableApiFuture<BatchWriteResult>> newPendingOperations = new ArrayList<>();
+
+  Set<DocumentReference> documentPaths = new CopyOnWriteArraySet<>();
+
 
   /**
    * Used to represent the state of batch.
@@ -192,7 +197,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation());
+    return wrapResult(processLastOperation(documentReference));
   }
 
   private void verifyNotCommitted() {
@@ -322,7 +327,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation());
+    return wrapResult(processLastOperation(documentReference));
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -591,7 +596,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation());
+    return wrapResult(processLastOperation(documentReference));
   }
 
   /**
@@ -629,7 +634,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation());
+    return wrapResult(processLastOperation(documentReference));
   }
 
   /** Commit the current batch. */
@@ -748,7 +753,9 @@ public abstract class UpdateBuilder<T> {
     return newPendingOperations.size();
   }
 
-  ApiFuture<WriteResult> processLastOperation() {
+  ApiFuture<WriteResult> processLastOperation(DocumentReference documentReference) {
+    Preconditions.checkState(!documentPaths.contains(documentReference), "Batch should not contain writes to the same document");
+    documentPaths.add(documentReference);
     Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
     SettableApiFuture<BatchWriteResult> resultFuture = SettableApiFuture.create();
     newPendingOperations.add(resultFuture);

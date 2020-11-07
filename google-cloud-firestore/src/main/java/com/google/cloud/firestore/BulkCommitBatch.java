@@ -17,6 +17,8 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /** Used to represent a batch on the BatchQueue. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {

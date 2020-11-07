@@ -302,15 +302,18 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void canSendWritesToSameDocInSameBatch() throws Exception {
+  public void sendsWritesToSameDocInDifferentBatches() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(1));
+            put(
+                batchWrite(
                     update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                mergeResponses(successResponse(1), successResponse(2)));
+                successResponse(2));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
@@ -533,12 +536,8 @@ public class BulkWriterTest {
           {
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc") ),
-                mergeResponses(successResponse(1), successResponse(2), successResponse(3), successResponse(4), successResponse(5)));
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc")),
+                    successResponse(5));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);

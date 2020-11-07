@@ -31,7 +31,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -613,7 +612,7 @@ final class BulkWriter implements AutoCloseable {
       final BulkWriterOperationCallback operationCallback,
       final int failedAttempts) {
     List<BulkCommitBatch> operationBatchQueue = failedAttempts > 0 ? retryBatchQueue : batchQueue;
-    BulkCommitBatch bulkCommitBatch = getEligibleBatch(operationBatchQueue);
+    BulkCommitBatch bulkCommitBatch = getEligibleBatch(documentReference, operationBatchQueue);
 
     // Send ready batches if this is the first attempt. Subsequent retry batches are scheduled
     // after the initial batch returns.
@@ -757,10 +756,13 @@ final class BulkWriter implements AutoCloseable {
    * Return the first eligible batch that can hold a write to the provided reference, or creates one
    * if no eligible batches are found.
    */
-  private BulkCommitBatch getEligibleBatch(List<BulkCommitBatch> batchQueue) {
+  private BulkCommitBatch getEligibleBatch(
+      DocumentReference documentReference,
+      List<BulkCommitBatch> batchQueue) {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
-      if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN) {
+      if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN &&
+      !lastBatch.documentPaths.contains(documentReference)) {
         return lastBatch;
       }
     }
