@@ -17,28 +17,12 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.common.base.Preconditions;
 
 /** Used to represent a batch on the BatchQueue. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
   BulkCommitBatch(FirestoreImpl firestore, int maxBatchSize) {
     super(firestore, maxBatchSize);
-  }
-
-  BulkCommitBatch(FirestoreImpl firestore, BulkCommitBatch retryBatch) {
-    super(firestore);
-
-    // Create a new BulkCommitBatch containing only the indexes from the provided indexes to retry.
-    for (int index : retryBatch.getPendingIndexes()) {
-      this.writes.add(retryBatch.writes.get(index));
-    }
-
-    Preconditions.checkState(
-        retryBatch.state == BatchState.SENT,
-        "Batch should be SENT when creating a new BulkCommitBatch for retry");
-    this.state = retryBatch.state;
-    this.pendingOperations = retryBatch.pendingOperations;
   }
 
   ApiFuture<WriteResult> wrapResult(ApiFuture<WriteResult> result) {
