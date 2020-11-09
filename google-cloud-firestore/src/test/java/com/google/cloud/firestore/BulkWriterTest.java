@@ -307,12 +307,10 @@ public class BulkWriterTest {
         new ResponseStubber() {
           {
             put(
-                batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(1));
             put(
-                batchWrite(
-                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                batchWrite(update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(2));
           }
         };
@@ -535,9 +533,8 @@ public class BulkWriterTest {
         new ResponseStubber() {
           {
             put(
-                batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc")),
-                    successResponse(5));
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc")),
+                successResponse(5));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);

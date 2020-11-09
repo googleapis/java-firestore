@@ -16,24 +16,19 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.firestore.v1.BatchWriteRequest;
-import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
-import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -64,46 +59,14 @@ public abstract class UpdateBuilder<T> {
     }
   }
 
-  /**
-   * Used to represent a pending write operation.
-   *
-   * <p>Contains a pending write's index, document path, and the corresponding result.
-   */
-  static class PendingOperation {
-    int writeBatchIndex;
-    String documentKey;
-    SettableApiFuture<WriteResult> future;
-
-    PendingOperation(
-        int writeBatchIndex, String documentKey, SettableApiFuture<WriteResult> future) {
-      this.writeBatchIndex = writeBatchIndex;
-      this.documentKey = documentKey;
-      this.future = future;
-    }
-  }
-
   final FirestoreImpl firestore;
   protected final List<WriteOperation> writes;
+  protected final int maxBatchSize;
   private boolean committed;
-  private final int maxBatchSize;
 
-  protected BatchState state = BatchState.OPEN;
   protected List<SettableApiFuture<BatchWriteResult>> newPendingOperations = new ArrayList<>();
 
   Set<DocumentReference> documentPaths = new CopyOnWriteArraySet<>();
-
-
-  /**
-   * Used to represent the state of batch.
-   *
-   * <p>Writes can only be added while the batch is OPEN. For a batch to be sent, the batch must be
-   * READY_TO_SEND. After a batch is sent, it is marked as SENT.
-   */
-  enum BatchState {
-    OPEN,
-    READY_TO_SEND,
-    SENT,
-  }
 
   UpdateBuilder(FirestoreImpl firestore) {
     this(firestore, BulkWriter.MAX_BATCH_SIZE);
@@ -119,10 +82,10 @@ public abstract class UpdateBuilder<T> {
    * Wraps the result of the write operation before it is returned.
    *
    * <p>This method is used to generate the return value for all public methods. It allows
-   * operations on Transaction and Writebatch to return the object for chaining, while also allowing
+   * operations on Transaction and WriteBatch to return the object for chaining, while also allowing
    * BulkWriter operations to return the future directly.
    */
-  abstract T wrapResult(ApiFuture<WriteResult> result);
+  abstract T wrapResult(DocumentReference documentReference);
 
   /**
    * Turns a field map that contains field paths into a nested map. Turns {a.b : c} into {a : {b :
@@ -197,7 +160,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation(documentReference));
+    return wrapResult(documentReference);
   }
 
   private void verifyNotCommitted() {
@@ -327,7 +290,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation(documentReference));
+    return wrapResult(documentReference);
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -596,7 +559,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation(documentReference));
+    return wrapResult(documentReference);
   }
 
   /**
@@ -634,7 +597,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(processLastOperation(documentReference));
+    return wrapResult(documentReference);
   }
 
   /** Commit the current batch. */
@@ -681,60 +644,6 @@ public abstract class UpdateBuilder<T> {
         MoreExecutors.directExecutor());
   }
 
-  /**
-   * Commits all pending operations to the database and verifies all preconditions.
-   *
-   * <p>The writes in the batch are not applied atomically and can be applied out of order.
-   */
-  ApiFuture<List<BatchWriteResult>> bulkCommit() {
-    Tracing.getTracer()
-        .getCurrentSpan()
-        .addAnnotation(
-            TraceUtil.SPAN_NAME_BATCHWRITE,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
-
-    final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
-    request.setDatabase(firestore.getDatabaseName());
-
-    for (WriteOperation writeOperation : writes) {
-      request.addWrites(writeOperation.write);
-    }
-
-    ApiFuture<BatchWriteResponse> response =
-        firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable());
-
-    return ApiFutures.transform(
-        response,
-        new ApiFunction<BatchWriteResponse, List<BatchWriteResult>>() {
-          @Override
-          public List<BatchWriteResult> apply(BatchWriteResponse batchWriteResponse) {
-            List<com.google.firestore.v1.WriteResult> writeResults =
-                batchWriteResponse.getWriteResultsList();
-
-            List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
-
-            List<BatchWriteResult> result = new ArrayList<>();
-
-            for (int i = 0; i < writeResults.size(); ++i) {
-              com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
-              com.google.rpc.Status status = statuses.get(i);
-              Status code = Status.fromCodeValue(status.getCode());
-              @Nullable Timestamp updateTime = null;
-              @Nullable Exception exception = null;
-              if (code == Status.OK) {
-                updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
-              } else {
-                exception = FirestoreException.serverRejected(code, status.getMessage());
-              }
-              result.add(new BatchWriteResult(updateTime, exception));
-            }
-
-            return result;
-          }
-        },
-        MoreExecutors.directExecutor());
-  }
-
   /** Checks whether any updates have been queued. */
   boolean isEmpty() {
     return writes.isEmpty();
@@ -743,60 +652,5 @@ public abstract class UpdateBuilder<T> {
   /** Get the number of writes. */
   public int getMutationsSize() {
     return writes.size();
-  }
-
-  BatchState getState() {
-    return state;
-  }
-
-  int getPendingOperationCount() {
-    return newPendingOperations.size();
-  }
-
-  ApiFuture<WriteResult> processLastOperation(DocumentReference documentReference) {
-    Preconditions.checkState(!documentPaths.contains(documentReference), "Batch should not contain writes to the same document");
-    documentPaths.add(documentReference);
-    Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
-    SettableApiFuture<BatchWriteResult> resultFuture = SettableApiFuture.create();
-    newPendingOperations.add(resultFuture);
-
-    if (getPendingOperationCount() == maxBatchSize) {
-      state = BatchState.READY_TO_SEND;
-    }
-
-    return ApiFutures.transformAsync(
-        resultFuture,
-        new ApiAsyncFunction<BatchWriteResult, WriteResult>() {
-          public ApiFuture<WriteResult> apply(BatchWriteResult batchWriteResult) throws Exception {
-            if (batchWriteResult.getException() == null) {
-              return ApiFutures.immediateFuture(new WriteResult(batchWriteResult.getWriteTime()));
-            } else {
-              throw batchWriteResult.getException();
-            }
-          }
-        },
-        MoreExecutors.directExecutor());
-  }
-
-  /**
-   * Resolves the individual operations in the batch with the results and removes the entry from the
-   * pendingOperations map if the result is not retryable.
-   */
-  void newProcessResults(List<BatchWriteResult> results) {
-    for (int i = 0; i < results.size(); i++) {
-      SettableApiFuture<BatchWriteResult> resultFuture = newPendingOperations.get(i);
-      BatchWriteResult result = results.get(i);
-      if (result.getException() == null) {
-        resultFuture.set(result);
-      } else {
-        resultFuture.setException(result.getException());
-      }
-    }
-  }
-
-  void markReadyToSend() {
-    if (state == BatchState.OPEN) {
-      state = BatchState.READY_TO_SEND;
-    }
   }
 }

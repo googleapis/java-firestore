@@ -24,7 +24,6 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.StatusCode.Code;
-import com.google.cloud.firestore.UpdateBuilder.BatchState;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -757,12 +756,10 @@ final class BulkWriter implements AutoCloseable {
    * if no eligible batches are found.
    */
   private BulkCommitBatch getEligibleBatch(
-      DocumentReference documentReference,
-      List<BulkCommitBatch> batchQueue) {
+      DocumentReference documentReference, List<BulkCommitBatch> batchQueue) {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
-      if (lastBatch.getState() == UpdateBuilder.BatchState.OPEN &&
-      !lastBatch.documentPaths.contains(documentReference)) {
+      if (lastBatch.isOpen() && !lastBatch.documentPaths.contains(documentReference)) {
         return lastBatch;
       }
     }
@@ -792,7 +789,7 @@ final class BulkWriter implements AutoCloseable {
    */
   private void sendReadyBatches(final List<BulkCommitBatch> batchQueue) {
     int index = 0;
-    while (index < batchQueue.size() && batchQueue.get(index).state == BatchState.READY_TO_SEND) {
+    while (index < batchQueue.size() && batchQueue.get(index).isReadyToSend()) {
       final BulkCommitBatch batch = batchQueue.get(index);
 
       // Future that completes when the current or its scheduling attempts completes.
@@ -832,14 +829,10 @@ final class BulkWriter implements AutoCloseable {
       final BulkCommitBatch batch,
       final List<BulkCommitBatch> batchQueue,
       final SettableApiFuture<Void> batchCompletedFuture) {
-    Preconditions.checkState(
-        batch.state == BatchState.READY_TO_SEND,
-        "The batch should be marked as READY_TO_SEND before committing");
-    batch.state = BatchState.SENT;
     boolean success = rateLimiter.tryMakeRequest(batch.getPendingOperationCount());
     Preconditions.checkState(success, "Batch should be under rate limit to be sent.");
 
-    ApiFuture<Void> commitFuture = newBulkCommit(batch);
+    ApiFuture<Void> commitFuture = bulkCommit(batch);
     commitFuture.addListener(
         new Runnable() {
           public void run() {
@@ -862,7 +855,7 @@ final class BulkWriter implements AutoCloseable {
         MoreExecutors.directExecutor());
   }
 
-  private ApiFuture<Void> newBulkCommit(final BulkCommitBatch batch) {
+  private ApiFuture<Void> bulkCommit(final BulkCommitBatch batch) {
     return ApiFutures.transformAsync(
         ApiFutures.catchingAsync(
             batch.bulkCommit(),
