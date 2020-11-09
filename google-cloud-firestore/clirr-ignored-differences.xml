@@ -212,6 +212,30 @@
   </difference>
 
   <!--
+  UpdateBuilder
+  -->
+  <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <field>pendingOperations</field>
+  </difference>
+  <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <field>state</field>
+  </difference>
+  <difference>
+    <differenceType>6010</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <field>writes</field>
+  </difference>
+  <difference>
+    <differenceType>7009</differenceType>
+    <className>com/google/cloud/firestore/UpdateBuilder</className>
+    <method>int getMutationsSize()</method>
+  </difference>
+
+  <!--
   FakeCredentials Refactor
   com.google.cloud.firestore.FirestoreOptions$Builder$FakeCredentials -> com.google.cloud.firestore.FirestoreOptions$EmulatorCredentials
   -->
