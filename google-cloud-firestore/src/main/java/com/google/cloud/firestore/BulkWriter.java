@@ -19,10 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.CurrentMillisClock;
 import com.google.api.core.SettableApiFuture;
-import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
-import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
@@ -44,11 +41,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 final class BulkWriter implements AutoCloseable {
-  public interface WriteResultListener {
+  /**
+   * A callback set by `addWriteResultListener()` to be run every time an operation successfully
+   * completes.
+   */
+  public interface WriteResultCallback {
+    /**
+     * @param documentReference The document the operation was performed on.
+     * @param result The result of the operation.
+     */
     void onResult(DocumentReference documentReference, WriteResult result);
   };
 
-  public interface WriteErrorListener {
+  /** A callback set by `addWriteErrorListener()` to be run every time an operation fails. */
+  public interface WriteErrorCallback {
+    /**
+     * @param error The error object from the failed BulkWriter operation attempt.
+     * @return Whether to retry the operation or not.
+     */
     boolean shouldRetryListener(BulkWriterError error);
   }
 
@@ -63,7 +73,7 @@ final class BulkWriter implements AutoCloseable {
     DELETE
   }
   /** The maximum number of writes that can be in a single batch. */
-  public static final int MAX_BATCH_SIZE = 500;
+  public static final int MAX_BATCH_SIZE = 20;
 
   /**
    * The maximum number of retries that will be attempted by backoff before stopping all retry
@@ -134,13 +144,13 @@ final class BulkWriter implements AutoCloseable {
   /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
   private final RateLimiter rateLimiter;
 
-  private WriteResultListener successListener =
-      new WriteResultListener() {
+  private WriteResultCallback successListener =
+      new WriteResultCallback() {
         public void onResult(DocumentReference documentReference, WriteResult result) {}
       };
 
-  private WriteErrorListener errorListener =
-      new WriteErrorListener() {
+  private WriteErrorCallback errorListener =
+      new WriteErrorCallback() {
         public boolean shouldRetryListener(BulkWriterError error) {
           if (error.getFailedAttempts() == MAX_RETRY_ATTEMPTS) {
             return false;
@@ -159,15 +169,8 @@ final class BulkWriter implements AutoCloseable {
 
   private final ScheduledExecutorService firestoreExecutor;
 
-  private final ExponentialRetryAlgorithm backoff;
-  private TimedAttemptSettings nextAttempt;
-
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
     this.firestore = firestore;
-    this.backoff =
-        new ExponentialRetryAlgorithm(
-            firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
-    this.nextAttempt = backoff.createFirstAttempt();
     this.firestoreExecutor = firestore.getClient().getExecutor();
 
     if (!options.getThrottlingEnabled()) {
@@ -214,7 +217,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be created.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> create(
@@ -237,7 +241,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be created.
    * @param pojo The POJO that will be used to populate the document contents.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> create(
@@ -257,8 +262,8 @@ final class BulkWriter implements AutoCloseable {
    * Delete a document from the database.
    *
    * @param documentReference The DocumentReference to delete.
-   * @return An ApiFuture containing the result of the delete. Contains an error if the delete
-   *     fails.
+   * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
+   *     Contains a {@link BulkWriterError} if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull final DocumentReference documentReference) {
@@ -279,7 +284,7 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference The DocumentReference to delete.
    * @param precondition Precondition to enforce for this delete.
    * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
-   *     Contains an error if the delete fails.
+   *     Contains a {@link BulkWriterError} if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(
@@ -301,9 +306,8 @@ final class BulkWriter implements AutoCloseable {
    * exist yet, it will be created.
    *
    * @param documentReference A reference to the document to be set.
-   * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
-   *     Contains an error if the delete fails.
+   * @param fields A map of the fields and values for the document. * @return An ApiFuture
+   *     containing the result of the write. Contains a {@link BulkWriterError} if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -328,7 +332,8 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be set.
    * @param fields A map of the fields and values for the document.
    * @param options An object to configure the set behavior.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -354,7 +359,8 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be set.
    * @param pojo The POJO that will be used to populate the document contents.
    * @param options An object to configure the set behavior.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -378,7 +384,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be set.
    * @param pojo The POJO that will be used to populate the document contents.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -405,7 +412,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -434,7 +442,8 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
    * @param precondition Precondition to enforce on this update.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -465,7 +474,8 @@ final class BulkWriter implements AutoCloseable {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -497,7 +507,8 @@ final class BulkWriter implements AutoCloseable {
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -529,7 +540,8 @@ final class BulkWriter implements AutoCloseable {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -563,7 +575,8 @@ final class BulkWriter implements AutoCloseable {
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains an error if the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
+   *     the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -585,14 +598,22 @@ final class BulkWriter implements AutoCloseable {
   }
 
   private ApiFuture<WriteResult> executeWrite(
-      DocumentReference documentReference,
+      final DocumentReference documentReference,
       OperationType operationType,
       BulkWriterOperationCallback operationCallback) {
     final SettableApiFuture<Void> operationCompletedFuture = SettableApiFuture.create();
     pendingOperations.add(operationCompletedFuture);
 
     ApiFuture<WriteResult> writeResultApiFuture =
-        continueCallback(documentReference, operationType, operationCallback, 0);
+        ApiFutures.transformAsync(
+            executeWriteWithRetries(documentReference, operationType, operationCallback, 0),
+            new ApiAsyncFunction<WriteResult, WriteResult>() {
+              public ApiFuture<WriteResult> apply(WriteResult result) {
+                successListener.onResult(documentReference, result);
+                return ApiFutures.immediateFuture(result);
+              }
+            },
+            MoreExecutors.directExecutor());
     writeResultApiFuture.addListener(
         new Runnable() {
           public void run() {
@@ -605,7 +626,7 @@ final class BulkWriter implements AutoCloseable {
     return writeResultApiFuture;
   }
 
-  private ApiFuture<WriteResult> continueCallback(
+  private ApiFuture<WriteResult> executeWriteWithRetries(
       final DocumentReference documentReference,
       final OperationType operationType,
       final BulkWriterOperationCallback operationCallback,
@@ -619,40 +640,31 @@ final class BulkWriter implements AutoCloseable {
       sendReadyBatches(operationBatchQueue);
     }
 
-    return ApiFutures.transformAsync(
-        ApiFutures.catchingAsync(
-            operationCallback.apply(bulkCommitBatch),
-            FirestoreException.class,
-            new ApiAsyncFunction<FirestoreException, WriteResult>() {
-              public ApiFuture<WriteResult> apply(FirestoreException exception)
-                  throws BulkWriterError {
-                BulkWriterError bulkWriterError =
-                    new BulkWriterError(
-                        exception.getStatus(),
-                        exception.getMessage(),
-                        documentReference,
-                        operationType,
-                        failedAttempts);
+    return ApiFutures.catchingAsync(
+        operationCallback.apply(bulkCommitBatch),
+        FirestoreException.class,
+        new ApiAsyncFunction<FirestoreException, WriteResult>() {
+          public ApiFuture<WriteResult> apply(FirestoreException exception) throws BulkWriterError {
+            BulkWriterError bulkWriterError =
+                new BulkWriterError(
+                    exception.getStatus(),
+                    exception.getMessage(),
+                    documentReference,
+                    operationType,
+                    failedAttempts);
 
-                boolean shouldRetry = errorListener.shouldRetryListener(bulkWriterError);
-                logger.log(
-                    Level.INFO,
-                    String.format(
-                        "Running error callback on error code: %d, shouldRetry: %b",
-                        exception.getStatus().getCode().value(), shouldRetry));
-                if (!shouldRetry) {
-                  throw bulkWriterError;
-                } else {
-                  return continueCallback(
-                      documentReference, operationType, operationCallback, failedAttempts + 1);
-                }
-              }
-            },
-            MoreExecutors.directExecutor()),
-        new ApiAsyncFunction<WriteResult, WriteResult>() {
-          public ApiFuture<WriteResult> apply(WriteResult result) throws Exception {
-            successListener.onResult(documentReference, result);
-            return ApiFutures.immediateFuture(result);
+            boolean shouldRetry = errorListener.shouldRetryListener(bulkWriterError);
+            logger.log(
+                Level.INFO,
+                String.format(
+                    "Running error callback on error code: %d, shouldRetry: %b",
+                    exception.getStatus().getCode().value(), shouldRetry));
+            if (!shouldRetry) {
+              throw bulkWriterError;
+            } else {
+              return executeWriteWithRetries(
+                  documentReference, operationType, operationCallback, failedAttempts + 1);
+            }
           }
         },
         MoreExecutors.directExecutor());
@@ -726,7 +738,8 @@ final class BulkWriter implements AutoCloseable {
   /**
    * Commits all enqueued writes and marks the BulkWriter instance as closed.
    *
-   * <p>After calling `close()`, calling any method wil return an error.
+   * <p>After calling `close()`, calling any method wil return an error. Any retries scheduled with
+   * `addWriteErrorListener()` will be run before the `close()` completes.
    *
    * <p>This method completes when there are no more pending writes. Calling this method will send
    * all requests.
@@ -743,12 +756,56 @@ final class BulkWriter implements AutoCloseable {
     }
   }
 
-  public void addWriteResultListener(WriteResultListener writeResultListener) {
-    successListener = writeResultListener;
+  /**
+   * Attaches a listener that is run every time a BulkWriter operation successfully completes.
+   *
+   * <p>For example, see the sample code: <code>
+   *   BulkWriter bulkWriter = firestore.bulkWriter();
+   *   bulkWriter.addWriteResultListener(
+   *         new WriteResultCallback() {
+   *           public void onResult(DocumentReference documentReference, WriteResult result) {
+   *             System.out.println(
+   *                 "Successfully executed write on document: "
+   *                     + documentReference
+   *                     + " at: "
+   *                     + result.getUpdateTime());
+   *           }
+   *         });
+   * </code>
+   *
+   * @param writeResultCallback A callback to be called every time a BulkWriter operation
+   *     successfully completes.
+   */
+  public void addWriteResultListener(WriteResultCallback writeResultCallback) {
+    successListener = writeResultCallback;
   }
 
-  public void addWriteErrorListener(WriteErrorListener shouldRetryListener) {
-    errorListener = shouldRetryListener;
+  /**
+   * Attaches an error handler listener that is run every time a BulkWriter operation fails.
+   *
+   * <p>BulkWriter has a default error handler that retries UNAVAILABLE and ABORTED errors up to a
+   * maximum of 10 failed attempts. When an error handler is specified, the default error handler
+   * will be overwritten.
+   *
+   * <p>For example, see the sample code: <code>
+   *   BulkWriter bulkWriter = firestore.bulkWriter();
+   *   bulkWriter.addWriteErrorListener(
+   *         new WriteErrorCallback() {
+   *           if (error.getStatus() == Status.UNAVAILABLE
+   *                 && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
+   *               return true;
+   *             } else {
+   *               System.out.println("Failed write at document: " + error.getDocumentReference());
+   *               return false;
+   *             }
+   *         });
+   * </code>
+   *
+   * @param shouldRetryCallback A callback to be called every time a BulkWriter operation fails.
+   *     Returning `true` will retry the operation. Returning `false` will stop the retry loop.
+   */
+  public void addWriteErrorListener(WriteErrorCallback shouldRetryCallback) {
+    errorListener = shouldRetryCallback;
   }
 
   /**

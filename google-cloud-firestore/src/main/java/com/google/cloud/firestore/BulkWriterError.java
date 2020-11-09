@@ -19,25 +19,31 @@ package com.google.cloud.firestore;
 import com.google.cloud.firestore.BulkWriter.OperationType;
 import io.grpc.Status;
 
-public class BulkWriterError extends Exception {
-  public DocumentReference getDocumentReference() {
-    return documentReference;
+/** The error thrown when a BulkWriter operation fails. */
+class BulkWriterError extends Exception {
+  /** @return The status code of the error. */
+  public Status getStatus() {
+    return status;
   }
 
-  public int getFailedAttempts() {
-    return failedAttempts;
-  }
-
+  /** @return The error message of the error. */
   public String getMessage() {
     return message;
   }
 
+  /** @return The document reference the operation was performed on. */
+  public DocumentReference getDocumentReference() {
+    return documentReference;
+  }
+
+  /** @return The type of operation performed. */
   public OperationType getOperationType() {
     return operationType;
   }
 
-  public Status getStatus() {
-    return status;
+  /** @return How many times this operation has been attempted unsuccessfully. */
+  public int getFailedAttempts() {
+    return failedAttempts;
   }
 
   private final Status status;
@@ -49,13 +55,13 @@ public class BulkWriterError extends Exception {
   public BulkWriterError(
       Status status,
       String message,
-      DocumentReference reference,
-      OperationType type,
-      int attempts) {
+      DocumentReference documentReference,
+      OperationType operationType,
+      int failedAttempts) {
     this.status = status;
     this.message = message;
-    documentReference = reference;
-    operationType = type;
-    failedAttempts = attempts;
+    this.documentReference = documentReference;
+    this.operationType = operationType;
+    this.failedAttempts = failedAttempts;
   }
 }
