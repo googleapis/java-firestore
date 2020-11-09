@@ -133,7 +133,7 @@ final class BulkWriter implements AutoCloseable {
   private final Set<ApiFuture<Void>> pendingOperations = new CopyOnWriteArraySet<>();
 
   /**
-   * A list of future that represent sent batches. Each future is completed when the batch's
+   * A list of futures that represent sent batches. Each future is completed when the batch's
    * response is received. This includes batches from both the batchQueue and retryBatchQueue.
    */
   private final Set<ApiFuture<Void>> pendingBatches = new CopyOnWriteArraySet<>();
@@ -293,7 +293,7 @@ final class BulkWriter implements AutoCloseable {
     verifyNotClosed();
     return executeWrite(
         documentReference,
-        OperationType.SET,
+        OperationType.DELETE,
         new BulkWriterOperationCallback() {
           public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
             return batch.delete(documentReference, precondition);
@@ -606,7 +606,7 @@ final class BulkWriter implements AutoCloseable {
 
     ApiFuture<WriteResult> writeResultApiFuture =
         ApiFutures.transformAsync(
-            executeWriteWithRetries(documentReference, operationType, operationCallback, 0),
+            executeWriteHelper(documentReference, operationType, operationCallback, 0),
             new ApiAsyncFunction<WriteResult, WriteResult>() {
               public ApiFuture<WriteResult> apply(WriteResult result) {
                 successListener.onResult(documentReference, result);
@@ -626,7 +626,7 @@ final class BulkWriter implements AutoCloseable {
     return writeResultApiFuture;
   }
 
-  private ApiFuture<WriteResult> executeWriteWithRetries(
+  private ApiFuture<WriteResult> executeWriteHelper(
       final DocumentReference documentReference,
       final OperationType operationType,
       final BulkWriterOperationCallback operationCallback,
@@ -662,7 +662,7 @@ final class BulkWriter implements AutoCloseable {
             if (!shouldRetry) {
               throw bulkWriterError;
             } else {
-              return executeWriteWithRetries(
+              return executeWriteHelper(
                   documentReference, operationType, operationCallback, failedAttempts + 1);
             }
           }
@@ -816,7 +816,7 @@ final class BulkWriter implements AutoCloseable {
       DocumentReference documentReference, List<BulkCommitBatch> batchQueue) {
     if (batchQueue.size() > 0) {
       BulkCommitBatch lastBatch = batchQueue.get(batchQueue.size() - 1);
-      if (lastBatch.isOpen() && !lastBatch.documentPaths.contains(documentReference)) {
+      if (lastBatch.isOpen() && !lastBatch.has(documentReference)) {
         return lastBatch;
       }
     }
@@ -849,7 +849,7 @@ final class BulkWriter implements AutoCloseable {
     while (index < batchQueue.size() && batchQueue.get(index).isReadyToSend()) {
       final BulkCommitBatch batch = batchQueue.get(index);
 
-      // Future that completes when the current or its scheduling attempts completes.
+      // Future that completes when the current batch or its scheduling attempts completes.
       final SettableApiFuture<Void> batchCompletedFuture = SettableApiFuture.create();
       pendingBatches.add(batchCompletedFuture);
 
@@ -921,7 +921,7 @@ final class BulkWriter implements AutoCloseable {
               public ApiFuture<List<BatchWriteResult>> apply(Exception exception) {
                 List<BatchWriteResult> results = new ArrayList<>();
                 // If the BatchWrite RPC fails, map the exception to each individual result.
-                for (int i = 0; i < batch.newPendingOperations.size(); ++i) {
+                for (int i = 0; i < batch.getPendingOperationCount(); ++i) {
                   results.add(new BatchWriteResult(null, exception));
                 }
                 return ApiFutures.immediateFuture(results);

@@ -611,14 +611,16 @@ public class BulkWriterTest {
               }
             },
             executor);
-    bulkWriter.flush().addListener(
-        new Runnable() {
-          public void run() {
-            operations.add("FLUSH");
-            flushComplete.set(null);
-          }
-        },
-        executor);
+    bulkWriter
+        .flush()
+        .addListener(
+            new Runnable() {
+              public void run() {
+                operations.add("FLUSH");
+                flushComplete.set(null);
+              }
+            },
+            executor);
     bulkWriter
         .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
         .addListener(

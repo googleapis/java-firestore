@@ -32,6 +32,8 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nullable;
 
 /** Used to represent a batch on the BatchQueue. */
@@ -48,10 +50,15 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     SENT,
   }
 
-  protected BatchState state = BatchState.OPEN;
+  private BatchState state = BatchState.OPEN;
+
+  private final List<SettableApiFuture<BatchWriteResult>> pendingOperations = new ArrayList<>();
+  private final Set<DocumentReference> documents = new CopyOnWriteArraySet<>();
+  private final int maxBatchSize;
 
   BulkCommitBatch(FirestoreImpl firestore, int maxBatchSize) {
-    super(firestore, maxBatchSize);
+    super(firestore);
+    this.maxBatchSize = maxBatchSize;
   }
 
   ApiFuture<WriteResult> wrapResult(DocumentReference documentReference) {
@@ -68,7 +75,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
         .getCurrentSpan()
         .addAnnotation(
             TraceUtil.SPAN_NAME_BATCHWRITE,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
+            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(getWrites().size())));
 
     Preconditions.checkState(
         isReadyToSend(), "The batch should be marked as READY_TO_SEND before committing");
@@ -77,12 +84,14 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
-    for (WriteOperation writeOperation : writes) {
+    for (WriteOperation writeOperation : getWrites()) {
       request.addWrites(writeOperation.write);
     }
 
     ApiFuture<BatchWriteResponse> response =
         firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable());
+
+    committed = true;
 
     return ApiFutures.transform(
         response,
@@ -117,17 +126,17 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
   }
 
   int getPendingOperationCount() {
-    return newPendingOperations.size();
+    return pendingOperations.size();
   }
 
   ApiFuture<WriteResult> processLastOperation(DocumentReference documentReference) {
     Preconditions.checkState(
-        !documentPaths.contains(documentReference),
+        !documents.contains(documentReference),
         "Batch should not contain writes to the same document");
-    documentPaths.add(documentReference);
+    documents.add(documentReference);
     Preconditions.checkState(state == BatchState.OPEN, "Batch should be OPEN when adding writes");
     SettableApiFuture<BatchWriteResult> resultFuture = SettableApiFuture.create();
-    newPendingOperations.add(resultFuture);
+    pendingOperations.add(resultFuture);
 
     if (getPendingOperationCount() == maxBatchSize) {
       state = BatchState.READY_TO_SEND;
@@ -153,7 +162,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
    */
   void newProcessResults(List<BatchWriteResult> results) {
     for (int i = 0; i < results.size(); i++) {
-      SettableApiFuture<BatchWriteResult> resultFuture = newPendingOperations.get(i);
+      SettableApiFuture<BatchWriteResult> resultFuture = pendingOperations.get(i);
       BatchWriteResult result = results.get(i);
       if (result.getException() == null) {
         resultFuture.set(result);
@@ -175,5 +184,9 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
   boolean isReadyToSend() {
     return state == BatchState.READY_TO_SEND;
+  }
+
+  boolean has(DocumentReference documentReference) {
+    return documents.contains(documentReference);
   }
 }

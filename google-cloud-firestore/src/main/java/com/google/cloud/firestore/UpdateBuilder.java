@@ -20,8 +20,8 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
-import com.google.api.core.SettableApiFuture;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -36,10 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -60,22 +58,13 @@ public abstract class UpdateBuilder<T> {
   }
 
   final FirestoreImpl firestore;
-  protected final List<WriteOperation> writes;
-  protected final int maxBatchSize;
-  private boolean committed;
 
-  protected List<SettableApiFuture<BatchWriteResult>> newPendingOperations = new ArrayList<>();
+  private final List<WriteOperation> writes = new ArrayList<>();
 
-  Set<DocumentReference> documentPaths = new CopyOnWriteArraySet<>();
+  protected boolean committed;
 
   UpdateBuilder(FirestoreImpl firestore) {
-    this(firestore, BulkWriter.MAX_BATCH_SIZE);
-  }
-
-  UpdateBuilder(FirestoreImpl firestore, int maxBatchSize) {
     this.firestore = firestore;
-    this.maxBatchSize = maxBatchSize;
-    this.writes = new ArrayList<>();
   }
 
   /**
@@ -649,8 +638,13 @@ public abstract class UpdateBuilder<T> {
     return writes.isEmpty();
   }
 
+  List<WriteOperation> getWrites() {
+    return writes;
+  }
+
   /** Get the number of writes. */
-  public int getMutationsSize() {
+  @VisibleForTesting
+  int getMutationsSize() {
     return writes.size();
   }
 }
