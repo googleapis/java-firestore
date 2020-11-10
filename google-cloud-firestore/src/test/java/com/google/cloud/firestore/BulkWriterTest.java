@@ -425,7 +425,7 @@ public class BulkWriterTest {
     DocumentReference doc4 = firestoreMock.document("coll/doc4");
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
+          public boolean shouldRetryError(BulkWriterError error) {
             operations.add(error.getOperationType().name());
             return true;
           }
@@ -463,8 +463,9 @@ public class BulkWriterTest {
     final boolean[] errorListenerCalled = {false};
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
+          public boolean shouldRetryError(BulkWriterError error) {
             errorListenerCalled[0] = true;
+            assertEquals(Status.INTERNAL, error.getStatus());
             return false;
           }
         });
@@ -494,8 +495,9 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
-            throw new NullPointerException("Test code threw NullPointerException");
+          public boolean shouldRetryError(BulkWriterError error) {
+            throw new UnsupportedOperationException(
+                "Test code threw UnsupportedOperationException");
           }
         });
 
@@ -505,7 +507,7 @@ public class BulkWriterTest {
       result1.get();
       fail("Operation should have failed in test");
     } catch (Exception e) {
-      assertTrue(e.getMessage().contains("Test code threw NullPointerException"));
+      assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
     }
   }
 
@@ -524,7 +526,8 @@ public class BulkWriterTest {
     bulkWriter.addWriteResultListener(
         new WriteResultCallback() {
           public void onResult(DocumentReference documentReference, WriteResult result) {
-            throw new NullPointerException("Test code threw NullPointerException");
+            throw new UnsupportedOperationException(
+                "Test code threw UnsupportedOperationException");
           }
         });
 
@@ -534,7 +537,7 @@ public class BulkWriterTest {
       result1.get();
       fail("Operation should have failed in test");
     } catch (Exception e) {
-      assertTrue(e.getMessage().contains("Test code threw NullPointerException"));
+      assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
     }
   }
 
@@ -561,7 +564,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
+          public boolean shouldRetryError(BulkWriterError error) {
             return true;
           }
         });
@@ -597,7 +600,7 @@ public class BulkWriterTest {
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
+          public boolean shouldRetryError(BulkWriterError error) {
             return true;
           }
         });
@@ -660,7 +663,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryListener(BulkWriterError error) {
+          public boolean shouldRetryError(BulkWriterError error) {
             return error.getFailedAttempts() < 3;
           }
         });

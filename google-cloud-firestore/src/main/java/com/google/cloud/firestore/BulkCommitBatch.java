@@ -160,7 +160,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
    * Resolves the individual operations in the batch with the results and removes the entry from the
    * pendingOperations map if the result is not retryable.
    */
-  void newProcessResults(List<BatchWriteResult> results) {
+  void processResults(List<BatchWriteResult> results) {
     for (int i = 0; i < results.size(); i++) {
       SettableApiFuture<BatchWriteResult> resultFuture = pendingOperations.get(i);
       BatchWriteResult result = results.get(i);
