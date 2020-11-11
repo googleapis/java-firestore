@@ -52,9 +52,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -68,7 +66,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
 
-  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
+  //  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -425,7 +423,7 @@ public class BulkWriterTest {
     DocumentReference doc4 = firestoreMock.document("coll/doc4");
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             operations.add(error.getOperationType().name());
             return true;
           }
@@ -463,7 +461,7 @@ public class BulkWriterTest {
     final boolean[] errorListenerCalled = {false};
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             errorListenerCalled[0] = true;
             assertEquals(Status.INTERNAL, error.getStatus());
             return false;
@@ -495,7 +493,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             throw new UnsupportedOperationException(
                 "Test code threw UnsupportedOperationException");
           }
@@ -564,7 +562,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             return true;
           }
         });
@@ -600,7 +598,7 @@ public class BulkWriterTest {
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             return true;
           }
         });
@@ -663,7 +661,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean shouldRetryError(BulkWriterError error) {
+          public boolean onError(BulkWriterError error) {
             return error.getFailedAttempts() < 3;
           }
         });

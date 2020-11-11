@@ -61,14 +61,12 @@ final class BulkWriter implements AutoCloseable {
      * @param error The error object from the failed BulkWriter operation attempt.
      * @return Whether to retry the operation or not.
      */
-    boolean shouldRetryError(BulkWriterError error);
+    boolean onError(BulkWriterError error);
   }
 
   private interface BulkWriterOperationCallback {
     ApiFuture<WriteResult> apply(BulkCommitBatch batch);
   }
-
-  private final Executor userCallbackExecutor;
 
   enum OperationType {
     CREATE,
@@ -155,7 +153,7 @@ final class BulkWriter implements AutoCloseable {
 
   private WriteErrorCallback errorListener =
       new WriteErrorCallback() {
-        public boolean shouldRetryError(BulkWriterError error) {
+        public boolean onError(BulkWriterError error) {
           if (error.getFailedAttempts() == MAX_RETRY_ATTEMPTS) {
             return false;
           }
@@ -169,14 +167,17 @@ final class BulkWriter implements AutoCloseable {
         }
       };
 
-  private final FirestoreImpl firestore;
+  private Executor successExecutor;
+  private Executor errorExecutor;
 
+  private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
-    this.userCallbackExecutor = Context.currentContextExecutor(this.firestoreExecutor);
+    this.successExecutor = Context.currentContextExecutor(this.firestoreExecutor);
+    this.errorExecutor = Context.currentContextExecutor(this.firestoreExecutor);
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -609,12 +610,15 @@ final class BulkWriter implements AutoCloseable {
     final SettableApiFuture<Void> operationCompletedFuture = SettableApiFuture.create();
     pendingOperations.add(operationCompletedFuture);
 
+    Executor currentExecutor = MoreExecutors.directExecutor();
+
     ApiFuture<WriteResult> writeResultApiFuture =
         ApiFutures.transformAsync(
             executeWriteHelper(documentReference, operationType, operationCallback, 0),
             new ApiAsyncFunction<WriteResult, WriteResult>() {
-              public ApiFuture<WriteResult> apply(WriteResult result)
+              public ApiFuture<WriteResult> apply(final WriteResult result)
                   throws ExecutionException, InterruptedException {
+
                 invokeUserSuccessCallback(documentReference, result).get();
                 return ApiFutures.immediateFuture(result);
               }
@@ -680,12 +684,12 @@ final class BulkWriter implements AutoCloseable {
   /** Invokes the user error callback on the user callback executor and returns the result. */
   private SettableApiFuture<Boolean> invokeUserErrorCallback(final BulkWriterError error) {
     final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
-    userCallbackExecutor.execute(
+    errorExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
             try {
-              boolean shouldRetry = errorListener.shouldRetryError(error);
+              boolean shouldRetry = errorListener.onError(error);
               callbackResult.set(shouldRetry);
             } catch (Exception e) {
               callbackResult.setException(e);
@@ -699,7 +703,7 @@ final class BulkWriter implements AutoCloseable {
   private ApiFuture<Void> invokeUserSuccessCallback(
       final DocumentReference documentReference, final WriteResult result) {
     final SettableApiFuture<Void> callbackResult = SettableApiFuture.create();
-    userCallbackExecutor.execute(
+    successExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
@@ -806,14 +810,14 @@ final class BulkWriter implements AutoCloseable {
    * <p>For example, see the sample code: <code>
    *   BulkWriter bulkWriter = firestore.bulkWriter();
    *   bulkWriter.addWriteResultListener(
-   *         (DocumentReference documentReference, WriteResult result -> {
+   *         (DocumentReference documentReference, WriteResult result) -> {
    *             System.out.println(
    *                 "Successfully executed write on document: "
    *                     + documentReference
    *                     + " at: "
    *                     + result.getUpdateTime());
    *           }
-   *         });
+   *         );
    * </code>
    *
    * @param writeResultCallback A callback to be called every time a BulkWriter operation
@@ -821,6 +825,12 @@ final class BulkWriter implements AutoCloseable {
    */
   public void addWriteResultListener(WriteResultCallback writeResultCallback) {
     successListener = writeResultCallback;
+  }
+
+  public void addWriteResultListener(
+      @Nonnull Executor executor, WriteResultCallback writeResultCallback) {
+    successListener = writeResultCallback;
+    successExecutor = executor;
   }
 
   /**
@@ -842,14 +852,19 @@ final class BulkWriter implements AutoCloseable {
    *             return false;
    *           }
    *         }
-   *         });
+   *       );
    * </code>
    *
-   * @param shouldRetryCallback A callback to be called every time a BulkWriter operation fails.
-   *     Returning `true` will retry the operation. Returning `false` will stop the retry loop.
+   * @param onError A callback to be called every time a BulkWriter operation fails. Returning
+   *     `true` will retry the operation. Returning `false` will stop the retry loop.
    */
-  public void addWriteErrorListener(WriteErrorCallback shouldRetryCallback) {
-    errorListener = shouldRetryCallback;
+  public void addWriteErrorListener(WriteErrorCallback onError) {
+    errorListener = onError;
+  }
+
+  public void addWriteErrorListener(@Nonnull Executor executor, WriteErrorCallback onError) {
+    errorListener = onError;
+    errorExecutor = executor;
   }
 
   /**
