@@ -619,6 +619,34 @@ public class ITSystemTest {
   }
 
   @Test
+  public void partitionedQuery_future() throws Exception {
+    int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
+
+    WriteBatch batch = firestore.batch();
+    for (int i = 0; i < documentCount; ++i) {
+      batch.create(randomColl.document(), map("foo", i));
+    }
+    batch.commit().get();
+
+    ApiFuture<List<QueryPartition>> future =
+        firestore.collectionGroup(randomColl.getId()).getPartitions(3);
+    final List<QueryPartition> partitions = future.get();
+
+    assertNull(partitions.get(0).getStartAt());
+    for (int i = 0; i < partitions.size() - 1; ++i) {
+      assertArrayEquals(partitions.get(i).getEndBefore(), partitions.get(i + 1).getStartAt());
+    }
+    assertNull(partitions.get(partitions.size() - 1).getEndBefore());
+
+    // Validate that we can use the partitions to read the original documents.
+    int resultCount = 0;
+    for (QueryPartition partition : partitions) {
+      resultCount += partition.createQuery().get().get().size();
+    }
+    assertEquals(documentCount, resultCount);
+  }
+
+  @Test
   public void emptyPartitionedQuery() throws Exception {
     StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
     firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
