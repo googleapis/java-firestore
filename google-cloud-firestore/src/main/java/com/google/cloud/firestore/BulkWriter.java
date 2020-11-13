@@ -182,8 +182,8 @@ final class BulkWriter implements AutoCloseable {
     this.firestoreExecutor = firestore.getClient().getExecutor();
 
     // TODO(chenbrian): Refactor this to be at the Firestore level.
-    this.userCallbackExecutor = Executors
-        .newCachedThreadPool(new DefaultThreadFactory("bulk-writer-user"));
+    this.userCallbackExecutor =
+        Executors.newCachedThreadPool(new DefaultThreadFactory("bulk-writer-user"));
     this.successExecutor = Context.currentContextExecutor(this.userCallbackExecutor);
     this.errorExecutor = Context.currentContextExecutor(this.userCallbackExecutor);
 
