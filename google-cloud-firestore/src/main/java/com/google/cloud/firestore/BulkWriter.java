@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
+import io.grpc.netty.shaded.io.netty.util.concurrent.DefaultThreadFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -172,12 +175,17 @@ final class BulkWriter implements AutoCloseable {
 
   private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
+  private final ExecutorService userCallbackExecutor;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
-    this.successExecutor = Context.currentContextExecutor(this.firestoreExecutor);
-    this.errorExecutor = Context.currentContextExecutor(this.firestoreExecutor);
+
+    // TODO(chenbrian): Refactor this to be at the Firestore level.
+    this.userCallbackExecutor = Executors
+        .newCachedThreadPool(new DefaultThreadFactory("bulk-writer-user"));
+    this.successExecutor = Context.currentContextExecutor(this.userCallbackExecutor);
+    this.errorExecutor = Context.currentContextExecutor(this.userCallbackExecutor);
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -608,9 +616,6 @@ final class BulkWriter implements AutoCloseable {
       OperationType operationType,
       BulkWriterOperationCallback operationCallback) {
     final SettableApiFuture<Void> operationCompletedFuture = SettableApiFuture.create();
-    pendingOperations.add(operationCompletedFuture);
-
-    Executor currentExecutor = MoreExecutors.directExecutor();
 
     ApiFuture<WriteResult> writeResultApiFuture =
         ApiFutures.transformAsync(
@@ -623,16 +628,16 @@ final class BulkWriter implements AutoCloseable {
                 return ApiFutures.immediateFuture(result);
               }
             },
-            MoreExecutors.directExecutor());
+            userCallbackExecutor);
     writeResultApiFuture.addListener(
         new Runnable() {
           public void run() {
-            operationCompletedFuture.set(null);
             pendingOperations.remove(operationCompletedFuture);
+            operationCompletedFuture.set(null);
           }
         },
-        MoreExecutors.directExecutor());
-
+        userCallbackExecutor);
+    pendingOperations.add(operationCompletedFuture);
     return writeResultApiFuture;
   }
 
@@ -678,7 +683,7 @@ final class BulkWriter implements AutoCloseable {
             }
           }
         },
-        MoreExecutors.directExecutor());
+        userCallbackExecutor);
   }
 
   /** Invokes the user error callback on the user callback executor and returns the result. */
@@ -766,17 +771,15 @@ final class BulkWriter implements AutoCloseable {
                 batch.markReadyToSend();
               }
               sendReadyBatches(retryBatchQueue);
-              ApiFutures.successfulAsList(pendingOperations)
-                  .addListener(
-                      new Runnable() {
-                        public void run() {
-                          flushComplete.set(null);
-                        }
-                      },
-                      MoreExecutors.directExecutor());
-            } else {
-              flushComplete.set(null);
             }
+            ApiFutures.successfulAsList(pendingOperations)
+                .addListener(
+                    new Runnable() {
+                      public void run() {
+                        flushComplete.set(null);
+                      }
+                    },
+                    MoreExecutors.directExecutor());
           }
         },
         MoreExecutors.directExecutor());
@@ -924,8 +927,8 @@ final class BulkWriter implements AutoCloseable {
               @Override
               public void run() {
                 sendReadyBatches(batchQueue);
-                batchCompletedFuture.set(null);
                 pendingBatches.remove(batchCompletedFuture);
+                batchCompletedFuture.set(null);
               }
             },
             delayMs,
@@ -962,8 +965,8 @@ final class BulkWriter implements AutoCloseable {
               }
             }
 
-            batchCompletedFuture.set(null);
             pendingBatches.remove(batchCompletedFuture);
+            batchCompletedFuture.set(null);
 
             sendReadyBatches(batchQueue);
           }
