@@ -55,7 +55,7 @@ public class QuickstartIT extends BaseIntegrationTest {
     addData();
 
     bout.reset();
-    quickstart.runAQuery();
+    quickstart.runQuery();
     String output = bout.toString();
     // confirm that results do not contain aturing
     assertTrue(output.contains("alovelace"));

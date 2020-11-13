@@ -129,7 +129,7 @@ public class Quickstart {
     }
   }
 
-  void runAQuery() throws Exception {
+  void runQuery() throws Exception {
     // [START fs_add_query]
     // asynchronously query for all users born before 1900
     ApiFuture<QuerySnapshot> query =
@@ -187,7 +187,7 @@ public class Quickstart {
 
     // retrieve all users born before 1900
     System.out.println("########## users born before 1900 ##########");
-    runAQuery();
+    runQuery();
 
     // retrieve all users
     System.out.println("########## All users ##########");
