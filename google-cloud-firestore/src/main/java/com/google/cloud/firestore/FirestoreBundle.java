@@ -54,7 +54,7 @@ public final class FirestoreBundle {
     // The latest read time among all bundled documents and queries.
     private Timestamp latestReadTime = Timestamp.MIN_VALUE;
 
-    public Builder(String id) {
+    Builder(String id) {
       this.id = id;
     }
 

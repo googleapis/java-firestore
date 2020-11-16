@@ -321,6 +321,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return transactionRunner.run();
   }
 
+  @Nonnull
+  @Override
+  public FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId) {
+    String id = bundleId == null ? autoId() : bundleId;
+    return new FirestoreBundle.Builder(id);
+  }
+
   /** Returns the name of the Firestore project associated with this client. */
   @Override
   public String getDatabaseName() {
