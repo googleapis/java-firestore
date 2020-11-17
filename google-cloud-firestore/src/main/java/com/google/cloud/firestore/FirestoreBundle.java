@@ -58,9 +58,7 @@ public final class FirestoreBundle {
       this.id = id;
     }
 
-    /**
-     * Returns the ID for this bundle.
-     */
+    /** Returns the ID for this bundle. */
     public String getId() {
       return this.id;
     }
