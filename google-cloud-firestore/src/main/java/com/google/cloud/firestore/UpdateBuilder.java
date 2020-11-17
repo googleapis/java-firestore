@@ -172,7 +172,8 @@ public abstract class UpdateBuilder<T> {
   public T create(@Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
     Object data = CustomClassMapper.convertToPlainJavaTypes(pojo);
     if (!(data instanceof Map)) {
-      throw FirestoreException.invalidState("Can't set a document's data to an array or primitive");
+      throw FirestoreException.forInvalidArgument(
+          "Can't set a document's data to an array or primitive");
     }
     return performCreate(documentReference, (Map<String, Object>) data);
   }

@@ -406,7 +406,7 @@ public class Query {
       Value encodedValue = encodeValue(fieldReference, sanitizedValue);
 
       if (encodedValue == null) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             "Cannot use FieldValue.delete() or FieldValue.serverTimestamp() in a query boundary");
       }
       result.addValues(encodedValue);
@@ -1434,7 +1434,7 @@ public class Query {
     Value encodedValue =
         UserDataConverter.encodeValue(fieldPath, sanitizedObject, UserDataConverter.ARGUMENT);
     if (encodedValue == null) {
-      throw FirestoreException.invalidState(
+      throw FirestoreException.forInvalidArgument(
           "Cannot use Firestore sentinels in FieldFilter or cursors");
     }
     return encodedValue;

@@ -997,7 +997,7 @@ public class BulkWriterTest {
   public void individualWritesErrorIfBulkCommitFails() throws Exception {
     doReturn(
             ApiFutures.immediateFailedFuture(
-                FirestoreException.serverRejected(
+                FirestoreException.forServerRejection(
                     Status.DEADLINE_EXCEEDED, "Mock batchWrite failed in test")))
         .when(firestoreMock)
         .sendRequest(
@@ -1049,7 +1049,7 @@ public class BulkWriterTest {
   @Test
   public void retriesWritesWhenBatchWriteFailsWithRetryableError() throws Exception {
     FirestoreException retryableError =
-        FirestoreException.serverRejected(
+        FirestoreException.forServerRejection(
             Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test");
 
     ApiFuture<Void> errorFuture = ApiFutures.immediateFailedFuture(retryableError);
@@ -1077,7 +1077,7 @@ public class BulkWriterTest {
               public ApiFuture<Object> answer(InvocationOnMock mock) {
                 retryAttempts[0]++;
                 return ApiFutures.immediateFailedFuture(
-                    FirestoreException.serverRejected(
+                    FirestoreException.forServerRejection(
                         Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test"));
               }
             })

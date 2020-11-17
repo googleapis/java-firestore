@@ -181,7 +181,8 @@ class UserDataConverter {
       }
     }
 
-    throw FirestoreException.invalidState("Cannot convert %s to Firestore Value", sanitizedObject);
+    throw FirestoreException.forInvalidArgument(
+        "Cannot convert %s to Firestore Value", sanitizedObject);
   }
 
   static Object decodeValue(FirestoreRpcContext<?> rpcContext, Value v) {
@@ -222,7 +223,8 @@ class UserDataConverter {
         }
         return outputMap;
       default:
-        throw FirestoreException.invalidState(String.format("Unknown Value Type: %s", typeCase));
+        throw FirestoreException.forInvalidArgument(
+            String.format("Unknown Value Type: %s", typeCase));
     }
   }
 }

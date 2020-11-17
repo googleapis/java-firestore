@@ -75,7 +75,7 @@ final class DocumentTransform {
             transforms.put(path, fieldValue.toProto(path));
           }
         } else {
-          throw FirestoreException.invalidState(
+          throw FirestoreException.forInvalidArgument(
               fieldValue.getMethodName() + " is not supported inside of an array.");
         }
       } else if (value instanceof Map) {
@@ -94,7 +94,7 @@ final class DocumentTransform {
       Object value = values.get(i);
       path = path.append(FieldPath.of(Integer.toString(i)));
       if (value instanceof FieldValue) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             ((FieldValue) value).getMethodName() + " is not supported inside of an array.");
       } else if (value instanceof Map) {
         extractFromMap((Map<String, Object>) value, path, false);

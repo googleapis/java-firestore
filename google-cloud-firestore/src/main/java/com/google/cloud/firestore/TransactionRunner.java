@@ -236,14 +236,14 @@ class TransactionRunner<T> {
         } else {
           span.setStatus(TOO_MANY_RETRIES_STATUS);
           final FirestoreException firestoreException =
-              FirestoreException.apiException(
+              FirestoreException.forApiException(
                   apiException, "Transaction was cancelled because of too many retries.");
           return rollbackAndReject(firestoreException);
         }
       } else {
         span.setStatus(TraceUtil.statusFromApiException(apiException));
         final FirestoreException firestoreException =
-            FirestoreException.apiException(
+            FirestoreException.forApiException(
                 apiException, "Transaction failed with non-retryable error");
         return rollbackAndReject(firestoreException);
       }

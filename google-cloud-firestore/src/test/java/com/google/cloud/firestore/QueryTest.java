@@ -938,7 +938,7 @@ public class QueryTest {
                 if (returnError[0]) {
                   returnError[0] = false;
                   return queryResponse(
-                          FirestoreException.serverRejected(
+                          FirestoreException.forServerRejection(
                               Status.DEADLINE_EXCEEDED, "Simulated test failure"),
                           DOCUMENT_NAME + "1",
                           DOCUMENT_NAME + "2")
@@ -998,7 +998,7 @@ public class QueryTest {
   public void doesNotRetryAfterNonRetryableError() throws Exception {
     doAnswer(
             queryResponse(
-                FirestoreException.serverRejected(
+                FirestoreException.forServerRejection(
                     Status.PERMISSION_DENIED, "Simulated test failure"),
                 DOCUMENT_NAME + "1",
                 DOCUMENT_NAME + "2"))

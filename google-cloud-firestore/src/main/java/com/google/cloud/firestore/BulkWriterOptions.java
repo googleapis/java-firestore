@@ -130,24 +130,24 @@ abstract class BulkWriterOptions {
       Double maxRate = options.getMaxOpsPerSecond();
 
       if (initialRate != null && initialRate < 1) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             "Value for argument 'initialOpsPerSecond' must be greater than 1, but was: "
                 + initialRate.intValue());
       }
 
       if (maxRate != null && maxRate < 1) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: "
                 + maxRate.intValue());
       }
 
       if (maxRate != null && initialRate != null && initialRate > maxRate) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             "'maxOpsPerSecond' cannot be less than 'initialOpsPerSecond'.");
       }
 
       if (!options.getThrottlingEnabled() && (maxRate != null || initialRate != null)) {
-        throw FirestoreException.invalidState(
+        throw FirestoreException.forInvalidArgument(
             "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
       }
       return options;

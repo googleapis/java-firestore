@@ -393,7 +393,7 @@ public class DocumentReference {
                   request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
     } catch (ApiException exception) {
       span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
-      throw FirestoreException.apiException(exception);
+      throw FirestoreException.forApiException(exception);
     } finally {
       span.end(TraceUtil.END_SPAN_OPTIONS);
     }
