@@ -44,8 +44,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.slf4j.LoggerFactory;
 
 final class BulkWriter implements AutoCloseable {
+  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(BulkWriter.class);
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
    * completes.
@@ -739,11 +741,17 @@ final class BulkWriter implements AutoCloseable {
    */
   @Nonnull
   public ApiFuture<Void> flush() {
-    verifyNotClosed();
-    return performFlush(Lists.newArrayList(pendingOperations));
+    LOGGER.debug(">>> flush()");
+    try {
+      verifyNotClosed();
+      return performFlush(Lists.newArrayList(pendingOperations));
+    } finally {
+      LOGGER.debug("<<< flush()");
+    }
   }
 
   private ApiFuture<Void> performFlush(final List<ApiFuture<Void>> pendingOperations) {
+    LOGGER.debug(">>> performFlush(pendingOperations : {})", pendingOperations);
     for (BulkCommitBatch batch : batchQueue) {
       batch.markReadyToSend();
     }
@@ -783,6 +791,7 @@ final class BulkWriter implements AutoCloseable {
           }
         },
         MoreExecutors.directExecutor());
+    LOGGER.debug("<<< performFlush(pendingOperations : {})", pendingOperations);
     return flushComplete;
   }
 
@@ -796,9 +805,11 @@ final class BulkWriter implements AutoCloseable {
    * all requests.
    */
   public void close() throws InterruptedException, ExecutionException {
+    LOGGER.debug(">>> close()");
     ApiFuture<Void> flushFuture = flush();
     closed = true;
     flushFuture.get();
+    LOGGER.debug("<<< close()");
   }
 
   private void verifyNotClosed() {

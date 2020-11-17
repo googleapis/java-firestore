@@ -37,8 +37,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public class BulkWriterIntegrationTest {
+  static {
+    SLF4JBridgeHandler.removeHandlersForRootLogger();
+    SLF4JBridgeHandler.install();
+  }
+  private static final Logger LOGGER = LoggerFactory.getLogger(BulkWriterIntegrationTest.class);
   private Firestore firestore;
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
@@ -158,6 +166,7 @@ public class BulkWriterIntegrationTest {
 
   @Test
   public void bulkWriterOnResult() throws Exception {
+    LOGGER.debug(">>> bulkWriterOnResult()");
     class NamedThreadFactory implements ThreadFactory {
       public Thread newThread(Runnable r) {
         return new Thread(r, "bulkWriterSuccess");
@@ -171,11 +180,16 @@ public class BulkWriterIntegrationTest {
         executor,
         new WriteResultCallback() {
           public void onResult(DocumentReference documentReference, WriteResult result) {
+            LOGGER.debug(">>> onResult(documentReference : {}, result : {})", documentReference,
+                result);
             operations.add("operation");
+            LOGGER.debug("<<< onResult(documentReference : {}, result : {})", documentReference,
+                result);
           }
         });
     writer.set(randomDoc, Collections.singletonMap("foo", "bar"));
     writer.close();
     assertEquals("operation", operations.get(0));
+    LOGGER.debug("<<< bulkWriterOnResult()");
   }
 }
