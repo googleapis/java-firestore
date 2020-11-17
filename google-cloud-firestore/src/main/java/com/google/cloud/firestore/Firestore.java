@@ -181,7 +181,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * ID.
    *
    * @param bundleId The ID is used by the client SDKs loading bundles to identify if a bundle has
-   *     been loaded before. If null, an random string will be used for the ID.
+   *     been loaded before. If null, a random string will be used for the ID.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId);
