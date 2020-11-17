@@ -169,11 +169,19 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   WriteBatch batch();
 
   /**
+   * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
+   * automatically generated ID. The ID is used by the client SDKs loading bundles to identify if a
+   * bundle has been loaded before.
+   */
+  @Nonnull
+  FirestoreBundle.Builder bundleBuilder();
+
+  /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance for the given bundle
-   * Id.
+   * ID.
    *
-   * @param bundleId If null, an random string will be used for the Id. The Id is used by the client
-   *     SDKs loading bundles to identify if a bundle has been loaded before.
+   * @param bundleId The ID is used by the client SDKs loading bundles to identify if a bundle has
+   *     been loaded before. If null, an random string will be used for the ID.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId);

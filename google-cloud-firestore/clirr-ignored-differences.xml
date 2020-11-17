@@ -22,6 +22,11 @@
   <difference>
     <differenceType>7012</differenceType>
     <className>com/google/cloud/firestore/Firestore</className>
+    <method>com.google.cloud.firestore.FirestoreBundle$Builder bundleBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
     <method>com.google.cloud.firestore.FirestoreBundle$Builder bundleBuilder(java.lang.String)</method>
   </difference>
 

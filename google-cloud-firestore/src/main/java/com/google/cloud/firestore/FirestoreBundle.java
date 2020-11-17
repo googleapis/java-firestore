@@ -59,6 +59,13 @@ public final class FirestoreBundle {
     }
 
     /**
+     * Returns the ID for this bundle.
+     */
+    public String getId() {
+      return this.id;
+    }
+
+    /**
      * Adds a Firestore document snapshot to the bundle. Both the documents data and the document
      * read time will be included in the bundle.
      *

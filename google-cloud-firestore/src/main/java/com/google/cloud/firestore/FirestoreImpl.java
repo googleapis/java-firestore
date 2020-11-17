@@ -323,6 +323,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   @Override
+  public FirestoreBundle.Builder bundleBuilder() {
+    return bundleBuilder(null);
+  }
+
+  @Nonnull
+  @Override
   public FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId) {
     String id = bundleId == null ? autoId() : bundleId;
     return new FirestoreBundle.Builder(id);
