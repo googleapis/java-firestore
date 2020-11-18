@@ -184,7 +184,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    *     been loaded before. If null, a random string will be used for the ID.
    */
   @Nonnull
-  FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId);
+  FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
 
   /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This
