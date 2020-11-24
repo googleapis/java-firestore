@@ -28,6 +28,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.util.Map;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 /**
@@ -83,4 +84,8 @@ public class BaseIntegrationTest {
     }
   }
 
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+    db.close();
+  }
 }

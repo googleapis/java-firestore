@@ -113,5 +113,6 @@ public class QuickstartIT extends BaseIntegrationTest {
   @After
   public void tearDown() throws Exception {
     deleteAllDocuments();
+    quickstart.close();
   }
 }

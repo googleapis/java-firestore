@@ -126,5 +126,6 @@ public class RetrieveDataSnippetsIT extends BaseIntegrationTest {
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
     deleteAllDocuments();
+    retrieveDataSnippets.close();
   }
 }

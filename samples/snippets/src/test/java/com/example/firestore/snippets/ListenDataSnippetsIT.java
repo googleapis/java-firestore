@@ -75,5 +75,6 @@ public class ListenDataSnippetsIT extends BaseIntegrationTest {
   @AfterClass
   public static void tearDown() throws Exception {
     deleteAllDocuments(db);
+    listenDataSnippets.close();
   }
 }

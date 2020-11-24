@@ -644,4 +644,9 @@ class QueryDataSnippets {
     // [END fs_filter_not_in]
     return query;
   }
+
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  void close() throws Exception {
+    db.close();
+  }
 }
