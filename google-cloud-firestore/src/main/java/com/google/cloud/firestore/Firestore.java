@@ -170,8 +170,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
-   * automatically generated ID. The ID is used by the client SDKs loading bundles to identify if a
-   * bundle has been loaded before.
+   * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and
+   * the timestamp associated with the built bundle to tell if it has been loaded already.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder();
@@ -180,8 +180,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance for the given bundle
    * ID.
    *
-   * @param bundleId The ID is used by the client SDKs loading bundles to identify if a bundle has
-   *     been loaded before. If null, a random string will be used for the ID.
+   * @param bundleId The ID of the bundle. When loaded on clients, client SDKs use this id and the
+   *     timestamp associated with the built bundle to tell if it has been loaded already.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
