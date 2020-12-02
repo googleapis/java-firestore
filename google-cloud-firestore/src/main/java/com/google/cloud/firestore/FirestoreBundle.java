@@ -54,12 +54,17 @@ public final class FirestoreBundle {
     // The latest read time among all bundled documents and queries.
     private Timestamp latestReadTime = Timestamp.MIN_VALUE;
 
-    public Builder(String id) {
+    Builder(String id) {
       this.id = id;
     }
 
+    /** Returns the ID for this bundle. */
+    public String getId() {
+      return this.id;
+    }
+
     /**
-     * Adds a Firestore document snapshot to the bundle. Both the documents data and the document
+     * Adds a Firestore document snapshot to the bundle. Both the document data and the document
      * read time will be included in the bundle.
      *
      * @param documentSnapshot A document snapshot to add.
@@ -121,7 +126,7 @@ public final class FirestoreBundle {
     }
 
     /**
-     * Adds a Firestore query snapshots to the bundle. Both the documents in the query snapshots and
+     * Adds a Firestore query snapshot to the bundle. Both the documents in the query snapshot and
      * the query read time will be included in the bundle.
      *
      * @param queryName The name of the query to add.
