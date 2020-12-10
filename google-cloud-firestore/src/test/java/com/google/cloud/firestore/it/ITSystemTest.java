@@ -1566,7 +1566,7 @@ public class ITSystemTest {
 
   @Test
   public void testBuildingBundleWhenDocumentDoesNotExist() throws Exception {
-    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    FirestoreBundle.Builder bundleBuilder = firestore.bundleBuilder("test-bundle");
     DocumentSnapshot snapshot = randomDoc.get().get();
     bundleBuilder.add(snapshot);
 
@@ -1595,7 +1595,7 @@ public class ITSystemTest {
 
     Query limitQuery = randomColl.orderBy("counter", Direction.DESCENDING).limit(1);
     QuerySnapshot limitQuerySnap = limitQuery.get().get();
-    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    FirestoreBundle.Builder bundleBuilder = firestore.bundleBuilder("test-bundle");
     bundleBuilder.add("limit", limitQuerySnap);
 
     // Expected bundle elements are [bundleMetadata, limitQuery,
@@ -1630,7 +1630,7 @@ public class ITSystemTest {
 
     Query limitToLastQuery = randomColl.orderBy("counter").limitToLast(1);
     QuerySnapshot limitToLastQuerySnap = limitToLastQuery.get().get();
-    FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder("test-bundle");
+    FirestoreBundle.Builder bundleBuilder = firestore.bundleBuilder("test-bundle");
     bundleBuilder.add("limitToLast", limitToLastQuerySnap);
 
     // Expected bundle elements are [bundleMetadata, limitToLastQuery,

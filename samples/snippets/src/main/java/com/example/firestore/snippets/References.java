@@ -34,7 +34,7 @@ public class References {
    *
    * @return collection reference
    */
-  public CollectionReference getACollectionRef() {
+  public CollectionReference getCollectionRef() {
     // [START fs_collection_ref]
     // [START firestore_data_reference_collection]
     // Reference to the collection "users"
@@ -49,7 +49,7 @@ public class References {
    *
    * @return document reference
    */
-  public DocumentReference getADocumentRef() {
+  public DocumentReference getDocumentRef() {
     // [START fs_document_ref]
     // [START firestore_data_reference_document]
     // Reference to a document with id "alovelace" in the collection "users"
@@ -64,7 +64,7 @@ public class References {
    *
    * @return document reference
    */
-  public DocumentReference getADocumentRefUsingPath() {
+  public DocumentReference getDocumentRefUsingPath() {
     // [START fs_document_path_ref]
     // [START firestore_data_reference_document_path]
     // Reference to a document with id "alovelace" in the collection "users"
@@ -79,7 +79,7 @@ public class References {
    *
    * @return document reference in a subcollection
    */
-  public DocumentReference getASubCollectionDocumentRef() {
+  public DocumentReference getSubCollectionDocumentRef() {
     // [START fs_subcollection_ref]
     // [START firestore_data_reference_subcollection]
     // Reference to a document in subcollection "messages"

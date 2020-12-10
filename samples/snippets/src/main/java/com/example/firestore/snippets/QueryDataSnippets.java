@@ -111,7 +111,7 @@ class QueryDataSnippets {
    *
    * @return query
    */
-  Query createAQuery() throws Exception {
+  Query createQuery() throws Exception {
     // [START fs_create_query]
     // [START firestore_query_filter_eq_boolean]
     // Create a reference to the cities collection
@@ -134,7 +134,7 @@ class QueryDataSnippets {
    *
    * @return query
    */
-  Query createAQueryAlternate() throws Exception {
+  Query createQueryAlternate() throws Exception {
     // [START fs_create_query_country]
     // [START firestore_query_filter_eq_string]
     // Create a reference to the cities collection

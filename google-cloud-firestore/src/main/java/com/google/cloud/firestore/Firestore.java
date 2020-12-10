@@ -172,6 +172,24 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   BulkWriter bulkWriter();
 
   /**
+   * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
+   * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and
+   * the timestamp associated with the built bundle to tell if it has been loaded already.
+   */
+  @Nonnull
+  FirestoreBundle.Builder bundleBuilder();
+
+  /**
+   * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance for the given bundle
+   * ID.
+   *
+   * @param bundleId The ID of the bundle. When loaded on clients, client SDKs use this id and the
+   *     timestamp associated with the built bundle to tell if it has been loaded already.
+   */
+  @Nonnull
+  FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
+
+  /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This
    * method blocks until all channels are closed. Once this method is called, this Firestore client
    * is no longer usable.
