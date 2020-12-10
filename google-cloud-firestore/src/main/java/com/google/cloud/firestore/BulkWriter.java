@@ -27,7 +27,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
-import io.grpc.netty.shaded.io.netty.util.concurrent.DefaultThreadFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -184,11 +183,9 @@ final class BulkWriter implements AutoCloseable {
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
 
-    this.bulkWriterExecutor =
-        Executors.newSingleThreadExecutor(new DefaultThreadFactory("bulk-writer"));
+    this.bulkWriterExecutor = Executors.newSingleThreadExecutor();
 
-    Executor userCallbackExecutor =
-        Executors.newSingleThreadExecutor(new DefaultThreadFactory("bw-user-callback"));
+    Executor userCallbackExecutor = Executors.newSingleThreadExecutor();
     this.successExecutor = Context.currentContextExecutor(userCallbackExecutor);
     this.errorExecutor = Context.currentContextExecutor(userCallbackExecutor);
 
