@@ -52,7 +52,9 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -66,7 +68,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
 
-  //  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
+  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -160,7 +162,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.update(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    bulkWriter.flush().get();
 
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
@@ -196,7 +198,7 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
     ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    bulkWriter.flush().get();
 
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
@@ -255,11 +257,6 @@ public class BulkWriterTest {
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
-  }
-
-  @Test
-  public void closeResolvesImmediatelyIfNoWrites() throws Exception {
-    bulkWriter.close();
   }
 
   @Test
@@ -995,7 +992,7 @@ public class BulkWriterTest {
             batchWriteCapture.capture(),
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    bulkWriter.flush().get();
 
     try {
       result.get();
