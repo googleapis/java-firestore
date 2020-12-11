@@ -61,7 +61,11 @@ public abstract class UpdateBuilder<T> {
 
   private final List<WriteOperation> writes = new ArrayList<>();
 
-  protected boolean committed;
+  private boolean committed;
+
+  boolean isCommitted() {
+    return committed;
+  }
 
   UpdateBuilder(FirestoreImpl firestore) {
     this.firestore = firestore;
@@ -154,7 +158,7 @@ public abstract class UpdateBuilder<T> {
 
   private void verifyNotCommitted() {
     Preconditions.checkState(
-        !committed, "Cannot modify a WriteBatch that has already been committed.");
+        !isCommitted(), "Cannot modify a WriteBatch that has already been committed.");
   }
 
   /**
@@ -644,7 +648,7 @@ public abstract class UpdateBuilder<T> {
 
   /** Get the number of writes. */
   @VisibleForTesting
-  int getMutationsSize() {
+  int getWriteCount() {
     return writes.size();
   }
 }

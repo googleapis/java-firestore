@@ -28,11 +28,10 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -62,7 +61,7 @@ final class BulkWriter implements AutoCloseable {
      * @param error The error object from the failed BulkWriter operation attempt.
      * @return Whether to retry the operation or not.
      */
-    boolean onError(BulkWriterError error);
+    boolean onError(BulkWriterException error);
   }
 
   private interface BulkWriterOperationCallback {
@@ -79,7 +78,7 @@ final class BulkWriter implements AutoCloseable {
   public static final int MAX_BATCH_SIZE = 20;
 
   /**
-   * The maximum number of retries that will be attempted by backoff before stopping all retry
+   * The maximum number of retries that will be attempted with backoff before stopping all retry
    * attempts.
    */
   public static final int MAX_RETRY_ATTEMPTS = 10;
@@ -119,28 +118,28 @@ final class BulkWriter implements AutoCloseable {
    * modification errors (as this list is modified from both the user thread and the network
    * thread).
    */
-  private final List<BulkCommitBatch> batchQueue = new CopyOnWriteArrayList<>();
+  private final List<BulkCommitBatch> batchQueue = new ArrayList<>();
 
   /**
    * A queue of batches to be retried. Use a synchronized list to avoid multi-thread concurrent
    * modification errors (as this list is modified from both the user thread and the network
    * thread).
    */
-  private final List<BulkCommitBatch> retryBatchQueue = new CopyOnWriteArrayList<>();
+  private final List<BulkCommitBatch> retryBatchQueue = new ArrayList<>();
 
   /**
    * A set of futures that represent pending BulkWriter operations. Each future is completed when
-   * the BulkWriter operation resolves. This set includes retries. Each retry's promise is added,
-   * attempted, and removed from this set before scheduling the next retry. This set of futures is
-   * used by flush() to track when enqueued writes are completed.
+   * the BulkWriter operation resolves with either a WriteResult or failure after all applicable
+   * retries are performed. This set of futures is used by flush() to track when enqueued writes are
+   * completed.
    */
-  private final Set<ApiFuture<Void>> pendingOperations = new CopyOnWriteArraySet<>();
+  private final Set<ApiFuture<Void>> pendingOperations = new HashSet<>();
 
   /**
    * A list of futures that represent sent batches. Each future is completed when the batch's
    * response is received. This includes batches from both the batchQueue and retryBatchQueue.
    */
-  private final Set<ApiFuture<Void>> pendingBatches = new CopyOnWriteArraySet<>();
+  private final Set<ApiFuture<Void>> pendingBatches = new HashSet<>();
 
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
   private boolean closed = false;
@@ -155,7 +154,7 @@ final class BulkWriter implements AutoCloseable {
 
   private WriteErrorCallback errorListener =
       new WriteErrorCallback() {
-        public boolean onError(BulkWriterError error) {
+        public boolean onError(BulkWriterException error) {
           if (error.getFailedAttempts() == MAX_RETRY_ATTEMPTS) {
             return false;
           }
@@ -173,17 +172,21 @@ final class BulkWriter implements AutoCloseable {
   private Executor errorExecutor;
 
   private final FirestoreImpl firestore;
-  private final ScheduledExecutorService firestoreExecutor;
 
   // Executor used to run all BulkWriter operations. BulkWriter uses its own executor since we
   // don't want to block a gax/grpc executor while running user error and success callbacks.
-  private final Executor bulkWriterExecutor;
+  private final ScheduledExecutorService bulkWriterExecutor;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
-    this.firestore = firestore;
-    this.firestoreExecutor = firestore.getClient().getExecutor();
+    this(firestore, options, Executors.newSingleThreadScheduledExecutor());
+  }
 
-    this.bulkWriterExecutor = Executors.newSingleThreadExecutor();
+  BulkWriter(
+      FirestoreImpl firestore,
+      BulkWriterOptions options,
+      ScheduledExecutorService bulkWriterExecutor) {
+    this.firestore = firestore;
+    this.bulkWriterExecutor = bulkWriterExecutor;
 
     Executor userCallbackExecutor = Executors.newSingleThreadExecutor();
     this.successExecutor = Context.currentContextExecutor(userCallbackExecutor);
@@ -233,8 +236,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be created.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> create(
@@ -257,8 +260,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be created.
    * @param pojo The POJO that will be used to populate the document contents.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> create(
@@ -279,7 +282,7 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference The DocumentReference to delete.
    * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
-   *     Contains a {@link BulkWriterError} if the delete fails.
+   *     Contains a {@link BulkWriterException} if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull final DocumentReference documentReference) {
@@ -300,7 +303,7 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference The DocumentReference to delete.
    * @param precondition Precondition to enforce for this delete.
    * @return An ApiFuture containing a sentinel value (Timestamp(0)) for the delete operation.
-   *     Contains a {@link BulkWriterError} if the delete fails.
+   *     Contains a {@link BulkWriterException} if the delete fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(
@@ -322,8 +325,9 @@ final class BulkWriter implements AutoCloseable {
    * exist yet, it will be created.
    *
    * @param documentReference A reference to the document to be set.
-   * @param fields A map of the fields and values for the document. * @return An ApiFuture
-   *     containing the result of the write. Contains a {@link BulkWriterError} if the write fails.
+   * @param fields A map of the fields and values for the document.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -348,8 +352,8 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be set.
    * @param fields A map of the fields and values for the document.
    * @param options An object to configure the set behavior.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
@@ -375,13 +379,13 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be set.
    * @param pojo The POJO that will be used to populate the document contents.
    * @param options An object to configure the set behavior.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
       @Nonnull final DocumentReference documentReference,
-      final Object pojo,
+      @Nonnull final Object pojo,
       @Nonnull final SetOptions options) {
     verifyNotClosed();
     return executeWrite(
@@ -400,12 +404,12 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be set.
    * @param pojo The POJO that will be used to populate the document contents.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> set(
-      @Nonnull final DocumentReference documentReference, final Object pojo) {
+      @Nonnull final DocumentReference documentReference, @Nonnull final Object pojo) {
     verifyNotClosed();
     return executeWrite(
         documentReference,
@@ -428,8 +432,8 @@ final class BulkWriter implements AutoCloseable {
    *
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -458,8 +462,8 @@ final class BulkWriter implements AutoCloseable {
    * @param documentReference A reference to the document to be updated.
    * @param fields A map of the fields and values for the document.
    * @param precondition Precondition to enforce on this update.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -490,8 +494,8 @@ final class BulkWriter implements AutoCloseable {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -523,8 +527,8 @@ final class BulkWriter implements AutoCloseable {
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -556,8 +560,8 @@ final class BulkWriter implements AutoCloseable {
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -591,8 +595,8 @@ final class BulkWriter implements AutoCloseable {
    * @param fieldPath The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
-   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterError} if
-   *     the write fails.
+   * @return An ApiFuture containing the result of the write. Contains a {@link BulkWriterException}
+   *     if the write fails.
    */
   @Nonnull
   public ApiFuture<WriteResult> update(
@@ -634,6 +638,11 @@ final class BulkWriter implements AutoCloseable {
                 return ApiFutures.immediateFuture(result);
               }
             },
+            // This should always run on the `bulkWriterExecutor`. However, we use
+            // `directExecutor()`
+            // here to ensure that the transform code runs immediately after without yielding. Using
+            // `bulkWriterExecutor` instead means that the transform is scheduled after other work
+            // already on the executor, which causes BulkWriter to deadlock.
             MoreExecutors.directExecutor());
 
     writeResultApiFuture.addListener(
@@ -643,6 +652,10 @@ final class BulkWriter implements AutoCloseable {
             operationCompletedFuture.set(null);
           }
         },
+        // This should always run on the `bulkWriterExecutor`. However, we use `directExecutor()`
+        // here to ensure that the transform code runs immediately after without yielding. Using
+        // `bulkWriterExecutor` instead means that the transform is scheduled after other work
+        // already on the executor, which causes BulkWriter to deadlock.
         MoreExecutors.directExecutor());
 
     pendingOperations.add(operationCompletedFuture);
@@ -687,34 +700,40 @@ final class BulkWriter implements AutoCloseable {
         FirestoreException.class,
         new ApiAsyncFunction<FirestoreException, WriteResult>() {
           public ApiFuture<WriteResult> apply(FirestoreException exception)
-              throws BulkWriterError, ExecutionException, InterruptedException {
-            BulkWriterError bulkWriterError =
-                new BulkWriterError(
+              throws BulkWriterException, ExecutionException, InterruptedException {
+            BulkWriterException bulkWriterException =
+                new BulkWriterException(
                     exception.getStatus(),
                     exception.getMessage(),
                     documentReference,
                     operationType,
                     failedAttempts);
 
-            boolean shouldRetry = invokeUserErrorCallback(bulkWriterError).get();
+            boolean shouldRetry = invokeUserErrorCallback(bulkWriterException).get();
             logger.log(
                 Level.INFO,
                 String.format(
-                    "Running error callback on error code: %d, shouldRetry: %b",
-                    exception.getStatus().getCode().value(), shouldRetry));
+                    "Ran error callback on document: %s, error code: %d, shouldRetry: %b",
+                    documentReference.getPath(),
+                    exception.getStatus().getCode().value(),
+                    shouldRetry));
             if (!shouldRetry) {
-              throw bulkWriterError;
+              throw bulkWriterException;
             } else {
               return enqueueWriteHelper(
                   documentReference, operationType, operationCallback, failedAttempts + 1);
             }
           }
         },
+        // This code should always be on the bulkWriterExecutor. However, we use `directExecutor()`
+        // here to ensure that the transform code runs immediately after without yielding. Using
+        // `bulkWriterExecutor` instead means that the transform is scheduled after other work
+        // already on the executor, which causes BulkWriter to deadlock..
         MoreExecutors.directExecutor());
   }
 
   /** Invokes the user error callback on the user callback executor and returns the result. */
-  private SettableApiFuture<Boolean> invokeUserErrorCallback(final BulkWriterError error) {
+  private SettableApiFuture<Boolean> invokeUserErrorCallback(final BulkWriterException error) {
     final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
     errorExecutor.execute(
         new Runnable() {
@@ -802,23 +821,23 @@ final class BulkWriter implements AutoCloseable {
     batchQueueFlushComplete.addListener(
         new Runnable() {
           public void run() {
-            if (retryBatchQueue.size() > 0) {
-              for (BulkCommitBatch batch : retryBatchQueue) {
-                batch.markReadyToSend();
-              }
-              sendReadyBatches(retryBatchQueue);
+            for (BulkCommitBatch batch : retryBatchQueue) {
+              batch.markReadyToSend();
             }
-            ApiFutures.successfulAsList(pendingOperations)
-                .addListener(
-                    new Runnable() {
-                      public void run() {
-                        flushComplete.set(null);
-                      }
-                    },
-                    MoreExecutors.directExecutor());
+            sendReadyBatches(retryBatchQueue);
           }
         },
         MoreExecutors.directExecutor());
+
+    ApiFutures.successfulAsList(pendingOperations)
+        .addListener(
+            new Runnable() {
+              public void run() {
+                flushComplete.set(null);
+              }
+            },
+            MoreExecutors.directExecutor());
+
     return flushComplete;
   }
 
@@ -902,7 +921,7 @@ final class BulkWriter implements AutoCloseable {
    * <p>For example, see the sample code: <code>
    *   BulkWriter bulkWriter = firestore.bulkWriter();
    *   bulkWriter.addWriteErrorListener(
-   *         (BulkWriterError error) -> {
+   *         (BulkWriterException error) -> {
    *           if (error.getStatus() == Status.UNAVAILABLE
    *             && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
    *             return true;
@@ -931,7 +950,7 @@ final class BulkWriter implements AutoCloseable {
    * <p>For example, see the sample code: <code>
    *   BulkWriter bulkWriter = firestore.bulkWriter();
    *   bulkWriter.addWriteErrorListener(
-   *         (BulkWriterError error) -> {
+   *         (BulkWriterException error) -> {
    *           if (error.getStatus() == Status.UNAVAILABLE
    *             && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
    *             return true;
@@ -1003,7 +1022,7 @@ final class BulkWriter implements AutoCloseable {
       if (delayMs == 0) {
         sendBatch(batch, batchQueue, batchCompletedFuture);
       } else {
-        firestoreExecutor.schedule(
+        bulkWriterExecutor.schedule(
             new Runnable() {
               @Override
               public void run() {

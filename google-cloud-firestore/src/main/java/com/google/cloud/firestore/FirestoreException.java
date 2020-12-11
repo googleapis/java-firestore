@@ -24,10 +24,10 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 /** A Firestore Service exception. */
-public final class FirestoreException extends BaseGrpcServiceException {
+public class FirestoreException extends BaseGrpcServiceException {
   private Status status;
 
-  private FirestoreException(String reason, Status status) {
+  FirestoreException(String reason, Status status) {
     this(reason, status, null);
   }
 

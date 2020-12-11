@@ -224,8 +224,8 @@ public class BulkWriterTest {
       result.get();
       fail("set() should have failed");
     } catch (Exception e) {
-      assertTrue(e.getCause() instanceof BulkWriterError);
-      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterError) e.getCause()).getStatus());
+      assertTrue(e.getCause() instanceof BulkWriterException);
+      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterException) e.getCause()).getStatus());
     }
   }
 
@@ -420,7 +420,7 @@ public class BulkWriterTest {
     DocumentReference doc4 = firestoreMock.document("coll/doc4");
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             operations.add(error.getOperationType().name());
             return true;
           }
@@ -458,21 +458,21 @@ public class BulkWriterTest {
     final boolean[] errorListenerCalled = {false};
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             errorListenerCalled[0] = true;
             assertEquals(Status.INTERNAL, error.getStatus());
             return false;
           }
         });
 
-    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
     assertTrue(errorListenerCalled[0]);
     try {
-      result1.get();
+      result.get();
       fail("Operation should have failed in test");
     } catch (Exception e) {
-      assertEquals(Status.INTERNAL, ((BulkWriterError) e.getCause()).getStatus());
+      assertEquals(Status.INTERNAL, ((BulkWriterException) e.getCause()).getStatus());
     }
   }
 
@@ -490,16 +490,16 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             throw new UnsupportedOperationException(
                 "Test code threw UnsupportedOperationException");
           }
         });
 
-    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
     try {
-      result1.get();
+      result.get();
       fail("Operation should have failed in test");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
@@ -526,10 +526,10 @@ public class BulkWriterTest {
           }
         });
 
-    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
     try {
-      result1.get();
+      result.get();
       fail("Operation should have failed in test");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
@@ -559,7 +559,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             return true;
           }
         });
@@ -595,7 +595,7 @@ public class BulkWriterTest {
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             return true;
           }
         });
@@ -633,6 +633,7 @@ public class BulkWriterTest {
     // Verify that the 2nd operation did not complete as a result of the flush() call.
     assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH"}, operations.toArray());
     bulkWriter.close();
+    assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH", "AFTER_FLUSH"}, operations.toArray());
   }
 
   @Test
@@ -658,7 +659,7 @@ public class BulkWriterTest {
 
     bulkWriter.addWriteErrorListener(
         new WriteErrorCallback() {
-          public boolean onError(BulkWriterError error) {
+          public boolean onError(BulkWriterException error) {
             return error.getFailedAttempts() < 3;
           }
         });
@@ -669,7 +670,7 @@ public class BulkWriterTest {
       result1.get();
       fail("Operation should have failed");
     } catch (Exception e) {
-      assertEquals(Status.INTERNAL, ((BulkWriterError) e.getCause()).getStatus());
+      assertEquals(Status.INTERNAL, ((BulkWriterException) e.getCause()).getStatus());
     }
   }
 
@@ -743,8 +744,8 @@ public class BulkWriterTest {
       result1.get();
       fail("set() should have failed");
     } catch (Exception e) {
-      assertTrue(e.getCause() instanceof BulkWriterError);
-      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterError) e.getCause()).getStatus());
+      assertTrue(e.getCause() instanceof BulkWriterException);
+      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterException) e.getCause()).getStatus());
     }
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
@@ -848,7 +849,6 @@ public class BulkWriterTest {
             return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
         };
-    doReturn(timeoutExecutor).when(firestoreRpc).getExecutor();
 
     // Stub responses for the BulkWriter batches.
     ResponseStubber responseStubber =
@@ -861,7 +861,8 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
     BulkWriter bulkWriter =
-        firestoreMock.bulkWriter(BulkWriterOptions.builder().setInitialOpsPerSecond(5).build());
+        firestoreMock.bulkWriter(
+            BulkWriterOptions.builder().setInitialOpsPerSecond(5).build(), timeoutExecutor);
 
     for (int i = 0; i < 600; ++i) {
       bulkWriter.set(firestoreMock.document("coll/doc"), LocalFirestoreHelper.SINGLE_FIELD_MAP);

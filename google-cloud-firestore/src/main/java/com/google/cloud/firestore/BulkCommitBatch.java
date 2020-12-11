@@ -61,6 +61,11 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     this.maxBatchSize = maxBatchSize;
   }
 
+  @Override
+  boolean isCommitted() {
+    return state == BatchState.SENT;
+  }
+
   ApiFuture<WriteResult> wrapResult(DocumentReference documentReference) {
     return processLastOperation(documentReference);
   }
@@ -90,8 +95,6 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
     ApiFuture<BatchWriteResponse> response =
         firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable());
-
-    committed = true;
 
     return ApiFutures.transform(
         response,

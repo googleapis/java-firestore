@@ -24,6 +24,7 @@ import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
 import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-public class BulkWriterIntegrationTest {
+public class ITBulkWriterTest {
   private Firestore firestore;
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
@@ -136,7 +137,7 @@ public class BulkWriterIntegrationTest {
       result.get();
       fail("Update operation should have thrown exception");
     } catch (Exception e) {
-      assertTrue(e.getMessage().contains("No document to update"));
+      assertTrue(e.getMessage().matches(".* No (document|entity) to update.*"));
     }
   }
 
@@ -172,10 +173,44 @@ public class BulkWriterIntegrationTest {
         new WriteResultCallback() {
           public void onResult(DocumentReference documentReference, WriteResult result) {
             operations.add("operation");
+            assertTrue(Thread.currentThread().getName().contains("bulkWriterSuccess"));
           }
         });
     writer.set(randomDoc, Collections.singletonMap("foo", "bar"));
     writer.flush().get();
     assertEquals("operation", operations.get(0));
+  }
+
+  @Test
+  public void bulkWriterOnError() throws Exception {
+    class NamedThreadFactory implements ThreadFactory {
+      public Thread newThread(Runnable r) {
+        return new Thread(r, "bulkWriterException");
+      }
+    }
+    Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory());
+    final List<String> operations = new ArrayList<>();
+
+    BulkWriter writer = firestore.bulkWriter();
+    writer.addWriteErrorListener(
+        executor,
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            operations.add("operation-error");
+            assertTrue(Thread.currentThread().getName().contains("bulkWriterException"));
+            return false;
+          }
+        });
+
+    writer.addWriteResultListener(
+        executor,
+        new WriteResultCallback() {
+          public void onResult(DocumentReference documentReference, WriteResult result) {
+            fail("The success listener shouldn't be called");
+          }
+        });
+    writer.update(randomDoc, "foo", "bar");
+    writer.flush().get();
+    assertEquals("operation-error", operations.get(0));
   }
 }
