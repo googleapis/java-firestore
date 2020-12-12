@@ -26,7 +26,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
-import io.grpc.Context;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -168,8 +167,8 @@ final class BulkWriter implements AutoCloseable {
         }
       };
 
-  private Executor successExecutor;
-  private Executor errorExecutor;
+  private @Nullable Executor successExecutor;
+  private @Nullable Executor errorExecutor;
 
   private final FirestoreImpl firestore;
 
@@ -187,10 +186,6 @@ final class BulkWriter implements AutoCloseable {
       ScheduledExecutorService bulkWriterExecutor) {
     this.firestore = firestore;
     this.bulkWriterExecutor = bulkWriterExecutor;
-
-    Executor userCallbackExecutor = Executors.newSingleThreadExecutor();
-    this.successExecutor = Context.currentContextExecutor(userCallbackExecutor);
-    this.errorExecutor = Context.currentContextExecutor(userCallbackExecutor);
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -735,18 +730,27 @@ final class BulkWriter implements AutoCloseable {
   /** Invokes the user error callback on the user callback executor and returns the result. */
   private SettableApiFuture<Boolean> invokeUserErrorCallback(final BulkWriterException error) {
     final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
-    errorExecutor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
-              boolean shouldRetry = errorListener.onError(error);
-              callbackResult.set(shouldRetry);
-            } catch (Exception e) {
-              callbackResult.setException(e);
+    if (errorExecutor != null) {
+      errorExecutor.execute(
+          new Runnable() {
+            @Override
+            public void run() {
+              try {
+                boolean shouldRetry = errorListener.onError(error);
+                callbackResult.set(shouldRetry);
+              } catch (Exception e) {
+                callbackResult.setException(e);
+              }
             }
-          }
-        });
+          });
+    } else {
+      try {
+        boolean shouldRetry = errorListener.onError(error);
+        callbackResult.set(shouldRetry);
+      } catch (Exception e) {
+        callbackResult.setException(e);
+      }
+    }
     return callbackResult;
   }
 
@@ -754,19 +758,24 @@ final class BulkWriter implements AutoCloseable {
   private ApiFuture<Void> invokeUserSuccessCallback(
       final DocumentReference documentReference, final WriteResult result) {
     final SettableApiFuture<Void> callbackResult = SettableApiFuture.create();
-    successExecutor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
-              successListener.onResult(documentReference, result);
-              callbackResult.set(null);
-            } catch (Exception e) {
-              callbackResult.setException(e);
+    if (successExecutor != null) {
+      successExecutor.execute(
+          new Runnable() {
+            @Override
+            public void run() {
+              try {
+                successListener.onResult(documentReference, result);
+                callbackResult.set(null);
+              } catch (Exception e) {
+                callbackResult.setException(e);
+              }
             }
-          }
-        });
-    return callbackResult;
+          });
+      return callbackResult;
+    } else {
+      successListener.onResult(documentReference, result);
+      return ApiFutures.immediateFuture(null);
+    }
   }
 
   /**

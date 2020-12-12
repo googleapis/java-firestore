@@ -44,6 +44,7 @@ import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -418,7 +419,9 @@ public class BulkWriterTest {
     final List<String> operations = new ArrayList<>();
     DocumentReference doc3 = firestoreMock.document("coll/doc3");
     DocumentReference doc4 = firestoreMock.document("coll/doc4");
+    Executor userCallbackExecutor = Executors.newSingleThreadExecutor();
     bulkWriter.addWriteErrorListener(
+        userCallbackExecutor,
         new WriteErrorCallback() {
           public boolean onError(BulkWriterException error) {
             operations.add(error.getOperationType().name());

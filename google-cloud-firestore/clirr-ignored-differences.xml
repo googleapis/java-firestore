@@ -242,7 +242,7 @@
     <field>writes</field>
   </difference>
   <difference>
-    <differenceType>7009</differenceType>
+    <differenceType>7002</differenceType>
     <className>com/google/cloud/firestore/UpdateBuilder</className>
     <method>int getMutationsSize()</method>
   </difference>
