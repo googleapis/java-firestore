@@ -594,6 +594,7 @@ public class BulkWriterTest {
     // Use separate futures to track listener completion since the callbacks are run on a different
     // thread than the BulkWriter operations.
     final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
+    final SettableApiFuture<Void> closeComplete = SettableApiFuture.create();
 
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
@@ -628,6 +629,7 @@ public class BulkWriterTest {
             new Runnable() {
               public void run() {
                 operations.add("AFTER_FLUSH");
+                closeComplete.set(null);
               }
             },
             executor);
@@ -636,6 +638,7 @@ public class BulkWriterTest {
     // Verify that the 2nd operation did not complete as a result of the flush() call.
     assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH"}, operations.toArray());
     bulkWriter.close();
+    closeComplete.get();
     assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH", "AFTER_FLUSH"}, operations.toArray());
   }
 
