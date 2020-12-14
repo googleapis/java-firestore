@@ -842,7 +842,9 @@ public class BulkWriterTest {
 
   @Test
   public void doesNotSendBatchesIfDoingSoExceedsRateLimit() throws Exception {
-    final boolean[] timeoutCalled = {false};
+    // This future is completed when the BulkWriter schedules a timeout. This test waits on the
+    // future at the end of the test to ensure that the timeout was called.
+    final SettableApiFuture<Void> timeoutCalledFuture = SettableApiFuture.create();
 
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
@@ -850,7 +852,7 @@ public class BulkWriterTest {
           @Nonnull
           public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
             if (delay > 0) {
-              timeoutCalled[0] = true;
+              timeoutCalledFuture.set(null);
             }
             return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
@@ -874,8 +876,7 @@ public class BulkWriterTest {
       bulkWriter.set(firestoreMock.document("coll/doc"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
     }
     bulkWriter.flush();
-
-    assertTrue(timeoutCalled[0]);
+    timeoutCalledFuture.get();
   }
 
   @Test
