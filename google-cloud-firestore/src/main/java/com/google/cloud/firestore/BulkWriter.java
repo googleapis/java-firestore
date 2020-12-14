@@ -167,8 +167,8 @@ final class BulkWriter implements AutoCloseable {
         }
       };
 
-  private @Nullable Executor successExecutor;
-  private @Nullable Executor errorExecutor;
+  private Executor successExecutor;
+  private Executor errorExecutor;
 
   private final FirestoreImpl firestore;
 
@@ -186,6 +186,8 @@ final class BulkWriter implements AutoCloseable {
       ScheduledExecutorService bulkWriterExecutor) {
     this.firestore = firestore;
     this.bulkWriterExecutor = bulkWriterExecutor;
+    this.successExecutor = MoreExecutors.directExecutor();
+    this.errorExecutor = MoreExecutors.directExecutor();
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -730,27 +732,18 @@ final class BulkWriter implements AutoCloseable {
   /** Invokes the user error callback on the user callback executor and returns the result. */
   private SettableApiFuture<Boolean> invokeUserErrorCallback(final BulkWriterException error) {
     final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
-    if (errorExecutor != null) {
-      errorExecutor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              try {
-                boolean shouldRetry = errorListener.onError(error);
-                callbackResult.set(shouldRetry);
-              } catch (Exception e) {
-                callbackResult.setException(e);
-              }
+    errorExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              boolean shouldRetry = errorListener.onError(error);
+              callbackResult.set(shouldRetry);
+            } catch (Exception e) {
+              callbackResult.setException(e);
             }
-          });
-    } else {
-      try {
-        boolean shouldRetry = errorListener.onError(error);
-        callbackResult.set(shouldRetry);
-      } catch (Exception e) {
-        callbackResult.setException(e);
-      }
-    }
+          }
+        });
     return callbackResult;
   }
 
@@ -758,24 +751,19 @@ final class BulkWriter implements AutoCloseable {
   private ApiFuture<Void> invokeUserSuccessCallback(
       final DocumentReference documentReference, final WriteResult result) {
     final SettableApiFuture<Void> callbackResult = SettableApiFuture.create();
-    if (successExecutor != null) {
-      successExecutor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              try {
-                successListener.onResult(documentReference, result);
-                callbackResult.set(null);
-              } catch (Exception e) {
-                callbackResult.setException(e);
-              }
+    successExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              successListener.onResult(documentReference, result);
+              callbackResult.set(null);
+            } catch (Exception e) {
+              callbackResult.setException(e);
             }
-          });
-      return callbackResult;
-    } else {
-      successListener.onResult(documentReference, result);
-      return ApiFutures.immediateFuture(null);
-    }
+          }
+        });
+    return callbackResult;
   }
 
   /**
