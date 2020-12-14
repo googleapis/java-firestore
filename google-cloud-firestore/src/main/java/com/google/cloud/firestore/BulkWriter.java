@@ -112,18 +112,10 @@ final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
   private int maxBatchSize = MAX_BATCH_SIZE;
 
-  /**
-   * A queue of batches to be written. Use a synchronized list to avoid multi-thread concurrent
-   * modification errors (as this list is modified from both the user thread and the network
-   * thread).
-   */
+  /** A queue of batches to be written. */
   private final List<BulkCommitBatch> batchQueue = new ArrayList<>();
 
-  /**
-   * A queue of batches to be retried. Use a synchronized list to avoid multi-thread concurrent
-   * modification errors (as this list is modified from both the user thread and the network
-   * thread).
-   */
+  /** A queue of batches containing operations that need to be retried. */
   private final List<BulkCommitBatch> retryBatchQueue = new ArrayList<>();
 
   /**
