@@ -241,11 +241,6 @@
     <className>com/google/cloud/firestore/UpdateBuilder</className>
     <field>writes</field>
   </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/cloud/firestore/UpdateBuilder</className>
-    <method>int getMutationsSize()</method>
-  </difference>
 
   <!--
   FakeCredentials Refactor

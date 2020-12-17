@@ -21,7 +21,6 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -647,8 +646,7 @@ public abstract class UpdateBuilder<T> {
   }
 
   /** Get the number of writes. */
-  @VisibleForTesting
-  int getWriteCount() {
+  public int getMutationsSize() {
     return writes.size();
   }
 }

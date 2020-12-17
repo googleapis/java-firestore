@@ -21,6 +21,26 @@ import io.grpc.Status;
 
 /** The error thrown when a BulkWriter operation fails. */
 final class BulkWriterException extends FirestoreException {
+  private final Status status;
+  private final String message;
+  private final DocumentReference documentReference;
+  private final OperationType operationType;
+  private final int failedAttempts;
+
+  public BulkWriterException(
+      Status status,
+      String message,
+      DocumentReference documentReference,
+      OperationType operationType,
+      int failedAttempts) {
+    super(message, status);
+    this.status = status;
+    this.message = message;
+    this.documentReference = documentReference;
+    this.operationType = operationType;
+    this.failedAttempts = failedAttempts;
+  }
+
   /** @return The status code of the error. */
   public Status getStatus() {
     return status;
@@ -44,25 +64,5 @@ final class BulkWriterException extends FirestoreException {
   /** @return How many times this operation has been attempted unsuccessfully. */
   public int getFailedAttempts() {
     return failedAttempts;
-  }
-
-  private final Status status;
-  private final String message;
-  private final DocumentReference documentReference;
-  private final OperationType operationType;
-  private final int failedAttempts;
-
-  public BulkWriterException(
-      Status status,
-      String message,
-      DocumentReference documentReference,
-      OperationType operationType,
-      int failedAttempts) {
-    super(message, status);
-    this.status = status;
-    this.message = message;
-    this.documentReference = documentReference;
-    this.operationType = operationType;
-    this.failedAttempts = failedAttempts;
   }
 }

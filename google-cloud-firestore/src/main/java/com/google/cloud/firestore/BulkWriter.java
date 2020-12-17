@@ -54,7 +54,10 @@ final class BulkWriter implements AutoCloseable {
     void onResult(DocumentReference documentReference, WriteResult result);
   };
 
-  /** A callback set by `addWriteErrorListener()` to be run every time an operation fails. */
+  /**
+   * A callback set by `addWriteErrorListener()` to be run every time an operation fails and
+   * determines if an operation should be retried.
+   */
   public interface WriteErrorCallback {
     /**
      * @param error The error object from the failed BulkWriter operation attempt.
@@ -107,6 +110,27 @@ final class BulkWriter implements AutoCloseable {
    */
   private static final int RATE_LIMITER_MULTIPLIER_MILLIS = 5 * 60 * 1000;
 
+  private static final WriteResultCallback DEFAULT_SUCCESS_LISTENER =
+      new WriteResultCallback() {
+        public void onResult(DocumentReference documentReference, WriteResult result) {}
+      };
+
+  private static final WriteErrorCallback DEFAULT_ERROR_LISTENER =
+      new WriteErrorCallback() {
+        public boolean onError(BulkWriterException error) {
+          if (error.getFailedAttempts() == MAX_RETRY_ATTEMPTS) {
+            return false;
+          }
+          Set<Code> codes = FirestoreSettings.newBuilder().batchWriteSettings().getRetryableCodes();
+          for (Code code : codes) {
+            if (code.equals(Code.valueOf(error.getStatus().getCode().name()))) {
+              return true;
+            }
+          }
+          return false;
+        }
+      };
+
   private static final Logger logger = Logger.getLogger(BulkWriter.class.getName());
 
   /** The maximum number of writes that can be in a single batch. */
@@ -138,29 +162,18 @@ final class BulkWriter implements AutoCloseable {
   /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
   private final RateLimiter rateLimiter;
 
-  private WriteResultCallback successListener =
-      new WriteResultCallback() {
-        public void onResult(DocumentReference documentReference, WriteResult result) {}
-      };
+  private WriteResultCallback successListener = DEFAULT_SUCCESS_LISTENER;
 
-  private WriteErrorCallback errorListener =
-      new WriteErrorCallback() {
-        public boolean onError(BulkWriterException error) {
-          if (error.getFailedAttempts() == MAX_RETRY_ATTEMPTS) {
-            return false;
-          }
-          Set<Code> codes = FirestoreSettings.newBuilder().batchWriteSettings().getRetryableCodes();
-          for (Code code : codes) {
-            if (code.equals(Code.valueOf(error.getStatus().getCode().name()))) {
-              return true;
-            }
-          }
-          return false;
-        }
-      };
+  private WriteErrorCallback errorListener = DEFAULT_ERROR_LISTENER;
 
   private Executor successExecutor;
   private Executor errorExecutor;
+
+  /**
+   * Used to track when writes are enqueued. The user handler executors cannot be changed after a
+   * write has been enqueued.
+   */
+  private boolean writesEnqueued = false;
 
   private final FirestoreImpl firestore;
 
@@ -261,7 +274,7 @@ final class BulkWriter implements AutoCloseable {
         OperationType.CREATE,
         new BulkWriterOperationCallback() {
           public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.set(documentReference, pojo);
+            return batch.create(documentReference, pojo);
           }
         });
   }
@@ -458,7 +471,7 @@ final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> update(
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields,
-      final Precondition precondition) {
+      @Nonnull final Precondition precondition) {
     verifyNotClosed();
     return executeWrite(
         documentReference,
@@ -615,6 +628,7 @@ final class BulkWriter implements AutoCloseable {
       final OperationType operationType,
       final BulkWriterOperationCallback operationCallback) {
     final SettableApiFuture<Void> operationCompletedFuture = SettableApiFuture.create();
+    writesEnqueued = true;
 
     ApiFuture<WriteResult> writeResultApiFuture =
         ApiFutures.transformAsync(
@@ -833,8 +847,8 @@ final class BulkWriter implements AutoCloseable {
   /**
    * Commits all enqueued writes and marks the BulkWriter instance as closed.
    *
-   * <p>After calling `close()`, calling any method wil return an error. Any retries scheduled with
-   * `addWriteErrorListener()` will be run before the `close()` completes.
+   * <p>After calling `close()`, calling any method will return an error. Any retries scheduled with
+   * `addWriteErrorListener()` will be run before `close()` completes.
    *
    * <p>This method completes when there are no more pending writes. Calling this method will send
    * all requests.
@@ -852,7 +866,8 @@ final class BulkWriter implements AutoCloseable {
   }
 
   /**
-   * Attaches a listener that is run every time a BulkWriter operation successfully completes.
+   * Attaches a listener that is run every time a BulkWriter operation successfully completes. The
+   * listener will be run before `close()` completes.
    *
    * <p>For example, see the sample code: <code>
    *   BulkWriter bulkWriter = firestore.bulkWriter();
@@ -877,6 +892,8 @@ final class BulkWriter implements AutoCloseable {
   /**
    * Attaches a listener that is run every time a BulkWriter operation successfully completes.
    *
+   * <p>The executor cannot be changed once writes have been enqueued onto the BulkWriter.
+   *
    * <p>For example, see the sample code: <code>
    *   BulkWriter bulkWriter = firestore.bulkWriter();
    *   bulkWriter.addWriteResultListener(
@@ -896,6 +913,10 @@ final class BulkWriter implements AutoCloseable {
    */
   public void addWriteResultListener(
       @Nonnull Executor executor, WriteResultCallback writeResultCallback) {
+    if (writesEnqueued) {
+      throw new IllegalStateException(
+          "The executor cannot be changed once writes have been enqueued.");
+    }
     successListener = writeResultCallback;
     successExecutor = executor;
   }
@@ -932,6 +953,8 @@ final class BulkWriter implements AutoCloseable {
   /**
    * Attaches an error handler listener that is run every time a BulkWriter operation fails.
    *
+   * <p>The executor cannot be changed once writes have been enqueued onto the BulkWriter.
+   *
    * <p>BulkWriter has a default error handler that retries UNAVAILABLE and ABORTED errors up to a
    * maximum of 10 failed attempts. When an error handler is specified, the default error handler
    * will be overwritten.
@@ -956,6 +979,10 @@ final class BulkWriter implements AutoCloseable {
    *     `true` will retry the operation. Returning `false` will stop the retry loop.
    */
   public void addWriteErrorListener(@Nonnull Executor executor, WriteErrorCallback onError) {
+    if (writesEnqueued) {
+      throw new IllegalStateException(
+          "The executor cannot be changed once writes have been enqueued.");
+    }
     errorListener = onError;
     errorExecutor = executor;
   }
