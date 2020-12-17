@@ -846,7 +846,10 @@ public class BulkWriterTest {
           {
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        "coll/doc1"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
                 mergeResponses(successResponse(1), failedResponse(Code.ABORTED_VALUE)));
             put(
@@ -860,7 +863,7 @@ public class BulkWriterTest {
     final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
 
     bulkWriter
-        .set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .set(doc1, (Object) LocalFirestoreHelper.SINGLE_FIELD_MAP, SetOptions.merge())
         .addListener(
             new Runnable() {
               public void run() {
