@@ -42,9 +42,7 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * A Firestore BulkWriter that can be used to perform a large number of writes in parallel.
- */
+/** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
 @BetaApi
 public final class BulkWriter implements AutoCloseable {
   /**
