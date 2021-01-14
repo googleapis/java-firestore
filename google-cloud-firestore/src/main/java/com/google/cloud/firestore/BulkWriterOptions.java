@@ -16,10 +16,13 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.BetaApi;
 import com.google.auto.value.AutoValue;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nullable;
 
 /** Options used to configure request throttling in BulkWriter. */
+@BetaApi
 @AutoValue
 abstract class BulkWriterOptions {
   /**
@@ -48,11 +51,19 @@ abstract class BulkWriterOptions {
   @Nullable
   abstract Double getMaxOpsPerSecond();
 
+  /**
+   * @return The {@link ScheduledExecutorService} that BulkWriter uses to schedule all operations.
+   *     If null, the default executor will be used.
+   */
+  @Nullable
+  abstract ScheduledExecutorService getExecutor();
+
   static Builder builder() {
     return new AutoValue_BulkWriterOptions.Builder()
         .setMaxOpsPerSecond(null)
         .setInitialOpsPerSecond(null)
-        .setThrottlingEnabled(true);
+        .setThrottlingEnabled(true)
+        .setExecutor(null);
   }
 
   abstract Builder toBuilder();
@@ -103,6 +114,13 @@ abstract class BulkWriterOptions {
     Builder setMaxOpsPerSecond(int maxOpsPerSecond) {
       return setMaxOpsPerSecond(new Double(maxOpsPerSecond));
     }
+
+    /**
+     * Set the executor that the BulkWriter instance schedules operations on.
+     *
+     * @param executor The executor to schedule BulkWriter operations on.
+     */
+    abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
 
     abstract BulkWriterOptions autoBuild();
 

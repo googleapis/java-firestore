@@ -953,7 +953,10 @@ public class BulkWriterTest {
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
     BulkWriter bulkWriter =
         firestoreMock.bulkWriter(
-            BulkWriterOptions.builder().setInitialOpsPerSecond(5).build(), timeoutExecutor);
+            BulkWriterOptions.builder()
+                .setInitialOpsPerSecond(5)
+                .setExecutor(timeoutExecutor)
+                .build());
 
     for (int i = 0; i < 600; ++i) {
       bulkWriter.set(firestoreMock.document("coll/doc"), LocalFirestoreHelper.SINGLE_FIELD_MAP);

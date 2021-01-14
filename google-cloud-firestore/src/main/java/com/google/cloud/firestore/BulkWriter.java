@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -41,7 +42,9 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-final class BulkWriter implements AutoCloseable {
+/** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
+@BetaApi
+public final class BulkWriter implements AutoCloseable {
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
    * completes.
@@ -182,15 +185,11 @@ final class BulkWriter implements AutoCloseable {
   private final ScheduledExecutorService bulkWriterExecutor;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
-    this(firestore, options, Executors.newSingleThreadScheduledExecutor());
-  }
-
-  BulkWriter(
-      FirestoreImpl firestore,
-      BulkWriterOptions options,
-      ScheduledExecutorService bulkWriterExecutor) {
     this.firestore = firestore;
-    this.bulkWriterExecutor = bulkWriterExecutor;
+    this.bulkWriterExecutor =
+        options.getExecutor() != null
+            ? options.getExecutor()
+            : Executors.newSingleThreadScheduledExecutor();
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
 
