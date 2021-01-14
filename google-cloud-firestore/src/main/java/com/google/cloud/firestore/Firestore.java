@@ -182,7 +182,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /**
    * Creates a {@link BulkWriter} instance, used for performing multiple writes in parallel.
-   * Gradually ramps up writes as specified by the 500/50/5 rule.
+   * Gradually ramps up writes as specified by the 500/50/5 rule unless otherwise configured by a
+   * BulkWriterOptions object.
    *
    * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
