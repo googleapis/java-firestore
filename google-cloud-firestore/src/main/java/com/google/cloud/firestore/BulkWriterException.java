@@ -16,11 +16,13 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.BulkWriter.OperationType;
 import io.grpc.Status;
 
 /** The error thrown when a BulkWriter operation fails. */
-final class BulkWriterException extends FirestoreException {
+@BetaApi
+public final class BulkWriterException extends FirestoreException {
   private final Status status;
   private final String message;
   private final DocumentReference documentReference;

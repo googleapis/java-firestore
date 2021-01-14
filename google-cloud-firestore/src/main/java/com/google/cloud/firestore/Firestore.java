@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
@@ -168,8 +169,28 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   WriteBatch batch();
 
+  /**
+   * Creates a {@link BulkWriter} instance, used for performing multiple writes in parallel.
+   * Gradually ramps up writes as specified by the 500/50/5 rule.
+   *
+   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   *     up traffic</a>
+   */
+  @BetaApi
   @Nonnull
   BulkWriter bulkWriter();
+
+  /**
+   * Creates a {@link BulkWriter} instance, used for performing multiple writes in parallel.
+   * Gradually ramps up writes as specified by the 500/50/5 rule.
+   *
+   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   *     up traffic</a>
+   * @param options An options object to configure BulkWriter.
+   */
+  @BetaApi
+  @Nonnull
+  BulkWriter bulkWriter(BulkWriterOptions options);
 
   /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
