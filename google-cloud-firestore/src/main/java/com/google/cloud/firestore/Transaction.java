@@ -80,7 +80,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     return transactionId != null;
   }
 
-  Transaction wrapResult(ApiFuture<WriteResult> result) {
+  Transaction wrapResult(DocumentReference documentReference) {
     return this;
   }
 

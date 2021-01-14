@@ -168,6 +168,9 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   WriteBatch batch();
 
+  @Nonnull
+  BulkWriter bulkWriter();
+
   /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
    * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and

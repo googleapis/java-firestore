@@ -41,7 +41,7 @@ public class WriteBatch extends UpdateBuilder<WriteBatch> {
     return super.commit(null);
   }
 
-  WriteBatch wrapResult(ApiFuture<WriteResult> result) {
+  WriteBatch wrapResult(DocumentReference documentReference) {
     return this;
   }
 }

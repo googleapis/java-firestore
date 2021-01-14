@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -93,13 +94,18 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   @Nonnull
-  BulkWriter bulkWriter() {
+  public BulkWriter bulkWriter() {
     return new BulkWriter(this, BulkWriterOptions.builder().setThrottlingEnabled(true).build());
   }
 
   @Nonnull
   BulkWriter bulkWriter(BulkWriterOptions options) {
     return new BulkWriter(this, options);
+  }
+
+  @Nonnull
+  BulkWriter bulkWriter(BulkWriterOptions options, ScheduledExecutorService executor) {
+    return new BulkWriter(this, options, executor);
   }
 
   @Nonnull

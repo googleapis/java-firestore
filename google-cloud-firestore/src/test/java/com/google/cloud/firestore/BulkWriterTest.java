@@ -19,8 +19,10 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.batchWrite;
 import static com.google.cloud.firestore.LocalFirestoreHelper.create;
 import static com.google.cloud.firestore.LocalFirestoreHelper.delete;
+import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -32,15 +34,21 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
+import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
+import com.google.firestore.v1.Value;
 import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -139,7 +147,8 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
-    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result =
+        bulkWriter.set(doc1, (Object) LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
 
     responseStubber.verifyAllRequestsSent();
@@ -152,14 +161,25 @@ public class BulkWriterTest {
         new ResponseStubber() {
           {
             put(
-                batchWrite(update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                batchWrite(
+                    update(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        com.google.firestore.v1.Precondition.newBuilder()
+                            .setUpdateTime(com.google.protobuf.Timestamp.newBuilder().build())
+                            .build(),
+                        "coll/doc1")),
                 successResponse(2));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
-    ApiFuture<WriteResult> result = bulkWriter.update(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    ApiFuture<WriteResult> result =
+        bulkWriter.update(
+            doc1,
+            LocalFirestoreHelper.SINGLE_FIELD_MAP,
+            Precondition.updatedAt(Timestamp.ofTimeSecondsAndNanos(0, 0)));
+    bulkWriter.flush().get();
 
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
@@ -175,7 +195,7 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
-    ApiFuture<WriteResult> result = bulkWriter.delete(doc1);
+    ApiFuture<WriteResult> result = bulkWriter.delete(doc1, Precondition.NONE);
     bulkWriter.close();
 
     responseStubber.verifyAllRequestsSent();
@@ -194,8 +214,9 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
-    ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    ApiFuture<WriteResult> result =
+        bulkWriter.create(doc1, (Object) LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.flush().get();
 
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result.get().getUpdateTime());
@@ -221,8 +242,8 @@ public class BulkWriterTest {
       result.get();
       fail("set() should have failed");
     } catch (Exception e) {
-      assertTrue(e.getCause() instanceof FirestoreException);
-      assertEquals(Status.DEADLINE_EXCEEDED, ((FirestoreException) e.getCause()).getStatus());
+      assertTrue(e.getCause() instanceof BulkWriterException);
+      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterException) e.getCause()).getStatus());
     }
   }
 
@@ -240,7 +261,11 @@ public class BulkWriterTest {
                 batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 successResponse(1));
             put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                batchWrite(
+                    set(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        "coll/doc2")),
                 successResponse(2));
           }
         };
@@ -248,17 +273,13 @@ public class BulkWriterTest {
 
     ApiFuture<WriteResult> result1 = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush();
-    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 =
+        bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP, SetOptions.merge());
     bulkWriter.close();
 
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
-  }
-
-  @Test
-  public void closeResolvesImmediatelyIfNoWrites() throws Exception {
-    bulkWriter.close();
   }
 
   @Test
@@ -304,15 +325,25 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void canSendWritesToSameDocInSameBatch() throws Exception {
+  public void sendsWritesToSameDocInDifferentBatches() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
             put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(1));
+            put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
-                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                mergeResponses(successResponse(1), successResponse(2)));
+                    update(
+                        map(
+                            "foo",
+                            Value.newBuilder().setStringValue("bar").build(),
+                            "boo",
+                            Value.newBuilder().setStringValue("far").build()),
+                        Arrays.asList("boo", "foo"),
+                        com.google.firestore.v1.Precondition.newBuilder().setExists(true).build(),
+                        "coll/doc1")),
+                successResponse(2));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
@@ -320,8 +351,7 @@ public class BulkWriterTest {
     // Create another document reference pointing to the same document.
     DocumentReference sameDoc = firestoreMock.document(doc1.getPath());
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    ApiFuture<WriteResult> result2 =
-        bulkWriter.update(sameDoc, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.update(sameDoc, "foo", "bar", "boo", "far");
     bulkWriter.close();
 
     responseStubber.verifyAllRequestsSent();
@@ -353,6 +383,373 @@ public class BulkWriterTest {
   }
 
   @Test
+  public void runsSuccessHandler() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3"),
+                    delete("coll/doc4")),
+                mergeResponses(
+                    successResponse(1),
+                    successResponse(2),
+                    successResponse(3),
+                    successResponse(4)));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    final List<Integer> writeResults = new ArrayList();
+    DocumentReference doc3 = firestoreMock.document("coll/doc3");
+    DocumentReference doc4 = firestoreMock.document("coll/doc4");
+    bulkWriter.addWriteResultListener(
+        new WriteResultCallback() {
+          public void onResult(DocumentReference documentReference, WriteResult result) {
+            writeResults.add((int) result.getUpdateTime().getSeconds());
+          }
+        });
+    bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.update(doc3, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.delete(doc4);
+    bulkWriter.close();
+    assertArrayEquals(new Integer[] {1, 2, 3, 4}, writeResults.toArray());
+  }
+
+  @Test
+  public void retriesFailedOperationsWithGlobalErrorCallback() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3"),
+                    delete("coll/doc4")),
+                mergeResponses(
+                    successResponse(1),
+                    failedResponse(Code.INTERNAL_VALUE),
+                    failedResponse(Code.INTERNAL_VALUE),
+                    failedResponse(Code.INTERNAL_VALUE)));
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3"),
+                    delete("coll/doc4")),
+                mergeResponses(successResponse(2), successResponse(3), successResponse(4)));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    final List<Integer> writeResults = new ArrayList<>();
+    final List<String> operations = new ArrayList<>();
+    DocumentReference doc3 = firestoreMock.document("coll/doc3");
+    DocumentReference doc4 = firestoreMock.document("coll/doc4");
+    Executor userCallbackExecutor = Executors.newSingleThreadExecutor();
+    bulkWriter.addWriteErrorListener(
+        userCallbackExecutor,
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            operations.add(error.getOperationType().name());
+            return true;
+          }
+        });
+    bulkWriter.addWriteResultListener(
+        new WriteResultCallback() {
+          public void onResult(DocumentReference documentReference, WriteResult result) {
+            operations.add("SUCCESS");
+            writeResults.add((int) result.getUpdateTime().getSeconds());
+          }
+        });
+    bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.update(doc3, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.delete(doc4);
+    bulkWriter.close();
+    assertArrayEquals(new Integer[] {1, 2, 3, 4}, writeResults.toArray());
+    assertArrayEquals(
+        new String[] {"SUCCESS", "SET", "UPDATE", "DELETE", "SUCCESS", "SUCCESS", "SUCCESS"},
+        operations.toArray());
+  }
+
+  @Test
+  public void errorSurfacedEvenWithRetryFunction() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    final boolean[] errorListenerCalled = {false};
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            errorListenerCalled[0] = true;
+            assertEquals(Status.INTERNAL, error.getStatus());
+            return false;
+          }
+        });
+
+    ApiFuture<WriteResult> result = bulkWriter.update(doc1, FieldPath.of("foo"), "bar");
+    bulkWriter.close();
+    assertTrue(errorListenerCalled[0]);
+    try {
+      result.get();
+      fail("Operation should have failed in test");
+    } catch (Exception e) {
+      assertEquals(Status.INTERNAL, ((BulkWriterException) e.getCause()).getStatus());
+    }
+  }
+
+  @Test
+  public void surfacesExceptionsThrownByUserProvidedErrorListener() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            throw new UnsupportedOperationException(
+                "Test code threw UnsupportedOperationException");
+          }
+        });
+
+    ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close();
+    try {
+      result.get();
+      fail("Operation should have failed in test");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
+    }
+  }
+
+  @Test
+  public void writeFailsIfUserProvidedSuccessListenerFails() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    update(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        com.google.firestore.v1.Precondition.newBuilder()
+                            .setUpdateTime(com.google.protobuf.Timestamp.newBuilder().build())
+                            .build(),
+                        "coll/doc1")),
+                successResponse(1));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.addWriteResultListener(
+        new WriteResultCallback() {
+          public void onResult(DocumentReference documentReference, WriteResult result) {
+            throw new UnsupportedOperationException(
+                "Test code threw UnsupportedOperationException");
+          }
+        });
+
+    ApiFuture<WriteResult> result =
+        bulkWriter.update(
+            doc1, Precondition.updatedAt(Timestamp.ofTimeSecondsAndNanos(0, 0)), "foo", "bar");
+    bulkWriter.close();
+    try {
+      result.get();
+      fail("Operation should have failed in test");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Test code threw UnsupportedOperationException"));
+    }
+  }
+
+  @Test
+  public void cannotChangeExecutorOnceWriteEnqueued() throws Exception {
+    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    try {
+      bulkWriter.addWriteResultListener(
+          MoreExecutors.directExecutor(),
+          new WriteResultCallback() {
+            public void onResult(DocumentReference documentReference, WriteResult result) {}
+          });
+      fail("Operation should have failed in test");
+    } catch (Exception e) {
+      assertTrue(
+          e.getMessage().contains("The executor cannot be changed once writes have been enqueued"));
+    }
+
+    try {
+      bulkWriter.addWriteErrorListener(
+          MoreExecutors.directExecutor(),
+          new WriteErrorCallback() {
+            public boolean onError(BulkWriterException error) {
+              return false;
+            }
+          });
+      fail("Operation should have failed in test");
+    } catch (Exception e) {
+      assertTrue(
+          e.getMessage().contains("The executor cannot be changed once writes have been enqueued"));
+    }
+  }
+
+  @Test
+  public void retriesMultipleTimes() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(1));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return true;
+          }
+        });
+
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close();
+    assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
+  }
+
+  @Test
+  public void retriesMaintainCorrectWriteResolutionOrdering() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(1));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                successResponse(2));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+    // Use separate futures to track listener completion since the callbacks are run on a different
+    // thread than the BulkWriter operations.
+    final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
+    final SettableApiFuture<Void> closeComplete = SettableApiFuture.create();
+
+    final List<String> operations = new ArrayList<>();
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return true;
+          }
+        });
+
+    bulkWriter
+        .set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .addListener(
+            new Runnable() {
+              public void run() {
+                operations.add("BEFORE_FLUSH");
+              }
+            },
+            executor);
+    bulkWriter
+        .flush()
+        .addListener(
+            new Runnable() {
+              public void run() {
+                operations.add("FLUSH");
+                flushComplete.set(null);
+              }
+            },
+            executor);
+    bulkWriter
+        .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .addListener(
+            new Runnable() {
+              public void run() {
+                operations.add("AFTER_FLUSH");
+                closeComplete.set(null);
+              }
+            },
+            executor);
+    flushComplete.get();
+
+    // Verify that the 2nd operation did not complete as a result of the flush() call.
+    assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH"}, operations.toArray());
+    bulkWriter.close();
+    closeComplete.get();
+    assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH", "AFTER_FLUSH"}, operations.toArray());
+  }
+
+  @Test
+  public void returnsTheErrorIfNoRetrySpecified() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.INTERNAL_VALUE));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return error.getFailedAttempts() < 3;
+          }
+        });
+
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close();
+    try {
+      result1.get();
+      fail("Operation should have failed");
+    } catch (Exception e) {
+      assertEquals(Status.INTERNAL, ((BulkWriterException) e.getCause()).getStatus());
+    }
+  }
+
+  @Test
   public void sendBatchesWhenSizeLimitIsReached() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
@@ -360,7 +757,13 @@ public class BulkWriterTest {
             put(
                 batchWrite(
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
-                    update(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    update(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        com.google.firestore.v1.Precondition.newBuilder()
+                            .setUpdateTime(com.google.protobuf.Timestamp.newBuilder().build())
+                            .build(),
+                        "coll/doc2"),
                     create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
                 mergeResponses(successResponse(1), successResponse(2), successResponse(3)));
           }
@@ -369,7 +772,12 @@ public class BulkWriterTest {
 
     bulkWriter.setMaxBatchSize(3);
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    ApiFuture<WriteResult> result2 = bulkWriter.update(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> result2 =
+        bulkWriter.update(
+            doc2,
+            Precondition.updatedAt(Timestamp.ofTimeSecondsAndNanos(0, 0)),
+            FieldPath.of("foo"),
+            "bar");
     ApiFuture<WriteResult> result3 =
         bulkWriter.create(
             firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -392,7 +800,7 @@ public class BulkWriterTest {
             put(
                 batchWrite(
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
-                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc2"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
                 mergeResponses(
                     failedResponse(),
@@ -400,7 +808,7 @@ public class BulkWriterTest {
                     failedResponse(Code.ABORTED_VALUE)));
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.UPDATED_FIELD_PROTO, "coll/doc2"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
                 mergeResponses(successResponse(2), failedResponse(Code.ABORTED_VALUE)));
             put(
@@ -413,7 +821,7 @@ public class BulkWriterTest {
     // Test writes to the same document in order to verify that retry logic unaffected by document
     // key.
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    ApiFuture<WriteResult> result2 = bulkWriter.set(doc1, LocalFirestoreHelper.UPDATED_FIELD_MAP);
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.UPDATED_FIELD_MAP);
     ApiFuture<WriteResult> result3 =
         bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
@@ -422,8 +830,8 @@ public class BulkWriterTest {
       result1.get();
       fail("set() should have failed");
     } catch (Exception e) {
-      assertTrue(e.getCause() instanceof FirestoreException);
-      assertEquals(Status.DEADLINE_EXCEEDED, ((FirestoreException) e.getCause()).getStatus());
+      assertTrue(e.getCause() instanceof BulkWriterException);
+      assertEquals(Status.DEADLINE_EXCEEDED, ((BulkWriterException) e.getCause()).getStatus());
     }
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
@@ -438,7 +846,10 @@ public class BulkWriterTest {
           {
             put(
                 batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(
+                        LocalFirestoreHelper.SINGLE_FIELD_PROTO,
+                        Collections.singletonList("foo"),
+                        "coll/doc1"),
                     set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
                 mergeResponses(successResponse(1), failedResponse(Code.ABORTED_VALUE)));
             put(
@@ -452,7 +863,7 @@ public class BulkWriterTest {
     final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
 
     bulkWriter
-        .set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+        .set(doc1, (Object) LocalFirestoreHelper.SINGLE_FIELD_MAP, SetOptions.merge())
         .addListener(
             new Runnable() {
               public void run() {
@@ -513,29 +924,42 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void doesNotSendBatchesIfDoingSoExceedsRateLimit() {
-    final boolean[] timeoutCalled = {false};
+  public void doesNotSendBatchesIfDoingSoExceedsRateLimit() throws Exception {
+    // This future is completed when the BulkWriter schedules a timeout. This test waits on the
+    // future at the end of the test to ensure that the timeout was called.
+    final SettableApiFuture<Void> timeoutCalledFuture = SettableApiFuture.create();
+
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
           @Override
           @Nonnull
           public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
             if (delay > 0) {
-              timeoutCalled[0] = true;
+              timeoutCalledFuture.set(null);
             }
             return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
         };
-    doReturn(timeoutExecutor).when(firestoreRpc).getExecutor();
+
+    // Stub responses for the BulkWriter batches.
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc")),
+                successResponse(5));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
     BulkWriter bulkWriter =
-        firestoreMock.bulkWriter(BulkWriterOptions.builder().setInitialOpsPerSecond(5).build());
+        firestoreMock.bulkWriter(
+            BulkWriterOptions.builder().setInitialOpsPerSecond(5).build(), timeoutExecutor);
 
     for (int i = 0; i < 600; ++i) {
-      bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+      bulkWriter.set(firestoreMock.document("coll/doc"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
     }
     bulkWriter.flush();
-
-    assertTrue(timeoutCalled[0]);
+    timeoutCalledFuture.get();
   }
 
   @Test
@@ -659,7 +1083,7 @@ public class BulkWriterTest {
             batchWriteCapture.capture(),
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
+    bulkWriter.flush().get();
 
     try {
       result.get();
