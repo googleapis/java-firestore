@@ -73,7 +73,7 @@ public class CollectionGroup extends Query {
       // Short circuit if the user only requested a single partition.
       observer.onNext(new QueryPartition(partitionQuery, null, null));
     } else {
-      PartitionQueryRequest.Builder request = buildRequest(desiredPartitionCount);
+      PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       final FirestoreClient.PartitionQueryPagedResponse response;
       final TraceUtil traceUtil = TraceUtil.getInstance();
@@ -82,7 +82,7 @@ public class CollectionGroup extends Query {
         response =
             ApiExceptions.callAndTranslateApiException(
                 rpcContext.sendRequest(
-                    request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
+                    request, rpcContext.getClient().partitionQueryPagedCallable()));
 
         consumePartitions(
             response,
@@ -110,14 +110,14 @@ public class CollectionGroup extends Query {
       return ApiFutures.immediateFuture(
           Collections.singletonList(new QueryPartition(partitionQuery, null, null)));
     } else {
-      PartitionQueryRequest.Builder request = buildRequest(desiredPartitionCount);
+      PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       final TraceUtil traceUtil = TraceUtil.getInstance();
       Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
       try (Scope scope = traceUtil.getTracer().withSpan(span)) {
         return ApiFutures.transform(
             rpcContext.sendRequest(
-                request.build(), rpcContext.getClient().partitionQueryPagedCallable()),
+                request, rpcContext.getClient().partitionQueryPagedCallable()),
             new ApiFunction<PartitionQueryPagedResponse, List<QueryPartition>>() {
               @Override
               public List<QueryPartition> apply(PartitionQueryPagedResponse response) {
@@ -144,7 +144,7 @@ public class CollectionGroup extends Query {
     }
   }
 
-  private PartitionQueryRequest.Builder buildRequest(long desiredPartitionCount) {
+  private PartitionQueryRequest buildRequest(long desiredPartitionCount) {
     Preconditions.checkArgument(
         desiredPartitionCount > 0, "Desired partition count must be one or greater");
 
@@ -155,7 +155,7 @@ public class CollectionGroup extends Query {
     // Since we are always returning an extra partition (with en empty endBefore cursor), we
     // reduce the desired partition count by one.
     request.setPartitionCount(desiredPartitionCount - 1);
-    return request;
+    return request.build();
   }
 
   private void consumePartitions(
