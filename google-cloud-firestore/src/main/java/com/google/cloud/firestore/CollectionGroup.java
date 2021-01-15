@@ -82,7 +82,7 @@ public class CollectionGroup extends Query {
                     request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
       } catch (ApiException exception) {
         span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
-        throw FirestoreException.apiException(exception);
+        throw FirestoreException.forApiException(exception);
       } finally {
         span.end(TraceUtil.END_SPAN_OPTIONS);
       }

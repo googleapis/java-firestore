@@ -117,7 +117,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
               if (code == Status.OK) {
                 updateTime = Timestamp.fromProto(writeResult.getUpdateTime());
               } else {
-                exception = FirestoreException.serverRejected(code, status.getMessage());
+                exception = FirestoreException.forServerRejection(code, status.getMessage());
               }
               result.add(new BatchWriteResult(updateTime, exception));
             }

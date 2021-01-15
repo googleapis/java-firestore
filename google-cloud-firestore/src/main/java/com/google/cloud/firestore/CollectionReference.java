@@ -149,7 +149,7 @@ public class CollectionReference extends Query {
       response = ApiExceptions.callAndTranslateApiException(future);
     } catch (ApiException exception) {
       span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
-      throw FirestoreException.apiException(exception);
+      throw FirestoreException.forApiException(exception);
     } finally {
       span.end(TraceUtil.END_SPAN_OPTIONS);
     }
@@ -217,7 +217,8 @@ public class CollectionReference extends Query {
   public ApiFuture<DocumentReference> add(Object pojo) {
     Object converted = CustomClassMapper.convertToPlainJavaTypes(pojo);
     if (!(converted instanceof Map)) {
-      throw FirestoreException.invalidState("Can't set a document's data to an array or primitive");
+      throw FirestoreException.forInvalidArgument(
+          "Can't set a document's data to an array or primitive");
     }
     return add((Map<String, Object>) converted);
   }

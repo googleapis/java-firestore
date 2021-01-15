@@ -184,7 +184,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
             break;
           case ADD:
             if (WATCH_TARGET_ID != change.getTargetIds(0)) {
-              closeStream(FirestoreException.invalidState("Target ID must be 0x01"));
+              closeStream(FirestoreException.forInvalidArgument("Target ID must be 0x01"));
             }
             break;
           case REMOVE:
@@ -193,7 +193,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
                     ? Status.fromCodeValue(change.getCause().getCode())
                     : Status.CANCELLED;
             closeStream(
-                FirestoreException.serverRejected(
+                FirestoreException.forServerRejection(
                     status, "Backend ended Listen stream: " + change.getCause().getMessage()));
             break;
           case CURRENT:
@@ -204,7 +204,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
             break;
           default:
             closeStream(
-                FirestoreException.invalidState(
+                FirestoreException.forInvalidArgument(
                     "Encountered invalid target change type: " + change.getTargetChangeType()));
         }
 
@@ -247,7 +247,8 @@ class Watch implements ApiStreamObserver<ListenResponse> {
         }
         break;
       default:
-        closeStream(FirestoreException.invalidState("Encountered invalid listen response type"));
+        closeStream(
+            FirestoreException.forInvalidArgument("Encountered invalid listen response type"));
         break;
     }
   }
@@ -340,7 +341,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
                   null,
                   throwable instanceof FirestoreException
                       ? (FirestoreException) throwable
-                      : FirestoreException.apiException(
+                      : FirestoreException.forApiException(
                           new ApiException(
                               throwable,
                               GrpcStatusCode.of(getStatus(throwable).getCode()),
