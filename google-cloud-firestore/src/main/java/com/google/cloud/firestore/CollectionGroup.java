@@ -16,16 +16,25 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiFunction;
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.v1.FirestoreClient;
+import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
 import io.opencensus.common.Scope;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
+import java.util.Collections;
+import java.util.List;
 import javax.annotation.Nullable;
 
 /**
@@ -33,6 +42,9 @@ import javax.annotation.Nullable;
  * subcollection with a specific collection ID.
  */
 public class CollectionGroup extends Query {
+
+  final Query partitionQuery;
+
   CollectionGroup(FirestoreRpcContext<?> rpcContext, String collectionId) {
     super(
         rpcContext,
@@ -41,6 +53,9 @@ public class CollectionGroup extends Query {
             .setCollectionId(collectionId)
             .setAllDescendants(true)
             .build());
+
+    // Partition queries require explicit ordering by __name__.
+    partitionQuery = orderBy(FieldPath.DOCUMENT_ID);
   }
 
   /**
@@ -53,24 +68,12 @@ public class CollectionGroup extends Query {
    * @param observer a stream observer that receives the result of the Partition request.
    */
   public void getPartitions(
-      long desiredPartitionCount, ApiStreamObserver<QueryPartition> observer) {
-    Preconditions.checkArgument(
-        desiredPartitionCount > 0, "Desired partition count must be one or greater");
-
-    // Partition queries require explicit ordering by __name__.
-    Query queryWithDefaultOrder = orderBy(FieldPath.DOCUMENT_ID);
-
+      long desiredPartitionCount, final ApiStreamObserver<QueryPartition> observer) {
     if (desiredPartitionCount == 1) {
       // Short circuit if the user only requested a single partition.
-      observer.onNext(new QueryPartition(queryWithDefaultOrder, null, null));
+      observer.onNext(new QueryPartition(partitionQuery, null, null));
     } else {
-      PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
-      request.setStructuredQuery(queryWithDefaultOrder.buildQuery());
-      request.setParent(options.getParentPath().toString());
-
-      // Since we are always returning an extra partition (with en empty endBefore cursor), we
-      // reduce the desired partition count by one.
-      request.setPartitionCount(desiredPartitionCount - 1);
+      PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       final FirestoreClient.PartitionQueryPagedResponse response;
       final TraceUtil traceUtil = TraceUtil.getInstance();
@@ -79,26 +82,92 @@ public class CollectionGroup extends Query {
         response =
             ApiExceptions.callAndTranslateApiException(
                 rpcContext.sendRequest(
-                    request.build(), rpcContext.getClient().partitionQueryPagedCallable()));
+                    request, rpcContext.getClient().partitionQueryPagedCallable()));
+
+        consumePartitions(
+            response,
+            new Function<QueryPartition, Void>() {
+              @Override
+              public Void apply(QueryPartition queryPartition) {
+                observer.onNext(queryPartition);
+                return null;
+              }
+            });
+
+        observer.onCompleted();
       } catch (ApiException exception) {
         span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
         throw FirestoreException.forApiException(exception);
       } finally {
         span.end(TraceUtil.END_SPAN_OPTIONS);
       }
-
-      @Nullable Object[] lastCursor = null;
-      for (Cursor cursor : response.iterateAll()) {
-        Object[] decodedCursorValue = new Object[cursor.getValuesCount()];
-        for (int i = 0; i < cursor.getValuesCount(); ++i) {
-          decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
-        }
-        observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, decodedCursorValue));
-        lastCursor = decodedCursorValue;
-      }
-      observer.onNext(new QueryPartition(queryWithDefaultOrder, lastCursor, null));
     }
+  }
 
-    observer.onCompleted();
+  public ApiFuture<List<QueryPartition>> getPartitions(long desiredPartitionCount) {
+    if (desiredPartitionCount == 1) {
+      // Short circuit if the user only requested a single partition.
+      return ApiFutures.immediateFuture(
+          Collections.singletonList(new QueryPartition(partitionQuery, null, null)));
+    } else {
+      PartitionQueryRequest request = buildRequest(desiredPartitionCount);
+
+      final TraceUtil traceUtil = TraceUtil.getInstance();
+      Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
+      try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+        return ApiFutures.transform(
+            rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
+            new ApiFunction<PartitionQueryPagedResponse, List<QueryPartition>>() {
+              @Override
+              public List<QueryPartition> apply(PartitionQueryPagedResponse response) {
+                final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
+                consumePartitions(
+                    response,
+                    new Function<QueryPartition, Void>() {
+                      @Override
+                      public Void apply(QueryPartition queryPartition) {
+                        partitions.add(queryPartition);
+                        return null;
+                      }
+                    });
+                return partitions.build();
+              }
+            },
+            MoreExecutors.directExecutor());
+      } catch (ApiException exception) {
+        span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
+        throw FirestoreException.forApiException(exception);
+      } finally {
+        span.end(TraceUtil.END_SPAN_OPTIONS);
+      }
+    }
+  }
+
+  private PartitionQueryRequest buildRequest(long desiredPartitionCount) {
+    Preconditions.checkArgument(
+        desiredPartitionCount > 0, "Desired partition count must be one or greater");
+
+    PartitionQueryRequest.Builder request = PartitionQueryRequest.newBuilder();
+    request.setStructuredQuery(partitionQuery.buildQuery());
+    request.setParent(options.getParentPath().toString());
+
+    // Since we are always returning an extra partition (with en empty endBefore cursor), we
+    // reduce the desired partition count by one.
+    request.setPartitionCount(desiredPartitionCount - 1);
+    return request.build();
+  }
+
+  private void consumePartitions(
+      PartitionQueryPagedResponse response, Function<QueryPartition, Void> consumer) {
+    @Nullable Object[] lastCursor = null;
+    for (Cursor cursor : response.iterateAll()) {
+      Object[] decodedCursorValue = new Object[cursor.getValuesCount()];
+      for (int i = 0; i < cursor.getValuesCount(); ++i) {
+        decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
+      }
+      consumer.apply(new QueryPartition(partitionQuery, lastCursor, decodedCursorValue));
+      lastCursor = decodedCursorValue;
+    }
+    consumer.apply(new QueryPartition(partitionQuery, lastCursor, null));
   }
 }
