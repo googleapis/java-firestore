@@ -19,18 +19,19 @@ package com.google.cloud.firestore;
 import com.google.api.core.BetaApi;
 import com.google.auto.value.AutoValue;
 import java.util.concurrent.ScheduledExecutorService;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Options used to configure request throttling in BulkWriter. */
 @BetaApi
 @AutoValue
-abstract class BulkWriterOptions {
+public abstract class BulkWriterOptions {
   /**
    * Return whether throttling is enabled.
    *
    * @return Whether throttling is enabled.
    */
-  abstract boolean getThrottlingEnabled();
+  public abstract boolean getThrottlingEnabled();
 
   /**
    * Returns the initial maximum number of operations per second allowed by the throttler.
@@ -38,7 +39,7 @@ abstract class BulkWriterOptions {
    * @return The initial maximum number of operations per second allowed by the throttler.
    */
   @Nullable
-  abstract Double getInitialOpsPerSecond();
+  public abstract Double getInitialOpsPerSecond();
 
   /**
    * Returns the maximum number of operations per second allowed by the throttler.
@@ -49,16 +50,16 @@ abstract class BulkWriterOptions {
    * @return The maximum number of operations per second allowed by the throttler.
    */
   @Nullable
-  abstract Double getMaxOpsPerSecond();
+  public abstract Double getMaxOpsPerSecond();
 
   /**
    * @return The {@link ScheduledExecutorService} that BulkWriter uses to schedule all operations.
    *     If null, the default executor will be used.
    */
   @Nullable
-  abstract ScheduledExecutorService getExecutor();
+  public abstract ScheduledExecutorService getExecutor();
 
-  static Builder builder() {
+  public static Builder builder() {
     return new AutoValue_BulkWriterOptions.Builder()
         .setMaxOpsPerSecond(null)
         .setInitialOpsPerSecond(null)
@@ -66,16 +67,16 @@ abstract class BulkWriterOptions {
         .setExecutor(null);
   }
 
-  abstract Builder toBuilder();
+  public abstract Builder toBuilder();
 
   @AutoValue.Builder
-  abstract static class Builder {
+  public abstract static class Builder {
     /**
      * Sets whether throttling should be enabled. By default, throttling is enabled.
      *
      * @param enabled Whether throttling should be enabled.
      */
-    abstract Builder setThrottlingEnabled(boolean enabled);
+    public abstract Builder setThrottlingEnabled(boolean enabled);
 
     /**
      * Set the initial maximum number of operations per second allowed by the throttler.
@@ -91,7 +92,7 @@ abstract class BulkWriterOptions {
      * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
      *     throttler.
      */
-    Builder setInitialOpsPerSecond(int initialOpsPerSecond) {
+    public Builder setInitialOpsPerSecond(int initialOpsPerSecond) {
       return setInitialOpsPerSecond(new Double(initialOpsPerSecond));
     }
 
@@ -111,7 +112,7 @@ abstract class BulkWriterOptions {
      *     The throttler's allowed operations per second does not ramp up past the specified
      *     operations per second.
      */
-    Builder setMaxOpsPerSecond(int maxOpsPerSecond) {
+    public Builder setMaxOpsPerSecond(int maxOpsPerSecond) {
       return setMaxOpsPerSecond(new Double(maxOpsPerSecond));
     }
 
@@ -120,11 +121,12 @@ abstract class BulkWriterOptions {
      *
      * @param executor The executor to schedule BulkWriter operations on.
      */
-    abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
+    public abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
 
-    abstract BulkWriterOptions autoBuild();
+    public abstract BulkWriterOptions autoBuild();
 
-    BulkWriterOptions build() {
+    @Nonnull
+    public BulkWriterOptions build() {
       BulkWriterOptions options = autoBuild();
       Double initialRate = options.getInitialOpsPerSecond();
       Double maxRate = options.getMaxOpsPerSecond();
