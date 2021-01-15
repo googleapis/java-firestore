@@ -116,8 +116,7 @@ public class CollectionGroup extends Query {
       Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
       try (Scope scope = traceUtil.getTracer().withSpan(span)) {
         return ApiFutures.transform(
-            rpcContext.sendRequest(
-                request, rpcContext.getClient().partitionQueryPagedCallable()),
+            rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
             new ApiFunction<PartitionQueryPagedResponse, List<QueryPartition>>() {
               @Override
               public List<QueryPartition> apply(PartitionQueryPagedResponse response) {
