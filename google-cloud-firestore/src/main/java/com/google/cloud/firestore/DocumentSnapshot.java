@@ -345,7 +345,8 @@ public class DocumentSnapshot {
    */
   @Nullable
   public Date getDate(@Nonnull String field) {
-    return ((Timestamp) get(field)).toDate();
+    Timestamp timestamp = getTimestamp(field);
+    return timestamp == null ? null : timestamp.toDate();
   }
 
   /**
