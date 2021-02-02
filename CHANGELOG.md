@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.2.1](https://www.github.com/googleapis/java-firestore/compare/v2.2.0...v2.2.1) (2021-02-02)
+
+
+### Bug Fixes
+
+* don't throw NPE in DocumentSnapshot.getDate() when value is missing ([#513](https://www.github.com/googleapis/java-firestore/issues/513)) ([a41b07e](https://www.github.com/googleapis/java-firestore/commit/a41b07ea8a02aefb9f2798240dd7ba32589791fe))
+
 ## [2.2.0](https://www.github.com/googleapis/java-firestore/compare/v2.1.0...v2.2.0) (2021-01-20)
 
 
