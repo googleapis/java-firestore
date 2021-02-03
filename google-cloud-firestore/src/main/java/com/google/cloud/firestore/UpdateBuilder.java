@@ -60,7 +60,7 @@ public abstract class UpdateBuilder<T> {
 
   private final List<WriteOperation> writes = new ArrayList<>();
 
-  private boolean committed;
+  protected boolean committed;
 
   boolean isCommitted() {
     return committed;
@@ -77,7 +77,7 @@ public abstract class UpdateBuilder<T> {
    * operations on Transaction and WriteBatch to return the object for chaining, while also allowing
    * BulkWriter operations to return the future directly.
    */
-  abstract T wrapResult(DocumentReference documentReference);
+  abstract T wrapResult(int writeIndex);
 
   /**
    * Turns a field map that contains field paths into a nested map. Turns {a.b : c} into {a : {b :
@@ -152,7 +152,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(documentReference);
+    return wrapResult(writes.size() - 1);
   }
 
   private void verifyNotCommitted() {
@@ -283,7 +283,7 @@ public abstract class UpdateBuilder<T> {
 
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(documentReference);
+    return wrapResult(writes.size() - 1);
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -552,7 +552,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(documentReference);
+    return wrapResult(writes.size() - 1);
   }
 
   /**
@@ -590,7 +590,7 @@ public abstract class UpdateBuilder<T> {
     }
     writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(documentReference);
+    return wrapResult(writes.size() - 1);
   }
 
   /** Commit the current batch. */

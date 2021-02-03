@@ -80,7 +80,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     return transactionId != null;
   }
 
-  Transaction wrapResult(DocumentReference documentReference) {
+  Transaction wrapResult(int writeIndex) {
     return this;
   }
 

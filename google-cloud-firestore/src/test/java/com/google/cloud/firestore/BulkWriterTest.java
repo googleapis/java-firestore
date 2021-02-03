@@ -32,6 +32,8 @@ import static org.mockito.Mockito.doReturn;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.grpc.GrpcStatusCode;
+import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
@@ -42,6 +44,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.Value;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
@@ -57,9 +60,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -73,7 +74,21 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
 
-  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
+  private static final ApiFuture<GeneratedMessageV3> FAILED_FUTURE =
+      ApiFutures.immediateFailedFuture(
+          new ApiException(
+              new IllegalStateException("Mock batchWrite failed in test"),
+              GrpcStatusCode.of(Status.Code.UNKNOWN),
+              false));
+
+  private static final ApiFuture<GeneratedMessageV3> RETRYABLE_FAILED_FUTURE =
+      ApiFutures.immediateFailedFuture(
+          new ApiException(
+              new IllegalStateException("Mock batchWrite failed in test"),
+              GrpcStatusCode.of(Status.Code.ABORTED),
+              true));
+
+  // @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -650,11 +665,10 @@ public class BulkWriterTest {
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 failedResponse(Code.INTERNAL_VALUE));
             put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                successResponse(1));
-            put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
-                successResponse(2));
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                mergeResponses(successResponse(1), successResponse(2)));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
@@ -667,21 +681,21 @@ public class BulkWriterTest {
 
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
+        executor,
         new WriteErrorCallback() {
           public boolean onError(BulkWriterException error) {
             return true;
           }
         });
+    bulkWriter.addWriteResultListener(
+        executor,
+        new WriteResultCallback() {
+          public void onResult(DocumentReference reference, WriteResult result) {
+            operations.add(reference.getPath());
+          }
+        });
 
-    bulkWriter
-        .set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP)
-        .addListener(
-            new Runnable() {
-              public void run() {
-                operations.add("BEFORE_FLUSH");
-              }
-            },
-            executor);
+    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter
         .flush()
         .addListener(
@@ -697,18 +711,16 @@ public class BulkWriterTest {
         .addListener(
             new Runnable() {
               public void run() {
-                operations.add("AFTER_FLUSH");
                 closeComplete.set(null);
               }
             },
             executor);
     flushComplete.get();
 
-    // Verify that the 2nd operation did not complete as a result of the flush() call.
-    assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH"}, operations.toArray());
+    assertArrayEquals(new String[] {"coll/doc2", "coll/doc1", "FLUSH"}, operations.toArray());
     bulkWriter.close();
     closeComplete.get();
-    assertArrayEquals(new String[] {"BEFORE_FLUSH", "FLUSH", "AFTER_FLUSH"}, operations.toArray());
+    assertArrayEquals(new String[] {"coll/doc2", "coll/doc1", "FLUSH"}, operations.toArray());
   }
 
   @Test
@@ -967,9 +979,7 @@ public class BulkWriterTest {
 
   @Test
   public void flushSucceedsEvenIfBulkCommitFails() throws Exception {
-    doReturn(
-            ApiFutures.immediateFailedFuture(
-                new IllegalStateException("Mock batchWrite failed in test")))
+    doReturn(FAILED_FUTURE)
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -981,9 +991,7 @@ public class BulkWriterTest {
 
   @Test
   public void closeSucceedsEvenIfBulkCommitFails() throws Exception {
-    doReturn(
-            ApiFutures.immediateFailedFuture(
-                new IllegalStateException("Mock batchWrite failed in test")))
+    doReturn(FAILED_FUTURE)
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -995,10 +1003,7 @@ public class BulkWriterTest {
 
   @Test
   public void individualWritesErrorIfBulkCommitFails() throws Exception {
-    doReturn(
-            ApiFutures.immediateFailedFuture(
-                FirestoreException.forServerRejection(
-                    Status.DEADLINE_EXCEEDED, "Mock batchWrite failed in test")))
+    doReturn(FAILED_FUTURE)
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -1021,9 +1026,7 @@ public class BulkWriterTest {
 
   @Test
   public void individualWritesErrorIfBulkCommitFailsWithNonFirestoreException() throws Exception {
-    doReturn(
-            ApiFutures.immediateFailedFuture(
-                new IllegalStateException("Mock batchWrite failed in test")))
+    doReturn(FAILED_FUTURE)
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -1048,15 +1051,9 @@ public class BulkWriterTest {
 
   @Test
   public void retriesWritesWhenBatchWriteFailsWithRetryableError() throws Exception {
-    FirestoreException retryableError =
-        FirestoreException.forServerRejection(
-            Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test");
-
-    ApiFuture<Void> errorFuture = ApiFutures.immediateFailedFuture(retryableError);
-
-    doReturn(errorFuture)
-        .doReturn(errorFuture)
-        .doReturn(errorFuture)
+    doReturn(RETRYABLE_FAILED_FUTURE)
+        .doReturn(RETRYABLE_FAILED_FUTURE)
+        .doReturn(RETRYABLE_FAILED_FUTURE)
         .doReturn(successResponse(3))
         .when(firestoreMock)
         .sendRequest(
@@ -1073,12 +1070,10 @@ public class BulkWriterTest {
   public void failsWritesAfterAllRetryAttemptsFail() throws Exception {
     final int[] retryAttempts = {0};
     doAnswer(
-            new Answer() {
-              public ApiFuture<Object> answer(InvocationOnMock mock) {
+            new Answer<ApiFuture<GeneratedMessageV3>>() {
+              public ApiFuture<GeneratedMessageV3> answer(InvocationOnMock mock) {
                 retryAttempts[0]++;
-                return ApiFutures.immediateFailedFuture(
-                    FirestoreException.forServerRejection(
-                        Status.fromCode(Status.Code.ABORTED), "Mock batchWrite failed in test"));
+                return RETRYABLE_FAILED_FUTURE;
               }
             })
         .when(firestoreMock)
