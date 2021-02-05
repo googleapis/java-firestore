@@ -24,7 +24,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
@@ -955,7 +954,7 @@ public class BulkWriterTest {
     result3.get();
     // `flush()` should now be complete, but it might resolve a tick later since we wrap flush
     // in another future to suppress any errors.
-    flush.get(1, TimeUnit.MICROSECONDS);
+    flush.get(100, TimeUnit.MILLISECONDS);
   }
 
   @Test
