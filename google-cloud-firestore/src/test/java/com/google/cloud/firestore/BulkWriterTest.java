@@ -91,7 +91,7 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.ABORTED),
               true));
 
-  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
+  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
