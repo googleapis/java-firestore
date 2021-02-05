@@ -132,10 +132,10 @@ public final class BulkWriter implements AutoCloseable {
 
   /** The maximum number of writes that can be in a single batch. */
   private int maxBatchSize = MAX_BATCH_SIZE;
-  
+
   /** Lock object for `bulkCommitBatch`. */
   private final Object lock = new Object();
-  
+
   /**
    * The batch that is currently used to schedule operations. Once this batch reaches maximum
    * capacity, a new batch is created.
