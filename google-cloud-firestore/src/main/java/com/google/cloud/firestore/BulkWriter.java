@@ -141,7 +141,7 @@ public final class BulkWriter implements AutoCloseable {
    * capacity, a new batch is created.
    *
    * <p>Access to the BulkCommitBatch should only occur under lock as it can be accessed by both the
-   * user thread as well as by the backoff lock in BulkWriter.
+   * user thread as well as by the backoff logic in BulkWriter.
    */
   @GuardedBy("lock")
   private BulkCommitBatch bulkCommitBatch;
