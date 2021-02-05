@@ -28,7 +28,7 @@ import java.util.concurrent.Executor;
  * Represents a single write for BulkWriter, encapsulating operation dispatch and error handling.
  */
 class BulkWriterOperation {
-  private final SettableApiFuture<WriteResult> future = SettableApiFuture.create();
+  private final SettableApiFuture<WriteResult> operationFuture = SettableApiFuture.create();
   private final DocumentReference documentReference;
   private final BulkWriter.OperationType operationType;
   private final ApiFunction<BulkWriterOperation, Void> scheduleWriteCallback;
@@ -37,7 +37,7 @@ class BulkWriterOperation {
   private final Executor errorExecutor;
   private final BulkWriter.WriteErrorCallback errorListener;
 
-  private int failedAttempts;
+  private int failedAttempts = 0;
 
   /**
    * @param documentReference The document reference being written to.
@@ -70,7 +70,7 @@ class BulkWriterOperation {
    * after all retry attempts are exhausted).
    */
   public ApiFuture<WriteResult> getFuture() {
-    return future;
+    return operationFuture;
   }
 
   public DocumentReference getDocumentReference() {
@@ -89,15 +89,15 @@ class BulkWriterOperation {
             operationType,
             failedAttempts);
 
-    final SettableApiFuture<Void> future = SettableApiFuture.create();
+    final SettableApiFuture<Void> callbackFuture = SettableApiFuture.create();
 
     ApiFutures.addCallback(
         invokeUserErrorCallback(bulkWriterException),
         new ApiFutureCallback<Boolean>() {
           @Override
           public void onFailure(Throwable throwable) {
-            BulkWriterOperation.this.future.setException(throwable);
-            future.set(null);
+            operationFuture.setException(throwable);
+            callbackFuture.set(null);
           }
 
           @Override
@@ -105,34 +105,36 @@ class BulkWriterOperation {
             if (shouldRetry) {
               scheduleWriteCallback.apply(BulkWriterOperation.this);
             } else {
-              BulkWriterOperation.this.future.setException(bulkWriterException);
+              operationFuture.setException(bulkWriterException);
             }
-            future.set(null);
+            callbackFuture.set(null);
           }
         },
         MoreExecutors.directExecutor());
 
-    return future;
+    return callbackFuture;
   }
 
   /** Callback invoked when the operation succeeds. */
   public ApiFuture<Void> onSuccess(final WriteResult result) {
-    ApiFuture<Void> future = invokeUserSuccessCallback(documentReference, result);
+    final SettableApiFuture<Void> callbackFuture = SettableApiFuture.create();
     ApiFutures.addCallback(
-        future,
+        invokeUserSuccessCallback(documentReference, result),
         new ApiFutureCallback<Void>() {
           @Override
           public void onFailure(Throwable throwable) {
-            BulkWriterOperation.this.future.setException(throwable);
+            operationFuture.setException(throwable);
+            callbackFuture.set(null);
           }
 
           @Override
           public void onSuccess(Void aVoid) {
-            BulkWriterOperation.this.future.set(result);
+            operationFuture.set(result);
+            callbackFuture.set(null);
           }
         },
         MoreExecutors.directExecutor());
-    return future;
+    return callbackFuture;
   }
 
   /** Invokes the user error callback on the user callback executor and returns the result. */

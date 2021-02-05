@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,7 +61,9 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -88,9 +91,11 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.ABORTED),
               true));
 
-  // @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
+  @Rule public Timeout timeout = new Timeout(500, TimeUnit.MILLISECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+
+  private ScheduledExecutorService testExecutor;
 
   /** Executor that executes delayed tasks without delay. */
   private final ScheduledExecutorService immediateExecutor =
@@ -145,6 +150,7 @@ public class BulkWriterTest {
   @Before
   public void before() {
     doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    testExecutor = Executors.newSingleThreadScheduledExecutor();
     bulkWriter = firestoreMock.bulkWriter();
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
@@ -369,9 +375,10 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.update(sameDoc, "foo", "bar", "boo", "far");
     bulkWriter.close();
 
-    responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
+
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
@@ -595,6 +602,15 @@ public class BulkWriterTest {
 
   @Test
   public void cannotChangeExecutorOnceWriteEnqueued() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(2));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     try {
       bulkWriter.addWriteResultListener(
@@ -621,6 +637,8 @@ public class BulkWriterTest {
       assertTrue(
           e.getMessage().contains("The executor cannot be changed once writes have been enqueued"));
     }
+
+    bulkWriter.close();
   }
 
   @Test
@@ -672,7 +690,6 @@ public class BulkWriterTest {
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
-    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     // Use separate futures to track listener completion since the callbacks are run on a different
     // thread than the BulkWriter operations.
@@ -681,14 +698,14 @@ public class BulkWriterTest {
 
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
-        executor,
+        testExecutor,
         new WriteErrorCallback() {
           public boolean onError(BulkWriterException error) {
             return true;
           }
         });
     bulkWriter.addWriteResultListener(
-        executor,
+        testExecutor,
         new WriteResultCallback() {
           public void onResult(DocumentReference reference, WriteResult result) {
             operations.add(reference.getPath());
@@ -705,7 +722,7 @@ public class BulkWriterTest {
                 flushComplete.set(null);
               }
             },
-            executor);
+            testExecutor);
     bulkWriter
         .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
         .addListener(
@@ -714,7 +731,7 @@ public class BulkWriterTest {
                 closeComplete.set(null);
               }
             },
-            executor);
+            testExecutor);
     flushComplete.get();
 
     assertArrayEquals(new String[] {"coll/doc2", "coll/doc1", "FLUSH"}, operations.toArray());
@@ -871,7 +888,6 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
     final List<String> completions = new ArrayList<>();
-    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
 
     bulkWriter
@@ -882,7 +898,7 @@ public class BulkWriterTest {
                 completions.add("doc1");
               }
             },
-            executor);
+            testExecutor);
     bulkWriter
         .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
         .addListener(
@@ -891,8 +907,7 @@ public class BulkWriterTest {
                 completions.add("doc2");
               }
             },
-            executor);
-    ;
+            testExecutor);
 
     ApiFuture<Void> flush = bulkWriter.flush();
     flush.addListener(
@@ -902,7 +917,7 @@ public class BulkWriterTest {
             flushComplete.set(null);
           }
         },
-        executor);
+        testExecutor);
 
     flushComplete.get();
     assertEquals("doc1", completions.get(0));
@@ -929,10 +944,15 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result3 =
         bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
-    bulkWriter.close();
-    assertTrue(result1.isDone());
-    assertTrue(result2.isDone());
-    assertTrue(result3.isDone());
+    ApiFuture<Void> flush = bulkWriter.flush();
+    try {
+      result1.get();
+    } catch (ExecutionException e) {
+      // Ignore
+    }
+    result2.get();
+    result3.get();
+    assertTrue(flush.isDone());
   }
 
   @Test

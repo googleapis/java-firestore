@@ -38,11 +38,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
 @BetaApi
 public final class BulkWriter implements AutoCloseable {
-
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
    * completes.
@@ -132,10 +132,18 @@ public final class BulkWriter implements AutoCloseable {
 
   /** The maximum number of writes that can be in a single batch. */
   private int maxBatchSize = MAX_BATCH_SIZE;
+  
+  /** Lock object for `bulkCommitBatch`. */
+  private final Object lock = new Object();
+  
   /**
    * The batch that is currently used to schedule operations. Once this batch reaches maximum
    * capacity, a new batch is created.
+   *
+   * <p>Access to the BulkCommitBatch should only occur under lock as it can be accessed by both the
+   * user thread as well as by the backoff lock in BulkWriter.
    */
+  @GuardedBy("lock")
   private BulkCommitBatch bulkCommitBatch;
 
   /**
@@ -800,13 +808,16 @@ public final class BulkWriter implements AutoCloseable {
    * Sends the current batch and resets {@link #bulkCommitBatch}.
    *
    * @param flush If provided, keeps re-sending operations until no more operations are enqueued.
-   *     This allows retries to resolve as part of a {#link flush()} or {#link close()} call.
+   *     This allows retries to resolve as part of a {@link BulkWriter#flush()} or {@link
+   *     BulkWriter#close()} call.
    */
   private void sendCurrentBatch(final boolean flush) {
-    if (bulkCommitBatch.getMutationsSize() == 0) return;
-    BulkCommitBatch pendingBatch = bulkCommitBatch;
-
-    bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
+    BulkCommitBatch pendingBatch;
+    synchronized (lock) {
+      if (bulkCommitBatch.getMutationsSize() == 0) return;
+      pendingBatch = bulkCommitBatch;
+      bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
+    }
 
     // Send the batch if it is under the rate limit, or schedule another attempt after the
     // appropriate timeout.
@@ -852,33 +863,36 @@ public final class BulkWriter implements AutoCloseable {
    * Schedules the provided operations on the current BulkCommitBatch. Sends the BulkCommitBatch if
    * it reaches maximum capacity.
    */
-  public void sendOperation(
+  private void sendOperation(
       ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>> enqueueOperationOnBatchCallback,
       final BulkWriterOperation op) {
-    if (bulkCommitBatch.has(op.getDocumentReference())) {
-      // Create a new batch since the backend doesn't support batches with two writes to the same
-      // document.
-      sendCurrentBatch(/* flush= */ false);
-    }
+    synchronized (lock) {
+      if (bulkCommitBatch.has(op.getDocumentReference())) {
+        // Create a new batch since the backend doesn't support batches with two writes to the same
+        // document.
+        sendCurrentBatch(/* flush= */ false);
+      }
 
-    // Run the operation on the current batch and advance the `lastOperation` pointer. This ensures
-    // that `lastOperation` only resolves when both the previous and the current write resolves.
-    bulkCommitBatch.enqueueOperation(op);
-    enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
+      // Run the operation on the current batch and advance the `lastOperation` pointer. This
+      // ensures that `lastOperation` only resolves when both the previous and the current write
+      // resolves.
+      bulkCommitBatch.enqueueOperation(op);
+      enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
 
-    lastOperation =
-        ApiFutures.transformAsync(
-            lastOperation,
-            new ApiAsyncFunction<Void, Void>() {
-              @Override
-              public ApiFuture<Void> apply(Void aVoid) {
-                return silenceFuture(op.getFuture());
-              }
-            },
-            MoreExecutors.directExecutor());
+      lastOperation =
+          ApiFutures.transformAsync(
+              lastOperation,
+              new ApiAsyncFunction<Void, Void>() {
+                @Override
+                public ApiFuture<Void> apply(Void aVoid) {
+                  return silenceFuture(op.getFuture());
+                }
+              },
+              MoreExecutors.directExecutor());
 
-    if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
-      sendCurrentBatch(/* flush= */ false);
+      if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
+        sendCurrentBatch(/* flush= */ false);
+      }
     }
   }
 
