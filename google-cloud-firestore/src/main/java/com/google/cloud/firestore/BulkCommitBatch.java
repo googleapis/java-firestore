@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 
-/** Used to represent a batch on the BatchQueue. */
+/** Used to represent a batch that contains scheduled BulkWriterOperations. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
   private final List<BulkWriterOperation> pendingOperations = new ArrayList<>();
