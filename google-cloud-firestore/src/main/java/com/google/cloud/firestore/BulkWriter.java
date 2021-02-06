@@ -73,6 +73,7 @@ public final class BulkWriter implements AutoCloseable {
     UPDATE,
     DELETE
   }
+
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 20;
 
@@ -150,7 +151,7 @@ public final class BulkWriter implements AutoCloseable {
    * A pointer to the tail of all active BulkWriter applications. This pointer is advanced every
    * time a new write is enqueued.
    */
-  private ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
+  private volatile ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
 
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
   private boolean closed = false;
@@ -812,40 +813,39 @@ public final class BulkWriter implements AutoCloseable {
    *     BulkWriter#close()} call.
    */
   private void sendCurrentBatch(final boolean flush) {
-    BulkCommitBatch pendingBatch;
     synchronized (lock) {
       if (bulkCommitBatch.getMutationsSize() == 0) return;
-      pendingBatch = bulkCommitBatch;
+      BulkCommitBatch pendingBatch = bulkCommitBatch;
       bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
-    }
 
-    // Send the batch if it is under the rate limit, or schedule another attempt after the
-    // appropriate timeout.
-    boolean underRateLimit = rateLimiter.tryMakeRequest(pendingBatch.getMutationsSize());
-    if (underRateLimit) {
-      pendingBatch
-          .bulkCommit()
-          .addListener(
-              new Runnable() {
-                @Override
-                public void run() {
-                  sendCurrentBatch(flush);
-                }
-              },
-              bulkWriterExecutor);
+      // Send the batch if it is under the rate limit, or schedule another attempt after the
+      // appropriate timeout.
+      boolean underRateLimit = rateLimiter.tryMakeRequest(pendingBatch.getMutationsSize());
+      if (underRateLimit) {
+        pendingBatch
+            .bulkCommit()
+            .addListener(
+                new Runnable() {
+                  @Override
+                  public void run() {
+                    sendCurrentBatch(flush);
+                  }
+                },
+                bulkWriterExecutor);
 
-    } else {
-      long delayMs = rateLimiter.getNextRequestDelayMs(pendingBatch.getMutationsSize());
-      logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
-      bulkWriterExecutor.schedule(
-          new Runnable() {
-            @Override
-            public void run() {
-              sendCurrentBatch(flush);
-            }
-          },
-          delayMs,
-          TimeUnit.MILLISECONDS);
+      } else {
+        long delayMs = rateLimiter.getNextRequestDelayMs(pendingBatch.getMutationsSize());
+        logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
+        bulkWriterExecutor.schedule(
+            new Runnable() {
+              @Override
+              public void run() {
+                sendCurrentBatch(flush);
+              }
+            },
+            delayMs,
+            TimeUnit.MILLISECONDS);
+      }
     }
   }
 
