@@ -157,12 +157,11 @@ public final class BulkWriter implements AutoCloseable {
   private boolean closed = false;
 
   /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
+  @GuardedBy("lock")
   private final RateLimiter rateLimiter;
 
   private WriteResultCallback successListener = DEFAULT_SUCCESS_LISTENER;
-
   private WriteErrorCallback errorListener = DEFAULT_ERROR_LISTENER;
-
   private Executor successExecutor;
   private Executor errorExecutor;
 
