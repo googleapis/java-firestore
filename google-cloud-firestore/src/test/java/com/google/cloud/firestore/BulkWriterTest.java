@@ -802,8 +802,6 @@ public class BulkWriterTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
-
-    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
