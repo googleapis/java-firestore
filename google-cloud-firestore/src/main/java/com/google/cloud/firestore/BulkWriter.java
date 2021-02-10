@@ -38,7 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
 @BetaApi
@@ -131,11 +130,23 @@ public final class BulkWriter implements AutoCloseable {
 
   private static final Logger logger = Logger.getLogger(BulkWriter.class.getName());
 
+  /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
+  private final RateLimiter rateLimiter;
+
+  private final FirestoreImpl firestore;
+
+  // Executor used to run all BulkWriter operations. BulkWriter uses its own executor since we
+  // don't want to block a gax/grpc executor while running user error and success callbacks.
+  private final ScheduledExecutorService bulkWriterExecutor;
+
+  /**
+   * Lock object for all mutable state in bulk writer. Bulk Writer state is accessed from the user
+   * thread and via {@code bulkWriterExecutor}.
+   */
+  private final Object lock = new Object();
+
   /** The maximum number of writes that can be in a single batch. */
   private int maxBatchSize = MAX_BATCH_SIZE;
-
-  /** Lock object for `bulkCommitBatch`. */
-  private final Object lock = new Object();
 
   /**
    * The batch that is currently used to schedule operations. Once this batch reaches maximum
@@ -144,21 +155,16 @@ public final class BulkWriter implements AutoCloseable {
    * <p>Access to the BulkCommitBatch should only occur under lock as it can be accessed by both the
    * user thread as well as by the backoff logic in BulkWriter.
    */
-  @GuardedBy("lock")
   private BulkCommitBatch bulkCommitBatch;
 
   /**
    * A pointer to the tail of all active BulkWriter applications. This pointer is advanced every
    * time a new write is enqueued.
    */
-  private volatile ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
+  private ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
 
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
   private boolean closed = false;
-
-  /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
-  @GuardedBy("lock")
-  private final RateLimiter rateLimiter;
 
   private WriteResultCallback successListener = DEFAULT_SUCCESS_LISTENER;
   private WriteErrorCallback errorListener = DEFAULT_ERROR_LISTENER;
@@ -170,12 +176,6 @@ public final class BulkWriter implements AutoCloseable {
    * write has been enqueued.
    */
   private boolean writesEnqueued = false;
-
-  private final FirestoreImpl firestore;
-
-  // Executor used to run all BulkWriter operations. BulkWriter uses its own executor since we
-  // don't want to block a gax/grpc executor while running user error and success callbacks.
-  private final ScheduledExecutorService bulkWriterExecutor;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
     this.firestore = firestore;
@@ -238,7 +238,6 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> create(
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.CREATE,
@@ -261,7 +260,6 @@ public final class BulkWriter implements AutoCloseable {
   @Nonnull
   public ApiFuture<WriteResult> create(
       @Nonnull final DocumentReference documentReference, @Nonnull final Object pojo) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.CREATE,
@@ -281,7 +279,6 @@ public final class BulkWriter implements AutoCloseable {
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull final DocumentReference documentReference) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.DELETE,
@@ -304,7 +301,6 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> delete(
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Precondition precondition) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.DELETE,
@@ -328,7 +324,6 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> set(
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.SET,
@@ -355,7 +350,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields,
       @Nonnull final SetOptions options) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.SET,
@@ -382,7 +376,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Object pojo,
       @Nonnull final SetOptions options) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.SET,
@@ -405,7 +398,6 @@ public final class BulkWriter implements AutoCloseable {
   @Nonnull
   public ApiFuture<WriteResult> set(
       @Nonnull final DocumentReference documentReference, @Nonnull final Object pojo) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.SET,
@@ -434,7 +426,6 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> update(
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -465,7 +456,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields,
       @Nonnull final Precondition precondition) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -498,7 +488,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final String field,
       @Nullable final Object value,
       final Object... moreFieldsAndValues) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -531,7 +520,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final FieldPath fieldPath,
       @Nullable final Object value,
       final Object... moreFieldsAndValues) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -565,7 +553,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final String field,
       @Nullable final Object value,
       final Object... moreFieldsAndValues) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -600,7 +587,6 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final FieldPath fieldPath,
       @Nullable final Object value,
       final Object... moreFieldsAndValues) {
-    verifyNotClosed();
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
@@ -620,7 +606,6 @@ public final class BulkWriter implements AutoCloseable {
       final DocumentReference documentReference,
       final OperationType operationType,
       final ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>> enqueueOperationOnBatchCallback) {
-    writesEnqueued = true;
     BulkWriterOperation operation =
         new BulkWriterOperation(
             documentReference,
@@ -628,15 +613,35 @@ public final class BulkWriter implements AutoCloseable {
             new ApiFunction<BulkWriterOperation, Void>() {
               @Override
               public Void apply(BulkWriterOperation operation) {
-                sendOperation(enqueueOperationOnBatchCallback, operation);
+                synchronized (lock) {
+                  sendOperationLocked(enqueueOperationOnBatchCallback, operation);
+                }
                 return null;
               }
             },
-            successExecutor,
-            successListener,
-            errorExecutor,
-            errorListener);
-    sendOperation(enqueueOperationOnBatchCallback, operation);
+            new ApiFunction<WriteResult, ApiFuture<Void>>() {
+              @Override
+              public ApiFuture<Void> apply(WriteResult writeResult) {
+                synchronized (lock) {
+                  return invokeUserSuccessCallbackLocked(documentReference, writeResult);
+                }
+              }
+            },
+            new ApiFunction<BulkWriterException, ApiFuture<Boolean>>() {
+              @Override
+              public ApiFuture<Boolean> apply(BulkWriterException e) {
+                synchronized (lock) {
+                  return invokeUserErrorCallbackLocked(e);
+                }
+              }
+            });
+
+    synchronized (lock) {
+      verifyNotClosedLocked();
+      writesEnqueued = true;
+      sendOperationLocked(enqueueOperationOnBatchCallback, operation);
+    }
+
     return operation.getFuture();
   }
 
@@ -656,8 +661,14 @@ public final class BulkWriter implements AutoCloseable {
    */
   @Nonnull
   public ApiFuture<Void> flush() {
-    verifyNotClosed();
-    sendCurrentBatch(/* flush= */ true);
+    synchronized (lock) {
+      return flushLocked();
+    }
+  }
+
+  private ApiFuture<Void> flushLocked() {
+    verifyNotClosedLocked();
+    sendCurrentBatchLocked(/* flush= */ true);
     return lastOperation;
   }
 
@@ -671,12 +682,15 @@ public final class BulkWriter implements AutoCloseable {
    * all requests.
    */
   public void close() throws InterruptedException, ExecutionException {
-    ApiFuture<Void> flushFuture = flush();
-    closed = true;
+    ApiFuture<Void> flushFuture;
+    synchronized (lock) {
+      flushFuture = flushLocked();
+      closed = true;
+    }
     flushFuture.get();
   }
 
-  private void verifyNotClosed() {
+  private void verifyNotClosedLocked() {
     if (this.closed) {
       throw new IllegalStateException("BulkWriter has already been closed.");
     }
@@ -703,7 +717,9 @@ public final class BulkWriter implements AutoCloseable {
    *     successfully completes.
    */
   public void addWriteResultListener(WriteResultCallback writeResultCallback) {
-    successListener = writeResultCallback;
+    synchronized (lock) {
+      successListener = writeResultCallback;
+    }
   }
 
   /**
@@ -730,12 +746,14 @@ public final class BulkWriter implements AutoCloseable {
    */
   public void addWriteResultListener(
       @Nonnull Executor executor, WriteResultCallback writeResultCallback) {
-    if (writesEnqueued) {
-      throw new IllegalStateException(
-          "The executor cannot be changed once writes have been enqueued.");
+    synchronized (lock) {
+      if (writesEnqueued) {
+        throw new IllegalStateException(
+            "The executor cannot be changed once writes have been enqueued.");
+      }
+      successListener = writeResultCallback;
+      successExecutor = executor;
     }
-    successListener = writeResultCallback;
-    successExecutor = executor;
   }
 
   /**
@@ -764,7 +782,9 @@ public final class BulkWriter implements AutoCloseable {
    *     `true` will retry the operation. Returning `false` will stop the retry loop.
    */
   public void addWriteErrorListener(WriteErrorCallback onError) {
-    errorListener = onError;
+    synchronized (lock) {
+      errorListener = onError;
+    }
   }
 
   /**
@@ -796,12 +816,14 @@ public final class BulkWriter implements AutoCloseable {
    *     `true` will retry the operation. Returning `false` will stop the retry loop.
    */
   public void addWriteErrorListener(@Nonnull Executor executor, WriteErrorCallback onError) {
-    if (writesEnqueued) {
-      throw new IllegalStateException(
-          "The executor cannot be changed once writes have been enqueued.");
+    synchronized (lock) {
+      if (writesEnqueued) {
+        throw new IllegalStateException(
+            "The executor cannot be changed once writes have been enqueued.");
+      }
+      errorListener = onError;
+      errorExecutor = executor;
     }
-    errorListener = onError;
-    errorExecutor = executor;
   }
 
   /**
@@ -811,40 +833,42 @@ public final class BulkWriter implements AutoCloseable {
    *     This allows retries to resolve as part of a {@link BulkWriter#flush()} or {@link
    *     BulkWriter#close()} call.
    */
-  private void sendCurrentBatch(final boolean flush) {
-    synchronized (lock) {
-      if (bulkCommitBatch.getMutationsSize() == 0) return;
-      BulkCommitBatch pendingBatch = bulkCommitBatch;
-      bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
+  private void sendCurrentBatchLocked(final boolean flush) {
+    if (bulkCommitBatch.getMutationsSize() == 0) return;
+    BulkCommitBatch pendingBatch = bulkCommitBatch;
+    bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
 
-      // Send the batch if it is under the rate limit, or schedule another attempt after the
-      // appropriate timeout.
-      boolean underRateLimit = rateLimiter.tryMakeRequest(pendingBatch.getMutationsSize());
-      if (underRateLimit) {
-        pendingBatch
-            .bulkCommit()
-            .addListener(
-                new Runnable() {
-                  @Override
-                  public void run() {
-                    sendCurrentBatch(flush);
+    // Send the batch if it is under the rate limit, or schedule another attempt after the
+    // appropriate timeout.
+    boolean underRateLimit = rateLimiter.tryMakeRequest(pendingBatch.getMutationsSize());
+    if (underRateLimit) {
+      pendingBatch
+          .bulkCommit()
+          .addListener(
+              new Runnable() {
+                @Override
+                public void run() {
+                  synchronized (lock) {
+                    sendCurrentBatchLocked(flush);
                   }
-                },
-                bulkWriterExecutor);
+                }
+              },
+              bulkWriterExecutor);
 
-      } else {
-        long delayMs = rateLimiter.getNextRequestDelayMs(pendingBatch.getMutationsSize());
-        logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
-        bulkWriterExecutor.schedule(
-            new Runnable() {
-              @Override
-              public void run() {
-                sendCurrentBatch(flush);
+    } else {
+      long delayMs = rateLimiter.getNextRequestDelayMs(pendingBatch.getMutationsSize());
+      logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
+      bulkWriterExecutor.schedule(
+          new Runnable() {
+            @Override
+            public void run() {
+              synchronized (lock) {
+                sendCurrentBatchLocked(flush);
               }
-            },
-            delayMs,
-            TimeUnit.MILLISECONDS);
-      }
+            }
+          },
+          delayMs,
+          TimeUnit.MILLISECONDS);
     }
   }
 
@@ -862,37 +886,75 @@ public final class BulkWriter implements AutoCloseable {
    * Schedules the provided operations on the current BulkCommitBatch. Sends the BulkCommitBatch if
    * it reaches maximum capacity.
    */
-  private void sendOperation(
+  private void sendOperationLocked(
       ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>> enqueueOperationOnBatchCallback,
       final BulkWriterOperation op) {
-    synchronized (lock) {
-      if (bulkCommitBatch.has(op.getDocumentReference())) {
-        // Create a new batch since the backend doesn't support batches with two writes to the same
-        // document.
-        sendCurrentBatch(/* flush= */ false);
-      }
-
-      // Run the operation on the current batch and advance the `lastOperation` pointer. This
-      // ensures that `lastOperation` only resolves when both the previous and the current write
-      // resolves.
-      bulkCommitBatch.enqueueOperation(op);
-      enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
-
-      lastOperation =
-          ApiFutures.transformAsync(
-              lastOperation,
-              new ApiAsyncFunction<Void, Void>() {
-                @Override
-                public ApiFuture<Void> apply(Void aVoid) {
-                  return silenceFuture(op.getFuture());
-                }
-              },
-              MoreExecutors.directExecutor());
-
-      if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
-        sendCurrentBatch(/* flush= */ false);
-      }
+    if (bulkCommitBatch.has(op.getDocumentReference())) {
+      // Create a new batch since the backend doesn't support batches with two writes to the same
+      // document.
+      sendCurrentBatchLocked(/* flush= */ false);
     }
+
+    // Run the operation on the current batch and advance the `lastOperation` pointer. This
+    // ensures that `lastOperation` only resolves when both the previous and the current write
+    // resolves.
+    bulkCommitBatch.enqueueOperation(op);
+    enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
+
+    lastOperation =
+        ApiFutures.transformAsync(
+            lastOperation,
+            new ApiAsyncFunction<Void, Void>() {
+              @Override
+              public ApiFuture<Void> apply(Void aVoid) {
+                return silenceFuture(op.getFuture());
+              }
+            },
+            MoreExecutors.directExecutor());
+
+    if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
+      sendCurrentBatchLocked(/* flush= */ false);
+    }
+  }
+
+  /** Invokes the user error callback on the user callback executor and returns the result. */
+  private SettableApiFuture<Boolean> invokeUserErrorCallbackLocked(
+      final BulkWriterException error) {
+    final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
+    final WriteErrorCallback listener = errorListener;
+    errorExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              boolean shouldRetry = listener.onError(error);
+              callbackResult.set(shouldRetry);
+            } catch (Exception e) {
+              callbackResult.setException(e);
+            }
+          }
+        });
+    return callbackResult;
+  }
+
+  /** Invokes the user success callback on the user callback executor. */
+  private ApiFuture<Void> invokeUserSuccessCallbackLocked(
+      final DocumentReference documentReference, final WriteResult result) {
+    final SettableApiFuture<Void> callbackResult = SettableApiFuture.create();
+    final WriteResultCallback listener = successListener;
+    successExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              listener.onResult(documentReference, result);
+              callbackResult.set(null);
+            } catch (Exception e) {
+              callbackResult.setException(e);
+            }
+          }
+        });
+    return callbackResult;
   }
 
   /** Returns an ApiFuture that resolves successfully when the provided future completes. */
