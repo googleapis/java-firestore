@@ -38,6 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
 @BetaApi
@@ -130,23 +131,24 @@ public final class BulkWriter implements AutoCloseable {
 
   private static final Logger logger = Logger.getLogger(BulkWriter.class.getName());
 
-  /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
-  private final RateLimiter rateLimiter;
-
   private final FirestoreImpl firestore;
 
   // Executor used to run all BulkWriter operations. BulkWriter uses its own executor since we
   // don't want to block a gax/grpc executor while running user error and success callbacks.
   private final ScheduledExecutorService bulkWriterExecutor;
 
+  /** The maximum number of writes that can be in a single batch. */
+  private int maxBatchSize = MAX_BATCH_SIZE;
+
   /**
-   * Lock object for all mutable state in bulk writer. Bulk Writer state is accessed from the user
+   * Lock object for all mutable state in bulk writer. BulkWriter state is accessed from the user
    * thread and via {@code bulkWriterExecutor}.
    */
   private final Object lock = new Object();
 
-  /** The maximum number of writes that can be in a single batch. */
-  private int maxBatchSize = MAX_BATCH_SIZE;
+  /** Rate limiter used to throttle requests as per the 500/50/5 rule. */
+  @GuardedBy("lock")
+  private final RateLimiter rateLimiter;
 
   /**
    * The batch that is currently used to schedule operations. Once this batch reaches maximum
@@ -155,26 +157,34 @@ public final class BulkWriter implements AutoCloseable {
    * <p>Access to the BulkCommitBatch should only occur under lock as it can be accessed by both the
    * user thread as well as by the backoff logic in BulkWriter.
    */
+  @GuardedBy("lock")
   private BulkCommitBatch bulkCommitBatch;
 
   /**
    * A pointer to the tail of all active BulkWriter applications. This pointer is advanced every
    * time a new write is enqueued.
    */
+  @GuardedBy("lock")
   private ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
 
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
+  @GuardedBy("lock")
   private boolean closed = false;
 
+  @GuardedBy("lock")
   private WriteResultCallback successListener = DEFAULT_SUCCESS_LISTENER;
+  @GuardedBy("lock")
   private WriteErrorCallback errorListener = DEFAULT_ERROR_LISTENER;
+  @GuardedBy("lock")
   private Executor successExecutor;
+  @GuardedBy("lock")
   private Executor errorExecutor;
 
   /**
    * Used to track when writes are enqueued. The user handler executors cannot be changed after a
    * write has been enqueued.
    */
+  @GuardedBy("lock")
   private boolean writesEnqueued = false;
 
   BulkWriter(FirestoreImpl firestore, BulkWriterOptions options) {
