@@ -66,6 +66,7 @@ import io.grpc.ManagedChannelBuilder;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * GRPC client implementation of the Firestore RPC methods. Exposes FirestoreOptions on top of the
@@ -151,6 +152,9 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
     firestoreStub.close();
     for (BackgroundResource resource : clientContext.getBackgroundResources()) {
       resource.close();
+    }
+    for (BackgroundResource resource : clientContext.getBackgroundResources()) {
+      resource.awaitTermination(1, TimeUnit.SECONDS);
     }
     executorFactory.release(executor);
   }
