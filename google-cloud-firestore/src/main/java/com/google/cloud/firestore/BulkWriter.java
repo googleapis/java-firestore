@@ -173,10 +173,13 @@ public final class BulkWriter implements AutoCloseable {
 
   @GuardedBy("lock")
   private WriteResultCallback successListener = DEFAULT_SUCCESS_LISTENER;
+
   @GuardedBy("lock")
   private WriteErrorCallback errorListener = DEFAULT_ERROR_LISTENER;
+
   @GuardedBy("lock")
   private Executor successExecutor;
+
   @GuardedBy("lock")
   private Executor errorExecutor;
 
