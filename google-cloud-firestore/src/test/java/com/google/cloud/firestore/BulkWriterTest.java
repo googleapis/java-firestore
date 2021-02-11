@@ -675,7 +675,7 @@ public class BulkWriterTest {
   }
 
   @Test
-  public void retriesMaintainCorrectWriteResolutionOrdering() throws Exception {
+  public void retryResolvesBeforeFlush() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
@@ -683,10 +683,8 @@ public class BulkWriterTest {
                 batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 failedResponse(Code.INTERNAL_VALUE));
             put(
-                batchWrite(
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
-                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
-                mergeResponses(successResponse(1), successResponse(2)));
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(1));
           }
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
@@ -694,7 +692,6 @@ public class BulkWriterTest {
     // Use separate futures to track listener completion since the callbacks are run on a different
     // thread than the BulkWriter operations.
     final SettableApiFuture<Void> flushComplete = SettableApiFuture.create();
-    final SettableApiFuture<Void> closeComplete = SettableApiFuture.create();
 
     final List<String> operations = new ArrayList<>();
     bulkWriter.addWriteErrorListener(
@@ -708,7 +705,7 @@ public class BulkWriterTest {
         testExecutor,
         new WriteResultCallback() {
           public void onResult(DocumentReference reference, WriteResult result) {
-            operations.add(reference.getPath());
+            operations.add("DOC");
           }
         });
 
@@ -723,21 +720,9 @@ public class BulkWriterTest {
               }
             },
             testExecutor);
-    bulkWriter
-        .set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP)
-        .addListener(
-            new Runnable() {
-              public void run() {
-                closeComplete.set(null);
-              }
-            },
-            testExecutor);
     flushComplete.get();
 
-    assertArrayEquals(new String[] {"coll/doc2", "coll/doc1", "FLUSH"}, operations.toArray());
-    bulkWriter.close();
-    closeComplete.get();
-    assertArrayEquals(new String[] {"coll/doc2", "coll/doc1", "FLUSH"}, operations.toArray());
+    assertArrayEquals(new String[] {"DOC", "FLUSH"}, operations.toArray());
   }
 
   @Test
@@ -817,8 +802,6 @@ public class BulkWriterTest {
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(3, 0), result3.get().getUpdateTime());
-
-    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
