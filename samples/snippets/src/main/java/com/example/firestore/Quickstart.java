@@ -205,5 +205,11 @@ public class Quickstart {
     String projectId = (args.length == 0) ? null : args[0];
     Quickstart quickStart = (projectId != null) ? new Quickstart(projectId) : new Quickstart();
     quickStart.run();
+    quickStart.close();
+  }
+
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  void close() throws Exception {
+    db.close();
   }
 }

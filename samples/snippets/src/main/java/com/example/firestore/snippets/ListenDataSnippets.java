@@ -222,4 +222,8 @@ public class ListenDataSnippets {
     // [END listen_errors]
   }
 
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  void close() throws Exception {
+    db.close();
+  }
 }

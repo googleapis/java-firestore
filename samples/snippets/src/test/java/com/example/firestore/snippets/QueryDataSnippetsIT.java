@@ -284,5 +284,6 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
   @AfterClass
   public static void tearDown() throws Exception {
     deleteAllDocuments(db);
+    queryDataSnippets.close();
   }
 }

@@ -171,4 +171,9 @@ public class RetrieveDataSnippets {
     // [END fs_get_collections]
     return collections;
   }
+
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  void close() throws Exception {
+    db.close();
+  }
 }

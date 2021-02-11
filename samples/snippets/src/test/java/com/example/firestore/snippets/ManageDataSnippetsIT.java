@@ -202,5 +202,6 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
   public static void tearDown() throws Exception {
     manageDataSnippets.deleteCollection(db.collection("cities"), 10);
     manageDataSnippets.deleteCollection(db.collection("users"), 10);
+    manageDataSnippets.close();
   }
 }

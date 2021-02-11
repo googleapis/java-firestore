@@ -469,4 +469,8 @@ class ManageDataSnippets {
     updateFuture.get();
   }
 
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  void close() throws Exception {
+    db.close();
+  }
 }
