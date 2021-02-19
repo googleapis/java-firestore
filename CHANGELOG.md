@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.2.2](https://www.github.com/googleapis/java-firestore/compare/v2.2.1...v2.2.2) (2021-02-19)
+
+
+### Bug Fixes
+
+* block close() on the termination of all RPC channels ([#512](https://www.github.com/googleapis/java-firestore/issues/512)) ([67bd06a](https://www.github.com/googleapis/java-firestore/commit/67bd06aac7a53a210e1a5c081929104c43a5d48a))
+* **samples:** close firestore instance in test ([#476](https://www.github.com/googleapis/java-firestore/issues/476)) ([fb1cb17](https://www.github.com/googleapis/java-firestore/commit/fb1cb175c06e2782f7cd9cb3bbb9c751e9d33713))
+
 ### [2.2.1](https://www.github.com/googleapis/java-firestore/compare/v2.2.0...v2.2.1) (2021-02-02)
 
 
