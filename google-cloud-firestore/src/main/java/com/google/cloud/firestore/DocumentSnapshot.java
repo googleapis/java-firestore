@@ -24,6 +24,7 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
 import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -337,16 +338,28 @@ public class DocumentSnapshot {
   }
 
   /**
+   * Returns the value of the field as an Instant.
+   *
+   * @param field The path to the field.
+   * @throws RuntimeException if the value is not an Instant.
+   * @return The value of the field.
+   */
+  @Nullable
+  public Instant getInstant(@Nonnull String field) {
+    return (Instant) get(field);
+  }
+
+  /**
    * Returns the value of the field as a Date.
    *
    * @param field The path to the field.
    * @throws RuntimeException if the value is not a Date.
    * @return The value of the field.
    */
-  @Nullable
+  @Nullable @Deprecated
   public Date getDate(@Nonnull String field) {
-    Timestamp timestamp = getTimestamp(field);
-    return timestamp == null ? null : timestamp.toDate();
+    Instant timestamp = getInstant(field);
+    return timestamp == null ? null : Date.from(timestamp);
   }
 
   /**
@@ -356,9 +369,10 @@ public class DocumentSnapshot {
    * @throws RuntimeException if the value is not a Date.
    * @return The value of the field.
    */
-  @Nullable
+  @Nullable @Deprecated
   public Timestamp getTimestamp(@Nonnull String field) {
-    return (Timestamp) get(field);
+    Instant instant = getInstant(field);
+    return Timestamp.ofTimeSecondsAndNanos(instant.getEpochSecond(), instant.getNano());
   }
 
   /**

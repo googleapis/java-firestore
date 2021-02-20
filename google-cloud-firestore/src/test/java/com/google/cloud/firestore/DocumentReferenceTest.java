@@ -20,7 +20,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPE
 import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPES_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.ALL_SUPPORTED_TYPES_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.BLOB;
-import static com.google.cloud.firestore.LocalFirestoreHelper.DATE;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.FIELD_TRANSFORM_COMMIT_RESPONSE;
@@ -240,8 +239,7 @@ public class DocumentReferenceTest {
     assertEquals((Double) 0.0, snapshot.getDouble("doubleValue"));
     assertEquals((Long) 0L, snapshot.getLong("longValue"));
     assertEquals(true, snapshot.getBoolean("trueValue"));
-    assertEquals(DATE, snapshot.getDate("dateValue"));
-    assertEquals(TIMESTAMP, snapshot.getTimestamp("timestampValue"));
+    assertEquals(TIMESTAMP, snapshot.getInstant("timestampValue"));
 
     assertEquals(BLOB, snapshot.getBlob("bytesValue"));
     assertEquals(BLOB.hashCode(), snapshot.getBlob("bytesValue").hashCode());
@@ -307,9 +305,7 @@ public class DocumentReferenceTest {
 
     DocumentSnapshot snapshot = documentReference.get().get();
 
-    assertEquals(Timestamp.of(DATE), snapshot.get("dateValue"));
     assertEquals(TIMESTAMP, snapshot.get("timestampValue"));
-    assertEquals(Timestamp.of(DATE), snapshot.getData().get("dateValue"));
     assertEquals(TIMESTAMP, snapshot.getData().get("timestampValue"));
   }
 
@@ -866,7 +862,6 @@ public class DocumentReferenceTest {
             "first.foo",
             "second.arrayValue",
             "second.bytesValue",
-            "second.dateValue",
             "second.doubleValue",
             "second.falseValue",
             "second.foo",

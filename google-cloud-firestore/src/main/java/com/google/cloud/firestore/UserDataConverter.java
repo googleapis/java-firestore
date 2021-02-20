@@ -16,18 +16,17 @@
 
 package com.google.cloud.firestore;
 
-import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
+
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 /** Converts user input into the Firestore Value representation. */
@@ -124,18 +123,9 @@ class UserDataConverter {
       return Value.newBuilder().setDoubleValue((Float) sanitizedObject).build();
     } else if (sanitizedObject instanceof Boolean) {
       return Value.newBuilder().setBooleanValue((Boolean) sanitizedObject).build();
-    } else if (sanitizedObject instanceof Date) {
-      Date date = (Date) sanitizedObject;
-      long epochSeconds = TimeUnit.MILLISECONDS.toSeconds(date.getTime());
-      long msOffset = date.getTime() - TimeUnit.SECONDS.toMillis(epochSeconds);
-      com.google.protobuf.Timestamp.Builder timestampBuilder =
-          com.google.protobuf.Timestamp.newBuilder();
-      timestampBuilder.setSeconds(epochSeconds);
-      timestampBuilder.setNanos((int) TimeUnit.MILLISECONDS.toNanos(msOffset));
-      return Value.newBuilder().setTimestampValue(timestampBuilder.build()).build();
-    } else if (sanitizedObject instanceof Timestamp) {
-      Timestamp timestamp = (Timestamp) sanitizedObject;
-      return Value.newBuilder().setTimestampValue(timestamp.toProto()).build();
+    } else if (sanitizedObject instanceof Instant) {
+      Instant timestamp = (Instant) sanitizedObject;
+      return Value.newBuilder().setTimestampValue(InstantUtils.toProto(timestamp)).build();
     } else if (sanitizedObject instanceof List) {
       ArrayValue.Builder res = ArrayValue.newBuilder();
       int i = 0;
@@ -197,7 +187,7 @@ class UserDataConverter {
       case DOUBLE_VALUE:
         return v.getDoubleValue();
       case TIMESTAMP_VALUE:
-        return Timestamp.fromProto(v.getTimestampValue());
+        return InstantUtils.fromProto(v.getTimestampValue());
       case STRING_VALUE:
         return v.getStringValue();
       case BYTES_VALUE:

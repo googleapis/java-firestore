@@ -83,6 +83,8 @@ import com.google.firestore.v1.RunQueryRequest;
 import io.grpc.Status;
 import io.grpc.Status.Code;
 import io.grpc.StatusRuntimeException;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -278,7 +280,7 @@ public class ITSystemTest extends ITBaseTest {
     randomDoc.set(updateMap, SetOptions.merge()).get();
     DocumentSnapshot documentSnapshot = randomDoc.get().get();
     assertEquals("b", documentSnapshot.getString("a"));
-    assertNotNull(documentSnapshot.getDate("c"));
+    assertNotNull(documentSnapshot.getTimestamp("c"));
   }
 
   @Test
@@ -306,7 +308,7 @@ public class ITSystemTest extends ITBaseTest {
   public void serverTimestamp() throws Exception {
     randomDoc.set(map("time", FieldValue.serverTimestamp())).get();
     DocumentSnapshot documentSnapshot = randomDoc.get().get();
-    assertTrue(documentSnapshot.getDate("time").getTime() > 0);
+    assertTrue(documentSnapshot.getInstant("time").getEpochSecond() > 0);
   }
 
   @Test
@@ -315,12 +317,12 @@ public class ITSystemTest extends ITBaseTest {
         addDocument("time", Timestamp.ofTimeSecondsAndNanos(0, 123000));
     DocumentSnapshot documentSnapshot = documentReference.get().get();
 
-    Timestamp timestamp = documentSnapshot.getTimestamp("time");
+    Instant timestamp = documentSnapshot.getInstant("time");
     documentReference.update("time", timestamp);
 
     documentSnapshot = documentReference.get().get();
-    timestamp = documentSnapshot.getTimestamp("time");
-    assertEquals(123000, timestamp.getNanos());
+    timestamp = documentSnapshot.getInstant("time");
+    assertEquals(123000, timestamp.getNano());
   }
 
   @Test

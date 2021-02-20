@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -167,8 +168,7 @@ class CustomClassMapper {
       } catch (NoSuchFieldException ex) {
         return enumName;
       }
-    } else if (o instanceof Date
-        || o instanceof Timestamp
+    } else if (o instanceof Instant
         || o instanceof GeoPoint
         || o instanceof Blob
         || o instanceof DocumentReference
@@ -229,9 +229,7 @@ class CustomClassMapper {
       return deserializeToPrimitive(o, clazz, context);
     } else if (String.class.isAssignableFrom(clazz)) {
       return (T) convertString(o, context);
-    } else if (Date.class.isAssignableFrom(clazz)) {
-      return (T) convertDate(o, context);
-    } else if (Timestamp.class.isAssignableFrom(clazz)) {
+    } else if (Instant.class.isAssignableFrom(clazz)) {
       return (T) convertTimestamp(o, context);
     } else if (Blob.class.isAssignableFrom(clazz)) {
       return (T) convertBlob(o, context);
@@ -533,23 +531,9 @@ class CustomClassMapper {
     }
   }
 
-  private static Date convertDate(Object o, DeserializeContext context) {
-    if (o instanceof Date) {
-      return (Date) o;
-    } else if (o instanceof Timestamp) {
-      return ((Timestamp) o).toDate();
-    } else {
-      throw deserializeError(
-          context.errorPath,
-          "Failed to convert value of type " + o.getClass().getName() + " to Date");
-    }
-  }
-
-  private static Timestamp convertTimestamp(Object o, DeserializeContext context) {
-    if (o instanceof Timestamp) {
-      return (Timestamp) o;
-    } else if (o instanceof Date) {
-      return Timestamp.of((Date) o);
+  private static Instant convertTimestamp(Object o, DeserializeContext context) {
+    if (o instanceof Instant) {
+      return (Instant) o;
     } else {
       throw deserializeError(
           context.errorPath,
