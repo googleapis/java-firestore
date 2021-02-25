@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.2.4](https://www.github.com/googleapis/java-firestore/compare/v2.2.3...v2.2.4) (2021-02-25)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.20.0 ([#554](https://www.github.com/googleapis/java-firestore/issues/554)) ([0ae4ea3](https://www.github.com/googleapis/java-firestore/commit/0ae4ea3ce4bdd3a361331615115bdf25928b7da6))
+
 ### [2.2.3](https://www.github.com/googleapis/java-firestore/compare/v2.2.2...v2.2.3) (2021-02-19)
 
 
