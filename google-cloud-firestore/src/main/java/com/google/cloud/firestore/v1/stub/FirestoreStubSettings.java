@@ -133,6 +133,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionSettings;
   private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
+  private final PagedCallSettings<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      partitionQuerySettings;
   private final UnaryCallSettings<RollbackRequest, Empty> rollbackSettings;
   private final ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings;
   private final StreamingCallSettings<WriteRequest, WriteResponse> writeSettings;
@@ -140,9 +143,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final PagedCallSettings<
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings;
-  private final PagedCallSettings<
-          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-      partitionQuerySettings;
 
   /** Returns the object with the settings used for calls to getDocument. */
   public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
@@ -192,6 +192,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     return commitSettings;
   }
 
+  /** Returns the object with the settings used for calls to partitionQuery. */
+  public PagedCallSettings<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      partitionQuerySettings() {
+    return partitionQuerySettings;
+  }
+
   /** Returns the object with the settings used for calls to rollback. */
   public UnaryCallSettings<RollbackRequest, Empty> rollbackSettings() {
     return rollbackSettings;
@@ -217,13 +224,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       listCollectionIdsSettings() {
     return listCollectionIdsSettings;
-  }
-
-  /** Returns the object with the settings used for calls to partitionQuery. */
-  public PagedCallSettings<
-          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-      partitionQuerySettings() {
-    return partitionQuerySettings;
   }
 
   @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
@@ -303,12 +303,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     batchWriteSettings = settingsBuilder.batchWriteSettings().build();
     beginTransactionSettings = settingsBuilder.beginTransactionSettings().build();
     commitSettings = settingsBuilder.commitSettings().build();
+    partitionQuerySettings = settingsBuilder.partitionQuerySettings().build();
     rollbackSettings = settingsBuilder.rollbackSettings().build();
     runQuerySettings = settingsBuilder.runQuerySettings().build();
     writeSettings = settingsBuilder.writeSettings().build();
     listenSettings = settingsBuilder.listenSettings().build();
     listCollectionIdsSettings = settingsBuilder.listCollectionIdsSettings().build();
-    partitionQuerySettings = settingsBuilder.partitionQuerySettings().build();
   }
 
   private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
@@ -344,6 +344,43 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               return payload.getDocumentsList() != null
                   ? payload.getDocumentsList()
                   : ImmutableList.<Document>of();
+            }
+          };
+
+  private static final PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>
+      PARTITION_QUERY_PAGE_STR_DESC =
+          new PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>() {
+            @Override
+            public String emptyToken() {
+              return "";
+            }
+
+            @Override
+            public PartitionQueryRequest injectToken(PartitionQueryRequest payload, String token) {
+              return PartitionQueryRequest.newBuilder(payload).setPageToken(token).build();
+            }
+
+            @Override
+            public PartitionQueryRequest injectPageSize(
+                PartitionQueryRequest payload, int pageSize) {
+              return PartitionQueryRequest.newBuilder(payload).setPageSize(pageSize).build();
+            }
+
+            @Override
+            public Integer extractPageSize(PartitionQueryRequest payload) {
+              return payload.getPageSize();
+            }
+
+            @Override
+            public String extractNextToken(PartitionQueryResponse payload) {
+              return payload.getNextPageToken();
+            }
+
+            @Override
+            public Iterable<Cursor> extractResources(PartitionQueryResponse payload) {
+              return payload.getPartitionsList() != null
+                  ? payload.getPartitionsList()
+                  : ImmutableList.<Cursor>of();
             }
           };
 
@@ -386,43 +423,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             }
           };
 
-  private static final PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>
-      PARTITION_QUERY_PAGE_STR_DESC =
-          new PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>() {
-            @Override
-            public String emptyToken() {
-              return "";
-            }
-
-            @Override
-            public PartitionQueryRequest injectToken(PartitionQueryRequest payload, String token) {
-              return PartitionQueryRequest.newBuilder(payload).setPageToken(token).build();
-            }
-
-            @Override
-            public PartitionQueryRequest injectPageSize(
-                PartitionQueryRequest payload, int pageSize) {
-              return PartitionQueryRequest.newBuilder(payload).setPageSize(pageSize).build();
-            }
-
-            @Override
-            public Integer extractPageSize(PartitionQueryRequest payload) {
-              return payload.getPageSize();
-            }
-
-            @Override
-            public String extractNextToken(PartitionQueryResponse payload) {
-              return payload.getNextPageToken();
-            }
-
-            @Override
-            public Iterable<Cursor> extractResources(PartitionQueryResponse payload) {
-              return payload.getPartitionsList() != null
-                  ? payload.getPartitionsList()
-                  : ImmutableList.<Cursor>of();
-            }
-          };
-
   private static final PagedListResponseFactory<
           ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
       LIST_DOCUMENTS_PAGE_STR_FACT =
@@ -437,6 +437,23 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               PageContext<ListDocumentsRequest, ListDocumentsResponse, Document> pageContext =
                   PageContext.create(callable, LIST_DOCUMENTS_PAGE_STR_DESC, request, context);
               return ListDocumentsPagedResponse.createAsync(pageContext, futureResponse);
+            }
+          };
+
+  private static final PagedListResponseFactory<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      PARTITION_QUERY_PAGE_STR_FACT =
+          new PagedListResponseFactory<
+              PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>() {
+            @Override
+            public ApiFuture<PartitionQueryPagedResponse> getFuturePagedResponse(
+                UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> callable,
+                PartitionQueryRequest request,
+                ApiCallContext context,
+                ApiFuture<PartitionQueryResponse> futureResponse) {
+              PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> pageContext =
+                  PageContext.create(callable, PARTITION_QUERY_PAGE_STR_DESC, request, context);
+              return PartitionQueryPagedResponse.createAsync(pageContext, futureResponse);
             }
           };
 
@@ -459,23 +476,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             }
           };
 
-  private static final PagedListResponseFactory<
-          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-      PARTITION_QUERY_PAGE_STR_FACT =
-          new PagedListResponseFactory<
-              PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>() {
-            @Override
-            public ApiFuture<PartitionQueryPagedResponse> getFuturePagedResponse(
-                UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> callable,
-                PartitionQueryRequest request,
-                ApiCallContext context,
-                ApiFuture<PartitionQueryResponse> futureResponse) {
-              PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> pageContext =
-                  PageContext.create(callable, PARTITION_QUERY_PAGE_STR_DESC, request, context);
-              return PartitionQueryPagedResponse.createAsync(pageContext, futureResponse);
-            }
-          };
-
   /** Builder for FirestoreStubSettings. */
   public static class Builder extends StubSettings.Builder<FirestoreStubSettings, Builder> {
     private final ImmutableList<UnaryCallSettings.Builder<?, ?>> unaryMethodSettingsBuilders;
@@ -495,6 +495,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final UnaryCallSettings.Builder<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionSettings;
     private final UnaryCallSettings.Builder<CommitRequest, CommitResponse> commitSettings;
+    private final PagedCallSettings.Builder<
+            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+        partitionQuerySettings;
     private final UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings;
     private final ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings;
@@ -503,9 +506,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final PagedCallSettings.Builder<
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings;
-    private final PagedCallSettings.Builder<
-            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-        partitionQuerySettings;
 
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
@@ -589,6 +589,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
       commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
+      partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
+
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       runQuerySettings = ServerStreamingCallSettings.newBuilder();
@@ -598,8 +600,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       listenSettings = StreamingCallSettings.newBuilder();
 
       listCollectionIdsSettings = PagedCallSettings.newBuilder(LIST_COLLECTION_IDS_PAGE_STR_FACT);
-
-      partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -611,9 +611,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               batchWriteSettings,
               beginTransactionSettings,
               commitSettings,
+              partitionQuerySettings,
               rollbackSettings,
-              listCollectionIdsSettings,
-              partitionQuerySettings);
+              listCollectionIdsSettings);
 
       initDefaults(this);
     }
@@ -675,6 +675,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       builder
+          .partitionQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+
+      builder
           .rollbackSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
@@ -687,11 +692,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       builder
           .listCollectionIdsSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
-          .partitionQuerySettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
 
       return builder;
@@ -709,12 +709,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       batchWriteSettings = settings.batchWriteSettings.toBuilder();
       beginTransactionSettings = settings.beginTransactionSettings.toBuilder();
       commitSettings = settings.commitSettings.toBuilder();
+      partitionQuerySettings = settings.partitionQuerySettings.toBuilder();
       rollbackSettings = settings.rollbackSettings.toBuilder();
       runQuerySettings = settings.runQuerySettings.toBuilder();
       writeSettings = settings.writeSettings.toBuilder();
       listenSettings = settings.listenSettings.toBuilder();
       listCollectionIdsSettings = settings.listCollectionIdsSettings.toBuilder();
-      partitionQuerySettings = settings.partitionQuerySettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -726,9 +726,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               batchWriteSettings,
               beginTransactionSettings,
               commitSettings,
+              partitionQuerySettings,
               rollbackSettings,
-              listCollectionIdsSettings,
-              partitionQuerySettings);
+              listCollectionIdsSettings);
     }
 
     // NEXT_MAJOR_VER: remove 'throws Exception'
@@ -796,6 +796,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       return commitSettings;
     }
 
+    /** Returns the builder for the settings used for calls to partitionQuery. */
+    public PagedCallSettings.Builder<
+            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+        partitionQuerySettings() {
+      return partitionQuerySettings;
+    }
+
     /** Returns the builder for the settings used for calls to rollback. */
     public UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings() {
       return rollbackSettings;
@@ -822,13 +829,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
         listCollectionIdsSettings() {
       return listCollectionIdsSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to partitionQuery. */
-    public PagedCallSettings.Builder<
-            PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-        partitionQuerySettings() {
-      return partitionQuerySettings;
     }
 
     @Override

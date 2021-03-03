@@ -153,6 +153,16 @@ public class GrpcFirestoreStub extends FirestoreStub {
           .setRequestMarshaller(ProtoUtils.marshaller(CommitRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(CommitResponse.getDefaultInstance()))
           .build();
+  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
+      partitionQueryMethodDescriptor =
+          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
+              .build();
   private static final MethodDescriptor<RollbackRequest, Empty> rollbackMethodDescriptor =
       MethodDescriptor.<RollbackRequest, Empty>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -192,16 +202,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListCollectionIdsResponse.getDefaultInstance()))
               .build();
-  private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
-      partitionQueryMethodDescriptor =
-          MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
-              .setType(MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName("google.firestore.v1.Firestore/PartitionQuery")
-              .setRequestMarshaller(
-                  ProtoUtils.marshaller(PartitionQueryRequest.getDefaultInstance()))
-              .setResponseMarshaller(
-                  ProtoUtils.marshaller(PartitionQueryResponse.getDefaultInstance()))
-              .build();
 
   private final BackgroundResource backgroundResources;
 
@@ -218,6 +218,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
   private final UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable;
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
+  private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable;
   private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
   private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
   private final BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable;
@@ -226,9 +229,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
       listCollectionIdsCallable;
   private final UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable;
-  private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
-  private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
-      partitionQueryPagedCallable;
 
   private final GrpcStubCallableFactory callableFactory;
 
@@ -369,6 +369,20 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   }
                 })
             .build();
+    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
+        partitionQueryTransportSettings =
+            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
+                .setMethodDescriptor(partitionQueryMethodDescriptor)
+                .setParamsExtractor(
+                    new RequestParamsExtractor<PartitionQueryRequest>() {
+                      @Override
+                      public Map<String, String> extract(PartitionQueryRequest request) {
+                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                        params.put("parent", String.valueOf(request.getParent()));
+                        return params.build();
+                      }
+                    })
+                .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         GrpcCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
@@ -417,20 +431,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
                       }
                     })
                 .build();
-    GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
-        partitionQueryTransportSettings =
-            GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
-                .setMethodDescriptor(partitionQueryMethodDescriptor)
-                .setParamsExtractor(
-                    new RequestParamsExtractor<PartitionQueryRequest>() {
-                      @Override
-                      public Map<String, String> extract(PartitionQueryRequest request) {
-                        ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                        params.put("parent", String.valueOf(request.getParent()));
-                        return params.build();
-                      }
-                    })
-                .build();
 
     this.getDocumentCallable =
         callableFactory.createUnaryCallable(
@@ -464,6 +464,12 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this.commitCallable =
         callableFactory.createUnaryCallable(
             commitTransportSettings, settings.commitSettings(), clientContext);
+    this.partitionQueryCallable =
+        callableFactory.createUnaryCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
+    this.partitionQueryPagedCallable =
+        callableFactory.createPagedCallable(
+            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
     this.rollbackCallable =
         callableFactory.createUnaryCallable(
             rollbackTransportSettings, settings.rollbackSettings(), clientContext);
@@ -486,12 +492,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
             listCollectionIdsTransportSettings,
             settings.listCollectionIdsSettings(),
             clientContext);
-    this.partitionQueryCallable =
-        callableFactory.createUnaryCallable(
-            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
-    this.partitionQueryPagedCallable =
-        callableFactory.createPagedCallable(
-            partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
 
     backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
@@ -539,6 +539,15 @@ public class GrpcFirestoreStub extends FirestoreStub {
     return commitCallable;
   }
 
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    return partitionQueryPagedCallable;
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
+    return partitionQueryCallable;
+  }
+
   public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
     return rollbackCallable;
   }
@@ -563,15 +572,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
-  }
-
-  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
-      partitionQueryPagedCallable() {
-    return partitionQueryPagedCallable;
-  }
-
-  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
-    return partitionQueryCallable;
   }
 
   @Override
