@@ -23,6 +23,13 @@
  * service `google.longrunning.Operations`.
  *
  * <p>Sample for FirestoreAdminClient:
+ *
+ * <pre>{@code
+ * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+ *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+ *   Index response = firestoreAdminClient.getIndex(name);
+ * }
+ * }</pre>
  */
 @Generated("by gapic-generator-java")
 package com.google.cloud.firestore.v1;

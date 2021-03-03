@@ -28,6 +28,17 @@
  * serverless apps.
  *
  * <p>Sample for FirestoreClient:
+ *
+ * <pre>{@code
+ * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+ *   GetDocumentRequest request =
+ *       GetDocumentRequest.newBuilder()
+ *           .setName("name3373707")
+ *           .setMask(DocumentMask.newBuilder().build())
+ *           .build();
+ *   Document response = firestoreClient.getDocument(request);
+ * }
+ * }</pre>
  */
 @Generated("by gapic-generator-java")
 package com.google.cloud.firestore.v1;
