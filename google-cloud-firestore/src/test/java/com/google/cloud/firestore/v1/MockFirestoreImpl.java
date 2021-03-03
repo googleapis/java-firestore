@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.firestore.v1;
 
 import com.google.api.core.BetaApi;
@@ -50,9 +51,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import javax.annotation.Generated;
 
-@javax.annotation.Generated("by GAPIC")
 @BetaApi
+@Generated("by gapic-generator-java")
 public class MockFirestoreImpl extends FirestoreImplBase {
   private List<AbstractMessage> requests;
   private Queue<Object> responses;
@@ -88,10 +90,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof Document) {
       requests.add(request);
-      responseObserver.onNext((Document) response);
+      responseObserver.onNext(((Document) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -103,10 +105,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof ListDocumentsResponse) {
       requests.add(request);
-      responseObserver.onNext((ListDocumentsResponse) response);
+      responseObserver.onNext(((ListDocumentsResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -118,10 +120,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof Document) {
       requests.add(request);
-      responseObserver.onNext((Document) response);
+      responseObserver.onNext(((Document) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -133,10 +135,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof Empty) {
       requests.add(request);
-      responseObserver.onNext((Empty) response);
+      responseObserver.onNext(((Empty) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -149,10 +151,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof BatchGetDocumentsResponse) {
       requests.add(request);
-      responseObserver.onNext((BatchGetDocumentsResponse) response);
+      responseObserver.onNext(((BatchGetDocumentsResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -164,10 +166,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof BeginTransactionResponse) {
       requests.add(request);
-      responseObserver.onNext((BeginTransactionResponse) response);
+      responseObserver.onNext(((BeginTransactionResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -178,10 +180,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof CommitResponse) {
       requests.add(request);
-      responseObserver.onNext((CommitResponse) response);
+      responseObserver.onNext(((CommitResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -192,10 +194,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof Empty) {
       requests.add(request);
-      responseObserver.onNext((Empty) response);
+      responseObserver.onNext(((Empty) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -206,10 +208,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof RunQueryResponse) {
       requests.add(request);
-      responseObserver.onNext((RunQueryResponse) response);
+      responseObserver.onNext(((RunQueryResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -221,10 +223,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof PartitionQueryResponse) {
       requests.add(request);
-      responseObserver.onNext((PartitionQueryResponse) response);
+      responseObserver.onNext(((PartitionQueryResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -239,9 +241,9 @@ public class MockFirestoreImpl extends FirestoreImplBase {
             requests.add(value);
             final Object response = responses.remove();
             if (response instanceof WriteResponse) {
-              responseObserver.onNext((WriteResponse) response);
+              responseObserver.onNext(((WriteResponse) response));
             } else if (response instanceof Exception) {
-              responseObserver.onError((Exception) response);
+              responseObserver.onError(((Exception) response));
             } else {
               responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
             }
@@ -270,9 +272,9 @@ public class MockFirestoreImpl extends FirestoreImplBase {
             requests.add(value);
             final Object response = responses.remove();
             if (response instanceof ListenResponse) {
-              responseObserver.onNext((ListenResponse) response);
+              responseObserver.onNext(((ListenResponse) response));
             } else if (response instanceof Exception) {
-              responseObserver.onError((Exception) response);
+              responseObserver.onError(((Exception) response));
             } else {
               responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
             }
@@ -298,10 +300,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof ListCollectionIdsResponse) {
       requests.add(request);
-      responseObserver.onNext((ListCollectionIdsResponse) response);
+      responseObserver.onNext(((ListCollectionIdsResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -313,10 +315,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof BatchWriteResponse) {
       requests.add(request);
-      responseObserver.onNext((BatchWriteResponse) response);
+      responseObserver.onNext(((BatchWriteResponse) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }
@@ -328,10 +330,10 @@ public class MockFirestoreImpl extends FirestoreImplBase {
     Object response = responses.remove();
     if (response instanceof Document) {
       requests.add(request);
-      responseObserver.onNext((Document) response);
+      responseObserver.onNext(((Document) response));
       responseObserver.onCompleted();
     } else if (response instanceof Exception) {
-      responseObserver.onError((Exception) response);
+      responseObserver.onError(((Exception) response));
     } else {
       responseObserver.onError(new IllegalArgumentException("Unrecognized response type"));
     }

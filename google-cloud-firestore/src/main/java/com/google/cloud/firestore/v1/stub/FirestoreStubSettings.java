@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.firestore.v1.stub;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
@@ -80,7 +81,7 @@ import java.util.List;
 import javax.annotation.Generated;
 import org.threeten.bp.Duration;
 
-// AUTO-GENERATED DOCUMENTATION AND CLASS
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
  * Settings class to configure an instance of {@link FirestoreStub}.
  *
@@ -95,23 +96,24 @@ import org.threeten.bp.Duration;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of updateDocument to 30 seconds:
+ * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
- * <pre>
- * <code>
- * FirestoreStubSettings.Builder firestoreSettingsBuilder =
- *     FirestoreStubSettings.newBuilder();
+ * <pre>{@code
+ * FirestoreStubSettings.Builder firestoreSettingsBuilder = FirestoreStubSettings.newBuilder();
  * firestoreSettingsBuilder
- *     .updateDocumentSettings()
+ *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder.updateDocumentSettings().getRetrySettings().toBuilder()
+ *         firestoreSettingsBuilder
+ *             .getDocumentSettings()
+ *             .getRetrySettings()
+ *             .toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreStubSettings firestoreSettings = firestoreSettingsBuilder.build();
- * </code>
- * </pre>
+ * }</pre>
  */
-@Generated("by gapic-generator")
+@BetaApi
+@Generated("by gapic-generator-java")
 public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   /** The default scopes of the service. */
   private static final ImmutableList<String> DEFAULT_SERVICE_SCOPES =
@@ -143,6 +145,171 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       listCollectionIdsSettings;
   private final UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteSettings;
   private final UnaryCallSettings<CreateDocumentRequest, Document> createDocumentSettings;
+
+  private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
+      LIST_DOCUMENTS_PAGE_STR_DESC =
+          new PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>() {
+            @Override
+            public String emptyToken() {
+              return "";
+            }
+
+            @Override
+            public ListDocumentsRequest injectToken(ListDocumentsRequest payload, String token) {
+              return ListDocumentsRequest.newBuilder(payload).setPageToken(token).build();
+            }
+
+            @Override
+            public ListDocumentsRequest injectPageSize(ListDocumentsRequest payload, int pageSize) {
+              return ListDocumentsRequest.newBuilder(payload).setPageSize(pageSize).build();
+            }
+
+            @Override
+            public Integer extractPageSize(ListDocumentsRequest payload) {
+              return payload.getPageSize();
+            }
+
+            @Override
+            public String extractNextToken(ListDocumentsResponse payload) {
+              return payload.getNextPageToken();
+            }
+
+            @Override
+            public Iterable<Document> extractResources(ListDocumentsResponse payload) {
+              return payload.getDocumentsList() == null
+                  ? ImmutableList.<Document>of()
+                  : payload.getDocumentsList();
+            }
+          };
+
+  private static final PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>
+      PARTITION_QUERY_PAGE_STR_DESC =
+          new PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>() {
+            @Override
+            public String emptyToken() {
+              return "";
+            }
+
+            @Override
+            public PartitionQueryRequest injectToken(PartitionQueryRequest payload, String token) {
+              return PartitionQueryRequest.newBuilder(payload).setPageToken(token).build();
+            }
+
+            @Override
+            public PartitionQueryRequest injectPageSize(
+                PartitionQueryRequest payload, int pageSize) {
+              return PartitionQueryRequest.newBuilder(payload).setPageSize(pageSize).build();
+            }
+
+            @Override
+            public Integer extractPageSize(PartitionQueryRequest payload) {
+              return payload.getPageSize();
+            }
+
+            @Override
+            public String extractNextToken(PartitionQueryResponse payload) {
+              return payload.getNextPageToken();
+            }
+
+            @Override
+            public Iterable<Cursor> extractResources(PartitionQueryResponse payload) {
+              return payload.getPartitionsList() == null
+                  ? ImmutableList.<Cursor>of()
+                  : payload.getPartitionsList();
+            }
+          };
+
+  private static final PagedListDescriptor<
+          ListCollectionIdsRequest, ListCollectionIdsResponse, String>
+      LIST_COLLECTION_IDS_PAGE_STR_DESC =
+          new PagedListDescriptor<ListCollectionIdsRequest, ListCollectionIdsResponse, String>() {
+            @Override
+            public String emptyToken() {
+              return "";
+            }
+
+            @Override
+            public ListCollectionIdsRequest injectToken(
+                ListCollectionIdsRequest payload, String token) {
+              return ListCollectionIdsRequest.newBuilder(payload).setPageToken(token).build();
+            }
+
+            @Override
+            public ListCollectionIdsRequest injectPageSize(
+                ListCollectionIdsRequest payload, int pageSize) {
+              return ListCollectionIdsRequest.newBuilder(payload).setPageSize(pageSize).build();
+            }
+
+            @Override
+            public Integer extractPageSize(ListCollectionIdsRequest payload) {
+              return payload.getPageSize();
+            }
+
+            @Override
+            public String extractNextToken(ListCollectionIdsResponse payload) {
+              return payload.getNextPageToken();
+            }
+
+            @Override
+            public Iterable<String> extractResources(ListCollectionIdsResponse payload) {
+              return payload.getCollectionIdsList() == null
+                  ? ImmutableList.<String>of()
+                  : payload.getCollectionIdsList();
+            }
+          };
+
+  private static final PagedListResponseFactory<
+          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+      LIST_DOCUMENTS_PAGE_STR_FACT =
+          new PagedListResponseFactory<
+              ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>() {
+            @Override
+            public ApiFuture<ListDocumentsPagedResponse> getFuturePagedResponse(
+                UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> callable,
+                ListDocumentsRequest request,
+                ApiCallContext context,
+                ApiFuture<ListDocumentsResponse> futureResponse) {
+              PageContext<ListDocumentsRequest, ListDocumentsResponse, Document> pageContext =
+                  PageContext.create(callable, LIST_DOCUMENTS_PAGE_STR_DESC, request, context);
+              return ListDocumentsPagedResponse.createAsync(pageContext, futureResponse);
+            }
+          };
+
+  private static final PagedListResponseFactory<
+          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+      PARTITION_QUERY_PAGE_STR_FACT =
+          new PagedListResponseFactory<
+              PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>() {
+            @Override
+            public ApiFuture<PartitionQueryPagedResponse> getFuturePagedResponse(
+                UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> callable,
+                PartitionQueryRequest request,
+                ApiCallContext context,
+                ApiFuture<PartitionQueryResponse> futureResponse) {
+              PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> pageContext =
+                  PageContext.create(callable, PARTITION_QUERY_PAGE_STR_DESC, request, context);
+              return PartitionQueryPagedResponse.createAsync(pageContext, futureResponse);
+            }
+          };
+
+  private static final PagedListResponseFactory<
+          ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
+      LIST_COLLECTION_IDS_PAGE_STR_FACT =
+          new PagedListResponseFactory<
+              ListCollectionIdsRequest,
+              ListCollectionIdsResponse,
+              ListCollectionIdsPagedResponse>() {
+            @Override
+            public ApiFuture<ListCollectionIdsPagedResponse> getFuturePagedResponse(
+                UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse> callable,
+                ListCollectionIdsRequest request,
+                ApiCallContext context,
+                ApiFuture<ListCollectionIdsResponse> futureResponse) {
+              PageContext<ListCollectionIdsRequest, ListCollectionIdsResponse, String> pageContext =
+                  PageContext.create(callable, LIST_COLLECTION_IDS_PAGE_STR_DESC, request, context);
+              return ListCollectionIdsPagedResponse.createAsync(pageContext, futureResponse);
+            }
+          };
 
   /** Returns the object with the settings used for calls to getDocument. */
   public UnaryCallSettings<GetDocumentRequest, Document> getDocumentSettings() {
@@ -232,10 +399,10 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
         .getTransportName()
         .equals(GrpcTransportChannel.getGrpcTransportName())) {
       return GrpcFirestoreStub.create(this);
-    } else {
-      throw new UnsupportedOperationException(
-          "Transport not supported: " + getTransportChannelProvider().getTransportName());
     }
+    throw new UnsupportedOperationException(
+        String.format(
+            "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
   }
 
   /** Returns a builder for the default ExecutorProvider for this service. */
@@ -311,175 +478,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     createDocumentSettings = settingsBuilder.createDocumentSettings().build();
   }
 
-  private static final PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>
-      LIST_DOCUMENTS_PAGE_STR_DESC =
-          new PagedListDescriptor<ListDocumentsRequest, ListDocumentsResponse, Document>() {
-            @Override
-            public String emptyToken() {
-              return "";
-            }
-
-            @Override
-            public ListDocumentsRequest injectToken(ListDocumentsRequest payload, String token) {
-              return ListDocumentsRequest.newBuilder(payload).setPageToken(token).build();
-            }
-
-            @Override
-            public ListDocumentsRequest injectPageSize(ListDocumentsRequest payload, int pageSize) {
-              return ListDocumentsRequest.newBuilder(payload).setPageSize(pageSize).build();
-            }
-
-            @Override
-            public Integer extractPageSize(ListDocumentsRequest payload) {
-              return payload.getPageSize();
-            }
-
-            @Override
-            public String extractNextToken(ListDocumentsResponse payload) {
-              return payload.getNextPageToken();
-            }
-
-            @Override
-            public Iterable<Document> extractResources(ListDocumentsResponse payload) {
-              return payload.getDocumentsList() != null
-                  ? payload.getDocumentsList()
-                  : ImmutableList.<Document>of();
-            }
-          };
-
-  private static final PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>
-      PARTITION_QUERY_PAGE_STR_DESC =
-          new PagedListDescriptor<PartitionQueryRequest, PartitionQueryResponse, Cursor>() {
-            @Override
-            public String emptyToken() {
-              return "";
-            }
-
-            @Override
-            public PartitionQueryRequest injectToken(PartitionQueryRequest payload, String token) {
-              return PartitionQueryRequest.newBuilder(payload).setPageToken(token).build();
-            }
-
-            @Override
-            public PartitionQueryRequest injectPageSize(
-                PartitionQueryRequest payload, int pageSize) {
-              return PartitionQueryRequest.newBuilder(payload).setPageSize(pageSize).build();
-            }
-
-            @Override
-            public Integer extractPageSize(PartitionQueryRequest payload) {
-              return payload.getPageSize();
-            }
-
-            @Override
-            public String extractNextToken(PartitionQueryResponse payload) {
-              return payload.getNextPageToken();
-            }
-
-            @Override
-            public Iterable<Cursor> extractResources(PartitionQueryResponse payload) {
-              return payload.getPartitionsList() != null
-                  ? payload.getPartitionsList()
-                  : ImmutableList.<Cursor>of();
-            }
-          };
-
-  private static final PagedListDescriptor<
-          ListCollectionIdsRequest, ListCollectionIdsResponse, String>
-      LIST_COLLECTION_IDS_PAGE_STR_DESC =
-          new PagedListDescriptor<ListCollectionIdsRequest, ListCollectionIdsResponse, String>() {
-            @Override
-            public String emptyToken() {
-              return "";
-            }
-
-            @Override
-            public ListCollectionIdsRequest injectToken(
-                ListCollectionIdsRequest payload, String token) {
-              return ListCollectionIdsRequest.newBuilder(payload).setPageToken(token).build();
-            }
-
-            @Override
-            public ListCollectionIdsRequest injectPageSize(
-                ListCollectionIdsRequest payload, int pageSize) {
-              return ListCollectionIdsRequest.newBuilder(payload).setPageSize(pageSize).build();
-            }
-
-            @Override
-            public Integer extractPageSize(ListCollectionIdsRequest payload) {
-              return payload.getPageSize();
-            }
-
-            @Override
-            public String extractNextToken(ListCollectionIdsResponse payload) {
-              return payload.getNextPageToken();
-            }
-
-            @Override
-            public Iterable<String> extractResources(ListCollectionIdsResponse payload) {
-              return payload.getCollectionIdsList() != null
-                  ? payload.getCollectionIdsList()
-                  : ImmutableList.<String>of();
-            }
-          };
-
-  private static final PagedListResponseFactory<
-          ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
-      LIST_DOCUMENTS_PAGE_STR_FACT =
-          new PagedListResponseFactory<
-              ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>() {
-            @Override
-            public ApiFuture<ListDocumentsPagedResponse> getFuturePagedResponse(
-                UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> callable,
-                ListDocumentsRequest request,
-                ApiCallContext context,
-                ApiFuture<ListDocumentsResponse> futureResponse) {
-              PageContext<ListDocumentsRequest, ListDocumentsResponse, Document> pageContext =
-                  PageContext.create(callable, LIST_DOCUMENTS_PAGE_STR_DESC, request, context);
-              return ListDocumentsPagedResponse.createAsync(pageContext, futureResponse);
-            }
-          };
-
-  private static final PagedListResponseFactory<
-          PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
-      PARTITION_QUERY_PAGE_STR_FACT =
-          new PagedListResponseFactory<
-              PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>() {
-            @Override
-            public ApiFuture<PartitionQueryPagedResponse> getFuturePagedResponse(
-                UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> callable,
-                PartitionQueryRequest request,
-                ApiCallContext context,
-                ApiFuture<PartitionQueryResponse> futureResponse) {
-              PageContext<PartitionQueryRequest, PartitionQueryResponse, Cursor> pageContext =
-                  PageContext.create(callable, PARTITION_QUERY_PAGE_STR_DESC, request, context);
-              return PartitionQueryPagedResponse.createAsync(pageContext, futureResponse);
-            }
-          };
-
-  private static final PagedListResponseFactory<
-          ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
-      LIST_COLLECTION_IDS_PAGE_STR_FACT =
-          new PagedListResponseFactory<
-              ListCollectionIdsRequest,
-              ListCollectionIdsResponse,
-              ListCollectionIdsPagedResponse>() {
-            @Override
-            public ApiFuture<ListCollectionIdsPagedResponse> getFuturePagedResponse(
-                UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse> callable,
-                ListCollectionIdsRequest request,
-                ApiCallContext context,
-                ApiFuture<ListCollectionIdsResponse> futureResponse) {
-              PageContext<ListCollectionIdsRequest, ListCollectionIdsResponse, String> pageContext =
-                  PageContext.create(callable, LIST_COLLECTION_IDS_PAGE_STR_DESC, request, context);
-              return ListCollectionIdsPagedResponse.createAsync(pageContext, futureResponse);
-            }
-          };
-
   /** Builder for FirestoreStubSettings. */
   public static class Builder extends StubSettings.Builder<FirestoreStubSettings, Builder> {
     private final ImmutableList<UnaryCallSettings.Builder<?, ?>> unaryMethodSettingsBuilders;
-
     private final UnaryCallSettings.Builder<GetDocumentRequest, Document> getDocumentSettings;
     private final PagedCallSettings.Builder<
             ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
@@ -506,7 +507,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final UnaryCallSettings.Builder<BatchWriteRequest, BatchWriteResponse>
         batchWriteSettings;
     private final UnaryCallSettings.Builder<CreateDocumentRequest, Document> createDocumentSettings;
-
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
 
@@ -521,16 +521,17 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
       definitions.put(
-          "retry_policy_1_codes",
+          "retry_policy_0_codes",
           ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList(StatusCode.Code.UNAVAILABLE)));
-      definitions.put("no_retry_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
-          "retry_policy_3_codes",
+          "retry_policy_1_codes",
           ImmutableSet.copyOf(
               Lists.<StatusCode.Code>newArrayList(
                   StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
+      definitions.put(
+          "no_retry_3_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
           "retry_policy_2_codes",
           ImmutableSet.copyOf(
@@ -538,8 +539,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
                   StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
-      definitions.put(
-          "no_retry_1_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
           "retry_policy_5_codes",
           ImmutableSet.copyOf(
@@ -563,39 +562,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               .setMaxRpcTimeout(Duration.ofMillis(60000L))
               .setTotalTimeout(Duration.ofMillis(60000L))
               .build();
-      definitions.put("retry_policy_1_params", settings);
-      settings =
-          RetrySettings.newBuilder()
-              .setInitialRetryDelay(Duration.ofMillis(100L))
-              .setRetryDelayMultiplier(1.3)
-              .setMaxRetryDelay(Duration.ofMillis(60000L))
-              .setInitialRpcTimeout(Duration.ofMillis(300000L))
-              .setRpcTimeoutMultiplier(1.0)
-              .setMaxRpcTimeout(Duration.ofMillis(300000L))
-              .setTotalTimeout(Duration.ofMillis(300000L))
-              .build();
-      definitions.put("retry_policy_2_params", settings);
-      settings =
-          RetrySettings.newBuilder()
-              .setInitialRetryDelay(Duration.ofMillis(100L))
-              .setRetryDelayMultiplier(1.3)
-              .setMaxRetryDelay(Duration.ofMillis(60000L))
-              .setInitialRpcTimeout(Duration.ofMillis(86400000L))
-              .setRpcTimeoutMultiplier(1.0)
-              .setMaxRpcTimeout(Duration.ofMillis(86400000L))
-              .setTotalTimeout(Duration.ofMillis(86400000L))
-              .build();
-      definitions.put("retry_policy_3_params", settings);
-      settings =
-          RetrySettings.newBuilder()
-              .setInitialRetryDelay(Duration.ofMillis(100L))
-              .setRetryDelayMultiplier(1.3)
-              .setMaxRetryDelay(Duration.ofMillis(60000L))
-              .setInitialRpcTimeout(Duration.ofMillis(60000L))
-              .setRpcTimeoutMultiplier(1.0)
-              .setMaxRpcTimeout(Duration.ofMillis(60000L))
-              .setTotalTimeout(Duration.ofMillis(60000L))
-              .build();
       definitions.put("retry_policy_4_params", settings);
       settings =
           RetrySettings.newBuilder()
@@ -607,9 +573,18 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               .setMaxRpcTimeout(Duration.ofMillis(60000L))
               .setTotalTimeout(Duration.ofMillis(60000L))
               .build();
-      definitions.put("retry_policy_5_params", settings);
-      settings = RetrySettings.newBuilder().setRpcTimeoutMultiplier(1.0).build();
-      definitions.put("no_retry_params", settings);
+      definitions.put("retry_policy_0_params", settings);
+      settings =
+          RetrySettings.newBuilder()
+              .setInitialRetryDelay(Duration.ofMillis(100L))
+              .setRetryDelayMultiplier(1.3)
+              .setMaxRetryDelay(Duration.ofMillis(60000L))
+              .setInitialRpcTimeout(Duration.ofMillis(300000L))
+              .setRpcTimeoutMultiplier(1.0)
+              .setMaxRpcTimeout(Duration.ofMillis(300000L))
+              .setTotalTimeout(Duration.ofMillis(300000L))
+              .build();
+      definitions.put("retry_policy_1_params", settings);
       settings =
           RetrySettings.newBuilder()
               .setInitialRpcTimeout(Duration.ofMillis(86400000L))
@@ -617,45 +592,53 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               .setMaxRpcTimeout(Duration.ofMillis(86400000L))
               .setTotalTimeout(Duration.ofMillis(86400000L))
               .build();
-      definitions.put("no_retry_1_params", settings);
+      definitions.put("no_retry_3_params", settings);
+      settings =
+          RetrySettings.newBuilder()
+              .setInitialRetryDelay(Duration.ofMillis(100L))
+              .setRetryDelayMultiplier(1.3)
+              .setMaxRetryDelay(Duration.ofMillis(60000L))
+              .setInitialRpcTimeout(Duration.ofMillis(86400000L))
+              .setRpcTimeoutMultiplier(1.0)
+              .setMaxRpcTimeout(Duration.ofMillis(86400000L))
+              .setTotalTimeout(Duration.ofMillis(86400000L))
+              .build();
+      definitions.put("retry_policy_2_params", settings);
+      settings =
+          RetrySettings.newBuilder()
+              .setInitialRetryDelay(Duration.ofMillis(100L))
+              .setRetryDelayMultiplier(1.3)
+              .setMaxRetryDelay(Duration.ofMillis(60000L))
+              .setInitialRpcTimeout(Duration.ofMillis(60000L))
+              .setRpcTimeoutMultiplier(1.0)
+              .setMaxRpcTimeout(Duration.ofMillis(60000L))
+              .setTotalTimeout(Duration.ofMillis(60000L))
+              .build();
+      definitions.put("retry_policy_5_params", settings);
       RETRY_PARAM_DEFINITIONS = definitions.build();
     }
 
     protected Builder() {
-      this((ClientContext) null);
+      this(((ClientContext) null));
     }
 
     protected Builder(ClientContext clientContext) {
       super(clientContext);
 
       getDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       listDocumentsSettings = PagedCallSettings.newBuilder(LIST_DOCUMENTS_PAGE_STR_FACT);
-
       updateDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       deleteDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       batchGetDocumentsSettings = ServerStreamingCallSettings.newBuilder();
-
       beginTransactionSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       runQuerySettings = ServerStreamingCallSettings.newBuilder();
-
       partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
-
       writeSettings = StreamingCallSettings.newBuilder();
-
       listenSettings = StreamingCallSettings.newBuilder();
-
       listCollectionIdsSettings = PagedCallSettings.newBuilder(LIST_COLLECTION_IDS_PAGE_STR_FACT);
-
       batchWriteSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
       createDocumentSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       unaryMethodSettingsBuilders =
@@ -671,87 +654,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               listCollectionIdsSettings,
               batchWriteSettings,
               createDocumentSettings);
-
       initDefaults(this);
-    }
-
-    private static Builder createDefault() {
-      Builder builder = new Builder((ClientContext) null);
-      builder.setTransportChannelProvider(defaultTransportChannelProvider());
-      builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
-      builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
-      return initDefaults(builder);
-    }
-
-    private static Builder initDefaults(Builder builder) {
-
-      builder
-          .getDocumentSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .listDocumentsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .updateDocumentSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
-
-      builder
-          .deleteDocumentSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .batchGetDocumentsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_2_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_2_params"));
-
-      builder
-          .beginTransactionSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .commitSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
-
-      builder
-          .rollbackSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .runQuerySettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_2_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_2_params"));
-
-      builder
-          .partitionQuerySettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_2_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_2_params"));
-
-      builder
-          .listCollectionIdsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
-
-      builder
-          .batchWriteSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_5_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_5_params"));
-
-      builder
-          .createDocumentSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
-
-      return builder;
     }
 
     protected Builder(FirestoreStubSettings settings) {
@@ -788,7 +691,87 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               createDocumentSettings);
     }
 
-    // NEXT_MAJOR_VER: remove 'throws Exception'
+    private static Builder createDefault() {
+      Builder builder = new Builder(((ClientContext) null));
+
+      builder.setTransportChannelProvider(defaultTransportChannelProvider());
+      builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
+      builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
+      builder.setEndpoint(getDefaultEndpoint());
+
+      return initDefaults(builder);
+    }
+
+    private static Builder initDefaults(Builder builder) {
+      builder
+          .getDocumentSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .listDocumentsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .updateDocumentSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_0_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_0_params"));
+
+      builder
+          .deleteDocumentSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .batchGetDocumentsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .beginTransactionSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .commitSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_0_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_0_params"));
+
+      builder
+          .rollbackSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .runQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .partitionQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .listCollectionIdsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_4_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_4_params"));
+
+      builder
+          .batchWriteSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_5_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_5_params"));
+
+      builder
+          .createDocumentSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_0_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_0_params"));
+
+      return builder;
+    }
+
+    // NEXT_MAJOR_VER: remove 'throws Exception'.
     /**
      * Applies the given settings updater function to all of the unary API methods in this service.
      *
