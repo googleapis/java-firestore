@@ -259,11 +259,21 @@ public class GrpcFirestoreStub extends FirestoreStub {
         FirestoreStubSettings.newBuilder().build(), clientContext, callableFactory);
   }
 
+  /**
+   * Constructs an instance of GrpcFirestoreStub, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
   protected GrpcFirestoreStub(FirestoreStubSettings settings, ClientContext clientContext)
       throws IOException {
     this(settings, clientContext, new GrpcFirestoreCallableFactory());
   }
 
+  /**
+   * Constructs an instance of GrpcFirestoreStub, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
   protected GrpcFirestoreStub(
       FirestoreStubSettings settings,
       ClientContext clientContext,

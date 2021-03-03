@@ -237,7 +237,7 @@ public class FirestoreClient implements BackgroundResource {
    *
    * @param document Required. The updated document. Creates the document if it does not already
    *     exist.
-   * @param update_mask The fields to update. None of the field paths in the mask may contain a
+   * @param updateMask The fields to update. None of the field paths in the mask may contain a
    *     reserved name.
    *     <p>If the document exists on the server and has fields not referenced in the mask, they are
    *     left unchanged. Fields referenced in the mask, but not present in the input document, are
