@@ -76,10 +76,6 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: listDocumentsCallable()");
   }
 
-  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
-    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
-  }
-
   public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
     throw new UnsupportedOperationException("Not implemented: updateDocumentCallable()");
   }
@@ -93,10 +89,6 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: batchGetDocumentsCallable()");
   }
 
-  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
-    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
-  }
-
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     throw new UnsupportedOperationException("Not implemented: beginTransactionCallable()");
@@ -106,6 +98,14 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: commitCallable()");
   }
 
+  public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
+    throw new UnsupportedOperationException("Not implemented: rollbackCallable()");
+  }
+
+  public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
+    throw new UnsupportedOperationException("Not implemented: runQueryCallable()");
+  }
+
   public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable() {
     throw new UnsupportedOperationException("Not implemented: partitionQueryPagedCallable()");
@@ -113,14 +113,6 @@ public abstract class FirestoreStub implements BackgroundResource {
 
   public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
     throw new UnsupportedOperationException("Not implemented: partitionQueryCallable()");
-  }
-
-  public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
-    throw new UnsupportedOperationException("Not implemented: rollbackCallable()");
-  }
-
-  public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
-    throw new UnsupportedOperationException("Not implemented: runQueryCallable()");
   }
 
   public BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable() {
@@ -139,6 +131,14 @@ public abstract class FirestoreStub implements BackgroundResource {
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     throw new UnsupportedOperationException("Not implemented: listCollectionIdsCallable()");
+  }
+
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
+  }
+
+  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
+    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
   }
 
   @Override

@@ -215,63 +215,6 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
-  public void createDocumentTest() {
-    String name = "name3373707";
-    Document expectedResponse = Document.newBuilder().setName(name).build();
-    mockFirestore.addResponse(expectedResponse);
-
-    String parent = "parent-995424086";
-    String collectionId = "collectionId-821242276";
-    Document document = Document.newBuilder().build();
-    CreateDocumentRequest request =
-        CreateDocumentRequest.newBuilder()
-            .setParent(parent)
-            .setCollectionId(collectionId)
-            .setDocument(document)
-            .build();
-
-    Document actualResponse = client.createDocument(request);
-    Assert.assertEquals(expectedResponse, actualResponse);
-
-    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    CreateDocumentRequest actualRequest = (CreateDocumentRequest) actualRequests.get(0);
-
-    Assert.assertEquals(parent, actualRequest.getParent());
-    Assert.assertEquals(collectionId, actualRequest.getCollectionId());
-    Assert.assertEquals(document, actualRequest.getDocument());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void createDocumentExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestore.addException(exception);
-
-    try {
-      String parent = "parent-995424086";
-      String collectionId = "collectionId-821242276";
-      Document document = Document.newBuilder().build();
-      CreateDocumentRequest request =
-          CreateDocumentRequest.newBuilder()
-              .setParent(parent)
-              .setCollectionId(collectionId)
-              .setDocument(document)
-              .build();
-
-      client.createDocument(request);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
   public void updateDocumentTest() {
     String name = "name3373707";
     Document expectedResponse = Document.newBuilder().setName(name).build();
@@ -402,46 +345,6 @@ public class FirestoreClientTest {
 
   @Test
   @SuppressWarnings("all")
-  public void batchWriteTest() {
-    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
-    mockFirestore.addResponse(expectedResponse);
-
-    String database = "database1789464955";
-    BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
-
-    BatchWriteResponse actualResponse = client.batchWrite(request);
-    Assert.assertEquals(expectedResponse, actualResponse);
-
-    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
-
-    Assert.assertEquals(database, actualRequest.getDatabase());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void batchWriteExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestore.addException(exception);
-
-    try {
-      String database = "database1789464955";
-      BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
-
-      client.batchWrite(request);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
   public void beginTransactionTest() {
     ByteString transaction = ByteString.copyFromUtf8("-34");
     BeginTransactionResponse expectedResponse =
@@ -515,56 +418,6 @@ public class FirestoreClientTest {
       List<Write> writes = new ArrayList<>();
 
       client.commit(database, writes);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void partitionQueryTest() {
-    String nextPageToken = "";
-    Cursor partitionsElement = Cursor.newBuilder().build();
-    List<Cursor> partitions = Arrays.asList(partitionsElement);
-    PartitionQueryResponse expectedResponse =
-        PartitionQueryResponse.newBuilder()
-            .setNextPageToken(nextPageToken)
-            .addAllPartitions(partitions)
-            .build();
-    mockFirestore.addResponse(expectedResponse);
-
-    String parent = "parent-995424086";
-    PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
-
-    PartitionQueryPagedResponse pagedListResponse = client.partitionQuery(request);
-
-    List<Cursor> resources = Lists.newArrayList(pagedListResponse.iterateAll());
-    Assert.assertEquals(1, resources.size());
-    Assert.assertEquals(expectedResponse.getPartitionsList().get(0), resources.get(0));
-
-    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    PartitionQueryRequest actualRequest = (PartitionQueryRequest) actualRequests.get(0);
-
-    Assert.assertEquals(parent, actualRequest.getParent());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void partitionQueryExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestore.addException(exception);
-
-    try {
-      String parent = "parent-995424086";
-      PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
-
-      client.partitionQuery(request);
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception
@@ -655,6 +508,56 @@ public class FirestoreClientTest {
       Assert.assertTrue(e.getCause() instanceof InvalidArgumentException);
       InvalidArgumentException apiException = (InvalidArgumentException) e.getCause();
       Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void partitionQueryTest() {
+    String nextPageToken = "";
+    Cursor partitionsElement = Cursor.newBuilder().build();
+    List<Cursor> partitions = Arrays.asList(partitionsElement);
+    PartitionQueryResponse expectedResponse =
+        PartitionQueryResponse.newBuilder()
+            .setNextPageToken(nextPageToken)
+            .addAllPartitions(partitions)
+            .build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+    PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
+
+    PartitionQueryPagedResponse pagedListResponse = client.partitionQuery(request);
+
+    List<Cursor> resources = Lists.newArrayList(pagedListResponse.iterateAll());
+    Assert.assertEquals(1, resources.size());
+    Assert.assertEquals(expectedResponse.getPartitionsList().get(0), resources.get(0));
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    PartitionQueryRequest actualRequest = (PartitionQueryRequest) actualRequests.get(0);
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void partitionQueryExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      PartitionQueryRequest request = PartitionQueryRequest.newBuilder().setParent(parent).build();
+
+      client.partitionQuery(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
     }
   }
 
@@ -795,6 +698,103 @@ public class FirestoreClientTest {
       String parent = "parent-995424086";
 
       client.listCollectionIds(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void batchWriteTest() {
+    BatchWriteResponse expectedResponse = BatchWriteResponse.newBuilder().build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String database = "database1789464955";
+    BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+    BatchWriteResponse actualResponse = client.batchWrite(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    BatchWriteRequest actualRequest = (BatchWriteRequest) actualRequests.get(0);
+
+    Assert.assertEquals(database, actualRequest.getDatabase());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void batchWriteExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String database = "database1789464955";
+      BatchWriteRequest request = BatchWriteRequest.newBuilder().setDatabase(database).build();
+
+      client.batchWrite(request);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void createDocumentTest() {
+    String name = "name3373707";
+    Document expectedResponse = Document.newBuilder().setName(name).build();
+    mockFirestore.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+    String collectionId = "collectionId-821242276";
+    Document document = Document.newBuilder().build();
+    CreateDocumentRequest request =
+        CreateDocumentRequest.newBuilder()
+            .setParent(parent)
+            .setCollectionId(collectionId)
+            .setDocument(document)
+            .build();
+
+    Document actualResponse = client.createDocument(request);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestore.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateDocumentRequest actualRequest = (CreateDocumentRequest) actualRequests.get(0);
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertEquals(collectionId, actualRequest.getCollectionId());
+    Assert.assertEquals(document, actualRequest.getDocument());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void createDocumentExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      String collectionId = "collectionId-821242276";
+      Document document = Document.newBuilder().build();
+      CreateDocumentRequest request =
+          CreateDocumentRequest.newBuilder()
+              .setParent(parent)
+              .setCollectionId(collectionId)
+              .setDocument(document)
+              .build();
+
+      client.createDocument(request);
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception

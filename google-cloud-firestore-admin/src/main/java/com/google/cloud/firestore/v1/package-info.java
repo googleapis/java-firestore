@@ -30,7 +30,7 @@
  * <code>
  * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
  *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
- *   firestoreAdminClient.deleteIndex(name);
+ *   Index response = firestoreAdminClient.getIndex(name);
  * }
  * </code>
  * </pre>

@@ -88,16 +88,16 @@ import org.threeten.bp.Duration;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of deleteIndex to 30 seconds:
+ * <p>For example, to set the total timeout of getIndex to 30 seconds:
  *
  * <pre>
  * <code>
  * FirestoreAdminStubSettings.Builder firestoreAdminSettingsBuilder =
  *     FirestoreAdminStubSettings.newBuilder();
  * firestoreAdminSettingsBuilder
- *     .deleteIndexSettings()
+ *     .getIndexSettings()
  *     .setRetrySettings(
- *         firestoreAdminSettingsBuilder.deleteIndexSettings().getRetrySettings().toBuilder()
+ *         firestoreAdminSettingsBuilder.getIndexSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
@@ -114,17 +114,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .add("https://www.googleapis.com/auth/datastore")
           .build();
 
-  private final UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings;
-  private final UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings;
-  private final OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationSettings;
   private final UnaryCallSettings<CreateIndexRequest, Operation> createIndexSettings;
   private final OperationCallSettings<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationSettings;
   private final PagedCallSettings<ListIndexesRequest, ListIndexesResponse, ListIndexesPagedResponse>
       listIndexesSettings;
   private final UnaryCallSettings<GetIndexRequest, Index> getIndexSettings;
+  private final UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings;
   private final UnaryCallSettings<GetFieldRequest, Field> getFieldSettings;
+  private final UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings;
+  private final OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationSettings;
   private final PagedCallSettings<ListFieldsRequest, ListFieldsResponse, ListFieldsPagedResponse>
       listFieldsSettings;
   private final UnaryCallSettings<ExportDocumentsRequest, Operation> exportDocumentsSettings;
@@ -134,23 +134,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<ImportDocumentsRequest, Operation> importDocumentsSettings;
   private final OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationSettings;
-
-  /** Returns the object with the settings used for calls to deleteIndex. */
-  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
-    return deleteIndexSettings;
-  }
-
-  /** Returns the object with the settings used for calls to updateField. */
-  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
-    return updateFieldSettings;
-  }
-
-  /** Returns the object with the settings used for calls to updateField. */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationSettings() {
-    return updateFieldOperationSettings;
-  }
 
   /** Returns the object with the settings used for calls to createIndex. */
   public UnaryCallSettings<CreateIndexRequest, Operation> createIndexSettings() {
@@ -175,9 +158,26 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return getIndexSettings;
   }
 
+  /** Returns the object with the settings used for calls to deleteIndex. */
+  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
+    return deleteIndexSettings;
+  }
+
   /** Returns the object with the settings used for calls to getField. */
   public UnaryCallSettings<GetFieldRequest, Field> getFieldSettings() {
     return getFieldSettings;
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
+    return updateFieldSettings;
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
+  public OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationSettings() {
+    return updateFieldOperationSettings;
   }
 
   /** Returns the object with the settings used for calls to listFields. */
@@ -280,14 +280,14 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   protected FirestoreAdminStubSettings(Builder settingsBuilder) throws IOException {
     super(settingsBuilder);
 
-    deleteIndexSettings = settingsBuilder.deleteIndexSettings().build();
-    updateFieldSettings = settingsBuilder.updateFieldSettings().build();
-    updateFieldOperationSettings = settingsBuilder.updateFieldOperationSettings().build();
     createIndexSettings = settingsBuilder.createIndexSettings().build();
     createIndexOperationSettings = settingsBuilder.createIndexOperationSettings().build();
     listIndexesSettings = settingsBuilder.listIndexesSettings().build();
     getIndexSettings = settingsBuilder.getIndexSettings().build();
+    deleteIndexSettings = settingsBuilder.deleteIndexSettings().build();
     getFieldSettings = settingsBuilder.getFieldSettings().build();
+    updateFieldSettings = settingsBuilder.updateFieldSettings().build();
+    updateFieldOperationSettings = settingsBuilder.updateFieldOperationSettings().build();
     listFieldsSettings = settingsBuilder.listFieldsSettings().build();
     exportDocumentsSettings = settingsBuilder.exportDocumentsSettings().build();
     exportDocumentsOperationSettings = settingsBuilder.exportDocumentsOperationSettings().build();
@@ -405,10 +405,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   public static class Builder extends StubSettings.Builder<FirestoreAdminStubSettings, Builder> {
     private final ImmutableList<UnaryCallSettings.Builder<?, ?>> unaryMethodSettingsBuilders;
 
-    private final UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings;
-    private final UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings;
-    private final OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
-        updateFieldOperationSettings;
     private final UnaryCallSettings.Builder<CreateIndexRequest, Operation> createIndexSettings;
     private final OperationCallSettings.Builder<CreateIndexRequest, Index, IndexOperationMetadata>
         createIndexOperationSettings;
@@ -416,7 +412,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             ListIndexesRequest, ListIndexesResponse, ListIndexesPagedResponse>
         listIndexesSettings;
     private final UnaryCallSettings.Builder<GetIndexRequest, Index> getIndexSettings;
+    private final UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings;
     private final UnaryCallSettings.Builder<GetFieldRequest, Field> getFieldSettings;
+    private final UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings;
+    private final OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
+        updateFieldOperationSettings;
     private final PagedCallSettings.Builder<
             ListFieldsRequest, ListFieldsResponse, ListFieldsPagedResponse>
         listFieldsSettings;
@@ -438,18 +438,15 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       ImmutableMap.Builder<String, ImmutableSet<StatusCode.Code>> definitions =
           ImmutableMap.builder();
       definitions.put(
-          "idempotent",
+          "retry_policy_1_codes",
           ImmutableSet.copyOf(
               Lists.<StatusCode.Code>newArrayList(
-                  StatusCode.Code.DEADLINE_EXCEEDED,
+                  StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
-                  StatusCode.Code.UNAVAILABLE)));
-      definitions.put("non_idempotent", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
+                  StatusCode.Code.DEADLINE_EXCEEDED)));
+      definitions.put("no_retry_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
-          "idempotent2",
-          ImmutableSet.copyOf(
-              Lists.<StatusCode.Code>newArrayList(
-                  StatusCode.Code.DEADLINE_EXCEEDED, StatusCode.Code.UNAVAILABLE)));
+          "no_retry_1_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       RETRYABLE_CODE_DEFINITIONS = definitions.build();
     }
 
@@ -466,9 +463,19 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               .setInitialRpcTimeout(Duration.ofMillis(60000L))
               .setRpcTimeoutMultiplier(1.0)
               .setMaxRpcTimeout(Duration.ofMillis(60000L))
-              .setTotalTimeout(Duration.ofMillis(600000L))
+              .setTotalTimeout(Duration.ofMillis(60000L))
               .build();
-      definitions.put("default", settings);
+      definitions.put("retry_policy_1_params", settings);
+      settings = RetrySettings.newBuilder().setRpcTimeoutMultiplier(1.0).build();
+      definitions.put("no_retry_params", settings);
+      settings =
+          RetrySettings.newBuilder()
+              .setInitialRpcTimeout(Duration.ofMillis(60000L))
+              .setRpcTimeoutMultiplier(1.0)
+              .setMaxRpcTimeout(Duration.ofMillis(60000L))
+              .setTotalTimeout(Duration.ofMillis(60000L))
+              .build();
+      definitions.put("no_retry_1_params", settings);
       RETRY_PARAM_DEFINITIONS = definitions.build();
     }
 
@@ -479,12 +486,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     protected Builder(ClientContext clientContext) {
       super(clientContext);
 
-      deleteIndexSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
-      updateFieldSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
-
-      updateFieldOperationSettings = OperationCallSettings.newBuilder();
-
       createIndexSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       createIndexOperationSettings = OperationCallSettings.newBuilder();
@@ -493,7 +494,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       getIndexSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
+      deleteIndexSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
       getFieldSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
+      updateFieldSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+
+      updateFieldOperationSettings = OperationCallSettings.newBuilder();
 
       listFieldsSettings = PagedCallSettings.newBuilder(LIST_FIELDS_PAGE_STR_FACT);
 
@@ -507,12 +514,12 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
-              deleteIndexSettings,
-              updateFieldSettings,
               createIndexSettings,
               listIndexesSettings,
               getIndexSettings,
+              deleteIndexSettings,
               getFieldSettings,
+              updateFieldSettings,
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings);
@@ -532,77 +539,55 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private static Builder initDefaults(Builder builder) {
 
       builder
-          .deleteIndexSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
-          .updateFieldSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-
-      builder
           .createIndexSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
 
       builder
           .listIndexesSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent2"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
       builder
           .getIndexSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent2"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .deleteIndexSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
       builder
           .getFieldSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent2"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .updateFieldSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
 
       builder
           .listFieldsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("idempotent2"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
       builder
           .exportDocumentsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
 
       builder
           .importDocumentsSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"));
-      builder
-          .updateFieldOperationSettings()
-          .setInitialCallSettings(
-              UnaryCallSettings.<UpdateFieldRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"))
-                  .build())
-          .setResponseTransformer(
-              ProtoOperationTransformers.ResponseTransformer.create(Field.class))
-          .setMetadataTransformer(
-              ProtoOperationTransformers.MetadataTransformer.create(FieldOperationMetadata.class))
-          .setPollingAlgorithm(
-              OperationTimedPollAlgorithm.create(
-                  RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(500L))
-                      .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(5000L))
-                      .setInitialRpcTimeout(Duration.ZERO) // ignored
-                      .setRpcTimeoutMultiplier(1.0) // ignored
-                      .setMaxRpcTimeout(Duration.ZERO) // ignored
-                      .setTotalTimeout(Duration.ofMillis(300000L))
-                      .build()));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
       builder
           .createIndexOperationSettings()
           .setInitialCallSettings(
               UnaryCallSettings.<CreateIndexRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"))
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"))
                   .build())
           .setResponseTransformer(
               ProtoOperationTransformers.ResponseTransformer.create(Index.class))
@@ -620,12 +605,34 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
                       .setTotalTimeout(Duration.ofMillis(300000L))
                       .build()));
       builder
+          .updateFieldOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings.<UpdateFieldRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Field.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(FieldOperationMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(500L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRpcTimeout(Duration.ZERO) // ignored
+                      .setRpcTimeoutMultiplier(1.0) // ignored
+                      .setMaxRpcTimeout(Duration.ZERO) // ignored
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+      builder
           .exportDocumentsOperationSettings()
           .setInitialCallSettings(
               UnaryCallSettings
                   .<ExportDocumentsRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"))
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"))
                   .build())
           .setResponseTransformer(
               ProtoOperationTransformers.ResponseTransformer.create(ExportDocumentsResponse.class))
@@ -647,8 +654,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setInitialCallSettings(
               UnaryCallSettings
                   .<ImportDocumentsRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("non_idempotent"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("default"))
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"))
                   .build())
           .setResponseTransformer(
               ProtoOperationTransformers.ResponseTransformer.create(Empty.class))
@@ -672,14 +679,14 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     protected Builder(FirestoreAdminStubSettings settings) {
       super(settings);
 
-      deleteIndexSettings = settings.deleteIndexSettings.toBuilder();
-      updateFieldSettings = settings.updateFieldSettings.toBuilder();
-      updateFieldOperationSettings = settings.updateFieldOperationSettings.toBuilder();
       createIndexSettings = settings.createIndexSettings.toBuilder();
       createIndexOperationSettings = settings.createIndexOperationSettings.toBuilder();
       listIndexesSettings = settings.listIndexesSettings.toBuilder();
       getIndexSettings = settings.getIndexSettings.toBuilder();
+      deleteIndexSettings = settings.deleteIndexSettings.toBuilder();
       getFieldSettings = settings.getFieldSettings.toBuilder();
+      updateFieldSettings = settings.updateFieldSettings.toBuilder();
+      updateFieldOperationSettings = settings.updateFieldOperationSettings.toBuilder();
       listFieldsSettings = settings.listFieldsSettings.toBuilder();
       exportDocumentsSettings = settings.exportDocumentsSettings.toBuilder();
       exportDocumentsOperationSettings = settings.exportDocumentsOperationSettings.toBuilder();
@@ -688,12 +695,12 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
-              deleteIndexSettings,
-              updateFieldSettings,
               createIndexSettings,
               listIndexesSettings,
               getIndexSettings,
+              deleteIndexSettings,
               getFieldSettings,
+              updateFieldSettings,
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings);
@@ -713,24 +720,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
     public ImmutableList<UnaryCallSettings.Builder<?, ?>> unaryMethodSettingsBuilders() {
       return unaryMethodSettingsBuilders;
-    }
-
-    /** Returns the builder for the settings used for calls to deleteIndex. */
-    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
-      return deleteIndexSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to updateField. */
-    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
-      return updateFieldSettings;
-    }
-
-    /** Returns the builder for the settings used for calls to updateField. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
-    public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
-        updateFieldOperationSettings() {
-      return updateFieldOperationSettings;
     }
 
     /** Returns the builder for the settings used for calls to createIndex. */
@@ -758,9 +747,27 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       return getIndexSettings;
     }
 
+    /** Returns the builder for the settings used for calls to deleteIndex. */
+    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
+      return deleteIndexSettings;
+    }
+
     /** Returns the builder for the settings used for calls to getField. */
     public UnaryCallSettings.Builder<GetFieldRequest, Field> getFieldSettings() {
       return getFieldSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
+      return updateFieldSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    @BetaApi(
+        "The surface for use by generated code is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
+        updateFieldOperationSettings() {
+      return updateFieldOperationSettings;
     }
 
     /** Returns the builder for the settings used for calls to listFields. */

@@ -103,90 +103,6 @@ public class FirestoreAdminClientTest {
 
   @Test
   @SuppressWarnings("all")
-  public void deleteIndexTest() {
-    Empty expectedResponse = Empty.newBuilder().build();
-    mockFirestoreAdmin.addResponse(expectedResponse);
-
-    IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-
-    client.deleteIndex(name);
-
-    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    DeleteIndexRequest actualRequest = (DeleteIndexRequest) actualRequests.get(0);
-
-    Assert.assertEquals(name, IndexName.parse(actualRequest.getName()));
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void deleteIndexExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestoreAdmin.addException(exception);
-
-    try {
-      IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-
-      client.deleteIndex(name);
-      Assert.fail("No exception raised");
-    } catch (InvalidArgumentException e) {
-      // Expected exception
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void updateFieldTest() throws Exception {
-    FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
-    Field expectedResponse = Field.newBuilder().setName(name.toString()).build();
-    Operation resultOperation =
-        Operation.newBuilder()
-            .setName("updateFieldTest")
-            .setDone(true)
-            .setResponse(Any.pack(expectedResponse))
-            .build();
-    mockFirestoreAdmin.addResponse(resultOperation);
-
-    Field field = Field.newBuilder().build();
-
-    Field actualResponse = client.updateFieldAsync(field).get();
-    Assert.assertEquals(expectedResponse, actualResponse);
-
-    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
-    Assert.assertEquals(1, actualRequests.size());
-    UpdateFieldRequest actualRequest = (UpdateFieldRequest) actualRequests.get(0);
-
-    Assert.assertEquals(field, actualRequest.getField());
-    Assert.assertTrue(
-        channelProvider.isHeaderSent(
-            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
-            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
-  }
-
-  @Test
-  @SuppressWarnings("all")
-  public void updateFieldExceptionTest() throws Exception {
-    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
-    mockFirestoreAdmin.addException(exception);
-
-    try {
-      Field field = Field.newBuilder().build();
-
-      client.updateFieldAsync(field).get();
-      Assert.fail("No exception raised");
-    } catch (ExecutionException e) {
-      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
-      InvalidArgumentException apiException = (InvalidArgumentException) e.getCause();
-      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
-    }
-  }
-
-  @Test
-  @SuppressWarnings("all")
   public void createIndexTest() throws Exception {
     IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
     Index expectedResponse = Index.newBuilder().setName(name.toString()).build();
@@ -326,6 +242,43 @@ public class FirestoreAdminClientTest {
 
   @Test
   @SuppressWarnings("all")
+  public void deleteIndexTest() {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+
+    client.deleteIndex(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteIndexRequest actualRequest = (DeleteIndexRequest) actualRequests.get(0);
+
+    Assert.assertEquals(name, IndexName.parse(actualRequest.getName()));
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void deleteIndexExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
+
+      client.deleteIndex(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
   public void getFieldTest() {
     FieldName name2 = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
     Field expectedResponse = Field.newBuilder().setName(name2.toString()).build();
@@ -360,6 +313,53 @@ public class FirestoreAdminClientTest {
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception
+    }
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void updateFieldTest() throws Exception {
+    FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
+    Field expectedResponse = Field.newBuilder().setName(name.toString()).build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("updateFieldTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    Field field = Field.newBuilder().build();
+
+    Field actualResponse = client.updateFieldAsync(field).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    UpdateFieldRequest actualRequest = (UpdateFieldRequest) actualRequests.get(0);
+
+    Assert.assertEquals(field, actualRequest.getField());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  @SuppressWarnings("all")
+  public void updateFieldExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      Field field = Field.newBuilder().build();
+
+      client.updateFieldAsync(field).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = (InvalidArgumentException) e.getCause();
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
     }
   }
 

@@ -70,16 +70,16 @@ import javax.annotation.Generated;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of deleteIndex to 30 seconds:
+ * <p>For example, to set the total timeout of getIndex to 30 seconds:
  *
  * <pre>
  * <code>
  * FirestoreAdminSettings.Builder firestoreAdminSettingsBuilder =
  *     FirestoreAdminSettings.newBuilder();
  * firestoreAdminSettingsBuilder
- *     .deleteIndexSettings()
+ *     .getIndexSettings()
  *     .setRetrySettings(
- *         firestoreAdminSettingsBuilder.deleteIndexSettings().getRetrySettings().toBuilder()
+ *         firestoreAdminSettingsBuilder.getIndexSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreAdminSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
@@ -89,24 +89,6 @@ import javax.annotation.Generated;
 @Generated("by gapic-generator")
 @BetaApi
 public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSettings> {
-  /** Returns the object with the settings used for calls to deleteIndex. */
-  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).deleteIndexSettings();
-  }
-
-  /** Returns the object with the settings used for calls to updateField. */
-  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldSettings();
-  }
-
-  /** Returns the object with the settings used for calls to updateField. */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
-  public OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationSettings() {
-    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldOperationSettings();
-  }
-
   /** Returns the object with the settings used for calls to createIndex. */
   public UnaryCallSettings<CreateIndexRequest, Operation> createIndexSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).createIndexSettings();
@@ -131,9 +113,27 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).getIndexSettings();
   }
 
+  /** Returns the object with the settings used for calls to deleteIndex. */
+  public UnaryCallSettings<DeleteIndexRequest, Empty> deleteIndexSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteIndexSettings();
+  }
+
   /** Returns the object with the settings used for calls to getField. */
   public UnaryCallSettings<GetFieldRequest, Field> getFieldSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).getFieldSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  public UnaryCallSettings<UpdateFieldRequest, Operation> updateFieldSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateField. */
+  @BetaApi(
+      "The surface for long-running operations is not stable yet and may change in the future.")
+  public OperationCallSettings<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateFieldOperationSettings();
   }
 
   /** Returns the object with the settings used for calls to listFields. */
@@ -266,24 +266,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return this;
     }
 
-    /** Returns the builder for the settings used for calls to deleteIndex. */
-    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
-      return getStubSettingsBuilder().deleteIndexSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to updateField. */
-    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
-      return getStubSettingsBuilder().updateFieldSettings();
-    }
-
-    /** Returns the builder for the settings used for calls to updateField. */
-    @BetaApi(
-        "The surface for long-running operations is not stable yet and may change in the future.")
-    public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
-        updateFieldOperationSettings() {
-      return getStubSettingsBuilder().updateFieldOperationSettings();
-    }
-
     /** Returns the builder for the settings used for calls to createIndex. */
     public UnaryCallSettings.Builder<CreateIndexRequest, Operation> createIndexSettings() {
       return getStubSettingsBuilder().createIndexSettings();
@@ -309,9 +291,27 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return getStubSettingsBuilder().getIndexSettings();
     }
 
+    /** Returns the builder for the settings used for calls to deleteIndex. */
+    public UnaryCallSettings.Builder<DeleteIndexRequest, Empty> deleteIndexSettings() {
+      return getStubSettingsBuilder().deleteIndexSettings();
+    }
+
     /** Returns the builder for the settings used for calls to getField. */
     public UnaryCallSettings.Builder<GetFieldRequest, Field> getFieldSettings() {
       return getStubSettingsBuilder().getFieldSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    public UnaryCallSettings.Builder<UpdateFieldRequest, Operation> updateFieldSettings() {
+      return getStubSettingsBuilder().updateFieldSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateField. */
+    @BetaApi(
+        "The surface for long-running operations is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
+        updateFieldOperationSettings() {
+      return getStubSettingsBuilder().updateFieldOperationSettings();
     }
 
     /** Returns the builder for the settings used for calls to listFields. */
