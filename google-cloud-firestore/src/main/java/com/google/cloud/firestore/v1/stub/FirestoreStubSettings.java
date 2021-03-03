@@ -112,7 +112,6 @@ import org.threeten.bp.Duration;
  * FirestoreStubSettings firestoreSettings = firestoreSettingsBuilder.build();
  * }</pre>
  */
-@BetaApi
 @Generated("by gapic-generator-java")
 public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   /** The default scopes of the service. */

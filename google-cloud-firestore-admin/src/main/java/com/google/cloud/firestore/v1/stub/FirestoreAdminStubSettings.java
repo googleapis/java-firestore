@@ -106,7 +106,6 @@ import org.threeten.bp.Duration;
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
  * }</pre>
  */
-@BetaApi
 @Generated("by gapic-generator-java")
 public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubSettings> {
   /** The default scopes of the service. */
