@@ -444,6 +444,7 @@ public class FirestoreAdminClientTest {
     Field expectedResponse =
         Field.newBuilder()
             .setName(FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]").toString())
+            .setIndexConfig(Field.IndexConfig.newBuilder().build())
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -482,6 +483,7 @@ public class FirestoreAdminClientTest {
     Field expectedResponse =
         Field.newBuilder()
             .setName(FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]").toString())
+            .setIndexConfig(Field.IndexConfig.newBuilder().build())
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -520,6 +522,7 @@ public class FirestoreAdminClientTest {
     Field expectedResponse =
         Field.newBuilder()
             .setName(FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]").toString())
+            .setIndexConfig(Field.IndexConfig.newBuilder().build())
             .build();
     Operation resultOperation =
         Operation.newBuilder()
