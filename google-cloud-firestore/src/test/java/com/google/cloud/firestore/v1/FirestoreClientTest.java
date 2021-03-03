@@ -188,10 +188,10 @@ public class FirestoreClientTest {
     ListDocumentsRequest request =
         ListDocumentsRequest.newBuilder()
             .setParent("parent-995424086")
-            .setCollectionId("collection_id-821242276")
+            .setCollectionId("collectionId1636075609")
             .setPageSize(883849137)
-            .setPageToken("page_token1630607433")
-            .setOrderBy("order_by1234304744")
+            .setPageToken("pageToken873572522")
+            .setOrderBy("orderBy-1207110587")
             .setMask(DocumentMask.newBuilder().build())
             .setShowMissing(true)
             .build();
@@ -231,10 +231,10 @@ public class FirestoreClientTest {
       ListDocumentsRequest request =
           ListDocumentsRequest.newBuilder()
               .setParent("parent-995424086")
-              .setCollectionId("collection_id-821242276")
+              .setCollectionId("collectionId1636075609")
               .setPageSize(883849137)
-              .setPageToken("page_token1630607433")
-              .setOrderBy("order_by1234304744")
+              .setPageToken("pageToken873572522")
+              .setOrderBy("orderBy-1207110587")
               .setMask(DocumentMask.newBuilder().build())
               .setShowMissing(true)
               .build();
@@ -548,7 +548,7 @@ public class FirestoreClientTest {
         PartitionQueryRequest.newBuilder()
             .setParent("parent-995424086")
             .setPartitionCount(-1738969222)
-            .setPageToken("page_token1630607433")
+            .setPageToken("pageToken873572522")
             .setPageSize(883849137)
             .build();
 
@@ -584,7 +584,7 @@ public class FirestoreClientTest {
           PartitionQueryRequest.newBuilder()
               .setParent("parent-995424086")
               .setPartitionCount(-1738969222)
-              .setPageToken("page_token1630607433")
+              .setPageToken("pageToken873572522")
               .setPageSize(883849137)
               .build();
       client.partitionQuery(request);
@@ -598,7 +598,7 @@ public class FirestoreClientTest {
   public void writeTest() throws Exception {
     WriteResponse expectedResponse =
         WriteResponse.newBuilder()
-            .setStreamId("stream_id-315624902")
+            .setStreamId("streamId1790933179")
             .setStreamToken(ByteString.EMPTY)
             .addAllWriteResults(new ArrayList<WriteResult>())
             .setCommitTime(Timestamp.newBuilder().build())
@@ -607,7 +607,7 @@ public class FirestoreClientTest {
     WriteRequest request =
         WriteRequest.newBuilder()
             .setDatabase("database1789464955")
-            .setStreamId("stream_id-315624902")
+            .setStreamId("streamId1790933179")
             .addAllWrites(new ArrayList<Write>())
             .setStreamToken(ByteString.EMPTY)
             .putAllLabels(new HashMap<String, String>())
@@ -633,7 +633,7 @@ public class FirestoreClientTest {
     WriteRequest request =
         WriteRequest.newBuilder()
             .setDatabase("database1789464955")
-            .setStreamId("stream_id-315624902")
+            .setStreamId("streamId1790933179")
             .addAllWrites(new ArrayList<Write>())
             .setStreamToken(ByteString.EMPTY)
             .putAllLabels(new HashMap<String, String>())
@@ -815,8 +815,8 @@ public class FirestoreClientTest {
     CreateDocumentRequest request =
         CreateDocumentRequest.newBuilder()
             .setParent("parent-995424086")
-            .setCollectionId("collection_id-821242276")
-            .setDocumentId("document_id506676927")
+            .setCollectionId("collectionId1636075609")
+            .setDocumentId("documentId-814940266")
             .setDocument(Document.newBuilder().build())
             .setMask(DocumentMask.newBuilder().build())
             .build();
@@ -848,8 +848,8 @@ public class FirestoreClientTest {
       CreateDocumentRequest request =
           CreateDocumentRequest.newBuilder()
               .setParent("parent-995424086")
-              .setCollectionId("collection_id-821242276")
-              .setDocumentId("document_id506676927")
+              .setCollectionId("collectionId1636075609")
+              .setDocumentId("documentId-814940266")
               .setDocument(Document.newBuilder().build())
               .setMask(DocumentMask.newBuilder().build())
               .build();
