@@ -393,65 +393,80 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
     return operationsStub;
   }
 
+  @Override
   public UnaryCallable<CreateIndexRequest, Operation> createIndexCallable() {
     return createIndexCallable;
   }
 
+  @Override
   public OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable() {
     return createIndexOperationCallable;
   }
 
+  @Override
   public UnaryCallable<ListIndexesRequest, ListIndexesResponse> listIndexesCallable() {
     return listIndexesCallable;
   }
 
+  @Override
   public UnaryCallable<ListIndexesRequest, ListIndexesPagedResponse> listIndexesPagedCallable() {
     return listIndexesPagedCallable;
   }
 
+  @Override
   public UnaryCallable<GetIndexRequest, Index> getIndexCallable() {
     return getIndexCallable;
   }
 
+  @Override
   public UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
     return deleteIndexCallable;
   }
 
+  @Override
   public UnaryCallable<GetFieldRequest, Field> getFieldCallable() {
     return getFieldCallable;
   }
 
+  @Override
   public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
     return updateFieldCallable;
   }
 
+  @Override
   public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
       updateFieldOperationCallable() {
     return updateFieldOperationCallable;
   }
 
+  @Override
   public UnaryCallable<ListFieldsRequest, ListFieldsResponse> listFieldsCallable() {
     return listFieldsCallable;
   }
 
+  @Override
   public UnaryCallable<ListFieldsRequest, ListFieldsPagedResponse> listFieldsPagedCallable() {
     return listFieldsPagedCallable;
   }
 
+  @Override
   public UnaryCallable<ExportDocumentsRequest, Operation> exportDocumentsCallable() {
     return exportDocumentsCallable;
   }
 
+  @Override
   public OperationCallable<ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
       exportDocumentsOperationCallable() {
     return exportDocumentsOperationCallable;
   }
 
+  @Override
   public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return importDocumentsCallable;
   }
 
+  @Override
   public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable() {
     return importDocumentsOperationCallable;

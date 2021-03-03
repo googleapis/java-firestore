@@ -553,80 +553,98 @@ public class GrpcFirestoreStub extends FirestoreStub {
     return operationsStub;
   }
 
+  @Override
   public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
     return getDocumentCallable;
   }
 
+  @Override
   public UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
     return listDocumentsCallable;
   }
 
+  @Override
   public UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
       listDocumentsPagedCallable() {
     return listDocumentsPagedCallable;
   }
 
+  @Override
   public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
     return updateDocumentCallable;
   }
 
+  @Override
   public UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable() {
     return deleteDocumentCallable;
   }
 
+  @Override
   public ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable() {
     return batchGetDocumentsCallable;
   }
 
+  @Override
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
       beginTransactionCallable() {
     return beginTransactionCallable;
   }
 
+  @Override
   public UnaryCallable<CommitRequest, CommitResponse> commitCallable() {
     return commitCallable;
   }
 
+  @Override
   public UnaryCallable<RollbackRequest, Empty> rollbackCallable() {
     return rollbackCallable;
   }
 
+  @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return runQueryCallable;
   }
 
+  @Override
   public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
     return partitionQueryCallable;
   }
 
+  @Override
   public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable() {
     return partitionQueryPagedCallable;
   }
 
+  @Override
   public BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable() {
     return writeCallable;
   }
 
+  @Override
   public BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable() {
     return listenCallable;
   }
 
+  @Override
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsResponse>
       listCollectionIdsCallable() {
     return listCollectionIdsCallable;
   }
 
+  @Override
   public UnaryCallable<ListCollectionIdsRequest, ListCollectionIdsPagedResponse>
       listCollectionIdsPagedCallable() {
     return listCollectionIdsPagedCallable;
   }
 
+  @Override
   public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
     return batchWriteCallable;
   }
 
+  @Override
   public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
     return createDocumentCallable;
   }
