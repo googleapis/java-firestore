@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,27 +15,16 @@
  */
 
 /**
- * A client to Google Cloud Firestore Admin API.
+ * The interfaces provided are listed below, along with usage samples.
  *
- * <p>The interfaces provided are listed below, along with usage samples.
- *
- * <p>==================== FirestoreAdminClient ====================
+ * <p>======================= FirestoreAdminClient =======================
  *
  * <p>Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
  * service `google.longrunning.Operations`.
  *
  * <p>Sample for FirestoreAdminClient:
- *
- * <pre>
- * <code>
- * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
- *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
- *   Index response = firestoreAdminClient.getIndex(name);
- * }
- * </code>
- * </pre>
  */
-@Generated("by gapic-generator")
+@Generated("by gapic-generator-java")
 package com.google.cloud.firestore.v1;
 
 import javax.annotation.Generated;

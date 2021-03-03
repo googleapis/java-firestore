@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.firestore.v1;
 
 import com.google.api.core.ApiFunction;
@@ -60,7 +61,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Generated;
 
-// AUTO-GENERATED DOCUMENTATION AND SERVICE
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
  * Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
  * service `google.longrunning.Operations`.
@@ -68,16 +69,7 @@ import javax.annotation.Generated;
  * <p>This class provides the ability to make remote calls to the backing service through method
  * calls that map to API methods. Sample code to get started:
  *
- * <pre>
- * <code>
- * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
- *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
- *   Index response = firestoreAdminClient.getIndex(name);
- * }
- * </code>
- * </pre>
- *
- * <p>Note: close() needs to be called on the firestoreAdminClient object to clean up resources such
+ * <p>Note: close() needs to be called on the FirestoreAdminClient object to clean up resources such
  * as threads. In the example above, try-with-resources is used, which automatically calls close().
  *
  * <p>The surface of this class includes several types of Java methods for each of the API's
@@ -105,30 +97,26 @@ import javax.annotation.Generated;
  *
  * <p>To customize credentials:
  *
- * <pre>
- * <code>
+ * <pre>{@code
  * FirestoreAdminSettings firestoreAdminSettings =
  *     FirestoreAdminSettings.newBuilder()
  *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
  *         .build();
- * FirestoreAdminClient firestoreAdminClient =
- *     FirestoreAdminClient.create(firestoreAdminSettings);
- * </code>
- * </pre>
+ * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
+ * }</pre>
  *
- * To customize the endpoint:
+ * <p>To customize the endpoint:
  *
- * <pre>
- * <code>
+ * <pre>{@code
  * FirestoreAdminSettings firestoreAdminSettings =
  *     FirestoreAdminSettings.newBuilder().setEndpoint(myEndpoint).build();
- * FirestoreAdminClient firestoreAdminClient =
- *     FirestoreAdminClient.create(firestoreAdminSettings);
- * </code>
- * </pre>
+ * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
+ * }</pre>
+ *
+ * <p>Please refer to the GitHub repository's samples for more quickstart code snippets.
  */
-@Generated("by gapic-generator")
 @BetaApi
+@Generated("by gapic-generator")
 public class FirestoreAdminClient implements BackgroundResource {
   private final FirestoreAdminSettings settings;
   private final FirestoreAdminStub stub;
@@ -150,7 +138,7 @@ public class FirestoreAdminClient implements BackgroundResource {
 
   /**
    * Constructs an instance of FirestoreAdminClient, using the given stub for making calls. This is
-   * for advanced usage - prefer to use FirestoreAdminSettings}.
+   * for advanced usage - prefer using create(FirestoreAdminSettings).
    */
   @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public static final FirestoreAdminClient create(FirestoreAdminStub stub) {
@@ -188,36 +176,22 @@ public class FirestoreAdminClient implements BackgroundResource {
    * Returns the OperationsClient that can be used to query the status of a long-running operation
    * returned by another API method call.
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationsClient getOperationsClient() {
     return operationsClient;
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a composite index. This returns a
    * [google.longrunning.Operation][google.longrunning.Operation] which may be used to track the
    * status of the creation. The metadata for the operation will be the type
    * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   Index index = Index.newBuilder().build();
-   *   Index response = firestoreAdminClient.createIndexAsync(parent, index).get();
-   * }
-   * </code></pre>
-   *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @param index Required. The composite index to create.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Index, IndexOperationMetadata> createIndexAsync(
       CollectionGroupName parent, Index index) {
     CreateIndexRequest request =
@@ -228,30 +202,18 @@ public class FirestoreAdminClient implements BackgroundResource {
     return createIndexAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a composite index. This returns a
    * [google.longrunning.Operation][google.longrunning.Operation] which may be used to track the
    * status of the creation. The metadata for the operation will be the type
    * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   Index index = Index.newBuilder().build();
-   *   Index response = firestoreAdminClient.createIndexAsync(parent.toString(), index).get();
-   * }
-   * </code></pre>
-   *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
    * @param index Required. The composite index to create.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Index, IndexOperationMetadata> createIndexAsync(
       String parent, Index index) {
     CreateIndexRequest request =
@@ -259,38 +221,22 @@ public class FirestoreAdminClient implements BackgroundResource {
     return createIndexAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a composite index. This returns a
    * [google.longrunning.Operation][google.longrunning.Operation] which may be used to track the
    * status of the creation. The metadata for the operation will be the type
    * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   Index index = Index.newBuilder().build();
-   *   CreateIndexRequest request = CreateIndexRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .setIndex(index)
-   *     .build();
-   *   Index response = firestoreAdminClient.createIndexAsync(request).get();
-   * }
-   * </code></pre>
-   *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Index, IndexOperationMetadata> createIndexAsync(
       CreateIndexRequest request) {
     return createIndexOperationCallable().futureCall(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a composite index. This returns a
    * [google.longrunning.Operation][google.longrunning.Operation] which may be used to track the
@@ -298,28 +244,13 @@ public class FirestoreAdminClient implements BackgroundResource {
    * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   Index index = Index.newBuilder().build();
-   *   CreateIndexRequest request = CreateIndexRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .setIndex(index)
-   *     .build();
-   *   OperationFuture&lt;Index, IndexOperationMetadata&gt; future = firestoreAdminClient.createIndexOperationCallable().futureCall(request);
-   *   // Do something
-   *   Index response = future.get();
-   * }
-   * </code></pre>
    */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable() {
     return stub.createIndexOperationCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a composite index. This returns a
    * [google.longrunning.Operation][google.longrunning.Operation] which may be used to track the
@@ -327,39 +258,14 @@ public class FirestoreAdminClient implements BackgroundResource {
    * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   Index index = Index.newBuilder().build();
-   *   CreateIndexRequest request = CreateIndexRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .setIndex(index)
-   *     .build();
-   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.createIndexCallable().futureCall(request);
-   *   // Do something
-   *   Operation response = future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable() {
     return stub.createIndexCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists composite indexes.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   for (Index element : firestoreAdminClient.listIndexes(parent).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -373,20 +279,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listIndexes(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists composite indexes.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   for (Index element : firestoreAdminClient.listIndexes(parent.toString()).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -397,23 +292,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listIndexes(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists composite indexes.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListIndexesRequest request = ListIndexesRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   for (Index element : firestoreAdminClient.listIndexes(request).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
@@ -422,74 +303,30 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listIndexesPagedCallable().call(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists composite indexes.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListIndexesRequest request = ListIndexesRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   ApiFuture&lt;ListIndexesPagedResponse&gt; future = firestoreAdminClient.listIndexesPagedCallable().futureCall(request);
-   *   // Do something
-   *   for (Index element : future.get().iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ListIndexesRequest, ListIndexesPagedResponse>
       listIndexesPagedCallable() {
     return stub.listIndexesPagedCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists composite indexes.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListIndexesRequest request = ListIndexesRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   while (true) {
-   *     ListIndexesResponse response = firestoreAdminClient.listIndexesCallable().call(request);
-   *     for (Index element : response.getIndexesList()) {
-   *       // doThingsWith(element);
-   *     }
-   *     String nextPageToken = response.getNextPageToken();
-   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
-   *       request = request.toBuilder().setPageToken(nextPageToken).build();
-   *     } else {
-   *       break;
-   *     }
-   *   }
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ListIndexesRequest, ListIndexesResponse> listIndexesCallable() {
     return stub.listIndexesCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   Index response = firestoreAdminClient.getIndex(name);
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -501,18 +338,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getIndex(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   Index response = firestoreAdminClient.getIndex(name.toString());
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -523,21 +351,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getIndex(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   GetIndexRequest request = GetIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   Index response = firestoreAdminClient.getIndex(request);
-   * }
-   * </code></pre>
    *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
@@ -546,40 +362,19 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getIndexCallable().call(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets a composite index.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   GetIndexRequest request = GetIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Index&gt; future = firestoreAdminClient.getIndexCallable().futureCall(request);
-   *   // Do something
-   *   Index response = future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<GetIndexRequest, Index> getIndexCallable() {
     return stub.getIndexCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   firestoreAdminClient.deleteIndex(name);
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -591,18 +386,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     deleteIndex(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   firestoreAdminClient.deleteIndex(name.toString());
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/indexes/{index_id}`
@@ -613,21 +399,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     deleteIndex(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Deletes a composite index.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   firestoreAdminClient.deleteIndex(request);
-   * }
-   * </code></pre>
    *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
@@ -636,40 +410,19 @@ public class FirestoreAdminClient implements BackgroundResource {
     deleteIndexCallable().call(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Deletes a composite index.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
-   *   DeleteIndexRequest request = DeleteIndexRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Void&gt; future = firestoreAdminClient.deleteIndexCallable().futureCall(request);
-   *   // Do something
-   *   future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<DeleteIndexRequest, Empty> deleteIndexCallable() {
     return stub.deleteIndexCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets the metadata and configuration for a Field.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
-   *   Field response = firestoreAdminClient.getField(name);
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_id}`
@@ -681,18 +434,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getField(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets the metadata and configuration for a Field.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
-   *   Field response = firestoreAdminClient.getField(name.toString());
-   * }
-   * </code></pre>
    *
    * @param name Required. A name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_id}`
@@ -703,21 +447,9 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getField(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets the metadata and configuration for a Field.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
-   *   GetFieldRequest request = GetFieldRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   Field response = firestoreAdminClient.getField(request);
-   * }
-   * </code></pre>
    *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
@@ -726,29 +458,17 @@ public class FirestoreAdminClient implements BackgroundResource {
     return getFieldCallable().call(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Gets the metadata and configuration for a Field.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
-   *   GetFieldRequest request = GetFieldRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Field&gt; future = firestoreAdminClient.getFieldCallable().futureCall(request);
-   *   // Do something
-   *   Field response = future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<GetFieldRequest, Field> getFieldCallable() {
     return stub.getFieldCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Updates a field configuration. Currently, field updates apply only to single field index
    * configuration. However, calls to
@@ -764,26 +484,15 @@ public class FirestoreAdminClient implements BackgroundResource {
    * resource name:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   Field response = firestoreAdminClient.updateFieldAsync(field).get();
-   * }
-   * </code></pre>
-   *
    * @param field Required. The field to be updated.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(Field field) {
     UpdateFieldRequest request = UpdateFieldRequest.newBuilder().setField(field).build();
     return updateFieldAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Updates a field configuration. Currently, field updates apply only to single field index
    * configuration. However, calls to
@@ -799,29 +508,15 @@ public class FirestoreAdminClient implements BackgroundResource {
    * resource name:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   Field response = firestoreAdminClient.updateFieldAsync(request).get();
-   * }
-   * </code></pre>
-   *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Field, FieldOperationMetadata> updateFieldAsync(
       UpdateFieldRequest request) {
     return updateFieldOperationCallable().futureCall(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Updates a field configuration. Currently, field updates apply only to single field index
    * configuration. However, calls to
@@ -838,26 +533,13 @@ public class FirestoreAdminClient implements BackgroundResource {
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   OperationFuture&lt;Field, FieldOperationMetadata&gt; future = firestoreAdminClient.updateFieldOperationCallable().futureCall(request);
-   *   // Do something
-   *   Field response = future.get();
-   * }
-   * </code></pre>
    */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public final OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
       updateFieldOperationCallable() {
     return stub.updateFieldOperationCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Updates a field configuration. Currently, field updates apply only to single field index
    * configuration. However, calls to
@@ -874,24 +556,12 @@ public class FirestoreAdminClient implements BackgroundResource {
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   Field field = Field.newBuilder().build();
-   *   UpdateFieldRequest request = UpdateFieldRequest.newBuilder()
-   *     .setField(field)
-   *     .build();
-   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.updateFieldCallable().futureCall(request);
-   *   // Do something
-   *   Operation response = future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
     return stub.updateFieldCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists the field configuration and metadata for this database.
    *
@@ -899,17 +569,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
    * filter set to `indexConfig.usesAncestorConfig:false`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   for (Field element : firestoreAdminClient.listFields(parent).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -921,7 +580,7 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listFields(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists the field configuration and metadata for this database.
    *
@@ -929,17 +588,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
    * filter set to `indexConfig.usesAncestorConfig:false`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   for (Field element : firestoreAdminClient.listFields(parent.toString()).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param parent Required. A parent name of the form
    *     `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}`
@@ -950,7 +598,7 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listFields(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists the field configuration and metadata for this database.
    *
@@ -958,20 +606,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
    * filter set to `indexConfig.usesAncestorConfig:false`.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListFieldsRequest request = ListFieldsRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   for (Field element : firestoreAdminClient.listFields(request).iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
@@ -980,7 +614,7 @@ public class FirestoreAdminClient implements BackgroundResource {
     return listFieldsPagedCallable().call(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists the field configuration and metadata for this database.
    *
@@ -990,26 +624,12 @@ public class FirestoreAdminClient implements BackgroundResource {
    * filter set to `indexConfig.usesAncestorConfig:false`.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListFieldsRequest request = ListFieldsRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   ApiFuture&lt;ListFieldsPagedResponse&gt; future = firestoreAdminClient.listFieldsPagedCallable().futureCall(request);
-   *   // Do something
-   *   for (Field element : future.get().iterateAll()) {
-   *     // doThingsWith(element);
-   *   }
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ListFieldsRequest, ListFieldsPagedResponse> listFieldsPagedCallable() {
     return stub.listFieldsPagedCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Lists the field configuration and metadata for this database.
    *
@@ -1019,33 +639,12 @@ public class FirestoreAdminClient implements BackgroundResource {
    * filter set to `indexConfig.usesAncestorConfig:false`.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   CollectionGroupName parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
-   *   ListFieldsRequest request = ListFieldsRequest.newBuilder()
-   *     .setParent(parent.toString())
-   *     .build();
-   *   while (true) {
-   *     ListFieldsResponse response = firestoreAdminClient.listFieldsCallable().call(request);
-   *     for (Field element : response.getFieldsList()) {
-   *       // doThingsWith(element);
-   *     }
-   *     String nextPageToken = response.getNextPageToken();
-   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
-   *       request = request.toBuilder().setPageToken(nextPageToken).build();
-   *     } else {
-   *       break;
-   *     }
-   *   }
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ListFieldsRequest, ListFieldsResponse> listFieldsCallable() {
     return stub.listFieldsCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Exports a copy of all or a subset of documents from Google Cloud Firestore to another storage
    * system, such as Google Cloud Storage. Recent updates to documents may not be reflected in the
@@ -1054,21 +653,10 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(name).get();
-   * }
-   * </code></pre>
-   *
    * @param name Required. Database to export. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata>
       exportDocumentsAsync(DatabaseName name) {
     ExportDocumentsRequest request =
@@ -1076,7 +664,7 @@ public class FirestoreAdminClient implements BackgroundResource {
     return exportDocumentsAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Exports a copy of all or a subset of documents from Google Cloud Firestore to another storage
    * system, such as Google Cloud Storage. Recent updates to documents may not be reflected in the
@@ -1085,28 +673,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(name.toString()).get();
-   * }
-   * </code></pre>
-   *
    * @param name Required. Database to export. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata>
       exportDocumentsAsync(String name) {
     ExportDocumentsRequest request = ExportDocumentsRequest.newBuilder().setName(name).build();
     return exportDocumentsAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Exports a copy of all or a subset of documents from Google Cloud Firestore to another storage
    * system, such as Google Cloud Storage. Recent updates to documents may not be reflected in the
@@ -1115,29 +692,15 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ExportDocumentsRequest request = ExportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(request).get();
-   * }
-   * </code></pre>
-   *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata>
       exportDocumentsAsync(ExportDocumentsRequest request) {
     return exportDocumentsOperationCallable().futureCall(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Exports a copy of all or a subset of documents from Google Cloud Firestore to another storage
    * system, such as Google Cloud Storage. Recent updates to documents may not be reflected in the
@@ -1147,27 +710,14 @@ public class FirestoreAdminClient implements BackgroundResource {
    * leave partial data behind in Google Cloud Storage.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ExportDocumentsRequest request = ExportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   OperationFuture&lt;ExportDocumentsResponse, ExportDocumentsMetadata&gt; future = firestoreAdminClient.exportDocumentsOperationCallable().futureCall(request);
-   *   // Do something
-   *   ExportDocumentsResponse response = future.get();
-   * }
-   * </code></pre>
    */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public final OperationCallable<
           ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
       exportDocumentsOperationCallable() {
     return stub.exportDocumentsOperationCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Exports a copy of all or a subset of documents from Google Cloud Firestore to another storage
    * system, such as Google Cloud Storage. Recent updates to documents may not be reflected in the
@@ -1177,45 +727,22 @@ public class FirestoreAdminClient implements BackgroundResource {
    * leave partial data behind in Google Cloud Storage.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ExportDocumentsRequest request = ExportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.exportDocumentsCallable().futureCall(request);
-   *   // Do something
-   *   Operation response = future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ExportDocumentsRequest, Operation> exportDocumentsCallable() {
     return stub.exportDocumentsCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Imports documents into Google Cloud Firestore. Existing documents with the same name are
    * overwritten. The import occurs in the background and its progress can be monitored and managed
    * via the Operation resource that is created. If an ImportDocuments operation is cancelled, it is
    * possible that a subset of the data has already been imported to Cloud Firestore.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   firestoreAdminClient.importDocumentsAsync(name).get();
-   * }
-   * </code></pre>
-   *
    * @param name Required. Database to import into. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Empty, ImportDocumentsMetadata> importDocumentsAsync(
       DatabaseName name) {
     ImportDocumentsRequest request =
@@ -1223,63 +750,38 @@ public class FirestoreAdminClient implements BackgroundResource {
     return importDocumentsAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Imports documents into Google Cloud Firestore. Existing documents with the same name are
    * overwritten. The import occurs in the background and its progress can be monitored and managed
    * via the Operation resource that is created. If an ImportDocuments operation is cancelled, it is
    * possible that a subset of the data has already been imported to Cloud Firestore.
-   *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   firestoreAdminClient.importDocumentsAsync(name.toString()).get();
-   * }
-   * </code></pre>
    *
    * @param name Required. Database to import into. Should be of the form:
    *     `projects/{project_id}/databases/{database_id}`.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Empty, ImportDocumentsMetadata> importDocumentsAsync(String name) {
     ImportDocumentsRequest request = ImportDocumentsRequest.newBuilder().setName(name).build();
     return importDocumentsAsync(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Imports documents into Google Cloud Firestore. Existing documents with the same name are
    * overwritten. The import occurs in the background and its progress can be monitored and managed
    * via the Operation resource that is created. If an ImportDocuments operation is cancelled, it is
    * possible that a subset of the data has already been imported to Cloud Firestore.
    *
-   * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ImportDocumentsRequest request = ImportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   firestoreAdminClient.importDocumentsAsync(request).get();
-   * }
-   * </code></pre>
-   *
    * @param request The request object containing all of the parameters for the API call.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
-  @BetaApi(
-      "The surface for long-running operations is not stable yet and may change in the future.")
   public final OperationFuture<Empty, ImportDocumentsMetadata> importDocumentsAsync(
       ImportDocumentsRequest request) {
     return importDocumentsOperationCallable().futureCall(request);
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Imports documents into Google Cloud Firestore. Existing documents with the same name are
    * overwritten. The import occurs in the background and its progress can be monitored and managed
@@ -1287,26 +789,13 @@ public class FirestoreAdminClient implements BackgroundResource {
    * possible that a subset of the data has already been imported to Cloud Firestore.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ImportDocumentsRequest request = ImportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   OperationFuture&lt;Empty, ImportDocumentsMetadata&gt; future = firestoreAdminClient.importDocumentsOperationCallable().futureCall(request);
-   *   // Do something
-   *   future.get();
-   * }
-   * </code></pre>
    */
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable() {
     return stub.importDocumentsOperationCallable();
   }
 
-  // AUTO-GENERATED DOCUMENTATION AND METHOD
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Imports documents into Google Cloud Firestore. Existing documents with the same name are
    * overwritten. The import occurs in the background and its progress can be monitored and managed
@@ -1314,18 +803,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * possible that a subset of the data has already been imported to Cloud Firestore.
    *
    * <p>Sample code:
-   *
-   * <pre><code>
-   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
-   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
-   *   ImportDocumentsRequest request = ImportDocumentsRequest.newBuilder()
-   *     .setName(name.toString())
-   *     .build();
-   *   ApiFuture&lt;Operation&gt; future = firestoreAdminClient.importDocumentsCallable().futureCall(request);
-   *   // Do something
-   *   future.get();
-   * }
-   * </code></pre>
    */
   public final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return stub.importDocumentsCallable();

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.firestore.v1.stub;
 
 import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListFieldsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPagedResponse;
 
-import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.core.BackgroundResourceAggregation;
 import com.google.api.gax.grpc.GrpcCallSettings;
@@ -56,16 +56,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Generated;
 
-// AUTO-GENERATED DOCUMENTATION AND CLASS
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
- * gRPC stub implementation for Google Cloud Firestore Admin API.
+ * gRPC stub implementation for the FirestoreAdmin service API.
  *
  * <p>This class is for advanced usage and reflects the underlying API directly.
  */
-@Generated("by gapic-generator")
-@BetaApi("A restructuring of stub classes is planned, so this may break in the future")
+@Generated("by gapic-generator-java")
 public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
-
   private static final MethodDescriptor<CreateIndexRequest, Operation> createIndexMethodDescriptor =
       MethodDescriptor.<CreateIndexRequest, Operation>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -73,6 +71,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
           .setRequestMarshaller(ProtoUtils.marshaller(CreateIndexRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
           .build();
+
   private static final MethodDescriptor<ListIndexesRequest, ListIndexesResponse>
       listIndexesMethodDescriptor =
           MethodDescriptor.<ListIndexesRequest, ListIndexesResponse>newBuilder()
@@ -82,6 +81,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setResponseMarshaller(
                   ProtoUtils.marshaller(ListIndexesResponse.getDefaultInstance()))
               .build();
+
   private static final MethodDescriptor<GetIndexRequest, Index> getIndexMethodDescriptor =
       MethodDescriptor.<GetIndexRequest, Index>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -89,6 +89,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
           .setRequestMarshaller(ProtoUtils.marshaller(GetIndexRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(Index.getDefaultInstance()))
           .build();
+
   private static final MethodDescriptor<DeleteIndexRequest, Empty> deleteIndexMethodDescriptor =
       MethodDescriptor.<DeleteIndexRequest, Empty>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -96,6 +97,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
           .setRequestMarshaller(ProtoUtils.marshaller(DeleteIndexRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(Empty.getDefaultInstance()))
           .build();
+
   private static final MethodDescriptor<GetFieldRequest, Field> getFieldMethodDescriptor =
       MethodDescriptor.<GetFieldRequest, Field>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -103,6 +105,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
           .setRequestMarshaller(ProtoUtils.marshaller(GetFieldRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(Field.getDefaultInstance()))
           .build();
+
   private static final MethodDescriptor<UpdateFieldRequest, Operation> updateFieldMethodDescriptor =
       MethodDescriptor.<UpdateFieldRequest, Operation>newBuilder()
           .setType(MethodDescriptor.MethodType.UNARY)
@@ -110,6 +113,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
           .setRequestMarshaller(ProtoUtils.marshaller(UpdateFieldRequest.getDefaultInstance()))
           .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
           .build();
+
   private static final MethodDescriptor<ListFieldsRequest, ListFieldsResponse>
       listFieldsMethodDescriptor =
           MethodDescriptor.<ListFieldsRequest, ListFieldsResponse>newBuilder()
@@ -118,6 +122,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setRequestMarshaller(ProtoUtils.marshaller(ListFieldsRequest.getDefaultInstance()))
               .setResponseMarshaller(ProtoUtils.marshaller(ListFieldsResponse.getDefaultInstance()))
               .build();
+
   private static final MethodDescriptor<ExportDocumentsRequest, Operation>
       exportDocumentsMethodDescriptor =
           MethodDescriptor.<ExportDocumentsRequest, Operation>newBuilder()
@@ -127,6 +132,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
                   ProtoUtils.marshaller(ExportDocumentsRequest.getDefaultInstance()))
               .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
               .build();
+
   private static final MethodDescriptor<ImportDocumentsRequest, Operation>
       importDocumentsMethodDescriptor =
           MethodDescriptor.<ImportDocumentsRequest, Operation>newBuilder()
@@ -136,9 +142,6 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
                   ProtoUtils.marshaller(ImportDocumentsRequest.getDefaultInstance()))
               .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
               .build();
-
-  private final BackgroundResource backgroundResources;
-  private final GrpcOperationsStub operationsStub;
 
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
@@ -162,6 +165,8 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   private final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable;
 
+  private final BackgroundResource backgroundResources;
+  private final GrpcOperationsStub operationsStub;
   private final GrpcStubCallableFactory callableFactory;
 
   public static final GrpcFirestoreAdminStub create(FirestoreAdminStubSettings settings)
@@ -330,7 +335,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             createIndexTransportSettings,
             settings.createIndexOperationSettings(),
             clientContext,
-            this.operationsStub);
+            operationsStub);
     this.listIndexesCallable =
         callableFactory.createUnaryCallable(
             listIndexesTransportSettings, settings.listIndexesSettings(), clientContext);
@@ -354,7 +359,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             updateFieldTransportSettings,
             settings.updateFieldOperationSettings(),
             clientContext,
-            this.operationsStub);
+            operationsStub);
     this.listFieldsCallable =
         callableFactory.createUnaryCallable(
             listFieldsTransportSettings, settings.listFieldsSettings(), clientContext);
@@ -369,7 +374,7 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             exportDocumentsTransportSettings,
             settings.exportDocumentsOperationSettings(),
             clientContext,
-            this.operationsStub);
+            operationsStub);
     this.importDocumentsCallable =
         callableFactory.createUnaryCallable(
             importDocumentsTransportSettings, settings.importDocumentsSettings(), clientContext);
@@ -378,32 +383,31 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             importDocumentsTransportSettings,
             settings.importDocumentsOperationSettings(),
             clientContext,
-            this.operationsStub);
+            operationsStub);
 
-    backgroundResources = new BackgroundResourceAggregation(clientContext.getBackgroundResources());
+    this.backgroundResources =
+        new BackgroundResourceAggregation(clientContext.getBackgroundResources());
   }
 
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
   public GrpcOperationsStub getOperationsStub() {
     return operationsStub;
-  }
-
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
-      createIndexOperationCallable() {
-    return createIndexOperationCallable;
   }
 
   public UnaryCallable<CreateIndexRequest, Operation> createIndexCallable() {
     return createIndexCallable;
   }
 
-  public UnaryCallable<ListIndexesRequest, ListIndexesPagedResponse> listIndexesPagedCallable() {
-    return listIndexesPagedCallable;
+  public OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
+      createIndexOperationCallable() {
+    return createIndexOperationCallable;
   }
 
   public UnaryCallable<ListIndexesRequest, ListIndexesResponse> listIndexesCallable() {
     return listIndexesCallable;
+  }
+
+  public UnaryCallable<ListIndexesRequest, ListIndexesPagedResponse> listIndexesPagedCallable() {
+    return listIndexesPagedCallable;
   }
 
   public UnaryCallable<GetIndexRequest, Index> getIndexCallable() {
@@ -418,42 +422,39 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
     return getFieldCallable;
   }
 
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
-      updateFieldOperationCallable() {
-    return updateFieldOperationCallable;
-  }
-
   public UnaryCallable<UpdateFieldRequest, Operation> updateFieldCallable() {
     return updateFieldCallable;
   }
 
-  public UnaryCallable<ListFieldsRequest, ListFieldsPagedResponse> listFieldsPagedCallable() {
-    return listFieldsPagedCallable;
+  public OperationCallable<UpdateFieldRequest, Field, FieldOperationMetadata>
+      updateFieldOperationCallable() {
+    return updateFieldOperationCallable;
   }
 
   public UnaryCallable<ListFieldsRequest, ListFieldsResponse> listFieldsCallable() {
     return listFieldsCallable;
   }
 
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallable<ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
-      exportDocumentsOperationCallable() {
-    return exportDocumentsOperationCallable;
+  public UnaryCallable<ListFieldsRequest, ListFieldsPagedResponse> listFieldsPagedCallable() {
+    return listFieldsPagedCallable;
   }
 
   public UnaryCallable<ExportDocumentsRequest, Operation> exportDocumentsCallable() {
     return exportDocumentsCallable;
   }
 
-  @BetaApi("The surface for use by generated code is not stable yet and may change in the future.")
-  public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
-      importDocumentsOperationCallable() {
-    return importDocumentsOperationCallable;
+  public OperationCallable<ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
+      exportDocumentsOperationCallable() {
+    return exportDocumentsOperationCallable;
   }
 
   public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return importDocumentsCallable;
+  }
+
+  public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
+      importDocumentsOperationCallable() {
+    return importDocumentsOperationCallable;
   }
 
   @Override
