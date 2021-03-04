@@ -100,6 +100,18 @@ public interface GetDocumentRequestOrBuilder
    *
    * <code>bytes transaction = 3;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  boolean hasTransaction();
+  /**
+   *
+   *
+   * <pre>
+   * Reads the document in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 3;</code>
+   *
    * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();

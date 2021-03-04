@@ -102,6 +102,18 @@ public interface RunQueryRequestOrBuilder
    *
    * <code>bytes transaction = 5;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  boolean hasTransaction();
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 5;</code>
+   *
    * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();

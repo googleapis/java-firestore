@@ -417,6 +417,21 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <code>bytes transaction = 4;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  @java.lang.Override
+  public boolean hasTransaction() {
+    return consistencySelectorCase_ == 4;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 4;</code>
+   *
    * @return The transaction.
    */
   @java.lang.Override
@@ -1536,6 +1551,20 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       return maskBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents in a transaction.
+     * </pre>
+     *
+     * <code>bytes transaction = 4;</code>
+     *
+     * @return Whether the transaction field is set.
+     */
+    public boolean hasTransaction() {
+      return consistencySelectorCase_ == 4;
+    }
     /**
      *
      *

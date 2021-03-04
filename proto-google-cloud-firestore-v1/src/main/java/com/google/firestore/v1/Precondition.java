@@ -181,6 +181,22 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>bool exists = 1;</code>
    *
+   * @return Whether the exists field is set.
+   */
+  @java.lang.Override
+  public boolean hasExists() {
+    return conditionTypeCase_ == 1;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * When set to `true`, the target document must exist.
+   * When set to `false`, the target document must not exist.
+   * </pre>
+   *
+   * <code>bool exists = 1;</code>
+   *
    * @return The exists.
    */
   @java.lang.Override
@@ -624,6 +640,21 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * When set to `true`, the target document must exist.
+     * When set to `false`, the target document must not exist.
+     * </pre>
+     *
+     * <code>bool exists = 1;</code>
+     *
+     * @return Whether the exists field is set.
+     */
+    public boolean hasExists() {
+      return conditionTypeCase_ == 1;
+    }
     /**
      *
      *

@@ -380,6 +380,21 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <code>bytes transaction = 5;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  @java.lang.Override
+  public boolean hasTransaction() {
+    return consistencySelectorCase_ == 5;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 5;</code>
+   *
    * @return The transaction.
    */
   @java.lang.Override
@@ -1327,6 +1342,20 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       return structuredQueryBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents in a transaction.
+     * </pre>
+     *
+     * <code>bytes transaction = 5;</code>
+     *
+     * @return Whether the transaction field is set.
+     */
+    public boolean hasTransaction() {
+      return consistencySelectorCase_ == 5;
+    }
     /**
      *
      *
