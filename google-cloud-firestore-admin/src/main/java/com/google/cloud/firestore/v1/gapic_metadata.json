@@ -1,0 +1,45 @@
+{
+  "schema": "1.0",
+  "comment": "This file maps proto services/RPCs to the corresponding library clients/methods",
+  "language": "java",
+  "protoPackage": "google.firestore.admin.v1",
+  "libraryPackage": "com.google.cloud.firestore.v1",
+  "services": {
+    "FirestoreAdmin": {
+      "clients": {
+        "grpc": {
+          "libraryClient": "FirestoreAdminClient",
+          "rpcs": {
+            "CreateIndex": {
+              "methods": ["createIndexAsync", "createIndexAsync", "createIndexAsync", "createIndexOperationCallable", "createIndexCallable"]
+            },
+            "DeleteIndex": {
+              "methods": ["deleteIndex", "deleteIndex", "deleteIndex", "deleteIndexCallable"]
+            },
+            "ExportDocuments": {
+              "methods": ["exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsOperationCallable", "exportDocumentsCallable"]
+            },
+            "GetField": {
+              "methods": ["getField", "getField", "getField", "getFieldCallable"]
+            },
+            "GetIndex": {
+              "methods": ["getIndex", "getIndex", "getIndex", "getIndexCallable"]
+            },
+            "ImportDocuments": {
+              "methods": ["importDocumentsAsync", "importDocumentsAsync", "importDocumentsAsync", "importDocumentsOperationCallable", "importDocumentsCallable"]
+            },
+            "ListFields": {
+              "methods": ["listFields", "listFields", "listFields", "listFieldsPagedCallable", "listFieldsCallable"]
+            },
+            "ListIndexes": {
+              "methods": ["listIndexes", "listIndexes", "listIndexes", "listIndexesPagedCallable", "listIndexesCallable"]
+            },
+            "UpdateField": {
+              "methods": ["updateFieldAsync", "updateFieldAsync", "updateFieldOperationCallable", "updateFieldCallable"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

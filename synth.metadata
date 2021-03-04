@@ -11,8 +11,8 @@
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "e8bc4471a88ac5f60defe3ed436f517174e59ba0",
-        "internalRef": "357800868"
+        "sha": "af8f71dae961ee036a0ac52a1965270149a6b2c9",
+        "internalRef": "358516065"
       }
     },
     {
@@ -117,6 +117,7 @@
     "codecov.yaml",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminClient.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminSettings.java",
+    "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/gapic_metadata.json",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/package-info.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStub.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStubSettings.java",
@@ -127,6 +128,7 @@
     "google-cloud-firestore-admin/src/test/java/com/google/cloud/firestore/v1/MockFirestoreAdminImpl.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreClient.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreSettings.java",
+    "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/gapic_metadata.json",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/package-info.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStub.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStubSettings.java",
