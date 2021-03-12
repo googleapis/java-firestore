@@ -19,8 +19,6 @@ package com.google.cloud.firestore;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.retrying.RetrySettings;
@@ -55,13 +53,15 @@ import com.google.firestore.v1.StructuredQuery.FieldFilter;
 import com.google.firestore.v1.StructuredQuery.UnaryFilter;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -970,12 +970,9 @@ public final class LocalFirestoreHelper {
   }
 
   private static Map<String, Object> fromJsonString(String json) {
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      return mapper.readValue(json, new TypeReference<Map<String, Object>>() {});
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    Type type = new TypeToken<Map<String, Object>>() {}.getType();
+    Gson gson = new Gson();
+    return gson.fromJson(json, type);
   }
 
   public static Map<String, Object> fromSingleQuotedString(String json) {

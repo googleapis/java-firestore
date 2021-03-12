@@ -20,9 +20,11 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.fromSingleQuotedSt
 import static com.google.cloud.firestore.LocalFirestoreHelper.mapAnyType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.PropertyName;
@@ -43,6 +45,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -698,11 +701,11 @@ public class MapperTest {
   }
 
   private static class PackageConstructorBean {
-    private String value;
+    private Timestamp value;
 
     PackageConstructorBean() {}
 
-    public String getValue() {
+    public Timestamp getValue() {
       return value;
     }
   }
@@ -950,8 +953,17 @@ public class MapperTest {
     return deserialize(jsonString, clazz, /*docRef=*/ null);
   }
 
+  private static <T> T deserialize(Map<String, Object> json, Class<T> clazz) {
+    return deserialize(json, clazz, /*docRef=*/ null);
+  }
+
   private static <T> T deserialize(String jsonString, Class<T> clazz, DocumentReference docRef) {
     Map<String, Object> json = fromSingleQuotedString(jsonString);
+    return CustomClassMapper.convertToCustomClass(json, clazz, docRef);
+  }
+
+  private static <T> T deserialize(
+      Map<String, Object> json, Class<T> clazz, DocumentReference docRef) {
     return CustomClassMapper.convertToCustomClass(json, clazz, docRef);
   }
 
@@ -1079,22 +1091,34 @@ public class MapperTest {
   @Test
   public void primitiveDeserializeBigDecimal() {
     BigDecimalBean beanBigdecimal = deserialize("{'value': 123}", BigDecimalBean.class);
-    assertEquals(BigDecimal.valueOf(123), beanBigdecimal.value);
+    assertEquals(BigDecimal.valueOf(123.0), beanBigdecimal.value);
 
     beanBigdecimal = deserialize("{'value': '123'}", BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(123), beanBigdecimal.value);
 
     // Int
-    BigDecimalBean beanInt = deserialize("{'value': 1}", BigDecimalBean.class);
+    BigDecimalBean beanInt =
+        deserialize(Collections.<String, Object>singletonMap("value", 1), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1), beanInt.value);
 
     // Long
-    BigDecimalBean beanLong = deserialize("{'value': 1234567890123}", BigDecimalBean.class);
+    BigDecimalBean beanLong =
+        deserialize(
+            Collections.<String, Object>singletonMap("value", 1234567890123L),
+            BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1234567890123L), beanLong.value);
 
     // Double
-    BigDecimalBean beanDouble = deserialize("{'value': 1.1}", BigDecimalBean.class);
+    BigDecimalBean beanDouble =
+        deserialize(Collections.<String, Object>singletonMap("value", 1.1), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1.1), beanDouble.value);
+
+    // BigDecimal
+    BigDecimalBean beanBigDecimal =
+        deserialize(
+            Collections.<String, Object>singletonMap("value", BigDecimal.valueOf(1.2)),
+            BigDecimalBean.class);
+    assertEquals(BigDecimal.valueOf(1.2), beanBigDecimal.value);
 
     // Boolean
     try {
@@ -1117,10 +1141,13 @@ public class MapperTest {
     assertEquals(1.1, beanFloat.value, EPSILON);
 
     // Int
-    FloatBean beanInt = deserialize("{'value': 1}", FloatBean.class);
+    FloatBean beanInt =
+        deserialize(Collections.<String, Object>singletonMap("value", 1), FloatBean.class);
     assertEquals(1, beanInt.value, EPSILON);
     // Long
-    FloatBean beanLong = deserialize("{'value': 1234567890123}", FloatBean.class);
+    FloatBean beanLong =
+        deserialize(
+            Collections.<String, Object>singletonMap("value", 1234567890123L), FloatBean.class);
     assertEquals((float) 1234567890123L, beanLong.value, EPSILON);
 
     // Boolean
@@ -1213,15 +1240,18 @@ public class MapperTest {
 
   @Test
   public void primitiveDeserializeWrongTypeMap() {
-    assertExceptionContains(
-        "Failed to convert value of type java.util.LinkedHashMap to String "
-            + "(found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': {'foo': 'bar'}}", StringBean.class);
-          }
-        });
+    String expectedExceptionMessage =
+        ".* Failed to convert value of type .*Map to String \\(found in field 'value'\\).*";
+    Throwable exception =
+        assertThrows(
+            RuntimeException.class,
+            new ThrowingRunnable() {
+              @Override
+              public void run() throws Throwable {
+                deserialize("{'value': {'foo': 'bar'}}", StringBean.class);
+              }
+            });
+    assertTrue(exception.getMessage().matches(expectedExceptionMessage));
   }
 
   @Test
@@ -1565,14 +1595,16 @@ public class MapperTest {
   public void serializeIntBean() {
     IntBean bean = new IntBean();
     bean.value = 1;
-    assertJson("{'value': 1}", serialize(bean));
+    assertJson("{'value': 1}", serialize(Collections.singletonMap("value", 1.0)));
   }
 
   @Test
   public void serializeLongBean() {
     LongBean bean = new LongBean();
     bean.value = 1234567890123L;
-    assertJson("{'value': 1234567890123}", serialize(bean));
+    assertJson(
+        "{'value': 1.234567890123E12}",
+        serialize(Collections.singletonMap("value", 1.234567890123E12)));
   }
 
   @Test
@@ -2061,8 +2093,12 @@ public class MapperTest {
 
   @Test
   public void packageConstructorCanBeDeserialized() {
-    PackageConstructorBean bean = deserialize("{'value': 'foo'}", PackageConstructorBean.class);
-    assertEquals("foo", bean.value);
+    Timestamp timestamp = Timestamp.now();
+    PackageConstructorBean bean =
+        deserialize(
+            Collections.<String, Object>singletonMap("value", timestamp),
+            PackageConstructorBean.class);
+    assertEquals(timestamp, bean.value);
   }
 
   @Test
@@ -2245,10 +2281,10 @@ public class MapperTest {
     recursiveBean.value.value = "foo";
     assertJson("{'value': {'value': 'foo'}}", serialize(recursiveBean));
 
-    DoubleGenericBean<String, Integer> doubleBean = new DoubleGenericBean<>();
+    DoubleGenericBean<String, Double> doubleBean = new DoubleGenericBean<>();
     doubleBean.valueA = "foo";
-    doubleBean.valueB = 1;
-    assertJson("{'valueA': 'foo', 'valueB': 1}", serialize(doubleBean));
+    doubleBean.valueB = 1.0;
+    assertJson("{'valueB': 1, 'valueA': 'foo'}", serialize(doubleBean));
   }
 
   @Test
@@ -2486,7 +2522,7 @@ public class MapperTest {
   public void settersCanOverridePrimitiveSettersSerializing() {
     NonConflictingSetterSubBean bean = new NonConflictingSetterSubBean();
     bean.value = 1;
-    assertJson("{'value': 1}", serialize(bean));
+    assertJson("{'value': 1}", serialize(Collections.singletonMap("value", 1.0)));
   }
 
   @Test
@@ -2740,6 +2776,14 @@ public class MapperTest {
                 ImmutableList.of("coll", "doc123")));
 
     assertEquals("doc123", deserialize("{}", DocumentIdOnStringField.class, ref).docId);
+
+    assertEquals(
+        "doc123",
+        deserialize(
+                Collections.<String, Object>singletonMap("property", 100),
+                DocumentIdOnStringField.class,
+                ref)
+            .docId);
 
     DocumentIdOnStringFieldAsProperty target =
         deserialize("{'anotherProperty': 100}", DocumentIdOnStringFieldAsProperty.class, ref);
