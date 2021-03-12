@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.2.6](https://www.github.com/googleapis/java-firestore/compare/v2.2.5...v2.2.6) (2021-03-12)
+
+
+### Bug Fixes
+
+* Removed Jackson dependency ([#508](https://www.github.com/googleapis/java-firestore/issues/508)) ([7ada73d](https://www.github.com/googleapis/java-firestore/commit/7ada73d3c0a282be8ce2682c2e9c737690d9f891))
+
 ### [2.2.5](https://www.github.com/googleapis/java-firestore/compare/v2.2.4...v2.2.5) (2021-03-11)
 
 
