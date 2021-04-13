@@ -1535,7 +1535,7 @@ public class ITSystemTest {
       final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
       final Status status = invalidArgument.getStatus();
       assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
-      assertThat(status.getDescription()).contains("old");
+      assertThat(status.getDescription()).contains("minimum");
     }
   }
 
