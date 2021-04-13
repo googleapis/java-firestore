@@ -1,5 +1,18 @@
 # Changelog
 
+### [2.2.6](https://www.github.com/googleapis/java-firestore/compare/v2.2.5...v2.2.6) (2021-04-13)
+
+
+### Bug Fixes
+
+* Removed Jackson dependency ([#508](https://www.github.com/googleapis/java-firestore/issues/508)) ([7ada73d](https://www.github.com/googleapis/java-firestore/commit/7ada73d3c0a282be8ce2682c2e9c737690d9f891))
+* typo ([#587](https://www.github.com/googleapis/java-firestore/issues/587)) ([520ac44](https://www.github.com/googleapis/java-firestore/commit/520ac441bcb7944be378ec6099b9ec4de37844d4))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.21.0 ([#584](https://www.github.com/googleapis/java-firestore/issues/584)) ([c83a222](https://www.github.com/googleapis/java-firestore/commit/c83a222bd602a489552276c5202796db7fadeffa))
+
 ### [2.2.5](https://www.github.com/googleapis/java-firestore/compare/v2.2.4...v2.2.5) (2021-03-11)
 
 
