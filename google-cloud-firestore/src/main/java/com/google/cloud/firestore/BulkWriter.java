@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS;
+
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
@@ -107,6 +109,12 @@ public final class BulkWriter implements AutoCloseable {
    *     up traffic</a>
    */
   private static final int RATE_LIMITER_MULTIPLIER_MILLIS = 5 * 60 * 1000;
+
+  /**
+   * The default jitter to apply to the exponential backoff used in retries. For example, a factor
+   * of 0.3 means a 30% jitter is applied.
+   */
+  static final double DEFAULT_JITTER_FACTOR = 0.3;
 
   private static final WriteResultCallback DEFAULT_SUCCESS_LISTENER =
       new WriteResultCallback() {
@@ -681,7 +689,7 @@ public final class BulkWriter implements AutoCloseable {
 
   private ApiFuture<Void> flushLocked() {
     verifyNotClosedLocked();
-    sendCurrentBatchLocked(/* flush= */ true);
+    scheduleCurrentBatchLocked(/* flush= */ true);
     return lastOperation;
   }
 
@@ -846,37 +854,61 @@ public final class BulkWriter implements AutoCloseable {
    *     This allows retries to resolve as part of a {@link BulkWriter#flush()} or {@link
    *     BulkWriter#close()} call.
    */
-  private void sendCurrentBatchLocked(final boolean flush) {
+  private void scheduleCurrentBatchLocked(final boolean flush) {
     if (bulkCommitBatch.getMutationsSize() == 0) return;
-    BulkCommitBatch pendingBatch = bulkCommitBatch;
+
+    final BulkCommitBatch pendingBatch = bulkCommitBatch;
     bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
 
-    // Send the batch if it is under the rate limit, or schedule another attempt after the
+    // Use the write with the longest backoff duration when determining backoff.
+    int highestBackoffDuration = 0;
+    for (BulkWriterOperation op : pendingBatch.pendingOperations) {
+      if (op.getBackoffDuration() > highestBackoffDuration) {
+        highestBackoffDuration = op.getBackoffDuration();
+      }
+    }
+    int backoffMsWithJitter = applyJitter(highestBackoffDuration);
+
+    bulkWriterExecutor.schedule(
+        new Runnable() {
+          @Override
+          public void run() {
+            synchronized (lock) {
+              sendBatchLocked(pendingBatch, flush);
+            }
+          }
+        },
+        backoffMsWithJitter,
+        TimeUnit.MILLISECONDS);
+  }
+
+  /** Sends the provided batch once the rate limiter does not require any delay. */
+  private void sendBatchLocked(final BulkCommitBatch batch, final boolean flush) {
+    // Send the batch if it is does not require any delay, or schedule another attempt after the
     // appropriate timeout.
-    boolean underRateLimit = rateLimiter.tryMakeRequest(pendingBatch.getMutationsSize());
+    boolean underRateLimit = rateLimiter.tryMakeRequest(batch.getMutationsSize());
     if (underRateLimit) {
-      pendingBatch
+      batch
           .bulkCommit()
           .addListener(
               new Runnable() {
                 @Override
                 public void run() {
                   synchronized (lock) {
-                    sendCurrentBatchLocked(flush);
+                    scheduleCurrentBatchLocked(flush);
                   }
                 }
               },
               bulkWriterExecutor);
-
     } else {
-      long delayMs = rateLimiter.getNextRequestDelayMs(pendingBatch.getMutationsSize());
+      long delayMs = rateLimiter.getNextRequestDelayMs(batch.getMutationsSize());
       logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
       bulkWriterExecutor.schedule(
           new Runnable() {
             @Override
             public void run() {
               synchronized (lock) {
-                sendCurrentBatchLocked(flush);
+                sendBatchLocked(batch, flush);
               }
             }
           },
@@ -905,7 +937,7 @@ public final class BulkWriter implements AutoCloseable {
     if (bulkCommitBatch.has(op.getDocumentReference())) {
       // Create a new batch since the backend doesn't support batches with two writes to the same
       // document.
-      sendCurrentBatchLocked(/* flush= */ false);
+      scheduleCurrentBatchLocked(/* flush= */ false);
     }
 
     // Run the operation on the current batch and advance the `lastOperation` pointer. This
@@ -926,7 +958,7 @@ public final class BulkWriter implements AutoCloseable {
             MoreExecutors.directExecutor());
 
     if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
-      sendCurrentBatchLocked(/* flush= */ false);
+      scheduleCurrentBatchLocked(/* flush= */ false);
     }
   }
 
@@ -988,5 +1020,12 @@ public final class BulkWriter implements AutoCloseable {
         },
         MoreExecutors.directExecutor());
     return flushCallback;
+  }
+
+  private int applyJitter(int backoffMs) {
+    if (backoffMs == 0) return 0;
+    // Random value in [-0.3, 0.3].
+    double jitter = DEFAULT_JITTER_FACTOR * (Math.random() * 2 - 1);
+    return (int) Math.min(DEFAULT_BACKOFF_MAX_DELAY_MS, backoffMs + jitter * backoffMs);
   }
 }
