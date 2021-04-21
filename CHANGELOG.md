@@ -1,5 +1,17 @@
 # Changelog
 
+### [2.2.7](https://www.github.com/googleapis/java-firestore/compare/v2.2.6...v2.2.7) (2021-04-20)
+
+
+### Bug Fixes
+
+* release scripts from issuing overlapping phases ([#595](https://www.github.com/googleapis/java-firestore/issues/595)) ([4372479](https://www.github.com/googleapis/java-firestore/commit/43724796ea940062512370c270f6bedc680b5b6a))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.21.1 ([#597](https://www.github.com/googleapis/java-firestore/issues/597)) ([dbd3d33](https://www.github.com/googleapis/java-firestore/commit/dbd3d331d83fc7b2c4e79946b9921ff158c8b1e9))
+
 ### [2.2.6](https://www.github.com/googleapis/java-firestore/compare/v2.2.5...v2.2.6) (2021-04-13)
 
 
