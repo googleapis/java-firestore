@@ -1092,6 +1092,7 @@ public class BulkWriterTest {
   @Test
   public void failsWritesAfterAllRetryAttemptsFail() throws Exception {
     final int[] retryAttempts = {0};
+    final int[] scheduleWithDelayCount = {0};
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
           @Override
@@ -1105,6 +1106,7 @@ public class BulkWriterTest {
 
               assertTrue(delay >= (1 - BulkWriter.DEFAULT_JITTER_FACTOR) * expected);
               assertTrue(delay <= (1 + BulkWriter.DEFAULT_JITTER_FACTOR) * expected);
+              scheduleWithDelayCount[0]++;
             }
             return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
@@ -1132,22 +1134,21 @@ public class BulkWriterTest {
       Assert.fail("Expected set() operation to fail");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
-      assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS + 1);
+      assertEquals(BulkWriter.MAX_RETRY_ATTEMPTS + 1, retryAttempts[0]);
+      // The first attempt should not have a delay.
+      assertEquals(BulkWriter.MAX_RETRY_ATTEMPTS, scheduleWithDelayCount[0]);
     }
   }
 
   @Test
   public void appliesMaxBackoffOnRetriesForResourceExhausted() throws Exception {
     final int[] retryAttempts = {0};
+    final int[] scheduleWithDelayCount = {0};
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
           @Override
           @Nonnull
           public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
-            int expected =
-                (int)
-                    (BulkWriterOperation.DEFAULT_BACKOFF_INITIAL_DELAY_MS
-                        * Math.pow(1.5, retryAttempts[0]));
             if (delay > 0) {
               assertTrue(
                   delay
@@ -1157,6 +1158,7 @@ public class BulkWriterTest {
                   delay
                       <= (1 + BulkWriter.DEFAULT_JITTER_FACTOR)
                           * BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS);
+              scheduleWithDelayCount[0]++;
             }
             return super.schedule(command, 0, TimeUnit.MILLISECONDS);
           }
@@ -1191,7 +1193,9 @@ public class BulkWriterTest {
       Assert.fail("Expected create() operation to fail");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
-      assertEquals(retryAttempts[0], 5);
+      assertEquals(5, retryAttempts[0]);
+      // The first attempt should not have a delay.
+      assertEquals(4, scheduleWithDelayCount[0]);
     }
   }
 
@@ -1256,7 +1260,7 @@ public class BulkWriterTest {
     bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
-    assertEquals(retryAttempts[0], 2);
+    assertEquals(2, retryAttempts[0]);
   }
 
   @Test
@@ -1268,7 +1272,7 @@ public class BulkWriterTest {
                 batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
                 failedResponse(Code.RESOURCE_EXHAUSTED_VALUE));
             put(
-                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
                 successResponse(0));
             put(
                 batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
@@ -1285,7 +1289,7 @@ public class BulkWriterTest {
         });
     bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush();
-    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
   }
 

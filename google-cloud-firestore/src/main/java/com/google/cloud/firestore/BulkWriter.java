@@ -867,7 +867,7 @@ public final class BulkWriter implements AutoCloseable {
         highestBackoffDuration = op.getBackoffDuration();
       }
     }
-    int backoffMsWithJitter = applyJitter(highestBackoffDuration);
+    final int backoffMsWithJitter = applyJitter(highestBackoffDuration);
 
     bulkWriterExecutor.schedule(
         new Runnable() {
