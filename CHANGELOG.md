@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/googleapis/java-firestore/compare/v2.2.7...v2.3.0) (2021-04-23)
+
+
+### Features
+
+* add backoff to BulkWriter ([#600](https://www.github.com/googleapis/java-firestore/issues/600)) ([e295aa5](https://www.github.com/googleapis/java-firestore/commit/e295aa5d20007a513e1647575f6935e243825c4d))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1 ([#607](https://www.github.com/googleapis/java-firestore/issues/607)) ([21e8cde](https://www.github.com/googleapis/java-firestore/commit/21e8cde718b5f2e2f8269d860d0ea3ae810dabdd))
+
 ### [2.2.7](https://www.github.com/googleapis/java-firestore/compare/v2.2.6...v2.2.7) (2021-04-20)
 
 
