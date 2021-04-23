@@ -22,6 +22,7 @@ import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import io.grpc.Status;
 
 /**
  * Represents a single write for BulkWriter, encapsulating operation dispatch and error handling.
@@ -34,7 +35,22 @@ class BulkWriterOperation {
   private final ApiFunction<WriteResult, ApiFuture<Void>> successListener;
   private final ApiFunction<BulkWriterException, ApiFuture<Boolean>> errorListener;
 
+  /**
+   * The default initial backoff time in milliseconds after an error. Set to 1s according to
+   * https://cloud.google.com/apis/design/errors.
+   */
+  public static final int DEFAULT_BACKOFF_INITIAL_DELAY_MS = 1000;
+
+  /** The default maximum backoff time in milliseconds when retrying an operation. */
+  public static final int DEFAULT_BACKOFF_MAX_DELAY_MS = 60 * 1000;
+
+  /** The default factor to increase the backup by after each failed attempt. */
+  public static final double DEFAULT_BACKOFF_FACTOR = 1.5;
+
   private int failedAttempts = 0;
+  private Status lastStatus;
+
+  private int backoffDuration = 0;
 
   /**
    * @param documentReference The document reference being written to.
@@ -68,6 +84,10 @@ class BulkWriterOperation {
     return documentReference;
   }
 
+  public int getBackoffDuration() {
+    return backoffDuration;
+  }
+
   /** Callback invoked when an operation attempt fails. */
   public ApiFuture<Void> onException(FirestoreException exception) {
     ++failedAttempts;
@@ -94,6 +114,8 @@ class BulkWriterOperation {
           @Override
           public void onSuccess(Boolean shouldRetry) {
             if (shouldRetry) {
+              lastStatus = bulkWriterException.getStatus();
+              updateBackoffDuration();
               scheduleWriteCallback.apply(BulkWriterOperation.this);
             } else {
               operationFuture.setException(bulkWriterException);
@@ -104,6 +126,16 @@ class BulkWriterOperation {
         MoreExecutors.directExecutor());
 
     return callbackFuture;
+  }
+
+  private void updateBackoffDuration() {
+    if (lastStatus == Status.RESOURCE_EXHAUSTED) {
+      backoffDuration = DEFAULT_BACKOFF_MAX_DELAY_MS;
+    } else if (backoffDuration == 0) {
+      backoffDuration = DEFAULT_BACKOFF_INITIAL_DELAY_MS;
+    } else {
+      backoffDuration *= DEFAULT_BACKOFF_FACTOR;
+    }
   }
 
   /** Callback invoked when the operation succeeds. */
