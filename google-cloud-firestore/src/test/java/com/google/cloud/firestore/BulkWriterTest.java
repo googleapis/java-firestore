@@ -423,6 +423,41 @@ public class BulkWriterTest {
   }
 
   @Test
+  public void buffersSubsequentOpsAfterReachingMaxPendingOpCount() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                mergeResponses(
+                    successResponse(1),
+                    successResponse(2),
+                    failedResponse(Code.FAILED_PRECONDITION_VALUE)));
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc4"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc5")),
+                mergeResponses(successResponse(4), successResponse(5)));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.setMaxPendingOpCount(3);
+    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(firestoreMock.document("coll/doc4"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    assertEquals(1, bulkWriter.getBufferedOperationsCount());
+    bulkWriter.set(firestoreMock.document("coll/doc5"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    assertEquals(2, bulkWriter.getBufferedOperationsCount());
+    bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
+  }
+
+  @Test
   public void runsSuccessHandler() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
@@ -1260,6 +1295,7 @@ public class BulkWriterTest {
     bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
     assertEquals(2, retryAttempts[0]);
   }
 
@@ -1291,6 +1327,7 @@ public class BulkWriterTest {
     bulkWriter.flush();
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
