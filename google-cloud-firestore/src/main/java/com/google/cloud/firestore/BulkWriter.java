@@ -724,7 +724,7 @@ public final class BulkWriter implements AutoCloseable {
       }
     }
 
-    ApiFuture<WriteResult> transformedFuture =
+    ApiFuture<WriteResult> processedOperationFuture =
         ApiFutures.transformAsync(
             operation.getFuture(),
             new ApiAsyncFunction<WriteResult, WriteResult>() {
@@ -733,10 +733,11 @@ public final class BulkWriter implements AutoCloseable {
                 processBufferedOperations();
                 return ApiFutures.immediateFuture(result);
               }
-            });
+            },
+            MoreExecutors.directExecutor());
 
     return ApiFutures.catchingAsync(
-        transformedFuture,
+        processedOperationFuture,
         ApiException.class,
         new ApiAsyncFunction<ApiException, WriteResult>() {
           public ApiFuture<WriteResult> apply(ApiException e) throws Exception {
