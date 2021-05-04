@@ -29,6 +29,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
+import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
@@ -1045,6 +1046,37 @@ public class BulkWriterTest {
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush().get();
+  }
+
+
+  // TODO: Figure out why this test fails with NPE at times.
+  @Test
+  public void tests() throws Exception {
+    doReturn(FAILED_FUTURE)
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+    final List<Integer> results = new ArrayList<>();
+
+    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    ApiFuture<WriteResult> deleteFuture = bulkWriter.delete(doc2);
+    ApiFutures.catchingAsync(deleteFuture, Throwable.class, new ApiAsyncFunction<Throwable, WriteResult>() {
+      public ApiFuture<WriteResult> apply(Throwable throwable) throws Exception {
+        results.add(1);
+        return ApiFutures.immediateFuture(null);
+      }
+    }, MoreExecutors.directExecutor());
+    ApiFuture<Void> flushFuture = bulkWriter.flush();
+    ApiFutures.transformAsync(flushFuture, new ApiAsyncFunction<Void, Object>() {
+      public ApiFuture<Object> apply(Void unused) throws Exception {
+        results.add(2);
+        return ApiFutures.immediateFuture(null);
+      }
+    }, MoreExecutors.directExecutor());
+    flushFuture.get();
+    System.out.println(results);
+    assertArrayEquals(new Integer[] {1,2}, results.toArray());
   }
 
   @Test
