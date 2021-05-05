@@ -24,6 +24,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
@@ -59,6 +60,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   private final FirestoreOptions firestoreOptions;
   private final ResourcePath databasePath;
 
+  /**
+   * A lazy-loaded BulkWriter instance to be used with recursiveDelete() if no BulkWriter instance
+   * is provided.
+   */
+  @Nullable private BulkWriter bulkWriterInstance;
+
   private boolean closed;
 
   FirestoreImpl(FirestoreOptions options) {
@@ -74,6 +81,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
+  }
+
+  /** Lazy-load the Firestore's default BulkWriter. */
+  private BulkWriter getBulkWriter() {
+    if (bulkWriterInstance == null) {
+      bulkWriterInstance = bulkWriter();
+    }
+    return bulkWriterInstance;
   }
 
   /** Creates a pseudo-random 20-character ID that can be used for Firestore documents. */
@@ -100,6 +115,46 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   public BulkWriter bulkWriter(BulkWriterOptions options) {
     return new BulkWriter(this, options);
+  }
+
+  @Nonnull
+  public ApiFuture<Void> recursiveDelete(CollectionReference reference) {
+    BulkWriter writer = getBulkWriter();
+    RecursiveDelete deleter = new RecursiveDelete(this, writer, reference);
+    return deleter.run();
+  }
+
+  @Nonnull
+  public ApiFuture<Void> recursiveDelete(CollectionReference reference, BulkWriter bulkWriter) {
+    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
+    return deleter.run();
+  }
+
+  @Nonnull
+  public ApiFuture<Void> recursiveDelete(DocumentReference reference) {
+    BulkWriter writer = getBulkWriter();
+    RecursiveDelete deleter = new RecursiveDelete(this, writer, reference);
+    return deleter.run();
+  }
+
+  @Nonnull
+  public ApiFuture<Void> recursiveDelete(DocumentReference reference, BulkWriter bulkWriter) {
+    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
+    return deleter.run();
+  }
+
+  /**
+   * This overload is only used to test the query resumption with startAfter() once the
+   * RecursiveDelete instance has MAX_PENDING_OPS pending.
+   */
+  @Nonnull
+  @VisibleForTesting
+  public ApiFuture<Void> recursiveDelete(
+      CollectionReference reference, BulkWriter bulkWriter, int maxLimit, int minLimit) {
+    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
+    deleter.setMaxPendingOps(maxLimit);
+    deleter.setMinPendingOps(minLimit);
+    return deleter.run();
   }
 
   @Nonnull

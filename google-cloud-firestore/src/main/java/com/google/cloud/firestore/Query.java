@@ -255,13 +255,24 @@ public class Query {
 
     abstract ImmutableList<FieldReference> getFieldProjections();
 
+    // Whether to select all documents under `parentPath`. By default, only
+    // collections that match `collectionId` are selected.
+    abstract boolean getKindless();
+
+    // Whether to require consistent documents when restarting the query. By
+    // default, restarting the query uses the readTime offset of the original
+    // query to provide consistent results.
+    abstract boolean getRequireConsistency();
+
     static Builder builder() {
       return new AutoValue_Query_QueryOptions.Builder()
           .setAllDescendants(false)
           .setLimitType(LimitType.First)
           .setFieldOrders(ImmutableList.<FieldOrder>of())
           .setFieldFilters(ImmutableList.<FieldFilter>of())
-          .setFieldProjections(ImmutableList.<FieldReference>of());
+          .setFieldProjections(ImmutableList.<FieldReference>of())
+          .setKindless(false)
+          .setRequireConsistency(true);
     }
 
     abstract Builder toBuilder();
@@ -289,6 +300,10 @@ public class Query {
       abstract Builder setFieldOrders(ImmutableList<FieldOrder> value);
 
       abstract Builder setFieldProjections(ImmutableList<FieldReference> value);
+
+      abstract Builder setKindless(boolean value);
+
+      abstract Builder setRequireConsistency(boolean value);
 
       abstract QueryOptions build();
     }
@@ -327,21 +342,21 @@ public class Query {
   /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
   private ImmutableList<FieldOrder> createImplicitOrderBy() {
     List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
-    boolean hasDocumentId = false;
 
+    // If no explicit ordering is specified, use the first inequality to define an implicit order.
     if (implicitOrders.isEmpty()) {
-      // If no explicit ordering is specified, use the first inequality to define an implicit order.
       for (FieldFilter fieldFilter : options.getFieldFilters()) {
         if (fieldFilter.isInequalityFilter()) {
           implicitOrders.add(new FieldOrder(fieldFilter.fieldReference, Direction.ASCENDING));
           break;
         }
       }
-    } else {
-      for (FieldOrder fieldOrder : options.getFieldOrders()) {
-        if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
-          hasDocumentId = true;
-        }
+    }
+
+    boolean hasDocumentId = false;
+    for (FieldOrder fieldOrder : implicitOrders) {
+      if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
+        hasDocumentId = true;
       }
     }
 
@@ -1237,7 +1252,12 @@ public class Query {
   private StructuredQuery.Builder buildWithoutClientTranslation() {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
     CollectionSelector.Builder collectionSelector = CollectionSelector.newBuilder();
-    collectionSelector.setCollectionId(options.getCollectionId());
+
+    // Kindless queries select all descendant documents, so we remove the collectionId field.
+    if (!options.getKindless()) {
+      collectionSelector.setCollectionId(options.getCollectionId());
+    }
+
     collectionSelector.setAllDescendants(options.getAllDescendants());
     structuredQuery.addFrom(collectionSelector);
 
@@ -1525,10 +1545,17 @@ public class Query {
               // since we are requiring at least a single document result.
               QueryDocumentSnapshot cursor = lastReceivedDocument.get();
               if (cursor != null) {
-                Query.this
-                    .startAfter(cursor)
-                    .internalStream(
-                        documentObserver, /* transactionId= */ null, cursor.getReadTime());
+                if (options.getRequireConsistency()) {
+                  Query.this
+                      .startAfter(cursor)
+                      .internalStream(
+                          documentObserver, /* transactionId= */ null, cursor.getReadTime());
+                } else {
+                  Query.this
+                      .startAfter(cursor)
+                      .internalStream(
+                          documentObserver, /* transactionId= */ null, /* readTime= */ null);
+                }
               }
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");

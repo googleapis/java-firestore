@@ -41,6 +41,8 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter;
+import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -1685,5 +1687,111 @@ public class ITSystemTest {
         Lists.newArrayList("limitToLast"),
         randomColl.document("doc2").get().get(),
         limitToLastQuerySnap.getReadTime().toProto());
+  }
+
+  private int countDocumentChildren(DocumentReference reference) {
+    int count = 0;
+    Iterable<CollectionReference> collections = reference.listCollections();
+    for (CollectionReference collectionReference : collections) {
+      count += countCollectionChildren(collectionReference);
+    }
+    return count;
+  }
+
+  private int countCollectionChildren(CollectionReference reference) {
+    int count = 0;
+    Iterable<DocumentReference> documents = reference.listDocuments();
+    for (DocumentReference documentReference : documents) {
+      count += countDocumentChildren(documentReference) + 1;
+    }
+    return count;
+  }
+
+  private void setupRecursiveDeleteTest() throws Exception {
+    // ROOT-DB
+    // └── randomCol
+    //     ├── anna
+    //     └── bob
+    //         └── parentsCol
+    //             ├── charlie
+    //             └── daniel
+    //                 └── childCol
+    //                     ├── ernie
+    //                     └── francis
+    WriteBatch batch = firestore.batch();
+    batch.set(randomColl.document("anna"), map("name", "anna"));
+    batch.set(randomColl.document("bob"), map("name", "bob"));
+    batch.set(randomColl.document("bob/parentsCol/charlie"), map("name", "charlie"));
+    batch.set(randomColl.document("bob/parentsCol/daniel"), map("name", "daniel"));
+    batch.set(randomColl.document("bob/parentsCol/daniel/childCol/ernie"), map("name", "ernie"));
+    batch.set(
+        randomColl.document("bob/parentsCol/daniel/childCol/francis"), map("name", "francis"));
+    batch.commit().get();
+  }
+
+  @Test
+  public void testRecursiveDeleteTopLevelCollection() throws Exception {
+    setupRecursiveDeleteTest();
+    firestore.recursiveDelete(randomColl).get();
+    assertEquals(0, countCollectionChildren(randomColl));
+  }
+
+  @Test
+  public void testRecursiveDeleteNestedCollection() throws Exception {
+    setupRecursiveDeleteTest();
+    firestore.recursiveDelete(randomColl.document("bob").collection("parentsCol")).get();
+    assertEquals(2, countCollectionChildren(randomColl));
+  }
+
+  @Test
+  public void testRecursiveDeleteNestedDocument() throws Exception {
+    setupRecursiveDeleteTest();
+    DocumentReference document = randomColl.document("bob/parentsCol/daniel");
+    firestore.recursiveDelete(document).get();
+    DocumentSnapshot snap = document.get().get();
+    assertFalse(snap.exists());
+    assertEquals(1, countDocumentChildren(randomColl.document("bob")));
+    assertEquals(3, countCollectionChildren(randomColl));
+  }
+
+  @Test
+  public void testRecursiveDeleteLeafDocument() throws Exception {
+    setupRecursiveDeleteTest();
+    DocumentReference document = randomColl.document("bob/parentsCol/daniel/childCol/ernie");
+    firestore.recursiveDelete(document).get();
+    DocumentSnapshot snap = document.get().get();
+    assertFalse(snap.exists());
+    assertEquals(5, countCollectionChildren(randomColl));
+  }
+
+  @Test
+  public void testRecursiveDeleteDoesNotAffectOtherCollections() throws Exception {
+    setupRecursiveDeleteTest();
+
+    // Add another nested collection that shouldn't be deleted.
+    CollectionReference collectionB = firestore.collection("doggos");
+    collectionB.document("doggo").set(map("name", "goodboi"));
+
+    firestore.recursiveDelete(collectionB).get();
+    assertEquals(6, countCollectionChildren(randomColl));
+    assertEquals(0, countCollectionChildren(collectionB));
+  }
+
+  @Test
+  public void testRecursiveDeleteWithCustomBulkWriterInstance() throws Exception {
+    setupRecursiveDeleteTest();
+
+    BulkWriter bulkWriter = firestore.bulkWriter();
+    final int[] callbackCount = {0};
+    bulkWriter.addWriteResultListener(
+        new WriteResultCallback() {
+          public void onResult(DocumentReference documentReference, WriteResult result) {
+            callbackCount[0]++;
+          }
+        });
+
+    firestore.recursiveDelete(randomColl, bulkWriter).get();
+    assertEquals(0, countCollectionChildren(randomColl));
+    assertEquals(6, callbackCount[0]);
   }
 }

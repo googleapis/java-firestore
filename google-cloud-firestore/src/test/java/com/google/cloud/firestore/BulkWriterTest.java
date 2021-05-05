@@ -77,7 +77,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
 
-  private static final ApiFuture<GeneratedMessageV3> FAILED_FUTURE =
+  public static final ApiFuture<GeneratedMessageV3> FAILED_FUTURE =
       ApiFutures.immediateFailedFuture(
           new ApiException(
               new IllegalStateException("Mock batchWrite failed in test"),
@@ -125,14 +125,14 @@ public class BulkWriterTest {
   private DocumentReference doc1;
   private DocumentReference doc2;
 
-  private ApiFuture<BatchWriteResponse> successResponse(int updateTimeSeconds) {
+  public static ApiFuture<BatchWriteResponse> successResponse(int updateTimeSeconds) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(updateTimeSeconds).build();
     response.addStatusBuilder().build();
     return ApiFutures.immediateFuture(response.build());
   }
 
-  private ApiFuture<BatchWriteResponse> failedResponse(int code) {
+  public static ApiFuture<BatchWriteResponse> failedResponse(int code) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().build();
     response.addStatusBuilder().setCode(code).build();
@@ -143,8 +143,8 @@ public class BulkWriterTest {
     return failedResponse(Code.DEADLINE_EXCEEDED_VALUE);
   }
 
-  private ApiFuture<BatchWriteResponse> mergeResponses(ApiFuture<BatchWriteResponse>... responses)
-      throws Exception {
+  public static ApiFuture<BatchWriteResponse> mergeResponses(
+      ApiFuture<BatchWriteResponse>... responses) throws Exception {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     for (ApiFuture<BatchWriteResponse> future : responses) {
       BatchWriteResponse res = future.get();

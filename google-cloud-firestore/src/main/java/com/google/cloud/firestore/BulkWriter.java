@@ -805,7 +805,7 @@ public final class BulkWriter implements AutoCloseable {
     flushFuture.get();
   }
 
-  private void verifyNotClosedLocked() {
+  void verifyNotClosedLocked() {
     if (this.closed) {
       throw new IllegalStateException("BulkWriter has already been closed.");
     }

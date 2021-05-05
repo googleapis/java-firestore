@@ -194,6 +194,84 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   BulkWriter bulkWriter(BulkWriterOptions options);
 
   /**
+   * Recursively deletes all documents and subcollections at and under the specified level.
+   *
+   * <p>If any delete fails, the future contains an error with an error message containing the
+   * number of failed deletes and the stack trace of the last failed delete. The provided reference
+   * is deleted regardless of whether all deletes succeeded.
+   *
+   * <p>recursiveDelete() uses a {@link BulkWriter} instance with default settings to perform the
+   * deletes. To customize throttling rates or add success/error callbacks, pass in a custom
+   * BulkWriter instance.
+   *
+   * @param reference The reference of the collection to delete.
+   * @return An ApiFuture that completes when all deletes have been performed. The future fails with
+   *     an error if any of the deletes fail.
+   */
+  @BetaApi
+  @Nonnull
+  ApiFuture<Void> recursiveDelete(CollectionReference reference);
+
+  /**
+   * Recursively deletes all documents and subcollections at and under the specified level.
+   *
+   * <p>If any delete fails, the future contains an error with an error message containing the
+   * number of failed deletes and the stack trace of the last failed delete. The provided reference
+   * is deleted regardless of whether all deletes succeeded.
+   *
+   * <p>recursiveDelete() uses a {@link BulkWriter} instance with default settings to perform the
+   * deletes. To customize throttling rates or add success/error callbacks, pass in a custom
+   * BulkWriter instance.
+   *
+   * @param reference The reference of the collection to delete.
+   * @param bulkWriter A custom BulkWriter instance used to perform the deletes.
+   * @return An ApiFuture that completes when all deletes have been performed. The future fails with
+   *     an error if any of the deletes fail.
+   */
+  @BetaApi
+  @Nonnull
+  ApiFuture<Void> recursiveDelete(CollectionReference reference, BulkWriter bulkWriter);
+
+  /**
+   * Recursively deletes all documents and subcollections at and under the specified level.
+   *
+   * <p>If any delete fails, the future contains an error with an error message containing the
+   * number of failed deletes and the stack trace of the last failed delete. The provided reference
+   * is deleted regardless of whether all deletes succeeded.
+   *
+   * <p>recursiveDelete() uses a {@link BulkWriter} instance with default settings to perform the
+   * deletes. To customize throttling rates or add success/error callbacks, pass in a custom
+   * BulkWriter instance.
+   *
+   * @param reference The reference of the document to delete.
+   * @return An ApiFuture that completes when all deletes have been performed. The future fails with
+   *     an error if any of the deletes fail.
+   */
+  @BetaApi
+  @Nonnull
+  ApiFuture<Void> recursiveDelete(DocumentReference reference);
+
+  /**
+   * Recursively deletes all documents and subcollections at and under the specified level.
+   *
+   * <p>If any delete fails, the future contains an error with an error message containing the
+   * number of failed deletes and the stack trace of the last failed delete. The provided reference
+   * is deleted regardless of whether all deletes succeeded.
+   *
+   * <p>recursiveDelete() uses a {@link BulkWriter} instance with default settings to perform the
+   * deletes. To customize throttling rates or add success/error callbacks, pass in a custom
+   * BulkWriter instance.
+   *
+   * @param reference The reference of the document to delete.
+   * @param bulkWriter A custom BulkWriter instance used to perform the deletes.
+   * @return An ApiFuture that completes when all deletes have been performed. The future fails with
+   *     an error if any of the deletes fail.
+   */
+  @BetaApi
+  @Nonnull
+  ApiFuture<Void> recursiveDelete(DocumentReference reference, BulkWriter bulkWriter);
+
+  /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
    * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and
    * the timestamp associated with the built bundle to tell if it has been loaded already.
