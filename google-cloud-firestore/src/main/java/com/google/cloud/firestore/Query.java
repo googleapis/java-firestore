@@ -1253,7 +1253,7 @@ public class Query {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
     CollectionSelector.Builder collectionSelector = CollectionSelector.newBuilder();
 
-    // Kindless queries select all descendant documents, so we remove the collectionId field.
+    // Kindless queries select all descendant documents, so we don't add the collectionId field.
     if (!options.getKindless()) {
       collectionSelector.setCollectionId(options.getCollectionId());
     }

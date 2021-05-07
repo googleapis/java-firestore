@@ -48,7 +48,7 @@ public final class RecursiveDelete {
    */
   public static final String REFERENCE_NAME_MIN_ID = "__id-9223372036854775808__";
 
-  /*!
+  /**
    * The query limit used for recursive deletes when fetching all descendants of
    * the specified reference to delete. This is done to prevent the query stream
    * from streaming documents faster than Firestore can delete.

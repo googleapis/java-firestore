@@ -196,7 +196,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   /**
    * Recursively deletes all documents and subcollections at and under the specified level.
    *
-   * <p>If any delete fails, the future contains an error with an error message containing the
+   * <p>If any delete fails, the ApiFuture contains an error with an error message containing the
    * number of failed deletes and the stack trace of the last failed delete. The provided reference
    * is deleted regardless of whether all deletes succeeded.
    *
@@ -215,7 +215,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   /**
    * Recursively deletes all documents and subcollections at and under the specified level.
    *
-   * <p>If any delete fails, the future contains an error with an error message containing the
+   * <p>If any delete fails, the ApiFuture contains an error with an error message containing the
    * number of failed deletes and the stack trace of the last failed delete. The provided reference
    * is deleted regardless of whether all deletes succeeded.
    *
@@ -235,7 +235,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   /**
    * Recursively deletes all documents and subcollections at and under the specified level.
    *
-   * <p>If any delete fails, the future contains an error with an error message containing the
+   * <p>If any delete fails, the ApiFuture contains an error with an error message containing the
    * number of failed deletes and the stack trace of the last failed delete. The provided reference
    * is deleted regardless of whether all deletes succeeded.
    *
@@ -254,7 +254,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   /**
    * Recursively deletes all documents and subcollections at and under the specified level.
    *
-   * <p>If any delete fails, the future contains an error with an error message containing the
+   * <p>If any delete fails, the ApiFuture contains an error with an error message containing the
    * number of failed deletes and the stack trace of the last failed delete. The provided reference
    * is deleted regardless of whether all deletes succeeded.
    *
