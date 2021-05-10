@@ -40,7 +40,10 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
+import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
@@ -48,6 +51,7 @@ import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
 import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.RunQueryRequest;
@@ -299,7 +303,6 @@ public class RecursiveDeleteTest {
             streamObserverCapture.capture(),
             Matchers.<ServerStreamingCallable>any());
 
-    // Include dummy response for the deleted reference.
     doAnswer(
             new Answer<ApiFuture<BatchWriteResponse>>() {
               public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) {
@@ -335,10 +338,21 @@ public class RecursiveDeleteTest {
 
   @Test
   public void createsSecondQueryWithCorrectStartAfter() throws Exception {
+    // This test checks that the second query is created with the correct startAfter() once the
+    // RecursiveDelete instance is below the MIN_PENDING_OPS threshold to send the next batch.
+
     // Use lower limits than the actual RecursiveDelete class in order to make this test run fast.
     int maxPendingOps = 100;
-    int minPendingOps = 20;
+    int minPendingOps = 21;
     int maxBatchSize = 10;
+
+    final int cutoff = maxPendingOps - minPendingOps;
+    final int[] numDeletesBuffered = {0};
+    final boolean[] secondRequestSent = {false};
+
+    // This future is used to delay the BatchWriteResponses from returning in order to create the
+    // situation where the number of pending operations is less than `minPendingOps`.
+    final SettableApiFuture<Void> bufferFuture = SettableApiFuture.create();
 
     List<String> firstStream = new ArrayList<>();
     final List<ApiFuture<BatchWriteResponse>> batchWriteResponse = new ArrayList<>();
@@ -361,7 +375,32 @@ public class RecursiveDeleteTest {
     doAnswer(
             new Answer<ApiFuture<BatchWriteResponse>>() {
               public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) throws Exception {
-                return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
+                if (numDeletesBuffered[0] < cutoff) {
+                  numDeletesBuffered[0] += batchWriteResponse.size();
+                  return ApiFutures.transformAsync(
+                      bufferFuture,
+                      new ApiAsyncFunction<Void, BatchWriteResponse>() {
+                        public ApiFuture<BatchWriteResponse> apply(Void unused) throws Exception {
+                          return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
+                        }
+                      },
+                      MoreExecutors.directExecutor());
+
+                } else {
+                  // Once there are `cutoff` pending deletes, completing the future allows enough
+                  // responses to be returned such that the number of pending deletes should be less
+                  // than `minPendingOps`.
+                  bufferFuture.set(null);
+
+                  // Verify that the second streaming call was made since we should be under the
+                  // minPendingOps check.
+                  if (runQueryCapture.getAllValues().size() == 2) {
+                    secondRequestSent[0] = true;
+                  }
+
+                  numDeletesBuffered[0] += batchWriteResponse.size();
+                  return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
+                }
               }
             })
         .when(firestoreMock)
@@ -394,6 +433,7 @@ public class RecursiveDeleteTest {
         .recursiveDelete(firestoreMock.collection("coll"), bulkWriter, maxPendingOps, minPendingOps)
         .get();
     assertEquals(expectedRequest, runQueryCapture.getAllValues().get(1));
+    assertTrue(secondRequestSent[0]);
   }
 
   @Test

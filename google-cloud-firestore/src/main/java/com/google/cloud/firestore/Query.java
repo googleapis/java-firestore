@@ -257,7 +257,7 @@ public class Query {
 
     // Whether to select all documents under `parentPath`. By default, only
     // collections that match `collectionId` are selected.
-    abstract boolean getKindless();
+    abstract boolean isKindless();
 
     // Whether to require consistent documents when restarting the query. By
     // default, restarting the query uses the readTime offset of the original
@@ -1254,7 +1254,7 @@ public class Query {
     CollectionSelector.Builder collectionSelector = CollectionSelector.newBuilder();
 
     // Kindless queries select all descendant documents, so we don't add the collectionId field.
-    if (!options.getKindless()) {
+    if (!options.isKindless()) {
       collectionSelector.setCollectionId(options.getCollectionId());
     }
 

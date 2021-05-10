@@ -149,11 +149,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
    */
   @Nonnull
   @VisibleForTesting
-  public ApiFuture<Void> recursiveDelete(
+  ApiFuture<Void> recursiveDelete(
       CollectionReference reference, BulkWriter bulkWriter, int maxLimit, int minLimit) {
-    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
-    deleter.setMaxPendingOps(maxLimit);
-    deleter.setMinPendingOps(minLimit);
+    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference, maxLimit, minLimit);
     return deleter.run();
   }
 

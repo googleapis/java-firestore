@@ -29,8 +29,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 /**
  * Class used to store state required for running a recursive delete operation. Each recursive
@@ -49,9 +49,9 @@ public final class RecursiveDelete {
   public static final String REFERENCE_NAME_MIN_ID = "__id-9223372036854775808__";
 
   /**
-   * The query limit used for recursive deletes when fetching all descendants of
-   * the specified reference to delete. This is done to prevent the query stream
-   * from streaming documents faster than Firestore can delete.
+   * The query limit used for recursive deletes when fetching all descendants of the specified
+   * reference to delete. This is done to prevent the query stream from streaming documents faster
+   * than Firestore can delete.
    */
   public static final int MAX_PENDING_OPS = 5000;
 
@@ -65,26 +65,40 @@ public final class RecursiveDelete {
 
   private final FirestoreRpcContext<?> firestoreRpcContext;
   private final BulkWriter writer;
-  @Nullable private final CollectionReference collectionReference;
+
   @Nullable private final DocumentReference documentReference;
 
+  private final ResourcePath parentPath;
+  private final String collectionId;
+
+  /** Lock object for all BulkWriter operations and callbacks. */
+  private final Object lock = new Object();
+
   /** The number of deletes that failed with a permanent error. */
+  @GuardedBy("lock")
   private int errorCount = 0;
 
   /**
    * The most recently thrown error. Used to populate the developer-facing error message when the
    * recursive delete operation completes.
    */
-  @Nullable private Throwable lastError;
+  @GuardedBy("lock")
+  @Nullable
+  private Throwable lastError;
 
   /** Whether there are still documents to delete that still need to be fetched. */
+  @GuardedBy("lock")
   private boolean documentsPending = true;
 
   /** A deferred promise that resolves when the recursive delete operation is completed. */
   private final SettableApiFuture<Void> completionFuture = SettableApiFuture.create();
 
   /** Whether a query stream is currently in progress. Only one stream can be run at a time. */
+  @GuardedBy("lock")
   private boolean streamInProgress = false;
+
+  /** Whether run() has been called. */
+  private boolean invoked = false;
 
   /** Query limit to use when fetching all descendants. */
   private int maxPendingOps = MAX_PENDING_OPS;
@@ -113,8 +127,14 @@ public final class RecursiveDelete {
     Preconditions.checkState(reference != null, "CollectionReference cannot be null");
     this.firestoreRpcContext = firestoreRpcContext;
     this.writer = writer;
-    this.collectionReference = reference;
+
     this.documentReference = null;
+
+    // The parent is the closest ancestor document to the location we're deleting. Since we are
+    // deleting a collection, the parent is the path of the document containing that collection (or
+    // the database root, if it is a root collection).
+    this.parentPath = reference.getResourcePath().popLast();
+    this.collectionId = reference.getId();
   }
 
   RecursiveDelete(
@@ -122,33 +142,40 @@ public final class RecursiveDelete {
     Preconditions.checkState(reference != null, "DocumentReference cannot be null");
     this.firestoreRpcContext = firestoreRpcContext;
     this.writer = writer;
+
     this.documentReference = reference;
-    this.collectionReference = null;
+
+    // The parent is the closest ancestor document to the location we're deleting. Since we are
+    // deleting a document, the parent is the path of that document.
+    this.parentPath = documentReference.getResourcePath();
+    this.collectionId = documentReference.getParent().getId();
+  }
+
+  @VisibleForTesting
+  RecursiveDelete(
+      FirestoreRpcContext<?> firestoreRpcContext,
+      BulkWriter writer,
+      CollectionReference reference,
+      int maxLimit,
+      int minLimit) {
+    this(firestoreRpcContext, writer, reference);
+    this.maxPendingOps = maxLimit;
+    this.minPendingOps = minLimit;
   }
 
   public ApiFuture<Void> run() {
-    Preconditions.checkState(
-        documentsPending, "The recursive delete operation has already been completed");
+    Preconditions.checkState(!invoked, "RecursiveDelete.run() should only be called once");
+    invoked = true;
 
-    // TODO: figure out if this is safe, or a way to lock this.
-    writer.verifyNotClosedLocked();
+    writer.verifyNotClosed();
 
     streamDescendants();
     return completionFuture;
   }
 
   private void streamDescendants() {
-    Preconditions.checkState(
-        (documentReference == null && collectionReference != null)
-            || (documentReference != null && collectionReference == null),
-        "Either documentReference or collectionReference should be set");
 
-    Query query;
-    if (collectionReference != null) {
-      query = getAllDescendantsQuery(collectionReference);
-    } else {
-      query = getAllDescendantsQuery(documentReference);
-    }
+    Query query = getAllDescendantsQuery();
     streamInProgress = true;
     final int[] streamedDocsCount = {0};
     final ApiStreamObserver<DocumentSnapshot> responseObserver =
@@ -160,19 +187,23 @@ public final class RecursiveDelete {
           }
 
           public void onError(Throwable throwable) {
-            lastError =
-                new FirestoreException("Failed to fetch children documents.", Status.UNAVAILABLE);
-            onQueryEnd();
+            synchronized (lock) {
+              String message = "Failed to fetch children documents. " + throwable.getMessage();
+              lastError = new FirestoreException(message, Status.UNAVAILABLE);
+              onQueryEnd();
+            }
           }
 
           public void onCompleted() {
-            streamInProgress = false;
-            // If there are fewer than the number of documents specified in the limit() field, we
-            // know that the query is complete.
-            if (streamedDocsCount[0] < maxPendingOps) {
-              onQueryEnd();
-            } else if (pendingOperationsCount == 0) {
-              streamDescendants();
+            synchronized (lock) {
+              streamInProgress = false;
+              // If there are fewer than the number of documents specified in the limit() field, we
+              // know that the query is complete.
+              if (streamedDocsCount[0] < maxPendingOps) {
+                onQueryEnd();
+              } else if (pendingOperationsCount == 0) {
+                streamDescendants();
+              }
             }
           }
         };
@@ -180,53 +211,12 @@ public final class RecursiveDelete {
     query.stream(responseObserver);
   }
 
-  private Query getAllDescendantsQuery(@Nonnull CollectionReference collectionReference) {
-    // The parent is the closest ancestor document to the location we're deleting. Since we are
-    // deleting a collection, the parent is the path of the document containing that collection (or
-    // the database root, if it is a root collection).
-    ResourcePath parentPath = collectionReference.getResourcePath();
-    parentPath = parentPath.popLast();
-    String collectionId = collectionReference.getId();
-
-    Query query = baseAllDescendantsQuery(parentPath, collectionId);
-
-    // To find all descendants of a collection reference, we need to use a
-    // composite filter that captures all documents that start with the
-    // collection prefix. The MIN_ID constant represents the minimum key in
-    // this collection, and a null byte + the MIN_ID represents the minimum
-    // key is the next possible collection.
-    char nullChar = '\0';
-    String startAt = collectionId + "/" + REFERENCE_NAME_MIN_ID;
-    String endAt = collectionId + nullChar + "/" + REFERENCE_NAME_MIN_ID;
-    query =
-        query
-            .whereGreaterThanOrEqualTo(FieldPath.documentId(), startAt)
-            .whereLessThan(FieldPath.documentId(), endAt);
-
-    // startAfter() needs to be added after the where() filters since it creates an implicit
-    // orderBy.
-    if (lastDocumentSnap != null) {
-      query = query.startAfter(lastDocumentSnap);
-    }
-
-    return query;
-  }
-
-  private Query getAllDescendantsQuery(@Nonnull DocumentReference documentReference) {
-    // The parent is the closest ancestor document to the location we're deleting. Since we are
-    // deleting a document, the parent is the path of that document.
-    ResourcePath parentPath = documentReference.getResourcePath();
-    String collectionId = documentReference.getParent().getId();
-
-    return baseAllDescendantsQuery(parentPath, collectionId);
-  }
-
-  private Query baseAllDescendantsQuery(ResourcePath resourcePath, String collectionId) {
+  private Query getAllDescendantsQuery() {
     Query query =
         new Query(
             firestoreRpcContext,
             QueryOptions.builder()
-                .setParentPath(resourcePath)
+                .setParentPath(parentPath)
                 .setCollectionId(collectionId)
                 .setAllDescendants(true)
                 .setKindless(true)
@@ -235,6 +225,27 @@ public final class RecursiveDelete {
 
     // Query for names only to fetch empty snapshots.
     query = query.select(FieldPath.documentId()).limit(maxPendingOps);
+
+    // To find all descendants of a collection reference, we need to use a
+    // composite filter that captures all documents that start with the
+    // collection prefix. The MIN_ID constant represents the minimum key in
+    // this collection, and a null byte + the MIN_ID represents the minimum
+    // key is the next possible collection.
+    if (documentReference == null) {
+      char nullChar = '\0';
+      String startAt = collectionId + "/" + REFERENCE_NAME_MIN_ID;
+      String endAt = collectionId + nullChar + "/" + REFERENCE_NAME_MIN_ID;
+      query =
+          query
+              .whereGreaterThanOrEqualTo(FieldPath.documentId(), startAt)
+              .whereLessThan(FieldPath.documentId(), endAt);
+    }
+
+    // startAfter() needs to be added after the where() filters since it creates an implicit
+    // orderBy.
+    if (lastDocumentSnap != null) {
+      query = query.startAfter(lastDocumentSnap);
+    }
 
     return query;
   }
@@ -273,23 +284,25 @@ public final class RecursiveDelete {
         ApiFutures.allAsList(pendingFutures),
         new ApiAsyncFunction<List<Void>, Void>() {
           public ApiFuture<Void> apply(List<Void> unused) {
-            if (lastError == null) {
-              completionFuture.set(null);
-            } else {
-              String message =
-                  errorCount
-                      + (errorCount != 1 ? " deletes" : " delete")
-                      + " failed. "
-                      + lastError.getMessage();
-              if (lastError instanceof FirestoreException) {
-                lastError =
-                    new FirestoreException(message, ((FirestoreException) lastError).getStatus());
+            synchronized (lock) {
+              if (lastError == null) {
+                completionFuture.set(null);
               } else {
-                lastError = new Throwable(message, lastError);
+                String message =
+                    errorCount
+                        + (errorCount != 1 ? " deletes" : " delete")
+                        + " failed. "
+                        + lastError.getMessage();
+                if (lastError instanceof FirestoreException) {
+                  lastError =
+                      new FirestoreException(message, ((FirestoreException) lastError).getStatus());
+                } else {
+                  lastError = new Throwable(message, lastError);
+                }
+                completionFuture.setException(lastError);
               }
-              completionFuture.setException(lastError);
+              return ApiFutures.immediateFuture(null);
             }
-            return ApiFutures.immediateFuture(null);
           }
         },
         MoreExecutors.directExecutor());
@@ -303,8 +316,11 @@ public final class RecursiveDelete {
         Throwable.class,
         new ApiAsyncFunction<Throwable, WriteResult>() {
           public ApiFuture<WriteResult> apply(Throwable e) {
-            incrementErrorCount(e);
-            return ApiFutures.immediateFuture(null);
+            synchronized (lock) {
+              errorCount++;
+              lastError = e;
+              return ApiFutures.immediateFuture(null);
+            }
           }
         },
         MoreExecutors.directExecutor());
@@ -312,42 +328,29 @@ public final class RecursiveDelete {
 
   /** Deletes the provided reference and starts the next stream if conditions are met. */
   private void deleteReference(final DocumentReference reference) {
-    pendingOperationsCount++;
-    ApiFutures.transformAsync(
-        catchingDelete(reference),
-        new ApiAsyncFunction<WriteResult, Object>() {
+    synchronized (lock) {
+      pendingOperationsCount++;
+      ApiFutures.transformAsync(
+          catchingDelete(reference),
+          new ApiAsyncFunction<WriteResult, Object>() {
 
-          public ApiFuture<Object> apply(WriteResult result) {
-            pendingOperationsCount--;
-            // We wait until the previous stream has ended in order to ensure the
-            // startAfter document is correct. Starting the next stream while
-            // there are pending operations allows Firestore to maximize
-            // BulkWriter throughput.
-            if (documentsPending && !streamInProgress && pendingOperationsCount < minPendingOps) {
-              streamDescendants();
+            public ApiFuture<Object> apply(WriteResult result) {
+              synchronized (lock) {
+                pendingOperationsCount--;
+                // We wait until the previous stream has ended in order to ensure the
+                // startAfter document is correct. Starting the next stream while
+                // there are pending operations allows Firestore to maximize
+                // BulkWriter throughput.
+                if (documentsPending
+                    && !streamInProgress
+                    && pendingOperationsCount < minPendingOps) {
+                  streamDescendants();
+                }
+                return ApiFutures.immediateFuture(null);
+              }
             }
-            return ApiFutures.immediateFuture(null);
-          }
-        },
-        MoreExecutors.directExecutor());
-  }
-
-  private void incrementErrorCount(Throwable e) {
-    errorCount++;
-    lastError = e;
-  }
-
-  /**
-   * Used to test the query startAfter() resumption without needing to stream MAX_PENDING_OPS docs.
-   */
-  @VisibleForTesting
-  void setMaxPendingOps(int limit) {
-    maxPendingOps = limit;
-  }
-
-  /** Used to test the query startAfter() resumption. */
-  @VisibleForTesting
-  void setMinPendingOps(int limit) {
-    minPendingOps = limit;
+          },
+          MoreExecutors.directExecutor());
+    }
   }
 }
