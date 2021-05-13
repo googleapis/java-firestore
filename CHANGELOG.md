@@ -1,5 +1,49 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/googleapis/java-firestore/compare/v2.2.7...v2.3.0) (2021-04-23)
+
+
+### Features
+
+* add backoff to BulkWriter ([#600](https://www.github.com/googleapis/java-firestore/issues/600)) ([e295aa5](https://www.github.com/googleapis/java-firestore/commit/e295aa5d20007a513e1647575f6935e243825c4d))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1 ([#607](https://www.github.com/googleapis/java-firestore/issues/607)) ([21e8cde](https://www.github.com/googleapis/java-firestore/commit/21e8cde718b5f2e2f8269d860d0ea3ae810dabdd))
+
+### [2.2.7](https://www.github.com/googleapis/java-firestore/compare/v2.2.6...v2.2.7) (2021-04-20)
+
+
+### Bug Fixes
+
+* release scripts from issuing overlapping phases ([#595](https://www.github.com/googleapis/java-firestore/issues/595)) ([4372479](https://www.github.com/googleapis/java-firestore/commit/43724796ea940062512370c270f6bedc680b5b6a))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.21.1 ([#597](https://www.github.com/googleapis/java-firestore/issues/597)) ([dbd3d33](https://www.github.com/googleapis/java-firestore/commit/dbd3d331d83fc7b2c4e79946b9921ff158c8b1e9))
+
+### [2.2.6](https://www.github.com/googleapis/java-firestore/compare/v2.2.5...v2.2.6) (2021-04-13)
+
+
+### Bug Fixes
+
+* Removed Jackson dependency ([#508](https://www.github.com/googleapis/java-firestore/issues/508)) ([7ada73d](https://www.github.com/googleapis/java-firestore/commit/7ada73d3c0a282be8ce2682c2e9c737690d9f891))
+* typo ([#587](https://www.github.com/googleapis/java-firestore/issues/587)) ([520ac44](https://www.github.com/googleapis/java-firestore/commit/520ac441bcb7944be378ec6099b9ec4de37844d4))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.21.0 ([#584](https://www.github.com/googleapis/java-firestore/issues/584)) ([c83a222](https://www.github.com/googleapis/java-firestore/commit/c83a222bd602a489552276c5202796db7fadeffa))
+
+### [2.2.5](https://www.github.com/googleapis/java-firestore/compare/v2.2.4...v2.2.5) (2021-03-11)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v0.20.1 ([#567](https://www.github.com/googleapis/java-firestore/issues/567)) ([7370d21](https://www.github.com/googleapis/java-firestore/commit/7370d21994126d206f51a8c0c1677b5dc0ee030f))
+
 ### [2.2.4](https://www.github.com/googleapis/java-firestore/compare/v2.2.3...v2.2.4) (2021-02-25)
 
 

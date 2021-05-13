@@ -39,7 +39,7 @@ import java.util.concurrent.Executor;
 /** Used to represent a batch that contains scheduled BulkWriterOperations. */
 class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
-  private final List<BulkWriterOperation> pendingOperations = new ArrayList<>();
+  final List<BulkWriterOperation> pendingOperations = new ArrayList<>();
   private final Set<DocumentReference> documents = new CopyOnWriteArraySet<>();
   private final Executor executor;
 

@@ -91,6 +91,13 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.ABORTED),
               true));
 
+  private static final ApiFuture<GeneratedMessageV3> RESOURCE_EXHAUSTED_FAILED_FUTURE =
+      ApiFutures.immediateFailedFuture(
+          new ApiException(
+              new IllegalStateException("Mock batchWrite failed in test"),
+              GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
+              true));
+
   @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
@@ -151,7 +158,18 @@ public class BulkWriterTest {
   public void before() {
     doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     testExecutor = Executors.newSingleThreadScheduledExecutor();
-    bulkWriter = firestoreMock.bulkWriter();
+
+    final ScheduledExecutorService timeoutExecutor =
+        new ScheduledThreadPoolExecutor(1) {
+          @Override
+          @Nonnull
+          public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            return super.schedule(command, 0, TimeUnit.MILLISECONDS);
+          }
+        };
+
+    bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
   }
@@ -402,6 +420,41 @@ public class BulkWriterTest {
     responseStubber.verifyAllRequestsSent();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
     assertEquals(Timestamp.ofTimeSecondsAndNanos(2, 0), result2.get().getUpdateTime());
+  }
+
+  @Test
+  public void buffersSubsequentOpsAfterReachingMaxPendingOpCount() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc3")),
+                mergeResponses(
+                    successResponse(1),
+                    successResponse(2),
+                    failedResponse(Code.FAILED_PRECONDITION_VALUE)));
+            put(
+                batchWrite(
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc4"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc5")),
+                mergeResponses(successResponse(4), successResponse(5)));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.setMaxPendingOpCount(3);
+    bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(firestoreMock.document("coll/doc4"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    assertEquals(1, bulkWriter.getBufferedOperationsCount());
+    bulkWriter.set(firestoreMock.document("coll/doc5"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    assertEquals(2, bulkWriter.getBufferedOperationsCount());
+    bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
@@ -1074,6 +1127,26 @@ public class BulkWriterTest {
   @Test
   public void failsWritesAfterAllRetryAttemptsFail() throws Exception {
     final int[] retryAttempts = {0};
+    final int[] scheduleWithDelayCount = {0};
+    final ScheduledExecutorService timeoutExecutor =
+        new ScheduledThreadPoolExecutor(1) {
+          @Override
+          @Nonnull
+          public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            if (delay > 0) {
+              int expected =
+                  (int)
+                      (BulkWriterOperation.DEFAULT_BACKOFF_INITIAL_DELAY_MS
+                          * Math.pow(1.5, retryAttempts[0] - 1));
+
+              assertTrue(delay >= (1 - BulkWriter.DEFAULT_JITTER_FACTOR) * expected);
+              assertTrue(delay <= (1 + BulkWriter.DEFAULT_JITTER_FACTOR) * expected);
+              scheduleWithDelayCount[0]++;
+            }
+            return super.schedule(command, 0, TimeUnit.MILLISECONDS);
+          }
+        };
+
     doAnswer(
             new Answer<ApiFuture<GeneratedMessageV3>>() {
               public ApiFuture<GeneratedMessageV3> answer(InvocationOnMock mock) {
@@ -1085,6 +1158,9 @@ public class BulkWriterTest {
         .sendRequest(
             batchWriteCapture.capture(),
             Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+
+    bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush().get();
 
@@ -1093,8 +1169,165 @@ public class BulkWriterTest {
       Assert.fail("Expected set() operation to fail");
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
-      assertEquals(retryAttempts[0], BulkWriter.MAX_RETRY_ATTEMPTS + 1);
+      assertEquals(BulkWriter.MAX_RETRY_ATTEMPTS + 1, retryAttempts[0]);
+      // The first attempt should not have a delay.
+      assertEquals(BulkWriter.MAX_RETRY_ATTEMPTS, scheduleWithDelayCount[0]);
     }
+  }
+
+  @Test
+  public void appliesMaxBackoffOnRetriesForResourceExhausted() throws Exception {
+    final int[] retryAttempts = {0};
+    final int[] scheduleWithDelayCount = {0};
+    final ScheduledExecutorService timeoutExecutor =
+        new ScheduledThreadPoolExecutor(1) {
+          @Override
+          @Nonnull
+          public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            if (delay > 0) {
+              assertTrue(
+                  delay
+                      >= (1 - BulkWriter.DEFAULT_JITTER_FACTOR)
+                          * BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS);
+              assertTrue(
+                  delay
+                      <= (1 + BulkWriter.DEFAULT_JITTER_FACTOR)
+                          * BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS);
+              scheduleWithDelayCount[0]++;
+            }
+            return super.schedule(command, 0, TimeUnit.MILLISECONDS);
+          }
+        };
+
+    doAnswer(
+            new Answer<ApiFuture<GeneratedMessageV3>>() {
+              public ApiFuture<GeneratedMessageV3> answer(InvocationOnMock mock) {
+                retryAttempts[0]++;
+                return RESOURCE_EXHAUSTED_FAILED_FUTURE;
+              }
+            })
+        .when(firestoreMock)
+        .sendRequest(
+            batchWriteCapture.capture(),
+            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+
+    bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return error.getFailedAttempts() < 5;
+          }
+        });
+
+    ApiFuture<WriteResult> result = bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.flush().get();
+
+    try {
+      result.get();
+      Assert.fail("Expected create() operation to fail");
+    } catch (Exception e) {
+      assertTrue(e.getMessage().contains("Mock batchWrite failed in test"));
+      assertEquals(5, retryAttempts[0]);
+      // The first attempt should not have a delay.
+      assertEquals(4, scheduleWithDelayCount[0]);
+    }
+  }
+
+  @Test
+  public void usesHighestBackoffFoundInBatch() throws Exception {
+    final int[] expected = {
+      BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS,
+      (int)
+          (BulkWriterOperation.DEFAULT_BACKOFF_INITIAL_DELAY_MS
+              * BulkWriterOperation.DEFAULT_BACKOFF_FACTOR)
+    };
+    final int[] retryAttempts = {0};
+    final ScheduledExecutorService timeoutExecutor =
+        new ScheduledThreadPoolExecutor(1) {
+          @Override
+          @Nonnull
+          public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            if (delay > 0) {
+              // The 1st batch should have max backoff. 2nd batch should have 1 round of backoff
+              // applied.
+              assertTrue(
+                  delay >= (1 - BulkWriter.DEFAULT_JITTER_FACTOR) * expected[retryAttempts[0]]);
+              assertTrue(
+                  delay <= (1 + BulkWriter.DEFAULT_JITTER_FACTOR) * expected[retryAttempts[0]]);
+              retryAttempts[0]++;
+            }
+            return super.schedule(command, 0, TimeUnit.MILLISECONDS);
+          }
+        };
+
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(
+                    create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                mergeResponses(
+                    failedResponse(Code.RESOURCE_EXHAUSTED_VALUE),
+                    failedResponse(Code.UNAVAILABLE_VALUE)));
+            put(
+                batchWrite(
+                    create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1"),
+                    set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                mergeResponses(successResponse(1), failedResponse(Code.UNAVAILABLE_VALUE)));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                successResponse(2));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter =
+        firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return error.getFailedAttempts() < 5;
+          }
+        });
+
+    bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
+    assertEquals(2, retryAttempts[0]);
+  }
+
+  @Test
+  public void sendsBackoffBatchAfterOtherEnqueuedBatches() throws Exception {
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                failedResponse(Code.RESOURCE_EXHAUSTED_VALUE));
+            put(
+                batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc2")),
+                successResponse(0));
+            put(
+                batchWrite(create(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc1")),
+                successResponse(0));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    bulkWriter.addWriteErrorListener(
+        new WriteErrorCallback() {
+          public boolean onError(BulkWriterException error) {
+            return error.getFailedAttempts() < 5;
+          }
+        });
+    bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.flush();
+    bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
   }
 
   @Test
