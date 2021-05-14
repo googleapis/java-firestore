@@ -4,15 +4,15 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "ea3d80f2211dc5a9361c42acfbd1241de864cd84"
+        "sha": "d77e5ce07bea9c6e481f894e66406060ea48b566"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "9c00a2f0dc8cc1c8d93b938fc097851335c08692",
-        "internalRef": "335923930"
+        "sha": "f6dd7e47620566925a4b3f1ce029e74e1b2f2516",
+        "internalRef": "359781040"
       }
     },
     {
@@ -118,6 +118,7 @@
     "codecov.yaml",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminClient.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminSettings.java",
+    "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/gapic_metadata.json",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/package-info.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStub.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreAdminStubSettings.java",
@@ -128,6 +129,7 @@
     "google-cloud-firestore-admin/src/test/java/com/google/cloud/firestore/v1/MockFirestoreAdminImpl.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreClient.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/FirestoreSettings.java",
+    "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/gapic_metadata.json",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/package-info.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStub.java",
     "google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/stub/FirestoreStubSettings.java",

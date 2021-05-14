@@ -308,6 +308,21 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <code>bytes transaction = 3;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  @java.lang.Override
+  public boolean hasTransaction() {
+    return consistencySelectorCase_ == 3;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads the document in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 3;</code>
+   *
    * @return The transaction.
    */
   @java.lang.Override
@@ -1108,6 +1123,20 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       return maskBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Reads the document in a transaction.
+     * </pre>
+     *
+     * <code>bytes transaction = 3;</code>
+     *
+     * @return Whether the transaction field is set.
+     */
+    public boolean hasTransaction() {
+      return consistencySelectorCase_ == 3;
+    }
     /**
      *
      *

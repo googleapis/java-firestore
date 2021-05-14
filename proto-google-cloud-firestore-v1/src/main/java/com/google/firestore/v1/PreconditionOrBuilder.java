@@ -33,6 +33,19 @@ public interface PreconditionOrBuilder
    *
    * <code>bool exists = 1;</code>
    *
+   * @return Whether the exists field is set.
+   */
+  boolean hasExists();
+  /**
+   *
+   *
+   * <pre>
+   * When set to `true`, the target document must exist.
+   * When set to `false`, the target document must not exist.
+   * </pre>
+   *
+   * <code>bool exists = 1;</code>
+   *
    * @return The exists.
    */
   boolean getExists();

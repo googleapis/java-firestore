@@ -17,75 +17,19 @@
 
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
-  <!-- v2.0.0 -->
-  <!-- Admin field rename
-    * collectionId -> collection
-    * fieldId -> field
-    * indexId -> index
-  -->
   <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName</className>
-    <method>java.lang.String getCollectionId()</method>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/*OrBuilder</className>
+    <method>* get*(*)</method>
   </difference>
   <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName</className>
-    <method>java.lang.String getFieldId()</method>
-  </difference>
-
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName$Builder</className>
-    <method>java.lang.String getCollectionId()</method>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/*OrBuilder</className>
+    <method>boolean contains*(*)</method>
   </difference>
   <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName$Builder</className>
-    <method>java.lang.String getFieldId()</method>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/*OrBuilder</className>
+    <method>boolean has*(*)</method>
   </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName$Builder</className>
-    <method>com.google.firestore.admin.v1.FieldName$Builder setCollectionId(java.lang.String)</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/FieldName$Builder</className>
-    <method>com.google.firestore.admin.v1.FieldName$Builder setFieldId(java.lang.String)</method>
-  </difference>
-
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName</className>
-    <method>java.lang.String getCollectionId()</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName</className>
-    <method>java.lang.String getIndexId()</method>
-  </difference>
-
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName$Builder</className>
-    <method>java.lang.String getCollectionId()</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName$Builder</className>
-    <method>java.lang.String getIndexId()</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName$Builder</className>
-    <method>com.google.firestore.admin.v1.IndexName$Builder setCollectionId(java.lang.String)</method>
-  </difference>
-  <difference>
-    <differenceType>7002</differenceType>
-    <className>com/google/firestore/admin/v1/IndexName$Builder</className>
-    <method>com.google.firestore.admin.v1.IndexName$Builder setIndexId(java.lang.String)</method>
-  </difference>
-
-
 </differences>
