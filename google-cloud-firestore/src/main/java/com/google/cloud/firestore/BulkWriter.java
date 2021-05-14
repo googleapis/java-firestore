@@ -988,8 +988,8 @@ public final class BulkWriter implements AutoCloseable {
               new Runnable() {
                 @Override
                 public void run() {
-                  synchronized (lock) {
-                    if (flush) {
+                  if (flush) {
+                    synchronized (lock) {
                       scheduleCurrentBatchLocked(/* flush= */ true);
                     }
                   }
