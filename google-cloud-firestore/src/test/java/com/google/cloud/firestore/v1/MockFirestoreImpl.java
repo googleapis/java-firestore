@@ -87,7 +87,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
 
   @Override
   public void getDocument(GetDocumentRequest request, StreamObserver<Document> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Document) {
       requests.add(request);
       responseObserver.onNext(((Document) response));
@@ -99,7 +99,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method GetDocument, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Document.class.getName(),
                   Exception.class.getName())));
     }
@@ -108,7 +108,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void listDocuments(
       ListDocumentsRequest request, StreamObserver<ListDocumentsResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof ListDocumentsResponse) {
       requests.add(request);
       responseObserver.onNext(((ListDocumentsResponse) response));
@@ -120,7 +120,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ListDocuments, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   ListDocumentsResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -129,7 +129,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void updateDocument(
       UpdateDocumentRequest request, StreamObserver<Document> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Document) {
       requests.add(request);
       responseObserver.onNext(((Document) response));
@@ -141,7 +141,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method UpdateDocument, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Document.class.getName(),
                   Exception.class.getName())));
     }
@@ -150,7 +150,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void deleteDocument(
       DeleteDocumentRequest request, StreamObserver<Empty> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Empty) {
       requests.add(request);
       responseObserver.onNext(((Empty) response));
@@ -162,7 +162,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method DeleteDocument, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Empty.class.getName(),
                   Exception.class.getName())));
     }
@@ -172,7 +172,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   public void batchGetDocuments(
       BatchGetDocumentsRequest request,
       StreamObserver<BatchGetDocumentsResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof BatchGetDocumentsResponse) {
       requests.add(request);
       responseObserver.onNext(((BatchGetDocumentsResponse) response));
@@ -184,7 +184,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method BatchGetDocuments, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   BatchGetDocumentsResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -193,7 +193,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void beginTransaction(
       BeginTransactionRequest request, StreamObserver<BeginTransactionResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof BeginTransactionResponse) {
       requests.add(request);
       responseObserver.onNext(((BeginTransactionResponse) response));
@@ -205,7 +205,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method BeginTransaction, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   BeginTransactionResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -213,7 +213,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
 
   @Override
   public void commit(CommitRequest request, StreamObserver<CommitResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof CommitResponse) {
       requests.add(request);
       responseObserver.onNext(((CommitResponse) response));
@@ -225,7 +225,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method Commit, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   CommitResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -233,7 +233,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
 
   @Override
   public void rollback(RollbackRequest request, StreamObserver<Empty> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Empty) {
       requests.add(request);
       responseObserver.onNext(((Empty) response));
@@ -245,7 +245,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method Rollback, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Empty.class.getName(),
                   Exception.class.getName())));
     }
@@ -253,7 +253,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
 
   @Override
   public void runQuery(RunQueryRequest request, StreamObserver<RunQueryResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof RunQueryResponse) {
       requests.add(request);
       responseObserver.onNext(((RunQueryResponse) response));
@@ -265,7 +265,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method RunQuery, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   RunQueryResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -274,7 +274,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void partitionQuery(
       PartitionQueryRequest request, StreamObserver<PartitionQueryResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof PartitionQueryResponse) {
       requests.add(request);
       responseObserver.onNext(((PartitionQueryResponse) response));
@@ -286,7 +286,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method PartitionQuery, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   PartitionQueryResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -309,7 +309,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
                   new IllegalArgumentException(
                       String.format(
                           "Unrecognized response type %s for method Write, expected %s or %s",
-                          response.getClass().getName(),
+                          response == null ? "null" : response.getClass().getName(),
                           WriteResponse.class.getName(),
                           Exception.class.getName())));
             }
@@ -346,7 +346,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
                   new IllegalArgumentException(
                       String.format(
                           "Unrecognized response type %s for method Listen, expected %s or %s",
-                          response.getClass().getName(),
+                          response == null ? "null" : response.getClass().getName(),
                           ListenResponse.class.getName(),
                           Exception.class.getName())));
             }
@@ -369,7 +369,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   public void listCollectionIds(
       ListCollectionIdsRequest request,
       StreamObserver<ListCollectionIdsResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof ListCollectionIdsResponse) {
       requests.add(request);
       responseObserver.onNext(((ListCollectionIdsResponse) response));
@@ -381,7 +381,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ListCollectionIds, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   ListCollectionIdsResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -390,7 +390,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void batchWrite(
       BatchWriteRequest request, StreamObserver<BatchWriteResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof BatchWriteResponse) {
       requests.add(request);
       responseObserver.onNext(((BatchWriteResponse) response));
@@ -402,7 +402,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method BatchWrite, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   BatchWriteResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -411,7 +411,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
   @Override
   public void createDocument(
       CreateDocumentRequest request, StreamObserver<Document> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Document) {
       requests.add(request);
       responseObserver.onNext(((Document) response));
@@ -423,7 +423,7 @@ public class MockFirestoreImpl extends FirestoreImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method CreateDocument, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Document.class.getName(),
                   Exception.class.getName())));
     }

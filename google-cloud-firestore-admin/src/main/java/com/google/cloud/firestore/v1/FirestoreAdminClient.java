@@ -451,6 +451,14 @@ public class FirestoreAdminClient implements BackgroundResource {
    *
    * <pre>{@code
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListIndexesRequest request =
+   *       ListIndexesRequest.newBuilder()
+   *           .setParent(
+   *               CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]").toString())
+   *           .setFilter("filter-1274492040")
+   *           .setPageSize(883849137)
+   *           .setPageToken("pageToken873572522")
+   *           .build();
    *   while (true) {
    *     ListIndexesResponse response = firestoreAdminClient.listIndexesCallable().call(request);
    *     for (Index element : response.getResponsesList()) {
@@ -1028,6 +1036,14 @@ public class FirestoreAdminClient implements BackgroundResource {
    *
    * <pre>{@code
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListFieldsRequest request =
+   *       ListFieldsRequest.newBuilder()
+   *           .setParent(
+   *               CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]").toString())
+   *           .setFilter("filter-1274492040")
+   *           .setPageSize(883849137)
+   *           .setPageToken("pageToken873572522")
+   *           .build();
    *   while (true) {
    *     ListFieldsResponse response = firestoreAdminClient.listFieldsCallable().call(request);
    *     for (Field element : response.getResponsesList()) {

@@ -75,7 +75,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
 
   @Override
   public void createIndex(CreateIndexRequest request, StreamObserver<Operation> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Operation) {
       requests.add(request);
       responseObserver.onNext(((Operation) response));
@@ -87,7 +87,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method CreateIndex, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));
     }
@@ -96,7 +96,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
   @Override
   public void listIndexes(
       ListIndexesRequest request, StreamObserver<ListIndexesResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof ListIndexesResponse) {
       requests.add(request);
       responseObserver.onNext(((ListIndexesResponse) response));
@@ -108,7 +108,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ListIndexes, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   ListIndexesResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -116,7 +116,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
 
   @Override
   public void getIndex(GetIndexRequest request, StreamObserver<Index> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Index) {
       requests.add(request);
       responseObserver.onNext(((Index) response));
@@ -128,7 +128,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method GetIndex, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Index.class.getName(),
                   Exception.class.getName())));
     }
@@ -136,7 +136,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
 
   @Override
   public void deleteIndex(DeleteIndexRequest request, StreamObserver<Empty> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Empty) {
       requests.add(request);
       responseObserver.onNext(((Empty) response));
@@ -148,7 +148,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method DeleteIndex, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Empty.class.getName(),
                   Exception.class.getName())));
     }
@@ -156,7 +156,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
 
   @Override
   public void getField(GetFieldRequest request, StreamObserver<Field> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Field) {
       requests.add(request);
       responseObserver.onNext(((Field) response));
@@ -168,7 +168,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method GetField, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Field.class.getName(),
                   Exception.class.getName())));
     }
@@ -176,7 +176,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
 
   @Override
   public void updateField(UpdateFieldRequest request, StreamObserver<Operation> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Operation) {
       requests.add(request);
       responseObserver.onNext(((Operation) response));
@@ -188,7 +188,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method UpdateField, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));
     }
@@ -197,7 +197,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
   @Override
   public void listFields(
       ListFieldsRequest request, StreamObserver<ListFieldsResponse> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof ListFieldsResponse) {
       requests.add(request);
       responseObserver.onNext(((ListFieldsResponse) response));
@@ -209,7 +209,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ListFields, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   ListFieldsResponse.class.getName(),
                   Exception.class.getName())));
     }
@@ -218,7 +218,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
   @Override
   public void exportDocuments(
       ExportDocumentsRequest request, StreamObserver<Operation> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Operation) {
       requests.add(request);
       responseObserver.onNext(((Operation) response));
@@ -230,7 +230,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ExportDocuments, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));
     }
@@ -239,7 +239,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
   @Override
   public void importDocuments(
       ImportDocumentsRequest request, StreamObserver<Operation> responseObserver) {
-    Object response = responses.remove();
+    Object response = responses.poll();
     if (response instanceof Operation) {
       requests.add(request);
       responseObserver.onNext(((Operation) response));
@@ -251,7 +251,7 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ImportDocuments, expected %s or %s",
-                  response.getClass().getName(),
+                  response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));
     }
