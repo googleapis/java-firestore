@@ -120,38 +120,71 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   public ApiFuture<Void> recursiveDelete(CollectionReference reference) {
     BulkWriter writer = getBulkWriter();
-    RecursiveDelete deleter = new RecursiveDelete(this, writer, reference);
-    return deleter.run();
+    return recursiveDelete(/* documentReference= */ null, reference, writer);
   }
 
   @Nonnull
   public ApiFuture<Void> recursiveDelete(CollectionReference reference, BulkWriter bulkWriter) {
-    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
-    return deleter.run();
+    return recursiveDelete(/* documentReference= */ null, reference, bulkWriter);
   }
 
   @Nonnull
   public ApiFuture<Void> recursiveDelete(DocumentReference reference) {
     BulkWriter writer = getBulkWriter();
-    RecursiveDelete deleter = new RecursiveDelete(this, writer, reference);
-    return deleter.run();
+    return recursiveDelete(reference, /* collectionReference= */ null, writer);
   }
 
   @Nonnull
-  public ApiFuture<Void> recursiveDelete(DocumentReference reference, BulkWriter bulkWriter) {
-    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference);
-    return deleter.run();
+  public ApiFuture<Void> recursiveDelete(DocumentReference reference, @Nonnull BulkWriter bulkWriter) {
+    return recursiveDelete(reference, /* collectionReference= */ null, bulkWriter);
+  }
+
+  ApiFuture<Void> recursiveDelete(
+      @Nullable DocumentReference documentReference,
+      @Nullable CollectionReference collectionReference,
+      @Nonnull BulkWriter bulkWriter) {
+    return recursiveDelete(
+        documentReference,
+        collectionReference,
+        bulkWriter,
+        RecursiveDelete.MAX_PENDING_OPS,
+        RecursiveDelete.MIN_PENDING_OPS);
   }
 
   /**
-   * This overload is only used to test the query resumption with startAfter() once the
+   * This overload is not private in order to test the query resumption with startAfter() once the
    * RecursiveDelete instance has MAX_PENDING_OPS pending.
    */
   @Nonnull
   @VisibleForTesting
   ApiFuture<Void> recursiveDelete(
-      CollectionReference reference, BulkWriter bulkWriter, int maxLimit, int minLimit) {
-    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, reference, maxLimit, minLimit);
+      @Nullable DocumentReference documentReference,
+      @Nullable CollectionReference collectionReference,
+      @Nonnull BulkWriter bulkWriter,
+      int maxLimit,
+      int minLimit) {
+    Preconditions.checkState(
+        (documentReference == null && collectionReference != null)
+            || (documentReference != null && collectionReference == null),
+        "Either documentReference or collectionReference should be set.");
+
+    ResourcePath parentPath;
+    String collectionId;
+    if (documentReference != null) {
+      // The parent is the closest ancestor document to the location we're deleting. Since we are
+      // deleting a document, the parent is the path of that document.
+      parentPath = documentReference.getResourcePath();
+      collectionId = documentReference.getParent().getId();
+    } else {
+      // The parent is the closest ancestor document to the location we're deleting. Since we are
+      // deleting a collection, the parent is the path of the document containing that collection
+      // (or the database root, if it is a root collection).
+      parentPath = collectionReference.getResourcePath().popLast();
+      collectionId = collectionReference.getId();
+    }
+    RecursiveDelete deleter =
+        new RecursiveDelete(
+            this, bulkWriter, parentPath, collectionId, documentReference, maxLimit, minLimit);
     return deleter.run();
   }
 

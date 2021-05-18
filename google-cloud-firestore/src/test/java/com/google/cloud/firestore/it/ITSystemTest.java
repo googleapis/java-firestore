@@ -1770,7 +1770,7 @@ public class ITSystemTest {
 
     // Add another nested collection that shouldn't be deleted.
     CollectionReference collectionB = firestore.collection("doggos");
-    collectionB.document("doggo").set(map("name", "goodboi"));
+    collectionB.document("doggo").set(map("name", "goodboi")).get();
 
     firestore.recursiveDelete(collectionB).get();
     assertEquals(6, countCollectionChildren(randomColl));

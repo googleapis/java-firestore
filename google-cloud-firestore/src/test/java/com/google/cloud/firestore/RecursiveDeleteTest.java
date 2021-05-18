@@ -406,11 +406,6 @@ public class RecursiveDeleteTest {
                       secondQueryFuture,
                       new ApiAsyncFunction<Void, BatchWriteResponse>() {
                         public ApiFuture<BatchWriteResponse> apply(Void unused) throws Exception {
-                          System.out.println(
-                              "2nd future: "
-                                  + numDeletesBuffered[0]
-                                  + " "
-                                  + runQueryCapture.getAllValues().size());
                           return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
                         }
                       },
@@ -445,7 +440,12 @@ public class RecursiveDeleteTest {
             limit(maxPendingOps));
 
     firestoreMock
-        .recursiveDelete(firestoreMock.collection("coll"), bulkWriter, maxPendingOps, minPendingOps)
+        .recursiveDelete(
+            /* documentReference= */ null,
+            firestoreMock.collection("coll"),
+            bulkWriter,
+            maxPendingOps,
+            minPendingOps)
         .get();
     assertEquals(2, runQueryCapture.getAllValues().size());
     assertEquals(expectedRequest, runQueryCapture.getAllValues().get(1));
