@@ -135,7 +135,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   @Nonnull
-  public ApiFuture<Void> recursiveDelete(DocumentReference reference, @Nonnull BulkWriter bulkWriter) {
+  public ApiFuture<Void> recursiveDelete(
+      DocumentReference reference, @Nonnull BulkWriter bulkWriter) {
     return recursiveDelete(reference, /* collectionReference= */ null, bulkWriter);
   }
 

@@ -68,10 +68,10 @@ public final class RecursiveDelete {
   /**
    * The root document reference to delete. This value is null if we are recursively deleting a
    * collection.
-   **/
+   */
   @Nullable private final DocumentReference rootDocumentReference;
 
-  /** ResourcePath of the parent to use for recursive delete calls.*/
+  /** ResourcePath of the parent to use for recursive delete calls. */
   private final ResourcePath parentPath;
 
   private final String collectionId;
@@ -169,9 +169,8 @@ public final class RecursiveDelete {
           public void onError(Throwable throwable) {
             String message = "Failed to fetch children documents";
             synchronized (lock) {
-              lastError = FirestoreException.forServerRejection(
-                  Status.UNAVAILABLE, throwable, message
-              );
+              lastError =
+                  FirestoreException.forServerRejection(Status.UNAVAILABLE, throwable, message);
             }
             onQueryEnd();
           }
@@ -180,15 +179,15 @@ public final class RecursiveDelete {
             synchronized (lock) {
               streamInProgress = false;
             }
-              // If there are fewer than the number of documents specified in the limit() field, we
-              // know that the query is complete.
-              if (streamedDocsCount[0] < maxPendingOps) {
-                onQueryEnd();
-              } else if (pendingOperationsCount == 0) {
-                // Start a new stream if all documents from this stream were deleted before the
-                // `onCompleted()` handler was called.
-                streamDescendants();
-              }
+            // If there are fewer than the number of documents specified in the limit() field, we
+            // know that the query is complete.
+            if (streamedDocsCount[0] < maxPendingOps) {
+              onQueryEnd();
+            } else if (pendingOperationsCount == 0) {
+              // Start a new stream if all documents from this stream were deleted before the
+              // `onCompleted()` handler was called.
+              streamDescendants();
+            }
           }
         };
 
@@ -290,40 +289,39 @@ public final class RecursiveDelete {
       pendingOperationsCount++;
     }
 
-    ApiFuture<WriteResult> catchingDeleteFuture = ApiFutures.catchingAsync(
-        writer.delete(reference),
-        Throwable.class,
-        new ApiAsyncFunction<Throwable, WriteResult>() {
-          public ApiFuture<WriteResult> apply(Throwable e) {
+    ApiFuture<WriteResult> catchingDeleteFuture =
+        ApiFutures.catchingAsync(
+            writer.delete(reference),
+            Throwable.class,
+            new ApiAsyncFunction<Throwable, WriteResult>() {
+              public ApiFuture<WriteResult> apply(Throwable e) {
+                synchronized (lock) {
+                  errorCount++;
+                  lastError = e;
+                  return ApiFutures.immediateFuture(null);
+                }
+              }
+            },
+            MoreExecutors.directExecutor());
+
+    return ApiFutures.transformAsync(
+        catchingDeleteFuture,
+        new ApiAsyncFunction<WriteResult, Void>() {
+
+          public ApiFuture<Void> apply(WriteResult result) {
             synchronized (lock) {
-              errorCount++;
-              lastError = e;
+              pendingOperationsCount--;
+              // We wait until the previous stream has ended in order to ensure the
+              // startAfter document is correct. Starting the next stream while
+              // there are pending operations allows Firestore to maximize
+              // BulkWriter throughput.
+              if (documentsPending && !streamInProgress && pendingOperationsCount < minPendingOps) {
+                streamDescendants();
+              }
               return ApiFutures.immediateFuture(null);
             }
           }
         },
         MoreExecutors.directExecutor());
-
-    return ApiFutures.transformAsync(
-          catchingDeleteFuture,
-          new ApiAsyncFunction<WriteResult, Void>() {
-
-            public ApiFuture<Void> apply(WriteResult result) {
-              synchronized (lock) {
-                pendingOperationsCount--;
-                // We wait until the previous stream has ended in order to ensure the
-                // startAfter document is correct. Starting the next stream while
-                // there are pending operations allows Firestore to maximize
-                // BulkWriter throughput.
-                if (documentsPending
-                    && !streamInProgress
-                    && pendingOperationsCount < minPendingOps) {
-                  streamDescendants();
-                }
-                return ApiFutures.immediateFuture(null);
-              }
-            }
-          },
-          MoreExecutors.directExecutor());
-    }
+  }
 }
