@@ -441,8 +441,7 @@ public class RecursiveDeleteTest {
 
     firestoreMock
         .recursiveDelete(
-            /* documentReference= */ null,
-            firestoreMock.collection("coll"),
+            firestoreMock.collection("coll").getResourcePath(),
             bulkWriter,
             maxPendingOps,
             minPendingOps)

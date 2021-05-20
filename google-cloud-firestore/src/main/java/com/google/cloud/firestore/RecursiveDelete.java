@@ -65,16 +65,8 @@ public final class RecursiveDelete {
   private final FirestoreRpcContext<?> firestoreRpcContext;
   private final BulkWriter writer;
 
-  /**
-   * The root document reference to delete. This value is null if we are recursively deleting a
-   * collection.
-   */
-  @Nullable private final DocumentReference rootDocumentReference;
-
-  /** ResourcePath of the parent to use for recursive delete calls. */
-  private final ResourcePath parentPath;
-
-  private final String collectionId;
+  /** The resource path of the reference to recursively delete */
+  private final ResourcePath path;
 
   /** Lock object for all BulkWriter operations and callbacks. */
   private final Object lock = new Object();
@@ -128,16 +120,12 @@ public final class RecursiveDelete {
   RecursiveDelete(
       FirestoreRpcContext<?> firestoreRpcContext,
       BulkWriter writer,
-      ResourcePath parentPath,
-      String collectionId,
-      @Nullable DocumentReference providedReference,
+      ResourcePath path,
       int maxLimit,
       int minLimit) {
     this.firestoreRpcContext = firestoreRpcContext;
     this.writer = writer;
-    this.parentPath = parentPath;
-    this.collectionId = collectionId;
-    this.rootDocumentReference = providedReference;
+    this.path = path;
     this.maxPendingOps = maxLimit;
     this.minPendingOps = minLimit;
   }
@@ -195,6 +183,22 @@ public final class RecursiveDelete {
   }
 
   private Query getAllDescendantsQuery() {
+    ResourcePath parentPath;
+    String collectionId;
+    if (path.isDocument()) {
+      // The parent is the closest ancestor document to the location we're deleting. Since we are
+      // deleting a document, the parent is the path of that document.
+      parentPath = path;
+      collectionId = path.getParent().getId();
+      Preconditions.checkState(collectionId != null, "Parent of a document should not be null.");
+    } else {
+      // The parent is the closest ancestor document to the location we're deleting. Since we are
+      // deleting a collection, the parent is the path of the document containing that collection
+      // (or the database root, if it is a root collection).
+      parentPath = path.popLast();
+      collectionId = path.getId();
+    }
+
     Query query =
         new Query(
             firestoreRpcContext,
@@ -214,7 +218,7 @@ public final class RecursiveDelete {
     // collection prefix. The MIN_ID constant represents the minimum key in
     // this collection, and a null byte + the MIN_ID represents the minimum
     // key is the next possible collection.
-    if (rootDocumentReference == null) {
+    if (path.isCollection()) {
       char nullChar = '\0';
       String startAt = collectionId + "/" + REFERENCE_NAME_MIN_ID;
       String endAt = collectionId + nullChar + "/" + REFERENCE_NAME_MIN_ID;
@@ -248,8 +252,8 @@ public final class RecursiveDelete {
     List<ApiFuture<Void>> pendingFutures = new ArrayList<>();
 
     // Delete the provided document reference if one was provided.
-    if (rootDocumentReference != null) {
-      pendingFutures.add(deleteReference(rootDocumentReference));
+    if (path.isDocument()) {
+      pendingFutures.add(deleteReference(new DocumentReference(firestoreRpcContext, path)));
     }
 
     pendingFutures.add(writer.flush());
