@@ -805,7 +805,17 @@ public final class BulkWriter implements AutoCloseable {
     flushFuture.get();
   }
 
-  private void verifyNotClosedLocked() {
+  /**
+   * Used for verifying that the BulkWriter instance isn't closed when calling from outside this
+   * class.
+   */
+  void verifyNotClosed() {
+    synchronized (lock) {
+      verifyNotClosedLocked();
+    }
+  }
+
+  void verifyNotClosedLocked() {
     if (this.closed) {
       throw new IllegalStateException("BulkWriter has already been closed.");
     }

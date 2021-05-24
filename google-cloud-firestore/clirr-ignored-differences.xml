@@ -252,4 +252,10 @@
     <to>*</to>
   </difference>
 
+  <!-- Recursive Delete -->
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
+    <method>com.google.api.core.ApiFuture recursiveDelete(*)</method>
+  </difference>
 </differences>
