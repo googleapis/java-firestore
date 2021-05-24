@@ -389,6 +389,10 @@ public class RecursiveDeleteTest {
               public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) throws Exception {
                 if (numDeletesBuffered[0] < cutoff) {
                   numDeletesBuffered[0] += batchWriteResponse.size();
+                  // By waiting for `bufferFuture` to complete, we can guarantee that the writes
+                  // complete after all documents are streamed. Without this future, the test can
+                  // race and complete the writes before the stream is finished, which is a
+                  // different scenario this test is not for.
                   return ApiFutures.transformAsync(
                       bufferFuture,
                       new ApiAsyncFunction<Void, BatchWriteResponse>() {

@@ -189,8 +189,9 @@ public final class RecursiveDelete {
       // The parent is the closest ancestor document to the location we're deleting. Since we are
       // deleting a document, the parent is the path of that document.
       parentPath = path;
+      Preconditions.checkState(
+          path.getParent() != null, "Parent of a document should not be null.");
       collectionId = path.getParent().getId();
-      Preconditions.checkState(collectionId != null, "Parent of a document should not be null.");
     } else {
       // The parent is the closest ancestor document to the location we're deleting. Since we are
       // deleting a collection, the parent is the path of the document containing that collection
