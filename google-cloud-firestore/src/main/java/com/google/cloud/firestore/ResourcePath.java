@@ -157,6 +157,18 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
     return super.compareTo(other);
   }
 
+  /**
+   * Pops the last segment from this `ResourcePath` and returns a newly constructed `ResourcePath`
+   * without the last segment. This does not change the ResourcePath, since `ResourcePath` is
+   * immutable.
+   *
+   * @return The newly created Path.
+   */
+  ResourcePath popLast() {
+    ImmutableList<String> segments = getSegments();
+    return createPathWithSegments(segments.subList(0, segments.size() - 1));
+  }
+
   @Override
   public String toString() {
     return getName();

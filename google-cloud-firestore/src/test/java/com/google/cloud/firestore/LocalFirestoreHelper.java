@@ -282,6 +282,11 @@ public final class LocalFirestoreHelper {
     return ApiFutures.immediateFuture(Empty.getDefaultInstance());
   }
 
+  public static Answer<RunQueryResponse> emptyQueryResponse() {
+    RunQueryResponse[] response = new RunQueryResponse[0];
+    return streamingResponse(response, null);
+  }
+
   public static Answer<RunQueryResponse> queryResponse() {
     return queryResponse(DOCUMENT_NAME);
   }
@@ -573,16 +578,36 @@ public final class LocalFirestoreHelper {
 
   public static RunQueryRequest query(
       @Nullable String transactionId, boolean allDescendants, StructuredQuery... query) {
+    return query(transactionId, /* parent= */ "", allDescendants, /* kindless= */ false, query);
+  }
+
+  public static RunQueryRequest query(
+      @Nullable String transactionId,
+      boolean allDescendants,
+      boolean kindless,
+      StructuredQuery... query) {
+    return query(transactionId, /* parent= */ "", allDescendants, kindless, query);
+  }
+
+  public static RunQueryRequest query(
+      @Nullable String transactionId,
+      String parent,
+      boolean allDescendants,
+      boolean kindless,
+      StructuredQuery... query) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request.setParent(LocalFirestoreHelper.DATABASE_NAME + "/documents");
+    if (!parent.equals("")) {
+      parent = '/' + parent;
+    }
+    request.setParent(LocalFirestoreHelper.DATABASE_NAME + "/documents" + parent);
     StructuredQuery.Builder structuredQuery = request.getStructuredQueryBuilder();
 
-    CollectionSelector collectionSelector =
-        CollectionSelector.newBuilder()
-            .setCollectionId("coll")
-            .setAllDescendants(allDescendants)
-            .build();
-    structuredQuery.addFrom(collectionSelector);
+    CollectionSelector.Builder builder =
+        CollectionSelector.newBuilder().setAllDescendants(allDescendants);
+    if (!kindless) {
+      builder.setCollectionId("coll");
+    }
+    structuredQuery.addFrom(builder);
 
     for (StructuredQuery option : query) {
       structuredQuery.mergeFrom(option);
@@ -628,6 +653,10 @@ public final class LocalFirestoreHelper {
     }
 
     return request.build();
+  }
+
+  public static StructuredQuery order(FieldPath fieldPath, StructuredQuery.Direction direction) {
+    return order(fieldPath.getEncodedPath(), direction);
   }
 
   public static StructuredQuery order(String fieldPath, StructuredQuery.Direction direction) {
