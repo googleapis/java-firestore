@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/googleapis/java-firestore/compare/v2.3.0...v2.4.0) (2021-05-17)
+
+
+### Features
+
+* add buffering layer to BulkWriter ([#611](https://www.github.com/googleapis/java-firestore/issues/611)) ([a7caff2](https://www.github.com/googleapis/java-firestore/commit/a7caff2c15ad8ad4e98165bf4029d9615c079637))
+
+
+### Bug Fixes
+
+* add flush check in BulkWriter.sendBatchLocked() callback ([#631](https://www.github.com/googleapis/java-firestore/issues/631)) ([ac3db81](https://www.github.com/googleapis/java-firestore/commit/ac3db81741ac74614d9eeae70a3f2eae6dcc9548))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1.1.0 ([#626](https://www.github.com/googleapis/java-firestore/issues/626)) ([00dbe33](https://www.github.com/googleapis/java-firestore/commit/00dbe33b426ea1509f9fb72181a36dd1a83b15cc))
+
 ## [2.3.0](https://www.github.com/googleapis/java-firestore/compare/v2.2.7...v2.3.0) (2021-04-23)
 
 

@@ -517,6 +517,21 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    * <code>bytes transaction = 8;</code>
    *
+   * @return Whether the transaction field is set.
+   */
+  @java.lang.Override
+  public boolean hasTransaction() {
+    return consistencySelectorCase_ == 8;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents in a transaction.
+   * </pre>
+   *
+   * <code>bytes transaction = 8;</code>
+   *
    * @return The transaction.
    */
   @java.lang.Override
@@ -1813,6 +1828,20 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       return maskBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents in a transaction.
+     * </pre>
+     *
+     * <code>bytes transaction = 8;</code>
+     *
+     * @return Whether the transaction field is set.
+     */
+    public boolean hasTransaction() {
+      return consistencySelectorCase_ == 8;
+    }
     /**
      *
      *

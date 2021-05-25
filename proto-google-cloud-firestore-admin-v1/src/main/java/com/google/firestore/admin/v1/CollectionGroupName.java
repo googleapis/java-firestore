@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,20 +23,32 @@ import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Generated;
 
-/** AUTO-GENERATED DOCUMENTATION AND CLASS */
-@javax.annotation.Generated("by GAPIC protoc plugin")
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+@Generated("by gapic-generator-java")
 public class CollectionGroupName implements ResourceName {
-
-  private static final PathTemplate PATH_TEMPLATE =
+  private static final PathTemplate PROJECT_DATABASE_COLLECTION =
       PathTemplate.createWithoutUrlEncoding(
           "projects/{project}/databases/{database}/collectionGroups/{collection}");
-
   private volatile Map<String, String> fieldValuesMap;
-
   private final String project;
   private final String database;
   private final String collection;
+
+  @Deprecated
+  protected CollectionGroupName() {
+    project = null;
+    database = null;
+    collection = null;
+  }
+
+  private CollectionGroupName(Builder builder) {
+    project = Preconditions.checkNotNull(builder.getProject());
+    database = Preconditions.checkNotNull(builder.getDatabase());
+    collection = Preconditions.checkNotNull(builder.getCollection());
+  }
 
   public String getProject() {
     return project;
@@ -58,12 +70,6 @@ public class CollectionGroupName implements ResourceName {
     return new Builder(this);
   }
 
-  private CollectionGroupName(Builder builder) {
-    project = Preconditions.checkNotNull(builder.getProject());
-    database = Preconditions.checkNotNull(builder.getDatabase());
-    collection = Preconditions.checkNotNull(builder.getCollection());
-  }
-
   public static CollectionGroupName of(String project, String database, String collection) {
     return newBuilder().setProject(project).setDatabase(database).setCollection(collection).build();
   }
@@ -82,7 +88,7 @@ public class CollectionGroupName implements ResourceName {
       return null;
     }
     Map<String, String> matchMap =
-        PATH_TEMPLATE.validatedMatch(
+        PROJECT_DATABASE_COLLECTION.validatedMatch(
             formattedString, "CollectionGroupName.parse: formattedString not in valid format");
     return of(matchMap.get("project"), matchMap.get("database"), matchMap.get("collection"));
   }
@@ -96,7 +102,7 @@ public class CollectionGroupName implements ResourceName {
   }
 
   public static List<String> toStringList(List<CollectionGroupName> values) {
-    List<String> list = new ArrayList<String>(values.size());
+    List<String> list = new ArrayList<>(values.size());
     for (CollectionGroupName value : values) {
       if (value == null) {
         list.add("");
@@ -108,17 +114,24 @@ public class CollectionGroupName implements ResourceName {
   }
 
   public static boolean isParsableFrom(String formattedString) {
-    return PATH_TEMPLATE.matches(formattedString);
+    return PROJECT_DATABASE_COLLECTION.matches(formattedString);
   }
 
+  @Override
   public Map<String, String> getFieldValuesMap() {
     if (fieldValuesMap == null) {
       synchronized (this) {
         if (fieldValuesMap == null) {
           ImmutableMap.Builder<String, String> fieldMapBuilder = ImmutableMap.builder();
-          fieldMapBuilder.put("project", project);
-          fieldMapBuilder.put("database", database);
-          fieldMapBuilder.put("collection", collection);
+          if (project != null) {
+            fieldMapBuilder.put("project", project);
+          }
+          if (database != null) {
+            fieldMapBuilder.put("database", database);
+          }
+          if (collection != null) {
+            fieldMapBuilder.put("collection", collection);
+          }
           fieldValuesMap = fieldMapBuilder.build();
         }
       }
@@ -132,16 +145,43 @@ public class CollectionGroupName implements ResourceName {
 
   @Override
   public String toString() {
-    return PATH_TEMPLATE.instantiate(
+    return PROJECT_DATABASE_COLLECTION.instantiate(
         "project", project, "database", database, "collection", collection);
   }
 
-  /** Builder for CollectionGroupName. */
-  public static class Builder {
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (o != null || getClass() == o.getClass()) {
+      CollectionGroupName that = ((CollectionGroupName) o);
+      return Objects.equals(this.project, that.project)
+          && Objects.equals(this.database, that.database)
+          && Objects.equals(this.collection, that.collection);
+    }
+    return false;
+  }
 
+  @Override
+  public int hashCode() {
+    int h = 1;
+    h *= 1000003;
+    h ^= Objects.hashCode(project);
+    h *= 1000003;
+    h ^= Objects.hashCode(database);
+    h *= 1000003;
+    h ^= Objects.hashCode(collection);
+    return h;
+  }
+
+  /** Builder for projects/{project}/databases/{database}/collectionGroups/{collection}. */
+  public static class Builder {
     private String project;
     private String database;
     private String collection;
+
+    protected Builder() {}
 
     public String getProject() {
       return project;
@@ -170,8 +210,6 @@ public class CollectionGroupName implements ResourceName {
       return this;
     }
 
-    private Builder() {}
-
     private Builder(CollectionGroupName collectionGroupName) {
       project = collectionGroupName.project;
       database = collectionGroupName.database;
@@ -181,31 +219,5 @@ public class CollectionGroupName implements ResourceName {
     public CollectionGroupName build() {
       return new CollectionGroupName(this);
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == this) {
-      return true;
-    }
-    if (o instanceof CollectionGroupName) {
-      CollectionGroupName that = (CollectionGroupName) o;
-      return (this.project.equals(that.project))
-          && (this.database.equals(that.database))
-          && (this.collection.equals(that.collection));
-    }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int h = 1;
-    h *= 1000003;
-    h ^= project.hashCode();
-    h *= 1000003;
-    h ^= database.hashCode();
-    h *= 1000003;
-    h ^= collection.hashCode();
-    return h;
   }
 }

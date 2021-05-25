@@ -68,6 +68,19 @@ public interface WriteOrBuilder
    *
    * <code>string delete = 2;</code>
    *
+   * @return Whether the delete field is set.
+   */
+  boolean hasDelete();
+  /**
+   *
+   *
+   * <pre>
+   * A document name to delete. In the format:
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   * </pre>
+   *
+   * <code>string delete = 2;</code>
+   *
    * @return The delete.
    */
   java.lang.String getDelete();

@@ -173,6 +173,20 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
      * </code>
      *
+     * @return Whether the setToServerValue field is set.
+     */
+    boolean hasSetToServerValue();
+    /**
+     *
+     *
+     * <pre>
+     * Sets the field to the given server value.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
+     *
      * @return The enum numeric value on the wire for setToServerValue.
      */
     int getSetToServerValueValue();
@@ -703,7 +717,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * The time at which the server processed the request, with millisecond
-       * precision.
+       * precision. If used on multiple fields (same or different documents) in
+       * a transaction, all the fields will get the same server timestamp.
        * </pre>
        *
        * <code>REQUEST_TIME = 1;</code>
@@ -727,7 +742,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * The time at which the server processed the request, with millisecond
-       * precision.
+       * precision. If used on multiple fields (same or different documents) in
+       * a transaction, all the fields will get the same server timestamp.
        * </pre>
        *
        * <code>REQUEST_TIME = 1;</code>
@@ -928,6 +944,22 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
 
     public static final int SET_TO_SERVER_VALUE_FIELD_NUMBER = 2;
+    /**
+     *
+     *
+     * <pre>
+     * Sets the field to the given server value.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+     * </code>
+     *
+     * @return Whether the setToServerValue field is set.
+     */
+    public boolean hasSetToServerValue() {
+      return transformTypeCase_ == 2;
+    }
     /**
      *
      *
@@ -1986,6 +2018,23 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         return this;
       }
 
+      /**
+       *
+       *
+       * <pre>
+       * Sets the field to the given server value.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.v1.DocumentTransform.FieldTransform.ServerValue set_to_server_value = 2;
+       * </code>
+       *
+       * @return Whether the setToServerValue field is set.
+       */
+      @java.lang.Override
+      public boolean hasSetToServerValue() {
+        return transformTypeCase_ == 2;
+      }
       /**
        *
        *

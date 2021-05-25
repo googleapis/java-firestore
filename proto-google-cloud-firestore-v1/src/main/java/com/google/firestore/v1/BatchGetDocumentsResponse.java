@@ -255,6 +255,21 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    *
    * <code>string missing = 2;</code>
    *
+   * @return Whether the missing field is set.
+   */
+  public boolean hasMissing() {
+    return resultCase_ == 2;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A document name that was requested but does not exist. In the format:
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   * </pre>
+   *
+   * <code>string missing = 2;</code>
+   *
    * @return The missing.
    */
   public java.lang.String getMissing() {
@@ -1009,6 +1024,22 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       return foundBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * A document name that was requested but does not exist. In the format:
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     * </pre>
+     *
+     * <code>string missing = 2;</code>
+     *
+     * @return Whether the missing field is set.
+     */
+    @java.lang.Override
+    public boolean hasMissing() {
+      return resultCase_ == 2;
+    }
     /**
      *
      *

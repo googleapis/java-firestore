@@ -2312,6 +2312,22 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <code>bytes resume_token = 4;</code>
    *
+   * @return Whether the resumeToken field is set.
+   */
+  @java.lang.Override
+  public boolean hasResumeToken() {
+    return resumeTypeCase_ == 4;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   * Using a resume token with a different target is unsupported and may fail.
+   * </pre>
+   *
+   * <code>bytes resume_token = 4;</code>
+   *
    * @return The resumeToken.
    */
   @java.lang.Override
@@ -3324,6 +3340,21 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       return documentsBuilder_;
     }
 
+    /**
+     *
+     *
+     * <pre>
+     * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     * Using a resume token with a different target is unsupported and may fail.
+     * </pre>
+     *
+     * <code>bytes resume_token = 4;</code>
+     *
+     * @return Whether the resumeToken field is set.
+     */
+    public boolean hasResumeToken() {
+      return resumeTypeCase_ == 4;
+    }
     /**
      *
      *

@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,11 +15,9 @@
  */
 
 /**
- * A client to Google Cloud Firestore API.
+ * The interfaces provided are listed below, along with usage samples.
  *
- * <p>The interfaces provided are listed below, along with usage samples.
- *
- * <p>=============== FirestoreClient ===============
+ * <p>======================= FirestoreClient =======================
  *
  * <p>Service Description: The Cloud Firestore service.
  *
@@ -31,17 +29,18 @@
  *
  * <p>Sample for FirestoreClient:
  *
- * <pre>
- * <code>
+ * <pre>{@code
  * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
- *   Document document = Document.newBuilder().build();
- *   DocumentMask updateMask = DocumentMask.newBuilder().build();
- *   Document response = firestoreClient.updateDocument(document, updateMask);
+ *   GetDocumentRequest request =
+ *       GetDocumentRequest.newBuilder()
+ *           .setName("name3373707")
+ *           .setMask(DocumentMask.newBuilder().build())
+ *           .build();
+ *   Document response = firestoreClient.getDocument(request);
  * }
- * </code>
- * </pre>
+ * }</pre>
  */
-@Generated("by gapic-generator")
+@Generated("by gapic-generator-java")
 package com.google.cloud.firestore.v1;
 
 import javax.annotation.Generated;

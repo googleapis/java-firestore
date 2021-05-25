@@ -16,11 +16,6 @@
 package com.google.firestore.admin.v1;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
-import static io.grpc.stub.ClientCalls.asyncUnaryCall;
-import static io.grpc.stub.ClientCalls.blockingUnaryCall;
-import static io.grpc.stub.ClientCalls.futureUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
  *
@@ -491,7 +486,8 @@ public final class FirestoreAdminGrpc {
     public void createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getCreateIndexMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getCreateIndexMethod(), responseObserver);
     }
 
     /**
@@ -505,7 +501,8 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListIndexesRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListIndexesResponse>
             responseObserver) {
-      asyncUnimplementedUnaryCall(getListIndexesMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getListIndexesMethod(), responseObserver);
     }
 
     /**
@@ -518,7 +515,7 @@ public final class FirestoreAdminGrpc {
     public void getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Index> responseObserver) {
-      asyncUnimplementedUnaryCall(getGetIndexMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetIndexMethod(), responseObserver);
     }
 
     /**
@@ -531,7 +528,8 @@ public final class FirestoreAdminGrpc {
     public void deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
-      asyncUnimplementedUnaryCall(getDeleteIndexMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getDeleteIndexMethod(), responseObserver);
     }
 
     /**
@@ -544,7 +542,7 @@ public final class FirestoreAdminGrpc {
     public void getField(
         com.google.firestore.admin.v1.GetFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Field> responseObserver) {
-      asyncUnimplementedUnaryCall(getGetFieldMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetFieldMethod(), responseObserver);
     }
 
     /**
@@ -567,7 +565,8 @@ public final class FirestoreAdminGrpc {
     public void updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getUpdateFieldMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getUpdateFieldMethod(), responseObserver);
     }
 
     /**
@@ -585,7 +584,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListFieldsRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListFieldsResponse>
             responseObserver) {
-      asyncUnimplementedUnaryCall(getListFieldsMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListFieldsMethod(), responseObserver);
     }
 
     /**
@@ -605,7 +604,8 @@ public final class FirestoreAdminGrpc {
     public void exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getExportDocumentsMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getExportDocumentsMethod(), responseObserver);
     }
 
     /**
@@ -622,7 +622,8 @@ public final class FirestoreAdminGrpc {
     public void importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnimplementedUnaryCall(getImportDocumentsMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getImportDocumentsMethod(), responseObserver);
     }
 
     @java.lang.Override
@@ -630,57 +631,57 @@ public final class FirestoreAdminGrpc {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
               getCreateIndexMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.CreateIndexRequest,
                       com.google.longrunning.Operation>(this, METHODID_CREATE_INDEX)))
           .addMethod(
               getListIndexesMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ListIndexesRequest,
                       com.google.firestore.admin.v1.ListIndexesResponse>(
                       this, METHODID_LIST_INDEXES)))
           .addMethod(
               getGetIndexMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.GetIndexRequest,
                       com.google.firestore.admin.v1.Index>(this, METHODID_GET_INDEX)))
           .addMethod(
               getDeleteIndexMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>(
                       this, METHODID_DELETE_INDEX)))
           .addMethod(
               getGetFieldMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.GetFieldRequest,
                       com.google.firestore.admin.v1.Field>(this, METHODID_GET_FIELD)))
           .addMethod(
               getUpdateFieldMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.UpdateFieldRequest,
                       com.google.longrunning.Operation>(this, METHODID_UPDATE_FIELD)))
           .addMethod(
               getListFieldsMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ListFieldsRequest,
                       com.google.firestore.admin.v1.ListFieldsResponse>(
                       this, METHODID_LIST_FIELDS)))
           .addMethod(
               getExportDocumentsMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ExportDocumentsRequest,
                       com.google.longrunning.Operation>(this, METHODID_EXPORT_DOCUMENTS)))
           .addMethod(
               getImportDocumentsMethod(),
-              asyncUnaryCall(
+              io.grpc.stub.ServerCalls.asyncUnaryCall(
                   new MethodHandlers<
                       com.google.firestore.admin.v1.ImportDocumentsRequest,
                       com.google.longrunning.Operation>(this, METHODID_IMPORT_DOCUMENTS)))
@@ -719,7 +720,7 @@ public final class FirestoreAdminGrpc {
     public void createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getCreateIndexMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -736,7 +737,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListIndexesRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListIndexesResponse>
             responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getListIndexesMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -752,7 +753,7 @@ public final class FirestoreAdminGrpc {
     public void getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Index> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetIndexMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -766,7 +767,7 @@ public final class FirestoreAdminGrpc {
     public void deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getDeleteIndexMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -782,7 +783,7 @@ public final class FirestoreAdminGrpc {
     public void getField(
         com.google.firestore.admin.v1.GetFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Field> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetFieldMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -806,7 +807,7 @@ public final class FirestoreAdminGrpc {
     public void updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateFieldMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -827,7 +828,7 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ListFieldsRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListFieldsResponse>
             responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getListFieldsMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -848,7 +849,7 @@ public final class FirestoreAdminGrpc {
     public void exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getExportDocumentsMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -868,7 +869,7 @@ public final class FirestoreAdminGrpc {
     public void importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
-      asyncUnaryCall(
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getImportDocumentsMethod(), getCallOptions()),
           request,
           responseObserver);
@@ -906,7 +907,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request) {
-      return blockingUnaryCall(getChannel(), getCreateIndexMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -918,7 +920,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.ListIndexesResponse listIndexes(
         com.google.firestore.admin.v1.ListIndexesRequest request) {
-      return blockingUnaryCall(getChannel(), getListIndexesMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListIndexesMethod(), getCallOptions(), request);
     }
 
     /**
@@ -930,7 +933,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.Index getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request) {
-      return blockingUnaryCall(getChannel(), getGetIndexMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -942,7 +946,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.protobuf.Empty deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request) {
-      return blockingUnaryCall(getChannel(), getDeleteIndexMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteIndexMethod(), getCallOptions(), request);
     }
 
     /**
@@ -954,7 +959,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.Field getField(
         com.google.firestore.admin.v1.GetFieldRequest request) {
-      return blockingUnaryCall(getChannel(), getGetFieldMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetFieldMethod(), getCallOptions(), request);
     }
 
     /**
@@ -976,7 +982,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request) {
-      return blockingUnaryCall(getChannel(), getUpdateFieldMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateFieldMethod(), getCallOptions(), request);
     }
 
     /**
@@ -992,7 +999,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
         com.google.firestore.admin.v1.ListFieldsRequest request) {
-      return blockingUnaryCall(getChannel(), getListFieldsMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListFieldsMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1011,7 +1019,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request) {
-      return blockingUnaryCall(getChannel(), getExportDocumentsMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getExportDocumentsMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1027,7 +1036,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.longrunning.Operation importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request) {
-      return blockingUnaryCall(getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
     }
   }
 
@@ -1062,7 +1072,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         createIndex(com.google.firestore.admin.v1.CreateIndexRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getCreateIndexMethod(), getCallOptions()), request);
     }
 
@@ -1076,7 +1086,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<
             com.google.firestore.admin.v1.ListIndexesResponse>
         listIndexes(com.google.firestore.admin.v1.ListIndexesRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getListIndexesMethod(), getCallOptions()), request);
     }
 
@@ -1089,7 +1099,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.admin.v1.Index>
         getIndex(com.google.firestore.admin.v1.GetIndexRequest request) {
-      return futureUnaryCall(getChannel().newCall(getGetIndexMethod(), getCallOptions()), request);
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetIndexMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1101,7 +1112,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty>
         deleteIndex(com.google.firestore.admin.v1.DeleteIndexRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteIndexMethod(), getCallOptions()), request);
     }
 
@@ -1114,7 +1125,8 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.admin.v1.Field>
         getField(com.google.firestore.admin.v1.GetFieldRequest request) {
-      return futureUnaryCall(getChannel().newCall(getGetFieldMethod(), getCallOptions()), request);
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetFieldMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1136,7 +1148,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         updateField(com.google.firestore.admin.v1.UpdateFieldRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateFieldMethod(), getCallOptions()), request);
     }
 
@@ -1154,7 +1166,7 @@ public final class FirestoreAdminGrpc {
     public com.google.common.util.concurrent.ListenableFuture<
             com.google.firestore.admin.v1.ListFieldsResponse>
         listFields(com.google.firestore.admin.v1.ListFieldsRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getListFieldsMethod(), getCallOptions()), request);
     }
 
@@ -1174,7 +1186,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         exportDocuments(com.google.firestore.admin.v1.ExportDocumentsRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getExportDocumentsMethod(), getCallOptions()), request);
     }
 
@@ -1191,7 +1203,7 @@ public final class FirestoreAdminGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
         importDocuments(com.google.firestore.admin.v1.ImportDocumentsRequest request) {
-      return futureUnaryCall(
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getImportDocumentsMethod(), getCallOptions()), request);
     }
   }

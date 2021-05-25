@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.cloud.firestore.v1.stub;
 
 import static com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 
-import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ServerStreamingCallable;
@@ -53,14 +53,13 @@ import com.google.firestore.v1.WriteResponse;
 import com.google.protobuf.Empty;
 import javax.annotation.Generated;
 
-// AUTO-GENERATED DOCUMENTATION AND CLASS
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
- * Base stub class for Google Cloud Firestore API.
+ * Base stub class for the Firestore service API.
  *
  * <p>This class is for advanced usage and reflects the underlying API directly.
  */
-@Generated("by gapic-generator")
-@BetaApi("A restructuring of stub classes is planned, so this may break in the future")
+@Generated("by gapic-generator-java")
 public abstract class FirestoreStub implements BackgroundResource {
 
   public UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
@@ -76,10 +75,6 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: listDocumentsCallable()");
   }
 
-  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
-    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
-  }
-
   public UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
     throw new UnsupportedOperationException("Not implemented: updateDocumentCallable()");
   }
@@ -91,10 +86,6 @@ public abstract class FirestoreStub implements BackgroundResource {
   public ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable() {
     throw new UnsupportedOperationException("Not implemented: batchGetDocumentsCallable()");
-  }
-
-  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
-    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
   }
 
   public UnaryCallable<BeginTransactionRequest, BeginTransactionResponse>
@@ -112,6 +103,15 @@ public abstract class FirestoreStub implements BackgroundResource {
 
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     throw new UnsupportedOperationException("Not implemented: runQueryCallable()");
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
+      partitionQueryPagedCallable() {
+    throw new UnsupportedOperationException("Not implemented: partitionQueryPagedCallable()");
+  }
+
+  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
+    throw new UnsupportedOperationException("Not implemented: partitionQueryCallable()");
   }
 
   public BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable() {
@@ -132,13 +132,12 @@ public abstract class FirestoreStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: listCollectionIdsCallable()");
   }
 
-  public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
-      partitionQueryPagedCallable() {
-    throw new UnsupportedOperationException("Not implemented: partitionQueryPagedCallable()");
+  public UnaryCallable<BatchWriteRequest, BatchWriteResponse> batchWriteCallable() {
+    throw new UnsupportedOperationException("Not implemented: batchWriteCallable()");
   }
 
-  public UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable() {
-    throw new UnsupportedOperationException("Not implemented: partitionQueryCallable()");
+  public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
+    throw new UnsupportedOperationException("Not implemented: createDocumentCallable()");
   }
 
   @Override
