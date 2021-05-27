@@ -33,7 +33,9 @@ import com.google.firestore.v1.PartitionQueryRequest;
 import io.opencensus.common.Scope;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -63,6 +65,8 @@ public class CollectionGroup extends Query {
    * parallel. The returned partition cursors are split points that can be used as starting/end
    * points for the query results.
    *
+   * @deprecated This method is deprecated as the SDK has to post-process all results streamed from
+   *     the server. Use {@link #getPartitions(long)} to get the same behavior.
    * @param desiredPartitionCount The desired maximum number of partition points. The number must be
    *     strictly positive. The actual number of partitions returned may be fewer.
    * @param observer a stream observer that receives the result of the Partition request.
@@ -159,8 +163,23 @@ public class CollectionGroup extends Query {
 
   private void consumePartitions(
       PartitionQueryPagedResponse response, Function<QueryPartition, Void> consumer) {
-    @Nullable Object[] lastCursor = null;
+    List<Cursor> cursors = new ArrayList<>();
     for (Cursor cursor : response.iterateAll()) {
+      cursors.add(cursor);
+    }
+
+    // Sort the partitions as they may not be ordered if responses are paged.
+    Collections.sort(
+        cursors,
+        new Comparator<Cursor>() {
+          @Override
+          public int compare(Cursor left, Cursor right) {
+            return Order.INSTANCE.compareArrays(left.getValuesList(), right.getValuesList());
+          }
+        });
+
+    @Nullable Object[] lastCursor = null;
+    for (Cursor cursor : cursors) {
       Object[] decodedCursorValue = new Object[cursor.getValuesCount()];
       for (int i = 0; i < cursor.getValuesCount(); ++i) {
         decodedCursorValue[i] = UserDataConverter.decodeValue(rpcContext, cursor.getValues(i));
