@@ -223,6 +223,29 @@
         <module>samples</module>
       </modules>
     </profile>
-  </profiles>
 
+    <profile>
+      <id>docFX</id>
+      <activation>
+        <property>
+          <!-- Activate with -P docFX -->
+          <name>docFX</name>
+        </property>
+      </activation>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+              <sourceFileExcludes>
+                <exclude>com/google/cloud/firestore/v1/package-info.java</exclude>
+              </sourceFileExcludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
 </project>
