@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/googleapis/java-firestore/compare/v2.4.0...v2.5.0) (2021-06-01)
+
+
+### Features
+
+* add `gcf-owl-bot[bot]` to `ignoreAuthors` ([#641](https://www.github.com/googleapis/java-firestore/issues/641)) ([6f40f0f](https://www.github.com/googleapis/java-firestore/commit/6f40f0fc821d31136686a41e82e4b57d0ad3dede))
+* add recursiveDelete() to Firestore ([#622](https://www.github.com/googleapis/java-firestore/issues/622)) ([#649](https://www.github.com/googleapis/java-firestore/issues/649)) ([9ff2f41](https://www.github.com/googleapis/java-firestore/commit/9ff2f41b765c8878c3b3fb7df962f6f1ed537f05))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1.2.0 ([#640](https://www.github.com/googleapis/java-firestore/issues/640)) ([9bd881a](https://www.github.com/googleapis/java-firestore/commit/9bd881a5ddd0bdb62396e8b778bf9784c00feba2))
+
 ## [2.4.0](https://www.github.com/googleapis/java-firestore/compare/v2.3.0...v2.4.0) (2021-05-17)
 
 
