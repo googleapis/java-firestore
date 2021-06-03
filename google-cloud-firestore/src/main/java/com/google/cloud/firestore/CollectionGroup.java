@@ -65,7 +65,7 @@ public class CollectionGroup extends Query {
    * parallel. The returned partition cursors are split points that can be used as starting/end
    * points for the query results.
    *
-   * @deprecated This method is deprecated as the SDK has to post-process all results streamed from
+   * @deprecated Please use {@link #getPartitions(long)} instead. All cursors will be loaded before any value will be provided to {@code observer}.
    *     the server. Use {@link #getPartitions(long)} to get the same behavior.
    * @param desiredPartitionCount The desired maximum number of partition points. The number must be
    *     strictly positive. The actual number of partitions returned may be fewer.
