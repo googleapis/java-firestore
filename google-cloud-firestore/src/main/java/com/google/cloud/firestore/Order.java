@@ -109,7 +109,8 @@ class Order implements Comparator<Value> {
       case GEO_POINT:
         return compareGeoPoints(left, right);
       case ARRAY:
-        return compareArrays(left, right);
+        return compareArrays(
+            left.getArrayValue().getValuesList(), right.getArrayValue().getValuesList());
       case OBJECT:
         return compareObjects(left, right);
       default:
@@ -171,27 +172,22 @@ class Order implements Comparator<Value> {
     return leftPath.compareTo(rightPath);
   }
 
-  private int compareArrays(Value left, Value right) {
-    List<Value> leftValue = left.getArrayValue().getValuesList();
-    List<Value> rightValue = right.getArrayValue().getValuesList();
-
-    int minLength = Math.min(leftValue.size(), rightValue.size());
+  public int compareArrays(List<Value> left, List<Value> right) {
+    int minLength = Math.min(left.size(), right.size());
     for (int i = 0; i < minLength; i++) {
-      int cmp = compare(leftValue.get(i), rightValue.get(i));
+      int cmp = compare(left.get(i), right.get(i));
       if (cmp != 0) {
         return cmp;
       }
     }
-    return Integer.compare(leftValue.size(), rightValue.size());
+    return Integer.compare(left.size(), right.size());
   }
 
   private int compareObjects(Value left, Value right) {
     // This requires iterating over the keys in the object in order and doing a
     // deep comparison.
-    SortedMap<String, Value> leftMap = new TreeMap<>();
-    leftMap.putAll(left.getMapValue().getFieldsMap());
-    SortedMap<String, Value> rightMap = new TreeMap<>();
-    rightMap.putAll(right.getMapValue().getFieldsMap());
+    SortedMap<String, Value> leftMap = new TreeMap<>(left.getMapValue().getFieldsMap());
+    SortedMap<String, Value> rightMap = new TreeMap<>(right.getMapValue().getFieldsMap());
 
     Iterator<Entry<String, Value>> leftIterator = leftMap.entrySet().iterator();
     Iterator<Entry<String, Value>> rightIterator = rightMap.entrySet().iterator();
