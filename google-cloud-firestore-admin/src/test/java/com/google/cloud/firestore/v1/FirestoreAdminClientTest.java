@@ -67,10 +67,10 @@ import org.junit.Test;
 
 @Generated("by gapic-generator-java")
 public class FirestoreAdminClientTest {
+  private static MockFirestoreAdmin mockFirestoreAdmin;
   private static MockServiceHelper mockServiceHelper;
   private FirestoreAdminClient client;
   private LocalChannelProvider channelProvider;
-  private static MockFirestoreAdmin mockFirestoreAdmin;
 
   @BeforeClass
   public static void startStaticServer() {
