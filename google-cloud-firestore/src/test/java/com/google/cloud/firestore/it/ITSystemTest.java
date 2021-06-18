@@ -689,6 +689,24 @@ public class ITSystemTest {
   }
 
   @Test
+  public void asyncTxFailsWithUserError() throws Exception {
+    try {
+      firestore
+          .runAsyncTransaction(
+              new Transaction.AsyncFunction<String>() {
+                @Override
+                public ApiFuture<String> updateCallback(Transaction transaction) {
+                  throw new RuntimeException("User exception");
+                }
+              })
+          .get();
+      fail();
+    } catch (Exception e) {
+      assertTrue(e.getMessage().endsWith("User exception"));
+    }
+  }
+
+  @Test
   public void doesNotRetryTransactionsWithFailedPreconditions() {
     final DocumentReference documentReference = randomColl.document();
 

@@ -146,12 +146,26 @@ class TransactionRunner<T> {
    */
   private SettableApiFuture<T> invokeUserCallback() {
     final SettableApiFuture<T> callbackResult = SettableApiFuture.create();
+
+    // Wrap the callback in case an exception is thrown inside the transaction.
+    final ApiFuture<T> updateCallback =
+        ApiFutures.catchingAsync(
+            userCallback.updateCallback(transaction),
+            Throwable.class,
+            new ApiAsyncFunction<Throwable, T>() {
+              public ApiFuture<T> apply(Throwable throwable) throws Exception {
+                System.out.println("caught");
+                return ApiFutures.immediateFailedFuture(throwable);
+              }
+            },
+            MoreExecutors.directExecutor());
+
     userCallbackExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
             ApiFutures.addCallback(
-                userCallback.updateCallback(transaction),
+                updateCallback,
                 new ApiFutureCallback<T>() {
                   @Override
                   public void onFailure(Throwable t) {
