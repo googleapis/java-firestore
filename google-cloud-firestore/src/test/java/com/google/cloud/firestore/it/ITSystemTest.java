@@ -1537,7 +1537,6 @@ public class ITSystemTest {
       final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
       final Status status = invalidArgument.getStatus();
       assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
-      assertThat(status.getDescription()).isEqualTo("The requested snapshot version is too old.");
     }
   }
 
