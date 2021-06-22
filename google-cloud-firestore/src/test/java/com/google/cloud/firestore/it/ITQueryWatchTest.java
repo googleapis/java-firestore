@@ -384,6 +384,21 @@ public final class ITQueryWatchTest {
     listenerAssertions.addedIdsIsAnyOf(emptyList(), asList("doc2", "doc3"));
   }
 
+  @Test
+  public void shutdownNowPreventsListener() throws Exception {
+    Query query = randomColl.whereEqualTo("foo", "bar");
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder().setExpectError().build();
+
+    firestore.shutdownNow();
+    query.addSnapshotListener(listener);
+
+    listener.eventsCountDownLatch.awaitError();
+
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.hasError();
+  }
+
   /**
    * A tuple class used by {@code #queryWatch}. This class represents an event delivered to the
    * registered query listener.
@@ -402,6 +417,7 @@ public final class ITQueryWatchTest {
   private static final class EventsCountDownLatch {
     private final CountDownLatch initialEventsCountDownLatch;
     private final int initialEventCount;
+    private final CountDownLatch errorCountDownLatch;
     private final EnumMap<DocumentChange.Type, Integer> eventsCounts;
     private final EnumMap<DocumentChange.Type, CountDownLatch> eventsCountDownLatches;
 
@@ -409,9 +425,11 @@ public final class ITQueryWatchTest {
         int initialEventCount,
         int addedInitialCount,
         int modifiedInitialCount,
-        int removedInitialCount) {
+        int removedInitialCount,
+        int errorCount) {
       initialEventsCountDownLatch = new CountDownLatch(initialEventCount);
       this.initialEventCount = initialEventCount;
+      this.errorCountDownLatch = new CountDownLatch(errorCount);
       eventsCounts = new EnumMap<>(DocumentChange.Type.class);
       eventsCounts.put(DocumentChange.Type.ADDED, addedInitialCount);
       eventsCounts.put(DocumentChange.Type.MODIFIED, modifiedInitialCount);
@@ -432,8 +450,16 @@ public final class ITQueryWatchTest {
       eventsCountDownLatches.get(type).countDown();
     }
 
+    void countError() {
+      errorCountDownLatch.countDown();
+    }
+
     void awaitInitialEvents() throws InterruptedException {
       initialEventsCountDownLatch.await(5 * initialEventCount, TimeUnit.SECONDS);
+    }
+
+    void awaitError() throws InterruptedException {
+      errorCountDownLatch.await(5, TimeUnit.SECONDS);
     }
 
     void await(DocumentChange.Type type) throws InterruptedException {
@@ -447,11 +473,15 @@ public final class ITQueryWatchTest {
     final EventsCountDownLatch eventsCountDownLatch;
 
     private QuerySnapshotEventListener(
-        int initialCount, int addedEventCount, int modifiedEventCount, int removedEventCount) {
+        int initialCount,
+        int addedEventCount,
+        int modifiedEventCount,
+        int removedEventCount,
+        int errorCount) {
       this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
       this.eventsCountDownLatch =
           new EventsCountDownLatch(
-              initialCount, addedEventCount, modifiedEventCount, removedEventCount);
+              initialCount, addedEventCount, modifiedEventCount, removedEventCount, errorCount);
     }
 
     @Override
@@ -462,6 +492,9 @@ public final class ITQueryWatchTest {
         for (DocumentChange docChange : documentChanges) {
           eventsCountDownLatch.countDown(docChange.getType());
         }
+      }
+      if (error != null) {
+        eventsCountDownLatch.countError();
       }
       eventsCountDownLatch.countDown();
     }
@@ -480,6 +513,7 @@ public final class ITQueryWatchTest {
       private int addedEventCount = 0;
       private int modifiedEventCount = 0;
       private int removedEventCount = 0;
+      private int errorCount = 0;
 
       private Builder() {}
 
@@ -503,9 +537,14 @@ public final class ITQueryWatchTest {
         return this;
       }
 
+      Builder setExpectError() {
+        this.errorCount = 1;
+        return this;
+      }
+
       public QuerySnapshotEventListener build() {
         return new QuerySnapshotEventListener(
-            initialEventCount, addedEventCount, modifiedEventCount, removedEventCount);
+            initialEventCount, addedEventCount, modifiedEventCount, removedEventCount, errorCount);
       }
     }
 
@@ -534,6 +573,20 @@ public final class ITQueryWatchTest {
                   }
                 });
         assertWithMessage("snapshotListener received an error").that(anyError).isAbsent();
+      }
+
+      private void hasError() {
+        final Optional<ListenerEvent> anyError =
+            events.firstMatch(
+                new Predicate<ListenerEvent>() {
+                  @Override
+                  public boolean apply(ListenerEvent input) {
+                    return input.error != null;
+                  }
+                });
+        assertWithMessage("snapshotListener did not receive an expected error")
+            .that(anyError)
+            .isPresent();
       }
 
       private static List<QuerySnapshot> getQuerySnapshots(FluentIterable<ListenerEvent> events) {

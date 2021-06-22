@@ -383,31 +383,36 @@ class Watch implements ApiStreamObserver<ListenResponse> {
         new Runnable() {
           @Override
           public void run() {
-            if (!isActive.get()) {
-              return;
-            }
-
-            synchronized (Watch.this) {
+            try {
               if (!isActive.get()) {
                 return;
               }
 
-              Preconditions.checkState(stream == null);
+              synchronized (Watch.this) {
+                if (!isActive.get()) {
+                  return;
+                }
 
-              current = false;
-              nextAttempt = backoff.createNextAttempt(nextAttempt);
+                Preconditions.checkState(stream == null);
 
-              Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-              stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+                current = false;
+                nextAttempt = backoff.createNextAttempt(nextAttempt);
 
-              ListenRequest.Builder request = ListenRequest.newBuilder();
-              request.setDatabase(firestore.getDatabaseName());
-              request.setAddTarget(target);
-              if (resumeToken != null) {
-                request.getAddTargetBuilder().setResumeToken(resumeToken);
+                Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
+                stream =
+                    firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+
+                ListenRequest.Builder request = ListenRequest.newBuilder();
+                request.setDatabase(firestore.getDatabaseName());
+                request.setAddTarget(target);
+                if (resumeToken != null) {
+                  request.getAddTargetBuilder().setResumeToken(resumeToken);
+                }
+
+                stream.onNext(request.build());
               }
-
-              stream.onNext(request.build());
+            } catch (Throwable throwable) {
+              onError(throwable);
             }
           }
         },
@@ -551,7 +556,6 @@ class Watch implements ApiStreamObserver<ListenResponse> {
 
     switch (status.getCode()) {
       case CANCELLED:
-      case UNKNOWN:
       case DEADLINE_EXCEEDED:
       case RESOURCE_EXHAUSTED:
       case INTERNAL:

@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.spi.v1;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.core.GaxProperties;
 import com.google.api.gax.grpc.GrpcCallContext;
@@ -27,8 +26,6 @@ import com.google.api.gax.rpc.HeaderProvider;
 import com.google.api.gax.rpc.NoHeaderProvider;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.TransportChannel;
-import com.google.api.gax.rpc.UnaryCallSettings;
-import com.google.api.gax.rpc.UnaryCallSettings.Builder;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.ServiceOptions;
@@ -38,7 +35,6 @@ import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedRespo
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreStub;
-import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.cloud.firestore.v1.stub.GrpcFirestoreStub;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.cloud.grpc.GrpcTransportOptions.ExecutorFactory;
@@ -126,18 +122,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
 
         clientContext = ClientContext.create(settingsBuilder.build());
       }
-      ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> retrySettingsSetter =
-          new ApiFunction<Builder<?, ?>, Void>() {
-            @Override
-            public Void apply(UnaryCallSettings.Builder<?, ?> builder) {
-              builder.setRetrySettings(options.getRetrySettings());
-              return null;
-            }
-          };
-      FirestoreStubSettings.Builder firestoreBuilder =
-          FirestoreStubSettings.newBuilder(clientContext)
-              .applyToAllUnaryMethods(retrySettingsSetter);
-      firestoreStub = GrpcFirestoreStub.create(firestoreBuilder.build());
+      firestoreStub = GrpcFirestoreStub.create(clientContext);
     } catch (Exception e) {
       throw new IOException(e);
     }
@@ -217,6 +202,16 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   @Override
   public BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable() {
     return firestoreStub.listenCallable();
+  }
+
+  @Override
+  public void shutdown() {
+    firestoreStub.shutdown();
+  }
+
+  @Override
+  public void shutdownNow() {
+    firestoreStub.shutdownNow();
   }
 
   // This class is needed solely to get access to protected method setInternalHeaderProvider()
