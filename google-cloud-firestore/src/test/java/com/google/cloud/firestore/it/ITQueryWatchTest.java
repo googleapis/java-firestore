@@ -390,6 +390,10 @@ public final class ITQueryWatchTest {
     QuerySnapshotEventListener listener =
         QuerySnapshotEventListener.builder().setExpectError().build();
 
+    // While a better test would test a shutdown after the listener has been added, this behavior
+    // leads to flakes as the timing of both the Watch stream and the shutdown call influence
+    // whether an error is raised. In some circumstances, the stream drops without any
+    // notifications.
     firestore.shutdownNow();
     query.addSnapshotListener(listener);
 
