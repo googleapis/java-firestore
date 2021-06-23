@@ -114,6 +114,7 @@ class TransactionRunner<T> {
   }
 
   private ApiFuture<Void> maybeRollback() {
+    System.out.println("maybe rollback, has id: " + transaction.hasTransactionId());
     return transaction.hasTransactionId()
         ? transaction.rollback()
         : ApiFutures.<Void>immediateFuture(null);
@@ -123,6 +124,7 @@ class TransactionRunner<T> {
   private class RollbackCallback implements ApiAsyncFunction<Void, T> {
     @Override
     public ApiFuture<T> apply(Void input) {
+      System.out.println("rollback callback");
       final SettableApiFuture<Void> backoff = SettableApiFuture.create();
       // Add a backoff delay. At first, this is 0.
       firestoreExecutor.schedule(
@@ -147,25 +149,22 @@ class TransactionRunner<T> {
   private SettableApiFuture<T> invokeUserCallback() {
     final SettableApiFuture<T> callbackResult = SettableApiFuture.create();
 
-    // Wrap the callback in case an exception is thrown inside the transaction.
-    final ApiFuture<T> updateCallback =
-        ApiFutures.catchingAsync(
-            userCallback.updateCallback(transaction),
-            Throwable.class,
-            new ApiAsyncFunction<Throwable, T>() {
-              public ApiFuture<T> apply(Throwable throwable) throws Exception {
-                System.out.println("caught");
-                return ApiFutures.immediateFailedFuture(throwable);
-              }
-            },
-            MoreExecutors.directExecutor());
-
     userCallbackExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
+            System.out.println("invoke user callback");
             ApiFutures.addCallback(
-                updateCallback,
+                ApiFutures.catchingAsync(
+                    userCallback.updateCallback(transaction),
+                    Throwable.class,
+                    new ApiAsyncFunction<Throwable, T>() {
+                      public ApiFuture<T> apply(Throwable throwable) throws Exception {
+                        System.out.println("caught");
+                        return ApiFutures.immediateFailedFuture(throwable);
+                      }
+                    },
+                    MoreExecutors.directExecutor()),
                 new ApiFutureCallback<T>() {
                   @Override
                   public void onFailure(Throwable t) {
@@ -177,7 +176,7 @@ class TransactionRunner<T> {
                     callbackResult.set(result);
                   }
                 },
-                MoreExecutors.directExecutor());
+                firestoreExecutor);
           }
         });
     return callbackResult;
@@ -187,6 +186,7 @@ class TransactionRunner<T> {
   private class BackoffCallback implements ApiAsyncFunction<Void, T> {
     @Override
     public ApiFuture<T> apply(Void input) {
+      System.out.println("backoff callback");
       return ApiFutures.transformAsync(
           transaction.begin(), new BeginTransactionCallback(), MoreExecutors.directExecutor());
     }
@@ -198,6 +198,7 @@ class TransactionRunner<T> {
    */
   private class BeginTransactionCallback implements ApiAsyncFunction<Void, T> {
     public ApiFuture<T> apply(Void ignored) {
+      System.out.println("begin tx callback");
       return ApiFutures.transformAsync(
           invokeUserCallback(), new UserFunctionCallback(), MoreExecutors.directExecutor());
     }
@@ -210,6 +211,7 @@ class TransactionRunner<T> {
   private class UserFunctionCallback implements ApiAsyncFunction<T, T> {
     @Override
     public ApiFuture<T> apply(T userFunctionResult) {
+      System.out.println("user function callback");
       return ApiFutures.transform(
           transaction.commit(),
           new CommitTransactionCallback(userFunctionResult),
@@ -236,6 +238,7 @@ class TransactionRunner<T> {
   /** A callback that restarts a transaction after an ApiException. It invokes the Rollback RPC. */
   private class RestartTransactionCallback implements ApiAsyncFunction<Throwable, T> {
     public ApiFuture<T> apply(Throwable throwable) {
+      System.out.println("restart callback");
       if (!(throwable instanceof ApiException)) {
         // This is likely a failure in the user callback.
         span.setStatus(USER_CALLBACK_FAILED);

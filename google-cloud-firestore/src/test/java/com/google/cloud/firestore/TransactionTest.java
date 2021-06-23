@@ -351,6 +351,7 @@ public class TransactionTest {
             new Transaction.AsyncFunction<String>() {
               @Override
               public ApiFuture<String> updateCallback(Transaction transaction) {
+//                return ApiFutures.immediateFailedFuture(new RuntimeException("User exception"));
                 throw new RuntimeException("User exception");
               }
             },
@@ -362,6 +363,10 @@ public class TransactionTest {
     } catch (Exception e) {
       assertTrue(e.getMessage().endsWith("User exception"));
     }
+  }
+
+  @Test
+  public void futuresTest() {
   }
 
   @Test

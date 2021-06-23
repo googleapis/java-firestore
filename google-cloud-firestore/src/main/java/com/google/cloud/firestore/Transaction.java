@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -86,6 +87,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
+    System.out.println("beginTx");
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_BEGINTRANSACTION);
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
@@ -105,11 +107,24 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore.sendRequest(
             beginTransaction.build(), firestore.getClient().beginTransactionCallable());
 
+    transactionBeginFuture = ApiFutures.catchingAsync(
+        transactionBeginFuture,
+        Throwable.class,
+        new ApiAsyncFunction<Throwable, BeginTransactionResponse>() {
+          public ApiFuture<BeginTransactionResponse> apply(Throwable throwable) throws Exception {
+            System.out.println("CAUGHT ERROR");
+            return ApiFutures.immediateFailedFuture(throwable);
+          }
+        },
+        MoreExecutors.directExecutor()
+    );
+
     return ApiFutures.transform(
         transactionBeginFuture,
         new ApiFunction<BeginTransactionResponse, Void>() {
           @Override
           public Void apply(BeginTransactionResponse beginTransactionResponse) {
+            System.out.println("begintx response");
             transactionId = beginTransactionResponse.getTransaction();
             return null;
           }

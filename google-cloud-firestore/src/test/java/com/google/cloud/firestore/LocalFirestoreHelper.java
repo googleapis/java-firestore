@@ -279,6 +279,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static ApiFuture<Empty> rollbackResponse() {
+    System.out.println("rollback Response");
     return ApiFutures.immediateFuture(Empty.getDefaultInstance());
   }
 
