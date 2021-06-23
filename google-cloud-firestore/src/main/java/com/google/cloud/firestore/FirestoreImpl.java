@@ -447,8 +447,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Override
   public void close() throws Exception {
-    firestoreClient.close();
-    closed = true;
+   shutdown();
   }
 
   @Override
