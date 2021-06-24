@@ -388,7 +388,7 @@ public final class ITQueryWatchTest {
   public void shutdownNowRejectsListener() throws Exception {
     Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
-            QuerySnapshotEventListener.builder().setExpectError().build();
+        QuerySnapshotEventListener.builder().setExpectError().build();
 
     query.addSnapshotListener(listener);
     firestore.shutdownNow();
@@ -403,7 +403,7 @@ public final class ITQueryWatchTest {
   public void shutdownNowPreventsListener() throws Exception {
     Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
-            QuerySnapshotEventListener.builder().setExpectError().build();
+        QuerySnapshotEventListener.builder().setExpectError().build();
 
     firestore.shutdownNow();
     query.addSnapshotListener(listener);
