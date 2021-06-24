@@ -34,7 +34,6 @@ public class ITShutdownTest {
 
   @Test
   public void closeSuccess_withListenerRemove() throws Exception {
-
     final CountDownLatch cdl = new CountDownLatch(1);
 
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
@@ -56,7 +55,6 @@ public class ITShutdownTest {
 
   @Test
   public void closeSuccess_withoutListenerRemove() throws Exception {
-
     final CountDownLatch cdl = new CountDownLatch(1);
 
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
@@ -77,7 +75,6 @@ public class ITShutdownTest {
 
   @Test
   public void shutdownNowSuccess_withoutListenerRemove() throws Exception {
-
     final CountDownLatch cdl = new CountDownLatch(1);
 
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
@@ -98,7 +95,6 @@ public class ITShutdownTest {
 
   @Test
   public void shutdownSuccess_withoutListenerRemove() throws Exception {
-
     final CountDownLatch cdl = new CountDownLatch(1);
 
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
@@ -119,7 +115,6 @@ public class ITShutdownTest {
 
   @Test
   public void closeAndShutdown() throws Exception {
-
     final CountDownLatch cdl = new CountDownLatch(1);
 
     Firestore fs = FirestoreOptions.getDefaultInstance().getService();
