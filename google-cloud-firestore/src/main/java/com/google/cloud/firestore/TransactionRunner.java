@@ -153,15 +153,7 @@ class TransactionRunner<T> {
           public void run() {
             try {
               ApiFutures.addCallback(
-                  ApiFutures.catchingAsync(
-                      userCallback.updateCallback(transaction),
-                      Throwable.class,
-                      new ApiAsyncFunction<Throwable, T>() {
-                        public ApiFuture<T> apply(Throwable throwable) throws Exception {
-                          return ApiFutures.immediateFailedFuture(throwable);
-                        }
-                      },
-                      MoreExecutors.directExecutor()),
+                  userCallback.updateCallback(transaction),
                   new ApiFutureCallback<T>() {
                     @Override
                     public void onFailure(Throwable t) {
