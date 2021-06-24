@@ -147,37 +147,36 @@ class TransactionRunner<T> {
   private SettableApiFuture<T> invokeUserCallback() {
     final SettableApiFuture<T> callbackResult = SettableApiFuture.create();
 
-    // Wrap the callback in case an exception is thrown inside the transaction.
-    final ApiFuture<T> updateCallback =
-        ApiFutures.catchingAsync(
-            userCallback.updateCallback(transaction),
-            Throwable.class,
-            new ApiAsyncFunction<Throwable, T>() {
-              public ApiFuture<T> apply(Throwable throwable) throws Exception {
-                System.out.println("caught");
-                return ApiFutures.immediateFailedFuture(throwable);
-              }
-            },
-            MoreExecutors.directExecutor());
-
     userCallbackExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
-            ApiFutures.addCallback(
-                updateCallback,
-                new ApiFutureCallback<T>() {
-                  @Override
-                  public void onFailure(Throwable t) {
-                    callbackResult.setException(t);
-                  }
+            try {
+              ApiFutures.addCallback(
+                  ApiFutures.catchingAsync(
+                      userCallback.updateCallback(transaction),
+                      Throwable.class,
+                      new ApiAsyncFunction<Throwable, T>() {
+                        public ApiFuture<T> apply(Throwable throwable) throws Exception {
+                          return ApiFutures.immediateFailedFuture(throwable);
+                        }
+                      },
+                      MoreExecutors.directExecutor()),
+                  new ApiFutureCallback<T>() {
+                    @Override
+                    public void onFailure(Throwable t) {
+                      callbackResult.setException(t);
+                    }
 
-                  @Override
-                  public void onSuccess(T result) {
-                    callbackResult.set(result);
-                  }
-                },
-                MoreExecutors.directExecutor());
+                    @Override
+                    public void onSuccess(T result) {
+                      callbackResult.set(result);
+                    }
+                  },
+                  firestoreExecutor);
+            } catch (Exception e) {
+              callbackResult.setException(e);
+            }
           }
         });
     return callbackResult;
