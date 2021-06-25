@@ -151,25 +151,26 @@ class TransactionRunner<T> {
         new Runnable() {
           @Override
           public void run() {
+            ApiFuture<T> userCallbackResult;
             try {
-              ApiFuture<T> userCallbackResult = userCallback.updateCallback(transaction);
-              ApiFutures.addCallback(
-                  userCallbackResult,
-                  new ApiFutureCallback<T>() {
-                    @Override
-                    public void onFailure(Throwable t) {
-                      returnedResult.setException(t);
-                    }
-
-                    @Override
-                    public void onSuccess(T result) {
-                      returnedResult.set(result);
-                    }
-                  },
-                  firestoreExecutor);
+              userCallbackResult = userCallback.updateCallback(transaction);
             } catch (Exception e) {
-              returnedResult.setException(e);
+              userCallbackResult = ApiFutures.immediateFailedFuture(e);
             }
+            ApiFutures.addCallback(
+                userCallbackResult,
+                new ApiFutureCallback<T>() {
+                  @Override
+                  public void onFailure(Throwable t) {
+                    returnedResult.setException(t);
+                  }
+
+                  @Override
+                  public void onSuccess(T result) {
+                    returnedResult.set(result);
+                  }
+                },
+                firestoreExecutor);
           }
         });
     return returnedResult;
