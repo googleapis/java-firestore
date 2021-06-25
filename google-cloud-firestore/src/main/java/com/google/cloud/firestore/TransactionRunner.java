@@ -145,33 +145,34 @@ class TransactionRunner<T> {
    * Invokes the user callback on the user callback executor and returns the user-provided result.
    */
   private SettableApiFuture<T> invokeUserCallback() {
-    final SettableApiFuture<T> callbackResult = SettableApiFuture.create();
+    final SettableApiFuture<T> returnedResult = SettableApiFuture.create();
 
     userCallbackExecutor.execute(
         new Runnable() {
           @Override
           public void run() {
             try {
+              ApiFuture<T> userCallbackResult = userCallback.updateCallback(transaction);
               ApiFutures.addCallback(
-                  userCallback.updateCallback(transaction),
+                  userCallbackResult,
                   new ApiFutureCallback<T>() {
                     @Override
                     public void onFailure(Throwable t) {
-                      callbackResult.setException(t);
+                      returnedResult.setException(t);
                     }
 
                     @Override
                     public void onSuccess(T result) {
-                      callbackResult.set(result);
+                      returnedResult.set(result);
                     }
                   },
                   firestoreExecutor);
             } catch (Exception e) {
-              callbackResult.setException(e);
+              returnedResult.setException(e);
             }
           }
         });
-    return callbackResult;
+    return returnedResult;
   }
 
   /** A callback that invokes the BeginTransaction callback. */
