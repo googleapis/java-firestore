@@ -383,7 +383,7 @@ public final class ITQueryWatchTest {
   }
 
   @Test
-  public void shutdownNowRejectsListener() throws Exception {
+  public void shutdownNowTerminatesActiveListener() throws Exception {
     Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
         QuerySnapshotEventListener.builder().setExpectError().build();
@@ -398,7 +398,7 @@ public final class ITQueryWatchTest {
   }
 
   @Test
-  public void shutdownNowPreventsListener() throws Exception {
+  public void shutdownNowPreventsAddingNewListener() throws Exception {
     Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
         QuerySnapshotEventListener.builder().setExpectError().build();
