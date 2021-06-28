@@ -54,6 +54,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.annotation.Nullable;
+
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -69,21 +71,17 @@ public final class ITQueryWatchTest {
 
   private CollectionReference randomColl;
 
-  @BeforeClass
-  public static void beforeClass() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
-  }
-
   @Before
   public void before() {
+    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+    firestore = firestoreOptions.getService();
     String autoId = LocalFirestoreHelper.autoId();
     String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
     randomColl = firestore.collection(collPath);
   }
 
-  @AfterClass
-  public static void afterClass() throws Exception {
+  @After
+  public void after() throws Exception {
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
