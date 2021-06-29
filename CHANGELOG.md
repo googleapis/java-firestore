@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/googleapis/java-firestore/compare/v2.5.1...v2.6.0) (2021-06-29)
+
+
+### Features
+
+* add shutdown() and shutdownNow() ([#673](https://www.github.com/googleapis/java-firestore/issues/673)) ([4f20858](https://www.github.com/googleapis/java-firestore/commit/4f2085887981121316fc046d13e945e6800aaad1))
+
+
+### Bug Fixes
+
+* handle thrown exceptions in runAsyncTransaction callback ([#671](https://www.github.com/googleapis/java-firestore/issues/671)) ([969f7fd](https://www.github.com/googleapis/java-firestore/commit/969f7fd72b07aa9c916609b73528ff0f17dfaead))
+
 ### [2.5.1](https://www.github.com/googleapis/java-firestore/compare/v2.5.0...v2.5.1) (2021-06-22)
 
 
