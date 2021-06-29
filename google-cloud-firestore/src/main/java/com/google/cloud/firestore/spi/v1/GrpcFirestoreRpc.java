@@ -28,7 +28,6 @@ import com.google.api.gax.rpc.NoHeaderProvider;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.TransportChannel;
 import com.google.api.gax.rpc.UnaryCallSettings;
-import com.google.api.gax.rpc.UnaryCallSettings.Builder;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.ServiceOptions;
@@ -127,7 +126,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         clientContext = ClientContext.create(settingsBuilder.build());
       }
       ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> retrySettingsSetter =
-          new ApiFunction<Builder<?, ?>, Void>() {
+          new ApiFunction<UnaryCallSettings.Builder<?, ?>, Void>() {
             @Override
             public Void apply(UnaryCallSettings.Builder<?, ?> builder) {
               builder.setRetrySettings(options.getRetrySettings());
@@ -145,18 +144,43 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
 
   @Override
   public void close() throws Exception {
-    if (closed) {
-      return;
-    }
-    closed = true;
-    firestoreStub.close();
-    for (BackgroundResource resource : clientContext.getBackgroundResources()) {
-      resource.close();
+    if (!closed) {
+      firestoreStub.close();
+      for (BackgroundResource resource : clientContext.getBackgroundResources()) {
+        resource.close();
+      }
+      executorFactory.release(executor);
+      closed = true;
     }
     for (BackgroundResource resource : clientContext.getBackgroundResources()) {
       resource.awaitTermination(1, TimeUnit.SECONDS);
     }
+  }
+
+  @Override
+  public void shutdown() {
+    if (closed) {
+      return;
+    }
+    firestoreStub.shutdown();
+    for (BackgroundResource resource : clientContext.getBackgroundResources()) {
+      resource.shutdown();
+    }
     executorFactory.release(executor);
+    closed = true;
+  }
+
+  @Override
+  public void shutdownNow() {
+    if (closed) {
+      return;
+    }
+    firestoreStub.shutdownNow();
+    for (BackgroundResource resource : clientContext.getBackgroundResources()) {
+      resource.shutdownNow();
+    }
+    executorFactory.release(executor);
+    closed = true;
   }
 
   @Override

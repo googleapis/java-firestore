@@ -451,6 +451,18 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     closed = true;
   }
 
+  @Override
+  public void shutdown() {
+    firestoreClient.shutdown();
+    closed = true;
+  }
+
+  @Override
+  public void shutdownNow() {
+    firestoreClient.shutdownNow();
+    closed = true;
+  }
+
   private static class TransactionAsyncAdapter<T> implements Transaction.AsyncFunction<T> {
     private final Transaction.Function<T> syncFunction;
 

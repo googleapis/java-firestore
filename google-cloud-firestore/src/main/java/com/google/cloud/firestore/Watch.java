@@ -337,15 +337,18 @@ class Watch implements ApiStreamObserver<ListenResponse> {
           new Runnable() {
             @Override
             public void run() {
-              listener.onEvent(
-                  null,
-                  throwable instanceof FirestoreException
-                      ? (FirestoreException) throwable
-                      : FirestoreException.forApiException(
-                          new ApiException(
-                              throwable,
-                              GrpcStatusCode.of(getStatus(throwable).getCode()),
-                              false)));
+              if (throwable instanceof FirestoreException) {
+                listener.onEvent(null, (FirestoreException) throwable);
+              } else {
+                Status status = getStatus(throwable);
+                FirestoreException firestoreException =
+                    FirestoreException.forApiException(
+                        new ApiException(
+                            throwable,
+                            GrpcStatusCode.of(status != null ? status.getCode() : Code.UNKNOWN),
+                            false));
+                listener.onEvent(null, firestoreException);
+              }
             }
           });
     }
@@ -383,31 +386,36 @@ class Watch implements ApiStreamObserver<ListenResponse> {
         new Runnable() {
           @Override
           public void run() {
-            if (!isActive.get()) {
-              return;
-            }
-
-            synchronized (Watch.this) {
+            try {
               if (!isActive.get()) {
                 return;
               }
 
-              Preconditions.checkState(stream == null);
+              synchronized (Watch.this) {
+                if (!isActive.get()) {
+                  return;
+                }
 
-              current = false;
-              nextAttempt = backoff.createNextAttempt(nextAttempt);
+                Preconditions.checkState(stream == null);
 
-              Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-              stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+                current = false;
+                nextAttempt = backoff.createNextAttempt(nextAttempt);
 
-              ListenRequest.Builder request = ListenRequest.newBuilder();
-              request.setDatabase(firestore.getDatabaseName());
-              request.setAddTarget(target);
-              if (resumeToken != null) {
-                request.getAddTargetBuilder().setResumeToken(resumeToken);
+                Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
+                stream =
+                    firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+
+                ListenRequest.Builder request = ListenRequest.newBuilder();
+                request.setDatabase(firestore.getDatabaseName());
+                request.setAddTarget(target);
+                if (resumeToken != null) {
+                  request.getAddTargetBuilder().setResumeToken(resumeToken);
+                }
+
+                stream.onNext(request.build());
               }
-
-              stream.onNext(request.build());
+            } catch (Throwable throwable) {
+              onError(throwable);
             }
           }
         },
@@ -549,6 +557,10 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   private static boolean isPermanentError(Throwable throwable) {
     Status status = getStatus(throwable);
 
+    if (status == null) {
+      return true;
+    }
+
     switch (status.getCode()) {
       case CANCELLED:
       case UNKNOWN:
@@ -563,20 +575,20 @@ class Watch implements ApiStreamObserver<ListenResponse> {
     }
   }
 
-  /** Extracts the GRPC status code if available. Returns UNKNOWN for non-GRPC exceptions. */
+  /** Extracts the GRPC status code if available. Returns `null` for non-GRPC exceptions. */
+  @Nullable
   private static Status getStatus(Throwable throwable) {
-    Status status = Status.UNKNOWN;
-
     if (throwable instanceof StatusRuntimeException) {
-      status = ((StatusRuntimeException) throwable).getStatus();
+      return ((StatusRuntimeException) throwable).getStatus();
     } else if (throwable instanceof StatusException) {
-      status = ((StatusException) throwable).getStatus();
+      return ((StatusException) throwable).getStatus();
     }
-    return status;
+    return null;
   }
 
   /** Determines whether we need to initiate a longer backoff due to system overload. */
   private static boolean isResourceExhaustedError(Throwable throwable) {
-    return getStatus(throwable).getCode().equals(Code.RESOURCE_EXHAUSTED);
+    Status status = getStatus(throwable);
+    return status != null && status.getCode().equals(Code.RESOURCE_EXHAUSTED);
   };
 }

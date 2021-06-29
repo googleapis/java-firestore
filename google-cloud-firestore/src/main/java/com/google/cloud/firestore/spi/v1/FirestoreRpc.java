@@ -78,4 +78,8 @@ public interface FirestoreRpc extends AutoCloseable, ServiceRpc {
 
   /** Returns a bi-directional watch stream. */
   BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable();
+
+  void shutdownNow();
+
+  void shutdown();
 }
