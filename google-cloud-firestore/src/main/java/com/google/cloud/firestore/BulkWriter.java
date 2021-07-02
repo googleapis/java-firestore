@@ -83,7 +83,7 @@ public final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 20;
 
-  /** The maximum number of writes can be can in a batch being retried. */
+  /** The maximum number of writes that can be in a batch containing retries. */
   public static final int RETRY_MAX_BATCH_SIZE = 10;
 
   /**
