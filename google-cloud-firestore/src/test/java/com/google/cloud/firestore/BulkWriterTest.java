@@ -62,7 +62,9 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -97,7 +99,7 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
               true));
 
-  //  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
