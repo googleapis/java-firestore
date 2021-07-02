@@ -83,7 +83,7 @@ public final class BulkWriter implements AutoCloseable {
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 20;
 
-  /** The maximum number of writes can be can in a single batch that is being retried. */
+  /** The maximum number of writes can be can in a batch being retried. */
   public static final int RETRY_MAX_BATCH_SIZE = 10;
 
   /**
@@ -1060,10 +1060,14 @@ public final class BulkWriter implements AutoCloseable {
     // A backoff duration greater than 0 implies that this batch is a retry.
     // Retried writes are sent with a batch size of 10 in order to guarantee
     // that the batch is under the 10MiB limit.
-    boolean retryInSmallerBatch =
-        op.getBackoffDuration() > 0 && bulkCommitBatch.getMutationsSize() >= RETRY_MAX_BATCH_SIZE;
+    if (op.getBackoffDuration() > 0) {
+      if (bulkCommitBatch.getMutationsSize() >= RETRY_MAX_BATCH_SIZE) {
+        scheduleCurrentBatchLocked(/* flush= */ false);
+      }
+      bulkCommitBatch.setMaxBatchSize(RETRY_MAX_BATCH_SIZE);
+    }
 
-    if (bulkCommitBatch.has(op.getDocumentReference()) || retryInSmallerBatch) {
+    if (bulkCommitBatch.has(op.getDocumentReference())) {
       // Create a new batch since the backend doesn't support batches with two writes to the same
       // document.
       scheduleCurrentBatchLocked(/* flush= */ false);
@@ -1074,10 +1078,6 @@ public final class BulkWriter implements AutoCloseable {
     // resolves.
     bulkCommitBatch.enqueueOperation(op);
     enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
-
-    if (op.getBackoffDuration() > 0) {
-      bulkCommitBatch.setMaxBatchSize(RETRY_MAX_BATCH_SIZE);
-    }
 
     if (bulkCommitBatch.getMutationsSize() == bulkCommitBatch.getMaxBatchSize()) {
       scheduleCurrentBatchLocked(/* flush= */ false);
