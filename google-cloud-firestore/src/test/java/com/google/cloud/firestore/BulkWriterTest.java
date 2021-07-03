@@ -44,6 +44,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.Value;
+import com.google.firestore.v1.Write;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
@@ -725,6 +726,42 @@ public class BulkWriterTest {
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
     assertEquals(Timestamp.ofTimeSecondsAndNanos(1, 0), result1.get().getUpdateTime());
+  }
+
+  @Test
+  public void retriesWithSmallerBatchSize() throws Exception {
+
+    final List<Write> writes = new ArrayList<>();
+    final List<ApiFuture<BatchWriteResponse>> successResponses = new ArrayList<>();
+    final List<ApiFuture<BatchWriteResponse>> failedResponses = new ArrayList<>();
+    for (int i = 0; i < 15; i++) {
+      writes.add(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i));
+      failedResponses.add(failedResponse(Code.ABORTED_VALUE));
+      successResponses.add(successResponse(1));
+    }
+
+    ResponseStubber responseStubber =
+        new ResponseStubber() {
+          {
+            put(
+                batchWrite(writes.toArray(new Write[0])),
+                mergeResponses(failedResponses.toArray(new ApiFuture[0])));
+            put(
+                batchWrite(
+                    writes.subList(0, BulkWriter.RETRY_MAX_BATCH_SIZE).toArray(new Write[0])),
+                mergeResponses(successResponses.subList(0, 10).toArray(new ApiFuture[0])));
+            put(
+                batchWrite(
+                    writes.subList(BulkWriter.RETRY_MAX_BATCH_SIZE, 15).toArray(new Write[0])),
+                mergeResponses(successResponses.subList(10, 15).toArray(new ApiFuture[0])));
+          }
+        };
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    for (int i = 0; i < 15; i++) {
+      bulkWriter.set(firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    }
+    bulkWriter.close();
   }
 
   @Test

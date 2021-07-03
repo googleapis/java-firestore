@@ -29,6 +29,7 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,9 @@ public final class BulkWriter implements AutoCloseable {
 
   /** The maximum number of writes that can be in a single batch. */
   public static final int MAX_BATCH_SIZE = 20;
+
+  /** The maximum number of writes that can be in a batch containing retries. */
+  public static final int RETRY_MAX_BATCH_SIZE = 10;
 
   /**
    * The maximum number of retries that will be attempted with backoff before stopping all retry
@@ -237,7 +241,7 @@ public final class BulkWriter implements AutoCloseable {
             : Executors.newSingleThreadScheduledExecutor();
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
-    this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
+    this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -962,7 +966,7 @@ public final class BulkWriter implements AutoCloseable {
     if (bulkCommitBatch.getMutationsSize() == 0) return;
 
     final BulkCommitBatch pendingBatch = bulkCommitBatch;
-    bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor);
+    bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
 
     // Use the write with the longest backoff duration when determining backoff.
     int highestBackoffDuration = 0;
@@ -1025,7 +1029,10 @@ public final class BulkWriter implements AutoCloseable {
 
   @VisibleForTesting
   void setMaxBatchSize(int size) {
+    Preconditions.checkState(
+        bulkCommitBatch.getMutationsSize() == 0, "BulkCommitBatch should be empty");
     maxBatchSize = size;
+    bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, size);
   }
 
   @VisibleForTesting
@@ -1050,6 +1057,16 @@ public final class BulkWriter implements AutoCloseable {
   private void sendOperationLocked(
       ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>> enqueueOperationOnBatchCallback,
       final BulkWriterOperation op) {
+    // A backoff duration greater than 0 implies that this batch is a retry.
+    // Retried writes are sent with a batch size of 10 in order to guarantee
+    // that the batch is under the 10MiB limit.
+    if (op.getBackoffDuration() > 0) {
+      if (bulkCommitBatch.getMutationsSize() >= RETRY_MAX_BATCH_SIZE) {
+        scheduleCurrentBatchLocked(/* flush= */ false);
+      }
+      bulkCommitBatch.setMaxBatchSize(RETRY_MAX_BATCH_SIZE);
+    }
+
     if (bulkCommitBatch.has(op.getDocumentReference())) {
       // Create a new batch since the backend doesn't support batches with two writes to the same
       // document.
@@ -1062,7 +1079,7 @@ public final class BulkWriter implements AutoCloseable {
     bulkCommitBatch.enqueueOperation(op);
     enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
 
-    if (bulkCommitBatch.getMutationsSize() == maxBatchSize) {
+    if (bulkCommitBatch.getMutationsSize() == bulkCommitBatch.getMaxBatchSize()) {
       scheduleCurrentBatchLocked(/* flush= */ false);
     }
   }
