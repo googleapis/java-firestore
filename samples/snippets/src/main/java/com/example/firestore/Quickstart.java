@@ -43,19 +43,10 @@ public class Quickstart {
 
   private Firestore db;
 
-  /**
-   * Initialize Firestore using default project ID.
-   */
-  public Quickstart() {
-    // [START fs_initialize]
-    // [START firestore_setup_client_create]
-    Firestore db = FirestoreOptions.getDefaultInstance().getService();
-    // [END firestore_setup_client_create]
-    // [END fs_initialize]
-    this.db = db;
-  }
-
   public Quickstart(String projectId) throws Exception {
+    // [START firestore_setup_client_create]
+    // Option 1: Initialize a Firestore client with a specific `projectId` and
+    //           authorization credential.
     // [START fs_initialize_project_id]
     // [START firestore_setup_client_create_with_project_id]
     FirestoreOptions firestoreOptions =
@@ -64,8 +55,24 @@ public class Quickstart {
             .setCredentials(GoogleCredentials.getApplicationDefault())
             .build();
     Firestore db = firestoreOptions.getService();
-    // [END firestore_setup_client_create_with_project_id]
     // [END fs_initialize_project_id]
+    // [END firestore_setup_client_create_with_project_id]
+    // [END firestore_setup_client_create]
+    this.db = db;
+  }
+
+  /**
+   * Initialize Firestore using default project ID.
+   */
+  public Quickstart() {
+    // [START firestore_setup_client_create]
+
+    // Option 2: Initialize a Firestore client with default values inferred from
+    //           your environment.
+    // [START fs_initialize]
+    Firestore db = FirestoreOptions.getDefaultInstance().getService();
+    // [END firestore_setup_client_create]
+    // [END fs_initialize]
     this.db = db;
   }
 
