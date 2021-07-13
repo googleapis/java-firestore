@@ -199,7 +199,9 @@ public final class FirestoreBundle {
       } catch (InvalidProtocolBufferException e) {
         throw new RuntimeException(e);
       }
-      return new StringBuilder().append(elementJson.getBytes(DEFAULT_CHARSET).length).append(elementJson);
+      return new StringBuilder()
+          .append(elementJson.getBytes(DEFAULT_CHARSET).length)
+          .append(elementJson);
     }
   }
 
