@@ -28,6 +28,7 @@ import com.google.firestore.v1.Document;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ public final class FirestoreBundle {
   static final int BUNDLE_SCHEMA_VERSION = 1;
   // Printer to encode protobuf objects into JSON string.
   private static final JsonFormat.Printer PRINTER = JsonFormat.printer();
+  private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
   // Raw byte array to hold the content of the bundle.
   private byte[] bundleData;
@@ -182,12 +184,12 @@ public final class FirestoreBundle {
               .setCreateTime(latestReadTime.toProto())
               .setVersion(BUNDLE_SCHEMA_VERSION)
               .setTotalDocuments(documents.size())
-              .setTotalBytes(buffer.toString().getBytes().length)
+              .setTotalBytes(buffer.toString().getBytes(DEFAULT_CHARSET).length)
               .build();
       BundleElement element = BundleElement.newBuilder().setMetadata(metadata).build();
       buffer.insert(0, elementToLengthPrefixedStringBuilder(element));
 
-      return new FirestoreBundle(buffer.toString().getBytes(StandardCharsets.UTF_8));
+      return new FirestoreBundle(buffer.toString().getBytes(DEFAULT_CHARSET));
     }
 
     private StringBuilder elementToLengthPrefixedStringBuilder(BundleElement element) {
@@ -197,7 +199,7 @@ public final class FirestoreBundle {
       } catch (InvalidProtocolBufferException e) {
         throw new RuntimeException(e);
       }
-      return new StringBuilder().append(elementJson.getBytes().length).append(elementJson);
+      return new StringBuilder().append(elementJson.getBytes(DEFAULT_CHARSET).length).append(elementJson);
     }
   }
 
