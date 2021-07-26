@@ -1,5 +1,37 @@
 # Changelog
 
+### [2.6.1](https://www.github.com/googleapis/java-firestore/compare/v2.6.0...v2.6.1) (2021-06-30)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1.4.0 ([#680](https://www.github.com/googleapis/java-firestore/issues/680)) ([b8ffcb4](https://www.github.com/googleapis/java-firestore/commit/b8ffcb43d79029f9b2a490fb84e78653c716b367))
+
+## [2.6.0](https://www.github.com/googleapis/java-firestore/compare/v2.5.1...v2.6.0) (2021-06-29)
+
+
+### Features
+
+* add shutdown() and shutdownNow() ([#673](https://www.github.com/googleapis/java-firestore/issues/673)) ([4f20858](https://www.github.com/googleapis/java-firestore/commit/4f2085887981121316fc046d13e945e6800aaad1))
+
+
+### Bug Fixes
+
+* handle thrown exceptions in runAsyncTransaction callback ([#671](https://www.github.com/googleapis/java-firestore/issues/671)) ([969f7fd](https://www.github.com/googleapis/java-firestore/commit/969f7fd72b07aa9c916609b73528ff0f17dfaead))
+
+### [2.5.1](https://www.github.com/googleapis/java-firestore/compare/v2.5.0...v2.5.1) (2021-06-22)
+
+
+### Bug Fixes
+
+* return results from getPartitions() in order ([#653](https://www.github.com/googleapis/java-firestore/issues/653)) ([12d17d1](https://www.github.com/googleapis/java-firestore/commit/12d17d1ac9d7a1c21eca1469164b079de4476633))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-conformance-tests to v0.1.1 ([#650](https://www.github.com/googleapis/java-firestore/issues/650)) ([b93ca8a](https://www.github.com/googleapis/java-firestore/commit/b93ca8a2b5751c61b3fbe0ca608056e2c0398575))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v1.3.0 ([#660](https://www.github.com/googleapis/java-firestore/issues/660)) ([0f13fd0](https://www.github.com/googleapis/java-firestore/commit/0f13fd0c0db0208b9f68a57dabcb1e998b4a7b9b))
+
 ## [2.5.0](https://www.github.com/googleapis/java-firestore/compare/v2.4.0...v2.5.0) (2021-06-01)
 
 

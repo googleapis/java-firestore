@@ -42,10 +42,23 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
   final List<BulkWriterOperation> pendingOperations = new ArrayList<>();
   private final Set<DocumentReference> documents = new CopyOnWriteArraySet<>();
   private final Executor executor;
+  private int maxBatchSize;
 
-  BulkCommitBatch(FirestoreImpl firestore, Executor executor) {
+  BulkCommitBatch(FirestoreImpl firestore, Executor executor, int maxBatchSize) {
     super(firestore);
     this.executor = executor;
+    this.maxBatchSize = maxBatchSize;
+  }
+
+  int getMaxBatchSize() {
+    return maxBatchSize;
+  }
+
+  void setMaxBatchSize(int size) {
+    Preconditions.checkState(
+        getMutationsSize() <= size,
+        "New batch size cannot be less than the number of enqueued writes");
+    this.maxBatchSize = size;
   }
 
   ApiFuture<WriteResult> wrapResult(int writeIndex) {

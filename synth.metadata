@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "55f471be26db5e5c53aed9f4488e60f6025b235c"
+        "sha": "0a10dd85de02647a9d08f41d45ebc25ee2689a52"
       }
     },
     {
@@ -19,7 +19,7 @@
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "8eae0234a16b26c2ff616d305dbd9786c8b10a47"
+        "sha": "5d3c52f5db664eee9026db76b5bcb466f3a09ca9"
       }
     }
   ],
@@ -115,6 +115,7 @@
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
     "LICENSE",
+    "SECURITY.md",
     "codecov.yaml",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminClient.java",
     "google-cloud-firestore-admin/src/main/java/com/google/cloud/firestore/v1/FirestoreAdminSettings.java",

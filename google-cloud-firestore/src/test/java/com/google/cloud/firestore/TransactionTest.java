@@ -253,7 +253,7 @@ public class TransactionTest {
   }
 
   @Test
-  public void rollbackOnCallbackErrorAsync() {
+  public void rollbackOnCallbackApiFutureErrorAsync() {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
@@ -337,6 +337,31 @@ public class TransactionTest {
 
     List<Message> requests = requestCapture.getAllValues();
     assertEquals(1, requests.size());
+  }
+
+  @Test
+  public void noRollbackOnThrownExceptionAsync() {
+    doReturn(beginResponse())
+        .doReturn(rollbackResponse())
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runAsyncTransaction(
+            new Transaction.AsyncFunction<String>() {
+              @Override
+              public ApiFuture<String> updateCallback(Transaction transaction) {
+                throw new RuntimeException("User exception");
+              }
+            },
+            options);
+
+    try {
+      transaction.get();
+      fail();
+    } catch (Exception e) {
+      assertTrue(e.getMessage().endsWith("User exception"));
+    }
   }
 
   @Test

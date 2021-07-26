@@ -296,4 +296,13 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    */
   @Override
   void close() throws Exception;
+
+  /**
+   * Initiates an orderly shutdown in which previously submitted work is finished, but no new work
+   * will be accepted.
+   */
+  void shutdown();
+
+  /** Attempts to stop all actively executing work and halts the processing of waiting work. */
+  void shutdownNow();
 }
