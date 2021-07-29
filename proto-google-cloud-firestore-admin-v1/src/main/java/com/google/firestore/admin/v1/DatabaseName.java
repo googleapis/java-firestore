@@ -181,8 +181,8 @@ public class DatabaseName implements ResourceName {
     }
 
     private Builder(DatabaseName databaseName) {
-      project = databaseName.project;
-      database = databaseName.database;
+      this.project = databaseName.project;
+      this.database = databaseName.database;
     }
 
     public DatabaseName build() {

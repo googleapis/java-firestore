@@ -247,10 +247,10 @@ public class FieldName implements ResourceName {
     }
 
     private Builder(FieldName fieldName) {
-      project = fieldName.project;
-      database = fieldName.database;
-      collection = fieldName.collection;
-      field = fieldName.field;
+      this.project = fieldName.project;
+      this.database = fieldName.database;
+      this.collection = fieldName.collection;
+      this.field = fieldName.field;
     }
 
     public FieldName build() {
