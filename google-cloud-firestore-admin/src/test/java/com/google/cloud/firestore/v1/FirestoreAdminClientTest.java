@@ -69,8 +69,8 @@ import org.junit.Test;
 public class FirestoreAdminClientTest {
   private static MockFirestoreAdmin mockFirestoreAdmin;
   private static MockServiceHelper mockServiceHelper;
-  private FirestoreAdminClient client;
   private LocalChannelProvider channelProvider;
+  private FirestoreAdminClient client;
 
   @BeforeClass
   public static void startStaticServer() {

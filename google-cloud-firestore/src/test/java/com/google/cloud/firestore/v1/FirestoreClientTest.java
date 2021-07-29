@@ -89,8 +89,8 @@ import org.junit.Test;
 public class FirestoreClientTest {
   private static MockFirestore mockFirestore;
   private static MockServiceHelper mockServiceHelper;
-  private FirestoreClient client;
   private LocalChannelProvider channelProvider;
+  private FirestoreClient client;
 
   @BeforeClass
   public static void startStaticServer() {
