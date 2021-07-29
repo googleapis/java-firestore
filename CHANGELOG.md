@@ -1,5 +1,20 @@
 # Changelog
 
+### [2.6.2](https://www.github.com/googleapis/java-firestore/compare/v2.6.1...v2.6.2) (2021-07-29)
+
+
+### Bug Fixes
+
+* Add shopt -s nullglob to dependencies script ([8f4b199](https://www.github.com/googleapis/java-firestore/commit/8f4b199c1dfdf268723e11696733fe5fb6bd5c64))
+* Ensures bundles are encoded as UTF8 bytes. ([#695](https://www.github.com/googleapis/java-firestore/issues/695)) ([0946a17](https://www.github.com/googleapis/java-firestore/commit/0946a170a963f50ec77409291c02696f2c416edb))
+* lower batch size on BulkWriter retry ([#688](https://www.github.com/googleapis/java-firestore/issues/688)) ([146b21d](https://www.github.com/googleapis/java-firestore/commit/146b21dd6d5772bfd9e023dbf5a1147b29076cdd))
+* Update dependencies.sh to not break on mac ([#694](https://www.github.com/googleapis/java-firestore/issues/694)) ([8f4b199](https://www.github.com/googleapis/java-firestore/commit/8f4b199c1dfdf268723e11696733fe5fb6bd5c64))
+
+
+### Documentation
+
+* began merging variant client samples ([#696](https://www.github.com/googleapis/java-firestore/issues/696)) ([0a10dd8](https://www.github.com/googleapis/java-firestore/commit/0a10dd85de02647a9d08f41d45ebc25ee2689a52))
+
 ### [2.6.1](https://www.github.com/googleapis/java-firestore/compare/v2.6.0...v2.6.1) (2021-06-30)
 
 
