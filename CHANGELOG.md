@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://www.github.com/googleapis/java-firestore/compare/v2.6.2...v2.7.0) (2021-08-04)
+
+
+### Features
+
+* configure initial sp version ([#714](https://www.github.com/googleapis/java-firestore/issues/714)) ([1227d7f](https://www.github.com/googleapis/java-firestore/commit/1227d7f0331f8c695ac7e9e17a90b08383414506))
+
 ### [2.6.2](https://www.github.com/googleapis/java-firestore/compare/v2.6.1...v2.6.2) (2021-07-29)
 
 
