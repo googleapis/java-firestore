@@ -247,10 +247,10 @@ public class IndexName implements ResourceName {
     }
 
     private Builder(IndexName indexName) {
-      project = indexName.project;
-      database = indexName.database;
-      collection = indexName.collection;
-      index = indexName.index;
+      this.project = indexName.project;
+      this.database = indexName.database;
+      this.collection = indexName.collection;
+      this.index = indexName.index;
     }
 
     public IndexName build() {

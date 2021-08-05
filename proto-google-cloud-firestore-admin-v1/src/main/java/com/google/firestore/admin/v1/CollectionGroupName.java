@@ -211,9 +211,9 @@ public class CollectionGroupName implements ResourceName {
     }
 
     private Builder(CollectionGroupName collectionGroupName) {
-      project = collectionGroupName.project;
-      database = collectionGroupName.database;
-      collection = collectionGroupName.collection;
+      this.project = collectionGroupName.project;
+      this.database = collectionGroupName.database;
+      this.collection = collectionGroupName.collection;
     }
 
     public CollectionGroupName build() {
