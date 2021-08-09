@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.v1;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.BetaApi;
@@ -1183,12 +1182,7 @@ public class FirestoreClient implements BackgroundResource {
           ListDocumentsPage.createEmptyPage().createPageAsync(context, futureResponse);
       return ApiFutures.transform(
           futurePage,
-          new ApiFunction<ListDocumentsPage, ListDocumentsPagedResponse>() {
-            @Override
-            public ListDocumentsPagedResponse apply(ListDocumentsPage input) {
-              return new ListDocumentsPagedResponse(input);
-            }
-          },
+          input -> new ListDocumentsPagedResponse(input),
           MoreExecutors.directExecutor());
     }
 
@@ -1264,12 +1258,7 @@ public class FirestoreClient implements BackgroundResource {
           PartitionQueryPage.createEmptyPage().createPageAsync(context, futureResponse);
       return ApiFutures.transform(
           futurePage,
-          new ApiFunction<PartitionQueryPage, PartitionQueryPagedResponse>() {
-            @Override
-            public PartitionQueryPagedResponse apply(PartitionQueryPage input) {
-              return new PartitionQueryPagedResponse(input);
-            }
-          },
+          input -> new PartitionQueryPagedResponse(input),
           MoreExecutors.directExecutor());
     }
 
@@ -1345,12 +1334,7 @@ public class FirestoreClient implements BackgroundResource {
           ListCollectionIdsPage.createEmptyPage().createPageAsync(context, futureResponse);
       return ApiFutures.transform(
           futurePage,
-          new ApiFunction<ListCollectionIdsPage, ListCollectionIdsPagedResponse>() {
-            @Override
-            public ListCollectionIdsPagedResponse apply(ListCollectionIdsPage input) {
-              return new ListCollectionIdsPagedResponse(input);
-            }
-          },
+          input -> new ListCollectionIdsPagedResponse(input),
           MoreExecutors.directExecutor());
     }
 
