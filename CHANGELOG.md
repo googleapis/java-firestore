@@ -5,10 +5,12 @@
 
 ### ⚠ BREAKING CHANGES
 
+* update Java compile to 1.8 ([#710](https://github.com/googleapis/java-firestore/pull/710))
 * update gapic generator to 2.0.0, java 8 features (#719)
 
 ### Features
 
+* update Java compile to 1.8 ([#710](https://github.com/googleapis/java-firestore/pull/710))
 * gapic-generator-java v1.0.13, mtls support ([#712](https://www.github.com/googleapis/java-firestore/issues/712)) ([a27dd9c](https://www.github.com/googleapis/java-firestore/commit/a27dd9cb0e2681a15eae754c97255d0d8c86bcae))
 * update gapic generator to 2.0.0, java 8 features ([#719](https://www.github.com/googleapis/java-firestore/issues/719)) ([0d5b378](https://www.github.com/googleapis/java-firestore/commit/0d5b378075f3723126c8809f4afcc8fc9f81d611))
 
