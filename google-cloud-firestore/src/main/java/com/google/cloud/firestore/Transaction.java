@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
@@ -107,12 +106,9 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
     return ApiFutures.transform(
         transactionBeginFuture,
-        new ApiFunction<BeginTransactionResponse, Void>() {
-          @Override
-          public Void apply(BeginTransactionResponse beginTransactionResponse) {
-            transactionId = beginTransactionResponse.getTransaction();
-            return null;
-          }
+        beginTransactionResponse -> {
+          transactionId = beginTransactionResponse.getTransaction();
+          return null;
         },
         MoreExecutors.directExecutor());
   }
@@ -133,14 +129,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
 
     return ApiFutures.transform(
-        rollbackFuture,
-        new ApiFunction<Empty, Void>() {
-          @Override
-          public Void apply(Empty beginTransactionResponse) {
-            return null;
-          }
-        },
-        MoreExecutors.directExecutor());
+        rollbackFuture, beginTransactionResponse -> null, MoreExecutors.directExecutor());
   }
 
   /**
@@ -155,12 +144,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
     return ApiFutures.transform(
         firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
-        new ApiFunction<List<DocumentSnapshot>, DocumentSnapshot>() {
-          @Override
-          public DocumentSnapshot apply(List<DocumentSnapshot> snapshots) {
-            return snapshots.isEmpty() ? null : snapshots.get(0);
-          }
-        },
+        snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
         MoreExecutors.directExecutor());
   }
 

@@ -305,7 +305,7 @@ class CustomClassMapper {
       try {
         result =
             (rawType == Map.class)
-                ? new HashMap<String, Object>()
+                ? new HashMap<>()
                 : (HashMap<String, Object>) rawType.getDeclaredConstructor().newInstance();
       } catch (InstantiationException
           | IllegalAccessException
@@ -789,7 +789,7 @@ class CustomClassMapper {
     }
 
     T deserialize(Map<String, Object> values, DeserializeContext context) {
-      return deserialize(values, Collections.<TypeVariable<Class<T>>, Type>emptyMap(), context);
+      return deserialize(values, Collections.emptyMap(), context);
     }
 
     T deserialize(

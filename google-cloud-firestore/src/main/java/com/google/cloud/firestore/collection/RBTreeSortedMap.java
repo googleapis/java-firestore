@@ -18,7 +18,6 @@ package com.google.cloud.firestore.collection;
 
 import com.google.api.core.InternalApi;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -35,8 +34,8 @@ import java.util.Map;
 @InternalApi
 public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
 
-  private LLRBNode<K, V> root;
-  private Comparator<K> comparator;
+  private final LLRBNode<K, V> root;
+  private final Comparator<K> comparator;
 
   RBTreeSortedMap(Comparator<K> comparator) {
     this.root = LLRBEmptyNode.getInstance();
@@ -86,7 +85,7 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
     } else {
       LLRBNode<K, V> newRoot =
           root.remove(key, this.comparator).copy(null, null, LLRBNode.Color.BLACK, null, null);
-      return new RBTreeSortedMap<K, V>(newRoot, this.comparator);
+      return new RBTreeSortedMap<>(newRoot, this.comparator);
     }
   }
 
@@ -94,7 +93,7 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
   public ImmutableSortedMap<K, V> insert(K key, V value) {
     LLRBNode<K, V> newRoot =
         root.insert(key, value, this.comparator).copy(null, null, LLRBNode.Color.BLACK, null, null);
-    return new RBTreeSortedMap<K, V>(newRoot, this.comparator);
+    return new RBTreeSortedMap<>(newRoot, this.comparator);
   }
 
   @Override
@@ -124,22 +123,22 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
 
   @Override
   public Iterator<Map.Entry<K, V>> iterator() {
-    return new ImmutableSortedMapIterator<K, V>(root, null, this.comparator, false);
+    return new ImmutableSortedMapIterator<>(root, null, this.comparator, false);
   }
 
   @Override
   public Iterator<Map.Entry<K, V>> iteratorFrom(K key) {
-    return new ImmutableSortedMapIterator<K, V>(root, key, this.comparator, false);
+    return new ImmutableSortedMapIterator<>(root, key, this.comparator, false);
   }
 
   @Override
   public Iterator<Map.Entry<K, V>> reverseIteratorFrom(K key) {
-    return new ImmutableSortedMapIterator<K, V>(root, key, this.comparator, true);
+    return new ImmutableSortedMapIterator<>(root, key, this.comparator, true);
   }
 
   @Override
   public Iterator<Map.Entry<K, V>> reverseIterator() {
-    return new ImmutableSortedMapIterator<K, V>(root, null, this.comparator, true);
+    return new ImmutableSortedMapIterator<>(root, null, this.comparator, true);
   }
 
   @Override
@@ -233,9 +232,9 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
 
   public static <A, B> RBTreeSortedMap<A, B> fromMap(Map<A, B> values, Comparator<A> comparator) {
     return Builder.buildFrom(
-        new ArrayList<A>(values.keySet()),
+        new ArrayList<>(values.keySet()),
         values,
-        ImmutableSortedMap.Builder.<A>identityTranslator(),
+        ImmutableSortedMap.Builder.identityTranslator(),
         comparator);
   }
 
@@ -248,7 +247,7 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
 
     static class Base1_2 implements Iterable<BooleanChunk> {
 
-      private long value;
+      private final long value;
       private final int length;
 
       public Base1_2(int size) {
@@ -315,14 +314,14 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
         return LLRBEmptyNode.getInstance();
       } else if (size == 1) {
         A key = this.keys.get(start);
-        return new LLRBBlackValueNode<A, C>(key, getValue(key), null, null);
+        return new LLRBBlackValueNode<>(key, getValue(key), null, null);
       } else {
         int half = size / 2;
         int middle = start + half;
         LLRBNode<A, C> left = buildBalancedTree(start, half);
         LLRBNode<A, C> right = buildBalancedTree(middle + 1, half);
         A key = this.keys.get(middle);
-        return new LLRBBlackValueNode<A, C>(key, getValue(key), left, right);
+        return new LLRBBlackValueNode<>(key, getValue(key), left, right);
       }
     }
 
@@ -331,9 +330,9 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
       A key = this.keys.get(start);
       LLRBValueNode<A, C> node;
       if (color == LLRBNode.Color.RED) {
-        node = new LLRBRedValueNode<A, C>(key, getValue(key), null, treeRoot);
+        node = new LLRBRedValueNode<>(key, getValue(key), null, treeRoot);
       } else {
-        node = new LLRBBlackValueNode<A, C>(key, getValue(key), null, treeRoot);
+        node = new LLRBBlackValueNode<>(key, getValue(key), null, treeRoot);
       }
       if (root == null) {
         root = node;
@@ -349,8 +348,8 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
         Map<B, C> values,
         ImmutableSortedMap.Builder.KeyTranslator<A, B> translator,
         Comparator<A> comparator) {
-      Builder<A, B, C> builder = new Builder<A, B, C>(keys, values, translator);
-      Collections.sort(keys, comparator);
+      Builder<A, B, C> builder = new Builder<>(keys, values, translator);
+      keys.sort(comparator);
       Iterator<BooleanChunk> iter = (new Base1_2(keys.size())).iterator();
       int index = keys.size();
       while (iter.hasNext()) {
@@ -364,8 +363,8 @@ public class RBTreeSortedMap<K, V> extends ImmutableSortedMap<K, V> {
           builder.buildPennant(LLRBNode.Color.RED, next.chunkSize, index);
         }
       }
-      return new RBTreeSortedMap<A, C>(
-          builder.root == null ? LLRBEmptyNode.<A, C>getInstance() : builder.root, comparator);
+      return new RBTreeSortedMap<>(
+          builder.root == null ? LLRBEmptyNode.getInstance() : builder.root, comparator);
     }
   }
 }

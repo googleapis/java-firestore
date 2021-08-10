@@ -78,7 +78,6 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -93,10 +92,10 @@ public class WatchTest {
   /** A counter of all document sent. Used to generate a unique update time. */
   private static int documentCount;
 
-  @Spy private FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
+  @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder()
               .setProjectId("test-project")
@@ -116,11 +115,11 @@ public class WatchTest {
         }
       };
 
-  private BlockingQueue<ListenRequest> requests = new LinkedBlockingDeque<>();
-  private BlockingQueue<FirestoreException> exceptions = new LinkedBlockingDeque<>();
-  private BlockingQueue<DocumentSnapshot> documentSnapshots = new LinkedBlockingDeque<>();
-  private BlockingQueue<QuerySnapshot> querySnapshots = new LinkedBlockingDeque<>();
-  private Semaphore closes = new Semaphore(0);
+  private final BlockingQueue<ListenRequest> requests = new LinkedBlockingDeque<>();
+  private final BlockingQueue<FirestoreException> exceptions = new LinkedBlockingDeque<>();
+  private final BlockingQueue<DocumentSnapshot> documentSnapshots = new LinkedBlockingDeque<>();
+  private final BlockingQueue<QuerySnapshot> querySnapshots = new LinkedBlockingDeque<>();
+  private final Semaphore closes = new Semaphore(0);
   private QuerySnapshot lastSnapshot = null;
 
   private ListenerRegistration listenerRegistration;
@@ -175,15 +174,11 @@ public class WatchTest {
         firestoreMock
             .document("coll/doc")
             .addSnapshotListener(
-                new EventListener<DocumentSnapshot>() {
-                  @Override
-                  public void onEvent(
-                      @Nullable DocumentSnapshot value, @Nullable FirestoreException error) {
-                    if (value != null) {
-                      documentSnapshots.add(value);
-                    } else {
-                      exceptions.add(error);
-                    }
+                (value, error) -> {
+                  if (value != null) {
+                    documentSnapshots.add(value);
+                  } else {
+                    exceptions.add(error);
                   }
                 });
   }
@@ -194,15 +189,11 @@ public class WatchTest {
         firestoreMock
             .collection("coll")
             .addSnapshotListener(
-                new EventListener<QuerySnapshot>() {
-                  @Override
-                  public void onEvent(
-                      @Nullable QuerySnapshot value, @Nullable FirestoreException error) {
-                    if (value != null) {
-                      querySnapshots.add(value);
-                    } else {
-                      exceptions.add(error);
-                    }
+                (value, error) -> {
+                  if (value != null) {
+                    querySnapshots.add(value);
+                  } else {
+                    exceptions.add(error);
                   }
                 });
   }
@@ -461,14 +452,7 @@ public class WatchTest {
             .collection("coll")
             .orderBy("foo")
             .orderBy("bar", Direction.DESCENDING)
-            .addSnapshotListener(
-                new EventListener<QuerySnapshot>() {
-                  @Override
-                  public void onEvent(
-                      @Nullable QuerySnapshot value, @Nullable FirestoreException error) {
-                    querySnapshots.add(value);
-                  }
-                });
+            .addSnapshotListener((value, error) -> querySnapshots.add(value));
 
     ListenResponse[] documents =
         new ListenResponse[] {
@@ -1004,10 +988,8 @@ public class WatchTest {
 
   /** Returns a new request observer that persists its input. */
   private Answer newRequestObserver() {
-    return new Answer() {
-      @Override
-      public Object answer(InvocationOnMock invocationOnMock) {
-        return new ApiStreamObserver<ListenRequest>() {
+    return invocationOnMock ->
+        new ApiStreamObserver<ListenRequest>() {
           @Override
           public void onNext(ListenRequest listenRequest) {
             requests.add(listenRequest);
@@ -1023,7 +1005,5 @@ public class WatchTest {
             closes.release();
           }
         };
-      }
-    };
   }
 }

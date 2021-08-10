@@ -36,8 +36,7 @@ class DocumentSet implements Iterable<QueryDocumentSnapshot> {
   /** Returns an empty DocumentSet sorted by the given comparator, then by keys. */
   static DocumentSet emptySet(final Comparator<QueryDocumentSnapshot> comparator) {
     return new DocumentSet(
-        EMPTY_DOCUMENT_MAP,
-        new ImmutableSortedSet<>(Collections.<QueryDocumentSnapshot>emptyList(), comparator));
+        EMPTY_DOCUMENT_MAP, new ImmutableSortedSet<>(Collections.emptyList(), comparator));
   }
 
   /**

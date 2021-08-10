@@ -63,7 +63,6 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.RunQueryRequest;
-import com.google.firestore.v1.Value;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
@@ -73,13 +72,10 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import javax.annotation.Nullable;
-import junit.framework.Protectable;
 import junit.framework.Test;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
@@ -94,7 +90,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 @RunWith(AllTests.class)
@@ -224,14 +219,11 @@ public class ConformanceTest {
       testResult.startTest(this);
       testResult.runProtected(
           this,
-          new Protectable() {
-            @Override
-            public void protect() throws Throwable {
-              if (DEBUG_MODE) {
-                System.out.printf(DEBUG_MESSAGE_FORMAT, description, testParameters);
-              }
-              runTest();
+          () -> {
+            if (DEBUG_MODE) {
+              System.out.printf(DEBUG_MESSAGE_FORMAT, description, testParameters);
             }
+            runTest();
           });
       testResult.endTest(this);
     }
@@ -267,7 +259,7 @@ public class ConformanceTest {
 
     @Override
     public void runTest() throws Throwable {
-      doAnswer(getAllResponse(Collections.<String, Value>emptyMap()))
+      doAnswer(getAllResponse(Collections.emptyMap()))
           .when(firestore)
           .streamRequest(
               getAllCapture.capture(),
@@ -635,7 +627,7 @@ public class ConformanceTest {
     @Captor private ArgumentCaptor<ApiStreamObserver<AbstractMessage>> streamObserverCapture;
     @Mock private ApiStreamObserver<ListenRequest> noOpRequestObserver;
 
-    private Query watchQuery;
+    private final Query watchQuery;
 
     private ConformanceListenTestRunner(
         String description, TestDefinition.ListenTest testParameters) {
@@ -649,13 +641,11 @@ public class ConformanceTest {
       final SettableApiFuture<Void> testCaseFinished = SettableApiFuture.create();
 
       doAnswer(
-              new Answer<ApiStreamObserver<ListenRequest>>() {
-                @Override
-                public ApiStreamObserver<ListenRequest> answer(InvocationOnMock invocationOnMock) {
-                  testCaseStarted.set(null);
-                  return noOpRequestObserver;
-                }
-              })
+              (Answer<ApiStreamObserver<ListenRequest>>)
+                  invocationOnMock -> {
+                    testCaseStarted.set(null);
+                    return noOpRequestObserver;
+                  })
           .when(firestore)
           .streamRequest(
               streamObserverCapture.capture(), Matchers.any(BidiStreamingCallable.class));
@@ -664,30 +654,26 @@ public class ConformanceTest {
 
       final ListenerRegistration registration =
           watchQuery.addSnapshotListener(
-              new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(
-                    @Nullable QuerySnapshot actualSnapshot, @Nullable FirestoreException error) {
-                  try {
-                    if (actualSnapshot != null) {
-                      Assert.assertNull(error);
-                      Assert.assertFalse(expectedSnapshots.isEmpty());
-                      Snapshot expectedSnapshot = expectedSnapshots.remove(0);
-                      Assert.assertEquals(convertQuerySnapshot(expectedSnapshot), actualSnapshot);
-                      if (expectedSnapshots.isEmpty()) {
-                        if (!testParameters.getIsError()) {
-                          testCaseFinished.set(null);
-                        }
+              (actualSnapshot, error) -> {
+                try {
+                  if (actualSnapshot != null) {
+                    Assert.assertNull(error);
+                    Assert.assertFalse(expectedSnapshots.isEmpty());
+                    Snapshot expectedSnapshot = expectedSnapshots.remove(0);
+                    Assert.assertEquals(convertQuerySnapshot(expectedSnapshot), actualSnapshot);
+                    if (expectedSnapshots.isEmpty()) {
+                      if (!testParameters.getIsError()) {
+                        testCaseFinished.set(null);
                       }
-                    } else { // Error case
-                      Assert.assertNotNull(error);
-                      Assert.assertTrue(expectedSnapshots.isEmpty());
-                      Assert.assertTrue(testParameters.getIsError());
-                      testCaseFinished.set(null);
                     }
-                  } catch (AssertionError e) {
-                    testCaseFinished.setException(e);
+                  } else { // Error case
+                    Assert.assertNotNull(error);
+                    Assert.assertTrue(expectedSnapshots.isEmpty());
+                    Assert.assertTrue(testParameters.getIsError());
+                    testCaseFinished.set(null);
                   }
+                } catch (AssertionError e) {
+                  testCaseFinished.setException(e);
                 }
               });
 
@@ -715,23 +701,20 @@ public class ConformanceTest {
 
       DocumentSet documentSet =
           DocumentSet.emptySet(
-              new Comparator<QueryDocumentSnapshot>() {
-                @Override
-                public int compare(QueryDocumentSnapshot o1, QueryDocumentSnapshot o2) {
-                  // Comparator that preserves the insertion order as defined in the test case.
-                  for (QueryDocumentSnapshot snapshot : documentSnapshots) {
-                    if (o1.equals(o2)) {
-                      return 0;
-                    } else if (o1.equals(snapshot)) {
-                      return -1;
-                    } else if (o2.equals(snapshot)) {
-                      return 1;
-                    }
+              (o1, o2) -> {
+                // Comparator that preserves the insertion order as defined in the test case.
+                for (QueryDocumentSnapshot snapshot : documentSnapshots) {
+                  if (o1.equals(o2)) {
+                    return 0;
+                  } else if (o1.equals(snapshot)) {
+                    return -1;
+                  } else if (o2.equals(snapshot)) {
+                    return 1;
                   }
-
-                  Assert.fail("Unable to find position for document snapshot");
-                  return 0;
                 }
+
+                Assert.fail("Unable to find position for document snapshot");
+                return 0;
               });
 
       for (QueryDocumentSnapshot snapshot : documentSnapshots) {

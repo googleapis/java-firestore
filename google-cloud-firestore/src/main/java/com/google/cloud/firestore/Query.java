@@ -268,9 +268,9 @@ public class Query {
       return new AutoValue_Query_QueryOptions.Builder()
           .setAllDescendants(false)
           .setLimitType(LimitType.First)
-          .setFieldOrders(ImmutableList.<FieldOrder>of())
-          .setFieldFilters(ImmutableList.<FieldFilter>of())
-          .setFieldProjections(ImmutableList.<FieldReference>of())
+          .setFieldOrders(ImmutableList.of())
+          .setFieldFilters(ImmutableList.of())
+          .setFieldProjections(ImmutableList.of())
           .setKindless(false)
           .setRequireConsistency(true);
     }
@@ -1617,7 +1617,7 @@ public class Query {
 
     internalStream(
         new QuerySnapshotObserver() {
-          List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
@@ -1649,48 +1649,45 @@ public class Query {
   }
 
   Comparator<QueryDocumentSnapshot> comparator() {
-    return new Comparator<QueryDocumentSnapshot>() {
-      @Override
-      public int compare(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
-        // Add implicit sorting by name, using the last specified direction.
-        ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
-        Direction lastDirection =
-            fieldOrders.isEmpty()
-                ? Direction.ASCENDING
-                : fieldOrders.get(fieldOrders.size() - 1).direction;
+    return (doc1, doc2) -> {
+      // Add implicit sorting by name, using the last specified direction.
+      ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
+      Direction lastDirection =
+          fieldOrders.isEmpty()
+              ? Direction.ASCENDING
+              : fieldOrders.get(fieldOrders.size() - 1).direction;
 
-        List<FieldOrder> orderBys = new ArrayList<>(fieldOrders);
-        orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID.toProto(), lastDirection));
+      List<FieldOrder> orderBys = new ArrayList<>(fieldOrders);
+      orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID.toProto(), lastDirection));
 
-        for (FieldOrder orderBy : orderBys) {
-          int comp;
+      for (FieldOrder orderBy : orderBys) {
+        int comp;
 
-          String path = orderBy.fieldReference.getFieldPath();
-          if (FieldPath.isDocumentId(path)) {
-            comp =
-                doc1.getReference()
-                    .getResourcePath()
-                    .compareTo(doc2.getReference().getResourcePath());
-          } else {
-            FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
-            Preconditions.checkState(
-                doc1.contains(fieldPath) && doc2.contains(fieldPath),
-                "Can only compare fields that exist in the DocumentSnapshot."
-                    + " Please include the fields you are ordering on in your select() call.");
-            Value v1 = doc1.extractField(fieldPath);
-            Value v2 = doc2.extractField(fieldPath);
+        String path = orderBy.fieldReference.getFieldPath();
+        if (FieldPath.isDocumentId(path)) {
+          comp =
+              doc1.getReference()
+                  .getResourcePath()
+                  .compareTo(doc2.getReference().getResourcePath());
+        } else {
+          FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+          Preconditions.checkState(
+              doc1.contains(fieldPath) && doc2.contains(fieldPath),
+              "Can only compare fields that exist in the DocumentSnapshot."
+                  + " Please include the fields you are ordering on in your select() call.");
+          Value v1 = doc1.extractField(fieldPath);
+          Value v2 = doc2.extractField(fieldPath);
 
-            comp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
-          }
-
-          if (comp != 0) {
-            int direction = orderBy.direction.equals(Direction.ASCENDING) ? 1 : -1;
-            return direction * comp;
-          }
+          comp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
         }
 
-        return 0;
+        if (comp != 0) {
+          int direction = orderBy.direction.equals(Direction.ASCENDING) ? 1 : -1;
+          return direction * comp;
+        }
       }
+
+      return 0;
     };
   }
 
