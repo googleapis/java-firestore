@@ -129,7 +129,8 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
                   .setMessage(exception.getMessage());
           BatchWriteResponse.Builder responseBuilder = BatchWriteResponse.newBuilder();
           for (int i = 0; i < pendingOperations.size(); ++i) {
-            responseBuilder.addWriteResults(com.google.firestore.v1.WriteResult.getDefaultInstance());
+            responseBuilder.addWriteResults(
+                com.google.firestore.v1.WriteResult.getDefaultInstance());
             responseBuilder.addStatus(status);
           }
           return responseBuilder.build();
