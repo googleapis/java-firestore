@@ -127,12 +127,12 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
               com.google.rpc.Status.newBuilder()
                   .setCode(exception.getStatusCode().getCode().ordinal())
                   .setMessage(exception.getMessage());
-          BatchWriteResponse.Builder response1 = BatchWriteResponse.newBuilder();
+          BatchWriteResponse.Builder responseBuilder = BatchWriteResponse.newBuilder();
           for (int i = 0; i < pendingOperations.size(); ++i) {
-            response1.addWriteResults(com.google.firestore.v1.WriteResult.getDefaultInstance());
-            response1.addStatus(status);
+            responseBuilder.addWriteResults(com.google.firestore.v1.WriteResult.getDefaultInstance());
+            responseBuilder.addStatus(status);
           }
-          return response1.build();
+          return responseBuilder.build();
         },
         MoreExecutors.directExecutor());
   }
