@@ -116,7 +116,7 @@ class TransactionRunner<T> {
   private ApiFuture<Void> maybeRollback() {
     return transaction.hasTransactionId()
         ? transaction.rollback()
-        : ApiFutures.<Void>immediateFuture(null);
+        : ApiFutures.immediateFuture(null);
   }
 
   /** A callback that invokes the BeginTransaction callback. */
@@ -126,11 +126,8 @@ class TransactionRunner<T> {
       final SettableApiFuture<Void> backoff = SettableApiFuture.create();
       // Add a backoff delay. At first, this is 0.
       firestoreExecutor.schedule(
-          new Runnable() {
-            @Override
-            public void run() {
-              backoff.set(null);
-            }
+          () -> {
+            backoff.set(null);
           },
           nextBackoffAttempt.getRandomizedRetryDelay().toMillis(),
           TimeUnit.MILLISECONDS);
@@ -148,30 +145,27 @@ class TransactionRunner<T> {
     final SettableApiFuture<T> returnedResult = SettableApiFuture.create();
 
     userCallbackExecutor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            ApiFuture<T> userCallbackResult;
-            try {
-              userCallbackResult = userCallback.updateCallback(transaction);
-            } catch (Exception e) {
-              userCallbackResult = ApiFutures.immediateFailedFuture(e);
-            }
-            ApiFutures.addCallback(
-                userCallbackResult,
-                new ApiFutureCallback<T>() {
-                  @Override
-                  public void onFailure(Throwable t) {
-                    returnedResult.setException(t);
-                  }
-
-                  @Override
-                  public void onSuccess(T result) {
-                    returnedResult.set(result);
-                  }
-                },
-                firestoreExecutor);
+        () -> {
+          ApiFuture<T> userCallbackResult;
+          try {
+            userCallbackResult = userCallback.updateCallback(transaction);
+          } catch (Exception e) {
+            userCallbackResult = ApiFutures.immediateFailedFuture(e);
           }
+          ApiFutures.addCallback(
+              userCallbackResult,
+              new ApiFutureCallback<T>() {
+                @Override
+                public void onFailure(Throwable t) {
+                  returnedResult.setException(t);
+                }
+
+                @Override
+                public void onSuccess(T result) {
+                  returnedResult.set(result);
+                }
+              },
+              firestoreExecutor);
         });
     return returnedResult;
   }
@@ -289,13 +283,7 @@ class TransactionRunner<T> {
         transaction
             .rollback()
             .addListener(
-                new Runnable() {
-                  @Override
-                  public void run() {
-                    failedTransaction.setException(throwable);
-                  }
-                },
-                MoreExecutors.directExecutor());
+                () -> failedTransaction.setException(throwable), MoreExecutors.directExecutor());
       } else {
         failedTransaction.setException(throwable);
       }

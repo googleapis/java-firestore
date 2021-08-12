@@ -52,10 +52,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class FirestoreBundleTest {
   private static final String TEST_BUNDLE_ID = "test-bundle";
   private static final int TEST_BUNDLE_VERSION = 1;
-  private static JsonFormat.Parser parser = JsonFormat.parser();
+  private static final JsonFormat.Parser parser = JsonFormat.parser();
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
@@ -189,7 +189,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.<String>newArrayList(),
+        Lists.newArrayList(),
         UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 
@@ -239,9 +239,7 @@ public class FirestoreBundleTest {
     FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
     QuerySnapshot snapshot =
         QuerySnapshot.withDocuments(
-            query,
-            SINGLE_FIELD_SNAPSHOT.getReadTime(),
-            Lists.<QueryDocumentSnapshot>newArrayList());
+            query, SINGLE_FIELD_SNAPSHOT.getReadTime(), Lists.newArrayList());
     bundleBuilder.add("test-query", snapshot);
     ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
 
@@ -284,7 +282,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.<String>newArrayList(),
+        Lists.newArrayList(),
         SINGLE_FIELD_SNAPSHOT);
 
     bundleBuilder.add(UPDATED_SINGLE_FIELD_SNAPSHOT);
@@ -303,7 +301,7 @@ public class FirestoreBundleTest {
         elements.get(1).getDocumentMetadata(),
         elements.get(2).getDocument(),
         DOCUMENT_NAME,
-        Lists.<String>newArrayList(),
+        Lists.newArrayList(),
         UPDATED_SINGLE_FIELD_SNAPSHOT);
   }
 

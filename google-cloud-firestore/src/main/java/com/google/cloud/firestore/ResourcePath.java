@@ -44,7 +44,7 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
    * @param databaseName The Firestore database name.
    */
   static ResourcePath create(DatabaseRootName databaseName) {
-    return new AutoValue_ResourcePath(ImmutableList.<String>of(), databaseName);
+    return new AutoValue_ResourcePath(ImmutableList.of(), databaseName);
   }
 
   /**
@@ -185,11 +185,6 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
   }
 
   public static Comparator<ResourcePath> comparator() {
-    return new Comparator<ResourcePath>() {
-      @Override
-      public int compare(ResourcePath left, ResourcePath right) {
-        return left.compareTo(right);
-      }
-    };
+    return Comparator.naturalOrder();
   }
 }

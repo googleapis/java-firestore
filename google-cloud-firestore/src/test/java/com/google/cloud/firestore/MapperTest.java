@@ -45,7 +45,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -56,7 +55,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class MapperTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
@@ -1098,26 +1097,23 @@ public class MapperTest {
 
     // Int
     BigDecimalBean beanInt =
-        deserialize(Collections.<String, Object>singletonMap("value", 1), BigDecimalBean.class);
+        deserialize(Collections.singletonMap("value", 1), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1), beanInt.value);
 
     // Long
     BigDecimalBean beanLong =
-        deserialize(
-            Collections.<String, Object>singletonMap("value", 1234567890123L),
-            BigDecimalBean.class);
+        deserialize(Collections.singletonMap("value", 1234567890123L), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1234567890123L), beanLong.value);
 
     // Double
     BigDecimalBean beanDouble =
-        deserialize(Collections.<String, Object>singletonMap("value", 1.1), BigDecimalBean.class);
+        deserialize(Collections.singletonMap("value", 1.1), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1.1), beanDouble.value);
 
     // BigDecimal
     BigDecimalBean beanBigDecimal =
         deserialize(
-            Collections.<String, Object>singletonMap("value", BigDecimal.valueOf(1.2)),
-            BigDecimalBean.class);
+            Collections.singletonMap("value", BigDecimal.valueOf(1.2)), BigDecimalBean.class);
     assertEquals(BigDecimal.valueOf(1.2), beanBigDecimal.value);
 
     // Boolean
@@ -1141,13 +1137,11 @@ public class MapperTest {
     assertEquals(1.1, beanFloat.value, EPSILON);
 
     // Int
-    FloatBean beanInt =
-        deserialize(Collections.<String, Object>singletonMap("value", 1), FloatBean.class);
+    FloatBean beanInt = deserialize(Collections.singletonMap("value", 1), FloatBean.class);
     assertEquals(1, beanInt.value, EPSILON);
     // Long
     FloatBean beanLong =
-        deserialize(
-            Collections.<String, Object>singletonMap("value", 1234567890123L), FloatBean.class);
+        deserialize(Collections.singletonMap("value", 1234567890123L), FloatBean.class);
     assertEquals((float) 1234567890123L, beanLong.value, EPSILON);
 
     // Boolean
@@ -1245,12 +1239,7 @@ public class MapperTest {
     Throwable exception =
         assertThrows(
             RuntimeException.class,
-            new ThrowingRunnable() {
-              @Override
-              public void run() throws Throwable {
-                deserialize("{'value': {'foo': 'bar'}}", StringBean.class);
-              }
-            });
+            () -> deserialize("{'value': {'foo': 'bar'}}", StringBean.class));
     assertTrue(exception.getMessage().matches(expectedExceptionMessage));
   }
 
@@ -1259,12 +1248,7 @@ public class MapperTest {
     assertExceptionContains(
         "Failed to convert value of type java.util.ArrayList to String"
             + " (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': ['foo']}", StringBean.class);
-          }
-        });
+        () -> deserialize("{'value': ['foo']}", StringBean.class));
   }
 
   @Test
@@ -1288,12 +1272,7 @@ public class MapperTest {
     assertExceptionContains(
         "No properties to serialize found on class "
             + "com.google.cloud.firestore.MapperTest$PackageFieldBean",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", PackageFieldBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", PackageFieldBean.class));
   }
 
   @Test
@@ -1301,12 +1280,7 @@ public class MapperTest {
     assertExceptionContains(
         "No properties to serialize found on class "
             + "com.google.cloud.firestore.MapperTest$PrivateFieldBean",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", PrivateFieldBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", PrivateFieldBean.class));
   }
 
   @Test
@@ -1336,12 +1310,8 @@ public class MapperTest {
     assertExceptionContains(
         "No setter/field for unknown found on class "
             + "com.google.cloud.firestore.MapperTest$ThrowOnUnknownPropertiesBean",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo', 'unknown': 'bar'}", ThrowOnUnknownPropertiesBean.class);
-          }
-        });
+        () ->
+            deserialize("{'value': 'foo', 'unknown': 'bar'}", ThrowOnUnknownPropertiesBean.class));
   }
 
   @Test
@@ -1349,12 +1319,7 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$TwoSetterBean has multiple setter "
             + "overloads",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", TwoSetterBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", TwoSetterBean.class));
   }
 
   @Test
@@ -1429,12 +1394,7 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$CaseSensitiveSetterBean1 has "
             + "multiple setter overloads",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", CaseSensitiveSetterBean1.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", CaseSensitiveSetterBean1.class));
   }
 
   @Test
@@ -1442,12 +1402,7 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$CaseSensitiveSetterBean2 has "
             + "multiple setter overloads",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", CaseSensitiveSetterBean2.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", CaseSensitiveSetterBean2.class));
   }
 
   @Test
@@ -1473,12 +1428,7 @@ public class MapperTest {
     assertExceptionContains(
         "Found setter on com.google.cloud.firestore.MapperTest$CaseSensitiveSetterBean6 "
             + "with invalid case-sensitive name: setVaLUE",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", CaseSensitiveSetterBean6.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", CaseSensitiveSetterBean6.class));
   }
 
   @Test
@@ -1569,12 +1519,7 @@ public class MapperTest {
     assertExceptionContains(
         "Only Maps with string keys are supported, but found Map with key type class "
             + "java.lang.Integer (found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'values': {'1': 'bar'}}", IllegalKeyMapBean.class);
-          }
-        });
+        () -> deserialize("{'values': {'1': 'bar'}}", IllegalKeyMapBean.class));
   }
 
   @Test
@@ -1654,12 +1599,7 @@ public class MapperTest {
     assertExceptionContains(
         "No properties to serialize found on class "
             + "com.google.cloud.firestore.MapperTest$PrivateFieldBean",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1669,12 +1609,7 @@ public class MapperTest {
     assertExceptionContains(
         "No properties to serialize found on class "
             + "com.google.cloud.firestore.MapperTest$PackageFieldBean",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1702,13 +1637,7 @@ public class MapperTest {
   @Test
   public void deserializeGetterBeanWithNoBackingFieldThrows() {
     assertExceptionContains(
-        "No setter/field",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", GetterBeanNoField.class);
-          }
-        });
+        "No setter/field", () -> deserialize("{'value': 'foo'}", GetterBeanNoField.class));
   }
 
   @Test
@@ -1724,12 +1653,7 @@ public class MapperTest {
     bean.valueCase = "foo";
     assertExceptionContains(
         "Found two getters or fields with conflicting case sensitivity for property: valuecase",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1778,7 +1702,7 @@ public class MapperTest {
   @Test
   public void serializingMapsWorks() {
     MapBean bean = new MapBean();
-    bean.values = new HashMap<String, String>();
+    bean.values = new HashMap<>();
     bean.values.put("foo", "bar");
     assertJson("{'values': {'foo': 'bar'}}", serialize(bean));
   }
@@ -1847,26 +1771,14 @@ public class MapperTest {
 
     assertExceptionContains(
         "Maps with non-string keys are not supported (found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
   public void twoGettersThrows() {
     final TwoGetterBean bean = new TwoGetterBean();
     bean.value = "foo";
-    assertExceptionContains(
-        "Found conflicting getters",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+    assertExceptionContains("Found conflicting getters", () -> serialize(bean));
   }
 
   @Test
@@ -1939,12 +1851,7 @@ public class MapperTest {
     bean.value = 1;
     assertExceptionContains(
         "Numbers of type Short are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1953,12 +1860,7 @@ public class MapperTest {
     bean.value = 1;
     assertExceptionContains(
         "Numbers of type Byte are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1967,12 +1869,7 @@ public class MapperTest {
     bean.value = 1;
     assertExceptionContains(
         "Characters are not supported, please use Strings (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1982,12 +1879,7 @@ public class MapperTest {
     assertExceptionContains(
         "Serializing Arrays is not supported, please use Lists instead "
             + "(found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -1997,60 +1889,35 @@ public class MapperTest {
     assertExceptionContains(
         "Serializing Arrays is not supported, please use Lists instead "
             + "(found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
   public void shortsCantBeDeserialized() {
     assertExceptionContains(
         "Deserializing values to short is not supported (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 1}", ShortBean.class);
-          }
-        });
+        () -> deserialize("{'value': 1}", ShortBean.class));
   }
 
   @Test
   public void bytesCantBeDeserialized() {
     assertExceptionContains(
         "Deserializing values to byte is not supported (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 1}", ByteBean.class);
-          }
-        });
+        () -> deserialize("{'value': 1}", ByteBean.class));
   }
 
   @Test
   public void charsCantBeDeserialized() {
     assertExceptionContains(
         "Deserializing values to char is not supported (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': '1'}", CharBean.class);
-          }
-        });
+        () -> deserialize("{'value': '1'}", CharBean.class));
   }
 
   @Test
   public void intArraysCantBeDeserialized() {
     assertExceptionContains(
         "Converting to Arrays is not supported, please use Lists instead (found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'values': [1]}", IntArrayBean.class);
-          }
-        });
+        () -> deserialize("{'values': [1]}", IntArrayBean.class));
   }
 
   @Test
@@ -2058,12 +1925,7 @@ public class MapperTest {
     assertExceptionContains(
         "Could not deserialize object. Converting to Arrays is not supported, please use Lists "
             + "instead (found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'values': ['foo']}", StringArrayBean.class);
-          }
-        });
+        () -> deserialize("{'values': ['foo']}", StringArrayBean.class));
   }
 
   @Test
@@ -2083,21 +1945,14 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$ArgConstructorBean does not define "
             + "a no-argument constructor.",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", ArgConstructorBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", ArgConstructorBean.class));
   }
 
   @Test
   public void packageConstructorCanBeDeserialized() {
     Timestamp timestamp = Timestamp.now();
     PackageConstructorBean bean =
-        deserialize(
-            Collections.<String, Object>singletonMap("value", timestamp),
-            PackageConstructorBean.class);
+        deserialize(Collections.singletonMap("value", timestamp), PackageConstructorBean.class);
     assertEquals(timestamp, bean.value);
   }
 
@@ -2147,12 +2002,7 @@ public class MapperTest {
     assertExceptionContains(
         "Class java.util.List has generic type parameters, please use GenericTypeIndicator "
             + "instead",
-        new Runnable() {
-          @Override
-          public void run() {
-            convertToCustomClass(Collections.singletonList("foo"), List.class);
-          }
-        });
+        () -> convertToCustomClass(Collections.singletonList("foo"), List.class));
   }
 
   @Test
@@ -2160,48 +2010,27 @@ public class MapperTest {
     assertExceptionContains(
         "Class java.util.Map has generic type parameters, please use GenericTypeIndicator "
             + "instead",
-        new Runnable() {
-          @Override
-          public void run() {
-            convertToCustomClass(Collections.singletonMap("foo", "bar"), Map.class);
-          }
-        });
+        () -> convertToCustomClass(Collections.singletonMap("foo", "bar"), Map.class));
   }
 
   @Test
   public void passingInCharacterTopLevelThrows() {
     assertExceptionContains(
         "Deserializing values to Character is not supported",
-        new Runnable() {
-          @Override
-          public void run() {
-            convertToCustomClass('1', Character.class);
-          }
-        });
+        () -> convertToCustomClass('1', Character.class));
   }
 
   @Test
   public void passingInShortTopLevelThrows() {
     assertExceptionContains(
         "Deserializing values to Short is not supported",
-        new Runnable() {
-          @Override
-          public void run() {
-            convertToCustomClass(1, Short.class);
-          }
-        });
+        () -> convertToCustomClass(1, Short.class));
   }
 
   @Test
   public void passingInByteTopLevelThrows() {
     assertExceptionContains(
-        "Deserializing values to Byte is not supported",
-        new Runnable() {
-          @Override
-          public void run() {
-            convertToCustomClass(1, Byte.class);
-          }
-        });
+        "Deserializing values to Byte is not supported", () -> convertToCustomClass(1, Byte.class));
   }
 
   @Test
@@ -2209,12 +2038,7 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$GenericBean has generic type "
             + "parameters, please use GenericTypeIndicator instead",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", GenericBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", GenericBean.class));
   }
 
   @Test
@@ -2231,24 +2055,14 @@ public class MapperTest {
     assertExceptionContains(
         "Serializing Collections is not supported, please use Lists instead "
             + "(found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
   public void collectionsCantBeDeserialized() {
     assertExceptionContains(
         "Collections are not supported, please use Lists instead (found in field 'values')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'values': ['foo']}", CollectionBean.class);
-          }
-        });
+        () -> deserialize("{'values': ['foo']}", CollectionBean.class));
   }
 
   @Test
@@ -2291,12 +2105,7 @@ public class MapperTest {
   public void deserializingWrongTypeThrows() {
     assertExceptionContains(
         "Failed to convert a value of type java.lang.String to int (found in field 'value')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'value': 'foo'}", WrongTypeBean.class);
-          }
-        });
+        () -> deserialize("{'value': 'foo'}", WrongTypeBean.class));
   }
 
   @Test
@@ -2320,7 +2129,7 @@ public class MapperTest {
             ExcludedBean.class);
     assertEquals("no-value", bean.excludedField);
     assertEquals("no-value", bean.excludedGetter);
-    assertEquals("foo", bean.includedGetter);
+    assertEquals("foo", bean.getIncludedGetter());
   }
 
   @Test
@@ -2415,12 +2224,7 @@ public class MapperTest {
     assertExceptionContains(
         "Could not find enum value of com.google.cloud.firestore.MapperTest$SimpleEnum for "
             + "value \"Unavailable\" (found in field 'enumField')",
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize(json, EnumBean.class);
-          }
-        });
+        () -> deserialize(json, EnumBean.class));
   }
 
   @Test
@@ -2495,12 +2299,7 @@ public class MapperTest {
     assertExceptionContains(
         "Found conflicting setters with name: setValue (conflicts with setValue defined on "
             + "com.google.cloud.firestore.MapperTest$ConflictingSetterSubBean)",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -2510,12 +2309,7 @@ public class MapperTest {
     assertExceptionContains(
         "Found conflicting setters with name: setValue (conflicts with setValue defined on "
             + "com.google.cloud.firestore.MapperTest$ConflictingSetterSubBean2)",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -2540,12 +2334,7 @@ public class MapperTest {
     assertExceptionContains(
         "Found conflicting setters with name: setValue (conflicts with setValue defined on "
             + "com.google.cloud.firestore.MapperTest$ConflictingGenericSetterSubBean)",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   // This should work, but generics and subclassing are tricky to get right. For now we will just
@@ -2555,13 +2344,10 @@ public class MapperTest {
     assertExceptionContains(
         "Class com.google.cloud.firestore.MapperTest$NonConflictingGenericSetterSubBean "
             + "has multiple setter overloads",
-        new Runnable() {
-          @Override
-          public void run() {
-            NonConflictingGenericSetterSubBean bean =
-                deserialize("{'value': 'value'}", NonConflictingGenericSetterSubBean.class);
-            assertEquals("subsetter:value", bean.value);
-          }
+        () -> {
+          NonConflictingGenericSetterSubBean bean =
+              deserialize("{'value': 'value'}", NonConflictingGenericSetterSubBean.class);
+          assertEquals("subsetter:value", bean.value);
         });
   }
 
@@ -2572,12 +2358,7 @@ public class MapperTest {
     // It's sufficient to verify it's a RuntimeException since StackOverflowException is not.
     assertExceptionContains(
         "Exceeded maximum depth of 500, which likely indicates there's an object cycle",
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+        () -> serialize(bean));
   }
 
   @Test
@@ -2619,7 +2400,7 @@ public class MapperTest {
   }
 
   private static class GetterWithDocumentIdOnWrongTypeBean {
-    private int intField = 100;
+    private final int intField = 100;
 
     @DocumentId
     public int getIntField() {
@@ -2637,55 +2418,22 @@ public class MapperTest {
   public void documentIdAnnotateWrongTypeThrows() {
     final String expectedErrorMessage = "instead of String or DocumentReference";
     assertExceptionContains(
-        expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(new FieldWithDocumentIdOnWrongTypeBean());
-          }
-        });
+        expectedErrorMessage, () -> serialize(new FieldWithDocumentIdOnWrongTypeBean()));
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'intField': 1}", FieldWithDocumentIdOnWrongTypeBean.class);
-          }
-        });
+        () -> deserialize("{'intField': 1}", FieldWithDocumentIdOnWrongTypeBean.class));
 
     assertExceptionContains(
-        expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(new GetterWithDocumentIdOnWrongTypeBean());
-          }
-        });
+        expectedErrorMessage, () -> serialize(new GetterWithDocumentIdOnWrongTypeBean()));
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'intField': 1}", GetterWithDocumentIdOnWrongTypeBean.class);
-          }
-        });
+        () -> deserialize("{'intField': 1}", GetterWithDocumentIdOnWrongTypeBean.class));
 
     assertExceptionContains(
-        expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(new PropertyWithDocumentIdOnWrongTypeBean());
-          }
-        });
+        expectedErrorMessage, () -> serialize(new PropertyWithDocumentIdOnWrongTypeBean()));
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'intField': 1}", PropertyWithDocumentIdOnWrongTypeBean.class);
-          }
-        });
+        () -> deserialize("{'intField': 1}", PropertyWithDocumentIdOnWrongTypeBean.class));
   }
 
   private static class GetterWithoutBackingFieldOnDocumentIdBean {
@@ -2701,24 +2449,12 @@ public class MapperTest {
     // Serialization.
     final GetterWithoutBackingFieldOnDocumentIdBean bean =
         new GetterWithoutBackingFieldOnDocumentIdBean();
-    assertExceptionContains(
-        expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            serialize(bean);
-          }
-        });
+    assertExceptionContains(expectedErrorMessage, () -> serialize(bean));
 
     // Deserialization.
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'docId': 'id'}", GetterWithoutBackingFieldOnDocumentIdBean.class);
-          }
-        });
+        () -> deserialize("{'docId': 'id'}", GetterWithoutBackingFieldOnDocumentIdBean.class));
   }
 
   private static class DocumentIdOnStringField {
@@ -2779,10 +2515,7 @@ public class MapperTest {
 
     assertEquals(
         "doc123",
-        deserialize(
-                Collections.<String, Object>singletonMap("property", 100),
-                DocumentIdOnStringField.class,
-                ref)
+        deserialize(Collections.singletonMap("property", 100), DocumentIdOnStringField.class, ref)
             .docId);
 
     DocumentIdOnStringFieldAsProperty target =
@@ -2847,35 +2580,22 @@ public class MapperTest {
 
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
-            deserialize("{'docId': 'toBeOverwritten'}", DocumentIdOnStringField.class, ref);
-          }
-        });
+        () -> deserialize("{'docId': 'toBeOverwritten'}", DocumentIdOnStringField.class, ref));
 
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
+        () ->
             deserialize(
                 "{'docIdProperty': 'toBeOverwritten', 'anotherProperty': 100}",
                 DocumentIdOnStringFieldAsProperty.class,
-                ref);
-          }
-        });
+                ref));
 
     assertExceptionContains(
         expectedErrorMessage,
-        new Runnable() {
-          @Override
-          public void run() {
+        () ->
             deserialize(
                 "{'nestedDocIdHolder': {'docId': 'toBeOverwritten'}}",
                 DocumentIdOnNestedObjects.class,
-                ref);
-          }
-        });
+                ref));
   }
 }

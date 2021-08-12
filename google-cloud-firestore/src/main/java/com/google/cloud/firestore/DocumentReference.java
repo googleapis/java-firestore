@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
@@ -131,12 +130,7 @@ public class DocumentReference {
   private <T> ApiFuture<T> extractFirst(ApiFuture<List<T>> results) {
     return ApiFutures.transform(
         results,
-        new ApiFunction<List<T>, T>() {
-          @Override
-          public T apply(List<T> results) {
-            return results.isEmpty() ? null : results.get(0);
-          }
-        },
+        results1 -> results1.isEmpty() ? null : results1.get(0),
         MoreExecutors.directExecutor());
   }
 
@@ -436,26 +430,22 @@ public class DocumentReference {
     return Watch.forDocument(this)
         .runWatch(
             executor,
-            new EventListener<QuerySnapshot>() {
-              @Override
-              public void onEvent(
-                  @Nullable QuerySnapshot value, @Nullable FirestoreException error) {
-                if (value == null) {
-                  listener.onEvent(null, error);
+            (value, error) -> {
+              if (value == null) {
+                listener.onEvent(null, error);
+                return;
+              }
+
+              for (DocumentSnapshot doc : value) {
+                if (doc.getReference().equals(DocumentReference.this)) {
+                  listener.onEvent(value.getDocuments().get(0), null);
                   return;
                 }
-
-                for (DocumentSnapshot doc : value) {
-                  if (doc.getReference().equals(DocumentReference.this)) {
-                    listener.onEvent(value.getDocuments().get(0), null);
-                    return;
-                  }
-                }
-                listener.onEvent(
-                    DocumentSnapshot.fromMissing(
-                        rpcContext, DocumentReference.this, value.getReadTime()),
-                    null);
               }
+              listener.onEvent(
+                  DocumentSnapshot.fromMissing(
+                      rpcContext, DocumentReference.this, value.getReadTime()),
+                  null);
             });
   }
 

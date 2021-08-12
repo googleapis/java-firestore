@@ -36,7 +36,7 @@ public class ImmutableSortedMapIterator<K, V> implements Iterator<Map.Entry<K, V
 
   ImmutableSortedMapIterator(
       LLRBNode<K, V> root, K startKey, Comparator<K> comparator, boolean isReverse) {
-    this.nodeStack = new Stack<LLRBValueNode<K, V>>();
+    this.nodeStack = new Stack<>();
     this.isReverse = isReverse;
 
     LLRBNode<K, V> node = root;
@@ -81,7 +81,7 @@ public class ImmutableSortedMapIterator<K, V> implements Iterator<Map.Entry<K, V
   public Map.Entry<K, V> next() {
     try {
       final LLRBValueNode<K, V> node = nodeStack.pop();
-      Map.Entry<K, V> entry = new AbstractMap.SimpleEntry<K, V>(node.getKey(), node.getValue());
+      Map.Entry<K, V> entry = new AbstractMap.SimpleEntry<>(node.getKey(), node.getValue());
       if (this.isReverse) {
         LLRBNode<K, V> next = node.getLeft();
         while (!next.isEmpty()) {

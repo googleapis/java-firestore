@@ -28,7 +28,7 @@ import java.util.Map;
 
 @InternalApi
 public class Internal {
-  private FirestoreImpl firestore;
+  private final FirestoreImpl firestore;
 
   @InternalApi
   public Internal(FirestoreImpl firestore) {

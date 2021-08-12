@@ -54,7 +54,6 @@ import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.Status;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
@@ -70,7 +69,6 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -78,7 +76,7 @@ import org.mockito.stubbing.Answer;
 public class QueryTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
@@ -312,9 +310,7 @@ public class QueryTest {
             Matchers.<ServerStreamingCallable>any());
 
     query
-        .whereIn(
-            FieldPath.documentId(),
-            Arrays.<Object>asList("doc", firestoreMock.document("coll/doc")))
+        .whereIn(FieldPath.documentId(), Arrays.asList("doc", firestoreMock.document("coll/doc")))
         .get()
         .get();
 
@@ -377,7 +373,7 @@ public class QueryTest {
     }
 
     try {
-      query.whereIn(FieldPath.documentId(), Arrays.<Object>asList()).get();
+      query.whereIn(FieldPath.documentId(), Arrays.asList()).get();
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals(
@@ -396,8 +392,7 @@ public class QueryTest {
 
     query
         .whereNotIn(
-            FieldPath.documentId(),
-            Arrays.<Object>asList("doc", firestoreMock.document("coll/doc")))
+            FieldPath.documentId(), Arrays.asList("doc", firestoreMock.document("coll/doc")))
         .get()
         .get();
 
@@ -427,7 +422,7 @@ public class QueryTest {
     }
 
     try {
-      query.whereNotIn(FieldPath.documentId(), Arrays.<Object>asList()).get();
+      query.whereNotIn(FieldPath.documentId(), Arrays.asList()).get();
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals(
@@ -933,21 +928,20 @@ public class QueryTest {
     final boolean[] returnError = new boolean[] {true};
 
     doAnswer(
-            new Answer<RunQueryResponse>() {
-              public RunQueryResponse answer(InvocationOnMock invocation) throws Throwable {
-                if (returnError[0]) {
-                  returnError[0] = false;
-                  return queryResponse(
-                          FirestoreException.forServerRejection(
-                              Status.DEADLINE_EXCEEDED, "Simulated test failure"),
-                          DOCUMENT_NAME + "1",
-                          DOCUMENT_NAME + "2")
-                      .answer(invocation);
-                } else {
-                  return queryResponse(DOCUMENT_NAME + "3").answer(invocation);
-                }
-              }
-            })
+            (Answer<RunQueryResponse>)
+                invocation -> {
+                  if (returnError[0]) {
+                    returnError[0] = false;
+                    return queryResponse(
+                            FirestoreException.forServerRejection(
+                                Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                            DOCUMENT_NAME + "1",
+                            DOCUMENT_NAME + "2")
+                        .answer(invocation);
+                  } else {
+                    return queryResponse(DOCUMENT_NAME + "3").answer(invocation);
+                  }
+                })
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
@@ -1111,18 +1105,15 @@ public class QueryTest {
         Proxy.newProxyInstance(
             QueryTest.class.getClassLoader(),
             new Class[] {Firestore.class, FirestoreRpcContext.class},
-            new InvocationHandler() {
-              @Override
-              public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                // use the reflection lookup of the method name so intellij will refactor it along
-                // with the method name if it ever happens.
-                Method getDatabaseNameMethod =
-                    FirestoreRpcContext.class.getDeclaredMethod("getDatabaseName");
-                if (method.equals(getDatabaseNameMethod)) {
-                  return "projects/test-project/databases/(default)";
-                } else {
-                  return null;
-                }
+            (proxy, method, args) -> {
+              // use the reflection lookup of the method name so intellij will refactor it along
+              // with the method name if it ever happens.
+              Method getDatabaseNameMethod =
+                  FirestoreRpcContext.class.getDeclaredMethod("getDatabaseName");
+              if (method.equals(getDatabaseNameMethod)) {
+                return "projects/test-project/databases/(default)";
+              } else {
+                return null;
               }
             });
 

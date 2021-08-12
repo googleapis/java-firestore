@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 /** A FieldMask can be used to limit the number of fields returned by a `getAll()` call. */
 public final class FieldMask {
-  static final FieldMask EMPTY_MASK = new FieldMask(new TreeSet<FieldPath>());
+  static final FieldMask EMPTY_MASK = new FieldMask(new TreeSet<>());
 
   private final SortedSet<FieldPath> fieldPaths; // Sorted for testing.
 

@@ -99,8 +99,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
                 .setExecutor(executor)
                 .setTransportChannel(transportChannel)
                 .setDefaultCallContext(GrpcCallContext.of(managedChannel, CallOptions.DEFAULT))
-                .setBackgroundResources(
-                    Collections.<BackgroundResource>singletonList(transportChannel))
+                .setBackgroundResources(Collections.singletonList(transportChannel))
                 .build();
       } else {
         FirestoreSettingsBuilder settingsBuilder =
@@ -126,12 +125,9 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         clientContext = ClientContext.create(settingsBuilder.build());
       }
       ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> retrySettingsSetter =
-          new ApiFunction<UnaryCallSettings.Builder<?, ?>, Void>() {
-            @Override
-            public Void apply(UnaryCallSettings.Builder<?, ?> builder) {
-              builder.setRetrySettings(options.getRetrySettings());
-              return null;
-            }
+          builder -> {
+            builder.setRetrySettings(options.getRetrySettings());
+            return null;
           };
       FirestoreStubSettings.Builder firestoreBuilder =
           FirestoreStubSettings.newBuilder(clientContext)

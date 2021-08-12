@@ -262,29 +262,29 @@ public final class RecursiveDelete {
     // Completes the future returned by run() and sets the exception if an error occurred.
     ApiFutures.transformAsync(
         ApiFutures.allAsList(pendingFutures),
-        new ApiAsyncFunction<List<Void>, Void>() {
-          public ApiFuture<Void> apply(List<Void> unused) {
-            synchronized (lock) {
-              if (lastError == null) {
-                completionFuture.set(null);
-              } else {
-                String message =
-                    errorCount
-                        + (errorCount != 1 ? " deletes" : " delete")
-                        + " failed. "
-                        + lastError.getMessage();
-                if (lastError instanceof FirestoreException) {
-                  lastError =
-                      new FirestoreException(message, ((FirestoreException) lastError).getStatus());
+        (ApiAsyncFunction<List<Void>, Void>)
+            unused -> {
+              synchronized (lock) {
+                if (lastError == null) {
+                  completionFuture.set(null);
                 } else {
-                  lastError = new Throwable(message, lastError);
+                  String message =
+                      errorCount
+                          + (errorCount != 1 ? " deletes" : " delete")
+                          + " failed. "
+                          + lastError.getMessage();
+                  if (lastError instanceof FirestoreException) {
+                    lastError =
+                        new FirestoreException(
+                            message, ((FirestoreException) lastError).getStatus());
+                  } else {
+                    lastError = new Throwable(message, lastError);
+                  }
+                  completionFuture.setException(lastError);
                 }
-                completionFuture.setException(lastError);
+                return ApiFutures.immediateFuture(null);
               }
-              return ApiFutures.immediateFuture(null);
-            }
-          }
-        },
+            },
         MoreExecutors.directExecutor());
   }
 
@@ -298,33 +298,28 @@ public final class RecursiveDelete {
         ApiFutures.catchingAsync(
             writer.delete(reference),
             Throwable.class,
-            new ApiAsyncFunction<Throwable, WriteResult>() {
-              public ApiFuture<WriteResult> apply(Throwable e) {
-                synchronized (lock) {
-                  errorCount++;
-                  lastError = e;
-                  return ApiFutures.immediateFuture(null);
-                }
+            e -> {
+              synchronized (lock) {
+                errorCount++;
+                lastError = e;
+                return ApiFutures.immediateFuture(null);
               }
             },
             MoreExecutors.directExecutor());
 
     return ApiFutures.transformAsync(
         catchingDeleteFuture,
-        new ApiAsyncFunction<WriteResult, Void>() {
-
-          public ApiFuture<Void> apply(WriteResult result) {
-            synchronized (lock) {
-              pendingOperationsCount--;
-              // We wait until the previous stream has ended in order to ensure the
-              // startAfter document is correct. Starting the next stream while
-              // there are pending operations allows Firestore to maximize
-              // BulkWriter throughput.
-              if (documentsPending && !streamInProgress && pendingOperationsCount < minPendingOps) {
-                streamDescendants();
-              }
-              return ApiFutures.immediateFuture(null);
+        result -> {
+          synchronized (lock) {
+            pendingOperationsCount--;
+            // We wait until the previous stream has ended in order to ensure the
+            // startAfter document is correct. Starting the next stream while
+            // there are pending operations allows Firestore to maximize
+            // BulkWriter throughput.
+            if (documentsPending && !streamInProgress && pendingOperationsCount < minPendingOps) {
+              streamDescendants();
             }
+            return ApiFutures.immediateFuture(null);
           }
         },
         MoreExecutors.directExecutor());

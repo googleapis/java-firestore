@@ -18,7 +18,6 @@ package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS;
 
-import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -59,7 +58,7 @@ public final class BulkWriter implements AutoCloseable {
      * @param result The result of the operation.
      */
     void onResult(DocumentReference documentReference, WriteResult result);
-  };
+  }
 
   /**
    * A callback set by `addWriteErrorListener()` to be run every time an operation fails and
@@ -132,24 +131,20 @@ public final class BulkWriter implements AutoCloseable {
   static final double DEFAULT_JITTER_FACTOR = 0.3;
 
   private static final WriteResultCallback DEFAULT_SUCCESS_LISTENER =
-      new WriteResultCallback() {
-        public void onResult(DocumentReference documentReference, WriteResult result) {}
-      };
+      (documentReference, result) -> {};
 
   private static final WriteErrorCallback DEFAULT_ERROR_LISTENER =
-      new WriteErrorCallback() {
-        public boolean onError(BulkWriterException error) {
-          if (error.getFailedAttempts() > MAX_RETRY_ATTEMPTS) {
-            return false;
-          }
-          Set<Code> codes = FirestoreSettings.newBuilder().batchWriteSettings().getRetryableCodes();
-          for (Code code : codes) {
-            if (code.equals(Code.valueOf(error.getStatus().getCode().name()))) {
-              return true;
-            }
-          }
+      error -> {
+        if (error.getFailedAttempts() > MAX_RETRY_ATTEMPTS) {
           return false;
         }
+        Set<Code> codes = FirestoreSettings.newBuilder().batchWriteSettings().getRetryableCodes();
+        for (Code code : codes) {
+          if (code.equals(Code.valueOf(error.getStatus().getCode().name()))) {
+            return true;
+          }
+        }
+        return false;
       };
 
   private static final Logger logger = Logger.getLogger(BulkWriter.class.getName());
@@ -295,13 +290,7 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
     return executeWrite(
-        documentReference,
-        OperationType.CREATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.create(documentReference, fields);
-          }
-        });
+        documentReference, OperationType.CREATE, batch -> batch.create(documentReference, fields));
   }
 
   /**
@@ -317,13 +306,7 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> create(
       @Nonnull final DocumentReference documentReference, @Nonnull final Object pojo) {
     return executeWrite(
-        documentReference,
-        OperationType.CREATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.create(documentReference, pojo);
-          }
-        });
+        documentReference, OperationType.CREATE, batch -> batch.create(documentReference, pojo));
   }
 
   /**
@@ -336,13 +319,7 @@ public final class BulkWriter implements AutoCloseable {
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull final DocumentReference documentReference) {
     return executeWrite(
-        documentReference,
-        OperationType.DELETE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.delete(documentReference);
-          }
-        });
+        documentReference, OperationType.DELETE, batch -> batch.delete(documentReference));
   }
 
   /**
@@ -360,11 +337,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.DELETE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.delete(documentReference, precondition);
-          }
-        });
+        batch -> batch.delete(documentReference, precondition));
   }
 
   /**
@@ -381,13 +354,7 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
     return executeWrite(
-        documentReference,
-        OperationType.SET,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.set(documentReference, fields);
-          }
-        });
+        documentReference, OperationType.SET, batch -> batch.set(documentReference, fields));
   }
 
   /**
@@ -409,11 +376,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.SET,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.set(documentReference, fields, options);
-          }
-        });
+        batch -> batch.set(documentReference, fields, options));
   }
 
   /**
@@ -433,13 +396,7 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final Object pojo,
       @Nonnull final SetOptions options) {
     return executeWrite(
-        documentReference,
-        OperationType.SET,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.set(documentReference, pojo, options);
-          }
-        });
+        documentReference, OperationType.SET, batch -> batch.set(documentReference, pojo, options));
   }
 
   /**
@@ -455,13 +412,7 @@ public final class BulkWriter implements AutoCloseable {
   public ApiFuture<WriteResult> set(
       @Nonnull final DocumentReference documentReference, @Nonnull final Object pojo) {
     return executeWrite(
-        documentReference,
-        OperationType.SET,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.set(documentReference, pojo);
-          }
-        });
+        documentReference, OperationType.SET, batch -> batch.set(documentReference, pojo));
   }
 
   /**
@@ -483,13 +434,7 @@ public final class BulkWriter implements AutoCloseable {
       @Nonnull final DocumentReference documentReference,
       @Nonnull final Map<String, Object> fields) {
     return executeWrite(
-        documentReference,
-        OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(documentReference, fields);
-          }
-        });
+        documentReference, OperationType.UPDATE, batch -> batch.update(documentReference, fields));
   }
 
   /**
@@ -515,11 +460,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(documentReference, fields, precondition);
-          }
-        });
+        batch -> batch.update(documentReference, fields, precondition));
   }
 
   /**
@@ -547,11 +488,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(documentReference, field, value, moreFieldsAndValues);
-          }
-        });
+        batch -> batch.update(documentReference, field, value, moreFieldsAndValues));
   }
 
   /**
@@ -579,11 +516,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(documentReference, fieldPath, value, moreFieldsAndValues);
-          }
-        });
+        batch -> batch.update(documentReference, fieldPath, value, moreFieldsAndValues));
   }
 
   /**
@@ -612,11 +545,7 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(documentReference, precondition, field, value, moreFieldsAndValues);
-          }
-        });
+        batch -> batch.update(documentReference, precondition, field, value, moreFieldsAndValues));
   }
 
   /**
@@ -646,12 +575,8 @@ public final class BulkWriter implements AutoCloseable {
     return executeWrite(
         documentReference,
         OperationType.UPDATE,
-        new ApiFunction<BulkCommitBatch, ApiFuture<WriteResult>>() {
-          public ApiFuture<WriteResult> apply(BulkCommitBatch batch) {
-            return batch.update(
-                documentReference, precondition, fieldPath, value, moreFieldsAndValues);
-          }
-        });
+        batch ->
+            batch.update(documentReference, precondition, fieldPath, value, moreFieldsAndValues));
   }
 
   /**
@@ -666,29 +591,20 @@ public final class BulkWriter implements AutoCloseable {
         new BulkWriterOperation(
             documentReference,
             operationType,
-            new ApiFunction<BulkWriterOperation, Void>() {
-              @Override
-              public Void apply(BulkWriterOperation operation) {
-                synchronized (lock) {
-                  sendOperationLocked(enqueueOperationOnBatchCallback, operation);
-                }
-                return null;
+            op -> {
+              synchronized (lock) {
+                sendOperationLocked(enqueueOperationOnBatchCallback, op);
+              }
+              return null;
+            },
+            writeResult -> {
+              synchronized (lock) {
+                return invokeUserSuccessCallbackLocked(documentReference, writeResult);
               }
             },
-            new ApiFunction<WriteResult, ApiFuture<Void>>() {
-              @Override
-              public ApiFuture<Void> apply(WriteResult writeResult) {
-                synchronized (lock) {
-                  return invokeUserSuccessCallbackLocked(documentReference, writeResult);
-                }
-              }
-            },
-            new ApiFunction<BulkWriterException, ApiFuture<Boolean>>() {
-              @Override
-              public ApiFuture<Boolean> apply(BulkWriterException e) {
-                synchronized (lock) {
-                  return invokeUserErrorCallbackLocked(e);
-                }
+            e -> {
+              synchronized (lock) {
+                return invokeUserErrorCallbackLocked(e);
               }
             });
 
@@ -701,12 +617,7 @@ public final class BulkWriter implements AutoCloseable {
       lastOperation =
           ApiFutures.transformAsync(
               lastOperation,
-              new ApiAsyncFunction<Void, Void>() {
-                @Override
-                public ApiFuture<Void> apply(Void aVoid) {
-                  return silenceFuture(operation.getFuture());
-                }
-              },
+              aVoid -> silenceFuture(operation.getFuture()),
               MoreExecutors.directExecutor());
 
       // Schedule the operation if the BulkWriter has fewer than the maximum number of allowed
@@ -716,13 +627,10 @@ public final class BulkWriter implements AutoCloseable {
         sendOperationLocked(enqueueOperationOnBatchCallback, operation);
       } else {
         bufferedOperations.add(
-            new Runnable() {
-              @Override
-              public void run() {
-                synchronized (lock) {
-                  pendingOpsCount++;
-                  sendOperationLocked(enqueueOperationOnBatchCallback, operation);
-                }
+            () -> {
+              synchronized (lock) {
+                pendingOpsCount++;
+                sendOperationLocked(enqueueOperationOnBatchCallback, operation);
               }
             });
       }
@@ -731,24 +639,20 @@ public final class BulkWriter implements AutoCloseable {
     ApiFuture<WriteResult> processedOperationFuture =
         ApiFutures.transformAsync(
             operation.getFuture(),
-            new ApiAsyncFunction<WriteResult, WriteResult>() {
-              public ApiFuture<WriteResult> apply(WriteResult result) throws Exception {
-                pendingOpsCount--;
-                processBufferedOperations();
-                return ApiFutures.immediateFuture(result);
-              }
+            result -> {
+              pendingOpsCount--;
+              processBufferedOperations();
+              return ApiFutures.immediateFuture(result);
             },
             MoreExecutors.directExecutor());
 
     return ApiFutures.catchingAsync(
         processedOperationFuture,
         ApiException.class,
-        new ApiAsyncFunction<ApiException, WriteResult>() {
-          public ApiFuture<WriteResult> apply(ApiException e) throws Exception {
-            pendingOpsCount--;
-            processBufferedOperations();
-            throw e;
-          }
+        e -> {
+          pendingOpsCount--;
+          processBufferedOperations();
+          throw e;
         },
         MoreExecutors.directExecutor());
   }
@@ -978,12 +882,9 @@ public final class BulkWriter implements AutoCloseable {
     final int backoffMsWithJitter = applyJitter(highestBackoffDuration);
 
     bulkWriterExecutor.schedule(
-        new Runnable() {
-          @Override
-          public void run() {
-            synchronized (lock) {
-              sendBatchLocked(pendingBatch, flush);
-            }
+        () -> {
+          synchronized (lock) {
+            sendBatchLocked(pendingBatch, flush);
           }
         },
         backoffMsWithJitter,
@@ -999,13 +900,10 @@ public final class BulkWriter implements AutoCloseable {
       batch
           .bulkCommit()
           .addListener(
-              new Runnable() {
-                @Override
-                public void run() {
-                  if (flush) {
-                    synchronized (lock) {
-                      scheduleCurrentBatchLocked(/* flush= */ true);
-                    }
+              () -> {
+                if (flush) {
+                  synchronized (lock) {
+                    scheduleCurrentBatchLocked(/* flush= */ true);
                   }
                 }
               },
@@ -1014,12 +912,9 @@ public final class BulkWriter implements AutoCloseable {
       long delayMs = rateLimiter.getNextRequestDelayMs(batch.getMutationsSize());
       logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
       bulkWriterExecutor.schedule(
-          new Runnable() {
-            @Override
-            public void run() {
-              synchronized (lock) {
-                sendBatchLocked(batch, flush);
-              }
+          () -> {
+            synchronized (lock) {
+              sendBatchLocked(batch, flush);
             }
           },
           delayMs,
@@ -1090,15 +985,12 @@ public final class BulkWriter implements AutoCloseable {
     final SettableApiFuture<Boolean> callbackResult = SettableApiFuture.create();
     final WriteErrorCallback listener = errorListener;
     errorExecutor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
-              boolean shouldRetry = listener.onError(error);
-              callbackResult.set(shouldRetry);
-            } catch (Exception e) {
-              callbackResult.setException(e);
-            }
+        () -> {
+          try {
+            boolean shouldRetry = listener.onError(error);
+            callbackResult.set(shouldRetry);
+          } catch (Exception e) {
+            callbackResult.setException(e);
           }
         });
     return callbackResult;
@@ -1110,15 +1002,12 @@ public final class BulkWriter implements AutoCloseable {
     final SettableApiFuture<Void> callbackResult = SettableApiFuture.create();
     final WriteResultCallback listener = successListener;
     successExecutor.execute(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
-              listener.onResult(documentReference, result);
-              callbackResult.set(null);
-            } catch (Exception e) {
-              callbackResult.setException(e);
-            }
+        () -> {
+          try {
+            listener.onResult(documentReference, result);
+            callbackResult.set(null);
+          } catch (Exception e) {
+            callbackResult.setException(e);
           }
         });
     return callbackResult;
