@@ -4,15 +4,15 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "e48f2f9d2404a054c6c9b6a946108999cea65dca"
+        "sha": "4e11844b0d75287985c46bb008608be7b28980c7"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "d9eaf41de44d953458b18712a3f240bb4c564e48",
-        "internalRef": "388535346"
+        "sha": "e1738ee972b49fd0c4d4718b035444495142b781",
+        "internalRef": "391407209"
       }
     },
     {
