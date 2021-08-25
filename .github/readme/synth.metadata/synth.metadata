@@ -4,14 +4,14 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "974f77b4eefb2b48bfb55e446019176ae78880e6"
+        "sha": "96341a3f2ffb457b52a8c1170c37f8127be5bcf6"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "8032ab5a32471d85ece8fc261df16cc40fbfa4fb"
+        "sha": "63cff634aabb85854caa511c5837ea6b45f42b4b"
       }
     }
   ]
