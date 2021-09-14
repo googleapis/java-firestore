@@ -102,8 +102,7 @@ public class RetrieveDataSnippetsIT extends BaseIntegrationTest {
     data.put("foo", "bar");
     db.document("cities/SF/landmarks/example").set(data).get();
 
-    Iterable<CollectionReference> collections =
-        retrieveDataSnippets.listCollections();
+    Iterable<CollectionReference> collections = retrieveDataSnippets.listCollections();
 
     List<CollectionReference> collectionList = new ArrayList<>();
     for (CollectionReference collRef : collections) {

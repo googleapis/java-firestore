@@ -1,0 +1,71 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+docker:
+  image: "gcr.io/repo-automation-bots/owlbot-java:latest"
+
+deep-remove-regex:
+- "/grpc-google-.*/src"
+- "/proto-google-.*/src"
+- "/google-cloud-firestore/src/main/java/com/google/cloud/firestore/v1/"
+- "/google-cloud-firestore-admin/src"
+
+deep-preserve-regex:
+- "/google-.*/src/test/java/com/google/cloud/.*/v.*/it/IT.*Test.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/BulkWriterTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/CollectionReferenceTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceConversions.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/ConformanceTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/DocumentReferenceTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/FirestoreBundleTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/FirestoreTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/ITBulkWriterTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/LocalFirestoreHelper.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/MapperTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/OrderTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/PartitionQuery.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/QueryTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/RateLimiterTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/RecursiveDeleteTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/TransactionTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/WatchTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/WriteBatchTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/it/ITQueryWatchTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/it/ITShutdownTest.java"
+- "/google-cloud-firestore/src/test/java/com/google/cloud/firestore/it/ITSystemTest.java"
+- "/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentPathName.java"
+- "/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/AnyPathName.java"
+- "/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DatabaseRootName.java"
+- "/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/DocumentRootName.java"
+- "/proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ParentName.java"
+- "/proto-google-cloud-firestore-v1/src/main/proto/firestore"
+
+
+
+
+deep-copy-regex:
+- source: "/google/firestore/(v\\d)/.*-java/proto-google-.*/src"
+  dest: "/owl-bot-staging/$1/proto-google-cloud-firestore-$1/src"
+- source: "/google/firestore/(v\\d)/.*-java/grpc-google-.*/src"
+  dest: "/owl-bot-staging/$1/grpc-google-cloud-firestore-$1/src"
+- source: "/google/firestore/(v\\d)/.*-java/gapic-google-.*/src"
+  dest: "/owl-bot-staging/$1/google-cloud-firestore/src"
+- source: "/google/firestore/admin/(v\\d)/.*-java/proto-google-.*/src"
+  dest: "/owl-bot-staging/$1/proto-google-cloud-firestore-admin-$1/src"
+- source: "/google/firestore/admin/(v\\d)/.*-java/grpc-google-.*/src"
+  dest: "/owl-bot-staging/$1/grpc-google-cloud-firestore-admin-$1/src"
+- source: "/google/firestore/admin/(v\\d)/.*-java/gapic-google-.*/src"
+  dest: "/owl-bot-staging/$1/google-cloud-firestore-admin/src"
+- source: "/google/firestore/bundle/google-cloud-firestore-bundle-v1-java/proto-google-cloud-firestore-bundle-v1-java/src"
+  dest: "/owl-bot-staging/v1/proto-google-cloud-firestore-bundle-v1/src"

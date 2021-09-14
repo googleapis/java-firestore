@@ -172,33 +172,40 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
   @Test
   public void testMultipleCursorConditions() throws Exception {
     // populate us_cities collection
-    Map<String, String> city1 = new ImmutableMap.Builder<String, String>()
-        .put("name", "Springfield").put("state", "Massachusetts").build();
-    Map<String, String> city2 = new ImmutableMap.Builder<String, String>()
-        .put("name", "Springfield").put("state", "Missouri").build();
-    Map<String, String> city3 = new ImmutableMap.Builder<String, String>()
-        .put("name", "Springfield").put("state", "Wisconsin").build();
+    Map<String, String> city1 =
+        new ImmutableMap.Builder<String, String>()
+            .put("name", "Springfield")
+            .put("state", "Massachusetts")
+            .build();
+    Map<String, String> city2 =
+        new ImmutableMap.Builder<String, String>()
+            .put("name", "Springfield")
+            .put("state", "Missouri")
+            .build();
+    Map<String, String> city3 =
+        new ImmutableMap.Builder<String, String>()
+            .put("name", "Springfield")
+            .put("state", "Wisconsin")
+            .build();
 
     db.collection("us_cities").document("Massachusetts").set(city1).get();
     db.collection("us_cities").document("Missouri").set(city2).get();
     db.collection("us_cities").document("Wisconsin").set(city3).get();
 
-    Query query1 = db.collection("us_cities")
-        .orderBy("name")
-        .orderBy("state")
-        .startAt("Springfield");
+    Query query1 =
+        db.collection("us_cities").orderBy("name").orderBy("state").startAt("Springfield");
 
     // all documents are retrieved
     QuerySnapshot querySnapshot = query1.get().get();
     List<QueryDocumentSnapshot> docs = querySnapshot.getDocuments();
     assertEquals(3, docs.size());
 
-
     // Will return "Springfield, Missouri" and "Springfield, Wisconsin"
-    Query query2 = db.collection("us_cities")
-        .orderBy("name")
-        .orderBy("state")
-        .startAt("Springfield", "Missouri");
+    Query query2 =
+        db.collection("us_cities")
+            .orderBy("name")
+            .orderBy("state")
+            .startAt("Springfield", "Missouri");
 
     // only Missouri and Wisconsin are retrieved
     List<String> expectedResults = Arrays.asList("Missouri", "Wisconsin");
