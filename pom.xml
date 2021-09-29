@@ -213,6 +213,37 @@
     <module>google-cloud-firestore-bom</module>
   </modules>
 
+<reporting>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>3.3.1</version>
+      <reportSets>
+        <reportSet>
+          <id>html</id>
+          <reports>
+            <report>aggregate</report>
+            <report>javadoc</report>
+          </reports>
+        </reportSet>
+      </reportSets>
+      <configuration>
+        <source>8</source>
+        <links combine.self="override">
+          <link>https://googleapis.dev/java/api-common/latest/</link>
+          <link>https://googleapis.dev/java/gax/latest/</link>
+          <link>https://googleapis.dev/java/google-auth-library/latest/</link>
+          <link>https://developers.google.com/protocol-buffers/docs/reference/java/</link>
+        </links>
+        <sourceFileExcludes>
+          <exclude>com/google/cloud/firestore/v1/package-info.java</exclude>
+        </sourceFileExcludes>
+      </configuration>
+    </plugin>
+  </plugins>
+</reporting>
+
   <profiles>
     <profile>
       <id>enable-samples</id>
