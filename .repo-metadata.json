@@ -2,7 +2,7 @@
   "name": "firestore",
   "name_pretty": "Cloud Firestore",
   "product_documentation": "https://cloud.google.com/firestore",
-  "client_documentation": "https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/history"
+  "client_documentation": "https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/history",
   "issue_tracker": "https://issuetracker.google.com/savedsearches/5337669",
   "release_level": "ga",
   "language": "java",
