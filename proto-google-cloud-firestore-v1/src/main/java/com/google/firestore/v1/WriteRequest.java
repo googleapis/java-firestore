@@ -503,10 +503,10 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, database_);
     }
-    if (!getStreamIdBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(streamId_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, streamId_);
     }
     for (int i = 0; i < writes_.size(); i++) {
@@ -526,10 +526,10 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     if (size != -1) return size;
 
     size = 0;
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, database_);
     }
-    if (!getStreamIdBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(streamId_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, streamId_);
     }
     for (int i = 0; i < writes_.size(); i++) {

@@ -1730,7 +1730,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
     if (endTime_ != null) {
       output.writeMessage(2, getEndTime());
     }
-    if (!getFieldBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(field_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, field_);
     }
     for (int i = 0; i < indexConfigDeltas_.size(); i++) {
@@ -1761,7 +1761,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
     if (endTime_ != null) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, getEndTime());
     }
-    if (!getFieldBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(field_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, field_);
     }
     for (int i = 0; i < indexConfigDeltas_.size(); i++) {
