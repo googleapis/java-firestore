@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.it;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,8 +24,17 @@ import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
 import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
+import com.google.cloud.firestore.BulkWriterException;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
