@@ -24,11 +24,11 @@ import java.util.Comparator;
 @InternalApi
 public interface LLRBNode<K, V> {
 
-  public interface ShortCircuitingNodeVisitor<K, V> {
+  interface ShortCircuitingNodeVisitor<K, V> {
     boolean shouldContinue(K key, V value);
   }
 
-  public abstract class NodeVisitor<K, V> implements ShortCircuitingNodeVisitor<K, V> {
+  abstract class NodeVisitor<K, V> implements ShortCircuitingNodeVisitor<K, V> {
 
     @Override
     public boolean shouldContinue(K key, V value) {

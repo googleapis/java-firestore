@@ -19,19 +19,15 @@ package com.google.cloud.firestore.it;
 import static org.junit.Assert.fail;
 
 import com.google.api.core.SettableApiFuture;
-import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
-import com.google.cloud.firestore.QuerySnapshot;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import javax.annotation.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -60,15 +56,12 @@ public class ITShutdownTest {
     ExecutorService testExecutorService = Executors.newSingleThreadExecutor();
     final SettableApiFuture<Void> result = SettableApiFuture.create();
     testExecutorService.submit(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
-              fs.close();
-              result.set(null);
-            } catch (Throwable throwable) {
-              result.setException(throwable);
-            }
+        () -> {
+          try {
+            fs.close();
+            result.set(null);
+          } catch (Throwable throwable) {
+            result.setException(throwable);
           }
         });
 
@@ -111,14 +104,7 @@ public class ITShutdownTest {
         fs.collection(
                 String.format(
                     "java-%s-%s", testName.getMethodName(), LocalFirestoreHelper.autoId()))
-            .addSnapshotListener(
-                new EventListener<QuerySnapshot>() {
-                  @Override
-                  public void onEvent(
-                      @Nullable QuerySnapshot value, @Nullable FirestoreException error) {
-                    cdl.countDown();
-                  }
-                });
+            .addSnapshotListener((value, error) -> cdl.countDown());
     cdl.await();
     return listenerRegistration;
   }

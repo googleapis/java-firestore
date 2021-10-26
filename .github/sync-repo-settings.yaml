@@ -2,7 +2,7 @@ rebaseMergeAllowed: false
 squashMergeAllowed: true
 mergeCommitAllowed: false
 branchProtectionRules:
-  - pattern: master
+  - pattern: main
     isAdminEnforced: true
     requiredApprovingReviewCount: 1
     requiresCodeOwnerReviews: true
@@ -10,7 +10,6 @@ branchProtectionRules:
     requiredStatusCheckContexts:
       - dependencies (8)
       - dependencies (11)
-      - linkage-monitor
       - lint
       - clirr
       - units (8)

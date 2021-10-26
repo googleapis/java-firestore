@@ -41,7 +41,7 @@ public class LLRBEmptyNode<K, V> implements LLRBNode<K, V> {
 
   @Override
   public LLRBNode<K, V> insert(K key, V value, Comparator<K> comparator) {
-    return new LLRBRedValueNode<K, V>(key, value);
+    return new LLRBRedValueNode<>(key, value);
   }
 
   @Override

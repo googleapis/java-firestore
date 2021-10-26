@@ -4,22 +4,22 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "a27dd9cb0e2681a15eae754c97255d0d8c86bcae"
+        "sha": "dae1b856f17d5c59d1e95b51ae527277ad4f718a"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "d9eaf41de44d953458b18712a3f240bb4c564e48",
-        "internalRef": "388535346"
+        "sha": "e1738ee972b49fd0c4d4718b035444495142b781",
+        "internalRef": "391407209"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "1a2878d6909dd10ca4e3c1b5943d6622e996054e"
+        "sha": "a4be3384ccb92364795d981f2863f6986fcee620"
       }
     }
   ],
@@ -60,8 +60,8 @@
     ".github/PULL_REQUEST_TEMPLATE.md",
     ".github/blunderbuss.yml",
     ".github/generated-files-bot.yml",
-    ".github/readme/synth.py",
     ".github/release-please.yml",
+    ".github/release-trigger.yml",
     ".github/snippet-bot.yml",
     ".github/sync-repo-settings.yaml",
     ".github/trusted-contribution.yml",
@@ -76,7 +76,6 @@
     ".kokoro/common.sh",
     ".kokoro/continuous/common.cfg",
     ".kokoro/continuous/java8.cfg",
-    ".kokoro/continuous/readme.cfg",
     ".kokoro/dependencies.sh",
     ".kokoro/nightly/common.cfg",
     ".kokoro/nightly/java11.cfg",

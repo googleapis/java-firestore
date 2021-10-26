@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
@@ -619,20 +618,17 @@ public abstract class UpdateBuilder<T> {
 
     return ApiFutures.transform(
         response,
-        new ApiFunction<CommitResponse, List<WriteResult>>() {
-          @Override
-          public List<WriteResult> apply(CommitResponse commitResponse) {
-            List<com.google.firestore.v1.WriteResult> writeResults =
-                commitResponse.getWriteResultsList();
+        commitResponse -> {
+          List<com.google.firestore.v1.WriteResult> writeResults =
+              commitResponse.getWriteResultsList();
 
-            List<WriteResult> result = new ArrayList<>();
+          List<WriteResult> result = new ArrayList<>();
 
-            for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-              result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-            }
-
-            return result;
+          for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+            result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
           }
+
+          return result;
         },
         MoreExecutors.directExecutor());
   }

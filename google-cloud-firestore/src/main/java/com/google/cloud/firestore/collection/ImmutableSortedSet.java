@@ -57,8 +57,8 @@ public class ImmutableSortedSet<T> implements Iterable<T> {
     this.map =
         ImmutableSortedMap.Builder.buildFrom(
             elems,
-            Collections.<T, Void>emptyMap(),
-            ImmutableSortedMap.Builder.<T>identityTranslator(),
+            Collections.emptyMap(),
+            ImmutableSortedMap.Builder.identityTranslator(),
             comparator);
   }
 
@@ -89,11 +89,11 @@ public class ImmutableSortedSet<T> implements Iterable<T> {
 
   public ImmutableSortedSet<T> remove(T entry) {
     ImmutableSortedMap<T, Void> newMap = this.map.remove(entry);
-    return (newMap == this.map) ? this : new ImmutableSortedSet<T>(newMap);
+    return (newMap == this.map) ? this : new ImmutableSortedSet<>(newMap);
   }
 
   public ImmutableSortedSet<T> insert(T entry) {
-    return new ImmutableSortedSet<T>(map.insert(entry, null));
+    return new ImmutableSortedSet<>(map.insert(entry, null));
   }
 
   public T getMinEntry() {
@@ -113,19 +113,19 @@ public class ImmutableSortedSet<T> implements Iterable<T> {
   }
 
   public Iterator<T> iterator() {
-    return new WrappedEntryIterator<T>(this.map.iterator());
+    return new WrappedEntryIterator<>(this.map.iterator());
   }
 
   public Iterator<T> iteratorFrom(T entry) {
-    return new WrappedEntryIterator<T>(this.map.iteratorFrom(entry));
+    return new WrappedEntryIterator<>(this.map.iteratorFrom(entry));
   }
 
   public Iterator<T> reverseIteratorFrom(T entry) {
-    return new WrappedEntryIterator<T>(this.map.reverseIteratorFrom(entry));
+    return new WrappedEntryIterator<>(this.map.reverseIteratorFrom(entry));
   }
 
   public Iterator<T> reverseIterator() {
-    return new WrappedEntryIterator<T>(this.map.reverseIterator());
+    return new WrappedEntryIterator<>(this.map.reverseIterator());
   }
 
   public T getPredecessorEntry(T entry) {

@@ -120,20 +120,14 @@ public abstract class ImmutableSortedMap<K, V> implements Iterable<Map.Entry<K, 
     static final int ARRAY_TO_RB_TREE_SIZE_THRESHOLD = 25;
 
     public static <K, V> ImmutableSortedMap<K, V> emptyMap(Comparator<K> comparator) {
-      return new ArraySortedMap<K, V>(comparator);
+      return new ArraySortedMap<>(comparator);
     }
 
     public interface KeyTranslator<C, D> {
-      public D translate(C key);
+      D translate(C key);
     }
 
-    private static final KeyTranslator IDENTITY_TRANSLATOR =
-        new KeyTranslator() {
-          @Override
-          public Object translate(Object key) {
-            return key;
-          }
-        };
+    private static final KeyTranslator IDENTITY_TRANSLATOR = key -> key;
 
     @SuppressWarnings("unchecked")
     public static <A> KeyTranslator<A, A> identityTranslator() {

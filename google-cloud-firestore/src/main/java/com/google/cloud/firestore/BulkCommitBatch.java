@@ -16,8 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiAsyncFunction;
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
@@ -92,32 +90,29 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
 
     return ApiFutures.transformAsync(
         response,
-        new ApiAsyncFunction<BatchWriteResponse, Void>() {
-          @Override
-          public ApiFuture<Void> apply(BatchWriteResponse batchWriteResponse) {
-            List<ApiFuture<Void>> pendingUserCallbacks = new ArrayList<>();
+        batchWriteResponse -> {
+          List<ApiFuture<Void>> pendingUserCallbacks = new ArrayList<>();
 
-            List<com.google.firestore.v1.WriteResult> writeResults =
-                batchWriteResponse.getWriteResultsList();
-            List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
+          List<com.google.firestore.v1.WriteResult> writeResults =
+              batchWriteResponse.getWriteResultsList();
+          List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
 
-            for (int i = 0; i < writeResults.size(); ++i) {
-              com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
-              com.google.rpc.Status status = statuses.get(i);
-              BulkWriterOperation operation = pendingOperations.get(i);
-              Status code = Status.fromCodeValue(status.getCode());
-              if (code == Status.OK) {
-                pendingUserCallbacks.add(
-                    operation.onSuccess(
-                        new WriteResult(Timestamp.fromProto(writeResult.getUpdateTime()))));
-              } else {
-                pendingUserCallbacks.add(
-                    operation.onException(
-                        FirestoreException.forServerRejection(code, status.getMessage())));
-              }
+          for (int i = 0; i < writeResults.size(); ++i) {
+            com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
+            com.google.rpc.Status status = statuses.get(i);
+            BulkWriterOperation operation = pendingOperations.get(i);
+            Status code = Status.fromCodeValue(status.getCode());
+            if (code == Status.OK) {
+              pendingUserCallbacks.add(
+                  operation.onSuccess(
+                      new WriteResult(Timestamp.fromProto(writeResult.getUpdateTime()))));
+            } else {
+              pendingUserCallbacks.add(
+                  operation.onException(
+                      FirestoreException.forServerRejection(code, status.getMessage())));
             }
-            return BulkWriter.silenceFuture(ApiFutures.allAsList(pendingUserCallbacks));
           }
+          return BulkWriter.silenceFuture(ApiFutures.allAsList(pendingUserCallbacks));
         },
         executor);
   }
@@ -127,20 +122,18 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     return ApiFutures.catching(
         response,
         ApiException.class,
-        new ApiFunction<ApiException, BatchWriteResponse>() {
-          @Override
-          public BatchWriteResponse apply(ApiException exception) {
-            com.google.rpc.Status.Builder status =
-                com.google.rpc.Status.newBuilder()
-                    .setCode(exception.getStatusCode().getCode().ordinal())
-                    .setMessage(exception.getMessage());
-            BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
-            for (int i = 0; i < pendingOperations.size(); ++i) {
-              response.addWriteResults(com.google.firestore.v1.WriteResult.getDefaultInstance());
-              response.addStatus(status);
-            }
-            return response.build();
+        exception -> {
+          com.google.rpc.Status.Builder status =
+              com.google.rpc.Status.newBuilder()
+                  .setCode(exception.getStatusCode().getCode().ordinal())
+                  .setMessage(exception.getMessage());
+          BatchWriteResponse.Builder responseBuilder = BatchWriteResponse.newBuilder();
+          for (int i = 0; i < pendingOperations.size(); ++i) {
+            responseBuilder.addWriteResults(
+                com.google.firestore.v1.WriteResult.getDefaultInstance());
+            responseBuilder.addStatus(status);
           }
+          return responseBuilder.build();
         },
         MoreExecutors.directExecutor());
   }

@@ -1,5 +1,48 @@
 # Changelog
 
+### [3.0.6](https://www.github.com/googleapis/java-firestore/compare/v3.0.5...v3.0.6) (2021-10-19)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.4.0 ([#793](https://www.github.com/googleapis/java-firestore/issues/793)) ([1af36a9](https://www.github.com/googleapis/java-firestore/commit/1af36a9e8eccc5edc4ccfbfd865c2966b0fab366))
+
+### [3.0.5](https://www.github.com/googleapis/java-firestore/compare/v3.0.4...v3.0.5) (2021-09-22)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.3.0 ([#775](https://www.github.com/googleapis/java-firestore/issues/775)) ([35469d6](https://www.github.com/googleapis/java-firestore/commit/35469d6f83a8027f2f54ce16b78141811ff393c3))
+
+### [3.0.4](https://www.github.com/googleapis/java-firestore/compare/v3.0.3...v3.0.4) (2021-09-14)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.2.1 ([#765](https://www.github.com/googleapis/java-firestore/issues/765)) ([e7a6537](https://www.github.com/googleapis/java-firestore/commit/e7a65374525da1b290835f6d6c7ec94d9cbde121))
+
+### [3.0.3](https://www.github.com/googleapis/java-firestore/compare/v3.0.2...v3.0.3) (2021-08-31)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.2.0 ([#753](https://www.github.com/googleapis/java-firestore/issues/753)) ([6744bfa](https://www.github.com/googleapis/java-firestore/commit/6744bfad1dc8a6a4e1da2d3e7cb7cd17514259b7))
+* update google-cloud-conformance-tests to 0.2.0 ([#752](https://www.github.com/googleapis/java-firestore/issues/752)) ([135bc6b](https://www.github.com/googleapis/java-firestore/commit/135bc6be06fff41fb8933b63fcde2f247a293b07))
+
+### [3.0.2](https://www.github.com/googleapis/java-firestore/compare/v3.0.1...v3.0.2) (2021-08-23)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.1.0 ([#739](https://www.github.com/googleapis/java-firestore/issues/739)) ([99b5820](https://www.github.com/googleapis/java-firestore/commit/99b5820f28c36ac83c44c6547764c7e41e4a8031))
+
+### [3.0.1](https://www.github.com/googleapis/java-firestore/compare/v3.0.0...v3.0.1) (2021-08-11)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.0.1 ([#728](https://www.github.com/googleapis/java-firestore/issues/728)) ([167683d](https://www.github.com/googleapis/java-firestore/commit/167683deebf4724795b013cc7d8b495239a918a6))
+
 ## [3.0.0](https://www.github.com/googleapis/java-firestore/compare/v2.6.2...v3.0.0) (2021-08-09)
 
 

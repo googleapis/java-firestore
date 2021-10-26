@@ -99,8 +99,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
                 .setExecutor(executor)
                 .setTransportChannel(transportChannel)
                 .setDefaultCallContext(GrpcCallContext.of(managedChannel, CallOptions.DEFAULT))
-                .setBackgroundResources(
-                    Collections.<BackgroundResource>singletonList(transportChannel))
+                .setBackgroundResources(Collections.singletonList(transportChannel))
                 .build();
       } else {
         FirestoreSettingsBuilder settingsBuilder =
