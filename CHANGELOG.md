@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.0.7](https://www.github.com/googleapis/java-firestore/compare/v3.0.6...v3.0.7) (2021-10-27)
+
+
+### Bug Fixes
+
+* **java:** java 17 dependency arguments ([#802](https://www.github.com/googleapis/java-firestore/issues/802)) ([ec07294](https://www.github.com/googleapis/java-firestore/commit/ec07294dc67d884a8bd6b0c4c9b9b1cdfb6e95c3))
+* set timeouts for BatchGetDocuments/RunQuery ([#799](https://www.github.com/googleapis/java-firestore/issues/799)) ([6cd2a45](https://www.github.com/googleapis/java-firestore/commit/6cd2a4526561a74f1aed355fa8d0405960b34965))
+
 ### [3.0.6](https://www.github.com/googleapis/java-firestore/compare/v3.0.5...v3.0.6) (2021-10-19)
 
 
