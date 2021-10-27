@@ -33,12 +33,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.BulkWriter;
@@ -100,7 +102,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.threeten.bp.Duration;
 
+@RunWith(JUnit4.class)
 public class ITSystemTest {
 
   private static final double DOUBLE_EPSILON = 0.000001;
@@ -1760,5 +1766,42 @@ public class ITSystemTest {
     firestore.recursiveDelete(randomColl, bulkWriter).get();
     assertEquals(0, countCollectionChildren(randomColl));
     assertEquals(6, callbackCount[0]);
+  }
+
+  @Test
+  public void testEnforcesTimeouts() throws Exception {
+    FirestoreOptions firestoreOptions =
+        FirestoreOptions.newBuilder()
+            .setRetrySettings(
+                RetrySettings.newBuilder()
+                    .setMaxRpcTimeout(Duration.ofMillis(1))
+                    .setTotalTimeout(Duration.ofMillis(1))
+                    .setInitialRpcTimeout(Duration.ofMillis(1))
+                    .build())
+            .build();
+    firestore = firestoreOptions.getService();
+    CollectionReference collection = firestore.collection("timeout");
+
+    // RunQuery
+    assertThrows(ExecutionException.class, () -> collection.get().get());
+    // CommitRequest
+    assertThrows(ExecutionException.class, () -> collection.add(map()).get());
+    // BulkCommit
+    assertThrows(
+        ExecutionException.class,
+        () -> {
+          BulkWriter bulkWriter = firestore.bulkWriter();
+          ApiFuture<WriteResult> op = bulkWriter.set(collection.document(), map());
+          bulkWriter.close();
+          op.get();
+        });
+    // BatchGetDocuments
+    assertThrows(ExecutionException.class, () -> collection.document().get().get());
+    // ListDocuments
+    assertThrows(FirestoreException.class, () -> collection.listDocuments().iterator().hasNext());
+    // ListCollections
+    assertThrows(
+        FirestoreException.class,
+        () -> collection.document().listCollections().iterator().hasNext());
   }
 }
