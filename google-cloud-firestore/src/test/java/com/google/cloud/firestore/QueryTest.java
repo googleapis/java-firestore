@@ -116,7 +116,7 @@ public class QueryTest {
   public void before() {
     clock = new MockClock();
     doReturn(clock).when(firestoreMock).getClock();
-    doReturn(Duration.ofNanos(0)).when(firestoreMock).getTotalRequestTimeout();
+    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
 
     query = firestoreMock.collection(COLLECTION_ID);
   }

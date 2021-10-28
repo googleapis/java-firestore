@@ -1769,7 +1769,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void testEnforcesTimeouts() throws Exception {
+  public void testEnforcesTimeouts() {
     FirestoreOptions firestoreOptions =
         FirestoreOptions.newBuilder()
             .setRetrySettings(
