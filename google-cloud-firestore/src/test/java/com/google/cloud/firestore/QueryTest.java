@@ -34,10 +34,13 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.string;
 import static com.google.cloud.firestore.LocalFirestoreHelper.unaryFilter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 
+import com.google.api.core.ApiClock;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
@@ -60,6 +63,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,9 +75,28 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.threeten.bp.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryTest {
+
+  static class MockClock implements ApiClock {
+    long nanoTime = 0;
+
+    public void advance(long nanos) {
+      nanoTime += nanos;
+    }
+
+    @Override
+    public long nanoTime() {
+      return nanoTime;
+    }
+
+    @Override
+    public long millisTime() {
+      return nanoTime / 1000000;
+    }
+  }
 
   @Spy
   private final FirestoreImpl firestoreMock =
@@ -87,8 +110,14 @@ public class QueryTest {
 
   private Query query;
 
+  private MockClock clock;
+
   @Before
   public void before() {
+    clock = new MockClock();
+    doReturn(clock).when(firestoreMock).getClock();
+    doReturn(Duration.ofNanos(0)).when(firestoreMock).getTotalRequestTimeout();
+
     query = firestoreMock.collection(COLLECTION_ID);
   }
 
@@ -1025,7 +1054,86 @@ public class QueryTest {
     semaphore.acquire();
 
     // Verify the request count
-    List<RunQueryRequest> requests = runQuery.getAllValues();
+    assertEquals(1, runQuery.getAllValues().size());
+  }
+
+  @Test
+  public void onlyRetriesWhenResultSent() throws Exception {
+    doAnswer(
+            queryResponse(
+                FirestoreException.forServerRejection(
+                    Status.DEADLINE_EXCEEDED, "Simulated test failure")))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    assertThrows(ExecutionException.class, () -> query.get().get());
+
+    // Verify the request count
+    assertEquals(1, runQuery.getAllValues().size());
+  }
+
+  @Test
+  public void retriesWithoutTimeout() throws Exception {
+    final boolean[] returnError = new boolean[] {true};
+
+    doAnswer(
+            (Answer<RunQueryResponse>)
+                invocation -> {
+                  // Advance clock by an hour
+                  clock.advance(Duration.ofHours(1).toNanos());
+
+                  if (returnError[0]) {
+                    returnError[0] = false;
+                    return queryResponse(
+                            FirestoreException.forServerRejection(
+                                Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                            DOCUMENT_NAME + "1")
+                        .answer(invocation);
+                  } else {
+                    return queryResponse(DOCUMENT_NAME + "2").answer(invocation);
+                  }
+                })
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    query.get().get();
+
+    // Verify the request count
+    assertEquals(2, runQuery.getAllValues().size());
+  }
+
+  @Test
+  public void doesNotRetryWithTimeout() {
+    doReturn(Duration.ofMinutes(1)).when(firestoreMock).getTotalRequestTimeout();
+
+    doAnswer(
+            (Answer<RunQueryResponse>)
+                invocation -> {
+                  // Advance clock by an hour
+                  clock.advance(Duration.ofHours(1).toNanos());
+
+                  return queryResponse(
+                          FirestoreException.forServerRejection(
+                              Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                          DOCUMENT_NAME + "1",
+                          DOCUMENT_NAME + "2")
+                      .answer(invocation);
+                })
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    assertThrows(ExecutionException.class, () -> query.get().get());
+
+    // Verify the request count
     assertEquals(1, runQuery.getAllValues().size());
   }
 

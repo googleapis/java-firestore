@@ -67,6 +67,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.threeten.bp.Duration;
 
 /**
  * A Query which you can read or listen to. You can also construct refined Query objects by adding
@@ -1342,6 +1343,7 @@ public class Query {
             responseObserver.onCompleted();
           }
         },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null);
   }
@@ -1478,6 +1480,7 @@ public class Query {
 
   private void internalStream(
       final QuerySnapshotObserver documentObserver,
+      final long startTimeNanos,
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
@@ -1535,28 +1538,20 @@ public class Query {
           public void onError(Throwable throwable) {
             // If a non-transactional query failed, attempt to restart.
             // Transactional queries are retried via the transaction runner.
-            if (transactionId == null && isRetryableError(throwable)) {
+            if (transactionId == null && shouldRetry(throwable)) {
               Tracing.getTracer()
                   .getCurrentSpan()
                   .addAnnotation("Firestore.Query: Retryable Error");
 
-              // Restart the query but use the last document we received as the
-              // query cursor. Note that this it is ok to not use backoff here
-              // since we are requiring at least a single document result.
               QueryDocumentSnapshot cursor = lastReceivedDocument.get();
-              if (cursor != null) {
-                if (options.getRequireConsistency()) {
-                  Query.this
-                      .startAfter(cursor)
-                      .internalStream(
-                          documentObserver, /* transactionId= */ null, cursor.getReadTime());
-                } else {
-                  Query.this
-                      .startAfter(cursor)
-                      .internalStream(
-                          documentObserver, /* transactionId= */ null, /* readTime= */ null);
-                }
-              }
+              Query.this
+                  .startAfter(cursor)
+                  .internalStream(
+                      documentObserver,
+                      startTimeNanos,
+                      /* transactionId= */ null,
+                      options.getRequireConsistency() ? cursor.getReadTime() : null);
+
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
               documentObserver.onError(throwable);
@@ -1572,6 +1567,25 @@ public class Query {
                     ImmutableMap.of(
                         "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
             documentObserver.onCompleted(readTime);
+          }
+
+          boolean shouldRetry(Throwable t) {
+            if (lastReceivedDocument.get() == null) {
+              // Only retry if we have received a single result. Retries for RPCs with initial
+              // failure are handled by Google Gax, which also implements backoff.
+              return false;
+            }
+
+            if (!isRetryableError(t)) {
+              return false;
+            }
+
+            if (rpcContext.getTotalRequestTimeout().isZero()) {
+              return true;
+            }
+
+            Duration duration = Duration.ofNanos(rpcContext.getClock().nanoTime() - startTimeNanos);
+            return duration.compareTo(rpcContext.getTotalRequestTimeout()) < 0;
           }
         };
 
@@ -1642,6 +1656,7 @@ public class Query {
             result.set(querySnapshot);
           }
         },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
         /* readTime= */ null);
 

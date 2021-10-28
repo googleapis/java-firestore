@@ -16,7 +16,9 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.NanoClock;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
@@ -42,6 +44,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.threeten.bp.Duration;
 
 /**
  * Main implementation of the Firestore client. This is the entry point for all Firestore
@@ -406,6 +409,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public FirestoreRpc getClient() {
     return firestoreClient;
+  }
+
+  @Override
+  public Duration getTotalRequestTimeout() {
+    return firestoreOptions.getRetrySettings().getTotalTimeout();
+  }
+
+  @Override
+  public ApiClock getClock() {
+    return NanoClock.getDefaultClock();
   }
 
   /** Request funnel for all read/write requests. */
