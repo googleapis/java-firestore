@@ -554,7 +554,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (usesAncestorConfig_ != false) {
         output.writeBool(2, usesAncestorConfig_);
       }
-      if (!getAncestorFieldBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(ancestorField_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, ancestorField_);
       }
       if (reverting_ != false) {
@@ -575,7 +575,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (usesAncestorConfig_ != false) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(2, usesAncestorConfig_);
       }
-      if (!getAncestorFieldBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(ancestorField_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, ancestorField_);
       }
       if (reverting_ != false) {
@@ -1749,7 +1749,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getNameBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
     if (indexConfig_ != null) {
@@ -1764,7 +1764,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     if (size != -1) return size;
 
     size = 0;
-    if (!getNameBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
     }
     if (indexConfig_ != null) {

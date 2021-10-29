@@ -200,7 +200,7 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, database_);
     }
     if (!transaction_.isEmpty()) {
@@ -215,7 +215,7 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
     if (size != -1) return size;
 
     size = 0;
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, database_);
     }
     if (!transaction_.isEmpty()) {
