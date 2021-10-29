@@ -1536,14 +1536,12 @@ public class Query {
 
           @Override
           public void onError(Throwable throwable) {
-            // If a non-transactional query failed, attempt to restart.
-            // Transactional queries are retried via the transaction runner.
-            if (transactionId == null && shouldRetry(throwable)) {
+            QueryDocumentSnapshot cursor = lastReceivedDocument.get();
+            if (shouldRetry(cursor, throwable)) {
               Tracing.getTracer()
                   .getCurrentSpan()
                   .addAnnotation("Firestore.Query: Retryable Error");
 
-              QueryDocumentSnapshot cursor = lastReceivedDocument.get();
               Query.this
                   .startAfter(cursor)
                   .internalStream(
@@ -1569,8 +1567,13 @@ public class Query {
             documentObserver.onCompleted(readTime);
           }
 
-          boolean shouldRetry(Throwable t) {
-            if (lastReceivedDocument.get() == null) {
+          boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
+            if (transactionId != null) {
+              // Transactional queries are retried via the transaction runner.
+              return false;
+            }
+
+            if (lastDocument == null) {
               // Only retry if we have received a single result. Retries for RPCs with initial
               // failure are handled by Google Gax, which also implements backoff.
               return false;
