@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;
 import com.google.api.core.InternalExtensionOnly;
@@ -24,6 +25,7 @@ import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import org.threeten.bp.Duration;
 
 @InternalApi
 @InternalExtensionOnly
@@ -36,6 +38,10 @@ interface FirestoreRpcContext<FS extends Firestore> {
   ResourcePath getResourcePath();
 
   FirestoreRpc getClient();
+
+  Duration getTotalRequestTimeout();
+
+  ApiClock getClock();
 
   <RequestT, ResponseT> ApiFuture<ResponseT> sendRequest(
       RequestT requestT, UnaryCallable<RequestT, ResponseT> callable);
