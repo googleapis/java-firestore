@@ -1,5 +1,17 @@
 # Changelog
 
+### [3.0.8](https://www.github.com/googleapis/java-firestore/compare/v3.0.7...v3.0.8) (2021-11-16)
+
+
+### Bug Fixes
+
+* respect total request timeout for Query retries ([#806](https://www.github.com/googleapis/java-firestore/issues/806)) ([feb1921](https://www.github.com/googleapis/java-firestore/commit/feb1921b39fc7630aa6549025c5ffe526e080d54))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.5.0 ([#814](https://www.github.com/googleapis/java-firestore/issues/814)) ([c1f4dac](https://www.github.com/googleapis/java-firestore/commit/c1f4dac67230b77864b4c4a64982cbbd7e28369f))
+
 ### [3.0.7](https://www.github.com/googleapis/java-firestore/compare/v3.0.6...v3.0.7) (2021-10-27)
 
 
