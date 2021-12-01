@@ -4,8 +4,8 @@
 google-cloud-firestore:3.0.8:3.0.9-SNAPSHOT
 google-cloud-firestore-admin:3.0.8:3.0.9-SNAPSHOT
 google-cloud-firestore-bom:3.0.8:3.0.9-SNAPSHOT
-google-cloud-firestore-parent:3.0.8:3.0.9-SNAPSHOT
 grpc-google-cloud-firestore-admin-v1:3.0.8:3.0.9-SNAPSHOT
 grpc-google-cloud-firestore-v1:3.0.8:3.0.9-SNAPSHOT
 proto-google-cloud-firestore-admin-v1:3.0.8:3.0.9-SNAPSHOT
 proto-google-cloud-firestore-v1:3.0.8:3.0.9-SNAPSHOT
+proto-google-cloud-firestore-bundle-v1:3.0.8:3.0.9-SNAPSHOT

@@ -33,9 +33,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
-/**
- * Snippets to demonstrate Firestore 'listen' operations.
- */
+/** Snippets to demonstrate Firestore 'listen' operations. */
 @SuppressWarnings("Convert2Lambda")
 public class ListenDataSnippets {
 
@@ -47,45 +45,41 @@ public class ListenDataSnippets {
     this.db = db;
   }
 
-  /**
-   * Listen to a single document, returning data after the first snapshot.
-   */
+  /** Listen to a single document, returning data after the first snapshot. */
   Map<String, Object> listenToDocument() throws Exception {
     final SettableApiFuture<Map<String, Object>> future = SettableApiFuture.create();
 
     // [START listen_to_document]
     // [START firestore_listen_document]
     DocumentReference docRef = db.collection("cities").document("SF");
-    docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-      @Override
-      public void onEvent(@Nullable DocumentSnapshot snapshot,
-                          @Nullable FirestoreException e) {
-        if (e != null) {
-          System.err.println("Listen failed: " + e);
-          return;
-        }
+    docRef.addSnapshotListener(
+        new EventListener<DocumentSnapshot>() {
+          @Override
+          public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirestoreException e) {
+            if (e != null) {
+              System.err.println("Listen failed: " + e);
+              return;
+            }
 
-        if (snapshot != null && snapshot.exists()) {
-          System.out.println("Current data: " + snapshot.getData());
-        } else {
-          System.out.print("Current data: null");
-        }
-        // [START_EXCLUDE silent]
-        if (!future.isDone()) {
-          future.set(snapshot.getData());
-        }
-        // [END_EXCLUDE]
-      }
-    });
+            if (snapshot != null && snapshot.exists()) {
+              System.out.println("Current data: " + snapshot.getData());
+            } else {
+              System.out.print("Current data: null");
+            }
+            // [START_EXCLUDE silent]
+            if (!future.isDone()) {
+              future.set(snapshot.getData());
+            }
+            // [END_EXCLUDE]
+          }
+        });
     // [END firestore_listen_document]
     // [END listen_to_document]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
 
-  /**
-   * Listen to a query, returning the names of all cities in the first snapshot.
-   */
+  /** Listen to a query, returning the names of all cities in the first snapshot. */
   List<String> listenForMultiple() throws Exception {
     final SettableApiFuture<List<String>> future = SettableApiFuture.create();
 
@@ -93,38 +87,37 @@ public class ListenDataSnippets {
     // [START firestore_listen_query_snapshots]
     db.collection("cities")
         .whereEqualTo("state", "CA")
-        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-          @Override
-          public void onEvent(@Nullable QuerySnapshot snapshots,
-                              @Nullable FirestoreException e) {
-            if (e != null) {
-              System.err.println("Listen failed:" + e);
-              return;
-            }
+        .addSnapshotListener(
+            new EventListener<QuerySnapshot>() {
+              @Override
+              public void onEvent(
+                  @Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
+                if (e != null) {
+                  System.err.println("Listen failed:" + e);
+                  return;
+                }
 
-            List<String> cities = new ArrayList<>();
-            for (DocumentSnapshot doc : snapshots) {
-              if (doc.get("name") != null) {
-                cities.add(doc.getString("name"));
+                List<String> cities = new ArrayList<>();
+                for (DocumentSnapshot doc : snapshots) {
+                  if (doc.get("name") != null) {
+                    cities.add(doc.getString("name"));
+                  }
+                }
+                System.out.println("Current cites in CA: " + cities);
+                // [START_EXCLUDE silent]
+                if (!future.isDone()) {
+                  future.set(cities);
+                }
+                // [END_EXCLUDE]
               }
-            }
-            System.out.println("Current cites in CA: " + cities);
-            // [START_EXCLUDE silent]
-            if (!future.isDone()) {
-              future.set(cities);
-            }
-            // [END_EXCLUDE]
-          }
-        });
+            });
     // [END firestore_listen_query_snapshots]
     // [END listen_to_multiple]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
 
-  /**
-   * Listen to a query, returning the list of DocumentChange events in the first snapshot.
-   */
+  /** Listen to a query, returning the list of DocumentChange events in the first snapshot. */
   List<DocumentChange> listenForChanges() throws Exception {
     SettableApiFuture<List<DocumentChange>> future = SettableApiFuture.create();
 
@@ -132,60 +125,59 @@ public class ListenDataSnippets {
     // [START firestore_listen_query_changes]
     db.collection("cities")
         .whereEqualTo("state", "CA")
-        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-          @Override
-          public void onEvent(@Nullable QuerySnapshot snapshots,
-                              @Nullable FirestoreException e) {
-            if (e != null) {
-              System.err.println("Listen failed: " + e);
-              return;
-            }
+        .addSnapshotListener(
+            new EventListener<QuerySnapshot>() {
+              @Override
+              public void onEvent(
+                  @Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
+                if (e != null) {
+                  System.err.println("Listen failed: " + e);
+                  return;
+                }
 
-            for (DocumentChange dc : snapshots.getDocumentChanges()) {
-              switch (dc.getType()) {
-                case ADDED:
-                  System.out.println("New city: " + dc.getDocument().getData());
-                  break;
-                case MODIFIED:
-                  System.out.println("Modified city: " + dc.getDocument().getData());
-                  break;
-                case REMOVED:
-                  System.out.println("Removed city: " + dc.getDocument().getData());
-                  break;
-                default:
-                  break;
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                  switch (dc.getType()) {
+                    case ADDED:
+                      System.out.println("New city: " + dc.getDocument().getData());
+                      break;
+                    case MODIFIED:
+                      System.out.println("Modified city: " + dc.getDocument().getData());
+                      break;
+                    case REMOVED:
+                      System.out.println("Removed city: " + dc.getDocument().getData());
+                      break;
+                    default:
+                      break;
+                  }
+                }
+                // [START_EXCLUDE silent]
+                if (!future.isDone()) {
+                  future.set(snapshots.getDocumentChanges());
+                }
+                // [END_EXCLUDE]
               }
-            }
-            // [START_EXCLUDE silent]
-            if (!future.isDone()) {
-              future.set(snapshots.getDocumentChanges());
-            }
-            // [END_EXCLUDE]
-          }
-        });
+            });
     // [END firestore_listen_query_changes]
     // [END listen_for_changes]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
 
-  /**
-   * Demonstrate how to detach an event listener.
-   */
+  /** Demonstrate how to detach an event listener. */
   void detachListener() {
     // [START detach_errors]
     // [START firestore_listen_detach]
     Query query = db.collection("cities");
-    ListenerRegistration registration = query.addSnapshotListener(
-        new EventListener<QuerySnapshot>() {
-          // [START_EXCLUDE]
-          @Override
-          public void onEvent(@Nullable QuerySnapshot snapshots,
-                              @Nullable FirestoreException e) {
+    ListenerRegistration registration =
+        query.addSnapshotListener(
+            new EventListener<QuerySnapshot>() {
+              // [START_EXCLUDE]
+              @Override
+              public void onEvent(
+                  @Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {}
 
-          }
-          // [END_EXCLUDE]
-        });
+              // [END_EXCLUDE]
+            });
 
     // ...
 
@@ -195,29 +187,28 @@ public class ListenDataSnippets {
     // [END detach_errors]
   }
 
-  /**
-   * Demonstrate how to handle listening errors.
-   */
+  /** Demonstrate how to handle listening errors. */
   void listenErrors() {
     // [START listen_errors]
     // [START firestore_listen_handle_error]
     db.collection("cities")
-        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-          @Override
-          public void onEvent(@Nullable QuerySnapshot snapshots,
-                              @Nullable FirestoreException e) {
-            if (e != null) {
-              System.err.println("Listen failed: " + e);
-              return;
-            }
+        .addSnapshotListener(
+            new EventListener<QuerySnapshot>() {
+              @Override
+              public void onEvent(
+                  @Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
+                if (e != null) {
+                  System.err.println("Listen failed: " + e);
+                  return;
+                }
 
-            for (DocumentChange dc : snapshots.getDocumentChanges()) {
-              if (dc.getType() == Type.ADDED) {
-                System.out.println("New city: " + dc.getDocument().getData());
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                  if (dc.getType() == Type.ADDED) {
+                    System.out.println("New city: " + dc.getDocument().getData());
+                  }
+                }
               }
-            }
-          }
-        });
+            });
     // [END firestore_listen_handle_error]
     // [END listen_errors]
   }

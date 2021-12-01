@@ -138,7 +138,6 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
     assertTrue(!city.getRegions().contains("east_coast"));
   }
 
-
   @Test
   public void testDeleteFields() throws Exception {
     manageDataSnippets.deleteFields();
@@ -168,8 +167,9 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
     assertEquals(info, "Population increased to 51");
     try {
       info = manageDataSnippets.returnInfoFromTransaction(5000001L);
-      assertTrue("returnInfoFromTransaction should have failed,"
-          + " instead returned info: " + info, false);
+      assertTrue(
+          "returnInfoFromTransaction should have failed," + " instead returned info: " + info,
+          false);
     } catch (Exception e) {
       assertTrue(e.getMessage().contains("Sorry! Population is too big."));
     }
