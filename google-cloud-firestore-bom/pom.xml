@@ -74,6 +74,11 @@
         <artifactId>proto-google-cloud-firestore-v1</artifactId>
         <version>3.0.9-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
       </dependency>
+      <dependency>
+        <groupId>com.google.api.grpc</groupId>
+        <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
+        <version>3.0.9-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-bundle-v1:current} -->
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

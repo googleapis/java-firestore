@@ -27,10 +27,6 @@
       <artifactId>proto-google-cloud-firestore-v1</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>proto-google-cloud-firestore-admin-v1</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
     </dependency>
@@ -41,11 +37,6 @@
     <dependency>
       <groupId>com.google.api.grpc</groupId>
       <artifactId>grpc-google-cloud-firestore-v1</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>grpc-google-cloud-firestore-admin-v1</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
