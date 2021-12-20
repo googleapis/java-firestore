@@ -31,8 +31,10 @@ import static org.mockito.Mockito.when;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.SettableApiFuture;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
@@ -63,7 +65,6 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.RunQueryRequest;
-import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import java.io.IOException;
@@ -90,7 +91,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
 
 @RunWith(AllTests.class)
 public class ConformanceTest {
@@ -251,7 +251,7 @@ public class ConformanceTest {
   private static final class ConformanceGetTestRunner extends BaseConformanceTestRunner<GetTest> {
 
     @Captor private ArgumentCaptor<BatchGetDocumentsRequest> getAllCapture;
-    @Captor private ArgumentCaptor<ApiStreamObserver<AbstractMessage>> streamObserverCapture;
+    @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
     private ConformanceGetTestRunner(String description, GetTest testParameters) {
       super(description, testParameters);
@@ -480,7 +480,7 @@ public class ConformanceTest {
       extends BaseConformanceTestRunner<TestDefinition.QueryTest> {
 
     @Captor private ArgumentCaptor<RunQueryRequest> runQueryCapture;
-    @Captor private ArgumentCaptor<ApiStreamObserver<AbstractMessage>> streamObserverCapture;
+    @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
     private ConformanceQueryTestRunner(
         String description, TestDefinition.QueryTest testParameters) {
@@ -624,8 +624,8 @@ public class ConformanceTest {
   private static final class ConformanceListenTestRunner
       extends BaseConformanceTestRunner<ListenTest> {
 
-    @Captor private ArgumentCaptor<ApiStreamObserver<AbstractMessage>> streamObserverCapture;
-    @Mock private ApiStreamObserver<ListenRequest> noOpRequestObserver;
+    @Captor private ArgumentCaptor<BidiStreamObserver<Message, Message>> streamObserverCapture;
+    @Mock private ClientStream<ListenRequest> noOpRequestObserver;
 
     private final Query watchQuery;
 
@@ -641,11 +641,10 @@ public class ConformanceTest {
       final SettableApiFuture<Void> testCaseFinished = SettableApiFuture.create();
 
       doAnswer(
-              (Answer<ApiStreamObserver<ListenRequest>>)
-                  invocationOnMock -> {
-                    testCaseStarted.set(null);
-                    return noOpRequestObserver;
-                  })
+              invocationOnMock -> {
+                testCaseStarted.set(null);
+                return noOpRequestObserver;
+              })
           .when(firestore)
           .streamRequest(
               streamObserverCapture.capture(), Matchers.any(BidiStreamingCallable.class));
@@ -680,7 +679,7 @@ public class ConformanceTest {
       testCaseStarted.get();
 
       for (ListenResponse response : testParameters.getResponsesList()) {
-        streamObserverCapture.getValue().onNext(response);
+        streamObserverCapture.getValue().onResponse(response);
       }
 
       testCaseFinished.get();

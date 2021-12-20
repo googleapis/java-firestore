@@ -32,7 +32,9 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StatusCode;
+import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
@@ -1502,14 +1504,17 @@ public class Query {
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
-    ApiStreamObserver<RunQueryResponse> observer =
-        new ApiStreamObserver<RunQueryResponse>() {
+    ResponseObserver<RunQueryResponse> observer =
+        new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
           boolean firstResponse;
           int numDocuments;
 
           @Override
-          public void onNext(RunQueryResponse response) {
+          public void onStart(StreamController streamController) {}
+
+          @Override
+          public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: First response");
@@ -1557,7 +1562,7 @@ public class Query {
           }
 
           @Override
-          public void onCompleted() {
+          public void onComplete() {
             Tracing.getTracer()
                 .getCurrentSpan()
                 .addAnnotation(
