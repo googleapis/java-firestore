@@ -18,18 +18,23 @@ package com.google.cloud.firestore.v1;
 
 import com.google.api.core.BetaApi;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FirestoreAdminGrpc.FirestoreAdminImplBase;
+import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
+import com.google.firestore.admin.v1.ListDatabasesRequest;
+import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.protobuf.AbstractMessage;
@@ -251,6 +256,68 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method ImportDocuments, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  Operation.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void getDatabase(GetDatabaseRequest request, StreamObserver<Database> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof Database) {
+      requests.add(request);
+      responseObserver.onNext(((Database) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method GetDatabase, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  Database.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void listDatabases(
+      ListDatabasesRequest request, StreamObserver<ListDatabasesResponse> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof ListDatabasesResponse) {
+      requests.add(request);
+      responseObserver.onNext(((ListDatabasesResponse) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method ListDatabases, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  ListDatabasesResponse.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void updateDatabase(
+      UpdateDatabaseRequest request, StreamObserver<Operation> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof Operation) {
+      requests.add(request);
+      responseObserver.onNext(((Operation) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method UpdateDatabase, expected %s or %s",
                   response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));

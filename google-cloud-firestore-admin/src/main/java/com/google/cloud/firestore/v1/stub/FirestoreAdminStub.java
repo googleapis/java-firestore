@@ -23,22 +23,28 @@ import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListDatabasesRequest;
+import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
+import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.longrunning.stub.OperationsStub;
@@ -120,6 +126,23 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
+  }
+
+  public UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: getDatabaseCallable()");
+  }
+
+  public UnaryCallable<ListDatabasesRequest, ListDatabasesResponse> listDatabasesCallable() {
+    throw new UnsupportedOperationException("Not implemented: listDatabasesCallable()");
+  }
+
+  public OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
+      updateDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateDatabaseCallable()");
   }
 
   @Override

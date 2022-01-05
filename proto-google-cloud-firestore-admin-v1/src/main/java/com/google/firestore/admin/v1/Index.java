@@ -555,7 +555,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -568,7 +568,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -581,7 +581,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1136,7 +1136,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1151,7 +1151,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1169,7 +1169,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Indicates that this field supports ordering by the specified order or
-     * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+     * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
      * </pre>
      *
      * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1767,7 +1767,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1783,7 +1783,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1802,7 +1802,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1821,7 +1821,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1846,7 +1846,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
@@ -1868,7 +1868,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        * <pre>
        * Indicates that this field supports ordering by the specified order or
-       * comparing using =, &lt;, &lt;=, &gt;, &gt;=.
+       * comparing using =, !=, &lt;, &lt;=, &gt;, &gt;=.
        * </pre>
        *
        * <code>.google.firestore.admin.v1.Index.IndexField.Order order = 2;</code>
