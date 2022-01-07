@@ -1,5 +1,17 @@
 # Changelog
 
+### [3.0.10](https://www.github.com/googleapis/java-firestore/compare/v3.0.9...v3.0.10) (2022-01-07)
+
+
+### Bug Fixes
+
+* **java:** add -ntp flag to native image testing command ([#829](https://www.github.com/googleapis/java-firestore/issues/829)) ([a0fb54f](https://www.github.com/googleapis/java-firestore/commit/a0fb54fa433d252ad814009cf28a412adad94405))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.6.0 ([#841](https://www.github.com/googleapis/java-firestore/issues/841)) ([ea34d81](https://www.github.com/googleapis/java-firestore/commit/ea34d811d707f02c06b18d10d3e5d41000208cec))
+
 ### [3.0.9](https://www.github.com/googleapis/java-firestore/compare/v3.0.8...v3.0.9) (2021-12-03)
 
 
