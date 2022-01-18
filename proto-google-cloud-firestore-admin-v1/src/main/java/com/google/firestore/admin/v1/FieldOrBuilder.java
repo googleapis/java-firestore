@@ -27,7 +27,7 @@ public interface FieldOrBuilder
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -51,7 +51,7 @@ public interface FieldOrBuilder
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The name.
    */
@@ -60,7 +60,7 @@ public interface FieldOrBuilder
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -84,7 +84,7 @@ public interface FieldOrBuilder
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The bytes for name.
    */

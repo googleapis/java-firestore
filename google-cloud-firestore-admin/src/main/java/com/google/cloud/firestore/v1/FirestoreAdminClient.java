@@ -32,6 +32,7 @@ import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
@@ -40,6 +41,7 @@ import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldName;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
@@ -47,14 +49,20 @@ import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexName;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListDatabasesRequest;
+import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
+import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.longrunning.OperationsClient;
 import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,8 +70,32 @@ import javax.annotation.Generated;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
- * Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
- * service `google.longrunning.Operations`.
+ * Service Description: The Cloud Firestore Admin API.
+ *
+ * <p>This API provides several administrative services for Cloud Firestore.
+ *
+ * <p>Project, Database, Namespace, Collection, Collection Group, and Document are used as defined
+ * in the Google Cloud Firestore API.
+ *
+ * <p>Operation: An Operation represents work being performed in the background.
+ *
+ * <p>The index service manages Cloud Firestore indexes.
+ *
+ * <p>Index creation is performed asynchronously. An Operation resource is created for each such
+ * asynchronous operation. The state of the operation (including any errors encountered) may be
+ * queried via the Operation resource.
+ *
+ * <p>The Operations collection provides a record of actions performed for the specified Project
+ * (including any Operations in progress). Operations are not created directly but through calls on
+ * other collections or resources.
+ *
+ * <p>An Operation that is done may be deleted so that it is no longer listed as part of the
+ * Operation collection. Operations are garbage collected after 30 days. By default, ListOperations
+ * will only return in progress and failed operations. To list completed operation, issue a
+ * ListOperations request with the filter `done: true`.
+ *
+ * <p>Operations are created by service `FirestoreAdmin`, but are accessed via service
+ * `google.longrunning.Operations`.
  *
  * <p>This class provides the ability to make remote calls to the backing service through method
  * calls that map to API methods. Sample code to get started:
@@ -902,7 +934,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
@@ -933,7 +965,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
@@ -962,7 +994,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
@@ -996,7 +1028,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
@@ -1029,7 +1061,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
@@ -1071,6 +1103,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
@@ -1100,6 +1135,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
@@ -1127,6 +1165,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * the Operation resource that is created. The output of an export may only be used once the
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
+   *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
    *
    * <p>Sample code:
    *
@@ -1159,6 +1200,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
@@ -1190,6 +1234,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    * the Operation resource that is created. The output of an export may only be used once the
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
+   *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
    *
    * <p>Sample code:
    *
@@ -1348,6 +1395,284 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return stub.importDocumentsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   Database response = firestoreAdminClient.getDatabase(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(DatabaseName name) {
+    GetDatabaseRequest request =
+        GetDatabaseRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return getDatabase(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   Database response = firestoreAdminClient.getDatabase(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(String name) {
+    GetDatabaseRequest request = GetDatabaseRequest.newBuilder().setName(name).build();
+    return getDatabase(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetDatabaseRequest request =
+   *       GetDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   Database response = firestoreAdminClient.getDatabase(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(GetDatabaseRequest request) {
+    return getDatabaseCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetDatabaseRequest request =
+   *       GetDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ApiFuture<Database> future = firestoreAdminClient.getDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable() {
+    return stub.getDatabaseCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ProjectName parent = ProjectName.of("[PROJECT]");
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(ProjectName parent) {
+    ListDatabasesRequest request =
+        ListDatabasesRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .build();
+    return listDatabases(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = ProjectName.of("[PROJECT]").toString();
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(String parent) {
+    ListDatabasesRequest request = ListDatabasesRequest.newBuilder().setParent(parent).build();
+    return listDatabases(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListDatabasesRequest request =
+   *       ListDatabasesRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .build();
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(ListDatabasesRequest request) {
+    return listDatabasesCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListDatabasesRequest request =
+   *       ListDatabasesRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .build();
+   *   ApiFuture<ListDatabasesResponse> future =
+   *       firestoreAdminClient.listDatabasesCallable().futureCall(request);
+   *   // Do something.
+   *   ListDatabasesResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ListDatabasesRequest, ListDatabasesResponse> listDatabasesCallable() {
+    return stub.listDatabasesCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Database database = Database.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Database response = firestoreAdminClient.updateDatabaseAsync(database, updateMask).get();
+   * }
+   * }</pre>
+   *
+   * @param database Required. The database to update.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, UpdateDatabaseMetadata> updateDatabaseAsync(
+      Database database, FieldMask updateMask) {
+    UpdateDatabaseRequest request =
+        UpdateDatabaseRequest.newBuilder().setDatabase(database).setUpdateMask(updateMask).build();
+    return updateDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Database response = firestoreAdminClient.updateDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, UpdateDatabaseMetadata> updateDatabaseAsync(
+      UpdateDatabaseRequest request) {
+    return updateDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture<Database, UpdateDatabaseMetadata> future =
+   *       firestoreAdminClient.updateDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
+      updateDatabaseOperationCallable() {
+    return stub.updateDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.updateDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable() {
+    return stub.updateDatabaseCallable();
   }
 
   @Override
