@@ -4,22 +4,22 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/java-firestore.git",
-        "sha": "10b7ff44e8815347a8eae7f424bcd3f59af6d648"
+        "sha": "d61dcd729d472207eb4ad8d796c1a7de1fb44951"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "2921f9fb3bfbd16f6b2da0104373e2b47a80a65e",
-        "internalRef": "408420890"
+        "sha": "10380880f030101709b3ebe1eb1dd121fa8b4116",
+        "internalRef": "420859180"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "79568427bbb18e1a926110df7dfcb51ed2050703"
+        "sha": "6355638dfed614fe5977a06d59dc010370f88582"
       }
     }
   ],
@@ -146,7 +146,10 @@
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CollectionGroupName.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CreateIndexRequest.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/CreateIndexRequestOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Database.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DatabaseName.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DatabaseOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DatabaseProto.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DeleteIndexRequest.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/DeleteIndexRequestOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ExportDocumentsMetadata.java",
@@ -162,6 +165,8 @@
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FieldProto.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/FirestoreAdminProto.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetDatabaseRequest.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetDatabaseRequestOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequest.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetFieldRequestOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/GetIndexRequest.java",
@@ -176,6 +181,10 @@
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOperationMetadataOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/IndexProto.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListDatabasesRequest.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListDatabasesRequestOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListDatabasesResponse.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListDatabasesResponseOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequest.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsRequestOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ListFieldsResponse.java",
@@ -191,8 +200,14 @@
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/OperationState.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/Progress.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ProgressOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/ProjectName.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateDatabaseMetadata.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateDatabaseMetadataOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateDatabaseRequest.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateDatabaseRequestOrBuilder.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequest.java",
     "proto-google-cloud-firestore-admin-v1/src/main/java/com/google/firestore/admin/v1/UpdateFieldRequestOrBuilder.java",
+    "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/database.proto",
     "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/field.proto",
     "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/firestore_admin.proto",
     "proto-google-cloud-firestore-admin-v1/src/main/proto/google/firestore/admin/v1/index.proto",
