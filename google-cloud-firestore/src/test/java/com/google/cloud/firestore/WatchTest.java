@@ -280,6 +280,8 @@ public class WatchTest {
     awaitAddTarget();
     send(removeTarget(Code.PERMISSION_DENIED));
     awaitClose();
+
+    awaitException(Code.PERMISSION_DENIED);
   }
 
   @Test
