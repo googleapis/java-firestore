@@ -21,7 +21,9 @@ import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentChange.Type;
 import com.google.common.base.Preconditions;
@@ -57,7 +59,7 @@ import javax.annotation.Nullable;
  * It synchronizes on its own instance so it is advisable not to use this class for external
  * synchronization.
  */
-class Watch implements ApiStreamObserver<ListenResponse> {
+class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /**
    * Target ID used by watch. Watch uses a fixed target id since we only support one target per
    * stream. The actual target ID we use is arbitrary.
@@ -71,7 +73,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   private final ExponentialRetryAlgorithm backoff;
   private final Target target;
   private TimedAttemptSettings nextAttempt;
-  private ApiStreamObserver<ListenRequest> stream;
+  private ClientStream<ListenRequest> stream;
 
   /** The sorted tree of DocumentSnapshots as sent in the last snapshot. */
   private DocumentSet documentSet;
@@ -167,7 +169,13 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   }
 
   @Override
-  public synchronized void onNext(ListenResponse listenResponse) {
+  public void onStart(StreamController streamController) {}
+
+  @Override
+  public void onReady(ClientStream<ListenRequest> clientStream) {}
+
+  @Override
+  public synchronized void onResponse(ListenResponse listenResponse) {
     switch (listenResponse.getResponseTypeCase()) {
       case TARGET_CHANGE:
         TargetChange change = listenResponse.getTargetChange();
@@ -258,7 +266,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   }
 
   @Override
-  public synchronized void onCompleted() {
+  public synchronized void onComplete() {
     maybeReopenStream(new StatusException(Status.fromCode(Code.UNKNOWN)));
   }
 
@@ -289,7 +297,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
           .execute(
               () -> {
                 synchronized (Watch.this) {
-                  stream.onCompleted();
+                  stream.closeSend();
                   stream = null;
                 }
               });
@@ -321,7 +329,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   /** Closes the stream and calls onError() if the stream is still active. */
   private void closeStream(final Throwable throwable) {
     if (stream != null) {
-      stream.onCompleted();
+      stream.closeSend();
       stream = null;
     }
 
@@ -363,7 +371,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   /** Helper to restart the outgoing stream to the backend. */
   private void resetStream() {
     if (stream != null) {
-      stream.onCompleted();
+      stream.closeSend();
       stream = null;
     }
 
@@ -399,7 +407,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
                 request.getAddTargetBuilder().setResumeToken(resumeToken);
               }
 
-              stream.onNext(request.build());
+              stream.send(request.build());
             }
           } catch (Throwable throwable) {
             onError(throwable);

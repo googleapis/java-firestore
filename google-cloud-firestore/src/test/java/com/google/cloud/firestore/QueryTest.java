@@ -42,6 +42,7 @@ import static org.mockito.Mockito.doReturn;
 
 import com.google.api.core.ApiClock;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilter;
@@ -74,7 +75,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.threeten.bp.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -106,7 +106,7 @@ public class QueryTest {
 
   @Captor private ArgumentCaptor<RunQueryRequest> runQuery;
 
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<RunQueryResponse>> streamObserverCapture;
 
   private Query query;
 
@@ -957,20 +957,19 @@ public class QueryTest {
     final boolean[] returnError = new boolean[] {true};
 
     doAnswer(
-            (Answer<RunQueryResponse>)
-                invocation -> {
-                  if (returnError[0]) {
-                    returnError[0] = false;
-                    return queryResponse(
-                            FirestoreException.forServerRejection(
-                                Status.DEADLINE_EXCEEDED, "Simulated test failure"),
-                            DOCUMENT_NAME + "1",
-                            DOCUMENT_NAME + "2")
-                        .answer(invocation);
-                  } else {
-                    return queryResponse(DOCUMENT_NAME + "3").answer(invocation);
-                  }
-                })
+            invocation -> {
+              if (returnError[0]) {
+                returnError[0] = false;
+                return queryResponse(
+                        FirestoreException.forServerRejection(
+                            Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                        DOCUMENT_NAME + "1",
+                        DOCUMENT_NAME + "2")
+                    .answer(invocation);
+              } else {
+                return queryResponse(DOCUMENT_NAME + "3").answer(invocation);
+              }
+            })
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
@@ -1080,22 +1079,21 @@ public class QueryTest {
     final boolean[] returnError = new boolean[] {true};
 
     doAnswer(
-            (Answer<RunQueryResponse>)
-                invocation -> {
-                  // Advance clock by an hour
-                  clock.advance(Duration.ofHours(1).toNanos());
+            invocation -> {
+              // Advance clock by an hour
+              clock.advance(Duration.ofHours(1).toNanos());
 
-                  if (returnError[0]) {
-                    returnError[0] = false;
-                    return queryResponse(
-                            FirestoreException.forServerRejection(
-                                Status.DEADLINE_EXCEEDED, "Simulated test failure"),
-                            DOCUMENT_NAME + "1")
-                        .answer(invocation);
-                  } else {
-                    return queryResponse(DOCUMENT_NAME + "2").answer(invocation);
-                  }
-                })
+              if (returnError[0]) {
+                returnError[0] = false;
+                return queryResponse(
+                        FirestoreException.forServerRejection(
+                            Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                        DOCUMENT_NAME + "1")
+                    .answer(invocation);
+              } else {
+                return queryResponse(DOCUMENT_NAME + "2").answer(invocation);
+              }
+            })
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
@@ -1113,18 +1111,17 @@ public class QueryTest {
     doReturn(Duration.ofMinutes(1)).when(firestoreMock).getTotalRequestTimeout();
 
     doAnswer(
-            (Answer<RunQueryResponse>)
-                invocation -> {
-                  // Advance clock by an hour
-                  clock.advance(Duration.ofHours(1).toNanos());
+            invocation -> {
+              // Advance clock by an hour
+              clock.advance(Duration.ofHours(1).toNanos());
 
-                  return queryResponse(
-                          FirestoreException.forServerRejection(
-                              Status.DEADLINE_EXCEEDED, "Simulated test failure"),
-                          DOCUMENT_NAME + "1",
-                          DOCUMENT_NAME + "2")
-                      .answer(invocation);
-                })
+              return queryResponse(
+                      FirestoreException.forServerRejection(
+                          Status.DEADLINE_EXCEEDED, "Simulated test failure"),
+                      DOCUMENT_NAME + "1",
+                      DOCUMENT_NAME + "2")
+                  .answer(invocation);
+            })
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
