@@ -274,6 +274,15 @@ public class WatchTest {
   }
 
   @Test
+  public void queryWatchShutsDownStreamOnPermissionDenied() throws InterruptedException {
+    addQueryListener();
+
+    awaitAddTarget();
+    send(removeTarget(Code.PERMISSION_DENIED));
+    awaitClose();
+  }
+
+  @Test
   public void queryWatchReopensOnUnexceptedStreamEnd() throws InterruptedException {
     addQueryListener();
 
