@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.11](https://github.com/googleapis/java-firestore/compare/v3.0.10...v3.0.11) (2022-01-27)
+
+
+### Bug Fixes
+
+* close the Watch stream when we receive an error ([#834](https://github.com/googleapis/java-firestore/issues/834)) ([077c9be](https://github.com/googleapis/java-firestore/commit/077c9be3b265e8cd7df149890986f36db94a9874))
+
 ### [3.0.10](https://www.github.com/googleapis/java-firestore/compare/v3.0.9...v3.0.10) (2022-01-07)
 
 
