@@ -4,7 +4,7 @@
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore-parent</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.13-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
+  <version>3.0.13-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <name>Google Cloud Firestore Parent</name>
   <url>https://github.com/googleapis/java-firestore</url>
   <description>
