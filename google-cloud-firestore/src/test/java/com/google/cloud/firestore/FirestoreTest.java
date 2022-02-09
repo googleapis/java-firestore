@@ -32,14 +32,14 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
-import com.google.firestore.v1.ListCollectionIdsRequest;
+import com.google.protobuf.Message;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,9 +64,7 @@ public class FirestoreTest {
 
   @Captor private ArgumentCaptor<BatchGetDocumentsRequest> getAllCapture;
 
-  @Captor private ArgumentCaptor<ListCollectionIdsRequest> listCollectionIdsCapture;
-
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
   @Captor private ArgumentCaptor<CommitRequest> commitCapture;
 

@@ -47,7 +47,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.ApiException;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
@@ -100,7 +100,7 @@ public class TransactionTest {
           firestoreRpc);
 
   @Captor private ArgumentCaptor<Message> requestCapture;
-  @Captor private ArgumentCaptor<ApiStreamObserver<Message>> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
   private DocumentReference documentReference;
   private Query queryReference;

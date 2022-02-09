@@ -22,7 +22,7 @@ import static org.mockito.Mockito.doAnswer;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.retrying.RetrySettings;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
@@ -316,14 +316,14 @@ public final class LocalFirestoreHelper {
       final T[] response, @Nullable final Throwable throwable) {
     return invocation -> {
       Object[] args = invocation.getArguments();
-      ApiStreamObserver<T> observer = (ApiStreamObserver<T>) args[1];
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
       for (T resp : response) {
-        observer.onNext(resp);
+        observer.onResponse(resp);
       }
       if (throwable != null) {
         observer.onError(throwable);
       }
-      observer.onCompleted();
+      observer.onComplete();
       return null;
     };
   }

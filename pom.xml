@@ -4,7 +4,7 @@
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore-parent</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.0.12</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
   <name>Google Cloud Firestore Parent</name>
   <url>https://github.com/googleapis/java-firestore</url>
   <description>
@@ -14,7 +14,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-shared-config</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.7</version>
   </parent>
 
   <developers>
@@ -150,38 +150,33 @@
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-admin-v1</artifactId>
-        <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
-      </dependency>
-      <dependency>
-        <groupId>com.google.cloud</groupId>
-        <artifactId>google-cloud-firestore</artifactId>
-        <version>3.0.9-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+        <version>3.0.12</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
-        <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+        <version>3.0.12</version><!-- {x-version-update:google-cloud-firestore:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-v1</artifactId>
-        <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
+        <version>3.0.12</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-admin-v1</artifactId>
-        <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
+        <version>3.0.12</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-v1</artifactId>
-        <version>3.0.11-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
+        <version>3.0.12</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
       </dependency>
 
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-shared-dependencies</artifactId>
-        <version>2.6.0</version>
+        <version>2.7.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -208,17 +203,17 @@
   </dependencyManagement>
 
   <modules>
-    <module>google-cloud-firestore</module>
-    <module>grpc-google-cloud-firestore-admin-v1</module>
-    <module>grpc-google-cloud-firestore-v1</module>
     <module>proto-google-cloud-firestore-admin-v1</module>
     <module>proto-google-cloud-firestore-v1</module>
     <module>proto-google-cloud-firestore-bundle-v1</module>
+    <module>grpc-google-cloud-firestore-admin-v1</module>
+    <module>grpc-google-cloud-firestore-v1</module>
     <module>google-cloud-firestore-admin</module>
+    <module>google-cloud-firestore</module>
     <module>google-cloud-firestore-bom</module>
   </modules>
 
-  <reporting>
+<reporting>
   <plugins>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
@@ -256,29 +251,13 @@
         <module>samples</module>
       </modules>
     </profile>
-
     <profile>
+      <!-- cloud RAD generation -->
       <id>docFX</id>
-      <activation>
-        <property>
-          <!-- Activate with -P docFX -->
-          <name>docFX</name>
-        </property>
-      </activation>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.3.1</version>
-            <configuration>
-              <sourceFileExcludes>
-                <exclude>com/google/cloud/firestore/v1/package-info.java</exclude>
-              </sourceFileExcludes>
-            </configuration>
-          </plugin>
-        </plugins>
-      </reporting>
+      <properties>
+        <!-- exclude file causing error generating doc -->
+        <sourceFileExclude>com/google/cloud/firestore/v1/package-info.java</sourceFileExclude>
+      </properties>
     </profile>
   </profiles>
 </project>

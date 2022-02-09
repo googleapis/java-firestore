@@ -64,7 +64,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
@@ -111,7 +111,7 @@ public class DocumentReferenceTest {
 
   @Captor private ArgumentCaptor<BatchGetDocumentsRequest> getAllCapture;
 
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<CommitResponse>> streamObserverCapture;
 
   private DocumentReference documentReference;
 

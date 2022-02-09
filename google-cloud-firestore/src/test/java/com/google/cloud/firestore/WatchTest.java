@@ -29,12 +29,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
+import com.google.api.gax.rpc.ClientStream;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.WatchTest.SnapshotDocument.ChangeType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
@@ -103,7 +103,8 @@ public class WatchTest {
               .build(),
           firestoreRpc);
 
-  @Captor private ArgumentCaptor<ApiStreamObserver<ListenResponse>> streamObserverCapture;
+  @Captor
+  private ArgumentCaptor<BidiStreamObserver<ListenRequest, ListenResponse>> streamObserverCapture;
 
   /** Executor that executes delayed tasks without delay. */
   private final ScheduledExecutorService immediateExecutor =
@@ -270,6 +271,17 @@ public class WatchTest {
     send(removeTarget(Code.ABORTED));
 
     awaitException(Code.ABORTED);
+  }
+
+  @Test
+  public void queryWatchShutsDownStreamOnPermissionDenied() throws InterruptedException {
+    addQueryListener();
+
+    awaitAddTarget();
+    send(removeTarget(Code.PERMISSION_DENIED));
+    awaitClose();
+
+    awaitException(Code.PERMISSION_DENIED);
   }
 
   @Test
@@ -975,7 +987,7 @@ public class WatchTest {
   }
 
   private void send(ListenResponse response) {
-    streamObserverCapture.getValue().onNext(response);
+    streamObserverCapture.getValue().onResponse(response);
   }
 
   private void destroy(Code code) {
@@ -983,26 +995,29 @@ public class WatchTest {
   }
 
   private void close() {
-    streamObserverCapture.getValue().onCompleted();
+    streamObserverCapture.getValue().onComplete();
   }
 
   /** Returns a new request observer that persists its input. */
-  private Answer newRequestObserver() {
+  private Answer<ClientStream<ListenRequest>> newRequestObserver() {
     return invocationOnMock ->
-        new ApiStreamObserver<ListenRequest>() {
+        new ClientStream<ListenRequest>() {
           @Override
-          public void onNext(ListenRequest listenRequest) {
+          public void send(ListenRequest listenRequest) {
             requests.add(listenRequest);
           }
 
           @Override
-          public void onError(Throwable throwable) {
-            fail("Received unexpected error");
+          public void closeSendWithError(Throwable throwable) {}
+
+          @Override
+          public void closeSend() {
+            closes.release();
           }
 
           @Override
-          public void onCompleted() {
-            closes.release();
+          public boolean isSendReady() {
+            return true;
           }
         };
   }

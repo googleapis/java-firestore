@@ -70,7 +70,6 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
@@ -1119,11 +1118,10 @@ public class BulkWriterTest {
         };
 
     doAnswer(
-            (Answer<ApiFuture<GeneratedMessageV3>>)
-                mock -> {
-                  retryAttempts[0]++;
-                  return RETRYABLE_FAILED_FUTURE;
-                })
+            mock -> {
+              retryAttempts[0]++;
+              return RETRYABLE_FAILED_FUTURE;
+            })
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -1170,11 +1168,10 @@ public class BulkWriterTest {
         };
 
     doAnswer(
-            (Answer<ApiFuture<GeneratedMessageV3>>)
-                mock -> {
-                  retryAttempts[0]++;
-                  return RESOURCE_EXHAUSTED_FAILED_FUTURE;
-                })
+            mock -> {
+              retryAttempts[0]++;
+              return RESOURCE_EXHAUSTED_FAILED_FUTURE;
+            })
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),

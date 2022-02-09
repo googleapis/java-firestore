@@ -1,5 +1,20 @@
 # Changelog
 
+### [3.0.12](https://github.com/googleapis/java-firestore/compare/v3.0.11...v3.0.12) (2022-02-04)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.7.0 ([#860](https://github.com/googleapis/java-firestore/issues/860)) ([bf48381](https://github.com/googleapis/java-firestore/commit/bf48381a64f17cd615c1bcd0bf7c9ffb473400d9))
+* update dependency org.apache.commons:commons-lang3 to v3.12.0 ([#846](https://github.com/googleapis/java-firestore/issues/846)) ([efc73bd](https://github.com/googleapis/java-firestore/commit/efc73bd1949d8214dd6702caa72a70405a6ca059))
+
+### [3.0.11](https://github.com/googleapis/java-firestore/compare/v3.0.10...v3.0.11) (2022-01-27)
+
+
+### Bug Fixes
+
+* close the Watch stream when we receive an error ([#834](https://github.com/googleapis/java-firestore/issues/834)) ([077c9be](https://github.com/googleapis/java-firestore/commit/077c9be3b265e8cd7df149890986f36db94a9874))
+
 ### [3.0.10](https://www.github.com/googleapis/java-firestore/compare/v3.0.9...v3.0.10) (2022-01-07)
 
 
