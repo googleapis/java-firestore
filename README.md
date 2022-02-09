@@ -19,7 +19,7 @@ If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>libraries-bom</artifactId>
-      <version>24.0.0</version>
+      <version>24.3.0</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -41,7 +41,7 @@ If you are using Maven without BOM, add this to your dependencies:
 <dependency>
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.0.9</version>
+  <version>3.0.12</version>
 </dependency>
 
 ```
@@ -49,20 +49,20 @@ If you are using Maven without BOM, add this to your dependencies:
 If you are using Gradle 5.x or later, add this to your dependencies
 
 ```Groovy
-implementation platform('com.google.cloud:libraries-bom:24.1.0')
+implementation platform('com.google.cloud:libraries-bom:24.3.0')
 
 implementation 'com.google.cloud:google-cloud-firestore'
 ```
 If you are using Gradle without BOM, add this to your dependencies
 
 ```Groovy
-implementation 'com.google.cloud:google-cloud-firestore:3.0.9'
+implementation 'com.google.cloud:google-cloud-firestore:3.0.12'
 ```
 
 If you are using SBT, add this to your dependencies
 
 ```Scala
-libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.0.9"
+libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.0.12"
 ```
 
 ## Authentication
@@ -214,7 +214,7 @@ Java is a registered trademark of Oracle and/or its affiliates.
 [kokoro-badge-link-4]: http://storage.googleapis.com/cloud-devrel-public/java/badges/java-firestore/java8-win.html
 [kokoro-badge-image-5]: http://storage.googleapis.com/cloud-devrel-public/java/badges/java-firestore/java11.svg
 [kokoro-badge-link-5]: http://storage.googleapis.com/cloud-devrel-public/java/badges/java-firestore/java11.html
-[stability-image]: https://img.shields.io/badge/stability-ga-green
+[stability-image]: https://img.shields.io/badge/stability-stable-green
 [maven-version-image]: https://img.shields.io/maven-central/v/com.google.cloud/google-cloud-firestore.svg
 [maven-version-link]: https://search.maven.org/search?q=g:com.google.cloud%20AND%20a:google-cloud-firestore&core=gav
 [authentication]: https://github.com/googleapis/google-cloud-java#authentication
