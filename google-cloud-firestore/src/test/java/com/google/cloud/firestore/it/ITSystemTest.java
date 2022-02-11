@@ -1491,6 +1491,37 @@ public class ITSystemTest {
   }
 
   @Test
+  public void readOnlyTransaction_successfulRead() throws Exception {
+    DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    Timestamp firstWriteTime =
+        documentReference.set(Collections.singletonMap("counter", 1)).get().getUpdateTime();
+    documentReference.set(Collections.singletonMap("counter", 2)).get();
+
+    final TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setReadTime(
+                com.google.protobuf.Timestamp.newBuilder()
+                    .setSeconds(firstWriteTime.getSeconds())
+                    .setNanos(firstWriteTime.getNanos()))
+            .build();
+
+    final ApiFuture<Long> runTransaction =
+        firestore.runTransaction(
+            transaction -> {
+              final DocumentSnapshot snapshot =
+                  transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+              return snapshot.getLong("counter");
+            },
+            options);
+
+    assertEquals(1, runTransaction.get(10, TimeUnit.SECONDS).longValue());
+
+    DocumentSnapshot documentSnapshot = documentReference.get().get();
+    assertEquals(2, (long) documentSnapshot.getData().get("counter"));
+  }
+
+  @Test
   public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
