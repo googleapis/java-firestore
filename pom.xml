@@ -4,7 +4,7 @@
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore-parent</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.13-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
+  <version>3.0.13-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <name>Google Cloud Firestore Parent</name>
   <url>https://github.com/googleapis/java-firestore</url>
   <description>
@@ -154,6 +154,11 @@
       </dependency>
       <dependency>
         <groupId>com.google.cloud</groupId>
+        <artifactId>google-cloud-firestore</artifactId>
+        <version>3.0.12</version><!-- {x-version-update:google-cloud-firestore:current} -->
+      </dependency>
+      <dependency>
+        <groupId>com.google.cloud</groupId>
         <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
         <version>3.0.13-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
       </dependency>
@@ -203,17 +208,17 @@
   </dependencyManagement>
 
   <modules>
+    <module>google-cloud-firestore</module>
+    <module>grpc-google-cloud-firestore-admin-v1</module>
+    <module>grpc-google-cloud-firestore-v1</module>
     <module>proto-google-cloud-firestore-admin-v1</module>
     <module>proto-google-cloud-firestore-v1</module>
     <module>proto-google-cloud-firestore-bundle-v1</module>
-    <module>grpc-google-cloud-firestore-admin-v1</module>
-    <module>grpc-google-cloud-firestore-v1</module>
     <module>google-cloud-firestore-admin</module>
-    <module>google-cloud-firestore</module>
     <module>google-cloud-firestore-bom</module>
   </modules>
 
-<reporting>
+  <reporting>
   <plugins>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
