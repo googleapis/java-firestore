@@ -19,6 +19,8 @@ package com.example.firestore.snippets.model;
 import java.util.List;
 import java.util.Objects;
 
+// [START fs_class_definition]
+// [START firestore_data_custom_type_definition]
 /** Represents a city : name, weather, population, country, capital, geo coordinates. */
 public class City {
 
@@ -29,13 +31,10 @@ public class City {
   private Long population;
   private List<String> regions;
 
-  // [START fs_class_definition]
-  // [START firestore_data_custom_type_definition]
   public City() {
     // Must have a public no-argument constructor
   }
 
-  // Initialize all fields of a city
   public City(
       String name,
       String state,
@@ -43,20 +42,19 @@ public class City {
       Boolean capital,
       Long population,
       List<String> regions) {
+    // Initialize all fields of a city
+    // [START_EXCLUDE]
     this.name = name;
     this.state = state;
     this.country = country;
     this.capital = capital;
     this.population = population;
     this.regions = regions;
-  }
-  // [END firestore_data_custom_type_definition]
-  // [END fs_class_definition]
-
-  public City(String name) {
-    this.name = name;
+    // [END_EXCLUDE]
   }
 
+  // public getters and setters for all fields
+  // [START_EXCLUDE]
   public String getName() {
     return name;
   }
@@ -104,62 +102,43 @@ public class City {
   public void setRegions(List<String> regions) {
     this.regions = regions;
   }
+  // [END_EXCLUDE]
 
-  private String getDefinedValue(String s) {
-    if (s != null) {
-      return s;
-    } else {
-      return "";
-    }
-  }
-
+  // [START_EXCLUDE]
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     if (name != null) {
-      sb.append(name);
+      sb.append(" name : ").append(name).append(",");
     }
     if (state != null) {
-      sb.append(" state : ");
-      sb.append(state);
-      sb.append(",");
+      sb.append(" state : ").append(state).append(",");
     }
     if (country != null) {
-      sb.append(", ");
-      sb.append(country);
+      sb.append(" country : ").append(country).append(",");
     }
-    sb.append(" : [");
     if (population != null) {
-      sb.append(" population : ");
-      sb.append(population);
-      sb.append(",");
+      sb.append(" population : ").append(population).append(",");
     }
     if (capital != null) {
-      sb.append(" capital : ");
-      sb.append(capital);
-      sb.append(",");
+      sb.append(" capital : ").append(capital).append(",");
     }
     if (regions != null) {
-      sb.append(" regions : [");
-      for (String r : regions) {
-        sb.append(r);
-        sb.append(", ");
-      }
-      sb.append("],");
+      sb.append(" regions : ").append(regions).append(",");
     }
     // remove trailing comma
-    if (sb.lastIndexOf(",") >= sb.length() - 1) {
-      sb.deleteCharAt(sb.length() - 1);
+    if (sb.length() > 0) {
+      sb.setLength(sb.length() - 1);
     }
-    sb.append(" ]");
     return sb.toString();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof City)) {
-      return false;
-    }
+    if (obj == this) return true;
+    if (obj == null) return false;
+    if (obj.getClass() != this.getClass()) return false;
+    
     City city = (City) obj;
     return Objects.equals(name, city.name)
         && Objects.equals(state, city.state)
@@ -173,4 +152,7 @@ public class City {
   public int hashCode() {
     return Objects.hash(name, state, country, capital, population, regions);
   }
+  // [END_EXCLUDE]
 }
+// [END firestore_data_custom_type_definition]
+// [END fs_class_definition]
