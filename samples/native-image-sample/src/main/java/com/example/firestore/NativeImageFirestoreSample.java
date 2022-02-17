@@ -26,6 +26,8 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class NativeImageFirestoreSample {
    * Entrypoint to the Firestore sample application.
    */
   public static void main(String[] args) throws Exception {
+    Instant startTime = Instant.now();
     FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance();
     Firestore db = firestoreOptions.getService();
 
@@ -49,6 +52,9 @@ public class NativeImageFirestoreSample {
     createUserDocumentPojo(db);
     readDocuments(db);
     runSampleQueries(db);
+    Instant endTime = Instant.now();
+    Duration duration = Duration.between(startTime, endTime);
+    System.out.println("Duration: " + duration.toString());
   }
 
   static void deleteCollection(Firestore db) throws Exception {
