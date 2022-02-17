@@ -18,12 +18,15 @@ package com.example.firestore.snippets.model;
 
 import java.util.List;
 import java.util.Objects;
+import com.google.firebase.firestore.DocumentId;
 
 // [START fs_class_definition]
 // [START firestore_data_custom_type_definition]
 /** Represents a city : name, weather, population, country, capital, geo coordinates. */
 public class City {
 
+  @DocumentId
+  private String id;
   private String name;
   private String state;
   private String country;
@@ -55,6 +58,14 @@ public class City {
 
   // public getters and setters for all fields
   // [START_EXCLUDE]
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+  
   public String getName() {
     return name;
   }
