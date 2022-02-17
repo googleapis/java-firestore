@@ -1,0 +1,40 @@
+[{
+  "name":"com.google.cloud.firestore.LocalFirestoreHelper$AllSupportedTypes",
+  "allDeclaredFields":true,
+  "allPublicFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+"name":"com.google.cloud.firestore.LocalFirestoreHelper$CustomList",
+"allDeclaredFields":true,
+"allPublicFields":true,
+"queryAllDeclaredMethods":true,
+"queryAllPublicMethods":true,
+"methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+"name":"com.google.cloud.firestore.LocalFirestoreHelper$CustomMap",
+"allDeclaredFields":true,
+"allPublicFields":true,
+"queryAllDeclaredMethods":true,
+"queryAllPublicMethods":true,
+"methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+"name":"com.google.cloud.firestore.LocalFirestoreHelper$FooList",
+"methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+"name":"com.google.cloud.firestore.LocalFirestoreHelper$FooMap",
+"methods":[{"name":"<init>","parameterTypes":[] }]}
+,
+{
+"name":"com.google.cloud.firestore.LocalFirestoreHelper$SingleField",
+"allDeclaredFields":true,
+"allPublicFields":true,
+"queryAllDeclaredMethods":true,
+"queryAllPublicMethods":true,
+"methods":[{"name":"<init>","parameterTypes":[] }]}
+]
