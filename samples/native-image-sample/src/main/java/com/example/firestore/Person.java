@@ -18,13 +18,10 @@ package com.example.firestore;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 
-/**
- * Simple document object to load into Firestore.
- */
+/** Simple document object to load into Firestore. */
 public class Person {
 
-  @DocumentId
-  public String id;
+  @DocumentId public String id;
 
   public String first;
 
