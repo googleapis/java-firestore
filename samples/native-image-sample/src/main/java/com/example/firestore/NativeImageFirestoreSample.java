@@ -32,16 +32,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Sample Firestore application demonstrating basic operations.
- */
+/** Sample Firestore application demonstrating basic operations. */
 public class NativeImageFirestoreSample {
 
   private static final String USERS_COLLECTION = "nativeimage_test_users";
 
-  /**
-   * Entrypoint to the Firestore sample application.
-   */
+  /** Entrypoint to the Firestore sample application. */
   public static void main(String[] args) throws Exception {
     Instant startTime = Instant.now();
     FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance();
@@ -79,9 +75,7 @@ public class NativeImageFirestoreSample {
   static void createUserDocumentPojo(Firestore db) throws Exception {
     CollectionReference collectionReference = db.collection(USERS_COLLECTION);
     WriteResult result =
-        collectionReference.document()
-            .set(new Person("Alan", "Turing", 1912))
-            .get();
+        collectionReference.document().set(new Person("Alan", "Turing", 1912)).get();
 
     System.out.println("Created user by POJO. Timestamp: " + result.getUpdateTime());
   }
@@ -99,12 +93,11 @@ public class NativeImageFirestoreSample {
         runQuery(db.collection(USERS_COLLECTION).whereLessThan("born", 1900));
     System.out.println("Number of users born before 1900: " + results.size());
 
-    results = runQuery(
-        db.collection(USERS_COLLECTION).whereGreaterThan(FieldPath.of("born"), 1900));
+    results =
+        runQuery(db.collection(USERS_COLLECTION).whereGreaterThan(FieldPath.of("born"), 1900));
     System.out.println("Number of users born earlier after 1900: " + results.size());
 
-    results = runQuery(
-        db.collection(USERS_COLLECTION).whereEqualTo("name", "Ada"));
+    results = runQuery(db.collection(USERS_COLLECTION).whereEqualTo("name", "Ada"));
     System.out.println("Number of users whose first name is 'Ada': " + results.size());
   }
 
