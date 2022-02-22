@@ -1,5 +1,23 @@
 # Changelog
 
+### [3.0.13](https://github.com/googleapis/java-firestore/compare/v3.0.12...v3.0.13) (2022-02-22)
+
+
+### Bug Fixes
+
+* retry watch on InternalException ([#875](https://github.com/googleapis/java-firestore/issues/875)) ([a76a0fd](https://github.com/googleapis/java-firestore/commit/a76a0fddbcd8996667a4ee239b3d74ee096161c6))
+
+
+### Documentation
+
+* **sample:** Add sample for native image support in Firestore ([#872](https://github.com/googleapis/java-firestore/issues/872)) ([a01fe88](https://github.com/googleapis/java-firestore/commit/a01fe88f17286a2988a4e4e52d11fc4aa43c5f83))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.4 ([#882](https://github.com/googleapis/java-firestore/issues/882)) ([b2aeb1a](https://github.com/googleapis/java-firestore/commit/b2aeb1a7c8f1baa428f1a718ea145fef77f439fb))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.10 ([#881](https://github.com/googleapis/java-firestore/issues/881)) ([036f7f8](https://github.com/googleapis/java-firestore/commit/036f7f83b1ec4846af91613136cc793c637f43c1))
+
 ### [3.0.12](https://github.com/googleapis/java-firestore/compare/v3.0.11...v3.0.12) (2022-02-04)
 
 
