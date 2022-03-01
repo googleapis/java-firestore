@@ -66,8 +66,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.example.firestore.NativeImageFirestoreSample
-              </mainClass>
+              <mainClass>com.example.firestore.NativeImageFirestoreSample</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -119,8 +118,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>0.9.10</version>
             <extensions>true</extensions>
             <configuration>
-              <mainClass>com.example.firestore.NativeImageFirestoreSample
-              </mainClass>
+              <mainClass>com.example.firestore.NativeImageFirestoreSample</mainClass>
               <buildArgs>
                 <buildArg>--no-fallback</buildArg>
                 <buildArg>--no-server</buildArg>
