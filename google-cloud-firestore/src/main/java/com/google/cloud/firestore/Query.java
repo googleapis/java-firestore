@@ -1761,6 +1761,20 @@ public class Query {
     return false;
   }
 
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField field, @Nonnull AggregateField... fields) {
+    throw new RuntimeException("not implemented");
+  }
+
+  // A convenience method for just getting the count of a query.
+  // This method also helps with visibility of the "count" feature, since "aggregate" is
+  // less obvious what you can do with it.
+  @Nonnull
+  public AggregateQuery count() {
+    return aggregate(AggregateField.count());
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *

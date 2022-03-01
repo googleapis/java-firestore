@@ -190,4 +190,9 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
     return query.get(transactionId);
   }
+
+  @Nonnull
+  public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
+    throw new RuntimeException("not implemented");
+  }
 }
