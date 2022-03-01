@@ -55,7 +55,7 @@
         <version>3.0.14-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
       </dependency>
       <dependency>
-        <groupId>com.google.api.grpc</groupId>
+        <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-firestore-admin</artifactId>
         <version>3.0.14-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-admin:current} -->
       </dependency>
@@ -80,7 +80,7 @@
         <version>3.0.14-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
       </dependency>
       <dependency>
-        <groupId>com.google.api.grpc</groupId>
+        <groupId>com.google.cloud</groupId>
         <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
         <version>3.0.14-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-bundle-v1:current} -->
       </dependency>
