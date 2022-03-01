@@ -1,5 +1,20 @@
 # Changelog
 
+### [3.0.14](https://github.com/googleapis/java-firestore/compare/v3.0.13...v3.0.14) (2022-03-01)
+
+
+### Bug Fixes
+
+* fix groupID for artifacts ([#890](https://github.com/googleapis/java-firestore/issues/890)) ([bb46bcb](https://github.com/googleapis/java-firestore/commit/bb46bcb5f52b1f5fb4e3fe7acfb7e74b6fc4eb4b))
+* **java:** add reflection configuration for native image tests ([#878](https://github.com/googleapis/java-firestore/issues/878)) ([1938113](https://github.com/googleapis/java-firestore/commit/19381131ab3c7a7a458e333de9929336fe4edcc9))
+
+
+### Dependencies
+
+* update actions/setup-java action to v3 ([#888](https://github.com/googleapis/java-firestore/issues/888)) ([07130f9](https://github.com/googleapis/java-firestore/commit/07130f961091bac19393dd13bff4826584509bd4))
+* update dependency com.google.cloud:native-image-support to v0.12.5 ([#889](https://github.com/googleapis/java-firestore/issues/889)) ([5f4ffcb](https://github.com/googleapis/java-firestore/commit/5f4ffcbe6de3081a47a137be06be9ca6f0969ed5))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.10 ([#880](https://github.com/googleapis/java-firestore/issues/880)) ([a3a9684](https://github.com/googleapis/java-firestore/commit/a3a96846e33e5ca53038c1d03a1f6734796c773f))
+
 ### [3.0.13](https://github.com/googleapis/java-firestore/compare/v3.0.12...v3.0.13) (2022-02-22)
 
 
