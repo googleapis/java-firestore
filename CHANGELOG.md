@@ -1,5 +1,18 @@
 # Changelog
 
+### [3.0.15](https://github.com/googleapis/java-firestore/compare/v3.0.14...v3.0.15) (2022-03-02)
+
+
+### Documentation
+
+* **sample:** Use Java 8 for native image sample ([#893](https://github.com/googleapis/java-firestore/issues/893)) ([5955f54](https://github.com/googleapis/java-firestore/commit/5955f54f49637e4a4d22df34dbcddacfef269d34))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.8.0 ([#895](https://github.com/googleapis/java-firestore/issues/895)) ([bf1951d](https://github.com/googleapis/java-firestore/commit/bf1951d760f4ba431caa18ecbc0505a5d99f2ae2))
+* update dependency com.google.cloud:native-image-support to v0.12.6 ([#898](https://github.com/googleapis/java-firestore/issues/898)) ([73606e5](https://github.com/googleapis/java-firestore/commit/73606e5617ff54daf60db720aed1436005d50fb5))
+
 ### [3.0.14](https://github.com/googleapis/java-firestore/compare/v3.0.13...v3.0.14) (2022-03-01)
 
 
