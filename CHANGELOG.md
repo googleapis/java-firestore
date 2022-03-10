@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.18](https://github.com/googleapis/java-firestore/compare/v3.0.17...v3.0.18) (2022-03-10)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.9 ([#912](https://github.com/googleapis/java-firestore/issues/912)) ([fedf824](https://github.com/googleapis/java-firestore/commit/fedf824a3bf66e245ef3eb10c85d8209c418d6fa))
+
 ### [3.0.17](https://github.com/googleapis/java-firestore/compare/v3.0.16...v3.0.17) (2022-03-09)
 
 
