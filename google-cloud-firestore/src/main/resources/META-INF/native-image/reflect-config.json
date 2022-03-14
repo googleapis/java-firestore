@@ -34,7 +34,7 @@
 "name":"com.google.cloud.firestore.LocalFirestoreHelper$SingleField",
 "allDeclaredFields":true,
 "allPublicFields":true,
-"queryAllDeclaredMethods":true,
-"queryAllPublicMethods":true,
+"allDeclaredMethods":true,
+"allPublicMethods":true,
 "methods":[{"name":"<init>","parameterTypes":[] }]}
 ]
