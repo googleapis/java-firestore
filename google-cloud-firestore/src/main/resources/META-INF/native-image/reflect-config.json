@@ -2,24 +2,24 @@
   "name":"com.google.cloud.firestore.LocalFirestoreHelper$AllSupportedTypes",
   "allDeclaredFields":true,
   "allPublicFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
+  "allDeclaredMethods":true,
+  "allPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
 "name":"com.google.cloud.firestore.LocalFirestoreHelper$CustomList",
 "allDeclaredFields":true,
 "allPublicFields":true,
-"queryAllDeclaredMethods":true,
-"queryAllPublicMethods":true,
+"allDeclaredMethods":true,
+"allPublicMethods":true,
 "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
 "name":"com.google.cloud.firestore.LocalFirestoreHelper$CustomMap",
 "allDeclaredFields":true,
 "allPublicFields":true,
-"queryAllDeclaredMethods":true,
-"queryAllPublicMethods":true,
+"allDeclaredMethods":true,
+"allPublicMethods":true,
 "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
 {
