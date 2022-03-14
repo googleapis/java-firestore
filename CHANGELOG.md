@@ -1,5 +1,17 @@
 # Changelog
 
+### [3.0.19](https://github.com/googleapis/java-firestore/compare/v3.0.18...v3.0.19) (2022-03-14)
+
+
+### Bug Fixes
+
+* **java:** fix native image Kokoro test setup ([#919](https://github.com/googleapis/java-firestore/issues/919)) ([7d905a5](https://github.com/googleapis/java-firestore/commit/7d905a5f2c687c1f099d2d976f9708b605b66a60))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.10 ([#917](https://github.com/googleapis/java-firestore/issues/917)) ([0a650e0](https://github.com/googleapis/java-firestore/commit/0a650e02ff1b0aea7d78b95c743358eff999b8aa))
+
 ### [3.0.18](https://github.com/googleapis/java-firestore/compare/v3.0.17...v3.0.18) (2022-03-10)
 
 
