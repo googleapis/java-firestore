@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.0.20](https://github.com/googleapis/java-firestore/compare/v3.0.19...v3.0.20) (2022-03-24)
+
+
+### Dependencies
+
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.11 ([#923](https://github.com/googleapis/java-firestore/issues/923)) ([43f24b1](https://github.com/googleapis/java-firestore/commit/43f24b12d0c79551f1bc3eb13f3af8c38630f0ca))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.11 ([#924](https://github.com/googleapis/java-firestore/issues/924)) ([70b0d00](https://github.com/googleapis/java-firestore/commit/70b0d001cb4199745e665a9d13731a9ca320ed93))
+
 ### [3.0.19](https://github.com/googleapis/java-firestore/compare/v3.0.18...v3.0.19) (2022-03-14)
 
 
