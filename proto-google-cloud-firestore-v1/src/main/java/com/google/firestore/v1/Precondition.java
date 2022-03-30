@@ -213,7 +213,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -229,7 +229,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -248,7 +248,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -723,7 +723,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -739,7 +739,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -765,7 +765,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -788,7 +788,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -808,7 +808,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -840,7 +840,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -866,7 +866,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -879,7 +879,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -900,7 +900,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>

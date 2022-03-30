@@ -375,7 +375,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
@@ -390,7 +391,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
@@ -1346,7 +1348,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1360,7 +1363,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1377,7 +1381,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1398,7 +1403,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>

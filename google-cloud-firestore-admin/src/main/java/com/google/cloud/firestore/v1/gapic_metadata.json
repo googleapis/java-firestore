@@ -19,6 +19,9 @@
             "ExportDocuments": {
               "methods": ["exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsOperationCallable", "exportDocumentsCallable"]
             },
+            "GetDatabase": {
+              "methods": ["getDatabase", "getDatabase", "getDatabase", "getDatabaseCallable"]
+            },
             "GetField": {
               "methods": ["getField", "getField", "getField", "getFieldCallable"]
             },
@@ -28,11 +31,17 @@
             "ImportDocuments": {
               "methods": ["importDocumentsAsync", "importDocumentsAsync", "importDocumentsAsync", "importDocumentsOperationCallable", "importDocumentsCallable"]
             },
+            "ListDatabases": {
+              "methods": ["listDatabases", "listDatabases", "listDatabases", "listDatabasesCallable"]
+            },
             "ListFields": {
               "methods": ["listFields", "listFields", "listFields", "listFieldsPagedCallable", "listFieldsCallable"]
             },
             "ListIndexes": {
               "methods": ["listIndexes", "listIndexes", "listIndexes", "listIndexesPagedCallable", "listIndexesCallable"]
+            },
+            "UpdateDatabase": {
+              "methods": ["updateDatabaseAsync", "updateDatabaseAsync", "updateDatabaseOperationCallable", "updateDatabaseCallable"]
             },
             "UpdateField": {
               "methods": ["updateFieldAsync", "updateFieldAsync", "updateFieldOperationCallable", "updateFieldCallable"]

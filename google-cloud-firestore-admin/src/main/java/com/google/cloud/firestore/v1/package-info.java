@@ -15,12 +15,38 @@
  */
 
 /**
- * The interfaces provided are listed below, along with usage samples.
+ * A client to Cloud Firestore API
+ *
+ * <p>The interfaces provided are listed below, along with usage samples.
  *
  * <p>======================= FirestoreAdminClient =======================
  *
- * <p>Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
- * service `google.longrunning.Operations`.
+ * <p>Service Description: The Cloud Firestore Admin API.
+ *
+ * <p>This API provides several administrative services for Cloud Firestore.
+ *
+ * <p>Project, Database, Namespace, Collection, Collection Group, and Document are used as defined
+ * in the Google Cloud Firestore API.
+ *
+ * <p>Operation: An Operation represents work being performed in the background.
+ *
+ * <p>The index service manages Cloud Firestore indexes.
+ *
+ * <p>Index creation is performed asynchronously. An Operation resource is created for each such
+ * asynchronous operation. The state of the operation (including any errors encountered) may be
+ * queried via the Operation resource.
+ *
+ * <p>The Operations collection provides a record of actions performed for the specified Project
+ * (including any Operations in progress). Operations are not created directly but through calls on
+ * other collections or resources.
+ *
+ * <p>An Operation that is done may be deleted so that it is no longer listed as part of the
+ * Operation collection. Operations are garbage collected after 30 days. By default, ListOperations
+ * will only return in progress and failed operations. To list completed operation, issue a
+ * ListOperations request with the filter `done: true`.
+ *
+ * <p>Operations are created by service `FirestoreAdmin`, but are accessed via service
+ * `google.longrunning.Operations`.
  *
  * <p>Sample for FirestoreAdminClient:
  *

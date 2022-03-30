@@ -171,8 +171,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -187,8 +186,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -203,8 +201,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -753,8 +750,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -768,8 +764,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -789,8 +784,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -812,8 +806,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -832,8 +825,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -859,8 +851,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -880,8 +871,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -895,8 +885,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
@@ -914,8 +903,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      *
      *
      * <pre>
-     * A query result.
-     * Not set when reporting partial progress.
+     * A query result, not set when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>

@@ -43,8 +43,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -56,8 +55,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -69,8 +67,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>

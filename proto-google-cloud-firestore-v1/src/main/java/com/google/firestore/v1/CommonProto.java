@@ -58,31 +58,29 @@ public final class CommonProto {
     java.lang.String[] descriptorData = {
       "\n google/firestore/v1/common.proto\022\023goog"
           + "le.firestore.v1\032\037google/protobuf/timesta"
-          + "mp.proto\032\034google/api/annotations.proto\"#"
-          + "\n\014DocumentMask\022\023\n\013field_paths\030\001 \003(\t\"e\n\014P"
-          + "recondition\022\020\n\006exists\030\001 \001(\010H\000\0221\n\013update_"
-          + "time\030\002 \001(\0132\032.google.protobuf.TimestampH\000"
-          + "B\020\n\016condition_type\"\251\002\n\022TransactionOption"
-          + "s\022E\n\tread_only\030\002 \001(\01320.google.firestore."
-          + "v1.TransactionOptions.ReadOnlyH\000\022G\n\nread"
-          + "_write\030\003 \001(\01321.google.firestore.v1.Trans"
-          + "actionOptions.ReadWriteH\000\032&\n\tReadWrite\022\031"
-          + "\n\021retry_transaction\030\001 \001(\014\032S\n\010ReadOnly\022/\n"
-          + "\tread_time\030\002 \001(\0132\032.google.protobuf.Times"
-          + "tampH\000B\026\n\024consistency_selectorB\006\n\004modeB\304"
-          + "\001\n\027com.google.firestore.v1B\013CommonProtoP"
-          + "\001Z<google.golang.org/genproto/googleapis"
-          + "/firestore/v1;firestore\242\002\004GCFS\252\002\031Google."
-          + "Cloud.Firestore.V1\312\002\031Google\\Cloud\\Firest"
-          + "ore\\V1\352\002\034Google::Cloud::Firestore::V1b\006p"
-          + "roto3"
+          + "mp.proto\"#\n\014DocumentMask\022\023\n\013field_paths\030"
+          + "\001 \003(\t\"e\n\014Precondition\022\020\n\006exists\030\001 \001(\010H\000\022"
+          + "1\n\013update_time\030\002 \001(\0132\032.google.protobuf.T"
+          + "imestampH\000B\020\n\016condition_type\"\251\002\n\022Transac"
+          + "tionOptions\022E\n\tread_only\030\002 \001(\01320.google."
+          + "firestore.v1.TransactionOptions.ReadOnly"
+          + "H\000\022G\n\nread_write\030\003 \001(\01321.google.firestor"
+          + "e.v1.TransactionOptions.ReadWriteH\000\032&\n\tR"
+          + "eadWrite\022\031\n\021retry_transaction\030\001 \001(\014\032S\n\010R"
+          + "eadOnly\022/\n\tread_time\030\002 \001(\0132\032.google.prot"
+          + "obuf.TimestampH\000B\026\n\024consistency_selector"
+          + "B\006\n\004modeB\304\001\n\027com.google.firestore.v1B\013Co"
+          + "mmonProtoP\001Z<google.golang.org/genproto/"
+          + "googleapis/firestore/v1;firestore\242\002\004GCFS"
+          + "\252\002\031Google.Cloud.Firestore.V1\312\002\031Google\\Cl"
+          + "oud\\Firestore\\V1\352\002\034Google::Cloud::Firest"
+          + "ore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
             descriptorData,
             new com.google.protobuf.Descriptors.FileDescriptor[] {
               com.google.protobuf.TimestampProto.getDescriptor(),
-              com.google.api.AnnotationsProto.getDescriptor(),
             });
     internal_static_google_firestore_v1_DocumentMask_descriptor =
         getDescriptor().getMessageTypes().get(0);
@@ -125,7 +123,6 @@ public final class CommonProto {
               "ReadTime", "ConsistencySelector",
             });
     com.google.protobuf.TimestampProto.getDescriptor();
-    com.google.api.AnnotationsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
