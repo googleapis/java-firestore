@@ -1,5 +1,19 @@
 # Changelog
 
+### [3.0.21](https://github.com/googleapis/java-firestore/compare/v3.0.20...v3.0.21) (2022-03-30)
+
+
+### Bug Fixes
+
+* change REST binding for ListDocuments to support root collection ([#900](https://github.com/googleapis/java-firestore/issues/900)) ([aabd4ac](https://github.com/googleapis/java-firestore/commit/aabd4ac4e43e1c58ec25e51117980f4396a3e8d9))
+* **java:** move test native image configs to test/resources ([#929](https://github.com/googleapis/java-firestore/issues/929)) ([9ed6c5e](https://github.com/googleapis/java-firestore/commit/9ed6c5ea50c02411df2c94e782caba1954fd1f73))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.9.0 ([#932](https://github.com/googleapis/java-firestore/issues/932)) ([abebae7](https://github.com/googleapis/java-firestore/commit/abebae7fd9fde7d971150ffcfc010eaa7952932d))
+* update dependency com.google.cloud:native-image-support to v0.12.11 ([#931](https://github.com/googleapis/java-firestore/issues/931)) ([0e1e3c5](https://github.com/googleapis/java-firestore/commit/0e1e3c598628c13c30cb7a51314d109c2106a678))
+
 ### [3.0.20](https://github.com/googleapis/java-firestore/compare/v3.0.19...v3.0.20) (2022-03-24)
 
 
