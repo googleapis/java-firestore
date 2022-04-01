@@ -29,7 +29,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-firestore</artifactId>
-      <version>3.0.20</version>
+      <version>3.0.21</version>
     </dependency>
     <!-- [END firestore_install_without_bom] -->
 
