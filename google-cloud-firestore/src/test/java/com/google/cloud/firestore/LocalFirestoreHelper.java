@@ -311,6 +311,25 @@ public final class LocalFirestoreHelper {
     return streamingResponse(responses, throwable);
   }
 
+  /** Returns a stream of responses when RunQueryResponse.done set to true */
+  public static Answer<RunQueryResponse> queryResponse(boolean setDone, String... documentNames) {
+    RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
+
+    for (int i = 0; i < documentNames.length; ++i) {
+      final RunQueryResponse.Builder runQueryResponse = RunQueryResponse.newBuilder();
+      runQueryResponse.setDocument(
+          Document.newBuilder().setName(documentNames[i]).putAllFields(SINGLE_FIELD_PROTO));
+      runQueryResponse.setReadTime(
+          com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
+      if (i == (documentNames.length - 1) && setDone) {
+        runQueryResponse.setDone(true);
+      }
+      responses[i] = runQueryResponse.build();
+    }
+
+    return streamingResponseWithoutOnComplete(responses);
+  }
+
   /** Returns a stream of responses followed by an optional exception. */
   public static <T> Answer<T> streamingResponse(
       final T[] response, @Nullable final Throwable throwable) {
@@ -324,6 +343,18 @@ public final class LocalFirestoreHelper {
         observer.onError(throwable);
       }
       observer.onComplete();
+      return null;
+    };
+  }
+
+  /** Returns a stream of responses even though onComplete() wasn't triggered */
+  public static <T> Answer<T> streamingResponseWithoutOnComplete(final T[] response) {
+    return invocation -> {
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      for (T resp : response) {
+        observer.onResponse(resp);
+      }
       return null;
     };
   }

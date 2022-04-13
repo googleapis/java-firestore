@@ -1537,6 +1537,16 @@ public class Query {
             if (readTime == null) {
               readTime = Timestamp.fromProto(response.getReadTime());
             }
+
+            if (response.hasDone() && response.getDone()) {
+              Tracing.getTracer()
+                  .getCurrentSpan()
+                  .addAnnotation(
+                      "Firestore.Query: Completed",
+                      ImmutableMap.of(
+                          "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
+              documentObserver.onCompleted(readTime);
+            }
           }
 
           @Override
@@ -1640,6 +1650,7 @@ public class Query {
     internalStream(
         new QuerySnapshotObserver() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          boolean hasReturned = false;
 
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
@@ -1655,6 +1666,8 @@ public class Query {
           public void onCompleted() {
             // The results for limitToLast queries need to be flipped since we reversed the
             // ordering constraints before sending the query to the backend.
+            if (hasReturned) return;
+            hasReturned = true;
             List<QueryDocumentSnapshot> resultView =
                 LimitType.Last.equals(Query.this.options.getLimitType())
                     ? reverse(documentSnapshots)

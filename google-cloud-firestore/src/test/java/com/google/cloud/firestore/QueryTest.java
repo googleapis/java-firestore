@@ -953,6 +953,39 @@ public class QueryTest {
   }
 
   @Test
+  public void successfulReturnWithoutOnComplete() throws Exception {
+    doAnswer(queryResponse(true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+  }
+
+  @Test
   public void retriesAfterRetryableError() throws Exception {
     final boolean[] returnError = new boolean[] {true};
 
