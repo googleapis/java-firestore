@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.0](https://github.com/googleapis/java-firestore/compare/v3.0.21...v3.1.0) (2022-04-21)
+
+
+### Features
+
+* relocate Firestore native image configuration from java-core ([#941](https://github.com/googleapis/java-firestore/issues/941)) ([900a7a8](https://github.com/googleapis/java-firestore/commit/900a7a855fab436aea3d221139e8c986f188d4be))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.10.0 ([#945](https://github.com/googleapis/java-firestore/issues/945)) ([5b2e318](https://github.com/googleapis/java-firestore/commit/5b2e3189cde0973edb524df88e71f8901f84b136))
+* update dependency com.google.cloud:native-image-support to v0.13.1 ([#944](https://github.com/googleapis/java-firestore/issues/944)) ([b3b474f](https://github.com/googleapis/java-firestore/commit/b3b474f44167985b52cb1fb7e7b4c42be1c58112))
+
 ### [3.0.21](https://github.com/googleapis/java-firestore/compare/v3.0.20...v3.0.21) (2022-03-30)
 
 
