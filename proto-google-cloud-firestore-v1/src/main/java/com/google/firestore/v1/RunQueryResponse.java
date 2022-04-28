@@ -110,6 +110,12 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
               skippedResults_ = input.readInt32();
               break;
             }
+          case 48:
+            {
+              continuationSelector_ = input.readBool();
+              continuationSelectorCase_ = 6;
+              break;
+            }
           default:
             {
               if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
@@ -121,6 +127,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -142,6 +150,50 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
         .ensureFieldAccessorsInitialized(
             com.google.firestore.v1.RunQueryResponse.class,
             com.google.firestore.v1.RunQueryResponse.Builder.class);
+  }
+
+  private int continuationSelectorCase_ = 0;
+  private java.lang.Object continuationSelector_;
+
+  public enum ContinuationSelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+    DONE(6),
+    CONTINUATIONSELECTOR_NOT_SET(0);
+    private final int value;
+
+    private ContinuationSelectorCase(int value) {
+      this.value = value;
+    }
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ContinuationSelectorCase valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ContinuationSelectorCase forNumber(int value) {
+      switch (value) {
+        case 6:
+          return DONE;
+        case 0:
+          return CONTINUATIONSELECTOR_NOT_SET;
+        default:
+          return null;
+      }
+    }
+
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public ContinuationSelectorCase getContinuationSelectorCase() {
+    return ContinuationSelectorCase.forNumber(continuationSelectorCase_);
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 2;
@@ -291,6 +343,43 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     return skippedResults_;
   }
 
+  public static final int DONE_FIELD_NUMBER = 6;
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return Whether the done field is set.
+   */
+  @java.lang.Override
+  public boolean hasDone() {
+    return continuationSelectorCase_ == 6;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return The done.
+   */
+  @java.lang.Override
+  public boolean getDone() {
+    if (continuationSelectorCase_ == 6) {
+      return (java.lang.Boolean) continuationSelector_;
+    }
+    return false;
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -317,6 +406,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     if (skippedResults_ != 0) {
       output.writeInt32(4, skippedResults_);
     }
+    if (continuationSelectorCase_ == 6) {
+      output.writeBool(6, (boolean) ((java.lang.Boolean) continuationSelector_));
+    }
     unknownFields.writeTo(output);
   }
 
@@ -337,6 +429,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     }
     if (skippedResults_ != 0) {
       size += com.google.protobuf.CodedOutputStream.computeInt32Size(4, skippedResults_);
+    }
+    if (continuationSelectorCase_ == 6) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeBoolSize(
+              6, (boolean) ((java.lang.Boolean) continuationSelector_));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -363,6 +460,14 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       if (!getReadTime().equals(other.getReadTime())) return false;
     }
     if (getSkippedResults() != other.getSkippedResults()) return false;
+    if (!getContinuationSelectorCase().equals(other.getContinuationSelectorCase())) return false;
+    switch (continuationSelectorCase_) {
+      case 6:
+        if (getDone() != other.getDone()) return false;
+        break;
+      case 0:
+      default:
+    }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -386,6 +491,14 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     }
     hash = (37 * hash) + SKIPPED_RESULTS_FIELD_NUMBER;
     hash = (53 * hash) + getSkippedResults();
+    switch (continuationSelectorCase_) {
+      case 6:
+        hash = (37 * hash) + DONE_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getDone());
+        break;
+      case 0:
+      default:
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -547,6 +660,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       }
       skippedResults_ = 0;
 
+      continuationSelectorCase_ = 0;
+      continuationSelector_ = null;
       return this;
     }
 
@@ -586,6 +701,10 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
         result.readTime_ = readTimeBuilder_.build();
       }
       result.skippedResults_ = skippedResults_;
+      if (continuationSelectorCase_ == 6) {
+        result.continuationSelector_ = continuationSelector_;
+      }
+      result.continuationSelectorCase_ = continuationSelectorCase_;
       onBuilt();
       return result;
     }
@@ -647,6 +766,17 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       if (other.getSkippedResults() != 0) {
         setSkippedResults(other.getSkippedResults());
       }
+      switch (other.getContinuationSelectorCase()) {
+        case DONE:
+          {
+            setDone(other.getDone());
+            break;
+          }
+        case CONTINUATIONSELECTOR_NOT_SET:
+          {
+            break;
+          }
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -673,6 +803,20 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
           mergeFrom(parsedMessage);
         }
       }
+      return this;
+    }
+
+    private int continuationSelectorCase_ = 0;
+    private java.lang.Object continuationSelector_;
+
+    public ContinuationSelectorCase getContinuationSelectorCase() {
+      return ContinuationSelectorCase.forNumber(continuationSelectorCase_);
+    }
+
+    public Builder clearContinuationSelector() {
+      continuationSelectorCase_ = 0;
+      continuationSelector_ = null;
+      onChanged();
       return this;
     }
 
@@ -1201,6 +1345,79 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
 
       skippedResults_ = 0;
       onChanged();
+      return this;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * If present, Firestore has completely finished the request and no more
+     * documents will be returned.
+     * </pre>
+     *
+     * <code>bool done = 6;</code>
+     *
+     * @return Whether the done field is set.
+     */
+    public boolean hasDone() {
+      return continuationSelectorCase_ == 6;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * If present, Firestore has completely finished the request and no more
+     * documents will be returned.
+     * </pre>
+     *
+     * <code>bool done = 6;</code>
+     *
+     * @return The done.
+     */
+    public boolean getDone() {
+      if (continuationSelectorCase_ == 6) {
+        return (java.lang.Boolean) continuationSelector_;
+      }
+      return false;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * If present, Firestore has completely finished the request and no more
+     * documents will be returned.
+     * </pre>
+     *
+     * <code>bool done = 6;</code>
+     *
+     * @param value The done to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDone(boolean value) {
+      continuationSelectorCase_ = 6;
+      continuationSelector_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * If present, Firestore has completely finished the request and no more
+     * documents will be returned.
+     * </pre>
+     *
+     * <code>bool done = 6;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearDone() {
+      if (continuationSelectorCase_ == 6) {
+        continuationSelectorCase_ = 0;
+        continuationSelector_ = null;
+        onChanged();
+      }
       return this;
     }
 

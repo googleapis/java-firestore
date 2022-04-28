@@ -104,6 +104,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -669,6 +671,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -2300,8 +2304,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         } else {
           if (transformTypeCase_ == 3) {
             incrementBuilder_.mergeFrom(value);
+          } else {
+            incrementBuilder_.setMessage(value);
           }
-          incrementBuilder_.setMessage(value);
         }
         transformTypeCase_ = 3;
         return this;
@@ -2590,8 +2595,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         } else {
           if (transformTypeCase_ == 4) {
             maximumBuilder_.mergeFrom(value);
+          } else {
+            maximumBuilder_.setMessage(value);
           }
-          maximumBuilder_.setMessage(value);
         }
         transformTypeCase_ = 4;
         return this;
@@ -2888,8 +2894,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         } else {
           if (transformTypeCase_ == 5) {
             minimumBuilder_.mergeFrom(value);
+          } else {
+            minimumBuilder_.setMessage(value);
           }
-          minimumBuilder_.setMessage(value);
         }
         transformTypeCase_ = 5;
         return this;
@@ -3182,8 +3189,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         } else {
           if (transformTypeCase_ == 6) {
             appendMissingElementsBuilder_.mergeFrom(value);
+          } else {
+            appendMissingElementsBuilder_.setMessage(value);
           }
-          appendMissingElementsBuilder_.setMessage(value);
         }
         transformTypeCase_ = 6;
         return this;
@@ -3462,8 +3470,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         } else {
           if (transformTypeCase_ == 7) {
             removeAllFromArrayBuilder_.mergeFrom(value);
+          } else {
+            removeAllFromArrayBuilder_.setMessage(value);
           }
-          removeAllFromArrayBuilder_.setMessage(value);
         }
         transformTypeCase_ = 7;
         return this;

@@ -95,8 +95,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
             }
           case 42:
             {
-              consistencySelectorCase_ = 5;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 5;
               break;
             }
           case 50:
@@ -143,6 +143,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1247,8 +1249,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (queryTypeCase_ == 2) {
           structuredQueryBuilder_.mergeFrom(value);
+        } else {
+          structuredQueryBuilder_.setMessage(value);
         }
-        structuredQueryBuilder_.setMessage(value);
       }
       queryTypeCase_ = 2;
       return this;
@@ -1548,8 +1551,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (consistencySelectorCase_ == 6) {
           newTransactionBuilder_.mergeFrom(value);
+        } else {
+          newTransactionBuilder_.setMessage(value);
         }
-        newTransactionBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 6;
       return this;
@@ -1773,8 +1777,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (consistencySelectorCase_ == 7) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 7;
       return this;

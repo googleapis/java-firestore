@@ -112,6 +112,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1016,8 +1018,9 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (queryTypeCase_ == 2) {
           structuredQueryBuilder_.mergeFrom(value);
+        } else {
+          structuredQueryBuilder_.setMessage(value);
         }
-        structuredQueryBuilder_.setMessage(value);
       }
       queryTypeCase_ = 2;
       return this;

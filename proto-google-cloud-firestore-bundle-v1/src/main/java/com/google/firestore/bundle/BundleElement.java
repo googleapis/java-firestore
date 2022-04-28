@@ -151,6 +151,8 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -871,8 +873,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 1) {
           metadataBuilder_.mergeFrom(value);
+        } else {
+          metadataBuilder_.setMessage(value);
         }
-        metadataBuilder_.setMessage(value);
       }
       elementTypeCase_ = 1;
       return this;
@@ -1011,8 +1014,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 2) {
           namedQueryBuilder_.mergeFrom(value);
+        } else {
+          namedQueryBuilder_.setMessage(value);
         }
-        namedQueryBuilder_.setMessage(value);
       }
       elementTypeCase_ = 2;
       return this;
@@ -1154,8 +1158,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 3) {
           documentMetadataBuilder_.mergeFrom(value);
+        } else {
+          documentMetadataBuilder_.setMessage(value);
         }
-        documentMetadataBuilder_.setMessage(value);
       }
       elementTypeCase_ = 3;
       return this;
@@ -1296,8 +1301,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 4) {
           documentBuilder_.mergeFrom(value);
+        } else {
+          documentBuilder_.setMessage(value);
         }
-        documentBuilder_.setMessage(value);
       }
       elementTypeCase_ = 4;
       return this;

@@ -124,8 +124,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             }
           case 66:
             {
-              consistencySelectorCase_ = 8;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 8;
               break;
             }
           case 82:
@@ -159,6 +159,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -2016,8 +2018,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       } else {
         if (consistencySelectorCase_ == 10) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 10;
       return this;

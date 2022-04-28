@@ -95,8 +95,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
             }
           case 26:
             {
-              consistencySelectorCase_ = 3;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 3;
               break;
             }
           case 42:
@@ -125,6 +125,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1311,8 +1313,9 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       } else {
         if (consistencySelectorCase_ == 5) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 5;
       return this;

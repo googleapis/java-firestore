@@ -123,6 +123,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -929,8 +931,9 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       } else {
         if (resultCase_ == 1) {
           foundBuilder_.mergeFrom(value);
+        } else {
+          foundBuilder_.setMessage(value);
         }
-        foundBuilder_.setMessage(value);
       }
       resultCase_ = 1;
       return this;

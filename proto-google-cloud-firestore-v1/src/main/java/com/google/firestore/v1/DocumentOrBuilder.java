@@ -164,8 +164,12 @@ public interface DocumentOrBuilder
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
    */
+
+  /* nullable */
   com.google.firestore.v1.Value getFieldsOrDefault(
-      java.lang.String key, com.google.firestore.v1.Value defaultValue);
+      java.lang.String key,
+      /* nullable */
+      com.google.firestore.v1.Value defaultValue);
   /**
    *
    *

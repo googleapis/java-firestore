@@ -137,4 +137,34 @@ public interface RunQueryResponseOrBuilder
    * @return The skippedResults.
    */
   int getSkippedResults();
+
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return Whether the done field is set.
+   */
+  boolean hasDone();
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return The done.
+   */
+  boolean getDone();
+
+  public com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase
+      getContinuationSelectorCase();
 }

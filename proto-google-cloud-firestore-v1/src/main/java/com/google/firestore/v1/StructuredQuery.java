@@ -191,6 +191,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -499,6 +501,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -1388,6 +1392,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -2149,8 +2155,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 1) {
             compositeFilterBuilder_.mergeFrom(value);
+          } else {
+            compositeFilterBuilder_.setMessage(value);
           }
-          compositeFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 1;
         return this;
@@ -2362,8 +2369,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 2) {
             fieldFilterBuilder_.mergeFrom(value);
+          } else {
+            fieldFilterBuilder_.setMessage(value);
           }
-          fieldFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 2;
         return this;
@@ -2573,8 +2581,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 3) {
             unaryFilterBuilder_.mergeFrom(value);
+          } else {
+            unaryFilterBuilder_.setMessage(value);
           }
-          unaryFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 3;
         return this;
@@ -2758,7 +2767,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2769,7 +2779,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2780,7 +2791,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2791,7 +2803,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2803,7 +2816,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2895,6 +2909,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -2945,7 +2961,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The results are required to satisfy each of the combined filters.
+       * Documents are required to satisfy all of the combined filters.
        * </pre>
        *
        * <code>AND = 1;</code>
@@ -2968,7 +2984,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The results are required to satisfy each of the combined filters.
+       * Documents are required to satisfy all of the combined filters.
        * </pre>
        *
        * <code>AND = 1;</code>
@@ -3103,7 +3119,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3117,7 +3134,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3132,7 +3150,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3146,7 +3165,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3160,7 +3180,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3669,7 +3690,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3686,7 +3708,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3703,7 +3726,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3720,7 +3744,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3743,7 +3768,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3764,7 +3790,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3787,7 +3814,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3810,7 +3838,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3831,7 +3860,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3852,7 +3882,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3873,7 +3904,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3893,7 +3925,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3913,7 +3946,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3926,7 +3960,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3944,7 +3979,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3962,7 +3998,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3976,7 +4013,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3990,7 +4028,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -4271,6 +4310,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -5856,6 +5897,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -6819,8 +6862,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (operandTypeCase_ == 2) {
             fieldBuilder_.mergeFrom(value);
+          } else {
+            fieldBuilder_.setMessage(value);
           }
-          fieldBuilder_.setMessage(value);
         }
         operandTypeCase_ = 2;
         return this;
@@ -7121,6 +7165,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -7999,6 +8045,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -8655,6 +8703,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {

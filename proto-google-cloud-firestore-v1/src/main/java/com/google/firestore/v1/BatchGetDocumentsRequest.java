@@ -107,8 +107,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
             }
           case 34:
             {
-              consistencySelectorCase_ = 4;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 4;
               break;
             }
           case 42:
@@ -155,6 +155,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1751,8 +1753,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       } else {
         if (consistencySelectorCase_ == 5) {
           newTransactionBuilder_.mergeFrom(value);
+        } else {
+          newTransactionBuilder_.setMessage(value);
         }
-        newTransactionBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 5;
       return this;
@@ -1976,8 +1979,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       } else {
         if (consistencySelectorCase_ == 7) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 7;
       return this;
