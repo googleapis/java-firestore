@@ -279,4 +279,11 @@
     <className>com/google/cloud/firestore/Firestore</className>
     <method>com.google.api.core.ApiFuture recursiveDelete(*)</method>
   </difference>
+
+  <!-- Aggregate Queries  -->
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
+    <method>com.google.api.gax.rpc.ServerStreamingCallable runAggregateQueryCallable()</method>
+  </difference>
 </differences>

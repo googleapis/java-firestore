@@ -60,6 +60,7 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -1764,7 +1765,10 @@ public class Query {
   @Nonnull
   public AggregateQuery aggregate(
       @Nonnull AggregateField field, @Nonnull AggregateField... fields) {
-    throw new RuntimeException("not implemented");
+    ArrayList<AggregateField> aggregateFields = new ArrayList<>();
+    aggregateFields.add(field);
+    aggregateFields.addAll(Arrays.asList(fields));
+    return new AggregateQueryImpl(this, aggregateFields);
   }
 
   // A convenience method for just getting the count of a query.
