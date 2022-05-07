@@ -312,7 +312,8 @@ public final class LocalFirestoreHelper {
   }
 
   /** Returns a stream of responses when RunQueryResponse.done set to true */
-  public static Answer<RunQueryResponse> queryResponse(boolean setDone, String... documentNames) {
+  public static Answer<RunQueryResponse> queryResponseWithDone(
+      boolean callWithoutOnComplete, String... documentNames) {
     RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
 
     for (int i = 0; i < documentNames.length; ++i) {
@@ -321,13 +322,16 @@ public final class LocalFirestoreHelper {
           Document.newBuilder().setName(documentNames[i]).putAllFields(SINGLE_FIELD_PROTO));
       runQueryResponse.setReadTime(
           com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
-      if (i == (documentNames.length - 1) && setDone) {
+      if (i == (documentNames.length - 1)) {
         runQueryResponse.setDone(true);
       }
       responses[i] = runQueryResponse.build();
     }
-
-    return streamingResponseWithoutOnComplete(responses);
+    if (callWithoutOnComplete) {
+      return streamingResponseWithoutOnComplete(responses);
+    } else {
+      return streamingResponse(responses, null);
+    }
   }
 
   /** Returns a stream of responses followed by an optional exception. */
