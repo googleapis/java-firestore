@@ -1330,6 +1330,8 @@ public class Query {
 
     internalStream(
         new QuerySnapshotObserver() {
+          boolean hasCompleted = false;
+
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
             responseObserver.onNext(documentSnapshot);
@@ -1342,6 +1344,8 @@ public class Query {
 
           @Override
           public void onCompleted() {
+            if (hasCompleted) return;
+            hasCompleted = true;
             responseObserver.onCompleted();
           }
         },

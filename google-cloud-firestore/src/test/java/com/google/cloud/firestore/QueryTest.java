@@ -955,7 +955,9 @@ public class QueryTest {
 
   @Test
   public void successfulReturnWithoutOnComplete() throws Exception {
-    doAnswer(queryResponseWithDone(true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
@@ -992,7 +994,9 @@ public class QueryTest {
    * to true. The second time is when it receives half close
    */
   public void successfulReturnCallsOnCompleteTwice() throws Exception {
-    doAnswer(queryResponseWithDone(false, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ false, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
         .streamRequest(
             runQuery.capture(),
@@ -1001,6 +1005,7 @@ public class QueryTest {
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+    final int[] counter = {0};
 
     query.stream(
         new ApiStreamObserver<DocumentSnapshot>() {
@@ -1016,11 +1021,15 @@ public class QueryTest {
 
           @Override
           public void onCompleted() {
+            counter[0]++;
             semaphore.release();
           }
         });
 
     semaphore.acquire();
+
+    Thread.sleep(200);
+    assertEquals(1, counter[0]);
   }
 
   @Test
