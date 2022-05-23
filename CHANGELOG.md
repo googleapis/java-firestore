@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.2.0](https://github.com/googleapis/java-firestore/compare/v3.1.0...v3.2.0) (2022-05-23)
+
+
+### Features
+
+* enable RunQueryResponse.done ([#942](https://github.com/googleapis/java-firestore/issues/942)) ([055b029](https://github.com/googleapis/java-firestore/commit/055b02930a455c253f443dcbacf935b5c8e37991))
+
+
+### Documentation
+
+* **sample:** remove unused native-image-support module ([#952](https://github.com/googleapis/java-firestore/issues/952)) ([17c2de9](https://github.com/googleapis/java-firestore/commit/17c2de9594c8ea549ed623ea482420f00fc7b6b6))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.12.0 ([#959](https://github.com/googleapis/java-firestore/issues/959)) ([f1d6b17](https://github.com/googleapis/java-firestore/commit/f1d6b17550556a6e1ce3cd734a5425b94da4aa6d))
+
 ## [3.1.0](https://github.com/googleapis/java-firestore/compare/v3.0.21...v3.1.0) (2022-04-21)
 
 
