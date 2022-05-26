@@ -1028,6 +1028,7 @@ public class QueryTest {
 
     semaphore.acquire();
 
+    // Wait for some time to see whether onCompleted() has been called more than once
     Thread.sleep(200);
     assertEquals(1, counter[0]);
   }
