@@ -27,6 +27,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.offset;
 import static com.google.cloud.firestore.LocalFirestoreHelper.order;
 import static com.google.cloud.firestore.LocalFirestoreHelper.query;
 import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponseWithDone;
 import static com.google.cloud.firestore.LocalFirestoreHelper.reference;
 import static com.google.cloud.firestore.LocalFirestoreHelper.select;
 import static com.google.cloud.firestore.LocalFirestoreHelper.startAt;
@@ -950,6 +951,86 @@ public class QueryTest {
         });
 
     semaphore.acquire();
+  }
+
+  @Test
+  public void successfulReturnWithoutOnComplete() throws Exception {
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+  }
+
+  @Test
+  /**
+   * onComplete() will be called twice. The first time is when it detects RunQueryResponse.done set
+   * to true. The second time is when it receives half close
+   */
+  public void successfulReturnCallsOnCompleteTwice() throws Exception {
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ false, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+    final int[] counter = {0};
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            counter[0]++;
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+
+    // Wait for some time to see whether onCompleted() has been called more than once
+    Thread.sleep(200);
+    assertEquals(1, counter[0]);
   }
 
   @Test

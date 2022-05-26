@@ -1330,6 +1330,8 @@ public class Query {
 
     internalStream(
         new QuerySnapshotObserver() {
+          boolean hasCompleted = false;
+
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
             responseObserver.onNext(documentSnapshot);
@@ -1342,6 +1344,8 @@ public class Query {
 
           @Override
           public void onCompleted() {
+            if (hasCompleted) return;
+            hasCompleted = true;
             responseObserver.onCompleted();
           }
         },
@@ -1537,6 +1541,16 @@ public class Query {
             if (readTime == null) {
               readTime = Timestamp.fromProto(response.getReadTime());
             }
+
+            if (response.hasDone() && response.getDone()) {
+              Tracing.getTracer()
+                  .getCurrentSpan()
+                  .addAnnotation(
+                      "Firestore.Query: Completed",
+                      ImmutableMap.of(
+                          "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
+              documentObserver.onCompleted(readTime);
+            }
           }
 
           @Override
@@ -1640,6 +1654,9 @@ public class Query {
     internalStream(
         new QuerySnapshotObserver() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          // The stream's onCompleted could be called more than once,
+          // this flag makes sure only the first one is actually processed.
+          boolean hasCompleted = false;
 
           @Override
           public void onNext(QueryDocumentSnapshot documentSnapshot) {
@@ -1653,6 +1670,9 @@ public class Query {
 
           @Override
           public void onCompleted() {
+            if (hasCompleted) return;
+            hasCompleted = true;
+
             // The results for limitToLast queries need to be flipped since we reversed the
             // ordering constraints before sending the query to the backend.
             List<QueryDocumentSnapshot> resultView =
