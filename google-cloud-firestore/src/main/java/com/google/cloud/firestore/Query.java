@@ -1761,6 +1761,11 @@ public class Query {
     return false;
   }
 
+  @Nonnull
+  public AggregateQuery count() {
+    throw new RuntimeException("not implemented");
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *
