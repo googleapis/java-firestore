@@ -13,7 +13,7 @@ MAX_NUM_WORKERS=<max-num-workers>
 ```
 2. Run the command to write example "cities" data:
 ```
-mvn compile exec:java -Dexec.mainClass=ExampleFirestoreWrite \
+mvn compile exec:java -Dexec.mainClass=ExampleFirestoreBeamWrite \
 "-Dexec.args=--project=$GOOGLE_CLOUD_PROJECT \
 --runner=DataflowRunner \
 --project=$GOOGLE_CLOUD_PROJECT \
@@ -25,7 +25,7 @@ mvn compile exec:java -Dexec.mainClass=ExampleFirestoreWrite \
 
 3. Run the command to filter and read the data you wrote:
 ```
-mvn compile exec:java -Dexec.mainClass=ExampleFirestoreRead \
+mvn compile exec:java -Dexec.mainClass=ExampleFirestoreBeamRead \
 "-Dexec.args=--project=$GOOGLE_CLOUD_PROJECT \
 --runner=DataflowRunner \
 --region=$REGION \
