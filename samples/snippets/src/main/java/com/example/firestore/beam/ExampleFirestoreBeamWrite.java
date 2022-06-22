@@ -32,6 +32,7 @@ public class ExampleFirestoreBeamWrite {
   private static final FirestoreOptions FIRESTORE_OPTIONS = FirestoreOptions.getDefaultInstance();
 
   public static void runWrite(String[] args, String collectionId) {
+    // create pipeline options from the passed in arguments
     PipelineOptions options =
         PipelineOptionsFactory.fromArgs(args).withValidation().as(PipelineOptions.class);
     Pipeline pipeline = Pipeline.create(options);
@@ -41,12 +42,13 @@ public class ExampleFirestoreBeamWrite {
             .withHintMaxNumWorkers(options.as(DataflowPipelineOptions.class).getMaxNumWorkers())
             .build();
 
+    // create some writes
     Write write1 =
         Write.newBuilder()
             .setUpdate(
                 Document.newBuilder()
                     // resolves to
-                    // projects/<your-project-id>/databases/<your-database-id>/documents/cities/NYC
+                    // projects/<your-project-id>/databases/<your-database-id>/documents/<collectionId>/NYC
                     .setName(createDocumentName(collectionId, "NYC"))
                     .putFields("name", Value.newBuilder().setStringValue("New York City").build())
                     .putFields("state", Value.newBuilder().setStringValue("New York").build())
@@ -58,17 +60,19 @@ public class ExampleFirestoreBeamWrite {
             .setUpdate(
                 Document.newBuilder()
                     // resolves to
-                    // projects/<your-project-id>/databases/<your-database-id>/documents/cities/TOK
+                    // projects/<your-project-id>/databases/<your-database-id>/documents/<collectionId>/TOK
                     .setName(createDocumentName(collectionId, "TOK"))
                     .putFields("name", Value.newBuilder().setStringValue("Tokyo").build())
                     .putFields("country", Value.newBuilder().setStringValue("Japan").build())
                     .putFields("capital", Value.newBuilder().setBooleanValue(true).build()))
             .build();
 
+    // batch write the data
     pipeline
         .apply(Create.of(write1, write2))
         .apply(FirestoreIO.v1().write().batchWrite().withRpcQosOptions(rpcQosOptions).build());
 
+    // run the pipeline
     pipeline.run().waitUntilFinish();
   }
 

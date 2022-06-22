@@ -51,11 +51,12 @@ public class ExampleFirestoreBeamRead {
     pipeline
         .apply(Create.of(collectionId))
         .apply(
-            new ReadDocumentsQuery(
+            new FilterDocumentsQuery(
                 firestoreOptions.getProjectId(), firestoreOptions.getDatabaseId()))
         .apply(FirestoreIO.v1().read().runQuery().withRpcQosOptions(rpcQosOptions).build())
         .apply(
             ParDo.of(
+                // transform each document to its name
                 new DoFn<RunQueryResponse, String>() {
                   @ProcessElement
                   public void processElement(ProcessContext c) {
@@ -64,6 +65,7 @@ public class ExampleFirestoreBeamRead {
                 }))
         .apply(
             ParDo.of(
+                // print the document name
                 new DoFn<String, Void>() {
                   @ProcessElement
                   public void processElement(ProcessContext c) {
@@ -74,13 +76,13 @@ public class ExampleFirestoreBeamRead {
     pipeline.run().waitUntilFinish();
   }
 
-  private static final class ReadDocumentsQuery
+  private static final class FilterDocumentsQuery
       extends PTransform<PCollection<String>, PCollection<RunQueryRequest>> {
 
     private final String projectId;
     private final String databaseId;
 
-    public ReadDocumentsQuery(String projectId, String databaseId) {
+    public FilterDocumentsQuery(String projectId, String databaseId) {
       this.projectId = projectId;
       this.databaseId = databaseId;
     }
@@ -90,33 +92,33 @@ public class ExampleFirestoreBeamRead {
       return input.apply(
           ParDo.of(
               new DoFn<String, RunQueryRequest>() {
-
                 @ProcessElement
                 public void processElement(ProcessContext c) {
+                  // select from collection "cities-collection-<uuid>"
+                  StructuredQuery.CollectionSelector collection =
+                      StructuredQuery.CollectionSelector.newBuilder()
+                          .setCollectionId(Objects.requireNonNull(c.element()))
+                          .build();
+                  // filter where country is equal to USA
+                  StructuredQuery.Filter countryFilter =
+                      StructuredQuery.Filter.newBuilder()
+                          .setFieldFilter(
+                              StructuredQuery.FieldFilter.newBuilder()
+                                  .setField(
+                                      StructuredQuery.FieldReference.newBuilder()
+                                          .setFieldPath("country")
+                                          .build())
+                                  .setValue(Value.newBuilder().setStringValue("USA").build())
+                                  .setOp(StructuredQuery.FieldFilter.Operator.EQUAL))
+                          .buildPartial();
+
                   RunQueryRequest runQueryRequest =
                       RunQueryRequest.newBuilder()
                           .setParent(DocumentRootName.format(projectId, databaseId))
                           .setStructuredQuery(
                               StructuredQuery.newBuilder()
-                                  .addFrom(
-                                      StructuredQuery.CollectionSelector.newBuilder()
-                                          .setCollectionId(Objects.requireNonNull(c.element()))
-                                          .build())
-                                  .setWhere(
-                                      StructuredQuery.Filter.newBuilder()
-                                          .setFieldFilter(
-                                              StructuredQuery.FieldFilter.newBuilder()
-                                                  .setField(
-                                                      StructuredQuery.FieldReference.newBuilder()
-                                                          .setFieldPath("country")
-                                                          .build())
-                                                  .setValue(
-                                                      Value.newBuilder()
-                                                          .setStringValue("USA")
-                                                          .build())
-                                                  .setOp(
-                                                      StructuredQuery.FieldFilter.Operator.EQUAL))
-                                          .buildPartial())
+                                  .addFrom(collection)
+                                  .setWhere(countryFilter)
                                   .build())
                           .build();
                   c.output(runQueryRequest);
