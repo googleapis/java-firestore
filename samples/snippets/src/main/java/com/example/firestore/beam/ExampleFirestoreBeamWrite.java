@@ -53,7 +53,7 @@ public class ExampleFirestoreBeamWrite {
             .setUpdate(
                 Document.newBuilder()
                     // resolves to
-                    // projects/<your-project-id>/databases/<your-database-id>/documents/<collectionId>/NYC
+                    // projects/<projectId>/databases/<databaseId>/documents/<collectionId>/NYC
                     .setName(createDocumentName(collectionId, "NYC"))
                     .putFields("name", Value.newBuilder().setStringValue("New York City").build())
                     .putFields("state", Value.newBuilder().setStringValue("New York").build())
@@ -65,7 +65,7 @@ public class ExampleFirestoreBeamWrite {
             .setUpdate(
                 Document.newBuilder()
                     // resolves to
-                    // projects/<your-project-id>/databases/<your-database-id>/documents/<collectionId>/TOK
+                    // projects/<projectId>/databases/<databaseId>/documents/<collectionId>/TOK
                     .setName(createDocumentName(collectionId, "TOK"))
                     .putFields("name", Value.newBuilder().setStringValue("Tokyo").build())
                     .putFields("country", Value.newBuilder().setStringValue("Japan").build())
