@@ -369,8 +369,6 @@ public class Query {
 
     abstract @Nullable Cursor getEndCursor();
 
-    // abstract ImmutableList<FieldFilter> getFieldFilters();
-
     abstract ImmutableList<FilterInternal> getFilters();
 
     abstract ImmutableList<FieldOrder> getFieldOrders();
@@ -391,7 +389,6 @@ public class Query {
           .setAllDescendants(false)
           .setLimitType(LimitType.First)
           .setFieldOrders(ImmutableList.of())
-          // .setFieldFilters(ImmutableList.of())
           .setFilters(ImmutableList.of())
           .setFieldProjections(ImmutableList.of())
           .setKindless(false)
@@ -417,8 +414,6 @@ public class Query {
       abstract Builder setStartCursor(@Nullable Cursor value);
 
       abstract Builder setEndCursor(@Nullable Cursor value);
-
-      // abstract Builder setFieldFilters(ImmutableList<FieldFilter> value);
 
       abstract Builder setFilters(ImmutableList<FilterInternal> value);
 
