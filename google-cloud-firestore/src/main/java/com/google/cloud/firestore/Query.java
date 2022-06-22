@@ -37,7 +37,6 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Filter.UnaryFilter;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
@@ -102,14 +101,14 @@ public class Query {
 
   abstract static class FilterInternal {
     /** Returns a list of all field filters that are contained within this filter */
-    public abstract List<FieldFilter> getFlattenedFilters();
+    abstract List<FieldFilter> getFlattenedFilters();
 
     /** Returns a list of all filters that are contained within this filter */
-    public abstract List<FilterInternal> getFilters();
+    abstract List<FilterInternal> getFilters();
 
     /** Returns the field of the first filter that's an inequality, or null if none. */
     @Nullable
-    public abstract FieldReference getFirstInequalityField();
+    abstract FieldReference getFirstInequalityField();
 
     /** Returns the proto representation of this filter */
     abstract Filter toProto();
@@ -172,10 +171,6 @@ public class Query {
       return null;
     }
 
-    public StructuredQuery.CompositeFilter.Operator getOperator() {
-      return operator;
-    }
-
     public boolean isConjunction() {
       return operator == CompositeFilter.Operator.AND;
     }
@@ -194,7 +189,7 @@ public class Query {
 
     @Override
     Filter toProto() {
-      // A composite filter that only contains one sub-filter is equivalent to the sub-filter.
+      // A composite filter that contains one sub-filter is equivalent to the sub-filter.
       if (filters.size() == 1) {
         return filters.get(0).toProto();
       }
