@@ -101,7 +101,7 @@ public class Query {
 
   abstract static class FilterInternal {
     /** Returns a list of all field filters that are contained within this filter */
-    abstract List<FieldFilter> getFlattenedFilters();
+    abstract List<FieldFilterInternal> getFlattenedFilters();
 
     /** Returns a list of all filters that are contained within this filter */
     abstract List<FilterInternal> getFilters();
@@ -115,12 +115,12 @@ public class Query {
 
     static FilterInternal fromProto(StructuredQuery.Filter filter) {
       if (filter.hasUnaryFilter()) {
-        return new Query.UnaryFilter(
+        return new UnaryFilterInternal(
             filter.getUnaryFilter().getField(), filter.getUnaryFilter().getOp());
       }
 
       if (filter.hasFieldFilter()) {
-        return new ComparisonFilter(
+        return new ComparisonFilterInternal(
             filter.getFieldFilter().getField(),
             filter.getFieldFilter().getOp(),
             filter.getFieldFilter().getValue());
@@ -137,19 +137,19 @@ public class Query {
       for (StructuredQuery.Filter subfilter : compositeFilter.getFiltersList()) {
         filters.add(FilterInternal.fromProto(subfilter));
       }
-      return new CompositeComparisonFilter(filters, compositeFilter.getOp());
+      return new CompositeFilterInternal(filters, compositeFilter.getOp());
     }
   }
 
-  static class CompositeComparisonFilter extends FilterInternal {
+  static class CompositeFilterInternal extends FilterInternal {
     private final List<FilterInternal> filters;
     private final StructuredQuery.CompositeFilter.Operator operator;
 
     // Memoized list of all field filters that can be found by traversing the tree of filters
     // contained in this composite filter.
-    private List<FieldFilter> memoizedFlattenedFilters;
+    private List<FieldFilterInternal> memoizedFlattenedFilters;
 
-    public CompositeComparisonFilter(
+    public CompositeFilterInternal(
         List<FilterInternal> filters, StructuredQuery.CompositeFilter.Operator operator) {
       this.filters = filters;
       this.operator = operator;
@@ -163,7 +163,7 @@ public class Query {
     @Nullable
     @Override
     public FieldReference getFirstInequalityField() {
-      for (FieldFilter fieldFilter : getFlattenedFilters()) {
+      for (FieldFilterInternal fieldFilter : getFlattenedFilters()) {
         if (fieldFilter.isInequalityFilter()) {
           return fieldFilter.fieldReference;
         }
@@ -176,7 +176,7 @@ public class Query {
     }
 
     @Override
-    public List<FieldFilter> getFlattenedFilters() {
+    public List<FieldFilterInternal> getFlattenedFilters() {
       if (memoizedFlattenedFilters != null) {
         return memoizedFlattenedFilters;
       }
@@ -206,10 +206,10 @@ public class Query {
     }
   }
 
-  abstract static class FieldFilter extends FilterInternal {
+  abstract static class FieldFilterInternal extends FilterInternal {
     protected final FieldReference fieldReference;
 
-    FieldFilter(FieldReference fieldReference) {
+    FieldFilterInternal(FieldReference fieldReference) {
       this.fieldReference = fieldReference;
     }
 
@@ -220,16 +220,17 @@ public class Query {
     }
 
     @Override
-    public List<FieldFilter> getFlattenedFilters() {
+    public List<FieldFilterInternal> getFlattenedFilters() {
       return Collections.singletonList(this);
     }
   }
 
-  private static class UnaryFilter extends FieldFilter {
+  private static class UnaryFilterInternal extends FieldFilterInternal {
 
     private final StructuredQuery.UnaryFilter.Operator operator;
 
-    UnaryFilter(FieldReference fieldReference, StructuredQuery.UnaryFilter.Operator operator) {
+    UnaryFilterInternal(
+        FieldReference fieldReference, StructuredQuery.UnaryFilter.Operator operator) {
       super(fieldReference);
       this.operator = operator;
     }
@@ -256,20 +257,20 @@ public class Query {
       if (this == o) {
         return true;
       }
-      if (!(o instanceof UnaryFilter)) {
+      if (!(o instanceof UnaryFilterInternal)) {
         return false;
       }
-      UnaryFilter other = (UnaryFilter) o;
+      UnaryFilterInternal other = (UnaryFilterInternal) o;
       return Objects.equals(fieldReference, other.fieldReference)
           && Objects.equals(operator, other.operator);
     }
   }
 
-  static class ComparisonFilter extends FieldFilter {
+  static class ComparisonFilterInternal extends FieldFilterInternal {
     final StructuredQuery.FieldFilter.Operator operator;
     final Value value;
 
-    ComparisonFilter(
+    ComparisonFilterInternal(
         FieldReference fieldReference, StructuredQuery.FieldFilter.Operator operator, Value value) {
       super(fieldReference);
       this.value = value;
@@ -305,10 +306,10 @@ public class Query {
       if (this == o) {
         return true;
       }
-      if (!(o instanceof ComparisonFilter)) {
+      if (!(o instanceof ComparisonFilterInternal)) {
         return false;
       }
-      ComparisonFilter other = (ComparisonFilter) o;
+      ComparisonFilterInternal other = (ComparisonFilterInternal) o;
       return Objects.equals(fieldReference, other.fieldReference)
           && Objects.equals(operator, other.operator)
           && Objects.equals(value, other.value);
@@ -911,7 +912,7 @@ public class Query {
     return parseCompositeFilter((com.google.cloud.firestore.Filter.CompositeFilter) filter);
   }
 
-  private FieldFilter parseFieldFilter(
+  private FieldFilterInternal parseFieldFilter(
       com.google.cloud.firestore.Filter.UnaryFilter fieldFilterData) {
     Object value = fieldFilterData.getValue();
     Operator operator = fieldFilterData.getOperator();
@@ -926,7 +927,7 @@ public class Query {
               : (value == null
                   ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
                   : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN);
-      return new UnaryFilter(fieldPath.toProto(), unaryOp);
+      return new UnaryFilterInternal(fieldPath.toProto(), unaryOp);
     } else {
       if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
         if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
@@ -951,7 +952,8 @@ public class Query {
           value = this.convertReference(value);
         }
       }
-      return new ComparisonFilter(fieldPath.toProto(), operator, encodeValue(fieldPath, value));
+      return new ComparisonFilterInternal(
+          fieldPath.toProto(), operator, encodeValue(fieldPath, value));
     }
   }
 
@@ -970,7 +972,7 @@ public class Query {
     if (parsedFilters.size() == 1) {
       return parsedFilters.get(0);
     }
-    return new CompositeComparisonFilter(parsedFilters, compositeFilterData.getOperator());
+    return new CompositeFilterInternal(parsedFilters, compositeFilterData.getOperator());
   }
 
   /**
@@ -1360,7 +1362,7 @@ public class Query {
     // There's an implicit AND operation between the top-level query filters.
     if (!options.getFilters().isEmpty()) {
       FilterInternal filter =
-          new CompositeComparisonFilter(options.getFilters(), CompositeFilter.Operator.AND);
+          new CompositeFilterInternal(options.getFilters(), CompositeFilter.Operator.AND);
       structuredQuery.setWhere(filter.toProto());
     }
 
@@ -1491,8 +1493,8 @@ public class Query {
       FilterInternal filter = FilterInternal.fromProto(structuredQuery.getWhere());
 
       // There's an implicit AND operation between the top-level query filters.
-      if (filter instanceof CompositeComparisonFilter
-          && ((CompositeComparisonFilter) filter).isConjunction()) {
+      if (filter instanceof CompositeFilterInternal
+          && ((CompositeFilterInternal) filter).isConjunction()) {
         queryOptions.setFilters(
             new ImmutableList.Builder<FilterInternal>().addAll(filter.getFilters()).build());
       } else {
