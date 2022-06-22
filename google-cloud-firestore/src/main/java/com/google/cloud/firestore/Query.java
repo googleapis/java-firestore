@@ -37,6 +37,7 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Filter.UnaryFilter;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
@@ -50,6 +51,7 @@ import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.CollectionSelector;
 import com.google.firestore.v1.StructuredQuery.CompositeFilter;
+import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.StructuredQuery.FieldReference;
 import com.google.firestore.v1.StructuredQuery.Filter;
 import com.google.firestore.v1.StructuredQuery.Order;
@@ -60,6 +62,7 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -97,31 +100,134 @@ public class Query {
     }
   }
 
-  abstract static class FieldFilter {
-    protected final FieldReference fieldReference;
+  abstract static class FilterInternal {
+    /** Returns a list of all field filters that are contained within this filter */
+    public abstract List<FieldFilter> getFlattenedFilters();
 
-    FieldFilter(FieldReference fieldReference) {
-      this.fieldReference = fieldReference;
-    }
+    /** Returns a list of all filters that are contained within this filter */
+    public abstract List<FilterInternal> getFilters();
 
-    static FieldFilter fromProto(StructuredQuery.Filter filter) {
-      Preconditions.checkArgument(
-          !filter.hasCompositeFilter(), "Cannot deserialize nested composite filters");
+    /** Returns the field of the first filter that's an inequality, or null if none. */
+    @Nullable
+    public abstract FieldReference getFirstInequalityField();
+
+    /** Returns the proto representation of this filter */
+    abstract Filter toProto();
+
+    static FilterInternal fromProto(StructuredQuery.Filter filter) {
+      if (filter.hasUnaryFilter()) {
+        return new Query.UnaryFilter(
+            filter.getUnaryFilter().getField(), filter.getUnaryFilter().getOp());
+      }
 
       if (filter.hasFieldFilter()) {
         return new ComparisonFilter(
             filter.getFieldFilter().getField(),
             filter.getFieldFilter().getOp(),
             filter.getFieldFilter().getValue());
-      } else {
-        Preconditions.checkState(filter.hasUnaryFilter(), "Expected unary of field filter");
-        return new UnaryFilter(filter.getUnaryFilter().getField(), filter.getUnaryFilter().getOp());
       }
+
+      // `filter` must be a composite filter.
+      Preconditions.checkArgument(filter.hasCompositeFilter(), "Unknown filter type.");
+      CompositeFilter compositeFilter = filter.getCompositeFilter();
+      // A composite filter with only 1 sub-filter should be reduced to its sub-filter.
+      if (compositeFilter.getFiltersCount() == 1) {
+        return FilterInternal.fromProto(compositeFilter.getFiltersList().get(0));
+      }
+      List<FilterInternal> filters = new ArrayList<>();
+      for (StructuredQuery.Filter subfilter : compositeFilter.getFiltersList()) {
+        filters.add(FilterInternal.fromProto(subfilter));
+      }
+      return new CompositeComparisonFilter(filters, compositeFilter.getOp());
+    }
+  }
+
+  static class CompositeComparisonFilter extends FilterInternal {
+    private final List<FilterInternal> filters;
+    private final StructuredQuery.CompositeFilter.Operator operator;
+
+    // Memoized list of all field filters that can be found by traversing the tree of filters
+    // contained in this composite filter.
+    private List<FieldFilter> memoizedFlattenedFilters;
+
+    public CompositeComparisonFilter(
+        List<FilterInternal> filters, StructuredQuery.CompositeFilter.Operator operator) {
+      this.filters = filters;
+      this.operator = operator;
+    }
+
+    @Override
+    public List<FilterInternal> getFilters() {
+      return filters;
+    }
+
+    @Nullable
+    @Override
+    public FieldReference getFirstInequalityField() {
+      for (FieldFilter fieldFilter : getFlattenedFilters()) {
+        if (fieldFilter.isInequalityFilter()) {
+          return fieldFilter.fieldReference;
+        }
+      }
+      return null;
+    }
+
+    public StructuredQuery.CompositeFilter.Operator getOperator() {
+      return operator;
+    }
+
+    public boolean isConjunction() {
+      return operator == CompositeFilter.Operator.AND;
+    }
+
+    @Override
+    public List<FieldFilter> getFlattenedFilters() {
+      if (memoizedFlattenedFilters != null) {
+        return memoizedFlattenedFilters;
+      }
+      memoizedFlattenedFilters = new ArrayList<>();
+      for (FilterInternal subfilter : filters) {
+        memoizedFlattenedFilters.addAll(subfilter.getFlattenedFilters());
+      }
+      return memoizedFlattenedFilters;
+    }
+
+    @Override
+    Filter toProto() {
+      // A composite filter that only contains one sub-filter is equivalent to the sub-filter.
+      if (filters.size() == 1) {
+        return filters.get(0).toProto();
+      }
+
+      Filter.Builder protoFilter = Filter.newBuilder();
+      StructuredQuery.CompositeFilter.Builder compositeFilter =
+          StructuredQuery.CompositeFilter.newBuilder();
+      compositeFilter.setOp(operator);
+      for (FilterInternal filter : filters) {
+        compositeFilter.addFilters(filter.toProto());
+      }
+      protoFilter.setCompositeFilter(compositeFilter.build());
+      return protoFilter.build();
+    }
+  }
+
+  abstract static class FieldFilter extends FilterInternal {
+    protected final FieldReference fieldReference;
+
+    FieldFilter(FieldReference fieldReference) {
+      this.fieldReference = fieldReference;
     }
 
     abstract boolean isInequalityFilter();
 
-    abstract Filter toProto();
+    public List<FilterInternal> getFilters() {
+      return Collections.singletonList(this);
+    }
+
+    @Override
+    public List<FieldFilter> getFlattenedFilters() {
+      return Collections.singletonList(this);
+    }
   }
 
   private static class UnaryFilter extends FieldFilter {
@@ -136,6 +242,12 @@ public class Query {
     @Override
     boolean isInequalityFilter() {
       return false;
+    }
+
+    @Nullable
+    @Override
+    public FieldReference getFirstInequalityField() {
+      return null;
     }
 
     Filter toProto() {
@@ -169,12 +281,22 @@ public class Query {
       this.operator = operator;
     }
 
+    // TODO(ehsan): This seems out of date.
     @Override
     boolean isInequalityFilter() {
       return operator.equals(GREATER_THAN)
           || operator.equals(GREATER_THAN_OR_EQUAL)
           || operator.equals(LESS_THAN)
           || operator.equals(LESS_THAN_OR_EQUAL);
+    }
+
+    @Nullable
+    @Override
+    public FieldReference getFirstInequalityField() {
+      if (isInequalityFilter()) {
+        return fieldReference;
+      }
+      return null;
     }
 
     Filter toProto() {
@@ -252,7 +374,9 @@ public class Query {
 
     abstract @Nullable Cursor getEndCursor();
 
-    abstract ImmutableList<FieldFilter> getFieldFilters();
+    // abstract ImmutableList<FieldFilter> getFieldFilters();
+
+    abstract ImmutableList<FilterInternal> getFilters();
 
     abstract ImmutableList<FieldOrder> getFieldOrders();
 
@@ -272,7 +396,8 @@ public class Query {
           .setAllDescendants(false)
           .setLimitType(LimitType.First)
           .setFieldOrders(ImmutableList.of())
-          .setFieldFilters(ImmutableList.of())
+          // .setFieldFilters(ImmutableList.of())
+          .setFilters(ImmutableList.of())
           .setFieldProjections(ImmutableList.of())
           .setKindless(false)
           .setRequireConsistency(true);
@@ -298,7 +423,9 @@ public class Query {
 
       abstract Builder setEndCursor(@Nullable Cursor value);
 
-      abstract Builder setFieldFilters(ImmutableList<FieldFilter> value);
+      // abstract Builder setFieldFilters(ImmutableList<FieldFilter> value);
+
+      abstract Builder setFilters(ImmutableList<FilterInternal> value);
 
       abstract Builder setFieldOrders(ImmutableList<FieldOrder> value);
 
@@ -348,9 +475,10 @@ public class Query {
 
     // If no explicit ordering is specified, use the first inequality to define an implicit order.
     if (implicitOrders.isEmpty()) {
-      for (FieldFilter fieldFilter : options.getFieldFilters()) {
-        if (fieldFilter.isInequalityFilter()) {
-          implicitOrders.add(new FieldOrder(fieldFilter.fieldReference, Direction.ASCENDING));
+      for (FilterInternal filter : options.getFilters()) {
+        FieldReference fieldReference = filter.getFirstInequalityField();
+        if (fieldReference != null) {
+          implicitOrders.add(new FieldOrder(fieldReference, Direction.ASCENDING));
           break;
         }
       }
@@ -499,23 +627,7 @@ public class Query {
    */
   @Nonnull
   public Query whereEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereEqualTo() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-
-    if (isUnaryComparison(value)) {
-      Builder newOptions = options.toBuilder();
-      StructuredQuery.UnaryFilter.Operator op =
-          value == null
-              ? StructuredQuery.UnaryFilter.Operator.IS_NULL
-              : StructuredQuery.UnaryFilter.Operator.IS_NAN;
-      UnaryFilter newFieldFilter = new UnaryFilter(fieldPath.toProto(), op);
-      newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
-      return new Query(rpcContext, newOptions.build());
-    } else {
-      return whereHelper(fieldPath, EQUAL, value);
-    }
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, EQUAL, value));
   }
 
   /**
@@ -541,23 +653,7 @@ public class Query {
    */
   @Nonnull
   public Query whereNotEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereNotEqualTo() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-
-    if (isUnaryComparison(value)) {
-      Builder newOptions = options.toBuilder();
-      StructuredQuery.UnaryFilter.Operator op =
-          value == null
-              ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
-              : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN;
-      UnaryFilter newFieldFilter = new UnaryFilter(fieldPath.toProto(), op);
-      newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
-      return new Query(rpcContext, newOptions.build());
-    } else {
-      return whereHelper(fieldPath, NOT_EQUAL, value);
-    }
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, NOT_EQUAL, value));
   }
 
   /**
@@ -583,11 +679,7 @@ public class Query {
    */
   @Nonnull
   public Query whereLessThan(@Nonnull FieldPath fieldPath, @Nonnull Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereLessThan() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, LESS_THAN, value);
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, LESS_THAN, value));
   }
 
   /**
@@ -613,11 +705,8 @@ public class Query {
    */
   @Nonnull
   public Query whereLessThanOrEqualTo(@Nonnull FieldPath fieldPath, @Nonnull Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereLessThanOrEqualTo() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, LESS_THAN_OR_EQUAL, value);
+    return where(
+        new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, LESS_THAN_OR_EQUAL, value));
   }
 
   /**
@@ -643,11 +732,7 @@ public class Query {
    */
   @Nonnull
   public Query whereGreaterThan(@Nonnull FieldPath fieldPath, @Nonnull Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereGreaterThan() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, GREATER_THAN, value);
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, GREATER_THAN, value));
   }
 
   /**
@@ -673,11 +758,8 @@ public class Query {
    */
   @Nonnull
   public Query whereGreaterThanOrEqualTo(@Nonnull FieldPath fieldPath, @Nonnull Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereGreaterThanOrEqualTo() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, GREATER_THAN_OR_EQUAL, value);
+    return where(
+        new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, GREATER_THAN_OR_EQUAL, value));
   }
 
   /**
@@ -711,11 +793,8 @@ public class Query {
    */
   @Nonnull
   public Query whereArrayContains(@Nonnull FieldPath fieldPath, @Nonnull Object value) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereArrayContains() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, ARRAY_CONTAINS, value);
+    return where(
+        new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, ARRAY_CONTAINS, value));
   }
 
   /**
@@ -733,11 +812,7 @@ public class Query {
   @Nonnull
   public Query whereArrayContainsAny(
       @Nonnull String field, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereArrayContainsAny() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(FieldPath.fromDotSeparatedString(field), ARRAY_CONTAINS_ANY, values);
+    return whereArrayContainsAny(FieldPath.fromDotSeparatedString(field), values);
   }
 
   /**
@@ -755,11 +830,8 @@ public class Query {
   @Nonnull
   public Query whereArrayContainsAny(
       @Nonnull FieldPath fieldPath, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereArrayContainsAny() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, ARRAY_CONTAINS_ANY, values);
+    return where(
+        new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, ARRAY_CONTAINS_ANY, values));
   }
 
   /**
@@ -775,11 +847,7 @@ public class Query {
    */
   @Nonnull
   public Query whereIn(@Nonnull String field, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereIn() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(FieldPath.fromDotSeparatedString(field), IN, values);
+    return whereIn(FieldPath.fromDotSeparatedString(field), values);
   }
 
   /**
@@ -795,11 +863,7 @@ public class Query {
    */
   @Nonnull
   public Query whereIn(@Nonnull FieldPath fieldPath, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereIn() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, IN, values);
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, IN, values));
   }
 
   /**
@@ -815,11 +879,7 @@ public class Query {
    */
   @Nonnull
   public Query whereNotIn(@Nonnull String field, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereNotIn() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(FieldPath.fromDotSeparatedString(field), NOT_IN, values);
+    return whereNotIn(FieldPath.fromDotSeparatedString(field), values);
   }
 
   /**
@@ -835,49 +895,92 @@ public class Query {
    */
   @Nonnull
   public Query whereNotIn(@Nonnull FieldPath fieldPath, @Nonnull List<? extends Object> values) {
-    Preconditions.checkState(
-        options.getStartCursor() == null && options.getEndCursor() == null,
-        "Cannot call whereNotIn() after defining a boundary with startAt(), "
-            + "startAfter(), endBefore() or endAt().");
-    return whereHelper(fieldPath, NOT_IN, values);
+    return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, NOT_IN, values));
   }
 
-  private Query whereHelper(
-      FieldPath fieldPath, StructuredQuery.FieldFilter.Operator operator, Object value) {
-    Preconditions.checkArgument(
-        !isUnaryComparison(value),
-        "Cannot use '%s' in field comparison. Use an equality filter instead.",
-        value);
+  // TODO(orquery): This method will become public API. Change visibility and add documentation.
+  Query where(com.google.cloud.firestore.Filter filter) {
+    Preconditions.checkState(
+        options.getStartCursor() == null && options.getEndCursor() == null,
+        "Cannot call a where() clause after defining a boundary with startAt(), "
+            + "startAfter(), endBefore() or endAt().");
+    FilterInternal parsedFilter = parseFilter(filter);
+    if (parsedFilter.getFilters().isEmpty()) {
+      // Return the existing query if not adding any more filters (e.g. an empty composite filter).
+      return this;
+    }
+    Builder newOptions = options.toBuilder();
+    newOptions.setFilters(append(options.getFilters(), parsedFilter));
+    return new Query(rpcContext, newOptions.build());
+  }
 
-    if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
-      if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
-        throw new IllegalArgumentException(
-            String.format(
-                "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
-                operator.toString()));
-      } else if (operator == IN | operator == NOT_IN) {
-        if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
+  FilterInternal parseFilter(com.google.cloud.firestore.Filter filter) {
+    if (filter instanceof com.google.cloud.firestore.Filter.UnaryFilter) {
+      return parseFieldFilter((com.google.cloud.firestore.Filter.UnaryFilter) filter);
+    }
+    return parseCompositeFilter((com.google.cloud.firestore.Filter.CompositeFilter) filter);
+  }
+
+  private FieldFilter parseFieldFilter(
+      com.google.cloud.firestore.Filter.UnaryFilter fieldFilterData) {
+    Object value = fieldFilterData.getValue();
+    Operator operator = fieldFilterData.getOperator();
+    FieldPath fieldPath = fieldFilterData.getField();
+
+    if ((operator == EQUAL || operator == NOT_EQUAL) && isUnaryComparison(value)) {
+      StructuredQuery.UnaryFilter.Operator unaryOp =
+          operator == EQUAL
+              ? (value == null
+                  ? StructuredQuery.UnaryFilter.Operator.IS_NULL
+                  : StructuredQuery.UnaryFilter.Operator.IS_NAN)
+              : (value == null
+                  ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
+                  : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN);
+      return new UnaryFilter(fieldPath.toProto(), unaryOp);
+    } else {
+      if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
+        if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
           throw new IllegalArgumentException(
               String.format(
-                  "Invalid Query. A non-empty array is required for '%s' filters.",
+                  "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
                   operator.toString()));
+        } else if (operator == IN | operator == NOT_IN) {
+          if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Invalid Query. A non-empty array is required for '%s' filters.",
+                    operator.toString()));
+          }
+          List<Object> referenceList = new ArrayList<>();
+          for (Object arrayValue : (List<Object>) value) {
+            Object convertedValue = this.convertReference(arrayValue);
+            referenceList.add(convertedValue);
+          }
+          value = referenceList;
+        } else {
+          value = this.convertReference(value);
         }
-        List<Object> referenceList = new ArrayList<>();
-        for (Object arrayValue : (List<Object>) value) {
-          Object convertedValue = this.convertReference(arrayValue);
-          referenceList.add(convertedValue);
-        }
-        value = referenceList;
-      } else {
-        value = this.convertReference(value);
+      }
+      return new ComparisonFilter(fieldPath.toProto(), operator, encodeValue(fieldPath, value));
+    }
+  }
+
+  private FilterInternal parseCompositeFilter(
+      com.google.cloud.firestore.Filter.CompositeFilter compositeFilterData) {
+    List<FilterInternal> parsedFilters = new ArrayList<>();
+    for (com.google.cloud.firestore.Filter filter : compositeFilterData.getFilters()) {
+      FilterInternal parsedFilter = parseFilter(filter);
+      if (!parsedFilter.getFilters().isEmpty()) {
+        parsedFilters.add(parsedFilter);
       }
     }
 
-    Builder newOptions = options.toBuilder();
-    ComparisonFilter newFieldFilter =
-        new ComparisonFilter(fieldPath.toProto(), operator, encodeValue(fieldPath, value));
-    newOptions.setFieldFilters(append(options.getFieldFilters(), newFieldFilter));
-    return new Query(rpcContext, newOptions.build());
+    // For composite filters containing 1 filter, return the only filter.
+    // For example: AND(FieldFilter1) == FieldFilter1
+    if (parsedFilters.size() == 1) {
+      return parsedFilters.get(0);
+    }
+    return new CompositeComparisonFilter(parsedFilters, compositeFilterData.getOperator());
   }
 
   /**
@@ -1264,25 +1367,11 @@ public class Query {
     collectionSelector.setAllDescendants(options.getAllDescendants());
     structuredQuery.addFrom(collectionSelector);
 
-    if (options.getFieldFilters().size() == 1) {
-      Filter filter = options.getFieldFilters().get(0).toProto();
-      if (filter.hasFieldFilter()) {
-        structuredQuery.getWhereBuilder().setFieldFilter(filter.getFieldFilter());
-      } else {
-        Preconditions.checkState(
-            filter.hasUnaryFilter(), "Expected a UnaryFilter or a FieldFilter.");
-        structuredQuery.getWhereBuilder().setUnaryFilter(filter.getUnaryFilter());
-      }
-    } else if (options.getFieldFilters().size() > 1) {
-      Filter.Builder filter = Filter.newBuilder();
-      StructuredQuery.CompositeFilter.Builder compositeFilter =
-          StructuredQuery.CompositeFilter.newBuilder();
-      compositeFilter.setOp(CompositeFilter.Operator.AND);
-      for (FieldFilter fieldFilter : options.getFieldFilters()) {
-        compositeFilter.addFilters(fieldFilter.toProto());
-      }
-      filter.setCompositeFilter(compositeFilter.build());
-      structuredQuery.setWhere(filter.build());
+    // There's an implicit AND operation between the top-level query filters.
+    if (!options.getFilters().isEmpty()) {
+      FilterInternal filter =
+          new CompositeComparisonFilter(options.getFilters(), CompositeFilter.Operator.AND);
+      structuredQuery.setWhere(filter.toProto());
     }
 
     if (!options.getFieldOrders().isEmpty()) {
@@ -1409,16 +1498,15 @@ public class Query {
     queryOptions.setAllDescendants(structuredQuery.getFrom(0).getAllDescendants());
 
     if (structuredQuery.hasWhere()) {
-      Filter where = structuredQuery.getWhere();
-      if (where.hasCompositeFilter()) {
-        CompositeFilter compositeFilter = where.getCompositeFilter();
-        ImmutableList.Builder<FieldFilter> fieldFilters = ImmutableList.builder();
-        for (Filter filter : compositeFilter.getFiltersList()) {
-          fieldFilters.add(FieldFilter.fromProto(filter));
-        }
-        queryOptions.setFieldFilters(fieldFilters.build());
+      FilterInternal filter = FilterInternal.fromProto(structuredQuery.getWhere());
+
+      // There's an implicit AND operation between the top-level query filters.
+      if (filter instanceof CompositeComparisonFilter
+          && ((CompositeComparisonFilter) filter).isConjunction()) {
+        queryOptions.setFilters(
+            new ImmutableList.Builder<FilterInternal>().addAll(filter.getFilters()).build());
       } else {
-        queryOptions.setFieldFilters(ImmutableList.of(FieldFilter.fromProto(where)));
+        queryOptions.setFilters(ImmutableList.of(filter));
       }
     }
 

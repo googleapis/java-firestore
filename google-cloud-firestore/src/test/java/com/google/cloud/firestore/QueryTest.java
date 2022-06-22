@@ -47,7 +47,7 @@ import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilter;
-import com.google.cloud.firestore.Query.FieldFilter;
+import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.io.BaseEncoding;
 import com.google.firestore.v1.ArrayValue;
@@ -1320,15 +1320,11 @@ public class QueryTest {
     ResourcePath path = query.options.getParentPath();
     assertEquals("projects/test-project/databases/(default)/documents", path.getName());
     assertEquals("testing-collection", query.options.getCollectionId());
-    FieldFilter next = query.options.getFieldFilters().iterator().next();
-    assertEquals("enabled", next.fieldReference.getFieldPath());
-
-    if (next instanceof ComparisonFilter) {
-      ComparisonFilter comparisonFilter = (ComparisonFilter) next;
-      assertFalse(comparisonFilter.isInequalityFilter());
-      assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
-    } else {
-      fail("expect filter to be a comparison filter");
-    }
+    FilterInternal next = query.options.getFilters().iterator().next();
+    assertTrue(next instanceof ComparisonFilter);
+    ComparisonFilter comparisonFilter = (ComparisonFilter) next;
+    assertEquals("enabled", comparisonFilter.fieldReference.getFieldPath());
+    assertFalse(comparisonFilter.isInequalityFilter());
+    assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
   }
 }
