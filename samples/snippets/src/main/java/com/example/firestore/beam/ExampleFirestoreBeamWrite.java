@@ -31,12 +31,11 @@ import org.apache.beam.sdk.transforms.Create;
 public class ExampleFirestoreBeamWrite {
   private static final FirestoreOptions FIRESTORE_OPTIONS = FirestoreOptions.getDefaultInstance();
 
-  public static void main(String[] args) {
+  public static void runWrite(String[] args, String collectionId) {
     PipelineOptions options =
         PipelineOptionsFactory.fromArgs(args).withValidation().as(PipelineOptions.class);
     Pipeline pipeline = Pipeline.create(options);
 
-    String collectionId = "cities-collection";
     RpcQosOptions rpcQosOptions =
         RpcQosOptions.newBuilder()
             .withHintMaxNumWorkers(options.as(DataflowPipelineOptions.class).getMaxNumWorkers())

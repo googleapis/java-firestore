@@ -26,6 +26,7 @@ import com.google.common.truth.Truth;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -37,9 +38,11 @@ public class ExampleFirestoreWriteReadTest {
   private ByteArrayOutputStream bout;
   private static String projectId;
   private static Firestore firestore;
+  private static String collectionId;
 
   @BeforeClass
   public static void setUp() {
+    collectionId = "cities-collection-" + UUID.randomUUID().toString().substring(0, 10);
     projectId = requireEnv("GOOGLE_CLOUD_PROJECT");
     firestore = FirestoreOptions.getDefaultInstance().getService();
   }
@@ -52,7 +55,7 @@ public class ExampleFirestoreWriteReadTest {
 
   @AfterClass
   public static void tearDown() {
-    deleteCollection(firestore.collection("cities-collection"), 1);
+    deleteCollection(firestore.collection(collectionId), 1);
   }
 
   @Test
@@ -61,18 +64,18 @@ public class ExampleFirestoreWriteReadTest {
       "--project=" + projectId, "--region=us-central1", "--numWorkers=1", "--maxNumWorkers=1"
     };
     // write the data to Firestore
-    ExampleFirestoreBeamWrite.main(args);
+    ExampleFirestoreBeamWrite.runWrite(args, collectionId);
 
-    ApiFuture<QuerySnapshot> apiFuture = firestore.collection("cities-collection").get();
+    ApiFuture<QuerySnapshot> apiFuture = firestore.collection(collectionId).get();
     QuerySnapshot querySnapshot = apiFuture.get();
     List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
     Truth.assertThat(documents).hasSize(2);
 
     // filter and read it back
-    ExampleFirestoreBeamRead.main(args);
+    ExampleFirestoreBeamRead.runRead(args, collectionId);
 
     String output = bout.toString();
-    Truth.assertThat(output).contains("/documents/cities-collection/NYC");
+    Truth.assertThat(output).contains("/documents/" + collectionId + "/NYC");
   }
 
   private static String requireEnv(String varName) {

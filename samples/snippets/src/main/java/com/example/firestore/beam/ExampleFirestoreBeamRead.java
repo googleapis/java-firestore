@@ -36,14 +36,13 @@ import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
 public class ExampleFirestoreBeamRead {
-  public static void main(String[] args) {
+  public static void runRead(String[] args, String collectionId) {
     FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance();
 
     PipelineOptions options =
         PipelineOptionsFactory.fromArgs(args).withValidation().as(PipelineOptions.class);
     Pipeline pipeline = Pipeline.create(options);
 
-    String collectionId = "cities-collection";
     RpcQosOptions rpcQosOptions =
         RpcQosOptions.newBuilder()
             .withHintMaxNumWorkers(options.as(DataflowPipelineOptions.class).getMaxNumWorkers())
