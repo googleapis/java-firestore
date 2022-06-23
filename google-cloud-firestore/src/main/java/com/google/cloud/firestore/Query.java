@@ -918,9 +918,9 @@ public class Query {
     Operator operator = fieldFilterData.getOperator();
     FieldPath fieldPath = fieldFilterData.getField();
 
-    if ((operator == EQUAL || operator == NOT_EQUAL) && isUnaryComparison(value)) {
+    if ((operator.equals(EQUAL) || operator.equals(NOT_EQUAL)) && isUnaryComparison(value)) {
       StructuredQuery.UnaryFilter.Operator unaryOp =
-          operator == EQUAL
+          operator.equals(EQUAL)
               ? (value == null
                   ? StructuredQuery.UnaryFilter.Operator.IS_NULL
                   : StructuredQuery.UnaryFilter.Operator.IS_NAN)
@@ -930,12 +930,12 @@ public class Query {
       return new UnaryFilterInternal(fieldPath.toProto(), unaryOp);
     } else {
       if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
-        if (operator == ARRAY_CONTAINS || operator == ARRAY_CONTAINS_ANY) {
+        if (operator.equals(ARRAY_CONTAINS) || operator.equals(ARRAY_CONTAINS_ANY)) {
           throw new IllegalArgumentException(
               String.format(
                   "Invalid query. You cannot perform '%s' queries on FieldPath.documentId().",
                   operator.toString()));
-        } else if (operator == IN | operator == NOT_IN) {
+        } else if (operator.equals(IN) || operator.equals(NOT_IN)) {
           if (!(value instanceof List) || ((List<?>) value).isEmpty()) {
             throw new IllegalArgumentException(
                 String.format(
