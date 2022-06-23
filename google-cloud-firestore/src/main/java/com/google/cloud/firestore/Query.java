@@ -918,16 +918,22 @@ public class Query {
     Operator operator = fieldFilterData.getOperator();
     FieldPath fieldPath = fieldFilterData.getField();
 
-    if ((operator.equals(EQUAL) || operator.equals(NOT_EQUAL)) && isUnaryComparison(value)) {
-      StructuredQuery.UnaryFilter.Operator unaryOp =
-          operator.equals(EQUAL)
-              ? (value == null
-                  ? StructuredQuery.UnaryFilter.Operator.IS_NULL
-                  : StructuredQuery.UnaryFilter.Operator.IS_NAN)
-              : (value == null
-                  ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
-                  : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN);
-      return new UnaryFilterInternal(fieldPath.toProto(), unaryOp);
+    if (isUnaryComparison(value)) {
+      if (operator.equals(EQUAL) || operator.equals(NOT_EQUAL)) {
+        StructuredQuery.UnaryFilter.Operator unaryOp =
+            operator.equals(EQUAL)
+                ? (value == null
+                    ? StructuredQuery.UnaryFilter.Operator.IS_NULL
+                    : StructuredQuery.UnaryFilter.Operator.IS_NAN)
+                : (value == null
+                    ? StructuredQuery.UnaryFilter.Operator.IS_NOT_NULL
+                    : StructuredQuery.UnaryFilter.Operator.IS_NOT_NAN);
+        return new UnaryFilterInternal(fieldPath.toProto(), unaryOp);
+      } else {
+        throw new IllegalArgumentException(
+            String.format(
+                "Cannot use '%s' in field comparison. Use an equality filter instead.", value));
+      }
     } else {
       if (fieldPath.equals(FieldPath.DOCUMENT_ID)) {
         if (operator.equals(ARRAY_CONTAINS) || operator.equals(ARRAY_CONTAINS_ANY)) {
