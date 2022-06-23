@@ -20,8 +20,8 @@ import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** @hide */
 public class Filter {
@@ -55,7 +55,7 @@ public class Filter {
     private final StructuredQuery.CompositeFilter.Operator operator;
 
     public CompositeFilter(
-        @NonNull List<Filter> filters, StructuredQuery.CompositeFilter.Operator operator) {
+        @Nonnull List<Filter> filters, StructuredQuery.CompositeFilter.Operator operator) {
       this.filters = filters;
       this.operator = operator;
     }
@@ -69,114 +69,114 @@ public class Filter {
     }
   }
 
-  @NonNull
-  public static Filter equalTo(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter equalTo(@Nonnull String field, @Nullable Object value) {
     return equalTo(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter equalTo(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter equalTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.EQUAL, value);
   }
 
-  @NonNull
-  public static Filter notEqualTo(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter notEqualTo(@Nonnull String field, @Nullable Object value) {
     return notEqualTo(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter notEqualTo(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter notEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.NOT_EQUAL, value);
   }
 
-  @NonNull
-  public static Filter greaterThan(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter greaterThan(@Nonnull String field, @Nullable Object value) {
     return greaterThan(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter greaterThan(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter greaterThan(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.GREATER_THAN, value);
   }
 
-  @NonNull
-  public static Filter greaterThanOrEqualTo(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter greaterThanOrEqualTo(@Nonnull String field, @Nullable Object value) {
     return greaterThanOrEqualTo(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter greaterThanOrEqualTo(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter greaterThanOrEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.GREATER_THAN_OR_EQUAL, value);
   }
 
-  @NonNull
-  public static Filter lessThan(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter lessThan(@Nonnull String field, @Nullable Object value) {
     return lessThan(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter lessThan(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter lessThan(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.LESS_THAN, value);
   }
 
-  @NonNull
-  public static Filter lessThanOrEqualTo(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter lessThanOrEqualTo(@Nonnull String field, @Nullable Object value) {
     return lessThanOrEqualTo(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter lessThanOrEqualTo(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter lessThanOrEqualTo(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.LESS_THAN_OR_EQUAL, value);
   }
 
-  @NonNull
-  public static Filter arrayContains(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter arrayContains(@Nonnull String field, @Nullable Object value) {
     return arrayContains(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter arrayContains(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter arrayContains(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.ARRAY_CONTAINS, value);
   }
 
-  @NonNull
-  public static Filter arrayContainsAny(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter arrayContainsAny(@Nonnull String field, @Nullable Object value) {
     return arrayContainsAny(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter arrayContainsAny(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter arrayContainsAny(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.ARRAY_CONTAINS_ANY, value);
   }
 
-  @NonNull
-  public static Filter inArray(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter inArray(@Nonnull String field, @Nullable Object value) {
     return inArray(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter inArray(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter inArray(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.IN, value);
   }
 
-  @NonNull
-  public static Filter notInArray(@NonNull String field, @Nullable Object value) {
+  @Nonnull
+  public static Filter notInArray(@Nonnull String field, @Nullable Object value) {
     return notInArray(FieldPath.fromDotSeparatedString(field), value);
   }
 
-  @NonNull
-  public static Filter notInArray(@NonNull FieldPath fieldPath, @Nullable Object value) {
+  @Nonnull
+  public static Filter notInArray(@Nonnull FieldPath fieldPath, @Nullable Object value) {
     return new UnaryFilter(fieldPath, Operator.NOT_IN, value);
   }
 
-  @NonNull
+  @Nonnull
   public static Filter or(Filter... filters) {
     // TODO(orquery): Change this to Operator.OR once it is available.
     return new CompositeFilter(
         Arrays.asList(filters), StructuredQuery.CompositeFilter.Operator.OPERATOR_UNSPECIFIED);
   }
 
-  @NonNull
+  @Nonnull
   public static Filter and(Filter... filters) {
     return new CompositeFilter(
         Arrays.asList(filters), StructuredQuery.CompositeFilter.Operator.AND);
