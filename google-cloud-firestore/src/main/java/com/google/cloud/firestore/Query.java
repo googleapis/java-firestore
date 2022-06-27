@@ -1542,13 +1542,14 @@ public class Query {
               readTime = Timestamp.fromProto(response.getReadTime());
             }
 
-            if (response.hasDone() && response.getDone()) {
+            if (response.getDone()) {
               Tracing.getTracer()
                   .getCurrentSpan()
                   .addAnnotation(
-                      "Firestore.Query: Completed",
+                      "Firestore.Query: Completed triggered by Logical termination",
                       ImmutableMap.of(
                           "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
+              System.out.println("Firestore.Query: Completed triggered by Logical termination");
               documentObserver.onCompleted(readTime);
             }
           }

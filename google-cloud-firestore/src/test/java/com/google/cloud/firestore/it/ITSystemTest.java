@@ -422,6 +422,16 @@ public class ITSystemTest {
   }
 
   @Test
+  public void requestLargerLimitQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limit(4).get().get();
+    assertEquals(asList("doc1", "doc2", "doc3"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
   public void limitToLastQuery() throws Exception {
     setDocument("doc1", Collections.singletonMap("counter", 1));
     setDocument("doc2", Collections.singletonMap("counter", 2));
@@ -439,6 +449,26 @@ public class ITSystemTest {
     QuerySnapshot querySnapshot = randomColl.offset(1).get().get();
     assertEquals(1, querySnapshot.size());
     assertEquals("bar", querySnapshot.getDocuments().get(0).get("foo"));
+  }
+
+  @Test
+  public void largerOffsetQuery() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    QuerySnapshot querySnapshot = randomColl.offset(3).get().get();
+    assertEquals(0, querySnapshot.size());
+  }
+
+  @Test
+  public void largeQuery() throws Exception {
+    int count = 1000;
+    while (count-- > 0) {
+      addDocument("foo", "bar");
+    }
+
+    QuerySnapshot querySnapshot = randomColl.get().get();
+    assertEquals(1000, querySnapshot.size());
   }
 
   @Test
