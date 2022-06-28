@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -948,6 +949,10 @@ public class MapperTest {
     }
   }
 
+  private static class OptionalStringBean {
+    public Optional<String> foo;
+  }
+
   private static <T> T deserialize(String jsonString, Class<T> clazz) {
     return deserialize(jsonString, clazz, /*docRef=*/ null);
   }
@@ -1297,6 +1302,30 @@ public class MapperTest {
     bean.packageValue = "foo";
     bean.publicValue = "bar";
     assertJson("{'publicValue': 'bar'}", serialize(bean));
+  }
+
+  @Test
+  public void serializeOptional() {
+    assertEquals("foo", serialize(Optional.of("foo")));
+  }
+
+  @Test
+  public void deserializeOptional() {
+    OptionalStringBean bean = deserialize("{'foo': 'bar'}", OptionalStringBean.class);
+    assertEquals(Optional.of("bar"), bean.foo);
+  }
+
+  @Test
+  public void deserlializeOptionalNull() {
+    OptionalStringBean bean = deserialize("{'foo': null}", OptionalStringBean.class);
+    assertEquals(Optional.empty(), bean.foo);
+  }
+
+  @Test
+  public void deserializeMismatchedOptional() {
+    assertExceptionContains(
+        "Cannot assign class java.lang.Double to " + "Optional<java.lang.String>",
+        () -> deserialize("{'foo': 1}", OptionalStringBean.class));
   }
 
   @Test

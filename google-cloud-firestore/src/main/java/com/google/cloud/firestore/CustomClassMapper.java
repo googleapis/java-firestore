@@ -45,6 +45,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
@@ -175,6 +176,8 @@ class CustomClassMapper {
         || o instanceof FieldValue
         || o instanceof Value) {
       return o;
+    } else if (o instanceof Optional) {
+      return ((Optional<?>) o).orElse(null);
     } else {
       Class<T> clazz = (Class<T>) o.getClass();
       BeanMapper<T> mapper = loadOrCreateBeanMapperForClass(clazz);
@@ -185,7 +188,11 @@ class CustomClassMapper {
   @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
   private static <T> T deserializeToType(Object o, Type type, DeserializeContext context) {
     if (o == null) {
-      return null;
+      if (typeIsAssignableToOptional(type)) {
+        return (T) Optional.empty();
+      } else {
+        return null;
+      }
     } else if (type instanceof ParameterizedType) {
       return deserializeToParameterizedType(o, (ParameterizedType) type, context);
     } else if (type instanceof Class) {
@@ -216,6 +223,17 @@ class CustomClassMapper {
     } else {
       throw deserializeError(context.errorPath, "Unknown type encountered: " + type);
     }
+  }
+
+  private static boolean typeIsAssignableToOptional(Type type) {
+    if (type instanceof ParameterizedType) {
+      Type rawType = ((ParameterizedType) type).getRawType();
+      if (rawType instanceof Class<?>) {
+        Class<?> clazz = (Class<?>) rawType;
+        return Optional.class.isAssignableFrom(clazz);
+      }
+    }
+    return false;
   }
 
   @SuppressWarnings("unchecked")
@@ -328,6 +346,22 @@ class CustomClassMapper {
     } else if (Collection.class.isAssignableFrom(rawType)) {
       throw deserializeError(
           context.errorPath, "Collections are not supported, please use Lists instead");
+    } else if (Optional.class.isAssignableFrom(rawType)) {
+      String typeArgumentName = type.getActualTypeArguments()[0].getTypeName();
+      try {
+        Class<?> typeArgumentClass = Class.forName(typeArgumentName);
+        if (!typeArgumentClass.isAssignableFrom(o.getClass())) {
+          throw deserializeError(
+              context.errorPath,
+              String.format(
+                  "Cannot assign %s to Optional<%s>", o.getClass(), typeArgumentClass.getName()));
+        }
+        return (T) Optional.of(o);
+      } catch (ClassNotFoundException e) {
+        throw deserializeError(
+            context.errorPath,
+            String.format("Cannot instantiate class %s: %s", typeArgumentName, e));
+      }
     } else {
       Map<String, Object> map = expectMap(o, context);
       BeanMapper<T> mapper = (BeanMapper<T>) loadOrCreateBeanMapperForClass(rawType);
