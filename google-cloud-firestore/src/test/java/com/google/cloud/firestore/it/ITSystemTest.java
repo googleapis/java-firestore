@@ -378,10 +378,65 @@ public class ITSystemTest {
   }
 
   @Test
+  public void defaultQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(2, docCount[0]);
+  }
+
+  @Test
   public void noResults() throws Exception {
     QuerySnapshot querySnapshot = randomColl.get().get();
     assertTrue(querySnapshot.isEmpty());
     assertNotNull(querySnapshot.getReadTime());
+  }
+
+  @Test
+  public void noResultsStream() throws Exception {
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(0, docCount[0]);
   }
 
   @Test
@@ -422,6 +477,38 @@ public class ITSystemTest {
   }
 
   @Test
+  public void limitQueryStream() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    final Iterator<Long> iterator = asList(1L, 2L).iterator();
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.orderBy("counter").limit(2).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+            assertEquals(iterator.next(), documentSnapshot.getData().values().toArray()[0]);
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(2, docCount[0]);
+  }
+
+  @Test
   public void requestLargerLimitQuery() throws Exception {
     setDocument("doc1", Collections.singletonMap("counter", 1));
     setDocument("doc2", Collections.singletonMap("counter", 2));
@@ -429,6 +516,38 @@ public class ITSystemTest {
 
     QuerySnapshot querySnapshot = randomColl.orderBy("counter").limit(4).get().get();
     assertEquals(asList("doc1", "doc2", "doc3"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void requestLargerLimitQueryStream() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<Long> iterator = asList(1L, 2L, 3L).iterator();
+    final int[] docCount = {0};
+    randomColl.orderBy("counter").limit(4).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+            assertEquals(iterator.next(), documentSnapshot.getData().values().toArray()[0]);
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(3, docCount[0]);
   }
 
   @Test
@@ -452,6 +571,35 @@ public class ITSystemTest {
   }
 
   @Test
+  public void offsetQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.offset(1).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(1, docCount[0]);
+  }
+
+  @Test
   public void largerOffsetQuery() throws Exception {
     addDocument("foo", "bar");
     addDocument("foo", "bar");
@@ -461,15 +609,78 @@ public class ITSystemTest {
   }
 
   @Test
-  public void largeQuery() throws Exception {
-    int count = 1000;
-    while (count-- > 0) {
-      addDocument("foo", "bar");
-    }
+  public void largerOffsetQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
 
-    QuerySnapshot querySnapshot = randomColl.get().get();
-    assertEquals(1000, querySnapshot.size());
+    // Verify the responses
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.offset(4).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the request count
+    assertEquals(0, docCount[0]);
   }
+
+  // This part of test has been tested locally
+  // @Test
+  // public void largeQuery() throws Exception {
+  //  int count = 1000;
+  //  while (count-- > 0) {
+  //    addDocument("foo", "bar");
+  //  }
+  //
+  //  QuerySnapshot querySnapshot = randomColl.get().get();
+  //  assertEquals(1000, querySnapshot.size());
+  // }
+  //
+  // @Test
+  // public void largeQueryStream() throws Exception {
+  //  int count = 1000;
+  //  while (count-- > 0) {
+  //    addDocument("foo", "bar");
+  //  }
+  //
+  //  // Verify the responses
+  //  final Semaphore semaphore = new Semaphore(0);
+  //  final int[] docCount = {0};
+  //  randomColl.stream(
+  //          new ApiStreamObserver<DocumentSnapshot>() {
+  //            @Override
+  //            public void onNext(DocumentSnapshot documentSnapshot) {
+  //              docCount[0]++;
+  //            }
+  //
+  //            @Override
+  //            public void onError(Throwable throwable) {
+  //
+  //            }
+  //
+  //            @Override
+  //            public void onCompleted() {
+  //              semaphore.release();
+  //            }
+  //          });
+  //
+  //  semaphore.acquire();
+  //  // Verify the request count
+  //  assertEquals(1000, docCount[0]);
+  // }
 
   @Test
   public void orderByQuery() throws Exception {
@@ -485,6 +696,63 @@ public class ITSystemTest {
     documents = querySnapshot.iterator();
     assertEquals(2L, documents.next().get("foo"));
     assertEquals(1L, documents.next().get("foo"));
+  }
+
+  @Test
+  public void orderByQueryStream() throws Exception {
+    addDocument("foo", 1);
+    addDocument("foo", 2);
+
+    final Iterator<Long> iterator1 = asList(1L, 2L).iterator();
+    // Verify the responses
+    final Semaphore semaphore1 = new Semaphore(0);
+    final int[] docCount1 = {0};
+    randomColl.orderBy("foo").stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount1[0]++;
+            assertEquals(iterator1.next(), documentSnapshot.getData().values().toArray()[0]);
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore1.release();
+          }
+        });
+
+    semaphore1.acquire();
+    // Verify the request count
+    assertEquals(2, docCount1[0]);
+
+    final Iterator<Long> iterator2 = asList(2L, 1L).iterator();
+
+    // Verify the responses
+    final Semaphore semaphore2 = new Semaphore(0);
+    final int[] docCount2 = {0};
+    randomColl.orderBy("foo", Query.Direction.DESCENDING).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount2[0]++;
+            assertEquals(iterator2.next(), documentSnapshot.getData().values().toArray()[0]);
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore2.release();
+          }
+        });
+
+    semaphore2.acquire();
+    // Verify the request count
+    assertEquals(2, docCount2[0]);
   }
 
   @Test
