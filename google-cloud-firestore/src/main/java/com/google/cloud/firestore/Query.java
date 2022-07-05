@@ -277,7 +277,6 @@ public class Query {
       this.operator = operator;
     }
 
-    // TODO(ehsan): This seems out of date.
     @Override
     boolean isInequalityFilter() {
       return operator.equals(GREATER_THAN)
