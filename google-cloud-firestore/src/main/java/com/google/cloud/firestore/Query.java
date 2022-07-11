@@ -1627,7 +1627,7 @@ public class Query {
               readTime = Timestamp.fromProto(response.getReadTime());
             }
 
-            if (response.hasDone() && response.getDone()) {
+            if (response.getDone()) {
               Tracing.getTracer()
                   .getCurrentSpan()
                   .addAnnotation(

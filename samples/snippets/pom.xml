@@ -21,6 +21,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <beam.version>2.40.0</beam.version>
     <!-- Define a default empty value property which can be overridden on the command line if
         necessary by passing `-Dfirestore.project.id="some-id"` when running maven exec -->
     <firestore.project.id/>
@@ -46,6 +47,18 @@
       <artifactId>google-cloud-firestore</artifactId>
     </dependency>
     <!-- [END firestore_install_with_bom] -->
+
+    <!--  used for beam samples-->
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-runners-direct-java</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
