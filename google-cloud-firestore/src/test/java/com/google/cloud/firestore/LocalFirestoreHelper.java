@@ -311,6 +311,29 @@ public final class LocalFirestoreHelper {
     return streamingResponse(responses, throwable);
   }
 
+  /** Returns a stream of responses when RunQueryResponse.done set to true */
+  public static Answer<RunQueryResponse> queryResponseWithDone(
+      boolean callWithoutOnComplete, String... documentNames) {
+    RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
+
+    for (int i = 0; i < documentNames.length; ++i) {
+      final RunQueryResponse.Builder runQueryResponse = RunQueryResponse.newBuilder();
+      runQueryResponse.setDocument(
+          Document.newBuilder().setName(documentNames[i]).putAllFields(SINGLE_FIELD_PROTO));
+      runQueryResponse.setReadTime(
+          com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
+      if (i == (documentNames.length - 1)) {
+        runQueryResponse.setDone(true);
+      }
+      responses[i] = runQueryResponse.build();
+    }
+    if (callWithoutOnComplete) {
+      return streamingResponseWithoutOnComplete(responses);
+    } else {
+      return streamingResponse(responses, null);
+    }
+  }
+
   /** Returns a stream of responses followed by an optional exception. */
   public static <T> Answer<T> streamingResponse(
       final T[] response, @Nullable final Throwable throwable) {
@@ -324,6 +347,18 @@ public final class LocalFirestoreHelper {
         observer.onError(throwable);
       }
       observer.onComplete();
+      return null;
+    };
+  }
+
+  /** Returns a stream of responses even though onComplete() wasn't triggered */
+  public static <T> Answer<T> streamingResponseWithoutOnComplete(final T[] response) {
+    return invocation -> {
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      for (T resp : response) {
+        observer.onResponse(resp);
+      }
       return null;
     };
   }
@@ -537,6 +572,32 @@ public final class LocalFirestoreHelper {
   public static StructuredQuery filter(
       StructuredQuery.FieldFilter.Operator operator, String path, String value) {
     return filter(operator, path, string(value));
+  }
+
+  public static StructuredQuery.Filter fieldFilter(
+      String path, StructuredQuery.FieldFilter.Operator operator, String value) {
+    StructuredQuery.FieldFilter.Builder builder =
+        FieldFilter.newBuilder()
+            .setField(StructuredQuery.FieldReference.newBuilder().setFieldPath(path))
+            .setOp(operator)
+            .setValue(Value.newBuilder().setStringValue(value).build());
+    return StructuredQuery.Filter.newBuilder().setFieldFilter(builder).build();
+  }
+
+  public static StructuredQuery.Filter andFilters(StructuredQuery.Filter... filters) {
+    return compositeFilter(CompositeFilter.Operator.AND, Arrays.asList(filters));
+  }
+
+  public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
+    // TODO(orquery): Replace this with Operator.OR once it's available.
+    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+  }
+
+  private static StructuredQuery.Filter compositeFilter(
+      StructuredQuery.CompositeFilter.Operator operator, List<StructuredQuery.Filter> filters) {
+    StructuredQuery.CompositeFilter.Builder builder =
+        StructuredQuery.CompositeFilter.newBuilder().setOp(operator).addAllFilters(filters);
+    return StructuredQuery.Filter.newBuilder().setCompositeFilter(builder).build();
   }
 
   public static StructuredQuery filter(
