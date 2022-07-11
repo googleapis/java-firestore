@@ -574,6 +574,32 @@ public final class LocalFirestoreHelper {
     return filter(operator, path, string(value));
   }
 
+  public static StructuredQuery.Filter fieldFilter(
+      String path, StructuredQuery.FieldFilter.Operator operator, String value) {
+    StructuredQuery.FieldFilter.Builder builder =
+        FieldFilter.newBuilder()
+            .setField(StructuredQuery.FieldReference.newBuilder().setFieldPath(path))
+            .setOp(operator)
+            .setValue(Value.newBuilder().setStringValue(value).build());
+    return StructuredQuery.Filter.newBuilder().setFieldFilter(builder).build();
+  }
+
+  public static StructuredQuery.Filter andFilters(StructuredQuery.Filter... filters) {
+    return compositeFilter(CompositeFilter.Operator.AND, Arrays.asList(filters));
+  }
+
+  public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
+    // TODO(orquery): Replace this with Operator.OR once it's available.
+    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+  }
+
+  private static StructuredQuery.Filter compositeFilter(
+      StructuredQuery.CompositeFilter.Operator operator, List<StructuredQuery.Filter> filters) {
+    StructuredQuery.CompositeFilter.Builder builder =
+        StructuredQuery.CompositeFilter.newBuilder().setOp(operator).addAllFilters(filters);
+    return StructuredQuery.Filter.newBuilder().setCompositeFilter(builder).build();
+  }
+
   public static StructuredQuery filter(
       StructuredQuery.FieldFilter.Operator operator, String path, Value value) {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
