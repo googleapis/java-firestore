@@ -1,5 +1,46 @@
 # Changelog
 
+## [3.3.0](https://github.com/googleapis/java-firestore/compare/v3.2.0...v3.3.0) (2022-07-01)
+
+
+### Features
+
+* add logical termination for RunQueryResponse ([#956](https://github.com/googleapis/java-firestore/issues/956)) ([1d869c8](https://github.com/googleapis/java-firestore/commit/1d869c8fbe5e4009bbded2fb24f978f7cf48c515))
+
+
+### Bug Fixes
+
+* add build script for JDK 17 native image testing ([#965](https://github.com/googleapis/java-firestore/issues/965)) ([963e384](https://github.com/googleapis/java-firestore/commit/963e384b254056b6879744ba0b5d69fc0699f0bf))
+
+
+### Performance Improvements
+
+* Change how proto was called in Query.java ([#970](https://github.com/googleapis/java-firestore/issues/970)) ([f6f6352](https://github.com/googleapis/java-firestore/commit/f6f63520e93d9b3db0a915be58ea3cd37cec68d2))
+
+
+### Dependencies
+
+* update beam.version to v2.40.0 ([#978](https://github.com/googleapis/java-firestore/issues/978)) ([44276f8](https://github.com/googleapis/java-firestore/commit/44276f84ac927e02105608d81bb198f45793f823))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.13.0 ([#974](https://github.com/googleapis/java-firestore/issues/974)) ([6def73d](https://github.com/googleapis/java-firestore/commit/6def73dbdbdc645d1148b9cc8e390e307a6896d4))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.12 ([#973](https://github.com/googleapis/java-firestore/issues/973)) ([bfb4ec9](https://github.com/googleapis/java-firestore/commit/bfb4ec9f9de6114259328bbe9a14c0cc7fae84c8))
+
+## [3.2.0](https://github.com/googleapis/java-firestore/compare/v3.1.0...v3.2.0) (2022-05-23)
+
+
+### Features
+
+* enable RunQueryResponse.done ([#942](https://github.com/googleapis/java-firestore/issues/942)) ([055b029](https://github.com/googleapis/java-firestore/commit/055b02930a455c253f443dcbacf935b5c8e37991))
+
+
+### Documentation
+
+* **sample:** remove unused native-image-support module ([#952](https://github.com/googleapis/java-firestore/issues/952)) ([17c2de9](https://github.com/googleapis/java-firestore/commit/17c2de9594c8ea549ed623ea482420f00fc7b6b6))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.12.0 ([#959](https://github.com/googleapis/java-firestore/issues/959)) ([f1d6b17](https://github.com/googleapis/java-firestore/commit/f1d6b17550556a6e1ce3cd734a5425b94da4aa6d))
+
 ## [3.1.0](https://github.com/googleapis/java-firestore/compare/v3.0.21...v3.1.0) (2022-04-21)
 
 

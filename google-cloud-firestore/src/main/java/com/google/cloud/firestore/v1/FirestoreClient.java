@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,8 @@ import javax.annotation.Generated;
  * calls that map to API methods. Sample code to get started:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
  * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
  *   GetDocumentRequest request =
  *       GetDocumentRequest.newBuilder()
@@ -119,6 +121,8 @@ import javax.annotation.Generated;
  * <p>To customize credentials:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder()
  *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
@@ -129,6 +133,8 @@ import javax.annotation.Generated;
  * <p>To customize the endpoint:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder().setEndpoint(myEndpoint).build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
@@ -194,6 +200,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   GetDocumentRequest request =
    *       GetDocumentRequest.newBuilder()
@@ -218,6 +226,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   GetDocumentRequest request =
    *       GetDocumentRequest.newBuilder()
@@ -241,6 +251,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -272,6 +284,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -303,6 +317,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -340,6 +356,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   Document document = Document.newBuilder().build();
    *   DocumentMask updateMask = DocumentMask.newBuilder().build();
@@ -369,6 +387,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   UpdateDocumentRequest request =
    *       UpdateDocumentRequest.newBuilder()
@@ -395,6 +415,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   UpdateDocumentRequest request =
    *       UpdateDocumentRequest.newBuilder()
@@ -420,6 +442,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String name = "name3373707";
    *   firestoreClient.deleteDocument(name);
@@ -442,6 +466,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   DeleteDocumentRequest request =
    *       DeleteDocumentRequest.newBuilder()
@@ -466,6 +492,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   DeleteDocumentRequest request =
    *       DeleteDocumentRequest.newBuilder()
@@ -492,6 +520,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchGetDocumentsRequest request =
    *       BatchGetDocumentsRequest.newBuilder()
@@ -519,6 +549,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   BeginTransactionResponse response = firestoreClient.beginTransaction(database);
@@ -542,6 +574,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BeginTransactionRequest request =
    *       BeginTransactionRequest.newBuilder()
@@ -566,6 +600,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BeginTransactionRequest request =
    *       BeginTransactionRequest.newBuilder()
@@ -591,6 +627,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   List<Write> writes = new ArrayList<>();
@@ -617,6 +655,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CommitRequest request =
    *       CommitRequest.newBuilder()
@@ -642,6 +682,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CommitRequest request =
    *       CommitRequest.newBuilder()
@@ -666,6 +708,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   ByteString transaction = ByteString.EMPTY;
@@ -691,6 +735,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RollbackRequest request =
    *       RollbackRequest.newBuilder()
@@ -715,6 +761,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RollbackRequest request =
    *       RollbackRequest.newBuilder()
@@ -738,6 +786,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
    *   ServerStream<RunQueryResponse> stream = firestoreClient.runQueryCallable().call(request);
@@ -760,6 +810,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -790,6 +842,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -820,6 +874,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -855,6 +911,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BidiStream<WriteRequest, WriteResponse> bidiStream = firestoreClient.writeCallable().call();
    *   WriteRequest request =
@@ -883,6 +941,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BidiStream<ListenRequest, ListenResponse> bidiStream =
    *       firestoreClient.listenCallable().call();
@@ -909,6 +969,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String parent = "parent-995424086";
    *   for (String element : firestoreClient.listCollectionIds(parent).iterateAll()) {
@@ -935,6 +997,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -962,6 +1026,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -990,6 +1056,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -1033,6 +1101,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchWriteRequest request =
    *       BatchWriteRequest.newBuilder()
@@ -1066,6 +1136,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchWriteRequest request =
    *       BatchWriteRequest.newBuilder()
@@ -1091,6 +1163,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CreateDocumentRequest request =
    *       CreateDocumentRequest.newBuilder()
@@ -1118,6 +1192,8 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CreateDocumentRequest request =
    *       CreateDocumentRequest.newBuilder()
