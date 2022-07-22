@@ -135,6 +135,70 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
+   * The App Engine integration mode to use for this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for appEngineIntegrationMode.
+   */
+  int getAppEngineIntegrationModeValue();
+  /**
+   *
+   *
+   * <pre>
+   * The App Engine integration mode to use for this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+   * </code>
+   *
+   * @return The appEngineIntegrationMode.
+   */
+  com.google.firestore.admin.v1.Database.AppEngineIntegrationMode getAppEngineIntegrationMode();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The key_prefix for this database. This key_prefix is used, in combination
+   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+   * application id that is returned from the Cloud Datastore APIs in Google App
+   * Engine first generation runtimes.
+   * This value may be empty in which case the appid to use for URL-encoded keys
+   * is the project_id (eg: foo instead of v~foo).
+   * </pre>
+   *
+   * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The keyPrefix.
+   */
+  java.lang.String getKeyPrefix();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The key_prefix for this database. This key_prefix is used, in combination
+   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+   * application id that is returned from the Cloud Datastore APIs in Google App
+   * Engine first generation runtimes.
+   * This value may be empty in which case the appid to use for URL-encoded keys
+   * is the project_id (eg: foo instead of v~foo).
+   * </pre>
+   *
+   * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The bytes for keyPrefix.
+   */
+  com.google.protobuf.ByteString getKeyPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
    * This checksum is computed by the server based on the value of other
    * fields, and may be sent on update and delete requests to ensure the
    * client has an up-to-date value before proceeding.

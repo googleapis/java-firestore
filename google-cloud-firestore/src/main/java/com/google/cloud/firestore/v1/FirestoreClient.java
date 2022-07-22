@@ -18,7 +18,6 @@ package com.google.cloud.firestore.v1;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.paging.AbstractFixedSizeCollection;
 import com.google.api.gax.paging.AbstractPage;
@@ -140,6 +139,20 @@ import javax.annotation.Generated;
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
  * }</pre>
  *
+ * <p>To use REST (HTTP1.1/JSON) transport (instead of gRPC) for sending and receiving requests over
+ * the wire:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * FirestoreSettings firestoreSettings =
+ *     FirestoreSettings.newBuilder()
+ *         .setTransportChannelProvider(
+ *             FirestoreSettings.defaultHttpJsonTransportProviderBuilder().build())
+ *         .build();
+ * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
+ * }</pre>
+ *
  * <p>Please refer to the GitHub repository's samples for more quickstart code snippets.
  */
 @Generated("by gapic-generator-java")
@@ -164,7 +177,6 @@ public class FirestoreClient implements BackgroundResource {
    * Constructs an instance of FirestoreClient, using the given stub for making calls. This is for
    * advanced usage - prefer using create(FirestoreSettings).
    */
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public static final FirestoreClient create(FirestoreStub stub) {
     return new FirestoreClient(stub);
   }
@@ -178,7 +190,6 @@ public class FirestoreClient implements BackgroundResource {
     this.stub = ((FirestoreStubSettings) settings.getStubSettings()).createStub();
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   protected FirestoreClient(FirestoreStub stub) {
     this.settings = null;
     this.stub = stub;
@@ -188,7 +199,6 @@ public class FirestoreClient implements BackgroundResource {
     return settings;
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public FirestoreStub getStub() {
     return stub;
   }
@@ -332,7 +342,7 @@ public class FirestoreClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     ListDocumentsResponse response = firestoreClient.listDocumentsCallable().call(request);
-   *     for (Document element : response.getResponsesList()) {
+   *     for (Document element : response.getDocumentsList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();
@@ -886,7 +896,7 @@ public class FirestoreClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     PartitionQueryResponse response = firestoreClient.partitionQueryCallable().call(request);
-   *     for (Cursor element : response.getResponsesList()) {
+   *     for (Cursor element : response.getPartitionsList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();
@@ -1068,7 +1078,7 @@ public class FirestoreClient implements BackgroundResource {
    *   while (true) {
    *     ListCollectionIdsResponse response =
    *         firestoreClient.listCollectionIdsCallable().call(request);
-   *     for (String element : response.getResponsesList()) {
+   *     for (String element : response.getCollectionIdsList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();

@@ -44,6 +44,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     locationId_ = "";
     type_ = 0;
     concurrencyMode_ = 0;
+    appEngineIntegrationMode_ = 0;
+    keyPrefix_ = "";
     etag_ = "";
   }
 
@@ -104,6 +106,20 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
               concurrencyMode_ = rawValue;
               break;
             }
+          case 152:
+            {
+              int rawValue = input.readEnum();
+
+              appEngineIntegrationMode_ = rawValue;
+              break;
+            }
+          case 162:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              keyPrefix_ = s;
+              break;
+            }
           case 794:
             {
               java.lang.String s = input.readStringRequireUtf8();
@@ -154,6 +170,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    * The type of the database.
    * See https://cloud.google.com/datastore/docs/firestore-or-datastore for
    * information about how to choose.
+   * Mode changes are only allowed if the database is empty.
    * </pre>
    *
    * Protobuf enum {@code google.firestore.admin.v1.Database.DatabaseType}
@@ -330,8 +347,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use optimistic concurrency control by default. This setting is available
-     * for Cloud Firestore customers.
+     * Use optimistic concurrency control by default. This mode is available
+     * for Cloud Firestore databases.
      * </pre>
      *
      * <code>OPTIMISTIC = 1;</code>
@@ -341,8 +358,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use pessimistic concurrency control by default. This setting is available
-     * for Cloud Firestore customers.
+     * Use pessimistic concurrency control by default. This mode is available
+     * for Cloud Firestore databases.
      * This is the default setting for Cloud Firestore.
      * </pre>
      *
@@ -353,9 +370,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use optimistic concurrency control with entity groups by default. This is
-     * the only available setting for Cloud Datastore customers.
-     * This is the default setting for Cloud Datastore.
+     * Use optimistic concurrency control with entity groups by default.
+     * This is the only available mode for Cloud Datastore.
+     * This mode is also available for Cloud Firestore with Datastore Mode but
+     * is not recommended.
      * </pre>
      *
      * <code>OPTIMISTIC_WITH_ENTITY_GROUPS = 3;</code>
@@ -378,8 +396,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use optimistic concurrency control by default. This setting is available
-     * for Cloud Firestore customers.
+     * Use optimistic concurrency control by default. This mode is available
+     * for Cloud Firestore databases.
      * </pre>
      *
      * <code>OPTIMISTIC = 1;</code>
@@ -389,8 +407,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use pessimistic concurrency control by default. This setting is available
-     * for Cloud Firestore customers.
+     * Use pessimistic concurrency control by default. This mode is available
+     * for Cloud Firestore databases.
      * This is the default setting for Cloud Firestore.
      * </pre>
      *
@@ -401,9 +419,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Use optimistic concurrency control with entity groups by default. This is
-     * the only available setting for Cloud Datastore customers.
-     * This is the default setting for Cloud Datastore.
+     * Use optimistic concurrency control with entity groups by default.
+     * This is the only available mode for Cloud Datastore.
+     * This mode is also available for Cloud Firestore with Datastore Mode but
+     * is not recommended.
      * </pre>
      *
      * <code>OPTIMISTIC_WITH_ENTITY_GROUPS = 3;</code>
@@ -495,6 +514,174 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     }
 
     // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Database.ConcurrencyMode)
+  }
+
+  /**
+   *
+   *
+   * <pre>
+   * The type of App Engine integration mode.
+   * </pre>
+   *
+   * Protobuf enum {@code google.firestore.admin.v1.Database.AppEngineIntegrationMode}
+   */
+  public enum AppEngineIntegrationMode implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     *
+     *
+     * <pre>
+     * Not used.
+     * </pre>
+     *
+     * <code>APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED = 0;</code>
+     */
+    APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED(0),
+    /**
+     *
+     *
+     * <pre>
+     * If an App Engine application exists in the same region as this database,
+     * App Engine configuration will impact this database. This includes
+     * disabling of the application &amp; database, as well as disabling writes to
+     * the database.
+     * </pre>
+     *
+     * <code>ENABLED = 1;</code>
+     */
+    ENABLED(1),
+    /**
+     *
+     *
+     * <pre>
+     * Appengine has no affect on the ability of this database to serve
+     * requests.
+     * </pre>
+     *
+     * <code>DISABLED = 2;</code>
+     */
+    DISABLED(2),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     *
+     *
+     * <pre>
+     * Not used.
+     * </pre>
+     *
+     * <code>APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED = 0;</code>
+     */
+    public static final int APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED_VALUE = 0;
+    /**
+     *
+     *
+     * <pre>
+     * If an App Engine application exists in the same region as this database,
+     * App Engine configuration will impact this database. This includes
+     * disabling of the application &amp; database, as well as disabling writes to
+     * the database.
+     * </pre>
+     *
+     * <code>ENABLED = 1;</code>
+     */
+    public static final int ENABLED_VALUE = 1;
+    /**
+     *
+     *
+     * <pre>
+     * Appengine has no affect on the ability of this database to serve
+     * requests.
+     * </pre>
+     *
+     * <code>DISABLED = 2;</code>
+     */
+    public static final int DISABLED_VALUE = 2;
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static AppEngineIntegrationMode valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static AppEngineIntegrationMode forNumber(int value) {
+      switch (value) {
+        case 0:
+          return APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED;
+        case 1:
+          return ENABLED;
+        case 2:
+          return DISABLED;
+        default:
+          return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AppEngineIntegrationMode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<AppEngineIntegrationMode>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<AppEngineIntegrationMode>() {
+              public AppEngineIntegrationMode findValueByNumber(int number) {
+                return AppEngineIntegrationMode.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+      return com.google.firestore.admin.v1.Database.getDescriptor().getEnumTypes().get(2);
+    }
+
+    private static final AppEngineIntegrationMode[] VALUES = values();
+
+    public static AppEngineIntegrationMode valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private AppEngineIntegrationMode(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Database.AppEngineIntegrationMode)
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
@@ -679,6 +866,109 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         : result;
   }
 
+  public static final int APP_ENGINE_INTEGRATION_MODE_FIELD_NUMBER = 19;
+  private int appEngineIntegrationMode_;
+  /**
+   *
+   *
+   * <pre>
+   * The App Engine integration mode to use for this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for appEngineIntegrationMode.
+   */
+  @java.lang.Override
+  public int getAppEngineIntegrationModeValue() {
+    return appEngineIntegrationMode_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The App Engine integration mode to use for this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+   * </code>
+   *
+   * @return The appEngineIntegrationMode.
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
+      getAppEngineIntegrationMode() {
+    @SuppressWarnings("deprecation")
+    com.google.firestore.admin.v1.Database.AppEngineIntegrationMode result =
+        com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.valueOf(
+            appEngineIntegrationMode_);
+    return result == null
+        ? com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.UNRECOGNIZED
+        : result;
+  }
+
+  public static final int KEY_PREFIX_FIELD_NUMBER = 20;
+  private volatile java.lang.Object keyPrefix_;
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The key_prefix for this database. This key_prefix is used, in combination
+   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+   * application id that is returned from the Cloud Datastore APIs in Google App
+   * Engine first generation runtimes.
+   * This value may be empty in which case the appid to use for URL-encoded keys
+   * is the project_id (eg: foo instead of v~foo).
+   * </pre>
+   *
+   * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The keyPrefix.
+   */
+  @java.lang.Override
+  public java.lang.String getKeyPrefix() {
+    java.lang.Object ref = keyPrefix_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      keyPrefix_ = s;
+      return s;
+    }
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The key_prefix for this database. This key_prefix is used, in combination
+   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+   * application id that is returned from the Cloud Datastore APIs in Google App
+   * Engine first generation runtimes.
+   * This value may be empty in which case the appid to use for URL-encoded keys
+   * is the project_id (eg: foo instead of v~foo).
+   * </pre>
+   *
+   * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The bytes for keyPrefix.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getKeyPrefixBytes() {
+    java.lang.Object ref = keyPrefix_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      keyPrefix_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   public static final int ETAG_FIELD_NUMBER = 99;
   private volatile java.lang.Object etag_;
   /**
@@ -762,6 +1052,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             .getNumber()) {
       output.writeEnum(15, concurrencyMode_);
     }
+    if (appEngineIntegrationMode_
+        != com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
+            .APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED
+            .getNumber()) {
+      output.writeEnum(19, appEngineIntegrationMode_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(keyPrefix_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 20, keyPrefix_);
+    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 99, etag_);
     }
@@ -790,6 +1089,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             .getNumber()) {
       size += com.google.protobuf.CodedOutputStream.computeEnumSize(15, concurrencyMode_);
     }
+    if (appEngineIntegrationMode_
+        != com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
+            .APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED
+            .getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(19, appEngineIntegrationMode_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(keyPrefix_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(20, keyPrefix_);
+    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(99, etag_);
     }
@@ -812,6 +1120,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     if (!getLocationId().equals(other.getLocationId())) return false;
     if (type_ != other.type_) return false;
     if (concurrencyMode_ != other.concurrencyMode_) return false;
+    if (appEngineIntegrationMode_ != other.appEngineIntegrationMode_) return false;
+    if (!getKeyPrefix().equals(other.getKeyPrefix())) return false;
     if (!getEtag().equals(other.getEtag())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
@@ -832,6 +1142,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + type_;
     hash = (37 * hash) + CONCURRENCY_MODE_FIELD_NUMBER;
     hash = (53 * hash) + concurrencyMode_;
+    hash = (37 * hash) + APP_ENGINE_INTEGRATION_MODE_FIELD_NUMBER;
+    hash = (53 * hash) + appEngineIntegrationMode_;
+    hash = (37 * hash) + KEY_PREFIX_FIELD_NUMBER;
+    hash = (53 * hash) + getKeyPrefix().hashCode();
     hash = (37 * hash) + ETAG_FIELD_NUMBER;
     hash = (53 * hash) + getEtag().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
@@ -989,6 +1303,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
 
       concurrencyMode_ = 0;
 
+      appEngineIntegrationMode_ = 0;
+
+      keyPrefix_ = "";
+
       etag_ = "";
 
       return this;
@@ -1022,6 +1340,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       result.locationId_ = locationId_;
       result.type_ = type_;
       result.concurrencyMode_ = concurrencyMode_;
+      result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
+      result.keyPrefix_ = keyPrefix_;
       result.etag_ = etag_;
       onBuilt();
       return result;
@@ -1085,6 +1405,13 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       if (other.concurrencyMode_ != 0) {
         setConcurrencyModeValue(other.getConcurrencyModeValue());
+      }
+      if (other.appEngineIntegrationMode_ != 0) {
+        setAppEngineIntegrationModeValue(other.getAppEngineIntegrationModeValue());
+      }
+      if (!other.getKeyPrefix().isEmpty()) {
+        keyPrefix_ = other.keyPrefix_;
+        onChanged();
       }
       if (!other.getEtag().isEmpty()) {
         etag_ = other.etag_;
@@ -1534,6 +1861,243 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     public Builder clearConcurrencyMode() {
 
       concurrencyMode_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int appEngineIntegrationMode_ = 0;
+    /**
+     *
+     *
+     * <pre>
+     * The App Engine integration mode to use for this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+     * </code>
+     *
+     * @return The enum numeric value on the wire for appEngineIntegrationMode.
+     */
+    @java.lang.Override
+    public int getAppEngineIntegrationModeValue() {
+      return appEngineIntegrationMode_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The App Engine integration mode to use for this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+     * </code>
+     *
+     * @param value The enum numeric value on the wire for appEngineIntegrationMode to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAppEngineIntegrationModeValue(int value) {
+
+      appEngineIntegrationMode_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The App Engine integration mode to use for this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+     * </code>
+     *
+     * @return The appEngineIntegrationMode.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
+        getAppEngineIntegrationMode() {
+      @SuppressWarnings("deprecation")
+      com.google.firestore.admin.v1.Database.AppEngineIntegrationMode result =
+          com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.valueOf(
+              appEngineIntegrationMode_);
+      return result == null
+          ? com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.UNRECOGNIZED
+          : result;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The App Engine integration mode to use for this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+     * </code>
+     *
+     * @param value The appEngineIntegrationMode to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAppEngineIntegrationMode(
+        com.google.firestore.admin.v1.Database.AppEngineIntegrationMode value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+
+      appEngineIntegrationMode_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The App Engine integration mode to use for this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.AppEngineIntegrationMode app_engine_integration_mode = 19;
+     * </code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearAppEngineIntegrationMode() {
+
+      appEngineIntegrationMode_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object keyPrefix_ = "";
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The key_prefix for this database. This key_prefix is used, in combination
+     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+     * application id that is returned from the Cloud Datastore APIs in Google App
+     * Engine first generation runtimes.
+     * This value may be empty in which case the appid to use for URL-encoded keys
+     * is the project_id (eg: foo instead of v~foo).
+     * </pre>
+     *
+     * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return The keyPrefix.
+     */
+    public java.lang.String getKeyPrefix() {
+      java.lang.Object ref = keyPrefix_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        keyPrefix_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The key_prefix for this database. This key_prefix is used, in combination
+     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+     * application id that is returned from the Cloud Datastore APIs in Google App
+     * Engine first generation runtimes.
+     * This value may be empty in which case the appid to use for URL-encoded keys
+     * is the project_id (eg: foo instead of v~foo).
+     * </pre>
+     *
+     * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return The bytes for keyPrefix.
+     */
+    public com.google.protobuf.ByteString getKeyPrefixBytes() {
+      java.lang.Object ref = keyPrefix_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        keyPrefix_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The key_prefix for this database. This key_prefix is used, in combination
+     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+     * application id that is returned from the Cloud Datastore APIs in Google App
+     * Engine first generation runtimes.
+     * This value may be empty in which case the appid to use for URL-encoded keys
+     * is the project_id (eg: foo instead of v~foo).
+     * </pre>
+     *
+     * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @param value The keyPrefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setKeyPrefix(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+
+      keyPrefix_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The key_prefix for this database. This key_prefix is used, in combination
+     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+     * application id that is returned from the Cloud Datastore APIs in Google App
+     * Engine first generation runtimes.
+     * This value may be empty in which case the appid to use for URL-encoded keys
+     * is the project_id (eg: foo instead of v~foo).
+     * </pre>
+     *
+     * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearKeyPrefix() {
+
+      keyPrefix_ = getDefaultInstance().getKeyPrefix();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The key_prefix for this database. This key_prefix is used, in combination
+     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
+     * application id that is returned from the Cloud Datastore APIs in Google App
+     * Engine first generation runtimes.
+     * This value may be empty in which case the appid to use for URL-encoded keys
+     * is the project_id (eg: foo instead of v~foo).
+     * </pre>
+     *
+     * <code>string key_prefix = 20 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @param value The bytes for keyPrefix to set.
+     * @return This builder for chaining.
+     */
+    public Builder setKeyPrefixBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
+      keyPrefix_ = value;
       onChanged();
       return this;
     }

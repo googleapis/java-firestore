@@ -20,6 +20,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.httpjson.longrunning.OperationsClient;
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.api.gax.paging.AbstractFixedSizeCollection;
 import com.google.api.gax.paging.AbstractPage;
@@ -60,7 +61,6 @@ import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
-import com.google.longrunning.OperationsClient;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
 import java.io.IOException;
@@ -157,13 +157,28 @@ import javax.annotation.Generated;
  * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
  * }</pre>
  *
+ * <p>To use REST (HTTP1.1/JSON) transport (instead of gRPC) for sending and receiving requests over
+ * the wire:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * FirestoreAdminSettings firestoreAdminSettings =
+ *     FirestoreAdminSettings.newBuilder()
+ *         .setTransportChannelProvider(
+ *             FirestoreAdminSettings.defaultHttpJsonTransportProviderBuilder().build())
+ *         .build();
+ * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
+ * }</pre>
+ *
  * <p>Please refer to the GitHub repository's samples for more quickstart code snippets.
  */
 @Generated("by gapic-generator-java")
 public class FirestoreAdminClient implements BackgroundResource {
   private final FirestoreAdminSettings settings;
   private final FirestoreAdminStub stub;
-  private final OperationsClient operationsClient;
+  private final OperationsClient httpJsonOperationsClient;
+  private final com.google.longrunning.OperationsClient operationsClient;
 
   /** Constructs an instance of FirestoreAdminClient with default settings. */
   public static final FirestoreAdminClient create() throws IOException {
@@ -183,7 +198,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * Constructs an instance of FirestoreAdminClient, using the given stub for making calls. This is
    * for advanced usage - prefer using create(FirestoreAdminSettings).
    */
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public static final FirestoreAdminClient create(FirestoreAdminStub stub) {
     return new FirestoreAdminClient(stub);
   }
@@ -196,21 +210,23 @@ public class FirestoreAdminClient implements BackgroundResource {
   protected FirestoreAdminClient(FirestoreAdminSettings settings) throws IOException {
     this.settings = settings;
     this.stub = ((FirestoreAdminStubSettings) settings.getStubSettings()).createStub();
-    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());
+    this.operationsClient =
+        com.google.longrunning.OperationsClient.create(this.stub.getOperationsStub());
+    this.httpJsonOperationsClient = OperationsClient.create(this.stub.getHttpJsonOperationsStub());
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   protected FirestoreAdminClient(FirestoreAdminStub stub) {
     this.settings = null;
     this.stub = stub;
-    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());
+    this.operationsClient =
+        com.google.longrunning.OperationsClient.create(this.stub.getOperationsStub());
+    this.httpJsonOperationsClient = OperationsClient.create(this.stub.getHttpJsonOperationsStub());
   }
 
   public final FirestoreAdminSettings getSettings() {
     return settings;
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public FirestoreAdminStub getStub() {
     return stub;
   }
@@ -219,8 +235,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * Returns the OperationsClient that can be used to query the status of a long-running operation
    * returned by another API method call.
    */
-  public final OperationsClient getOperationsClient() {
+  public final com.google.longrunning.OperationsClient getOperationsClient() {
     return operationsClient;
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  @BetaApi
+  public final OperationsClient getHttpJsonOperationsClient() {
+    return httpJsonOperationsClient;
   }
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
@@ -518,7 +543,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     ListIndexesResponse response = firestoreAdminClient.listIndexesCallable().call(request);
-   *     for (Index element : response.getResponsesList()) {
+   *     for (Index element : response.getIndexesList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();
@@ -1145,7 +1170,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     ListFieldsResponse response = firestoreAdminClient.listFieldsCallable().call(request);
-   *     for (Field element : response.getResponsesList()) {
+   *     for (Field element : response.getFieldsList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();

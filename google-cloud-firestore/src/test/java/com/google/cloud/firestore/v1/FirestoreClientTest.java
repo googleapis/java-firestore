@@ -568,6 +568,7 @@ public class FirestoreClientTest {
     Assert.assertEquals(request.getPartitionCount(), actualRequest.getPartitionCount());
     Assert.assertEquals(request.getPageToken(), actualRequest.getPageToken());
     Assert.assertEquals(request.getPageSize(), actualRequest.getPageSize());
+    Assert.assertEquals(request.getReadTime(), actualRequest.getReadTime());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
