@@ -133,4 +133,45 @@ public interface FieldOrBuilder
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
    */
   com.google.firestore.admin.v1.Field.IndexConfigOrBuilder getIndexConfigOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return Whether the ttlConfig field is set.
+   */
+  boolean hasTtlConfig();
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return The ttlConfig.
+   */
+  com.google.firestore.admin.v1.Field.TtlConfig getTtlConfig();
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   */
+  com.google.firestore.admin.v1.Field.TtlConfigOrBuilder getTtlConfigOrBuilder();
 }
