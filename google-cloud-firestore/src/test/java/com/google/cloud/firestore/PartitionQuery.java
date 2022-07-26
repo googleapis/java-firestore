@@ -26,7 +26,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import com.google.api.core.ApiFutures;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
@@ -75,7 +75,7 @@ public class PartitionQuery {
   @Mock private PartitionQueryPage queryPage;
 
   @Captor private ArgumentCaptor<RunQueryRequest> runQuery;
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<PartitionQueryResponse>> streamObserverCapture;
   @Captor private ArgumentCaptor<PartitionQueryRequest> requestCaptor;
 
   @Test

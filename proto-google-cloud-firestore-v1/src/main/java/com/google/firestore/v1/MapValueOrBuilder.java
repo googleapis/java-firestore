@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,8 +81,12 @@ public interface MapValueOrBuilder
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
+
+  /* nullable */
   com.google.firestore.v1.Value getFieldsOrDefault(
-      java.lang.String key, com.google.firestore.v1.Value defaultValue);
+      java.lang.String key,
+      /* nullable */
+      com.google.firestore.v1.Value defaultValue);
   /**
    *
    *

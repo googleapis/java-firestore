@@ -80,9 +80,7 @@ final class ConformanceConversions {
 
   /** Helper function to convert test values in a nested Map to Firestore API types. */
   private static Map<String, Object> convertMap(Map<String, Object> parsedData) {
-    for (Map.Entry<String, Object> entry : parsedData.entrySet()) {
-      parsedData.put(entry.getKey(), convertValue(entry.getValue()));
-    }
+    parsedData.replaceAll((k, v) -> convertValue(v));
     return parsedData;
   }
 

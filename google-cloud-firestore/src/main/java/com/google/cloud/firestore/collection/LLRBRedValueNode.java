@@ -24,7 +24,7 @@ import com.google.api.core.InternalApi;
 public class LLRBRedValueNode<K, V> extends LLRBValueNode<K, V> {
 
   LLRBRedValueNode(K key, V value) {
-    super(key, value, LLRBEmptyNode.<K, V>getInstance(), LLRBEmptyNode.<K, V>getInstance());
+    super(key, value, LLRBEmptyNode.getInstance(), LLRBEmptyNode.getInstance());
   }
 
   LLRBRedValueNode(K key, V value, LLRBNode<K, V> left, LLRBNode<K, V> right) {
@@ -52,6 +52,6 @@ public class LLRBRedValueNode<K, V> extends LLRBValueNode<K, V> {
     V newValue = value == null ? this.getValue() : value;
     LLRBNode<K, V> newLeft = left == null ? this.getLeft() : left;
     LLRBNode<K, V> newRight = right == null ? this.getRight() : right;
-    return new LLRBRedValueNode<K, V>(newKey, newValue, newLeft, newRight);
+    return new LLRBRedValueNode<>(newKey, newValue, newLeft, newRight);
   }
 }

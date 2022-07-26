@@ -87,7 +87,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   static FieldPath empty() {
     // NOTE: This is not static since it would create a circular class dependency during
     // initialization.
-    return new AutoValue_FieldPath(ImmutableList.<String>of());
+    return new AutoValue_FieldPath(ImmutableList.of());
   }
 
   private String encodedPath;

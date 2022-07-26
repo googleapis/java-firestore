@@ -38,10 +38,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Joiner.MapJoiner;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
 import java.util.ArrayList;
@@ -49,17 +46,22 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+@RunWith(JUnit4.class)
 public final class ITQueryWatchTest {
 
   private static Firestore firestore;
@@ -488,7 +490,7 @@ public final class ITQueryWatchTest {
         int modifiedEventCount,
         int removedEventCount,
         int errorCount) {
-      this.receivedEvents = Collections.synchronizedList(new ArrayList<ListenerEvent>());
+      this.receivedEvents = Collections.synchronizedList(new ArrayList<>());
       this.eventsCountDownLatch =
           new EventsCountDownLatch(
               initialCount, addedEventCount, modifiedEventCount, removedEventCount, errorCount);
@@ -560,14 +562,14 @@ public final class ITQueryWatchTest {
 
     static final class ListenerAssertions {
       private static final MapJoiner MAP_JOINER = Joiner.on(",").withKeyValueSeparator("=");
-      private final FluentIterable<ListenerEvent> events;
       private final List<String> addedIds;
       private final List<String> modifiedIds;
       private final List<String> removedIds;
+      private final List<ListenerEvent> receivedEvents;
 
       ListenerAssertions(List<ListenerEvent> receivedEvents) {
-        events = FluentIterable.from(receivedEvents);
-        List<QuerySnapshot> querySnapshots = getQuerySnapshots(events);
+        this.receivedEvents = receivedEvents;
+        List<QuerySnapshot> querySnapshots = getQuerySnapshots(receivedEvents);
         addedIds = getIds(querySnapshots, DocumentChange.Type.ADDED);
         modifiedIds = getIds(querySnapshots, DocumentChange.Type.MODIFIED);
         removedIds = getIds(querySnapshots, DocumentChange.Type.REMOVED);
@@ -575,47 +577,25 @@ public final class ITQueryWatchTest {
 
       private void noError() {
         final Optional<ListenerEvent> anyError =
-            events.firstMatch(
-                new Predicate<ListenerEvent>() {
-                  @Override
-                  public boolean apply(ListenerEvent input) {
-                    return input.error != null;
-                  }
-                });
-        assertWithMessage("snapshotListener received an error").that(anyError).isAbsent();
+            receivedEvents.stream().filter(input -> input.error != null).findFirst();
+        assertWithMessage("snapshotListener received an error")
+            .that(anyError.isPresent())
+            .isFalse();
       }
 
       private void hasError() {
         final Optional<ListenerEvent> anyError =
-            events.firstMatch(
-                new Predicate<ListenerEvent>() {
-                  @Override
-                  public boolean apply(ListenerEvent input) {
-                    return input.error != null;
-                  }
-                });
+            receivedEvents.stream().filter(input -> input.error != null).findFirst();
         assertWithMessage("snapshotListener did not receive an expected error")
-            .that(anyError)
-            .isPresent();
+            .that(anyError.isPresent())
+            .isTrue();
       }
 
-      private static List<QuerySnapshot> getQuerySnapshots(FluentIterable<ListenerEvent> events) {
-        return events
-            .filter(
-                new Predicate<ListenerEvent>() {
-                  @Override
-                  public boolean apply(ListenerEvent input) {
-                    return input.value != null;
-                  }
-                })
-            .transform(
-                new com.google.common.base.Function<ListenerEvent, QuerySnapshot>() {
-                  @Override
-                  public QuerySnapshot apply(ListenerEvent input) {
-                    return input.value;
-                  }
-                })
-            .toList();
+      private static List<QuerySnapshot> getQuerySnapshots(List<ListenerEvent> events) {
+        return events.stream()
+            .filter(input -> input.value != null)
+            .map(input -> input.value)
+            .collect(Collectors.toList());
       }
 
       private static List<String> getIds(
@@ -657,13 +637,13 @@ public final class ITQueryWatchTest {
       }
 
       void eventCountIsAnyOf(Range<Integer> range) {
-        Truth.assertWithMessage(debugMessage()).that(events.size()).isIn(range);
+        Truth.assertWithMessage(debugMessage()).that((int) receivedEvents.size()).isIn(range);
       }
 
       private String debugMessage() {
         final StringBuilder builder = new StringBuilder();
         builder.append("events[\n");
-        for (ListenerEvent receivedEvent : events) {
+        for (ListenerEvent receivedEvent : receivedEvents) {
           builder.append("event{");
           builder.append("error=").append(receivedEvent.error);
           builder.append(",");

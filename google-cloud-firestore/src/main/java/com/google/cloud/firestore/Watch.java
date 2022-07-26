@@ -21,7 +21,9 @@ import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentChange.Type;
 import com.google.common.base.Preconditions;
@@ -38,7 +40,6 @@ import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,7 @@ import javax.annotation.Nullable;
  * It synchronizes on its own instance so it is advisable not to use this class for external
  * synchronization.
  */
-class Watch implements ApiStreamObserver<ListenResponse> {
+class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /**
    * Target ID used by watch. Watch uses a fixed target id since we only support one target per
    * stream. The actual target ID we use is arbitrary.
@@ -72,7 +73,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   private final ExponentialRetryAlgorithm backoff;
   private final Target target;
   private TimedAttemptSettings nextAttempt;
-  private ApiStreamObserver<ListenRequest> stream;
+  private ClientStream<ListenRequest> stream;
 
   /** The sorted tree of DocumentSnapshots as sent in the last snapshot. */
   private DocumentSet documentSet;
@@ -105,7 +106,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
    * Indicates whether we are interested in data from the stream. Set to false in the
    * 'unsubscribe()' callback.
    */
-  private AtomicBoolean isActive;
+  private final AtomicBoolean isActive;
 
   /** The list of document changes in a snapshot separated by change type. */
   static class ChangeSet {
@@ -168,7 +169,13 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   }
 
   @Override
-  public synchronized void onNext(ListenResponse listenResponse) {
+  public void onStart(StreamController streamController) {}
+
+  @Override
+  public void onReady(ClientStream<ListenRequest> clientStream) {}
+
+  @Override
+  public synchronized void onResponse(ListenResponse listenResponse) {
     switch (listenResponse.getResponseTypeCase()) {
       case TARGET_CHANGE:
         TargetChange change = listenResponse.getTargetChange();
@@ -259,7 +266,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   }
 
   @Override
-  public synchronized void onCompleted() {
+  public synchronized void onComplete() {
     maybeReopenStream(new StatusException(Status.fromCode(Code.UNKNOWN)));
   }
 
@@ -281,25 +288,19 @@ class Watch implements ApiStreamObserver<ListenResponse> {
 
     initStream();
 
-    return new ListenerRegistration() {
-      @Override
-      public void remove() {
-        isActive.set(false);
+    return () -> {
+      isActive.set(false);
 
-        firestore
-            .getClient()
-            .getExecutor()
-            .execute(
-                new Runnable() {
-                  @Override
-                  public void run() {
-                    synchronized (Watch.this) {
-                      stream.onCompleted();
-                      stream = null;
-                    }
-                  }
-                });
-      }
+      firestore
+          .getClient()
+          .getExecutor()
+          .execute(
+              () -> {
+                synchronized (Watch.this) {
+                  stream.closeSend();
+                  stream = null;
+                }
+              });
     };
   }
 
@@ -328,27 +329,24 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   /** Closes the stream and calls onError() if the stream is still active. */
   private void closeStream(final Throwable throwable) {
     if (stream != null) {
-      stream.onCompleted();
+      stream.closeSend();
       stream = null;
     }
 
     if (isActive.getAndSet(false)) {
       userCallbackExecutor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              if (throwable instanceof FirestoreException) {
-                listener.onEvent(null, (FirestoreException) throwable);
-              } else {
-                Status status = getStatus(throwable);
-                FirestoreException firestoreException =
-                    FirestoreException.forApiException(
-                        new ApiException(
-                            throwable,
-                            GrpcStatusCode.of(status != null ? status.getCode() : Code.UNKNOWN),
-                            false));
-                listener.onEvent(null, firestoreException);
-              }
+          () -> {
+            if (throwable instanceof FirestoreException) {
+              listener.onEvent(null, (FirestoreException) throwable);
+            } else {
+              Status status = getStatus(throwable);
+              FirestoreException firestoreException =
+                  FirestoreException.forApiException(
+                      new ApiException(
+                          throwable,
+                          GrpcStatusCode.of(status != null ? status.getCode() : Code.UNKNOWN),
+                          false));
+              listener.onEvent(null, firestoreException);
             }
           });
     }
@@ -373,7 +371,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   /** Helper to restart the outgoing stream to the backend. */
   private void resetStream() {
     if (stream != null) {
-      stream.onCompleted();
+      stream.closeSend();
       stream = null;
     }
 
@@ -383,40 +381,36 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   /** Initializes a new stream to the backend with backoff. */
   private void initStream() {
     firestoreExecutor.schedule(
-        new Runnable() {
-          @Override
-          public void run() {
-            try {
+        () -> {
+          try {
+            if (!isActive.get()) {
+              return;
+            }
+
+            synchronized (Watch.this) {
               if (!isActive.get()) {
                 return;
               }
 
-              synchronized (Watch.this) {
-                if (!isActive.get()) {
-                  return;
-                }
+              Preconditions.checkState(stream == null);
 
-                Preconditions.checkState(stream == null);
+              current = false;
+              nextAttempt = backoff.createNextAttempt(nextAttempt);
 
-                current = false;
-                nextAttempt = backoff.createNextAttempt(nextAttempt);
+              Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
+              stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
 
-                Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-                stream =
-                    firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
-
-                ListenRequest.Builder request = ListenRequest.newBuilder();
-                request.setDatabase(firestore.getDatabaseName());
-                request.setAddTarget(target);
-                if (resumeToken != null) {
-                  request.getAddTargetBuilder().setResumeToken(resumeToken);
-                }
-
-                stream.onNext(request.build());
+              ListenRequest.Builder request = ListenRequest.newBuilder();
+              request.setDatabase(firestore.getDatabaseName());
+              request.setAddTarget(target);
+              if (resumeToken != null) {
+                request.getAddTargetBuilder().setResumeToken(resumeToken);
               }
-            } catch (Throwable throwable) {
-              onError(throwable);
+
+              stream.send(request.build());
             }
+          } catch (Throwable throwable) {
+            onError(throwable);
           }
         },
         nextAttempt.getRandomizedRetryDelay().toMillis(),
@@ -465,13 +459,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
     if (!hasPushed || !changes.isEmpty()) {
       final QuerySnapshot querySnapshot =
           QuerySnapshot.withChanges(query, readTime, documentSet, changes);
-      userCallbackExecutor.execute(
-          new Runnable() {
-            @Override
-            public void run() {
-              listener.onEvent(querySnapshot, null);
-            }
-          });
+      userCallbackExecutor.execute(() -> listener.onEvent(querySnapshot, null));
       hasPushed = true;
     }
 
@@ -497,7 +485,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
     documentSet = documentSet.add(newDocument);
     int newIndex = documentSet.indexOf(resourcePath);
     return new DocumentChange(newDocument, Type.ADDED, -1, newIndex);
-  };
+  }
 
   /**
    * Applies a document modification to the document tree. Returns the DocumentChange event for
@@ -516,7 +504,7 @@ class Watch implements ApiStreamObserver<ListenResponse> {
       return new DocumentChange(newDocument, Type.MODIFIED, oldIndex, newIndex);
     }
     return null;
-  };
+  }
 
   /**
    * Applies the mutations in changeMap to the document tree. Modified 'documentSet' in-place and
@@ -532,17 +520,17 @@ class Watch implements ApiStreamObserver<ListenResponse> {
     // Process the sorted changes in the order that is expected by our clients (removals, additions,
     // and then modifications). We also need to sort the individual changes to assure that
     // oldIndex/newIndex keep incrementing.
-    Collections.sort(changeSet.deletes, comparator);
+    changeSet.deletes.sort(comparator);
     for (QueryDocumentSnapshot delete : changeSet.deletes) {
       appliedChanges.add(deleteDoc(delete));
     }
 
-    Collections.sort(changeSet.adds, comparator);
+    changeSet.adds.sort(comparator);
     for (QueryDocumentSnapshot add : changeSet.adds) {
       appliedChanges.add(addDoc(add));
     }
 
-    Collections.sort(changeSet.updates, comparator);
+    changeSet.updates.sort(comparator);
     for (QueryDocumentSnapshot update : changeSet.updates) {
       DocumentChange change = modifyDoc(update);
       if (change != null) {
@@ -582,6 +570,9 @@ class Watch implements ApiStreamObserver<ListenResponse> {
       return ((StatusRuntimeException) throwable).getStatus();
     } else if (throwable instanceof StatusException) {
       return ((StatusException) throwable).getStatus();
+    } else if (throwable instanceof ApiException
+        && ((ApiException) throwable).getStatusCode().getTransportCode() instanceof Code) {
+      return ((Code) ((ApiException) throwable).getStatusCode().getTransportCode()).toStatus();
     }
     return null;
   }
@@ -590,5 +581,5 @@ class Watch implements ApiStreamObserver<ListenResponse> {
   private static boolean isResourceExhaustedError(Throwable throwable) {
     Status status = getStatus(throwable);
     return status != null && status.getCode().equals(Code.RESOURCE_EXHAUSTED);
-  };
+  }
 }

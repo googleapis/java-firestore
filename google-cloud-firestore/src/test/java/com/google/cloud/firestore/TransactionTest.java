@@ -47,7 +47,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.ApiException;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
@@ -56,7 +56,6 @@ import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
 import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
-import com.google.common.base.Function;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.Write;
@@ -69,9 +68,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.Assert;
+import java.util.function.Function;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,10 +88,10 @@ public class TransactionTest {
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
-  @Spy private FirestoreRpc firestoreRpc = mock(FirestoreRpc.class);
+  @Spy private final FirestoreRpc firestoreRpc = mock(FirestoreRpc.class);
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder()
               .setProjectId("test-project")
@@ -102,7 +100,7 @@ public class TransactionTest {
           firestoreRpc);
 
   @Captor private ArgumentCaptor<Message> requestCapture;
-  @Captor private ArgumentCaptor<ApiStreamObserver<Message>> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
   private DocumentReference documentReference;
   private Query queryReference;
@@ -117,13 +115,10 @@ public class TransactionTest {
     options =
         TransactionOptions.create(
             Executors.newSingleThreadExecutor(
-                new ThreadFactory() {
-                  @Override
-                  public Thread newThread(Runnable runnable) {
-                    Thread thread = new Thread(runnable);
-                    thread.setName("user_provided");
-                    return thread;
-                  }
+                runnable -> {
+                  Thread thread = new Thread(runnable);
+                  thread.setName("user_provided");
+                  return thread;
                 }));
   }
 
@@ -136,12 +131,9 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                Assert.assertEquals("user_provided", Thread.currentThread().getName());
-                return "foo";
-              }
+            t -> {
+              assertEquals("user_provided", Thread.currentThread().getName());
+              return "foo";
             },
             options);
 
@@ -163,12 +155,9 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<String>() {
-              @Override
-              public ApiFuture<String> updateCallback(Transaction transaction) {
-                Assert.assertEquals("user_provided", Thread.currentThread().getName());
-                return ApiFutures.immediateFuture("foo");
-              }
+            t -> {
+              assertEquals("user_provided", Thread.currentThread().getName());
+              return ApiFutures.immediateFuture("foo");
             },
             options);
 
@@ -188,15 +177,7 @@ public class TransactionTest {
         .when(firestoreMock)
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
 
-    ApiFuture<String> transaction =
-        firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                return null;
-              }
-            },
-            options);
+    ApiFuture<String> transaction = firestoreMock.runTransaction(transaction1 -> null, options);
 
     assertNull(transaction.get());
   }
@@ -209,14 +190,7 @@ public class TransactionTest {
         .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
-        firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<String>() {
-              @Override
-              public ApiFuture<String> updateCallback(Transaction transaction) {
-                return ApiFutures.immediateFuture(null);
-              }
-            },
-            options);
+        firestoreMock.runAsyncTransaction(t -> ApiFutures.immediateFuture(null), options);
 
     assertNull(transaction.get());
   }
@@ -230,11 +204,8 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) throws Exception {
-                throw new Exception("Expected exception");
-              }
+            t -> {
+              throw new Exception("Expected exception");
             },
             options);
 
@@ -261,13 +232,7 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<String>() {
-              @Override
-              public ApiFuture<String> updateCallback(Transaction transaction) {
-                return ApiFutures.immediateFailedFuture(new Exception("Expected exception"));
-              }
-            },
-            options);
+            t -> ApiFutures.immediateFailedFuture(new Exception("Expected exception")), options);
 
     try {
       transaction.get();
@@ -291,12 +256,9 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                fail();
-                return null;
-              }
+            t -> {
+              fail();
+              return null;
             },
             options);
 
@@ -319,12 +281,9 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<String>() {
-              @Override
-              public ApiFuture<String> updateCallback(Transaction transaction) {
-                fail();
-                return null;
-              }
+            t -> {
+              fail();
+              return null;
             },
             options);
 
@@ -348,11 +307,8 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<String>() {
-              @Override
-              public ApiFuture<String> updateCallback(Transaction transaction) {
-                throw new RuntimeException("User exception");
-              }
+            t -> {
+              throw new RuntimeException("User exception");
             },
             options);
 
@@ -393,12 +349,7 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                return "foo" + retryCount.getAndIncrement();
-              }
-            },
+            t -> "foo" + retryCount.getAndIncrement(),
             TransactionOptions.create(options.getExecutor(), 5));
 
     try {
@@ -442,12 +393,7 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                return "foo" + retryCount.getAndIncrement();
-              }
-            },
+            t -> "foo" + retryCount.getAndIncrement(),
             TransactionOptions.create(options.getExecutor(), 6));
 
     assertEquals("foo6", transaction.get());
@@ -491,12 +437,9 @@ public class TransactionTest {
 
         ApiFuture<Void> transaction =
             firestoreMock.runTransaction(
-                new Transaction.Function<Void>() {
-                  @Override
-                  public Void updateCallback(Transaction transaction) {
-                    ++attempts[0];
-                    return null;
-                  }
+                t -> {
+                  ++attempts[0];
+                  return null;
                 });
 
         transaction.get();
@@ -511,12 +454,9 @@ public class TransactionTest {
 
         ApiFuture<Void> transaction =
             firestoreMock.runTransaction(
-                new Transaction.Function<Void>() {
-                  @Override
-                  public Void updateCallback(Transaction transaction) {
-                    ++attempts[0];
-                    return null;
-                  }
+                t -> {
+                  ++attempts[0];
+                  return null;
                 });
 
         try {
@@ -534,32 +474,24 @@ public class TransactionTest {
   @Test
   public void retriesCommitBasedOnErrorCode() throws Exception {
     verifyRetries(
-        /* expectedSequenceWithRetry= */ new Function<ApiException, ResponseStubber>() {
-          @Override
-          public ResponseStubber apply(final ApiException e) {
-            return new ResponseStubber() {
+        /* expectedSequenceWithRetry= */ e ->
+            new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
-                put(commit("foo1"), ApiFutures.<GeneratedMessageV3>immediateFailedFuture(e));
+                put(commit("foo1"), ApiFutures.immediateFailedFuture(e));
                 put(rollback("foo1"), rollbackResponse());
                 put(begin("foo1"), beginResponse("foo2"));
                 put(commit("foo2"), commitResponse(0, 0));
               }
-            };
-          }
-        },
-        /* expectedSequenceWithoutRetry= */ new Function<ApiException, ResponseStubber>() {
-          @Override
-          public ResponseStubber apply(final ApiException e) {
-            return new ResponseStubber() {
+            },
+        /* expectedSequenceWithoutRetry= */ e ->
+            new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
-                put(commit("foo1"), ApiFutures.<GeneratedMessageV3>immediateFailedFuture(e));
+                put(commit("foo1"), ApiFutures.immediateFailedFuture(e));
                 put(rollback("foo1"), rollbackResponse());
               }
-            };
-          }
-        });
+            });
   }
 
   @Test
@@ -567,41 +499,31 @@ public class TransactionTest {
     final ApiException commitException = exception(Status.Code.ABORTED, true);
 
     verifyRetries(
-        /* expectedSequenceWithRetry= */ new Function<ApiException, ResponseStubber>() {
-          @Override
-          public ResponseStubber apply(final ApiException e) {
-            final ApiFuture<GeneratedMessageV3> rollbackException =
-                ApiFutures.immediateFailedFuture(e);
-            return new ResponseStubber() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(commitException));
-                put(rollback("foo1"), rollbackException);
-                put(rollback("foo1"), rollbackResponse());
-                put(begin("foo1"), beginResponse("foo2"));
-                put(commit("foo2"), commitResponse(0, 0));
-              }
-            };
-          }
+        /* expectedSequenceWithRetry= */ e -> {
+          final ApiFuture<GeneratedMessageV3> rollbackException =
+              ApiFutures.immediateFailedFuture(e);
+          return new ResponseStubber() {
+            {
+              put(begin(), beginResponse("foo1"));
+              put(commit("foo1"), ApiFutures.immediateFailedFuture(commitException));
+              put(rollback("foo1"), rollbackException);
+              put(rollback("foo1"), rollbackResponse());
+              put(begin("foo1"), beginResponse("foo2"));
+              put(commit("foo2"), commitResponse(0, 0));
+            }
+          };
         },
-        /* expectedSequenceWithoutRetry= */ new Function<ApiException, ResponseStubber>() {
-          @Override
-          public ResponseStubber apply(final ApiException e) {
-            final ApiFuture<GeneratedMessageV3> rollbackException =
-                ApiFutures.immediateFailedFuture(e);
-            return new ResponseStubber() {
-              {
-                put(begin(), beginResponse("foo1"));
-                put(
-                    commit("foo1"),
-                    ApiFutures.<GeneratedMessageV3>immediateFailedFuture(commitException));
-                put(rollback("foo1"), rollbackException);
-                put(rollback("foo1"), rollbackResponse());
-              }
-            };
-          }
+        /* expectedSequenceWithoutRetry= */ e -> {
+          final ApiFuture<GeneratedMessageV3> rollbackException =
+              ApiFutures.immediateFailedFuture(e);
+          return new ResponseStubber() {
+            {
+              put(begin(), beginResponse("foo1"));
+              put(commit("foo1"), ApiFutures.immediateFailedFuture(commitException));
+              put(rollback("foo1"), rollbackException);
+              put(rollback("foo1"), rollbackResponse());
+            }
+          };
         });
   }
 
@@ -614,21 +536,10 @@ public class TransactionTest {
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(
-            requestCapture.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable<Message, Message>>any());
+        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
 
     ApiFuture<DocumentSnapshot> transaction =
-        firestoreMock.runTransaction(
-            new Transaction.Function<DocumentSnapshot>() {
-              @Override
-              public DocumentSnapshot updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                return transaction.get(documentReference).get();
-              }
-            },
-            options);
+        firestoreMock.runTransaction(t -> t.get(documentReference).get(), options);
 
     assertEquals("doc", transaction.get().getId());
 
@@ -649,20 +560,10 @@ public class TransactionTest {
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(
-            requestCapture.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable<Message, Message>>any());
+        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
 
     ApiFuture<DocumentSnapshot> transaction =
-        firestoreMock.runAsyncTransaction(
-            new Transaction.AsyncFunction<DocumentSnapshot>() {
-              @Override
-              public ApiFuture<DocumentSnapshot> updateCallback(Transaction transaction) {
-                return transaction.get(documentReference);
-              }
-            },
-            options);
+        firestoreMock.runAsyncTransaction(t -> t.get(documentReference), options);
 
     assertEquals("doc", transaction.get().getId());
 
@@ -686,21 +587,10 @@ public class TransactionTest {
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(
-            requestCapture.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable<Message, Message>>any());
+        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
 
     ApiFuture<List<DocumentSnapshot>> transaction =
-        firestoreMock.runTransaction(
-            new Transaction.Function<List<DocumentSnapshot>>() {
-              @Override
-              public List<DocumentSnapshot> updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                return transaction.getAll(doc1, doc2).get();
-              }
-            },
-            options);
+        firestoreMock.runTransaction(t -> t.getAll(doc1, doc2).get(), options);
 
     assertEquals(2, transaction.get().size());
 
@@ -734,14 +624,7 @@ public class TransactionTest {
 
     ApiFuture<List<DocumentSnapshot>> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<List<DocumentSnapshot>>() {
-              @Override
-              public List<DocumentSnapshot> updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                return transaction.getAll(new DocumentReference[] {doc1}, fieldMask).get();
-              }
-            },
-            options);
+            t -> t.getAll(new DocumentReference[] {doc1}, fieldMask).get(), options);
     transaction.get();
 
     List<Message> requests = requestCapture.getAllValues();
@@ -768,21 +651,10 @@ public class TransactionTest {
 
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            requestCapture.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable<Message, Message>>any());
+        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
 
     ApiFuture<QuerySnapshot> transaction =
-        firestoreMock.runTransaction(
-            new Transaction.Function<QuerySnapshot>() {
-              @Override
-              public QuerySnapshot updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                return transaction.get(queryReference).get();
-              }
-            },
-            options);
+        firestoreMock.runTransaction(t -> t.get(queryReference).get(), options);
 
     assertEquals(1, transaction.get().size());
 
@@ -803,13 +675,10 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                transaction.update(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
-                transaction.update(documentReference, "foo", "bar");
-                return "foo";
-              }
+            t -> {
+              t.update(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+              t.update(documentReference, "foo", "bar");
+              return "foo";
             },
             options);
 
@@ -837,14 +706,10 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                transaction
-                    .set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
-                    .set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
-                return "foo";
-              }
+            t -> {
+              t.set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+                  .set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
+              return "foo";
             },
             options);
 
@@ -872,14 +737,10 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                transaction
-                    .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
-                    .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
-                return "foo";
-              }
+            t -> {
+              t.create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
+                  .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_OBJECT);
+              return "foo";
             },
             options);
 
@@ -907,15 +768,11 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction) {
-                transaction.delete(documentReference);
-                transaction.delete(
-                    documentReference,
-                    Precondition.updatedAt(Timestamp.ofTimeSecondsAndNanos(1, 2)));
-                return "foo";
-              }
+            t -> {
+              t.delete(documentReference);
+              t.delete(
+                  documentReference, Precondition.updatedAt(Timestamp.ofTimeSecondsAndNanos(1, 2)));
+              return "foo";
             },
             options);
 

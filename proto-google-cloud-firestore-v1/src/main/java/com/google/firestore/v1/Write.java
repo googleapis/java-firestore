@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,6 +166,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1260,8 +1262,9 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (operationCase_ == 1) {
           updateBuilder_.mergeFrom(value);
+        } else {
+          updateBuilder_.setMessage(value);
         }
-        updateBuilder_.setMessage(value);
       }
       operationCase_ = 1;
       return this;
@@ -1606,8 +1609,9 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (operationCase_ == 6) {
           transformBuilder_.mergeFrom(value);
+        } else {
+          transformBuilder_.setMessage(value);
         }
-        transformBuilder_.setMessage(value);
       }
       operationCase_ = 6;
       return this;

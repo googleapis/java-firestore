@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,8 +107,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
             }
           case 34:
             {
-              consistencySelectorCase_ = 4;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 4;
               break;
             }
           case 42:
@@ -155,6 +155,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -570,7 +572,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, database_);
     }
     for (int i = 0; i < documents_.size(); i++) {
@@ -597,7 +599,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     if (size != -1) return size;
 
     size = 0;
-    if (!getDatabaseBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, database_);
     }
     {
@@ -1751,8 +1753,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       } else {
         if (consistencySelectorCase_ == 5) {
           newTransactionBuilder_.mergeFrom(value);
+        } else {
+          newTransactionBuilder_.setMessage(value);
         }
-        newTransactionBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 5;
       return this;
@@ -1976,8 +1979,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       } else {
         if (consistencySelectorCase_ == 7) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 7;
       return this;

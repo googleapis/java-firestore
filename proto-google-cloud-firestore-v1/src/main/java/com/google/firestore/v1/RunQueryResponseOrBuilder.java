@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -56,8 +55,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -69,8 +67,7 @@ public interface RunQueryResponseOrBuilder
    *
    *
    * <pre>
-   * A query result.
-   * Not set when reporting partial progress.
+   * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
@@ -140,4 +137,34 @@ public interface RunQueryResponseOrBuilder
    * @return The skippedResults.
    */
   int getSkippedResults();
+
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return Whether the done field is set.
+   */
+  boolean hasDone();
+  /**
+   *
+   *
+   * <pre>
+   * If present, Firestore has completely finished the request and no more
+   * documents will be returned.
+   * </pre>
+   *
+   * <code>bool done = 6;</code>
+   *
+   * @return The done.
+   */
+  boolean getDone();
+
+  public com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase
+      getContinuationSelectorCase();
 }

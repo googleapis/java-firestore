@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.google.api.core.BetaApi;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
+import com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.ClientSettings;
@@ -33,22 +34,28 @@ import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListDatabasesRequest;
+import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
+import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Empty;
@@ -74,6 +81,8 @@ import javax.annotation.Generated;
  * <p>For example, to set the total timeout of getIndex to 30 seconds:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
  * FirestoreAdminSettings.Builder firestoreAdminSettingsBuilder =
  *     FirestoreAdminSettings.newBuilder();
  * firestoreAdminSettingsBuilder
@@ -163,6 +172,27 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsOperationSettings();
   }
 
+  /** Returns the object with the settings used for calls to getDatabase. */
+  public UnaryCallSettings<GetDatabaseRequest, Database> getDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).getDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to listDatabases. */
+  public UnaryCallSettings<ListDatabasesRequest, ListDatabasesResponse> listDatabasesSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).listDatabasesSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateDatabase. */
+  public UnaryCallSettings<UpdateDatabaseRequest, Operation> updateDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateDatabase. */
+  public OperationCallSettings<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
+      updateDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateDatabaseOperationSettings();
+  }
+
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
       throws IOException {
     return new FirestoreAdminSettings.Builder(stub.toBuilder()).build();
@@ -188,9 +218,16 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return FirestoreAdminStubSettings.defaultCredentialsProviderBuilder();
   }
 
-  /** Returns a builder for the default ChannelProvider for this service. */
+  /** Returns a builder for the default gRPC ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return FirestoreAdminStubSettings.defaultGrpcTransportProviderBuilder();
+  }
+
+  /** Returns a builder for the default REST ChannelProvider for this service. */
+  @BetaApi
+  public static InstantiatingHttpJsonChannelProvider.Builder
+      defaultHttpJsonTransportProviderBuilder() {
+    return FirestoreAdminStubSettings.defaultHttpJsonTransportProviderBuilder();
   }
 
   public static TransportChannelProvider defaultTransportChannelProvider() {
@@ -202,9 +239,15 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return FirestoreAdminStubSettings.defaultApiClientHeaderProviderBuilder();
   }
 
-  /** Returns a new builder for this class. */
+  /** Returns a new gRPC builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
+  }
+
+  /** Returns a new REST builder for this class. */
+  @BetaApi
+  public static Builder newHttpJsonBuilder() {
+    return Builder.createHttpJsonDefault();
   }
 
   /** Returns a new builder for this class. */
@@ -244,18 +287,22 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return new Builder(FirestoreAdminStubSettings.newBuilder());
     }
 
+    @BetaApi
+    private static Builder createHttpJsonDefault() {
+      return new Builder(FirestoreAdminStubSettings.newHttpJsonBuilder());
+    }
+
     public FirestoreAdminStubSettings.Builder getStubSettingsBuilder() {
       return ((FirestoreAdminStubSettings.Builder) getStubSettings());
     }
 
-    // NEXT_MAJOR_VER: remove 'throws Exception'.
     /**
      * Applies the given settings updater function to all of the unary API methods in this service.
      *
      * <p>Note: This method does not support applying settings to streaming methods.
      */
     public Builder applyToAllUnaryMethods(
-        ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> settingsUpdater) throws Exception {
+        ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> settingsUpdater) {
       super.applyToAllUnaryMethods(
           getStubSettingsBuilder().unaryMethodSettingsBuilders(), settingsUpdater);
       return this;
@@ -332,6 +379,28 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return getStubSettingsBuilder().importDocumentsOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to getDatabase. */
+    public UnaryCallSettings.Builder<GetDatabaseRequest, Database> getDatabaseSettings() {
+      return getStubSettingsBuilder().getDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to listDatabases. */
+    public UnaryCallSettings.Builder<ListDatabasesRequest, ListDatabasesResponse>
+        listDatabasesSettings() {
+      return getStubSettingsBuilder().listDatabasesSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateDatabase. */
+    public UnaryCallSettings.Builder<UpdateDatabaseRequest, Operation> updateDatabaseSettings() {
+      return getStubSettingsBuilder().updateDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateDatabase. */
+    public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
+        updateDatabaseOperationSettings() {
+      return getStubSettingsBuilder().updateDatabaseOperationSettings();
     }
 
     @Override

@@ -41,7 +41,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CollectionReferenceTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));

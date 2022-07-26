@@ -24,7 +24,7 @@ import java.util.Comparator;
 @InternalApi
 public class StandardComparator<A extends Comparable<A>> implements Comparator<A> {
 
-  private static StandardComparator INSTANCE = new StandardComparator();
+  private static final StandardComparator INSTANCE = new StandardComparator();
 
   private StandardComparator() {}
 

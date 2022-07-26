@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -568,6 +568,7 @@ public class FirestoreClientTest {
     Assert.assertEquals(request.getPartitionCount(), actualRequest.getPartitionCount());
     Assert.assertEquals(request.getPageToken(), actualRequest.getPageToken());
     Assert.assertEquals(request.getPageSize(), actualRequest.getPageSize());
+    Assert.assertEquals(request.getReadTime(), actualRequest.getReadTime());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),

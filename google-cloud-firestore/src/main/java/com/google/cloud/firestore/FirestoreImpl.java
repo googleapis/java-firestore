@@ -16,11 +16,17 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.NanoClock;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
+import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
@@ -42,6 +48,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.threeten.bp.Duration;
 
 /**
  * Main implementation of the Firestore client. This is the entry point for all Firestore
@@ -198,7 +205,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return this.getAll(documentReferences, fieldMask, (ByteString) null);
   }
 
-  @Nonnull
   @Override
   public void getAll(
       final @Nonnull DocumentReference[] documentReferences,
@@ -213,12 +219,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
 
-    ApiStreamObserver<BatchGetDocumentsResponse> responseObserver =
-        new ApiStreamObserver<BatchGetDocumentsResponse>() {
+    ResponseObserver<BatchGetDocumentsResponse> responseObserver =
+        new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses;
 
           @Override
-          public void onNext(BatchGetDocumentsResponse response) {
+          public void onStart(StreamController streamController) {}
+
+          @Override
+          public void onResponse(BatchGetDocumentsResponse response) {
             DocumentReference documentReference;
             DocumentSnapshot documentSnapshot;
 
@@ -267,7 +276,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           }
 
           @Override
-          public void onCompleted() {
+          public void onComplete() {
             tracer
                 .getCurrentSpan()
                 .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
@@ -408,6 +417,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return firestoreClient;
   }
 
+  @Override
+  public Duration getTotalRequestTimeout() {
+    return firestoreOptions.getRetrySettings().getTotalTimeout();
+  }
+
+  @Override
+  public ApiClock getClock() {
+    return NanoClock.getDefaultClock();
+  }
+
   /** Request funnel for all read/write requests. */
   @Override
   public <RequestT, ResponseT> ApiFuture<ResponseT> sendRequest(
@@ -420,19 +439,19 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public <RequestT, ResponseT> void streamRequest(
       RequestT requestT,
-      ApiStreamObserver<ResponseT> responseObserverT,
+      ResponseObserver<ResponseT> responseObserverT,
       ServerStreamingCallable<RequestT, ResponseT> callable) {
     Preconditions.checkState(!closed, "Firestore client has already been closed");
-    callable.serverStreamingCall(requestT, responseObserverT);
+    callable.call(requestT, responseObserverT);
   }
 
   /** Request funnel for all bidirectional streaming requests. */
   @Override
-  public <RequestT, ResponseT> ApiStreamObserver<RequestT> streamRequest(
-      ApiStreamObserver<ResponseT> responseObserverT,
+  public <RequestT, ResponseT> ClientStream<RequestT> streamRequest(
+      BidiStreamObserver<RequestT, ResponseT> responseObserverT,
       BidiStreamingCallable<RequestT, ResponseT> callable) {
     Preconditions.checkState(!closed, "Firestore client has already been closed");
-    return callable.bidiStreamingCall(responseObserverT);
+    return callable.splitCall(responseObserverT);
   }
 
   @Override

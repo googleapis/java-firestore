@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public interface PreconditionOrBuilder
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -68,7 +68,7 @@ public interface PreconditionOrBuilder
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -81,7 +81,7 @@ public interface PreconditionOrBuilder
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>

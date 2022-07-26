@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,8 +103,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
             }
           case 34:
             {
-              resumeTypeCase_ = 4;
               resumeType_ = input.readBytes();
+              resumeTypeCase_ = 4;
               break;
             }
           case 40:
@@ -143,6 +143,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -307,6 +309,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -1157,6 +1161,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
@@ -1348,7 +1354,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-      if (!getParentBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
       }
       if (queryTypeCase_ == 2) {
@@ -1363,7 +1369,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       if (size != -1) return size;
 
       size = 0;
-      if (!getParentBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
       }
       if (queryTypeCase_ == 2) {
@@ -1956,8 +1962,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         } else {
           if (queryTypeCase_ == 2) {
             structuredQueryBuilder_.mergeFrom(value);
+          } else {
+            structuredQueryBuilder_.setMessage(value);
           }
-          structuredQueryBuilder_.setMessage(value);
         }
         queryTypeCase_ = 2;
         return this;
@@ -3034,8 +3041,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (targetTypeCase_ == 2) {
           queryBuilder_.mergeFrom(value);
+        } else {
+          queryBuilder_.setMessage(value);
         }
-        queryBuilder_.setMessage(value);
       }
       targetTypeCase_ = 2;
       return this;
@@ -3243,8 +3251,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (targetTypeCase_ == 3) {
           documentsBuilder_.mergeFrom(value);
+        } else {
+          documentsBuilder_.setMessage(value);
         }
-        documentsBuilder_.setMessage(value);
       }
       targetTypeCase_ = 3;
       return this;
@@ -3531,8 +3540,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (resumeTypeCase_ == 11) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       resumeTypeCase_ = 11;
       return this;

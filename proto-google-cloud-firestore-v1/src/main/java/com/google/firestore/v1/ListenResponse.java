@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +159,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -1082,8 +1084,9 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (responseTypeCase_ == 2) {
           targetChangeBuilder_.mergeFrom(value);
+        } else {
+          targetChangeBuilder_.setMessage(value);
         }
-        targetChangeBuilder_.setMessage(value);
       }
       responseTypeCase_ = 2;
       return this;
@@ -1291,8 +1294,9 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (responseTypeCase_ == 3) {
           documentChangeBuilder_.mergeFrom(value);
+        } else {
+          documentChangeBuilder_.setMessage(value);
         }
-        documentChangeBuilder_.setMessage(value);
       }
       responseTypeCase_ = 3;
       return this;
@@ -1500,8 +1504,9 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (responseTypeCase_ == 4) {
           documentDeleteBuilder_.mergeFrom(value);
+        } else {
+          documentDeleteBuilder_.setMessage(value);
         }
-        documentDeleteBuilder_.setMessage(value);
       }
       responseTypeCase_ = 4;
       return this;
@@ -1714,8 +1719,9 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (responseTypeCase_ == 6) {
           documentRemoveBuilder_.mergeFrom(value);
+        } else {
+          documentRemoveBuilder_.setMessage(value);
         }
-        documentRemoveBuilder_.setMessage(value);
       }
       responseTypeCase_ = 6;
       return this;
@@ -1941,8 +1947,9 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (responseTypeCase_ == 5) {
           filterBuilder_.mergeFrom(value);
+        } else {
+          filterBuilder_.setMessage(value);
         }
-        filterBuilder_.setMessage(value);
       }
       responseTypeCase_ = 5;
       return this;

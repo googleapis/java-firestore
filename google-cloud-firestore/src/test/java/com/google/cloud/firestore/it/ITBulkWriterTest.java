@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.it;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,8 +24,14 @@ import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
-import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
+import com.google.cloud.firestore.BulkWriter;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,8 +76,7 @@ public class ITBulkWriterTest {
     firestore.bulkWriter();
 
     BulkWriter writer = firestore.bulkWriter();
-    ApiFuture<WriteResult> result =
-        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    ApiFuture<WriteResult> result = writer.create(docRef, Collections.singletonMap("foo", "bar"));
     writer.close();
 
     assertNotNull(result.get().getUpdateTime());
@@ -82,11 +87,10 @@ public class ITBulkWriterTest {
   @Test
   public void bulkWriterCreateAddsPrecondition() throws Exception {
     DocumentReference docRef = randomColl.document();
-    docRef.set(Collections.singletonMap("foo", (Object) "bar")).get();
+    docRef.set(Collections.singletonMap("foo", "bar")).get();
 
     BulkWriter writer = firestore.bulkWriter();
-    ApiFuture<WriteResult> result =
-        writer.create(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    ApiFuture<WriteResult> result = writer.create(docRef, Collections.singletonMap("foo", "bar"));
     writer.close();
 
     try {
@@ -102,8 +106,7 @@ public class ITBulkWriterTest {
     DocumentReference docRef = randomColl.document();
 
     BulkWriter writer = firestore.bulkWriter();
-    ApiFuture<WriteResult> result =
-        writer.set(docRef, Collections.singletonMap("foo", (Object) "bar"));
+    ApiFuture<WriteResult> result = writer.set(docRef, Collections.singletonMap("foo", "bar"));
     writer.close();
 
     assertNotNull(result.get().getUpdateTime());
@@ -170,11 +173,9 @@ public class ITBulkWriterTest {
     BulkWriter writer = firestore.bulkWriter();
     writer.addWriteResultListener(
         executor,
-        new WriteResultCallback() {
-          public void onResult(DocumentReference documentReference, WriteResult result) {
-            operations.add("operation");
-            assertTrue(Thread.currentThread().getName().contains("bulkWriterSuccess"));
-          }
+        (documentReference, result) -> {
+          operations.add("operation");
+          assertTrue(Thread.currentThread().getName().contains("bulkWriterSuccess"));
         });
     writer.set(randomDoc, Collections.singletonMap("foo", "bar"));
     writer.flush().get();
@@ -194,21 +195,14 @@ public class ITBulkWriterTest {
     BulkWriter writer = firestore.bulkWriter();
     writer.addWriteErrorListener(
         executor,
-        new WriteErrorCallback() {
-          public boolean onError(BulkWriterException error) {
-            operations.add("operation-error");
-            assertTrue(Thread.currentThread().getName().contains("bulkWriterException"));
-            return false;
-          }
+        error -> {
+          operations.add("operation-error");
+          assertTrue(Thread.currentThread().getName().contains("bulkWriterException"));
+          return false;
         });
 
     writer.addWriteResultListener(
-        executor,
-        new WriteResultCallback() {
-          public void onResult(DocumentReference documentReference, WriteResult result) {
-            fail("The success listener shouldn't be called");
-          }
-        });
+        executor, (documentReference, result) -> fail("The success listener shouldn't be called"));
     writer.update(randomDoc, "foo", "bar");
     writer.flush().get();
     assertEquals("operation-error", operations.get(0));

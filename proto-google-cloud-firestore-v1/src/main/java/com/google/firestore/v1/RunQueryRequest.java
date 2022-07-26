@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,8 +95,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
             }
           case 42:
             {
-              consistencySelectorCase_ = 5;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 5;
               break;
             }
           case 50:
@@ -143,6 +143,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -375,7 +377,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
@@ -390,7 +393,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
@@ -533,7 +537,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getParentBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
     if (queryTypeCase_ == 2) {
@@ -557,7 +561,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     if (size != -1) return size;
 
     size = 0;
-    if (!getParentBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
     }
     if (queryTypeCase_ == 2) {
@@ -1245,8 +1249,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (queryTypeCase_ == 2) {
           structuredQueryBuilder_.mergeFrom(value);
+        } else {
+          structuredQueryBuilder_.setMessage(value);
         }
-        structuredQueryBuilder_.setMessage(value);
       }
       queryTypeCase_ = 2;
       return this;
@@ -1346,7 +1351,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1360,7 +1366,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1377,7 +1384,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1398,7 +1406,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Run the query within an already active transaction.
+     * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 5;</code>
@@ -1542,8 +1551,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (consistencySelectorCase_ == 6) {
           newTransactionBuilder_.mergeFrom(value);
+        } else {
+          newTransactionBuilder_.setMessage(value);
         }
-        newTransactionBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 6;
       return this;
@@ -1767,8 +1777,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       } else {
         if (consistencySelectorCase_ == 7) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 7;
       return this;

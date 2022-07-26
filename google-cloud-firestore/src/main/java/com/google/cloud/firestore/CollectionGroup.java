@@ -16,15 +16,12 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
-import com.google.cloud.firestore.v1.FirestoreClient;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -35,8 +32,8 @@ import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
 /**
@@ -79,7 +76,7 @@ public class CollectionGroup extends Query {
     } else {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
-      final FirestoreClient.PartitionQueryPagedResponse response;
+      final PartitionQueryPagedResponse response;
       final TraceUtil traceUtil = TraceUtil.getInstance();
       Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
       try (Scope scope = traceUtil.getTracer().withSpan(span)) {
@@ -90,12 +87,9 @@ public class CollectionGroup extends Query {
 
         consumePartitions(
             response,
-            new Function<QueryPartition, Void>() {
-              @Override
-              public Void apply(QueryPartition queryPartition) {
-                observer.onNext(queryPartition);
-                return null;
-              }
+            queryPartition -> {
+              observer.onNext(queryPartition);
+              return null;
             });
 
         observer.onCompleted();
@@ -121,21 +115,15 @@ public class CollectionGroup extends Query {
       try (Scope scope = traceUtil.getTracer().withSpan(span)) {
         return ApiFutures.transform(
             rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
-            new ApiFunction<PartitionQueryPagedResponse, List<QueryPartition>>() {
-              @Override
-              public List<QueryPartition> apply(PartitionQueryPagedResponse response) {
-                final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
-                consumePartitions(
-                    response,
-                    new Function<QueryPartition, Void>() {
-                      @Override
-                      public Void apply(QueryPartition queryPartition) {
-                        partitions.add(queryPartition);
-                        return null;
-                      }
-                    });
-                return partitions.build();
-              }
+            response -> {
+              final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
+              consumePartitions(
+                  response,
+                  queryPartition -> {
+                    partitions.add(queryPartition);
+                    return null;
+                  });
+              return partitions.build();
             },
             MoreExecutors.directExecutor());
       } catch (ApiException exception) {
@@ -169,14 +157,8 @@ public class CollectionGroup extends Query {
     }
 
     // Sort the partitions as they may not be ordered if responses are paged.
-    Collections.sort(
-        cursors,
-        new Comparator<Cursor>() {
-          @Override
-          public int compare(Cursor left, Cursor right) {
-            return Order.INSTANCE.compareArrays(left.getValuesList(), right.getValuesList());
-          }
-        });
+    cursors.sort(
+        (left, right) -> Order.INSTANCE.compareArrays(left.getValuesList(), right.getValuesList()));
 
     @Nullable Object[] lastCursor = null;
     for (Cursor cursor : cursors) {

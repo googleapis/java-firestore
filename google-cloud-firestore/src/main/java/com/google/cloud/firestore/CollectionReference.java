@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
@@ -195,14 +194,7 @@ public class CollectionReference extends Query {
     ApiFuture<WriteResult> createFuture = documentReference.create(fields);
 
     return ApiFutures.transform(
-        createFuture,
-        new ApiFunction<WriteResult, DocumentReference>() {
-          @Override
-          public DocumentReference apply(WriteResult writeResult) {
-            return documentReference;
-          }
-        },
-        MoreExecutors.directExecutor());
+        createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
   }
 
   /**

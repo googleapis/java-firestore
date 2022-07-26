@@ -16,14 +16,18 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;
 import com.google.api.core.InternalExtensionOnly;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import org.threeten.bp.Duration;
 
 @InternalApi
 @InternalExtensionOnly
@@ -37,15 +41,19 @@ interface FirestoreRpcContext<FS extends Firestore> {
 
   FirestoreRpc getClient();
 
+  Duration getTotalRequestTimeout();
+
+  ApiClock getClock();
+
   <RequestT, ResponseT> ApiFuture<ResponseT> sendRequest(
       RequestT requestT, UnaryCallable<RequestT, ResponseT> callable);
 
   <RequestT, ResponseT> void streamRequest(
       RequestT requestT,
-      ApiStreamObserver<ResponseT> responseObserverT,
+      ResponseObserver<ResponseT> responseObserverT,
       ServerStreamingCallable<RequestT, ResponseT> callable);
 
-  <RequestT, ResponseT> ApiStreamObserver<RequestT> streamRequest(
-      ApiStreamObserver<ResponseT> responseObserverT,
+  <RequestT, ResponseT> ClientStream<RequestT> streamRequest(
+      BidiStreamObserver<RequestT, ResponseT> responseObserverT,
       BidiStreamingCallable<RequestT, ResponseT> callable);
 }

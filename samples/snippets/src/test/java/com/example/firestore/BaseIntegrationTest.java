@@ -31,9 +31,7 @@ import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-/**
- * Base class for tests like {@link ManageDataSnippetsIT}.
- */
+/** Base class for tests like {@link ManageDataSnippetsIT}. */
 public class BaseIntegrationTest {
 
   protected static String projectId;
@@ -42,18 +40,20 @@ public class BaseIntegrationTest {
   private static String getEnvVar(String varName) {
     String value = System.getenv(varName);
     assertNotNull(
-            String.format("Environment variable '%s' must be set to perform these tests.", varName),
-            value);
+        String.format("Environment variable '%s' must be set to perform these tests.", varName),
+        value);
     return value;
   }
 
   @BeforeClass
   public static void baseSetup() throws Exception {
     projectId = getEnvVar("FIRESTORE_PROJECT_ID");
-    FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-        .setCredentials(GoogleCredentials.getApplicationDefault())
-        .setProjectId(projectId)
-        .build();
+    FirestoreOptions firestoreOptions =
+        FirestoreOptions.getDefaultInstance()
+            .toBuilder()
+            .setCredentials(GoogleCredentials.getApplicationDefault())
+            .setProjectId(projectId)
+            .build();
     db = firestoreOptions.getService();
     deleteAllDocuments(db);
   }
@@ -75,7 +75,7 @@ public class BaseIntegrationTest {
     return docRef.get().get().toObject(City.class);
   }
 
-  protected  static void deleteAllDocuments(Firestore db) throws Exception {
+  protected static void deleteAllDocuments(Firestore db) throws Exception {
     ApiFuture<QuerySnapshot> future = db.collection("cities").get();
     QuerySnapshot querySnapshot = future.get();
     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {

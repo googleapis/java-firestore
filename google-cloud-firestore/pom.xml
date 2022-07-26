@@ -1,10 +1,8 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>2.6.3-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.3.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -14,7 +12,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>2.6.3-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore-parent:current} -->
+    <version>3.3.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
@@ -82,6 +80,10 @@
       <artifactId>gax-grpc</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.google.api</groupId>
+      <artifactId>gax-httpjson</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
@@ -135,20 +137,38 @@
     <!-- Need testing utility classes for generated gRPC clients tests -->
     <dependency>
       <groupId>com.google.api</groupId>
+      <artifactId>gax</artifactId>
+      <classifier>testlib</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api</groupId>
       <artifactId>gax-grpc</artifactId>
+      <classifier>testlib</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    <groupId>com.google.api</groupId>
+      <artifactId>gax-httpjson</artifactId>
       <classifier>testlib</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-conformance-tests</artifactId>
-      <version>0.1.1</version>
+      <version>0.3.3</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>checker-qual</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.11</version>
+      <version>3.12.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -158,7 +178,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.0</version>
         <configuration>
           <show>protected</show>
           <nohelp>true</nohelp>

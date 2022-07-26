@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ option go_package = "google.golang.org/genproto/googleapis/firestore/v1;firestor
 option java_multiple_files = true;
 option java_outer_classname = "FirestoreProto";
 option java_package = "com.google.firestore.v1";
-option objc_class_prefix = "GCFS";
 option php_namespace = "Google\\Cloud\\Firestore\\V1";
 option ruby_package = "Google::Cloud::Firestore::V1";
 
@@ -63,6 +62,9 @@ service Firestore {
   rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse) {
     option (google.api.http) = {
       get: "/v1/{parent=projects/*/databases/*/documents/*/**}/{collection_id}"
+      additional_bindings {
+        get: "/v1/{parent=projects/*/databases/*/documents}/{collection_id}"
+      }
     };
   }
 
@@ -481,7 +483,9 @@ message RunQueryRequest {
   // The consistency mode for this transaction.
   // If not set, defaults to strong consistency.
   oneof consistency_selector {
-    // Reads documents in a transaction.
+    // Run the query within an already active transaction.
+    //
+    // The value here is the opaque transaction ID to execute the query in.
     bytes transaction = 5;
 
     // Starts a new transaction and reads the documents.
@@ -504,8 +508,7 @@ message RunQueryResponse {
   // If set, no other fields will be set in this response.
   bytes transaction = 2;
 
-  // A query result.
-  // Not set when reporting partial progress.
+  // A query result, not set when reporting partial progress.
   Document document = 1;
 
   // The time at which the document was read. This may be monotonically
@@ -520,6 +523,15 @@ message RunQueryResponse {
   // The number of results that have been skipped due to an offset between
   // the last response and the current response.
   int32 skipped_results = 4;
+
+  // The continuation mode for the query. If present, it indicates the current
+  // query response stream has finished. This can be set with or without a
+  // `document` present, but when set, no more results are returned.
+  oneof continuation_selector {
+    // If present, Firestore has completely finished the request and no more
+    // documents will be returned.
+    bool done = 6;
+  }
 }
 
 // The request for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
@@ -572,6 +584,14 @@ message PartitionQueryRequest {
   // if more results exist. A second call to PartitionQuery will return up to
   // 2 partitions, to complete the total of 10 specified in `partition_count`.
   int32 page_size = 5;
+
+  // The consistency mode for this request.
+  // If not set, defaults to strong consistency.
+  oneof consistency_selector {
+    // Reads documents as they were at the given time.
+    // This may not be older than 270 seconds.
+    google.protobuf.Timestamp read_time = 6;
+  }
 }
 
 // The response for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
@@ -856,6 +876,14 @@ message ListCollectionIdsRequest {
   // A page token. Must be a value from
   // [ListCollectionIdsResponse][google.firestore.v1.ListCollectionIdsResponse].
   string page_token = 3;
+
+  // The consistency mode for this request.
+  // If not set, defaults to strong consistency.
+  oneof consistency_selector {
+    // Reads documents as they were at the given time.
+    // This may not be older than 270 seconds.
+    google.protobuf.Timestamp read_time = 4;
+  }
 }
 
 // The response from [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].

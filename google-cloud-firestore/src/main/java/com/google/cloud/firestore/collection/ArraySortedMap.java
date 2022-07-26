@@ -19,7 +19,6 @@ package com.google.cloud.firestore.collection;
 import com.google.api.core.InternalApi;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,7 +43,7 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
       Map<B, C> values,
       Builder.KeyTranslator<A, B> translator,
       Comparator<A> comparator) {
-    Collections.sort(keys, comparator);
+    keys.sort(comparator);
     int size = keys.size();
     A[] keyArray = (A[]) new Object[size];
     C[] valueArray = (C[]) new Object[size];
@@ -55,12 +54,11 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
       valueArray[pos] = value;
       pos++;
     }
-    return new ArraySortedMap<A, C>(comparator, keyArray, valueArray);
+    return new ArraySortedMap<>(comparator, keyArray, valueArray);
   }
 
   public static <K, V> ArraySortedMap<K, V> fromMap(Map<K, V> map, Comparator<K> comparator) {
-    return buildFrom(
-        new ArrayList<K>(map.keySet()), map, Builder.<K>identityTranslator(), comparator);
+    return buildFrom(new ArrayList<>(map.keySet()), map, Builder.identityTranslator(), comparator);
   }
 
   private final K[] keys;
@@ -100,7 +98,7 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
     } else {
       K[] keys = removeFromArray(this.keys, pos);
       V[] values = removeFromArray(this.values, pos);
-      return new ArraySortedMap<K, V>(this.comparator, keys, values);
+      return new ArraySortedMap<>(this.comparator, keys, values);
     }
   }
 
@@ -114,12 +112,12 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
         // The key and/or value might have changed, even though the comparison might still yield 0
         K[] newKeys = replaceInArray(this.keys, pos, key);
         V[] newValues = replaceInArray(this.values, pos, value);
-        return new ArraySortedMap<K, V>(this.comparator, newKeys, newValues);
+        return new ArraySortedMap<>(this.comparator, newKeys, newValues);
       }
     } else {
       if (this.keys.length > Builder.ARRAY_TO_RB_TREE_SIZE_THRESHOLD) {
         @SuppressWarnings("unchecked")
-        Map<K, V> map = new HashMap<K, V>(this.keys.length + 1);
+        Map<K, V> map = new HashMap<>(this.keys.length + 1);
         for (int i = 0; i < this.keys.length; i++) {
           map.put(this.keys[i], this.values[i]);
         }
@@ -129,7 +127,7 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
         int newPos = findKeyOrInsertPosition(key);
         K[] keys = addToArray(this.keys, newPos, key);
         V[] values = addToArray(this.values, newPos, value);
-        return new ArraySortedMap<K, V>(this.comparator, keys, values);
+        return new ArraySortedMap<>(this.comparator, keys, values);
       }
     }
   }
@@ -175,7 +173,7 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
         final K key = keys[currentPos];
         final V value = values[currentPos];
         currentPos = reverse ? currentPos - 1 : currentPos + 1;
-        return new AbstractMap.SimpleImmutableEntry<K, V>(key, value);
+        return new AbstractMap.SimpleImmutableEntry<>(key, value);
       }
 
       @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -181,8 +181,8 @@ public class DatabaseName implements ResourceName {
     }
 
     private Builder(DatabaseName databaseName) {
-      project = databaseName.project;
-      database = databaseName.database;
+      this.project = databaseName.project;
+      this.database = databaseName.database;
     }
 
     public DatabaseName build() {

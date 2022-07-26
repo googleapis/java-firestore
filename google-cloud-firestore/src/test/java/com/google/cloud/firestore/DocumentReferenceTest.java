@@ -64,7 +64,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
@@ -102,7 +102,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class DocumentReferenceTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
@@ -111,7 +111,7 @@ public class DocumentReferenceTest {
 
   @Captor private ArgumentCaptor<BatchGetDocumentsRequest> getAllCapture;
 
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<CommitResponse>> streamObserverCapture;
 
   private DocumentReference documentReference;
 
@@ -166,7 +166,7 @@ public class DocumentReferenceTest {
         .sendRequest(
             commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
-    documentReference.set(map("docRef", (Object) documentReference)).get();
+    documentReference.set(map("docRef", documentReference)).get();
 
     Map<String, Value> documentReferenceFields = new HashMap<>();
     documentReferenceFields.put(
@@ -414,7 +414,7 @@ public class DocumentReferenceTest {
 
     CommitRequest create =
         commit(
-            create(Collections.<String, Value>emptyMap()),
+            create(Collections.emptyMap()),
             transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     List<CommitRequest> commitRequests = commitCapture.getAllValues();
@@ -453,7 +453,7 @@ public class DocumentReferenceTest {
 
     CommitRequest update =
         commit(
-            update(Collections.<String, Value>emptyMap(), Collections.singletonList("inner")),
+            update(Collections.emptyMap(), Collections.singletonList("inner")),
             transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     assertCommitEquals(update, commitCapture.getValue());
@@ -463,10 +463,7 @@ public class DocumentReferenceTest {
 
     update =
         commit(
-            update(
-                Collections.<String, Value>emptyMap(),
-                new ArrayList<String>(),
-                UPDATE_PRECONDITION),
+            update(Collections.emptyMap(), new ArrayList<>(), UPDATE_PRECONDITION),
             transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
     assertCommitEquals(update, commitCapture.getValue());
@@ -488,7 +485,7 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            set(SERVER_TIMESTAMP_PROTO, new ArrayList<String>()),
+            set(SERVER_TIMESTAMP_PROTO, new ArrayList<>()),
             transform("inner.bar", serverTimestamp()));
 
     List<CommitRequest> commitRequests = commitCapture.getAllValues();
@@ -509,7 +506,7 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            set(Collections.<String, Value>emptyMap()),
+            set(Collections.emptyMap()),
             transform(
                 "integer",
                 increment(Value.newBuilder().setIntegerValue(1).build()),
@@ -531,7 +528,7 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            set(Collections.<String, Value>emptyMap()),
+            set(Collections.emptyMap()),
             transform("foo", arrayUnion(string("bar"), object("foo", string("baz")))));
 
     CommitRequest commitRequest = commitCapture.getValue();
@@ -549,7 +546,7 @@ public class DocumentReferenceTest {
 
     CommitRequest set =
         commit(
-            set(Collections.<String, Value>emptyMap()),
+            set(Collections.emptyMap()),
             transform("foo", arrayRemove(string("bar"), object("foo", string("baz")))));
 
     CommitRequest commitRequest = commitCapture.getValue();
@@ -722,8 +719,7 @@ public class DocumentReferenceTest {
     documentReference.set(map(), SetOptions.merge()).get();
 
     assertCommitEquals(
-        commit(set(Collections.<String, Value>emptyMap(), Collections.<String>emptyList())),
-        commitCapture.getValue());
+        commit(set(Collections.emptyMap(), Collections.emptyList())), commitCapture.getValue());
   }
 
   @Test
@@ -892,7 +888,7 @@ public class DocumentReferenceTest {
         .sendRequest(
             commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
-    documentReference.update(map("a.b.c", (Object) map("d.e", "foo"))).get();
+    documentReference.update(map("a.b.c", map("d.e", "foo"))).get();
 
     Map<String, Value> nestedUpdate = new HashMap<>();
     Value.Builder valueProto = Value.newBuilder();
@@ -1076,9 +1072,7 @@ public class DocumentReferenceTest {
     FieldPath path = FieldPath.of("a.b", "c.d");
     documentReference.update(path, FieldValue.delete()).get();
     CommitRequest expectedCommit =
-        commit(
-            update(
-                Collections.<String, Value>emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
+        commit(update(Collections.emptyMap(), Collections.singletonList("`a.b`.`c.d`")));
     assertEquals(expectedCommit, commitCapture.getValue());
   }
 

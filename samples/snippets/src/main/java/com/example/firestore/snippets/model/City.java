@@ -35,8 +35,13 @@ public class City {
   }
 
   // Initialize all fields of a city
-  public City(String name, String state, String country,
-              Boolean capital, Long population, List<String> regions) {
+  public City(
+      String name,
+      String state,
+      String country,
+      Boolean capital,
+      Long population,
+      List<String> regions) {
     this.name = name;
     this.state = state;
     this.country = country;
@@ -140,7 +145,7 @@ public class City {
       }
       sb.append("],");
     }
-    //remove trailing comma
+    // remove trailing comma
     if (sb.lastIndexOf(",") >= sb.length() - 1) {
       sb.deleteCharAt(sb.length() - 1);
     }

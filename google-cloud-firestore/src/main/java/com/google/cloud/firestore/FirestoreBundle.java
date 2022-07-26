@@ -17,7 +17,6 @@
 package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.firestore.bundle.BundleElement;
 import com.google.firestore.bundle.BundleMetadata;
@@ -33,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /** Represents a Firestore data bundle with results from the given document and query snapshots. */
 public final class FirestoreBundle {
@@ -43,16 +43,16 @@ public final class FirestoreBundle {
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
   // Raw byte array to hold the content of the bundle.
-  private byte[] bundleData;
+  private final byte[] bundleData;
 
   /** Builds a Firestore data bundle with results from the given document and query snapshots. */
   public static final class Builder {
     // Id of the bundle.
-    private String id;
+    private final String id;
     // Resulting documents for the bundle, keyed by full document path.
-    private Map<String, BundledDocument> documents = new HashMap<>();
+    private final Map<String, BundledDocument> documents = new HashMap<>();
     // Named queries saved in the bundle, keyed by query name.
-    private Map<String, NamedQuery> namedQueries = new HashMap<>();
+    private final Map<String, NamedQuery> namedQueries = new HashMap<>();
     // The latest read time among all bundled documents and queries.
     private Timestamp latestReadTime = Timestamp.MIN_VALUE;
 
@@ -73,7 +73,7 @@ public final class FirestoreBundle {
      * @returns This instance.
      */
     public Builder add(DocumentSnapshot documentSnapshot) {
-      return add(documentSnapshot, Optional.<String>absent());
+      return add(documentSnapshot, Optional.empty());
     }
 
     private Builder add(DocumentSnapshot documentSnapshot, Optional<String> queryName) {
@@ -81,7 +81,7 @@ public final class FirestoreBundle {
       BundledDocument originalDocument = documents.get(documentSnapshot.getReference().getName());
       List<String> queries =
           originalDocument == null
-              ? Lists.<String>newArrayList()
+              ? Lists.newArrayList()
               : Lists.newArrayList(originalDocument.getMetadata().getQueriesList());
 
       // Update with document built from `documentSnapshot` because it is newer.

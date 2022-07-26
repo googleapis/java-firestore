@@ -44,11 +44,9 @@ import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
-import com.google.cloud.firestore.BulkWriter.WriteErrorCallback;
-import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.cloud.firestore.LocalFirestoreHelper.ResponseStubber;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -60,6 +58,7 @@ import com.google.firestore.v1.StructuredQuery.Direction;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
+import com.google.protobuf.Message;
 import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
@@ -81,7 +80,6 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -108,7 +106,7 @@ public class RecursiveDeleteTest {
 
   @Captor private ArgumentCaptor<BatchWriteRequest> batchWriteCapture;
   @Captor private ArgumentCaptor<RunQueryRequest> runQueryCapture;
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
   private BulkWriter bulkWriter;
   private ResponseStubber responseStubber;
@@ -266,12 +264,7 @@ public class RecursiveDeleteTest {
             Matchers.<ServerStreamingCallable>any());
 
     // Include dummy response for the deleted fullDocumentPath reference.
-    doAnswer(
-            new Answer<ApiFuture<BatchWriteResponse>>() {
-              public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) {
-                return successResponse(1);
-              }
-            })
+    doAnswer((Answer<ApiFuture<BatchWriteResponse>>) mock -> successResponse(1))
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -303,12 +296,7 @@ public class RecursiveDeleteTest {
             streamObserverCapture.capture(),
             Matchers.<ServerStreamingCallable>any());
 
-    doAnswer(
-            new Answer<ApiFuture<BatchWriteResponse>>() {
-              public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) {
-                return successResponse(1);
-              }
-            })
+    doAnswer(mock -> successResponse(1))
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
@@ -368,15 +356,13 @@ public class RecursiveDeleteTest {
 
     doAnswer(queryResponse(firstStream.toArray(new String[0])))
         .doAnswer(
-            new Answer<RunQueryResponse>() {
-              public RunQueryResponse answer(InvocationOnMock invocation) throws Throwable {
-                secondQueryFuture.set(null);
-                Object[] args = invocation.getArguments();
-                ApiStreamObserver<RunQueryResponse> observer =
-                    (ApiStreamObserver<RunQueryResponse>) args[1];
-                observer.onCompleted();
-                return null;
-              }
+            invocation -> {
+              secondQueryFuture.set(null);
+              Object[] args = invocation.getArguments();
+              ResponseObserver<RunQueryResponse> observer =
+                  (ResponseObserver<RunQueryResponse>) args[1];
+              observer.onComplete();
+              return null;
             })
         .when(firestoreMock)
         .streamRequest(
@@ -385,36 +371,29 @@ public class RecursiveDeleteTest {
             Matchers.<ServerStreamingCallable>any());
 
     doAnswer(
-            new Answer<ApiFuture<BatchWriteResponse>>() {
-              public ApiFuture<BatchWriteResponse> answer(InvocationOnMock mock) throws Exception {
-                if (numDeletesBuffered[0] < cutoff) {
-                  numDeletesBuffered[0] += batchWriteResponse.size();
-                  // By waiting for `bufferFuture` to complete, we can guarantee that the writes
-                  // complete after all documents are streamed. Without this future, the test can
-                  // race and complete the writes before the stream is finished, which is a
-                  // different scenario this test is not for.
-                  return ApiFutures.transformAsync(
-                      bufferFuture,
-                      new ApiAsyncFunction<Void, BatchWriteResponse>() {
-                        public ApiFuture<BatchWriteResponse> apply(Void unused) throws Exception {
-                          return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
-                        }
-                      },
-                      MoreExecutors.directExecutor());
-                } else {
-                  // Once there are `cutoff` pending deletes, completing the future allows enough
-                  // responses to be returned such that the number of pending deletes should be less
-                  // than `minPendingOps`. This allows us to test that the second query is made.
-                  bufferFuture.set(null);
-                  return ApiFutures.transformAsync(
-                      secondQueryFuture,
-                      new ApiAsyncFunction<Void, BatchWriteResponse>() {
-                        public ApiFuture<BatchWriteResponse> apply(Void unused) throws Exception {
-                          return mergeResponses(batchWriteResponse.toArray(new ApiFuture[0]));
-                        }
-                      },
-                      MoreExecutors.directExecutor());
-                }
+            mock -> {
+              if (numDeletesBuffered[0] < cutoff) {
+                numDeletesBuffered[0] += batchWriteResponse.size();
+                // By waiting for `bufferFuture` to complete, we can guarantee that the writes
+                // complete after all documents are streamed. Without this future, the test can
+                // race and complete the writes before the stream is finished, which is a
+                // different scenario this test is not for.
+                return ApiFutures.transformAsync(
+                    bufferFuture,
+                    (ApiAsyncFunction<Void, BatchWriteResponse>)
+                        unused -> mergeResponses(batchWriteResponse.toArray(new ApiFuture[0])),
+                    MoreExecutors.directExecutor());
+              } else {
+                // Once there are `cutoff` pending deletes, completing the future allows enough
+                // responses to be returned such that the number of pending deletes should be
+                // less than `minPendingOps`. This allows us to test that the second query is
+                // made.
+                bufferFuture.set(null);
+                return ApiFutures.transformAsync(
+                    secondQueryFuture,
+                    (ApiAsyncFunction<Void, BatchWriteResponse>)
+                        unused -> mergeResponses(batchWriteResponse.toArray(new ApiFuture[0])),
+                    MoreExecutors.directExecutor());
               }
             })
         .when(firestoreMock)
@@ -500,11 +479,8 @@ public class RecursiveDeleteTest {
     setupMocks(documents, "bob");
     bulkWriter = firestoreMock.bulkWriter();
     bulkWriter.addWriteResultListener(
-        new WriteResultCallback() {
-          public void onResult(DocumentReference documentReference, WriteResult result) {
-            throw new UnsupportedOperationException(
-                "Test code threw UnsupportedOperationException");
-          }
+        (documentReference, result) -> {
+          throw new UnsupportedOperationException("Test code threw UnsupportedOperationException");
         });
     try {
       ApiFuture<Void> future =
@@ -528,11 +504,9 @@ public class RecursiveDeleteTest {
     final List<String> references = new ArrayList<>();
     bulkWriter = firestoreMock.bulkWriter();
     bulkWriter.addWriteResultListener(
-        new WriteResultCallback() {
-          public void onResult(DocumentReference documentReference, WriteResult result) {
-            results.add((int) result.getUpdateTime().getSeconds());
-            references.add(documentReference.getPath());
-          }
+        (documentReference, result) -> {
+          results.add((int) result.getUpdateTime().getSeconds());
+          references.add(documentReference.getPath());
         });
     ApiFuture<Void> future =
         firestoreMock.recursiveDelete(
@@ -560,12 +534,10 @@ public class RecursiveDeleteTest {
     final List<String> references = new ArrayList<>();
     bulkWriter = firestoreMock.bulkWriter();
     bulkWriter.addWriteErrorListener(
-        new WriteErrorCallback() {
-          public boolean onError(BulkWriterException error) {
-            codes.add(error.getStatus());
-            references.add(error.getDocumentReference().getPath());
-            return false;
-          }
+        error -> {
+          codes.add(error.getStatus());
+          references.add(error.getDocumentReference().getPath());
+          return false;
         });
     ApiFuture<Void> future =
         firestoreMock.recursiveDelete(
@@ -656,7 +628,7 @@ public class RecursiveDeleteTest {
 
     firestoreMock.recursiveDelete(firestoreMock.collection(COLLECTION_ID)).get();
     responseStubber.verifyAllRequestsSent();
-  };
+  }
 
   @Test
   public void handlesMultipleCallsToRecursiveDelete() throws Exception {
@@ -704,11 +676,9 @@ public class RecursiveDeleteTest {
     final int[] callCount = {0};
     final BulkWriter bulkWriter = firestoreMock.bulkWriter();
     doAnswer(
-            new Answer<BulkWriter>() {
-              public BulkWriter answer(InvocationOnMock mock) throws Throwable {
-                callCount[0]++;
-                return bulkWriter;
-              }
+            mock -> {
+              callCount[0]++;
+              return bulkWriter;
             })
         .when(firestoreMock)
         .bulkWriter();

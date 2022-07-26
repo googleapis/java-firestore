@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,4 +93,45 @@ public interface ListCollectionIdsRequestOrBuilder
    * @return The bytes for pageToken.
    */
   com.google.protobuf.ByteString getPageTokenBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return Whether the readTime field is set.
+   */
+  boolean hasReadTime();
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return The readTime.
+   */
+  com.google.protobuf.Timestamp getReadTime();
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   */
+  com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
+
+  public com.google.firestore.v1.ListCollectionIdsRequest.ConsistencySelectorCase
+      getConsistencySelectorCase();
 }

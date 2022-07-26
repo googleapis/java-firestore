@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -288,4 +288,43 @@ public interface FieldOperationMetadataOrBuilder
    * <code>.google.firestore.admin.v1.Progress progress_bytes = 7;</code>
    */
   com.google.firestore.admin.v1.ProgressOrBuilder getProgressBytesOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Describes the deltas of TTL configuration.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta ttl_config_delta = 8;
+   * </code>
+   *
+   * @return Whether the ttlConfigDelta field is set.
+   */
+  boolean hasTtlConfigDelta();
+  /**
+   *
+   *
+   * <pre>
+   * Describes the deltas of TTL configuration.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta ttl_config_delta = 8;
+   * </code>
+   *
+   * @return The ttlConfigDelta.
+   */
+  com.google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta getTtlConfigDelta();
+  /**
+   *
+   *
+   * <pre>
+   * Describes the deltas of TTL configuration.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta ttl_config_delta = 8;
+   * </code>
+   */
+  com.google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDeltaOrBuilder
+      getTtlConfigDeltaOrBuilder();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -247,10 +247,10 @@ public class FieldName implements ResourceName {
     }
 
     private Builder(FieldName fieldName) {
-      project = fieldName.project;
-      database = fieldName.database;
-      collection = fieldName.collection;
-      field = fieldName.field;
+      this.project = fieldName.project;
+      this.database = fieldName.database;
+      this.collection = fieldName.collection;
+      this.field = fieldName.field;
     }
 
     public FieldName build() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,8 +61,8 @@ public interface ListFieldsRequestOrBuilder
    * The filter to apply to list results. Currently,
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
    * that have been explicitly overridden. To issue this query, call
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-   * `indexConfig.usesAncestorConfig:false`.
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with a filter that includes
+   * `indexConfig.usesAncestorConfig:false` .
    * </pre>
    *
    * <code>string filter = 2;</code>
@@ -77,8 +77,8 @@ public interface ListFieldsRequestOrBuilder
    * The filter to apply to list results. Currently,
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
    * that have been explicitly overridden. To issue this query, call
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-   * `indexConfig.usesAncestorConfig:false`.
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with a filter that includes
+   * `indexConfig.usesAncestorConfig:false` .
    * </pre>
    *
    * <code>string filter = 2;</code>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,8 @@ public interface RunQueryRequestOrBuilder
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>
@@ -109,7 +110,8 @@ public interface RunQueryRequestOrBuilder
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Run the query within an already active transaction.
+   * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 5;</code>

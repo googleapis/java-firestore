@@ -33,20 +33,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.BulkWriter;
-import com.google.cloud.firestore.BulkWriter.WriteResultCallback;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.FieldMask;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.FieldValue;
@@ -96,14 +96,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.annotation.Nullable;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.threeten.bp.Duration;
 
+@RunWith(JUnit4.class)
 public class ITSystemTest {
 
   private static final double DOUBLE_EPSILON = 0.000001;
@@ -257,13 +260,10 @@ public class ITSystemTest {
 
   @Test
   public void setDocumentWithMerge() throws Exception {
-    Map<String, Object> originalMap =
-        LocalFirestoreHelper.<String, Object>map("a.b", "c", "nested", map("d", "e"));
-    Map<String, Object> updateMap =
-        LocalFirestoreHelper.<String, Object>map("f.g", "h", "nested", map("i", "j"));
+    Map<String, Object> originalMap = LocalFirestoreHelper.map("a.b", "c", "nested", map("d", "e"));
+    Map<String, Object> updateMap = LocalFirestoreHelper.map("f.g", "h", "nested", map("i", "j"));
     Map<String, Object> resultMap =
-        LocalFirestoreHelper.<String, Object>map(
-            "a.b", "c", "f.g", "h", "nested", map("d", "e", "i", "j"));
+        LocalFirestoreHelper.map("a.b", "c", "f.g", "h", "nested", map("d", "e", "i", "j"));
     randomDoc.set(originalMap).get();
     randomDoc.set(updateMap, SetOptions.merge()).get();
     DocumentSnapshot documentSnapshot = randomDoc.get().get();
@@ -281,7 +281,7 @@ public class ITSystemTest {
 
   @Test
   public void mergeDocumentWithServerTimestamp() throws Exception {
-    Map<String, Object> originalMap = LocalFirestoreHelper.<String, Object>map("a", "b");
+    Map<String, Object> originalMap = LocalFirestoreHelper.map("a", "b");
     Map<String, FieldValue> updateMap = map("c", FieldValue.serverTimestamp());
     randomDoc.set(originalMap).get();
     randomDoc.set(updateMap, SetOptions.merge()).get();
@@ -300,7 +300,7 @@ public class ITSystemTest {
     documentSnapshot = randomDoc.get().get();
     expectedResult.foo = "updated";
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
-    expectedResult.model = ImmutableMap.of("foo", (Object) UPDATE_SINGLE_FIELD_OBJECT.foo);
+    expectedResult.model = ImmutableMap.of("foo", UPDATE_SINGLE_FIELD_OBJECT.foo);
     randomDoc.update("model", UPDATE_SINGLE_FIELD_OBJECT).get();
     documentSnapshot = randomDoc.get().get();
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
@@ -675,12 +675,10 @@ public class ITSystemTest {
     try {
       firestore
           .runTransaction(
-              new Function<String>() {
-                @Override
-                public String updateCallback(Transaction transaction) {
-                  throw new RuntimeException("User exception");
-                }
-              })
+              (Function<String>)
+                  transaction -> {
+                    throw new RuntimeException("User exception");
+                  })
           .get();
       fail();
     } catch (Exception e) {
@@ -693,12 +691,10 @@ public class ITSystemTest {
     try {
       firestore
           .runAsyncTransaction(
-              new Transaction.AsyncFunction<String>() {
-                @Override
-                public ApiFuture<String> updateCallback(Transaction transaction) {
-                  throw new RuntimeException("User exception");
-                }
-              })
+              (Transaction.AsyncFunction<String>)
+                  transaction -> {
+                    throw new RuntimeException("User exception");
+                  })
           .get();
       fail();
     } catch (Exception e) {
@@ -714,13 +710,10 @@ public class ITSystemTest {
 
     ApiFuture<Void> firstTransaction =
         firestore.runTransaction(
-            new Transaction.Function<Void>() {
-              @Override
-              public Void updateCallback(Transaction transaction) {
-                attempts.incrementAndGet();
-                transaction.update(documentReference, "foo", "bar");
-                return null;
-              }
+            transaction -> {
+              attempts.incrementAndGet();
+              transaction.update(documentReference, "foo", "bar");
+              return null;
             });
 
     try {
@@ -745,35 +738,27 @@ public class ITSystemTest {
     // same document, which they then modify.
     ApiFuture<String> firstTransaction =
         firestore.runTransaction(
-            new Transaction.Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                attempts.incrementAndGet();
-                DocumentSnapshot documentSnapshot = transaction.get(documentReference).get();
-                latch.countDown();
-                latch.await();
-                transaction.update(
-                    documentReference, "counter", documentSnapshot.getLong("counter") + 1);
-                return "foo";
-              }
+            transaction -> {
+              attempts.incrementAndGet();
+              DocumentSnapshot documentSnapshot = transaction.get(documentReference).get();
+              latch.countDown();
+              latch.await();
+              transaction.update(
+                  documentReference, "counter", documentSnapshot.getLong("counter") + 1);
+              return "foo";
             });
 
     ApiFuture<String> secondTransaction =
         firestore.runTransaction(
-            new Function<String>() {
-              @Override
-              public String updateCallback(Transaction transaction)
-                  throws ExecutionException, InterruptedException {
-                attempts.incrementAndGet();
-                List<DocumentSnapshot> documentSnapshots =
-                    transaction.getAll(documentReference).get();
-                latch.countDown();
-                latch.await();
-                transaction.update(
-                    documentReference, "counter", documentSnapshots.get(0).getLong("counter") + 1);
-                return "bar";
-              }
+            transaction -> {
+              attempts.incrementAndGet();
+              List<DocumentSnapshot> documentSnapshots =
+                  transaction.getAll(documentReference).get();
+              latch.countDown();
+              latch.await();
+              transaction.update(
+                  documentReference, "counter", documentSnapshots.get(0).getLong("counter") + 1);
+              return "bar";
             });
 
     assertEquals("foo", firstTransaction.get());
@@ -881,7 +866,7 @@ public class ITSystemTest {
   public void addAndRemoveFields() throws ExecutionException, InterruptedException {
     Map<String, Object> expected = new HashMap<>();
 
-    randomDoc.create(Collections.<String, Object>emptyMap()).get();
+    randomDoc.create(Collections.emptyMap()).get();
     assertEquals(expected, getData());
 
     randomDoc.delete().get();
@@ -891,7 +876,7 @@ public class ITSystemTest {
     expected.put("a", map("b", "c"));
     assertEquals(expected, getData());
 
-    randomDoc.set(Collections.<String, Object>emptyMap()).get();
+    randomDoc.set(Collections.emptyMap()).get();
     expected = map();
     assertEquals(expected, getData());
 
@@ -904,24 +889,18 @@ public class ITSystemTest {
     assertEquals(expected, getData());
 
     randomDoc
-        .set(
-            LocalFirestoreHelper.<String, Object>map("a", map("d", FieldValue.delete())),
-            SetOptions.merge())
+        .set(LocalFirestoreHelper.map("a", map("d", FieldValue.delete())), SetOptions.merge())
         .get();
     getNestedMap(expected, "a").remove("d");
     assertEquals(expected, getData());
 
     randomDoc
-        .set(
-            LocalFirestoreHelper.<String, Object>map("a", map("b", FieldValue.delete())),
-            SetOptions.merge())
+        .set(LocalFirestoreHelper.map("a", map("b", FieldValue.delete())), SetOptions.merge())
         .get();
     getNestedMap(expected, "a").remove("b");
     assertEquals(expected, getData());
 
-    randomDoc
-        .set(LocalFirestoreHelper.<String, Object>map("a", map("e", "foo")), SetOptions.merge())
-        .get();
+    randomDoc.set(LocalFirestoreHelper.map("a", map("e", "foo")), SetOptions.merge()).get();
     getNestedMap(expected, "a").put("e", "foo");
     assertEquals(expected, getData());
 
@@ -929,9 +908,7 @@ public class ITSystemTest {
     expected.put("f", "foo");
     assertEquals(expected, getData());
 
-    randomDoc
-        .set(LocalFirestoreHelper.<String, Object>map("f", map("g", "foo")), SetOptions.merge())
-        .get();
+    randomDoc.set(LocalFirestoreHelper.map("f", map("g", "foo")), SetOptions.merge()).get();
     expected.put("f", map("g", "foo"));
     assertEquals(expected, getData());
 
@@ -1054,37 +1031,33 @@ public class ITSystemTest {
     try {
       registration =
           documentReference.addSnapshotListener(
-              new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(
-                    @Nullable DocumentSnapshot value, @Nullable FirestoreException error) {
-                  try {
-                    switch (semaphore.availablePermits()) {
-                      case 0:
-                        assertFalse(value.exists());
-                        documentReference.set(map("foo", "foo"));
-                        break;
-                      case 1:
-                        assertTrue(value.exists());
-                        DocumentSnapshot documentSnapshot = documentReference.get().get();
-                        assertEquals("foo", documentSnapshot.getString("foo"));
-                        documentReference.set(map("foo", "bar"));
-                        break;
-                      case 2:
-                        assertTrue(value.exists());
-                        documentSnapshot = documentReference.get().get();
-                        assertEquals("bar", documentSnapshot.getString("foo"));
-                        documentReference.delete();
-                        break;
-                      case 3:
-                        assertFalse(value.exists());
-                        break;
-                    }
-                  } catch (Exception e) {
-                    fail(e.getMessage());
+              (value, error) -> {
+                try {
+                  switch (semaphore.availablePermits()) {
+                    case 0:
+                      assertFalse(value.exists());
+                      documentReference.set(map("foo", "foo"));
+                      break;
+                    case 1:
+                      assertTrue(value.exists());
+                      DocumentSnapshot documentSnapshot = documentReference.get().get();
+                      assertEquals("foo", documentSnapshot.getString("foo"));
+                      documentReference.set(map("foo", "bar"));
+                      break;
+                    case 2:
+                      assertTrue(value.exists());
+                      documentSnapshot = documentReference.get().get();
+                      assertEquals("bar", documentSnapshot.getString("foo"));
+                      documentReference.delete();
+                      break;
+                    case 3:
+                      assertFalse(value.exists());
+                      break;
                   }
-                  semaphore.release();
+                } catch (Exception e) {
+                  fail(e.getMessage());
                 }
+                semaphore.release();
               });
 
       semaphore.acquire(4);
@@ -1343,10 +1316,7 @@ public class ITSystemTest {
     setDocument("c", map("count", 3));
 
     QuerySnapshot querySnapshot =
-        randomColl
-            .whereIn(FieldPath.documentId(), Arrays.<Object>asList(doc1.getId(), doc2))
-            .get()
-            .get();
+        randomColl.whereIn(FieldPath.documentId(), Arrays.asList(doc1.getId(), doc2)).get().get();
 
     assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
   }
@@ -1381,7 +1351,7 @@ public class ITSystemTest {
 
     QuerySnapshot querySnapshot =
         randomColl
-            .whereNotIn(FieldPath.documentId(), Arrays.<Object>asList(doc1.getId(), doc2))
+            .whereNotIn(FieldPath.documentId(), Arrays.asList(doc1.getId(), doc2))
             .get()
             .get();
 
@@ -1462,7 +1432,7 @@ public class ITSystemTest {
   @Test
   public void deleteNestedFieldUsingFieldPath() throws Exception {
     DocumentReference documentReference = randomColl.document("doc1");
-    documentReference.set(map("a.b", (Object) SINGLE_FILED_MAP_WITH_DOT)).get();
+    documentReference.set(map("a.b", SINGLE_FILED_MAP_WITH_DOT)).get();
     DocumentSnapshot documentSnapshots = documentReference.get().get();
     assertEquals(SINGLE_FILED_MAP_WITH_DOT, documentSnapshots.getData().get("a.b"));
 
@@ -1481,14 +1451,11 @@ public class ITSystemTest {
 
     final ApiFuture<Void> runTransaction =
         firestore.runTransaction(
-            new Function<Void>() {
-              @Override
-              public Void updateCallback(Transaction transaction) throws Exception {
-                final DocumentSnapshot snapshot =
-                    transaction.get(documentReference).get(5, TimeUnit.SECONDS);
-                ref.compareAndSet(null, snapshot);
-                return null;
-              }
+            transaction -> {
+              final DocumentSnapshot snapshot =
+                  transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+              ref.compareAndSet(null, snapshot);
+              return null;
             },
             TransactionOptions.createReadOnlyOptionsBuilder().build());
 
@@ -1503,12 +1470,9 @@ public class ITSystemTest {
     final DocumentReference documentReference = randomColl.document("tx/ro/writeShouldFail");
     final ApiFuture<Void> runTransaction =
         firestore.runTransaction(
-            new Function<Void>() {
-              @Override
-              public Void updateCallback(Transaction transaction) {
-                transaction.set(documentReference, SINGLE_FIELD_MAP);
-                return null;
-              }
+            transaction -> {
+              transaction.set(documentReference, SINGLE_FIELD_MAP);
+              return null;
             },
             TransactionOptions.createReadOnlyOptionsBuilder().build());
 
@@ -1527,6 +1491,37 @@ public class ITSystemTest {
   }
 
   @Test
+  public void readOnlyTransaction_successfulRead() throws Exception {
+    DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
+
+    Timestamp firstWriteTime =
+        documentReference.set(Collections.singletonMap("counter", 1)).get().getUpdateTime();
+    documentReference.set(Collections.singletonMap("counter", 2)).get();
+
+    final TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setReadTime(
+                com.google.protobuf.Timestamp.newBuilder()
+                    .setSeconds(firstWriteTime.getSeconds())
+                    .setNanos(firstWriteTime.getNanos()))
+            .build();
+
+    final ApiFuture<Long> runTransaction =
+        firestore.runTransaction(
+            transaction -> {
+              final DocumentSnapshot snapshot =
+                  transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+              return snapshot.getLong("counter");
+            },
+            options);
+
+    assertEquals(1, runTransaction.get(10, TimeUnit.SECONDS).longValue());
+
+    DocumentSnapshot documentSnapshot = documentReference.get().get();
+    assertEquals(2, (long) documentSnapshot.getData().get("counter"));
+  }
+
+  @Test
   public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
@@ -1538,12 +1533,9 @@ public class ITSystemTest {
 
     final ApiFuture<Void> runTransaction =
         firestore.runTransaction(
-            new Function<Void>() {
-              @Override
-              public Void updateCallback(Transaction transaction) throws Exception {
-                transaction.get(documentReference).get(5, TimeUnit.SECONDS);
-                return null;
-              }
+            transaction -> {
+              transaction.get(documentReference).get(5, TimeUnit.SECONDS);
+              return null;
             },
             options);
 
@@ -1589,7 +1581,7 @@ public class ITSystemTest {
   /** Wrapper around ApiStreamObserver that returns the results in a list. */
   private static class StreamConsumer<T> implements ApiStreamObserver<T> {
     SettableApiFuture<List<T>> done = SettableApiFuture.create();
-    List<T> results = Collections.synchronizedList(new ArrayList<T>());
+    List<T> results = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void onNext(T element) {
@@ -1800,15 +1792,47 @@ public class ITSystemTest {
 
     BulkWriter bulkWriter = firestore.bulkWriter();
     final int[] callbackCount = {0};
-    bulkWriter.addWriteResultListener(
-        new WriteResultCallback() {
-          public void onResult(DocumentReference documentReference, WriteResult result) {
-            callbackCount[0]++;
-          }
-        });
+    bulkWriter.addWriteResultListener((documentReference, result) -> callbackCount[0]++);
 
     firestore.recursiveDelete(randomColl, bulkWriter).get();
     assertEquals(0, countCollectionChildren(randomColl));
     assertEquals(6, callbackCount[0]);
+  }
+
+  @Test
+  public void testEnforcesTimeouts() {
+    FirestoreOptions firestoreOptions =
+        FirestoreOptions.newBuilder()
+            .setRetrySettings(
+                RetrySettings.newBuilder()
+                    .setMaxRpcTimeout(Duration.ofMillis(1))
+                    .setTotalTimeout(Duration.ofMillis(1))
+                    .setInitialRpcTimeout(Duration.ofMillis(1))
+                    .build())
+            .build();
+    firestore = firestoreOptions.getService();
+    CollectionReference collection = firestore.collection("timeout");
+
+    // RunQuery
+    assertThrows(ExecutionException.class, () -> collection.get().get());
+    // CommitRequest
+    assertThrows(ExecutionException.class, () -> collection.add(map()).get());
+    // BulkCommit
+    assertThrows(
+        ExecutionException.class,
+        () -> {
+          BulkWriter bulkWriter = firestore.bulkWriter();
+          ApiFuture<WriteResult> op = bulkWriter.set(collection.document(), map());
+          bulkWriter.close();
+          op.get();
+        });
+    // BatchGetDocuments
+    assertThrows(ExecutionException.class, () -> collection.document().get().get());
+    // ListDocuments
+    assertThrows(FirestoreException.class, () -> collection.listDocuments().iterator().hasNext());
+    // ListCollections
+    assertThrows(
+        FirestoreException.class,
+        () -> collection.document().listCollections().iterator().hasNext());
   }
 }

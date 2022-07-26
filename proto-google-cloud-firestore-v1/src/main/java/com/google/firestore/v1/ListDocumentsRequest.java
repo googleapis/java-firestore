@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,8 +124,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             }
           case 66:
             {
-              consistencySelectorCase_ = 8;
               consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 8;
               break;
             }
           case 82:
@@ -159,6 +159,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -633,19 +635,19 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!getParentBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
-    if (!getCollectionIdBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(collectionId_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, collectionId_);
     }
     if (pageSize_ != 0) {
       output.writeInt32(3, pageSize_);
     }
-    if (!getPageTokenBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pageToken_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, pageToken_);
     }
-    if (!getOrderByBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(orderBy_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, orderBy_);
     }
     if (mask_ != null) {
@@ -669,19 +671,19 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     if (size != -1) return size;
 
     size = 0;
-    if (!getParentBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
     }
-    if (!getCollectionIdBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(collectionId_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, collectionId_);
     }
     if (pageSize_ != 0) {
       size += com.google.protobuf.CodedOutputStream.computeInt32Size(3, pageSize_);
     }
-    if (!getPageTokenBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pageToken_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, pageToken_);
     }
-    if (!getOrderByBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(orderBy_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, orderBy_);
     }
     if (mask_ != null) {
@@ -2016,8 +2018,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       } else {
         if (consistencySelectorCase_ == 10) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 10;
       return this;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,6 +171,8 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -567,7 +569,7 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     for (int i = 0; i < collectionIds_.size(); i++) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, collectionIds_.getRaw(i));
     }
-    if (!getInputUriPrefixBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, inputUriPrefix_);
     }
     unknownFields.writeTo(output);
@@ -603,7 +605,7 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
       size += dataSize;
       size += 1 * getCollectionIdsList().size();
     }
-    if (!getInputUriPrefixBytes().isEmpty()) {
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, inputUriPrefix_);
     }
     size += unknownFields.getSerializedSize();

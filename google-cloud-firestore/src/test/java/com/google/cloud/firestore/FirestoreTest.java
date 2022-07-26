@@ -32,15 +32,14 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
-import com.google.firestore.v1.ListCollectionIdsRequest;
-import com.google.firestore.v1.Value;
+import com.google.protobuf.Message;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,16 +57,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class FirestoreTest {
 
   @Spy
-  private FirestoreImpl firestoreMock =
+  private final FirestoreImpl firestoreMock =
       new FirestoreImpl(
           FirestoreOptions.newBuilder().setProjectId("test-project").build(),
           Mockito.mock(FirestoreRpc.class));
 
   @Captor private ArgumentCaptor<BatchGetDocumentsRequest> getAllCapture;
 
-  @Captor private ArgumentCaptor<ListCollectionIdsRequest> listCollectionIdsCapture;
-
-  @Captor private ArgumentCaptor<ApiStreamObserver> streamObserverCapture;
+  @Captor private ArgumentCaptor<ResponseObserver<Message>> streamObserverCapture;
 
   @Captor private ArgumentCaptor<CommitRequest> commitCapture;
 
@@ -200,7 +197,7 @@ public class FirestoreTest {
 
     CommitRequest expectedRequest =
         commit(
-            update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+            update(Collections.emptyMap(), new ArrayList<>()),
             transform("array", arrayUnion(SINGLE_FIELD_VALUE)));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);
@@ -218,7 +215,7 @@ public class FirestoreTest {
 
     CommitRequest expectedRequest =
         commit(
-            update(Collections.<String, Value>emptyMap(), new ArrayList<String>()),
+            update(Collections.emptyMap(), new ArrayList<>()),
             transform("array", arrayRemove(SINGLE_FIELD_VALUE)));
     CommitRequest actualRequest = commitCapture.getValue();
     assertEquals(expectedRequest, actualRequest);

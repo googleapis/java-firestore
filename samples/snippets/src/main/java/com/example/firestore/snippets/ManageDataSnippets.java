@@ -26,7 +26,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
-import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import java.util.ArrayList;
@@ -105,8 +104,8 @@ class ManageDataSnippets {
    */
   City addSimpleDocumentAsEntity() throws Exception {
     // [START firestore_data_set_from_custom_type]
-    City city = new City("Los Angeles", "CA", "USA", false, 3900000L,
-        Arrays.asList("west_coast", "socal"));
+    City city =
+        new City("Los Angeles", "CA", "USA", false, 3900000L, Arrays.asList("west_coast", "socal"));
     ApiFuture<WriteResult> future = db.collection("cities").document("LA").set(city);
     // block on response if required
     System.out.println("Update time : " + future.get().getUpdateTime());
@@ -115,9 +114,7 @@ class ManageDataSnippets {
     return city;
   }
 
-  /**
-   * set() providing a document ID.
-   */
+  /** set() providing a document ID. */
   void setRequiresId(Map<String, String> data) {
     // [START firestore_data_set_id_specified]
     db.collection("cities").document("new-city-id").set(data);
@@ -193,7 +190,7 @@ class ManageDataSnippets {
     updates.put("country", "USA");
     updates.put("capital", true);
 
-    //asynchronously update doc
+    // asynchronously update doc
     ApiFuture<WriteResult> writeResult = docRef.update(updates);
     // ...
     System.out.println("Update time : " + writeResult.get().getUpdateTime());
@@ -203,15 +200,12 @@ class ManageDataSnippets {
   /** Partially update fields of a document using a map (field => value). */
   void updateAndCreateIfMissing() throws Exception {
     // [START firestore_data_set_doc_upsert]
-    //asynchronously update doc, create the document if missing
+    // asynchronously update doc, create the document if missing
     Map<String, Object> update = new HashMap<>();
     update.put("capital", true);
 
     ApiFuture<WriteResult> writeResult =
-        db
-            .collection("cities")
-            .document("BJ")
-            .set(update, SetOptions.merge());
+        db.collection("cities").document("BJ").set(update, SetOptions.merge());
     // ...
     System.out.println("Update time : " + writeResult.get().getUpdateTime());
     // [END firestore_data_set_doc_upsert]
@@ -219,7 +213,7 @@ class ManageDataSnippets {
 
   /** Partial update nested fields of a document. */
   void updateNestedFields() throws Exception {
-    //CHECKSTYLE OFF: VariableDeclarationUsageDistance
+    // CHECKSTYLE OFF: VariableDeclarationUsageDistance
     // [START firestore_data_set_nested_fields]
     // Create an initial document to update
     DocumentReference frankDocRef = db.collection("users").document("frank");
@@ -247,7 +241,7 @@ class ManageDataSnippets {
     // ...
     System.out.println("Update time : " + writeResult.get().getUpdateTime());
     // [END firestore_data_set_nested_fields]
-    //CHECKSTYLE ON: VariableDeclarationUsageDistance
+    // CHECKSTYLE ON: VariableDeclarationUsageDistance
   }
 
   /** Update document with server timestamp. */
@@ -262,19 +256,19 @@ class ManageDataSnippets {
     // [END firestore_data_set_server_timestamp]
   }
 
-  /** Update array fields in a document. **/
+  /** Update array fields in a document. * */
   void updateDocumentArray() throws Exception {
     // [START firestore_data_set_array_operations]
     DocumentReference washingtonRef = db.collection("cities").document("DC");
 
     // Atomically add a new region to the "regions" array field.
-    ApiFuture<WriteResult> arrayUnion = washingtonRef.update("regions",
-        FieldValue.arrayUnion("greater_virginia"));
+    ApiFuture<WriteResult> arrayUnion =
+        washingtonRef.update("regions", FieldValue.arrayUnion("greater_virginia"));
     System.out.println("Update time : " + arrayUnion.get());
 
     // Atomically remove a region from the "regions" array field.
-    ApiFuture<WriteResult> arrayRm = washingtonRef.update("regions",
-        FieldValue.arrayRemove("east_coast"));
+    ApiFuture<WriteResult> arrayRm =
+        washingtonRef.update("regions", FieldValue.arrayRemove("east_coast"));
     System.out.println("Update time : " + arrayRm.get());
     // [END firestore_data_set_array_operations]
   }
@@ -307,8 +301,9 @@ class ManageDataSnippets {
   }
 
   // [START firestore_data_delete_collection]
-  /** Delete a collection in batches to avoid out-of-memory errors.
-   * Batch size may be tuned based on document size (atmost 1MB) and application requirements.
+  /**
+   * Delete a collection in batches to avoid out-of-memory errors. Batch size may be tuned based on
+   * document size (atmost 1MB) and application requirements.
    */
   void deleteCollection(CollectionReference collection, int batchSize) {
     try {
@@ -331,7 +326,8 @@ class ManageDataSnippets {
   }
   // [END firestore_data_delete_collection]
 
-  /** Run a simple transaction to perform a field value increment.
+  /**
+   * Run a simple transaction to perform a field value increment.
    *
    * @return transaction future
    */
@@ -345,13 +341,15 @@ class ManageDataSnippets {
     docRef.set(city).get();
 
     // run an asynchronous transaction
-    ApiFuture<Void> futureTransaction = db.runTransaction(transaction -> {
-      // retrieve document and increment population field
-      DocumentSnapshot snapshot = transaction.get(docRef).get();
-      long oldPopulation = snapshot.getLong("population");
-      transaction.update(docRef, "population", oldPopulation + 1);
-      return null;
-    });
+    ApiFuture<Void> futureTransaction =
+        db.runTransaction(
+            transaction -> {
+              // retrieve document and increment population field
+              DocumentSnapshot snapshot = transaction.get(docRef).get();
+              long oldPopulation = snapshot.getLong("population");
+              transaction.update(docRef, "population", oldPopulation + 1);
+              return null;
+            });
     // block on transaction operation using transaction.get()
     // [END firestore_transaction_document_update]
     return futureTransaction;
@@ -359,7 +357,6 @@ class ManageDataSnippets {
 
   /**
    * Return information from a conditional transaction.
-   *
    *
    * @param population : set initial population.
    */
@@ -370,17 +367,19 @@ class ManageDataSnippets {
     db.collection("cities").document("SF").set(map).get();
     // [START firestore_transaction_document_update_conditional]
     final DocumentReference docRef = db.collection("cities").document("SF");
-    ApiFuture<String> futureTransaction = db.runTransaction(transaction -> {
-      DocumentSnapshot snapshot = transaction.get(docRef).get();
-      Long newPopulation = snapshot.getLong("population") + 1;
-      // conditionally update based on current population
-      if (newPopulation <= 1000000L) {
-        transaction.update(docRef, "population", newPopulation);
-        return "Population increased to " + newPopulation;
-      } else {
-        throw new Exception("Sorry! Population is too big.");
-      }
-    });
+    ApiFuture<String> futureTransaction =
+        db.runTransaction(
+            transaction -> {
+              DocumentSnapshot snapshot = transaction.get(docRef).get();
+              Long newPopulation = snapshot.getLong("population") + 1;
+              // conditionally update based on current population
+              if (newPopulation <= 1000000L) {
+                transaction.update(docRef, "population", newPopulation);
+                return "Population increased to " + newPopulation;
+              } else {
+                throw new Exception("Sorry! Population is too big.");
+              }
+            });
     // Print information retrieved from transaction
     System.out.println(futureTransaction.get());
     // [END firestore_transaction_document_update_conditional]
@@ -427,8 +426,8 @@ class ManageDataSnippets {
     DocumentReference washingtonRef = db.collection("cities").document("DC");
 
     // Atomically increment the population of the city by 50.
-    final ApiFuture<WriteResult> updateFuture = washingtonRef
-        .update("population", FieldValue.increment(50));
+    final ApiFuture<WriteResult> updateFuture =
+        washingtonRef.update("population", FieldValue.increment(50));
     // [END firestore_data_set_numeric_increment]
     updateFuture.get();
   }

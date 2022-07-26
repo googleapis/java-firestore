@@ -22,7 +22,7 @@ import static org.mockito.Mockito.doAnswer;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.retrying.RetrySettings;
-import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
@@ -80,7 +80,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.threeten.bp.Duration;
@@ -312,22 +311,55 @@ public final class LocalFirestoreHelper {
     return streamingResponse(responses, throwable);
   }
 
+  /** Returns a stream of responses when RunQueryResponse.done set to true */
+  public static Answer<RunQueryResponse> queryResponseWithDone(
+      boolean callWithoutOnComplete, String... documentNames) {
+    RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
+
+    for (int i = 0; i < documentNames.length; ++i) {
+      final RunQueryResponse.Builder runQueryResponse = RunQueryResponse.newBuilder();
+      runQueryResponse.setDocument(
+          Document.newBuilder().setName(documentNames[i]).putAllFields(SINGLE_FIELD_PROTO));
+      runQueryResponse.setReadTime(
+          com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
+      if (i == (documentNames.length - 1)) {
+        runQueryResponse.setDone(true);
+      }
+      responses[i] = runQueryResponse.build();
+    }
+    if (callWithoutOnComplete) {
+      return streamingResponseWithoutOnComplete(responses);
+    } else {
+      return streamingResponse(responses, null);
+    }
+  }
+
   /** Returns a stream of responses followed by an optional exception. */
   public static <T> Answer<T> streamingResponse(
       final T[] response, @Nullable final Throwable throwable) {
-    return new Answer<T>() {
-      public T answer(InvocationOnMock invocation) {
-        Object[] args = invocation.getArguments();
-        ApiStreamObserver<T> observer = (ApiStreamObserver<T>) args[1];
-        for (T resp : response) {
-          observer.onNext(resp);
-        }
-        if (throwable != null) {
-          observer.onError(throwable);
-        }
-        observer.onCompleted();
-        return null;
+    return invocation -> {
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      for (T resp : response) {
+        observer.onResponse(resp);
       }
+      if (throwable != null) {
+        observer.onError(throwable);
+      }
+      observer.onComplete();
+      return null;
+    };
+  }
+
+  /** Returns a stream of responses even though onComplete() wasn't triggered */
+  public static <T> Answer<T> streamingResponseWithoutOnComplete(final T[] response) {
+    return invocation -> {
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      for (T resp : response) {
+        observer.onResponse(resp);
+      }
+      return null;
     };
   }
 
@@ -542,6 +574,32 @@ public final class LocalFirestoreHelper {
     return filter(operator, path, string(value));
   }
 
+  public static StructuredQuery.Filter fieldFilter(
+      String path, StructuredQuery.FieldFilter.Operator operator, String value) {
+    StructuredQuery.FieldFilter.Builder builder =
+        FieldFilter.newBuilder()
+            .setField(StructuredQuery.FieldReference.newBuilder().setFieldPath(path))
+            .setOp(operator)
+            .setValue(Value.newBuilder().setStringValue(value).build());
+    return StructuredQuery.Filter.newBuilder().setFieldFilter(builder).build();
+  }
+
+  public static StructuredQuery.Filter andFilters(StructuredQuery.Filter... filters) {
+    return compositeFilter(CompositeFilter.Operator.AND, Arrays.asList(filters));
+  }
+
+  public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
+    // TODO(orquery): Replace this with Operator.OR once it's available.
+    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+  }
+
+  private static StructuredQuery.Filter compositeFilter(
+      StructuredQuery.CompositeFilter.Operator operator, List<StructuredQuery.Filter> filters) {
+    StructuredQuery.CompositeFilter.Builder builder =
+        StructuredQuery.CompositeFilter.newBuilder().setOp(operator).addAllFilters(filters);
+    return StructuredQuery.Filter.newBuilder().setCompositeFilter(builder).build();
+  }
+
   public static StructuredQuery filter(
       StructuredQuery.FieldFilter.Operator operator, String path, Value value) {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
@@ -747,14 +805,7 @@ public final class LocalFirestoreHelper {
 
       if (!writes.getUpdateTransformsList().isEmpty()) {
         ArrayList<FieldTransform> transformList = new ArrayList<>(writes.getUpdateTransformsList());
-        Collections.sort(
-            transformList,
-            new Comparator<FieldTransform>() {
-              @Override
-              public int compare(FieldTransform t1, FieldTransform t2) {
-                return t1.getFieldPath().compareTo(t2.getFieldPath());
-              }
-            });
+        transformList.sort(Comparator.comparing(FieldTransform::getFieldPath));
         writes.clearUpdateTransforms().addAllUpdateTransforms(transformList);
       }
     }
@@ -779,7 +830,7 @@ public final class LocalFirestoreHelper {
     public String nullValue = null;
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
-    public Map<String, Object> model = ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
+    public Map<String, Object> model = ImmutableMap.of("foo", SINGLE_FIELD_OBJECT.foo);
 
     @Override
     public boolean equals(Object o) {
@@ -825,7 +876,7 @@ public final class LocalFirestoreHelper {
     GEO_POINT = new GeoPoint(50.1430847, -122.9477780);
     BLOB = Blob.fromBytes(new byte[] {1, 2, 3});
     SINGLE_FLOAT_MAP = map("float", 0.1F);
-    SINGLE_FLOAT_PROTO = map("float", Value.newBuilder().setDoubleValue((Float) 0.1F).build());
+    SINGLE_FLOAT_PROTO = map("float", Value.newBuilder().setDoubleValue(0.1F).build());
 
     DATABASE_NAME = "projects/test-project/databases/(default)";
     COLLECTION_ID = "coll";
@@ -836,8 +887,8 @@ public final class LocalFirestoreHelper {
     EMPTY_MAP_PROTO =
         map("inner", Value.newBuilder().setMapValue(MapValue.getDefaultInstance()).build());
 
-    SINGLE_FIELD_MAP = map("foo", (Object) "bar");
-    SINGLE_FILED_MAP_WITH_DOT = map("c.d", (Object) "bar");
+    SINGLE_FIELD_MAP = map("foo", "bar");
+    SINGLE_FILED_MAP_WITH_DOT = map("c.d", "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     FOO_LIST.add(SINGLE_FIELD_OBJECT);
     FOO_MAP.put("customMap", SINGLE_FIELD_OBJECT);
@@ -869,7 +920,7 @@ public final class LocalFirestoreHelper {
     UPDATE_SINGLE_FIELD_OBJECT = new SingleField();
     UPDATE_SINGLE_FIELD_OBJECT.foo = "foobar";
 
-    UPDATED_FIELD_MAP = map("foo", (Object) "foobar");
+    UPDATED_FIELD_MAP = map("foo", "foobar");
     UPDATED_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("foobar").build());
     UPDATED_SINGLE_FIELD_PROTO =
         ImmutableMap.<String, Value>builder()
@@ -982,7 +1033,7 @@ public final class LocalFirestoreHelper {
     NESTED_CLASS_OBJECT = new NestedClass();
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
-    UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);
+    UPDATED_POJO = map("model", UPDATE_SINGLE_FIELD_OBJECT);
   }
 
   public static String autoId() {
@@ -1011,7 +1062,7 @@ public final class LocalFirestoreHelper {
   public static String fullPath(DocumentReference ref, FirestoreOptions options) {
     return ResourcePath.create(
             DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()),
-            ImmutableList.<String>copyOf(ref.getPath().split("/")))
+            ImmutableList.copyOf(ref.getPath().split("/")))
         .toString();
   }
 
@@ -1043,14 +1094,10 @@ public final class LocalFirestoreHelper {
       Stubber stubber = null;
       for (final RequestResponsePair entry : operationList) {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
-            new Answer<ApiFuture<? extends GeneratedMessageV3>>() {
-              @Override
-              public ApiFuture<? extends GeneratedMessageV3> answer(
-                  InvocationOnMock invocationOnMock) throws Throwable {
-                ++requestCount;
-                assertEquals(entry.request, invocationOnMock.getArguments()[0]);
-                return entry.response;
-              }
+            invocationOnMock -> {
+              ++requestCount;
+              assertEquals(entry.request, invocationOnMock.getArguments()[0]);
+              return entry.response;
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
       }

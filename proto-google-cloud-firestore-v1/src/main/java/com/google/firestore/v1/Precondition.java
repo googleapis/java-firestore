@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,8 +70,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
             break;
           case 8:
             {
-              conditionTypeCase_ = 1;
               conditionType_ = input.readBool();
+              conditionTypeCase_ = 1;
               break;
             }
           case 18:
@@ -100,6 +100,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
       throw e.setUnfinishedMessage(this);
+    } catch (com.google.protobuf.UninitializedMessageException e) {
+      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
       throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
@@ -213,7 +215,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -229,7 +231,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -248,7 +250,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * When set, the target document must exist and have been last updated at
-   * that time.
+   * that time. Timestamp must be microsecond aligned.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -723,7 +725,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -739,7 +741,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -765,7 +767,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -788,7 +790,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -808,7 +810,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -829,8 +831,9 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (conditionTypeCase_ == 2) {
           updateTimeBuilder_.mergeFrom(value);
+        } else {
+          updateTimeBuilder_.setMessage(value);
         }
-        updateTimeBuilder_.setMessage(value);
       }
       conditionTypeCase_ = 2;
       return this;
@@ -840,7 +843,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -866,7 +869,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -879,7 +882,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>
@@ -900,7 +903,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * When set, the target document must exist and have been last updated at
-     * that time.
+     * that time. Timestamp must be microsecond aligned.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp update_time = 2;</code>

@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -36,7 +35,7 @@ import com.google.common.collect.ImmutableSet;
 import io.grpc.ManagedChannelBuilder;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -236,13 +235,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         this.setChannelProvider(
             InstantiatingGrpcChannelProvider.newBuilder()
                 .setEndpoint(emulatorHost)
-                .setChannelConfigurator(
-                    new ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder>() {
-                      @Override
-                      public ManagedChannelBuilder apply(ManagedChannelBuilder input) {
-                        return input.usePlaintext();
-                      }
-                    })
+                .setChannelConfigurator(ManagedChannelBuilder::usePlaintext)
                 .build());
         // Use a `CredentialProvider` to match the Firebase Admin SDK, which prevents the Admin SDK
         // from overwriting the Emulator credentials.
@@ -255,7 +248,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
   public static class EmulatorCredentials extends Credentials {
     private final Map<String, List<String>> HEADERS =
-        ImmutableMap.of("Authorization", Arrays.asList("Bearer owner"));
+        ImmutableMap.of("Authorization", Collections.singletonList("Bearer owner"));
 
     @Override
     public String getAuthenticationType() {
