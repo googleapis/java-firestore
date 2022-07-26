@@ -52,6 +52,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -98,13 +100,13 @@ import javax.annotation.Generated;
  * methods:
  *
  * <ol>
- *   <li>A "flattened" method. With this type of method, the fields of the request type have been
+ *   <li> A "flattened" method. With this type of method, the fields of the request type have been
  *       converted into function parameters. It may be the case that not all fields are available as
  *       parameters, and not every API method will have a flattened method entry point.
- *   <li>A "request object" method. This type of method only takes one parameter, a request object,
+ *   <li> A "request object" method. This type of method only takes one parameter, a request object,
  *       which must be constructed before the call. Not every API method will have a request object
  *       method.
- *   <li>A "callable" method. This type of method takes no parameters and returns an immutable API
+ *   <li> A "callable" method. This type of method takes no parameters and returns an immutable API
  *       callable object, which can be used to initiate calls to the service.
  * </ol>
  *
@@ -136,20 +138,6 @@ import javax.annotation.Generated;
  * // It may require modifications to work in your environment.
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder().setEndpoint(myEndpoint).build();
- * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
- * }</pre>
- *
- * <p>To use REST (HTTP1.1/JSON) transport (instead of gRPC) for sending and receiving requests over
- * the wire:
- *
- * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
- * FirestoreSettings firestoreSettings =
- *     FirestoreSettings.newBuilder()
- *         .setTransportChannelProvider(
- *             FirestoreSettings.defaultHttpJsonTransportProviderBuilder().build())
- *         .build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
  * }</pre>
  *
@@ -813,6 +801,41 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
+   * Runs an aggregation query.
+   *
+   * <p>Rather than producing [Document][google.firestore.v1.Document] results like
+   * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API allows running an
+   * aggregation to produce a series of [AggregationResult][google.firestore.v1.AggregationResult]
+   * server-side.
+   *
+   * <p>High-Level Example:
+   *
+   * <p>``` -- Return the number of documents in table given a filter. SELECT COUNT(&#42;) FROM (
+   * SELECT &#42; FROM k where a = true ); ```
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   RunAggregationQueryRequest request =
+   *       RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
+   *   ServerStream<RunAggregationQueryResponse> stream =
+   *       firestoreClient.runAggregationQueryCallable().call(request);
+   *   for (RunAggregationQueryResponse response : stream) {
+   *     // Do something when a response is received.
+   *   }
+   * }
+   * }</pre>
+   */
+  public final ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    return stub.runAggregationQueryCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
    * Partitions a query by returning partition cursors that can be used to run the query in
    * parallel. The returned partition cursors are split points that can be used by RunQuery as
    * starting/end points for the query results.
@@ -1255,10 +1278,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class ListDocumentsPagedResponse
       extends AbstractPagedListResponse<
-          ListDocumentsRequest,
-          ListDocumentsResponse,
-          Document,
-          ListDocumentsPage,
+          ListDocumentsRequest, ListDocumentsResponse, Document, ListDocumentsPage,
           ListDocumentsFixedSizeCollection> {
 
     public static ApiFuture<ListDocumentsPagedResponse> createAsync(
@@ -1308,10 +1328,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class ListDocumentsFixedSizeCollection
       extends AbstractFixedSizeCollection<
-          ListDocumentsRequest,
-          ListDocumentsResponse,
-          Document,
-          ListDocumentsPage,
+          ListDocumentsRequest, ListDocumentsResponse, Document, ListDocumentsPage,
           ListDocumentsFixedSizeCollection> {
 
     private ListDocumentsFixedSizeCollection(List<ListDocumentsPage> pages, int collectionSize) {
@@ -1331,10 +1348,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class PartitionQueryPagedResponse
       extends AbstractPagedListResponse<
-          PartitionQueryRequest,
-          PartitionQueryResponse,
-          Cursor,
-          PartitionQueryPage,
+          PartitionQueryRequest, PartitionQueryResponse, Cursor, PartitionQueryPage,
           PartitionQueryFixedSizeCollection> {
 
     public static ApiFuture<PartitionQueryPagedResponse> createAsync(
@@ -1384,10 +1398,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class PartitionQueryFixedSizeCollection
       extends AbstractFixedSizeCollection<
-          PartitionQueryRequest,
-          PartitionQueryResponse,
-          Cursor,
-          PartitionQueryPage,
+          PartitionQueryRequest, PartitionQueryResponse, Cursor, PartitionQueryPage,
           PartitionQueryFixedSizeCollection> {
 
     private PartitionQueryFixedSizeCollection(List<PartitionQueryPage> pages, int collectionSize) {
@@ -1407,10 +1418,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class ListCollectionIdsPagedResponse
       extends AbstractPagedListResponse<
-          ListCollectionIdsRequest,
-          ListCollectionIdsResponse,
-          String,
-          ListCollectionIdsPage,
+          ListCollectionIdsRequest, ListCollectionIdsResponse, String, ListCollectionIdsPage,
           ListCollectionIdsFixedSizeCollection> {
 
     public static ApiFuture<ListCollectionIdsPagedResponse> createAsync(
@@ -1460,10 +1468,7 @@ public class FirestoreClient implements BackgroundResource {
 
   public static class ListCollectionIdsFixedSizeCollection
       extends AbstractFixedSizeCollection<
-          ListCollectionIdsRequest,
-          ListCollectionIdsResponse,
-          String,
-          ListCollectionIdsPage,
+          ListCollectionIdsRequest, ListCollectionIdsResponse, String, ListCollectionIdsPage,
           ListCollectionIdsFixedSizeCollection> {
 
     private ListCollectionIdsFixedSizeCollection(

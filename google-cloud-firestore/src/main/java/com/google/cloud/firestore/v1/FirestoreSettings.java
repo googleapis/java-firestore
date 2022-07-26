@@ -25,13 +25,13 @@ import com.google.api.core.BetaApi;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
-import com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.ClientSettings;
 import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.ServerStreamingCallSettings;
 import com.google.api.gax.rpc.StreamingCallSettings;
+import com.google.api.gax.rpc.StubSettings;
 import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
@@ -56,6 +56,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -73,9 +75,9 @@ import javax.annotation.Generated;
  * <p>The default instance has everything set to sensible defaults:
  *
  * <ul>
- *   <li>The default service address (firestore.googleapis.com) and default port (443) are used.
- *   <li>Credentials are acquired automatically through Application Default Credentials.
- *   <li>Retries are configured for idempotent methods but not for non-idempotent methods.
+ *   <li> The default service address (firestore.googleapis.com) and default port (443) are used.
+ *   <li> Credentials are acquired automatically through Application Default Credentials.
+ *   <li> Retries are configured for idempotent methods but not for non-idempotent methods.
  * </ul>
  *
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
@@ -150,6 +152,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return ((FirestoreStubSettings) getStubSettings()).runQuerySettings();
   }
 
+  /** Returns the object with the settings used for calls to runAggregationQuery. */
+  public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings() {
+    return ((FirestoreStubSettings) getStubSettings()).runAggregationQuerySettings();
+  }
+
   /** Returns the object with the settings used for calls to partitionQuery. */
   public PagedCallSettings<
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
@@ -208,16 +216,9 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultCredentialsProviderBuilder();
   }
 
-  /** Returns a builder for the default gRPC ChannelProvider for this service. */
+  /** Returns a builder for the default ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return FirestoreStubSettings.defaultGrpcTransportProviderBuilder();
-  }
-
-  /** Returns a builder for the default REST ChannelProvider for this service. */
-  @BetaApi
-  public static InstantiatingHttpJsonChannelProvider.Builder
-      defaultHttpJsonTransportProviderBuilder() {
-    return FirestoreStubSettings.defaultHttpJsonTransportProviderBuilder();
   }
 
   public static TransportChannelProvider defaultTransportChannelProvider() {
@@ -229,15 +230,9 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultApiClientHeaderProviderBuilder();
   }
 
-  /** Returns a new gRPC builder for this class. */
+  /** Returns a new builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
-  }
-
-  /** Returns a new REST builder for this class. */
-  @BetaApi
-  public static Builder newHttpJsonBuilder() {
-    return Builder.createHttpJsonDefault();
   }
 
   /** Returns a new builder for this class. */
@@ -275,11 +270,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
 
     private static Builder createDefault() {
       return new Builder(FirestoreStubSettings.newBuilder());
-    }
-
-    @BetaApi
-    private static Builder createHttpJsonDefault() {
-      return new Builder(FirestoreStubSettings.newHttpJsonBuilder());
     }
 
     public FirestoreStubSettings.Builder getStubSettingsBuilder() {
@@ -346,6 +336,13 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return getStubSettingsBuilder().runQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to runAggregationQuery. */
+    public ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings() {
+      return getStubSettingsBuilder().runAggregationQuerySettings();
     }
 
     /** Returns the builder for the settings used for calls to partitionQuery. */
