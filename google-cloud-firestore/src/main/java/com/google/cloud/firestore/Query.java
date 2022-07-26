@@ -1846,6 +1846,11 @@ public class Query {
     return false;
   }
 
+  @Nonnull
+  public AggregateQuery count() {
+    return new AggregateQuery(this);
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *
