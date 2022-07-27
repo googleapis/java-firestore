@@ -30,7 +30,7 @@ import java.util.Date;
  * <p>RateLimiter can also implement a gradually increasing rate limit. This is used to enforce the
  * 500/50/5 rule.
  *
- * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping up
+ * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping up
  *     traffic</a>
  */
 class RateLimiter {
