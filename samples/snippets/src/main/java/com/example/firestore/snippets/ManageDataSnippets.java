@@ -516,7 +516,7 @@ class ManageDataSnippets {
               return documentResult;
             },
             options);
-    // [END firestore_firestore_snapshot_read]
+    // [END firestore_snapshot_read]
     return futureTransaction.get();
   }
 
