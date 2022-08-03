@@ -28,8 +28,6 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.TransactionOptions;
-import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
-import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.protobuf.Timestamp;
@@ -496,27 +494,24 @@ class ManageDataSnippets {
     // In the transaction options, Set read time and and set to read-only
     // Snapshot reads require read-only transactions
     // As an example, set read time to the update time of the previous write operation
-    final Timestamp readTime = com.google.protobuf.Timestamp.newBuilder()
-        .setSeconds(writeResult.getUpdateTime().getSeconds())
-        .setNanos(writeResult.getUpdateTime().getNanos())
-        .build();
-    // final Timestamp readTime = writeResult.getUpdateTime();
-    TransactionOptions options =
-        TransactionOptions.createReadOnlyOptionsBuilder()
-            .setReadTime(readTime)
+    final Timestamp readTime =
+        com.google.protobuf.Timestamp.newBuilder()
+            .setSeconds(writeResult.getUpdateTime().getSeconds())
+            .setNanos(writeResult.getUpdateTime().getNanos())
             .build();
+
+    TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder().setReadTime(readTime).build();
 
     // run a transaction
     ApiFuture<DocumentSnapshot> futureTransaction =
         db.runTransaction(
             transaction -> {
               // Execute a snapshot read document lookup
-              final DocumentSnapshot documentResult =
-                  transaction.get(documentReference).get();
+              final DocumentSnapshot documentResult = transaction.get(documentReference).get();
 
               // Execute a snapshot read query with the same transaction options
-              final QuerySnapshot queryResult =
-                  transaction.get(query).get();
+              final QuerySnapshot queryResult = transaction.get(query).get();
 
               return documentResult;
             },
