@@ -94,7 +94,7 @@ public final class BulkWriter implements AutoCloseable {
   /**
    * The starting maximum number of operations per second as allowed by the 500/50/5 rule.
    *
-   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    */
   static final int DEFAULT_STARTING_MAXIMUM_OPS_PER_SECOND = 500;
@@ -102,7 +102,7 @@ public final class BulkWriter implements AutoCloseable {
   /**
    * The rate by which to increase the capacity as specified by the 500/50/5 rule.
    *
-   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    */
   private static final double RATE_LIMITER_MULTIPLIER = 1.5;
@@ -111,7 +111,7 @@ public final class BulkWriter implements AutoCloseable {
    * How often the operations per second capacity should increase in milliseconds as specified by
    * the 500/50/5 rule.
    *
-   * @see <a href=https://cloud.google.com/datastore/docs/best-practices#ramping_up_traffic>Ramping
+   * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    */
   private static final int RATE_LIMITER_MULTIPLIER_MILLIS = 5 * 60 * 1000;
