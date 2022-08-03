@@ -23,11 +23,16 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.TransactionOptions;
+import com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
+import com.google.protobuf.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -466,6 +471,58 @@ class ManageDataSnippets {
     // [END firestore_data_set_numeric_increment]
     // [END fs_update_document_increment]
     updateFuture.get();
+  }
+
+  /**
+   * Run a snapshot read to read past versions of documents.
+   *
+   * @return transaction future
+   */
+  DocumentSnapshot runSnapshotReads() throws Exception {
+    // [START firestore_snapshot_read]
+    // Initialize a documnet
+    final DocumentReference documentReference = db.collection("cities").document("SF");
+    City city = new City("SF");
+    city.setCountry("USA");
+    city.setPopulation(860008L);
+    // Write doc and save write result
+    WriteResult writeResult = documentReference.set(city).get();
+
+    // Create a reference to the cities collection
+    CollectionReference cities = db.collection("cities");
+    // Create a query against the collection.
+    Query query = cities.whereEqualTo("capital", true);
+
+    // In the transaction options, Set read time and and set to read-only
+    // Snapshot reads require read-only transactions
+    // As an example, set read time to the update time of the previous write operation
+    final Timestamp readTime = com.google.protobuf.Timestamp.newBuilder()
+        .setSeconds(writeResult.getUpdateTime().getSeconds())
+        .setNanos(writeResult.getUpdateTime().getNanos())
+        .build();
+    // final Timestamp readTime = writeResult.getUpdateTime();
+    TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder()
+            .setReadTime(readTime)
+            .build();
+
+    // run a transaction
+    ApiFuture<DocumentSnapshot> futureTransaction =
+        db.runTransaction(
+            transaction -> {
+              // Execute a snapshot read document lookup
+              final DocumentSnapshot documentResult =
+                  transaction.get(documentReference).get();
+
+              // Execute a snapshot read query with the same transaction options
+              final QuerySnapshot queryResult =
+                  transaction.get(query).get();
+
+              return documentResult;
+            },
+            options);
+    // [END firestore_firestore_snapshot_read]
+    return futureTransaction.get();
   }
 
   /** Closes the gRPC channels associated with this instance and frees up their resources. */

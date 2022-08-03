@@ -26,6 +26,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.protobuf.Timestamp;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -196,6 +197,14 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
     final DocumentSnapshot data = documentReference.get().get();
     assertTrue(data.contains("population"));
     assertEquals((Long) 150L, data.getLong("population"));
+  }
+
+  @Test
+  public void testSnapshotReads() throws Exception {
+
+    DocumentSnapshot doc = manageDataSnippets.runSnapshotReads();
+    // Assert that population value is exactly the one from the write operation
+    assertEquals((Long) 860008L, doc.getLong("population"));
   }
 
   @AfterClass
