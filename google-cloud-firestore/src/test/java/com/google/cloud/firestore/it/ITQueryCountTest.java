@@ -122,9 +122,10 @@ public class ITQueryCountTest {
     CollectionReference collection = createEmptyCollection();
     createDocumentsWithKeyValuePair(collection, 3, "key1", 42);
     createDocumentsWithKeyValuePair(collection, 5, "key2", 24);
+    createDocumentsWithKeyValuePair(collection, 4, "key1", 99);
     AggregateQuerySnapshot snapshot = collection.orderBy("key1").count().get().get();
     // Note: A subtle side effect of order-by is that it filters out documents that do not have the order-by field.
-    assertEquals(Long.valueOf(3), snapshot.getCount());
+    assertEquals(Long.valueOf(7), snapshot.getCount());
   }
 
   @Test
