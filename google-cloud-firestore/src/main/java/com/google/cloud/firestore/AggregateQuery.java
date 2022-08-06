@@ -20,6 +20,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
+import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.firestore.v1.RunAggregationQueryRequest;
@@ -34,7 +35,7 @@ public class AggregateQuery {
 
   private static final String ALIAS_COUNT = "count";
 
-  @Nonnull Query query;
+  @Nonnull private final Query query;
 
   AggregateQuery(@Nonnull Query query) {
     this.query = query;
@@ -47,25 +48,11 @@ public class AggregateQuery {
 
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
-    RunQueryRequest runQueryRequest = query.toProto();
-
-    RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
-    request.setParent(runQueryRequest.getParent());
-
-    StructuredAggregationQuery.Builder structuredAggregationQuery = request.getStructuredAggregationQueryBuilder();
-    structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
-
-    StructuredAggregationQuery.Aggregation.Builder aggregation = StructuredAggregationQuery.Aggregation.newBuilder();
-    aggregation.setCount(StructuredAggregationQuery.Aggregation.Count.getDefaultInstance());
-    aggregation.setAlias(ALIAS_COUNT);
-    structuredAggregationQuery.addAggregations(aggregation);
-
+    RunAggregationQueryRequest request = toProto();
     AggregateQueryResponseObserver responseObserver = new AggregateQueryResponseObserver();
+    ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable = query.rpcContext.getClient().runAggregationQueryCallable();
 
-    query.rpcContext.streamRequest(
-            request.build(),
-            responseObserver,
-            query.rpcContext.getClient().runAggregationQueryCallable());
+    query.rpcContext.streamRequest(request, responseObserver, callable);
 
     return responseObserver.getFuture();
   }
@@ -100,6 +87,33 @@ public class AggregateQuery {
     }
   }
 
+  @Nonnull
+  public RunAggregationQueryRequest toProto() {
+    RunQueryRequest runQueryRequest = query.toProto();
+
+    RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
+    request.setParent(runQueryRequest.getParent());
+
+    StructuredAggregationQuery.Builder structuredAggregationQuery = request.getStructuredAggregationQueryBuilder();
+    structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
+
+    StructuredAggregationQuery.Aggregation.Builder aggregation = StructuredAggregationQuery.Aggregation.newBuilder();
+    aggregation.setCount(StructuredAggregationQuery.Aggregation.Count.getDefaultInstance());
+    aggregation.setAlias(ALIAS_COUNT);
+    structuredAggregationQuery.addAggregations(aggregation);
+
+    return request.build();
+  }
+
+  @Nonnull
+  public static AggregateQuery fromProto(Firestore firestore, RunAggregationQueryRequest proto) {
+    RunQueryRequest runQueryRequest = RunQueryRequest.newBuilder()
+            .setParent(proto.getParent())
+            .setStructuredQuery(proto.getStructuredAggregationQuery().getStructuredQuery())
+            .build();
+    Query query = Query.fromProto(firestore, runQueryRequest);
+    return new AggregateQuery(query);
+  }
 
   @Override
   public int hashCode() {
