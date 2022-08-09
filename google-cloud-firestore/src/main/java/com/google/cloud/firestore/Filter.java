@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.firestore.v1.StructuredQuery;
+import com.google.firestore.v1.StructuredQuery.CompositeFilter;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import java.util.Arrays;
 import java.util.List;
@@ -171,9 +172,7 @@ public class Filter {
 
   @Nonnull
   public static Filter or(Filter... filters) {
-    // TODO(orquery): Change this to Operator.OR once it is available.
-    return new CompositeFilter(
-        Arrays.asList(filters), StructuredQuery.CompositeFilter.Operator.OPERATOR_UNSPECIFIED);
+    return new CompositeFilter(Arrays.asList(filters), StructuredQuery.CompositeFilter.Operator.OR);
   }
 
   @Nonnull
