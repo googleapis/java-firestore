@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.4.0](https://github.com/googleapis/java-firestore/compare/v3.3.0...v3.4.0) (2022-08-03)
+
+
+### Features
+
+* Support for Composite Filters. ([#975](https://github.com/googleapis/java-firestore/issues/975)) ([9d0653a](https://github.com/googleapis/java-firestore/commit/9d0653aa5e488af847ae1c8fbbd9ae60bac9149a))
+
+
+### Bug Fixes
+
+* update gapic-generator-java with mock service generation fixes ([#960](https://github.com/googleapis/java-firestore/issues/960)) ([a9338ff](https://github.com/googleapis/java-firestore/commit/a9338ff8c0039111f1e1da9db460626a7b2c98ec))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v3 ([#1000](https://github.com/googleapis/java-firestore/issues/1000)) ([a3c4ec5](https://github.com/googleapis/java-firestore/commit/a3c4ec5db33fc0217e2d5c9c0799570a0a63a2d0))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.12 ([#972](https://github.com/googleapis/java-firestore/issues/972)) ([8cf33b0](https://github.com/googleapis/java-firestore/commit/8cf33b053d784cd2d03ed1d6c37fe17e9f96d677))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.13 ([#988](https://github.com/googleapis/java-firestore/issues/988)) ([f8d9496](https://github.com/googleapis/java-firestore/commit/f8d949688e2eba095d008d6a36bb71cc9860fd61))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.13 ([#989](https://github.com/googleapis/java-firestore/issues/989)) ([4c768e3](https://github.com/googleapis/java-firestore/commit/4c768e3939b2820b8c93216df4fc1bd7352253a1))
+* update dependency org.junit.vintage:junit-vintage-engine to v5.9.0 ([#997](https://github.com/googleapis/java-firestore/issues/997)) ([d4dd4d8](https://github.com/googleapis/java-firestore/commit/d4dd4d8b9f83f54900eae7ea119e24e0e68c551b))
+
 ## [3.3.0](https://github.com/googleapis/java-firestore/compare/v3.2.0...v3.3.0) (2022-07-01)
 
 
