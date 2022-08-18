@@ -39,7 +39,7 @@ import org.apache.beam.sdk.values.PCollection;
 public class ExampleFirestoreBeamRead {
 
   public static void main(String[] args) {
-    runRead(args, "cities-collection-" + UUID.randomUUID().toString().substring(0, 10));
+    runRead(args, "cities-beam-sample");
   }
 
   public static void runRead(String[] args, String collectionId) {

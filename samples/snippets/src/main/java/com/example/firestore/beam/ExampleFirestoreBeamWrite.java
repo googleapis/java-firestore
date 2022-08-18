@@ -33,7 +33,7 @@ public class ExampleFirestoreBeamWrite {
   private static final FirestoreOptions FIRESTORE_OPTIONS = FirestoreOptions.getDefaultInstance();
 
   public static void main(String[] args) {
-    runWrite(args, "cities-collection-" + UUID.randomUUID().toString().substring(0, 10));
+    runWrite(args, "cities-beam-sample");
   }
 
   public static void runWrite(String[] args, String collectionId) {
