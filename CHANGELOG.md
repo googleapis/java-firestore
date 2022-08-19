@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.1](https://github.com/googleapis/java-firestore/compare/v3.4.0...v3.4.1) (2022-08-19)
+
+
+### Bug Fixes
+
+* declare gson as runtime rather than test ([#1004](https://github.com/googleapis/java-firestore/issues/1004)) ([e37e997](https://github.com/googleapis/java-firestore/commit/e37e997075288844c2fb1807b166007177ebea2f))
+
 ## [3.4.0](https://github.com/googleapis/java-firestore/compare/v3.3.0...v3.4.0) (2022-08-03)
 
 
