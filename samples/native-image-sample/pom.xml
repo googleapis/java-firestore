@@ -23,7 +23,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!-- Java 8 because the Kokoro Sample test uses that Java version -->
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <beam.version>2.40.0</beam.version>
+    <beam.version>2.41.0</beam.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
