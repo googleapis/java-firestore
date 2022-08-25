@@ -16,8 +16,18 @@
 
 package com.google.cloud.firestore.it;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.AggregateQuery;
+import com.google.cloud.firestore.AggregateQuerySnapshot;
+import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.WriteBatch;
 import com.google.common.base.Preconditions;
 import org.junit.After;
 import org.junit.Before;
@@ -27,10 +37,18 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.singletonMap;
 
 @RunWith(JUnit4.class)
 public class ITQueryCountTest {
@@ -117,6 +135,30 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsClosed() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(20);
+    ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
+    collection.getFirestore().close();
+    assertThat(task.get().getCount()).isEqualTo(20);
+  }
+
+  @Test
+  public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsShutDownGracefully() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(20);
+    ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
+    collection.getFirestore().shutdown();
+    assertThat(task.get().getCount()).isEqualTo(20);
+  }
+
+  @Test
+  public void inFlightCountQueriesShouldRunToCompletionWhenFirestoreIsShutDownForcefully() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(20);
+    ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
+    collection.getFirestore().shutdownNow();
+    await(task);
+  }
+
+  @Test
   public void aggregateSnapshotShouldHaveReasonableReadTime() throws Exception {
     CollectionReference collection = createCollectionWithDocuments(5);
     AggregateQuerySnapshot snapshot1 = collection.count().get().get();
@@ -156,21 +198,21 @@ public class ITQueryCountTest {
   }
 
   private void createDocumentsWithKeyValuePair(CollectionReference collection, int numDocumentsToCreate, String key, int value) throws ExecutionException, InterruptedException {
+    WriteBatch writeBatch = firestore.batch();
     for (int i=0; i<numDocumentsToCreate; i++) {
-      createDocumentInCollection(collection, key, value);
+      DocumentReference doc = collection.document();
+      writeBatch.create(doc, singletonMap(key, value));
     }
+    writeBatch.commit().get();
   }
 
-  private void createDocumentInCollection(CollectionReference collection) throws ExecutionException, InterruptedException {
-    createDocumentInCollection(collection, "age", 42);
+  private void createDocumentInCollection(WriteBatch writeBatch, CollectionReference collection) throws ExecutionException, InterruptedException {
+    createDocumentInCollection(writeBatch, collection, "age", 42);
   }
 
-  private void createDocumentInCollection(CollectionReference collection, String key, int value) throws ExecutionException, InterruptedException {
+  private void createDocumentInCollection(WriteBatch writeBatch, CollectionReference collection, String key, int value) throws ExecutionException, InterruptedException {
     DocumentReference doc = collection.document();
-    System.out.println("zzyzx created document: " + doc);
-    HashMap<String, Object> data = new HashMap<>();
-    data.put(key, value);
-    doc.set(data).get();
+    writeBatch.create(doc, singletonMap(key, value));
   }
 
   private CollectionGroup createCollectionGroupWithDocuments(int numDocumentsToCreate) throws ExecutionException, InterruptedException {
@@ -183,10 +225,13 @@ public class ITQueryCountTest {
     }
 
     // Populate the collections with documents.
+    WriteBatch writeBatch = firestore.batch();
     Iterator<CollectionReference> collectionIterator = loopInfinitely(collections);
     for (int i=0; i<numDocumentsToCreate; i++) {
-      createDocumentInCollection(collectionIterator.next());
+      createDocumentInCollection(writeBatch, collectionIterator.next());
     }
+
+    writeBatch.commit().get();
 
     return firestore.collectionGroup(collectionId);
   }
@@ -229,6 +274,30 @@ public class ITQueryCountTest {
         return element;
       }
     };
+  }
+
+  /**
+   * Blocks the calling thread until the given future completes.
+   * Note that this method does not check the success or failure of the future; it returns regardless of its success
+   * or failure.
+   */
+  private static void await(ApiFuture<?> future) throws InterruptedException {
+    AtomicBoolean done = new AtomicBoolean(false);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    future.addListener(() -> {
+      synchronized (done) {
+        done.set(true);
+        done.notifyAll();
+      }
+    }, executor);
+
+    synchronized (done) {
+      while (!done.get()) {
+        done.wait();
+      }
+    }
+
+    executor.shutdown();
   }
 
 }
