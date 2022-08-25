@@ -82,20 +82,29 @@
         <version>3.1.0</version>
         <executions>
           <execution>
+            <!-- to run quickstart:
+            mvn exec:exec@quickstart -Dfirestore.project.id="your-firestore-project-id"-->
+            <id>quickstart</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>com.example.firestore.Quickstart</argument>
+                <argument>${firestore.project.id}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>beam-sample</id>
             <goals>
               <goal>exec</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <executable>java</executable>
-          <arguments>
-            <argument>-classpath</argument>
-            <classpath/>
-            <argument>com.example.firestore.Quickstart</argument>
-            <argument>${firestore.project.id}</argument>
-          </arguments>
-        </configuration>
       </plugin>
     </plugins>
   </build>
