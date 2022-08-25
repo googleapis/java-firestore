@@ -286,4 +286,40 @@
     <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
     <method>com.google.api.gax.rpc.ServerStreamingCallable runAggregationQueryCallable()</method>
   </difference>
+
+  <!-- Others, which should be removed before merging into main  -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreSettings</className>
+    <method>com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider$Builder defaultHttpJsonTransportProviderBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/FirestoreSettings</className>
+    <method>com.google.cloud.firestore.v1.FirestoreSettings$Builder newHttpJsonBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/stub/FirestoreStubSettings</className>
+    <method>com.google.api.gax.rpc.ApiClientHeaderProvider$Builder defaultGrpcApiClientHeaderProviderBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/stub/FirestoreStubSettings</className>
+    <method>com.google.api.gax.rpc.ApiClientHeaderProvider$Builder defaultHttpJsonApiClientHeaderProviderBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/stub/FirestoreStubSettings</className>
+    <method>com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider$Builder defaultHttpJsonTransportProviderBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/v1/stub/FirestoreStubSettings</className>
+    <method>com.google.cloud.firestore.v1.stub.FirestoreStubSettings$Builder newHttpJsonBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/v1/stub/HttpJsonFirestoreStub</className>
+  </difference>
 </differences>
