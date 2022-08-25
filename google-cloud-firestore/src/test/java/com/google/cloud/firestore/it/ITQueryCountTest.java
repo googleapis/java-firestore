@@ -131,6 +131,13 @@ public class ITQueryCountTest {
     assertThat(snapshot2.getQuery()).isSameInstanceAs(aggregateQuery);
   }
 
+  @Test
+  public void aggregateQueryShouldHaveCorrectQuery() {
+    CollectionReference collection = firestore.collection("abc");
+    AggregateQuery aggregateQuery = collection.count();
+    assertThat(aggregateQuery.getQuery()).isSameInstanceAs(collection);
+  }
+
   private CollectionReference createEmptyCollection() {
     String collectionPath = "java-" + testName.getMethodName() + "-" + LocalFirestoreHelper.autoId();
     return firestore.collection(collectionPath);

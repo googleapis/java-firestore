@@ -27,7 +27,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.*;
+import static com.google.common.truth.Truth.assertThat;
+
 
 @RunWith(JUnit4.class)
 public class ITAggregateQueryTest {
@@ -56,11 +57,11 @@ public class ITAggregateQueryTest {
     AggregateQuery countQuery2 = query2.count();
     AggregateQuery countQuery1Recreated = AggregateQuery.fromProto(firestore, countQuery1.toProto());
     AggregateQuery countQuery2Recreated = AggregateQuery.fromProto(firestore, countQuery2.toProto());
-    assertNotSame(countQuery1, countQuery1Recreated);
-    assertNotSame(countQuery2, countQuery2Recreated);
-    assertEquals(countQuery1, countQuery1Recreated);
-    assertEquals(countQuery2, countQuery2Recreated);
-    assertNotEquals(countQuery1, countQuery2);
+    assertThat(countQuery1).isNotSameInstanceAs(countQuery1Recreated);
+    assertThat(countQuery2).isNotSameInstanceAs(countQuery2Recreated);
+    assertThat(countQuery1).isEqualTo(countQuery1Recreated);
+    assertThat(countQuery2).isEqualTo(countQuery2Recreated);
+    assertThat(countQuery1).isNotEqualTo(countQuery2);
   }
 
 }

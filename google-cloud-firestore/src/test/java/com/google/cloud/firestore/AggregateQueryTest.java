@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AggregateQueryTest {
@@ -34,45 +34,45 @@ public class AggregateQueryTest {
   @Test
   public void getQueryShouldReturnTheQuerySpecifiedToTheConstructor() {
     AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
-    assertSame(mockQuery, aggregateQuery.getQuery());
+    assertThat(aggregateQuery.getQuery()).isSameInstanceAs(mockQuery);
   }
 
   @Test
   public void hashCodeShouldReturnHashCodeOfUnderlyingQuery() {
     AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
-    assertEquals(mockQuery.hashCode(), aggregateQuery.hashCode());
+    assertThat(aggregateQuery.hashCode()).isEqualTo(mockQuery.hashCode());
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenNull() {
     AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
-    assertFalse(aggregateQuery.equals(null));
+    assertThat(aggregateQuery.equals(null)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenADifferentObject() {
     AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
-    assertFalse(aggregateQuery.equals("Not An AggregateQuery"));
+    assertThat(aggregateQuery.equals("Not An AggregateQuery")).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenAnAggregateQueryWithADifferentQuery() {
     AggregateQuery aggregateQuery1 = new AggregateQuery(mockQuery);
     AggregateQuery aggregateQuery2 = new AggregateQuery(mockQuery2);
-    assertFalse(aggregateQuery1.equals(aggregateQuery2));
+    assertThat(aggregateQuery1.equals(aggregateQuery2)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenTheSameAggregateQueryInstance() {
     AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
-    assertTrue(aggregateQuery.equals(aggregateQuery));
+    assertThat(aggregateQuery.equals(aggregateQuery)).isTrue();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenAnAggregateQueryWithTheSameQuery() {
     AggregateQuery aggregateQuery1 = new AggregateQuery(mockQuery);
     AggregateQuery aggregateQuery2 = new AggregateQuery(mockQuery);
-    assertTrue(aggregateQuery1.equals(aggregateQuery2));
+    assertThat(aggregateQuery1.equals(aggregateQuery2)).isTrue();
   }
 
 }

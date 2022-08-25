@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AggregateQuerySnapshotTest {
@@ -49,93 +49,93 @@ public class AggregateQuerySnapshotTest {
   @Test
   public void getQueryShouldReturnTheAggregateQuerySpecifiedToTheConstructor() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertSame(sampleAggregateQuery, snapshot.getQuery());
+    assertThat(snapshot.getQuery()).isSameInstanceAs(sampleAggregateQuery);
   }
 
   @Test
   public void getReadTimeShouldReturnTheTimestampSpecifiedToTheConstructor() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertSame(sampleTimestamp, snapshot.getReadTime());
+    assertThat(snapshot.getReadTime()).isSameInstanceAs(sampleTimestamp);
   }
 
   @Test
   public void getCountShouldReturnTheCountSpecifiedToTheConstructor() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertEquals(Long.valueOf(42), snapshot.getCount());
+    assertThat(snapshot.getCount()).isEqualTo(42);
   }
 
   @Test
   public void hashCodeShouldReturnSameHashCodeWhenConstructedWithSameObjects() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertEquals(snapshot1.hashCode(), snapshot2.hashCode());
+    assertThat(snapshot1.hashCode()).isEqualTo(snapshot2.hashCode());
   }
 
   @Test
   public void hashCodeShouldReturnDifferentHashCodeWhenConstructedDifferentAggregateQuery() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery2, sampleTimestamp, 42);
-    assertNotEquals(snapshot1.hashCode(), snapshot2.hashCode());
+    assertThat(snapshot1.hashCode()).isNotEqualTo(snapshot2.hashCode());
   }
 
   @Test
   public void hashCodeShouldReturnDifferentHashCodeWhenConstructedDifferentTimestamp() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp2, 42);
-    assertNotEquals(snapshot1.hashCode(), snapshot2.hashCode());
+    assertThat(snapshot1.hashCode()).isNotEqualTo(snapshot2.hashCode());
   }
 
   @Test
   public void hashCodeShouldReturnDifferentHashCodeWhenConstructedDifferentCount() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 24);
-    assertNotEquals(snapshot1.hashCode(), snapshot2.hashCode());
+    assertThat(snapshot1.hashCode()).isNotEqualTo(snapshot2.hashCode());
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenNull() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertFalse(snapshot.equals(null));
+    assertThat(snapshot.equals(null)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenADifferentObject() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertFalse(snapshot.equals("Not An AggregateQuerySnapshot"));
+    assertThat(snapshot.equals("Not An AggregateQuerySnapshot")).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenAnAggregateQuerySnapshotWithADifferentQuery() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery2, sampleTimestamp, 42);
-    assertFalse(snapshot1.equals(snapshot2));
+    assertThat(snapshot1.equals(snapshot2)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenAnAggregateQuerySnapshotWithADifferentReadTime() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp2, 42);
-    assertFalse(snapshot1.equals(snapshot2));
+    assertThat(snapshot1.equals(snapshot2)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenAnAggregateQuerySnapshotWithADifferentCount() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 24);
-    assertFalse(snapshot1.equals(snapshot2));
+    assertThat(snapshot1.equals(snapshot2)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenTheSameAggregateQuerySnapshotInstance() {
     AggregateQuerySnapshot snapshot = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertTrue(snapshot.equals(snapshot));
+    assertThat(snapshot.equals(snapshot)).isTrue();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenAnAggregateQuerySnapshotConstructedWithTheSameArguments() {
     AggregateQuerySnapshot snapshot1 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 = new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
-    assertTrue(snapshot1.equals(snapshot2));
+    assertThat(snapshot1.equals(snapshot2)).isTrue();
   }
 
 }
