@@ -27,8 +27,7 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -111,6 +110,13 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void countShouldReturnNumberOfDocumentsForCollectionGroups() throws Exception {
+    CollectionGroup collectionGroup = createCollectionGroupWithDocuments(13);
+    AggregateQuerySnapshot snapshot = collectionGroup.count().get().get();
+    assertThat(snapshot.getCount()).isEqualTo(13);
+  }
+
+  @Test
   public void aggregateSnapshotShouldHaveReasonableReadTime() throws Exception {
     CollectionReference collection = createCollectionWithDocuments(5);
     AggregateQuerySnapshot snapshot1 = collection.count().get().get();
@@ -151,15 +157,78 @@ public class ITQueryCountTest {
 
   private void createDocumentsWithKeyValuePair(CollectionReference collection, int numDocumentsToCreate, String key, int value) throws ExecutionException, InterruptedException {
     for (int i=0; i<numDocumentsToCreate; i++) {
-      DocumentReference doc = collection.document();
-      HashMap<String, Object> data = new HashMap<>();
-      data.put(key, value);
-      doc.set(data).get();
+      createDocumentInCollection(collection, key, value);
     }
   }
 
+  private void createDocumentInCollection(CollectionReference collection) throws ExecutionException, InterruptedException {
+    createDocumentInCollection(collection, "age", 42);
+  }
+
+  private void createDocumentInCollection(CollectionReference collection, String key, int value) throws ExecutionException, InterruptedException {
+    DocumentReference doc = collection.document();
+    System.out.println("zzyzx created document: " + doc);
+    HashMap<String, Object> data = new HashMap<>();
+    data.put(key, value);
+    doc.set(data).get();
+  }
+
+  private CollectionGroup createCollectionGroupWithDocuments(int numDocumentsToCreate) throws ExecutionException, InterruptedException {
+    String collectionId = generateUniqueId();
+
+    // Create some collections to participate in the group.
+    ArrayList<CollectionReference> collections = new ArrayList<>();
+    for (int i=0; i<=numDocumentsToCreate/3; i++) {
+      collections.add(createEmptyCollection().document().collection(collectionId));
+    }
+
+    // Populate the collections with documents.
+    Iterator<CollectionReference> collectionIterator = loopInfinitely(collections);
+    for (int i=0; i<numDocumentsToCreate; i++) {
+      createDocumentInCollection(collectionIterator.next());
+    }
+
+    return firestore.collectionGroup(collectionId);
+  }
+
+  /**
+   * Generates and returns a globally unique string.
+   */
+  private static String generateUniqueId() {
+    return UUID.randomUUID().toString();
+  }
+
+  /**
+   * Converts a {@link Timestamp} to the equivalent number of milliseconds.
+   */
   private static long msFromTimestamp(Timestamp timestamp) {
     return (timestamp.getSeconds() * 1_000) + (timestamp.getNanos() / 1_000_000);
+  }
+
+  /**
+   * Creates and returns an infinite iterator that iterates over the given collection in the same order as its
+   * {@link Collection#iterator} method does, looping around back to the beginning when it reaches the end.
+   */
+  private static <T> Iterator<T> loopInfinitely(Collection<T> collection) {
+    return new Iterator<T>() {
+      private Iterator<T> it = collection.iterator();
+
+      @Override
+      public boolean hasNext() {
+        // NOTE: it.hasNext() will ALWAYS return true, except in the case that the given collection is empty.
+        return it.hasNext();
+      }
+
+      @Override
+      public T next() {
+        T element = it.next();
+        // If we've reached the end of the iterator, create a new one.
+        if (! it.hasNext()) {
+          it = collection.iterator();
+        }
+        return element;
+      }
+    };
   }
 
 }
