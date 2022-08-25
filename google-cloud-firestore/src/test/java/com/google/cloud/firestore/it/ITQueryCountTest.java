@@ -33,6 +33,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -41,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,6 +49,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
+import static org.junit.Assert.assertThrows;
 
 @RunWith(JUnit4.class)
 public class ITQueryCountTest {
@@ -159,6 +160,22 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void countQueriesShouldFailIfStartedOnAClosedFirestoreInstance() throws Exception {
+    CollectionReference collection = createEmptyCollection();
+    AggregateQuery aggregateQuery = collection.count();
+    collection.getFirestore().close();
+    assertThrows(IllegalStateException.class, aggregateQuery::get);
+  }
+
+  @Test
+  public void countQueriesShouldFailIfStartedOnAShutDownFirestoreInstance() throws Exception {
+    CollectionReference collection = createEmptyCollection();
+    AggregateQuery aggregateQuery = collection.count();
+    collection.getFirestore().shutdown();
+    assertThrows(IllegalStateException.class, aggregateQuery::get);
+  }
+
+  @Test
   public void aggregateSnapshotShouldHaveReasonableReadTime() throws Exception {
     CollectionReference collection = createCollectionWithDocuments(5);
     AggregateQuerySnapshot snapshot1 = collection.count().get().get();
@@ -239,8 +256,8 @@ public class ITQueryCountTest {
   /**
    * Generates and returns a globally unique string.
    */
-  private static String generateUniqueId() {
-    return UUID.randomUUID().toString();
+  private String generateUniqueId() {
+    return firestore.collection("abc").document().getId();
   }
 
   /**
