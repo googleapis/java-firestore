@@ -29,9 +29,6 @@ import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.grpc.GaxGrpcProperties;
 import com.google.api.gax.grpc.GrpcTransportChannel;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
-import com.google.api.gax.httpjson.GaxHttpJsonProperties;
-import com.google.api.gax.httpjson.HttpJsonTransportChannel;
-import com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiCallContext;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
@@ -73,6 +70,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -91,9 +90,9 @@ import org.threeten.bp.Duration;
  * <p>The default instance has everything set to sensible defaults:
  *
  * <ul>
- *   <li>The default service address (firestore.googleapis.com) and default port (443) are used.
- *   <li>Credentials are acquired automatically through Application Default Credentials.
- *   <li>Retries are configured for idempotent methods but not for non-idempotent methods.
+ *   <li> The default service address (firestore.googleapis.com) and default port (443) are used.
+ *   <li> Credentials are acquired automatically through Application Default Credentials.
+ *   <li> Retries are configured for idempotent methods but not for non-idempotent methods.
  * </ul>
  *
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
@@ -139,6 +138,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
   private final UnaryCallSettings<RollbackRequest, Empty> rollbackSettings;
   private final ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings;
+  private final ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings;
   private final PagedCallSettings<
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
       partitionQuerySettings;
@@ -300,8 +301,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           ListCollectionIdsRequest, ListCollectionIdsResponse, ListCollectionIdsPagedResponse>
       LIST_COLLECTION_IDS_PAGE_STR_FACT =
           new PagedListResponseFactory<
-              ListCollectionIdsRequest,
-              ListCollectionIdsResponse,
+              ListCollectionIdsRequest, ListCollectionIdsResponse,
               ListCollectionIdsPagedResponse>() {
             @Override
             public ApiFuture<ListCollectionIdsPagedResponse> getFuturePagedResponse(
@@ -363,6 +363,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     return runQuerySettings;
   }
 
+  /** Returns the object with the settings used for calls to runAggregationQuery. */
+  public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings() {
+    return runAggregationQuerySettings;
+  }
+
   /** Returns the object with the settings used for calls to partitionQuery. */
   public PagedCallSettings<
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
@@ -403,11 +409,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
         .equals(GrpcTransportChannel.getGrpcTransportName())) {
       return GrpcFirestoreStub.create(this);
     }
-    if (getTransportChannelProvider()
-        .getTransportName()
-        .equals(HttpJsonTransportChannel.getHttpJsonTransportName())) {
-      return HttpJsonFirestoreStub.create(this);
-    }
     throw new UnsupportedOperationException(
         String.format(
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
@@ -440,17 +441,10 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
         .setUseJwtAccessWithScope(true);
   }
 
-  /** Returns a builder for the default gRPC ChannelProvider for this service. */
+  /** Returns a builder for the default ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return InstantiatingGrpcChannelProvider.newBuilder()
         .setMaxInboundMessageSize(Integer.MAX_VALUE);
-  }
-
-  /** Returns a builder for the default REST ChannelProvider for this service. */
-  @BetaApi
-  public static InstantiatingHttpJsonChannelProvider.Builder
-      defaultHttpJsonTransportProviderBuilder() {
-    return InstantiatingHttpJsonChannelProvider.newBuilder();
   }
 
   public static TransportChannelProvider defaultTransportChannelProvider() {
@@ -458,34 +452,16 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   }
 
   @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
-  public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
+  public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken("gapic", GaxProperties.getLibraryVersion(FirestoreStubSettings.class))
         .setTransportToken(
             GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
-  public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder() {
-    return ApiClientHeaderProvider.newBuilder()
-        .setGeneratedLibToken("gapic", GaxProperties.getLibraryVersion(FirestoreStubSettings.class))
-        .setTransportToken(
-            GaxHttpJsonProperties.getHttpJsonTokenName(),
-            GaxHttpJsonProperties.getHttpJsonVersion());
-  }
-
-  public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
-    return FirestoreStubSettings.defaultGrpcApiClientHeaderProviderBuilder();
-  }
-
-  /** Returns a new gRPC builder for this class. */
+  /** Returns a new builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
-  }
-
-  /** Returns a new REST builder for this class. */
-  public static Builder newHttpJsonBuilder() {
-    return Builder.createHttpJsonDefault();
   }
 
   /** Returns a new builder for this class. */
@@ -510,6 +486,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     commitSettings = settingsBuilder.commitSettings().build();
     rollbackSettings = settingsBuilder.rollbackSettings().build();
     runQuerySettings = settingsBuilder.runQuerySettings().build();
+    runAggregationQuerySettings = settingsBuilder.runAggregationQuerySettings().build();
     partitionQuerySettings = settingsBuilder.partitionQuerySettings().build();
     writeSettings = settingsBuilder.writeSettings().build();
     listenSettings = settingsBuilder.listenSettings().build();
@@ -536,6 +513,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings;
     private final ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings;
+    private final ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings;
     private final PagedCallSettings.Builder<
             PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
         partitionQuerySettings;
@@ -681,6 +661,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       runQuerySettings = ServerStreamingCallSettings.newBuilder();
+      runAggregationQuerySettings = ServerStreamingCallSettings.newBuilder();
       partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
       writeSettings = StreamingCallSettings.newBuilder();
       listenSettings = StreamingCallSettings.newBuilder();
@@ -716,6 +697,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = settings.commitSettings.toBuilder();
       rollbackSettings = settings.rollbackSettings.toBuilder();
       runQuerySettings = settings.runQuerySettings.toBuilder();
+      runAggregationQuerySettings = settings.runAggregationQuerySettings.toBuilder();
       partitionQuerySettings = settings.partitionQuerySettings.toBuilder();
       writeSettings = settings.writeSettings.toBuilder();
       listenSettings = settings.listenSettings.toBuilder();
@@ -744,19 +726,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       builder.setTransportChannelProvider(defaultTransportChannelProvider());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
-      builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
-      builder.setSwitchToMtlsEndpointAllowed(true);
-
-      return initDefaults(builder);
-    }
-
-    private static Builder createHttpJsonDefault() {
-      Builder builder = new Builder(((ClientContext) null));
-
-      builder.setTransportChannelProvider(defaultHttpJsonTransportProviderBuilder().build());
-      builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
-      builder.setInternalHeaderProvider(defaultHttpJsonApiClientHeaderProviderBuilder().build());
       builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
@@ -807,6 +776,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
       builder
           .runQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
+          .runAggregationQuerySettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
@@ -896,6 +870,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return runQuerySettings;
+    }
+
+    /** Returns the builder for the settings used for calls to runAggregationQuery. */
+    public ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings() {
+      return runAggregationQuerySettings;
     }
 
     /** Returns the builder for the settings used for calls to partitionQuery. */

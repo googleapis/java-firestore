@@ -39,6 +39,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -267,6 +269,28 @@ public class MockFirestoreImpl extends FirestoreImplBase {
                   "Unrecognized response type %s for method RunQuery, expected %s or %s",
                   response == null ? "null" : response.getClass().getName(),
                   RunQueryResponse.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void runAggregationQuery(
+      RunAggregationQueryRequest request,
+      StreamObserver<RunAggregationQueryResponse> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof RunAggregationQueryResponse) {
+      requests.add(request);
+      responseObserver.onNext(((RunAggregationQueryResponse) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method RunAggregationQuery, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  RunAggregationQueryResponse.class.getName(),
                   Exception.class.getName())));
     }
   }
