@@ -18,33 +18,41 @@
 
 package com.google.firestore.v1;
 
-public interface BatchWriteRequestOrBuilder extends
+public interface BatchWriteRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.BatchWriteRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The database.
    */
   java.lang.String getDatabase();
   /**
+   *
+   *
    * <pre>
    * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The bytes for database.
    */
-  com.google.protobuf.ByteString
-      getDatabaseBytes();
+  com.google.protobuf.ByteString getDatabaseBytes();
 
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Method does not apply writes atomically and does not guarantee ordering.
@@ -54,9 +62,10 @@ public interface BatchWriteRequestOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
-  java.util.List<com.google.firestore.v1.Write> 
-      getWritesList();
+  java.util.List<com.google.firestore.v1.Write> getWritesList();
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Method does not apply writes atomically and does not guarantee ordering.
@@ -68,6 +77,8 @@ public interface BatchWriteRequestOrBuilder extends
    */
   com.google.firestore.v1.Write getWrites(int index);
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Method does not apply writes atomically and does not guarantee ordering.
@@ -79,6 +90,8 @@ public interface BatchWriteRequestOrBuilder extends
    */
   int getWritesCount();
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Method does not apply writes atomically and does not guarantee ordering.
@@ -88,9 +101,10 @@ public interface BatchWriteRequestOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
-  java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> 
-      getWritesOrBuilderList();
+  java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> getWritesOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Method does not apply writes atomically and does not guarantee ordering.
@@ -100,10 +114,11 @@ public interface BatchWriteRequestOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Write writes = 2;</code>
    */
-  com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(
-      int index);
+  com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * Labels associated with this batch write.
    * </pre>
@@ -112,30 +127,31 @@ public interface BatchWriteRequestOrBuilder extends
    */
   int getLabelsCount();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this batch write.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 3;</code>
    */
-  boolean containsLabels(
-      java.lang.String key);
-  /**
-   * Use {@link #getLabelsMap()} instead.
-   */
+  boolean containsLabels(java.lang.String key);
+  /** Use {@link #getLabelsMap()} instead. */
   @java.lang.Deprecated
-  java.util.Map<java.lang.String, java.lang.String>
-  getLabels();
+  java.util.Map<java.lang.String, java.lang.String> getLabels();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this batch write.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 3;</code>
    */
-  java.util.Map<java.lang.String, java.lang.String>
-  getLabelsMap();
+  java.util.Map<java.lang.String, java.lang.String> getLabelsMap();
   /**
+   *
+   *
    * <pre>
    * Labels associated with this batch write.
    * </pre>
@@ -144,18 +160,18 @@ public interface BatchWriteRequestOrBuilder extends
    */
 
   /* nullable */
-java.lang.String getLabelsOrDefault(
+  java.lang.String getLabelsOrDefault(
       java.lang.String key,
       /* nullable */
-java.lang.String defaultValue);
+      java.lang.String defaultValue);
   /**
+   *
+   *
    * <pre>
    * Labels associated with this batch write.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 3;</code>
    */
-
-  java.lang.String getLabelsOrThrow(
-      java.lang.String key);
+  java.lang.String getLabelsOrThrow(java.lang.String key);
 }

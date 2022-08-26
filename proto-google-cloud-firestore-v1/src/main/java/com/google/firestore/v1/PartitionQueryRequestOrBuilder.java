@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface PartitionQueryRequestOrBuilder extends
+public interface PartitionQueryRequestOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.PartitionQueryRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents`.
@@ -31,10 +34,13 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The parent.
    */
   java.lang.String getParent();
   /**
+   *
+   *
    * <pre>
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents`.
@@ -43,12 +49,14 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The bytes for parent.
    */
-  com.google.protobuf.ByteString
-      getParentBytes();
+  com.google.protobuf.ByteString getParentBytes();
 
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * Query must specify collection with all descendants and be ordered by name
@@ -57,10 +65,13 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return Whether the structuredQuery field is set.
    */
   boolean hasStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * Query must specify collection with all descendants and be ordered by name
@@ -69,10 +80,13 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 2;</code>
+   *
    * @return The structuredQuery.
    */
   com.google.firestore.v1.StructuredQuery getStructuredQuery();
   /**
+   *
+   *
    * <pre>
    * A structured query.
    * Query must specify collection with all descendants and be ordered by name
@@ -85,6 +99,8 @@ public interface PartitionQueryRequestOrBuilder extends
   com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The desired maximum number of partition points.
    * The partitions may be returned across multiple pages of results.
@@ -96,11 +112,14 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>int64 partition_count = 3;</code>
+   *
    * @return The partitionCount.
    */
   long getPartitionCount();
 
   /**
+   *
+   *
    * <pre>
    * The `next_page_token` value returned from a previous call to
    * PartitionQuery that may be used to get an additional set of results.
@@ -115,10 +134,13 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
    * @return The pageToken.
    */
   java.lang.String getPageToken();
   /**
+   *
+   *
    * <pre>
    * The `next_page_token` value returned from a previous call to
    * PartitionQuery that may be used to get an additional set of results.
@@ -133,12 +155,14 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>string page_token = 4;</code>
+   *
    * @return The bytes for pageToken.
    */
-  com.google.protobuf.ByteString
-      getPageTokenBytes();
+  com.google.protobuf.ByteString getPageTokenBytes();
 
   /**
+   *
+   *
    * <pre>
    * The maximum number of partitions to return in this call, subject to
    * `partition_count`.
@@ -149,31 +173,40 @@ public interface PartitionQueryRequestOrBuilder extends
    * </pre>
    *
    * <code>int32 page_size = 5;</code>
+   *
    * @return The pageSize.
    */
   int getPageSize();
 
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
    * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 270 seconds.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
    * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * Reads documents as they were at the given time.
    * This may not be older than 270 seconds.
@@ -185,5 +218,6 @@ public interface PartitionQueryRequestOrBuilder extends
 
   public com.google.firestore.v1.PartitionQueryRequest.QueryTypeCase getQueryTypeCase();
 
-  public com.google.firestore.v1.PartitionQueryRequest.ConsistencySelectorCase getConsistencySelectorCase();
+  public com.google.firestore.v1.PartitionQueryRequest.ConsistencySelectorCase
+      getConsistencySelectorCase();
 }

@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface RunQueryResponseOrBuilder extends
+public interface RunQueryResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.RunQueryResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The transaction that was started as part of this request.
    * Can only be set in the first response, and only if
@@ -31,29 +34,38 @@ public interface RunQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
+   *
    * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
   /**
+   *
+   *
    * <pre>
    * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
    * @return Whether the document field is set.
    */
   boolean hasDocument();
   /**
+   *
+   *
    * <pre>
    * A query result, not set when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
    * @return The document.
    */
   com.google.firestore.v1.Document getDocument();
   /**
+   *
+   *
    * <pre>
    * A query result, not set when reporting partial progress.
    * </pre>
@@ -63,6 +75,8 @@ public interface RunQueryResponseOrBuilder extends
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
@@ -73,10 +87,13 @@ public interface RunQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
@@ -87,10 +104,13 @@ public interface RunQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
@@ -105,36 +125,46 @@ public interface RunQueryResponseOrBuilder extends
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The number of results that have been skipped due to an offset between
    * the last response and the current response.
    * </pre>
    *
    * <code>int32 skipped_results = 4;</code>
+   *
    * @return The skippedResults.
    */
   int getSkippedResults();
 
   /**
+   *
+   *
    * <pre>
    * If present, Firestore has completely finished the request and no more
    * documents will be returned.
    * </pre>
    *
    * <code>bool done = 6;</code>
+   *
    * @return Whether the done field is set.
    */
   boolean hasDone();
   /**
+   *
+   *
    * <pre>
    * If present, Firestore has completely finished the request and no more
    * documents will be returned.
    * </pre>
    *
    * <code>bool done = 6;</code>
+   *
    * @return The done.
    */
   boolean getDone();
 
-  public com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase getContinuationSelectorCase();
+  public com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase
+      getContinuationSelectorCase();
 }

@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface PartitionQueryResponseOrBuilder extends
+public interface PartitionQueryResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.PartitionQueryResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -42,9 +45,10 @@ public interface PartitionQueryResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
    */
-  java.util.List<com.google.firestore.v1.Cursor> 
-      getPartitionsList();
+  java.util.List<com.google.firestore.v1.Cursor> getPartitionsList();
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -66,6 +70,8 @@ public interface PartitionQueryResponseOrBuilder extends
    */
   com.google.firestore.v1.Cursor getPartitions(int index);
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -87,6 +93,8 @@ public interface PartitionQueryResponseOrBuilder extends
    */
   int getPartitionsCount();
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -106,9 +114,10 @@ public interface PartitionQueryResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
    */
-  java.util.List<? extends com.google.firestore.v1.CursorOrBuilder> 
-      getPartitionsOrBuilderList();
+  java.util.List<? extends com.google.firestore.v1.CursorOrBuilder> getPartitionsOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -128,10 +137,11 @@ public interface PartitionQueryResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
    */
-  com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(
-      int index);
+  com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request an additional set of results, up
    * to the number specified by `partition_count` in the PartitionQuery request.
@@ -139,10 +149,13 @@ public interface PartitionQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The nextPageToken.
    */
   java.lang.String getNextPageToken();
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request an additional set of results, up
    * to the number specified by `partition_count` in the PartitionQuery request.
@@ -150,8 +163,8 @@ public interface PartitionQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The bytes for nextPageToken.
    */
-  com.google.protobuf.ByteString
-      getNextPageTokenBytes();
+  com.google.protobuf.ByteString getNextPageTokenBytes();
 }

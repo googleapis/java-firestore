@@ -18,33 +18,41 @@
 
 package com.google.firestore.v1;
 
-public interface DocumentOrBuilder extends
+public interface DocumentOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.Document)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The resource name of the document, for example
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The name.
    */
   java.lang.String getName();
   /**
+   *
+   *
    * <pre>
    * The resource name of the document, for example
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
    * </pre>
    *
    * <code>string name = 1;</code>
+   *
    * @return The bytes for name.
    */
-  com.google.protobuf.ByteString
-      getNameBytes();
+  com.google.protobuf.ByteString getNameBytes();
 
   /**
+   *
+   *
    * <pre>
    * The document's fields.
    * The map keys represent field names.
@@ -71,6 +79,8 @@ public interface DocumentOrBuilder extends
    */
   int getFieldsCount();
   /**
+   *
+   *
    * <pre>
    * The document's fields.
    * The map keys represent field names.
@@ -95,15 +105,13 @@ public interface DocumentOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
    */
-  boolean containsFields(
-      java.lang.String key);
-  /**
-   * Use {@link #getFieldsMap()} instead.
-   */
+  boolean containsFields(java.lang.String key);
+  /** Use {@link #getFieldsMap()} instead. */
   @java.lang.Deprecated
-  java.util.Map<java.lang.String, com.google.firestore.v1.Value>
-  getFields();
+  java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFields();
   /**
+   *
+   *
    * <pre>
    * The document's fields.
    * The map keys represent field names.
@@ -128,9 +136,10 @@ public interface DocumentOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
    */
-  java.util.Map<java.lang.String, com.google.firestore.v1.Value>
-  getFieldsMap();
+  java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFieldsMap();
   /**
+   *
+   *
    * <pre>
    * The document's fields.
    * The map keys represent field names.
@@ -157,11 +166,13 @@ public interface DocumentOrBuilder extends
    */
 
   /* nullable */
-com.google.firestore.v1.Value getFieldsOrDefault(
+  com.google.firestore.v1.Value getFieldsOrDefault(
       java.lang.String key,
       /* nullable */
-com.google.firestore.v1.Value defaultValue);
+      com.google.firestore.v1.Value defaultValue);
   /**
+   *
+   *
    * <pre>
    * The document's fields.
    * The map keys represent field names.
@@ -186,11 +197,11 @@ com.google.firestore.v1.Value defaultValue);
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
    */
-
-  com.google.firestore.v1.Value getFieldsOrThrow(
-      java.lang.String key);
+  com.google.firestore.v1.Value getFieldsOrThrow(java.lang.String key);
 
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was created.
    * This value increases monotonically when a document is deleted then
@@ -199,10 +210,13 @@ com.google.firestore.v1.Value defaultValue);
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 3;</code>
+   *
    * @return Whether the createTime field is set.
    */
   boolean hasCreateTime();
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was created.
    * This value increases monotonically when a document is deleted then
@@ -211,10 +225,13 @@ com.google.firestore.v1.Value defaultValue);
    * </pre>
    *
    * <code>.google.protobuf.Timestamp create_time = 3;</code>
+   *
    * @return The createTime.
    */
   com.google.protobuf.Timestamp getCreateTime();
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was created.
    * This value increases monotonically when a document is deleted then
@@ -227,6 +244,8 @@ com.google.firestore.v1.Value defaultValue);
   com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was last changed.
    * This value is initially set to the `create_time` then increases
@@ -235,10 +254,13 @@ com.google.firestore.v1.Value defaultValue);
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 4;</code>
+   *
    * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was last changed.
    * This value is initially set to the `create_time` then increases
@@ -247,10 +269,13 @@ com.google.firestore.v1.Value defaultValue);
    * </pre>
    *
    * <code>.google.protobuf.Timestamp update_time = 4;</code>
+   *
    * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
   /**
+   *
+   *
    * <pre>
    * Output only. The time at which the document was last changed.
    * This value is initially set to the `create_time` then increases

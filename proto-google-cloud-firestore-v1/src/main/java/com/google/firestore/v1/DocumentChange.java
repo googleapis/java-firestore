@@ -19,6 +19,8 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * A [Document][google.firestore.v1.Document] has changed.
  * May be the result of multiple [writes][google.firestore.v1.Write], including deletes, that
@@ -29,15 +31,16 @@ package com.google.firestore.v1;
  *
  * Protobuf type {@code google.firestore.v1.DocumentChange}
  */
-public final class DocumentChange extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.DocumentChange)
     DocumentChangeOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use DocumentChange.newBuilder() to construct.
   private DocumentChange(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private DocumentChange() {
     targetIds_ = emptyIntList();
     removedTargetIds_ = emptyIntList();
@@ -45,16 +48,15 @@ private static final long serialVersionUID = 0L;
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new DocumentChange();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private DocumentChange(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -74,68 +76,74 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            com.google.firestore.v1.Document.Builder subBuilder = null;
-            if (document_ != null) {
-              subBuilder = document_.toBuilder();
-            }
-            document_ = input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(document_);
-              document_ = subBuilder.buildPartial();
-            }
+          case 10:
+            {
+              com.google.firestore.v1.Document.Builder subBuilder = null;
+              if (document_ != null) {
+                subBuilder = document_.toBuilder();
+              }
+              document_ =
+                  input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(document_);
+                document_ = subBuilder.buildPartial();
+              }
 
-            break;
-          }
-          case 40: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              targetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000001;
+              break;
             }
-            targetIds_.addInt(input.readInt32());
-            break;
-          }
-          case 42: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
-              targetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000001;
-            }
-            while (input.getBytesUntilLimit() > 0) {
+          case 40:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                targetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000001;
+              }
               targetIds_.addInt(input.readInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
-          case 48: {
-            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-              removedTargetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000002;
+          case 42:
+            {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000001) != 0) && input.getBytesUntilLimit() > 0) {
+                targetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                targetIds_.addInt(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
             }
-            removedTargetIds_.addInt(input.readInt32());
-            break;
-          }
-          case 50: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
-              removedTargetIds_ = newIntList();
-              mutable_bitField0_ |= 0x00000002;
-            }
-            while (input.getBytesUntilLimit() > 0) {
+          case 48:
+            {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                removedTargetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000002;
+              }
               removedTargetIds_.addInt(input.readInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+          case 50:
+            {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) != 0) && input.getBytesUntilLimit() > 0) {
+                removedTargetIds_ = newIntList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                removedTargetIds_.addInt(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -143,8 +151,7 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
         targetIds_.makeImmutable(); // C
@@ -156,28 +163,34 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentChange_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.WriteProto
+        .internal_static_google_firestore_v1_DocumentChange_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentChange_fieldAccessorTable
+    return com.google.firestore.v1.WriteProto
+        .internal_static_google_firestore_v1_DocumentChange_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.DocumentChange.class, com.google.firestore.v1.DocumentChange.Builder.class);
+            com.google.firestore.v1.DocumentChange.class,
+            com.google.firestore.v1.DocumentChange.Builder.class);
   }
 
   public static final int DOCUMENT_FIELD_NUMBER = 1;
   private com.google.firestore.v1.Document document_;
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
    * @return Whether the document field is set.
    */
   @java.lang.Override
@@ -185,12 +198,15 @@ private static final long serialVersionUID = 0L;
     return document_ != null;
   }
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
    * <code>.google.firestore.v1.Document document = 1;</code>
+   *
    * @return The document.
    */
   @java.lang.Override
@@ -198,6 +214,8 @@ private static final long serialVersionUID = 0L;
     return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
   /**
+   *
+   *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
    * If `mask` is set, contains only fields that were updated or added.
@@ -213,84 +231,103 @@ private static final long serialVersionUID = 0L;
   public static final int TARGET_IDS_FIELD_NUMBER = 5;
   private com.google.protobuf.Internal.IntList targetIds_;
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
    * @return A list containing the targetIds.
    */
   @java.lang.Override
-  public java.util.List<java.lang.Integer>
-      getTargetIdsList() {
+  public java.util.List<java.lang.Integer> getTargetIdsList() {
     return targetIds_;
   }
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
    * @return The count of targetIds.
    */
   public int getTargetIdsCount() {
     return targetIds_.size();
   }
   /**
+   *
+   *
    * <pre>
    * A set of target IDs of targets that match this document.
    * </pre>
    *
    * <code>repeated int32 target_ids = 5;</code>
+   *
    * @param index The index of the element to return.
    * @return The targetIds at the given index.
    */
   public int getTargetIds(int index) {
     return targetIds_.getInt(index);
   }
+
   private int targetIdsMemoizedSerializedSize = -1;
 
   public static final int REMOVED_TARGET_IDS_FIELD_NUMBER = 6;
   private com.google.protobuf.Internal.IntList removedTargetIds_;
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
    * @return A list containing the removedTargetIds.
    */
   @java.lang.Override
-  public java.util.List<java.lang.Integer>
-      getRemovedTargetIdsList() {
+  public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
     return removedTargetIds_;
   }
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
    * @return The count of removedTargetIds.
    */
   public int getRemovedTargetIdsCount() {
     return removedTargetIds_.size();
   }
   /**
+   *
+   *
    * <pre>
    * A set of target IDs for targets that no longer match this document.
    * </pre>
    *
    * <code>repeated int32 removed_target_ids = 6;</code>
+   *
    * @param index The index of the element to return.
    * @return The removedTargetIds at the given index.
    */
   public int getRemovedTargetIds(int index) {
     return removedTargetIds_.getInt(index);
   }
+
   private int removedTargetIdsMemoizedSerializedSize = -1;
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -302,8 +339,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     getSerializedSize();
     if (document_ != null) {
       output.writeMessage(1, getDocument());
@@ -332,34 +368,32 @@ private static final long serialVersionUID = 0L;
 
     size = 0;
     if (document_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, getDocument());
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getDocument());
     }
     {
       int dataSize = 0;
       for (int i = 0; i < targetIds_.size(); i++) {
-        dataSize += com.google.protobuf.CodedOutputStream
-          .computeInt32SizeNoTag(targetIds_.getInt(i));
+        dataSize +=
+            com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(targetIds_.getInt(i));
       }
       size += dataSize;
       if (!getTargetIdsList().isEmpty()) {
         size += 1;
-        size += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(dataSize);
+        size += com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(dataSize);
       }
       targetIdsMemoizedSerializedSize = dataSize;
     }
     {
       int dataSize = 0;
       for (int i = 0; i < removedTargetIds_.size(); i++) {
-        dataSize += com.google.protobuf.CodedOutputStream
-          .computeInt32SizeNoTag(removedTargetIds_.getInt(i));
+        dataSize +=
+            com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(
+                removedTargetIds_.getInt(i));
       }
       size += dataSize;
       if (!getRemovedTargetIdsList().isEmpty()) {
         size += 1;
-        size += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(dataSize);
+        size += com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(dataSize);
       }
       removedTargetIdsMemoizedSerializedSize = dataSize;
     }
@@ -371,7 +405,7 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.DocumentChange)) {
       return super.equals(obj);
@@ -380,13 +414,10 @@ private static final long serialVersionUID = 0L;
 
     if (hasDocument() != other.hasDocument()) return false;
     if (hasDocument()) {
-      if (!getDocument()
-          .equals(other.getDocument())) return false;
+      if (!getDocument().equals(other.getDocument())) return false;
     }
-    if (!getTargetIdsList()
-        .equals(other.getTargetIdsList())) return false;
-    if (!getRemovedTargetIdsList()
-        .equals(other.getRemovedTargetIdsList())) return false;
+    if (!getTargetIdsList().equals(other.getTargetIdsList())) return false;
+    if (!getRemovedTargetIdsList().equals(other.getRemovedTargetIdsList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -415,97 +446,104 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.DocumentChange parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.DocumentChange parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentChange parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.DocumentChange parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.DocumentChange parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.DocumentChange prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * A [Document][google.firestore.v1.Document] has changed.
    * May be the result of multiple [writes][google.firestore.v1.Write], including deletes, that
@@ -516,21 +554,23 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code google.firestore.v1.DocumentChange}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.DocumentChange)
       com.google.firestore.v1.DocumentChangeOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentChange_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentChange_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentChange_fieldAccessorTable
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentChange_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.DocumentChange.class, com.google.firestore.v1.DocumentChange.Builder.class);
+              com.google.firestore.v1.DocumentChange.class,
+              com.google.firestore.v1.DocumentChange.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.DocumentChange.newBuilder()
@@ -538,16 +578,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -565,9 +604,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_DocumentChange_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.WriteProto
+          .internal_static_google_firestore_v1_DocumentChange_descriptor;
     }
 
     @java.lang.Override
@@ -586,7 +625,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.DocumentChange buildPartial() {
-      com.google.firestore.v1.DocumentChange result = new com.google.firestore.v1.DocumentChange(this);
+      com.google.firestore.v1.DocumentChange result =
+          new com.google.firestore.v1.DocumentChange(this);
       int from_bitField0_ = bitField0_;
       if (documentBuilder_ == null) {
         result.document_ = document_;
@@ -611,38 +651,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.DocumentChange) {
-        return mergeFrom((com.google.firestore.v1.DocumentChange)other);
+        return mergeFrom((com.google.firestore.v1.DocumentChange) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -702,40 +743,54 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private com.google.firestore.v1.Document document_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> documentBuilder_;
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
+        documentBuilder_;
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
+     *
      * @return Whether the document field is set.
      */
     public boolean hasDocument() {
       return documentBuilder_ != null || document_ != null;
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
+     *
      * @return The document.
      */
     public com.google.firestore.v1.Document getDocument() {
       if (documentBuilder_ == null) {
-        return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
+        return document_ == null
+            ? com.google.firestore.v1.Document.getDefaultInstance()
+            : document_;
       } else {
         return documentBuilder_.getMessage();
       }
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -757,6 +812,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -764,8 +821,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>.google.firestore.v1.Document document = 1;</code>
      */
-    public Builder setDocument(
-        com.google.firestore.v1.Document.Builder builderForValue) {
+    public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
         document_ = builderForValue.build();
         onChanged();
@@ -776,6 +832,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -787,7 +845,9 @@ private static final long serialVersionUID = 0L;
       if (documentBuilder_ == null) {
         if (document_ != null) {
           document_ =
-            com.google.firestore.v1.Document.newBuilder(document_).mergeFrom(value).buildPartial();
+              com.google.firestore.v1.Document.newBuilder(document_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           document_ = value;
         }
@@ -799,6 +859,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -818,6 +880,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -826,11 +890,13 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.Document document = 1;</code>
      */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
-      
+
       onChanged();
       return getDocumentFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -842,11 +908,14 @@ private static final long serialVersionUID = 0L;
       if (documentBuilder_ != null) {
         return documentBuilder_.getMessageOrBuilder();
       } else {
-        return document_ == null ?
-            com.google.firestore.v1.Document.getDefaultInstance() : document_;
+        return document_ == null
+            ? com.google.firestore.v1.Document.getDefaultInstance()
+            : document_;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
      * If `mask` is set, contains only fields that were updated or added.
@@ -855,56 +924,69 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.Document document = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> 
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
         getDocumentFieldBuilder() {
       if (documentBuilder_ == null) {
-        documentBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder>(
-                getDocument(),
-                getParentForChildren(),
-                isClean());
+        documentBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.Document,
+                com.google.firestore.v1.Document.Builder,
+                com.google.firestore.v1.DocumentOrBuilder>(
+                getDocument(), getParentForChildren(), isClean());
         document_ = null;
       }
       return documentBuilder_;
     }
 
     private com.google.protobuf.Internal.IntList targetIds_ = emptyIntList();
+
     private void ensureTargetIdsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
         targetIds_ = mutableCopy(targetIds_);
         bitField0_ |= 0x00000001;
-       }
+      }
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @return A list containing the targetIds.
      */
-    public java.util.List<java.lang.Integer>
-        getTargetIdsList() {
-      return ((bitField0_ & 0x00000001) != 0) ?
-               java.util.Collections.unmodifiableList(targetIds_) : targetIds_;
+    public java.util.List<java.lang.Integer> getTargetIdsList() {
+      return ((bitField0_ & 0x00000001) != 0)
+          ? java.util.Collections.unmodifiableList(targetIds_)
+          : targetIds_;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @return The count of targetIds.
      */
     public int getTargetIdsCount() {
       return targetIds_.size();
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @param index The index of the element to return.
      * @return The targetIds at the given index.
      */
@@ -912,28 +994,33 @@ private static final long serialVersionUID = 0L;
       return targetIds_.getInt(index);
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @param index The index to set the value at.
      * @param value The targetIds to set.
      * @return This builder for chaining.
      */
-    public Builder setTargetIds(
-        int index, int value) {
+    public Builder setTargetIds(int index, int value) {
       ensureTargetIdsIsMutable();
       targetIds_.setInt(index, value);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @param value The targetIds to add.
      * @return This builder for chaining.
      */
@@ -944,28 +1031,32 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @param values The targetIds to add.
      * @return This builder for chaining.
      */
-    public Builder addAllTargetIds(
-        java.lang.Iterable<? extends java.lang.Integer> values) {
+    public Builder addAllTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureTargetIdsIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, targetIds_);
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, targetIds_);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs of targets that match this document.
      * </pre>
      *
      * <code>repeated int32 target_ids = 5;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearTargetIds() {
@@ -976,42 +1067,52 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.Internal.IntList removedTargetIds_ = emptyIntList();
+
     private void ensureRemovedTargetIdsIsMutable() {
       if (!((bitField0_ & 0x00000002) != 0)) {
         removedTargetIds_ = mutableCopy(removedTargetIds_);
         bitField0_ |= 0x00000002;
-       }
+      }
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @return A list containing the removedTargetIds.
      */
-    public java.util.List<java.lang.Integer>
-        getRemovedTargetIdsList() {
-      return ((bitField0_ & 0x00000002) != 0) ?
-               java.util.Collections.unmodifiableList(removedTargetIds_) : removedTargetIds_;
+    public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
+      return ((bitField0_ & 0x00000002) != 0)
+          ? java.util.Collections.unmodifiableList(removedTargetIds_)
+          : removedTargetIds_;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @return The count of removedTargetIds.
      */
     public int getRemovedTargetIdsCount() {
       return removedTargetIds_.size();
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @param index The index of the element to return.
      * @return The removedTargetIds at the given index.
      */
@@ -1019,28 +1120,33 @@ private static final long serialVersionUID = 0L;
       return removedTargetIds_.getInt(index);
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @param index The index to set the value at.
      * @param value The removedTargetIds to set.
      * @return This builder for chaining.
      */
-    public Builder setRemovedTargetIds(
-        int index, int value) {
+    public Builder setRemovedTargetIds(int index, int value) {
       ensureRemovedTargetIdsIsMutable();
       removedTargetIds_.setInt(index, value);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @param value The removedTargetIds to add.
      * @return This builder for chaining.
      */
@@ -1051,28 +1157,32 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @param values The removedTargetIds to add.
      * @return This builder for chaining.
      */
-    public Builder addAllRemovedTargetIds(
-        java.lang.Iterable<? extends java.lang.Integer> values) {
+    public Builder addAllRemovedTargetIds(java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureRemovedTargetIdsIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, removedTargetIds_);
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, removedTargetIds_);
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A set of target IDs for targets that no longer match this document.
      * </pre>
      *
      * <code>repeated int32 removed_target_ids = 6;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearRemovedTargetIds() {
@@ -1081,9 +1191,9 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1093,12 +1203,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.DocumentChange)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.DocumentChange)
   private static final com.google.firestore.v1.DocumentChange DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.DocumentChange();
   }
@@ -1107,16 +1217,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<DocumentChange>
-      PARSER = new com.google.protobuf.AbstractParser<DocumentChange>() {
-    @java.lang.Override
-    public DocumentChange parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new DocumentChange(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<DocumentChange> PARSER =
+      new com.google.protobuf.AbstractParser<DocumentChange>() {
+        @java.lang.Override
+        public DocumentChange parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new DocumentChange(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<DocumentChange> parser() {
     return PARSER;
@@ -1131,6 +1241,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.DocumentChange getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

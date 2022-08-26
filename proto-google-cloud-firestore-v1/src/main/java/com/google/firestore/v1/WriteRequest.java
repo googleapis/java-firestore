@@ -19,6 +19,8 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
  * The first request creates a stream, or resumes an existing one from a token.
@@ -31,15 +33,16 @@ package com.google.firestore.v1;
  *
  * Protobuf type {@code google.firestore.v1.WriteRequest}
  */
-public final class WriteRequest extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.WriteRequest)
     WriteRequestOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use WriteRequest.newBuilder() to construct.
   private WriteRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private WriteRequest() {
     database_ = "";
     streamId_ = "";
@@ -49,16 +52,15 @@ private static final long serialVersionUID = 0L;
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new WriteRequest();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private WriteRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -78,52 +80,55 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            database_ = s;
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
+              database_ = s;
+              break;
+            }
+          case 18:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            streamId_ = s;
-            break;
-          }
-          case 26: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>();
-              mutable_bitField0_ |= 0x00000001;
+              streamId_ = s;
+              break;
             }
-            writes_.add(
-                input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry));
-            break;
-          }
-          case 34: {
-
-            streamToken_ = input.readBytes();
-            break;
-          }
-          case 42: {
-            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-              labels_ = com.google.protobuf.MapField.newMapField(
-                  LabelsDefaultEntryHolder.defaultEntry);
-              mutable_bitField0_ |= 0x00000002;
+          case 26:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              writes_.add(
+                  input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry));
+              break;
             }
-            com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-            labels__ = input.readMessage(
-                LabelsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            labels_.getMutableMap().put(
-                labels__.getKey(), labels__.getValue());
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+          case 34:
+            {
+              streamToken_ = input.readBytes();
+              break;
             }
-            break;
-          }
+          case 42:
+            {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                labels_ =
+                    com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000002;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.String> labels__ =
+                  input.readMessage(
+                      LabelsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              labels_.getMutableMap().put(labels__.getKey(), labels__.getValue());
+              break;
+            }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -131,8 +136,7 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
         writes_ = java.util.Collections.unmodifiableList(writes_);
@@ -141,34 +145,38 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_WriteRequest_descriptor;
   }
 
   @SuppressWarnings({"rawtypes"})
   @java.lang.Override
-  protected com.google.protobuf.MapField internalGetMapField(
-      int number) {
+  protected com.google.protobuf.MapField internalGetMapField(int number) {
     switch (number) {
       case 5:
         return internalGetLabels();
       default:
-        throw new RuntimeException(
-            "Invalid map field number: " + number);
+        throw new RuntimeException("Invalid map field number: " + number);
     }
   }
+
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.WriteRequest.class, com.google.firestore.v1.WriteRequest.Builder.class);
+            com.google.firestore.v1.WriteRequest.class,
+            com.google.firestore.v1.WriteRequest.Builder.class);
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
   private volatile java.lang.Object database_;
   /**
+   *
+   *
    * <pre>
    * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
@@ -176,6 +184,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The database.
    */
   @java.lang.Override
@@ -184,14 +193,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       database_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Required. The database name. In the format:
    * `projects/{project_id}/databases/{database_id}`.
@@ -199,16 +209,15 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The bytes for database.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getDatabaseBytes() {
+  public com.google.protobuf.ByteString getDatabaseBytes() {
     java.lang.Object ref = database_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       database_ = b;
       return b;
     } else {
@@ -219,6 +228,8 @@ private static final long serialVersionUID = 0L;
   public static final int STREAM_ID_FIELD_NUMBER = 2;
   private volatile java.lang.Object streamId_;
   /**
+   *
+   *
    * <pre>
    * The ID of the write stream to resume.
    * This may only be set in the first message. When left empty, a new write
@@ -226,6 +237,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string stream_id = 2;</code>
+   *
    * @return The streamId.
    */
   @java.lang.Override
@@ -234,14 +246,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       streamId_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * The ID of the write stream to resume.
    * This may only be set in the first message. When left empty, a new write
@@ -249,16 +262,15 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string stream_id = 2;</code>
+   *
    * @return The bytes for streamId.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getStreamIdBytes() {
+  public com.google.protobuf.ByteString getStreamIdBytes() {
     java.lang.Object ref = streamId_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       streamId_ = b;
       return b;
     } else {
@@ -269,6 +281,8 @@ private static final long serialVersionUID = 0L;
   public static final int WRITES_FIELD_NUMBER = 3;
   private java.util.List<com.google.firestore.v1.Write> writes_;
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Always executed atomically and in order.
@@ -284,6 +298,8 @@ private static final long serialVersionUID = 0L;
     return writes_;
   }
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Always executed atomically and in order.
@@ -295,11 +311,12 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Write writes = 3;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> 
-      getWritesOrBuilderList() {
+  public java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> getWritesOrBuilderList() {
     return writes_;
   }
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Always executed atomically and in order.
@@ -315,6 +332,8 @@ private static final long serialVersionUID = 0L;
     return writes_.size();
   }
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Always executed atomically and in order.
@@ -330,6 +349,8 @@ private static final long serialVersionUID = 0L;
     return writes_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * The writes to apply.
    * Always executed atomically and in order.
@@ -341,14 +362,15 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Write writes = 3;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(
-      int index) {
+  public com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(int index) {
     return writes_.get(index);
   }
 
   public static final int STREAM_TOKEN_FIELD_NUMBER = 4;
   private com.google.protobuf.ByteString streamToken_;
   /**
+   *
+   *
    * <pre>
    * A stream token that was previously sent by the server.
    * The client should set this field to the token from the most recent
@@ -363,6 +385,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>bytes stream_token = 4;</code>
+   *
    * @return The streamToken.
    */
   @java.lang.Override
@@ -371,24 +394,23 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int LABELS_FIELD_NUMBER = 5;
+
   private static final class LabelsDefaultEntryHolder {
-    static final com.google.protobuf.MapEntry<
-        java.lang.String, java.lang.String> defaultEntry =
-            com.google.protobuf.MapEntry
-            .<java.lang.String, java.lang.String>newDefaultInstance(
-                com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_LabelsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.STRING,
-                "",
-                com.google.protobuf.WireFormat.FieldType.STRING,
-                "");
+    static final com.google.protobuf.MapEntry<java.lang.String, java.lang.String> defaultEntry =
+        com.google.protobuf.MapEntry.<java.lang.String, java.lang.String>newDefaultInstance(
+            com.google.firestore.v1.FirestoreProto
+                .internal_static_google_firestore_v1_WriteRequest_LabelsEntry_descriptor,
+            com.google.protobuf.WireFormat.FieldType.STRING,
+            "",
+            com.google.protobuf.WireFormat.FieldType.STRING,
+            "");
   }
-  private com.google.protobuf.MapField<
-      java.lang.String, java.lang.String> labels_;
-  private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-  internalGetLabels() {
+
+  private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
+
+  private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
     if (labels_ == null) {
-      return com.google.protobuf.MapField.emptyMapField(
-          LabelsDefaultEntryHolder.defaultEntry);
+      return com.google.protobuf.MapField.emptyMapField(LabelsDefaultEntryHolder.defaultEntry);
     }
     return labels_;
   }
@@ -397,28 +419,30 @@ private static final long serialVersionUID = 0L;
     return internalGetLabels().getMap().size();
   }
   /**
+   *
+   *
    * <pre>
    * Labels associated with this write request.
    * </pre>
    *
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
-
   @java.lang.Override
-  public boolean containsLabels(
-      java.lang.String key) {
-    if (key == null) { throw new NullPointerException("map key"); }
+  public boolean containsLabels(java.lang.String key) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
     return internalGetLabels().getMap().containsKey(key);
   }
-  /**
-   * Use {@link #getLabelsMap()} instead.
-   */
+  /** Use {@link #getLabelsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, java.lang.String> getLabels() {
     return getLabelsMap();
   }
   /**
+   *
+   *
    * <pre>
    * Labels associated with this write request.
    * </pre>
@@ -426,11 +450,12 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
   @java.lang.Override
-
   public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
     return internalGetLabels().getMap();
   }
   /**
+   *
+   *
    * <pre>
    * Labels associated with this write request.
    * </pre>
@@ -438,16 +463,16 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
   @java.lang.Override
-
-  public java.lang.String getLabelsOrDefault(
-      java.lang.String key,
-      java.lang.String defaultValue) {
-    if (key == null) { throw new NullPointerException("map key"); }
-    java.util.Map<java.lang.String, java.lang.String> map =
-        internalGetLabels().getMap();
+  public java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
+    java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
+   *
+   *
    * <pre>
    * Labels associated with this write request.
    * </pre>
@@ -455,12 +480,11 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
   @java.lang.Override
-
-  public java.lang.String getLabelsOrThrow(
-      java.lang.String key) {
-    if (key == null) { throw new NullPointerException("map key"); }
-    java.util.Map<java.lang.String, java.lang.String> map =
-        internalGetLabels().getMap();
+  public java.lang.String getLabelsOrThrow(java.lang.String key) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
+    java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
     }
@@ -468,6 +492,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -479,8 +504,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(database_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, database_);
     }
@@ -493,12 +517,8 @@ private static final long serialVersionUID = 0L;
     if (!streamToken_.isEmpty()) {
       output.writeBytes(4, streamToken_);
     }
-    com.google.protobuf.GeneratedMessageV3
-      .serializeStringMapTo(
-        output,
-        internalGetLabels(),
-        LabelsDefaultEntryHolder.defaultEntry,
-        5);
+    com.google.protobuf.GeneratedMessageV3.serializeStringMapTo(
+        output, internalGetLabels(), LabelsDefaultEntryHolder.defaultEntry, 5);
     unknownFields.writeTo(output);
   }
 
@@ -515,22 +535,20 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, streamId_);
     }
     for (int i = 0; i < writes_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, writes_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, writes_.get(i));
     }
     if (!streamToken_.isEmpty()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(4, streamToken_);
+      size += com.google.protobuf.CodedOutputStream.computeBytesSize(4, streamToken_);
     }
-    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
-         : internalGetLabels().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-      labels__ = LabelsDefaultEntryHolder.defaultEntry.newBuilderForType()
-          .setKey(entry.getKey())
-          .setValue(entry.getValue())
-          .build();
-      size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, labels__);
+    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry :
+        internalGetLabels().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, java.lang.String> labels__ =
+          LabelsDefaultEntryHolder.defaultEntry
+              .newBuilderForType()
+              .setKey(entry.getKey())
+              .setValue(entry.getValue())
+              .build();
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(5, labels__);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -540,23 +558,18 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.WriteRequest)) {
       return super.equals(obj);
     }
     com.google.firestore.v1.WriteRequest other = (com.google.firestore.v1.WriteRequest) obj;
 
-    if (!getDatabase()
-        .equals(other.getDatabase())) return false;
-    if (!getStreamId()
-        .equals(other.getStreamId())) return false;
-    if (!getWritesList()
-        .equals(other.getWritesList())) return false;
-    if (!getStreamToken()
-        .equals(other.getStreamToken())) return false;
-    if (!internalGetLabels().equals(
-        other.internalGetLabels())) return false;
+    if (!getDatabase().equals(other.getDatabase())) return false;
+    if (!getStreamId().equals(other.getStreamId())) return false;
+    if (!getWritesList().equals(other.getWritesList())) return false;
+    if (!getStreamToken().equals(other.getStreamToken())) return false;
+    if (!internalGetLabels().equals(other.internalGetLabels())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -587,97 +600,103 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.WriteRequest parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.WriteRequest parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.v1.WriteRequest parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.google.firestore.v1.WriteRequest parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.WriteRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.WriteRequest parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.WriteRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.WriteRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
    * The first request creates a stream, or resumes an existing one from a token.
@@ -690,43 +709,43 @@ private static final long serialVersionUID = 0L;
    *
    * Protobuf type {@code google.firestore.v1.WriteRequest}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.WriteRequest)
       com.google.firestore.v1.WriteRequestOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_WriteRequest_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMapField(
-        int number) {
+    protected com.google.protobuf.MapField internalGetMapField(int number) {
       switch (number) {
         case 5:
           return internalGetLabels();
         default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
+          throw new RuntimeException("Invalid map field number: " + number);
       }
     }
+
     @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMutableMapField(
-        int number) {
+    protected com.google.protobuf.MapField internalGetMutableMapField(int number) {
       switch (number) {
         case 5:
           return internalGetMutableLabels();
         default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
+          throw new RuntimeException("Invalid map field number: " + number);
       }
     }
+
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_WriteRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.WriteRequest.class, com.google.firestore.v1.WriteRequest.Builder.class);
+              com.google.firestore.v1.WriteRequest.class,
+              com.google.firestore.v1.WriteRequest.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.WriteRequest.newBuilder()
@@ -734,17 +753,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getWritesFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -765,9 +784,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_WriteRequest_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_WriteRequest_descriptor;
     }
 
     @java.lang.Override
@@ -810,38 +829,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.WriteRequest) {
-        return mergeFrom((com.google.firestore.v1.WriteRequest)other);
+        return mergeFrom((com.google.firestore.v1.WriteRequest) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -876,9 +896,10 @@ private static final long serialVersionUID = 0L;
             writesBuilder_ = null;
             writes_ = other.writes_;
             bitField0_ = (bitField0_ & ~0x00000001);
-            writesBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getWritesFieldBuilder() : null;
+            writesBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getWritesFieldBuilder()
+                    : null;
           } else {
             writesBuilder_.addAllMessages(other.writes_);
           }
@@ -887,8 +908,7 @@ private static final long serialVersionUID = 0L;
       if (other.getStreamToken() != com.google.protobuf.ByteString.EMPTY) {
         setStreamToken(other.getStreamToken());
       }
-      internalGetMutableLabels().mergeFrom(
-          other.internalGetLabels());
+      internalGetMutableLabels().mergeFrom(other.internalGetLabels());
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -917,10 +937,13 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.lang.Object database_ = "";
     /**
+     *
+     *
      * <pre>
      * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
@@ -928,13 +951,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return The database.
      */
     public java.lang.String getDatabase() {
       java.lang.Object ref = database_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         database_ = s;
         return s;
@@ -943,6 +966,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
@@ -950,15 +975,14 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return The bytes for database.
      */
-    public com.google.protobuf.ByteString
-        getDatabaseBytes() {
+    public com.google.protobuf.ByteString getDatabaseBytes() {
       java.lang.Object ref = database_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         database_ = b;
         return b;
       } else {
@@ -966,6 +990,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
@@ -973,20 +999,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @param value The database to set.
      * @return This builder for chaining.
      */
-    public Builder setDatabase(
-        java.lang.String value) {
+    public Builder setDatabase(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       database_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
@@ -994,15 +1022,18 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-      
+
       database_ = getDefaultInstance().getDatabase();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Required. The database name. In the format:
      * `projects/{project_id}/databases/{database_id}`.
@@ -1010,16 +1041,16 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string database = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @param value The bytes for database to set.
      * @return This builder for chaining.
      */
-    public Builder setDatabaseBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setDatabaseBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       database_ = value;
       onChanged();
       return this;
@@ -1027,6 +1058,8 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object streamId_ = "";
     /**
+     *
+     *
      * <pre>
      * The ID of the write stream to resume.
      * This may only be set in the first message. When left empty, a new write
@@ -1034,13 +1067,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string stream_id = 2;</code>
+     *
      * @return The streamId.
      */
     public java.lang.String getStreamId() {
       java.lang.Object ref = streamId_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         streamId_ = s;
         return s;
@@ -1049,6 +1082,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the write stream to resume.
      * This may only be set in the first message. When left empty, a new write
@@ -1056,15 +1091,14 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string stream_id = 2;</code>
+     *
      * @return The bytes for streamId.
      */
-    public com.google.protobuf.ByteString
-        getStreamIdBytes() {
+    public com.google.protobuf.ByteString getStreamIdBytes() {
       java.lang.Object ref = streamId_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         streamId_ = b;
         return b;
       } else {
@@ -1072,6 +1106,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the write stream to resume.
      * This may only be set in the first message. When left empty, a new write
@@ -1079,20 +1115,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string stream_id = 2;</code>
+     *
      * @param value The streamId to set.
      * @return This builder for chaining.
      */
-    public Builder setStreamId(
-        java.lang.String value) {
+    public Builder setStreamId(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       streamId_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the write stream to resume.
      * This may only be set in the first message. When left empty, a new write
@@ -1100,15 +1138,18 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string stream_id = 2;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearStreamId() {
-      
+
       streamId_ = getDefaultInstance().getStreamId();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The ID of the write stream to resume.
      * This may only be set in the first message. When left empty, a new write
@@ -1116,34 +1157,40 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string stream_id = 2;</code>
+     *
      * @param value The bytes for streamId to set.
      * @return This builder for chaining.
      */
-    public Builder setStreamIdBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setStreamIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       streamId_ = value;
       onChanged();
       return this;
     }
 
     private java.util.List<com.google.firestore.v1.Write> writes_ =
-      java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
+
     private void ensureWritesIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
         writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>(writes_);
         bitField0_ |= 0x00000001;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Write, com.google.firestore.v1.Write.Builder, com.google.firestore.v1.WriteOrBuilder> writesBuilder_;
+            com.google.firestore.v1.Write,
+            com.google.firestore.v1.Write.Builder,
+            com.google.firestore.v1.WriteOrBuilder>
+        writesBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1162,6 +1209,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1180,6 +1229,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1198,6 +1249,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1208,8 +1261,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public Builder setWrites(
-        int index, com.google.firestore.v1.Write value) {
+    public Builder setWrites(int index, com.google.firestore.v1.Write value) {
       if (writesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1223,6 +1275,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1233,8 +1287,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public Builder setWrites(
-        int index, com.google.firestore.v1.Write.Builder builderForValue) {
+    public Builder setWrites(int index, com.google.firestore.v1.Write.Builder builderForValue) {
       if (writesBuilder_ == null) {
         ensureWritesIsMutable();
         writes_.set(index, builderForValue.build());
@@ -1245,6 +1298,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1269,6 +1324,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1279,8 +1336,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public Builder addWrites(
-        int index, com.google.firestore.v1.Write value) {
+    public Builder addWrites(int index, com.google.firestore.v1.Write value) {
       if (writesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1294,6 +1350,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1304,8 +1362,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public Builder addWrites(
-        com.google.firestore.v1.Write.Builder builderForValue) {
+    public Builder addWrites(com.google.firestore.v1.Write.Builder builderForValue) {
       if (writesBuilder_ == null) {
         ensureWritesIsMutable();
         writes_.add(builderForValue.build());
@@ -1316,6 +1373,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1326,8 +1385,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public Builder addWrites(
-        int index, com.google.firestore.v1.Write.Builder builderForValue) {
+    public Builder addWrites(int index, com.google.firestore.v1.Write.Builder builderForValue) {
       if (writesBuilder_ == null) {
         ensureWritesIsMutable();
         writes_.add(index, builderForValue.build());
@@ -1338,6 +1396,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1352,8 +1412,7 @@ private static final long serialVersionUID = 0L;
         java.lang.Iterable<? extends com.google.firestore.v1.Write> values) {
       if (writesBuilder_ == null) {
         ensureWritesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, writes_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, writes_);
         onChanged();
       } else {
         writesBuilder_.addAllMessages(values);
@@ -1361,6 +1420,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1382,6 +1443,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1403,6 +1466,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1413,11 +1478,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public com.google.firestore.v1.Write.Builder getWritesBuilder(
-        int index) {
+    public com.google.firestore.v1.Write.Builder getWritesBuilder(int index) {
       return getWritesFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1428,14 +1494,16 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(
-        int index) {
+    public com.google.firestore.v1.WriteOrBuilder getWritesOrBuilder(int index) {
       if (writesBuilder_ == null) {
-        return writes_.get(index);  } else {
+        return writes_.get(index);
+      } else {
         return writesBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1446,8 +1514,8 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public java.util.List<? extends com.google.firestore.v1.WriteOrBuilder> 
-         getWritesOrBuilderList() {
+    public java.util.List<? extends com.google.firestore.v1.WriteOrBuilder>
+        getWritesOrBuilderList() {
       if (writesBuilder_ != null) {
         return writesBuilder_.getMessageOrBuilderList();
       } else {
@@ -1455,6 +1523,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1466,10 +1536,11 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
     public com.google.firestore.v1.Write.Builder addWritesBuilder() {
-      return getWritesFieldBuilder().addBuilder(
-          com.google.firestore.v1.Write.getDefaultInstance());
+      return getWritesFieldBuilder().addBuilder(com.google.firestore.v1.Write.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1480,12 +1551,13 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public com.google.firestore.v1.Write.Builder addWritesBuilder(
-        int index) {
-      return getWritesFieldBuilder().addBuilder(
-          index, com.google.firestore.v1.Write.getDefaultInstance());
+    public com.google.firestore.v1.Write.Builder addWritesBuilder(int index) {
+      return getWritesFieldBuilder()
+          .addBuilder(index, com.google.firestore.v1.Write.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The writes to apply.
      * Always executed atomically and in order.
@@ -1496,20 +1568,22 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Write writes = 3;</code>
      */
-    public java.util.List<com.google.firestore.v1.Write.Builder> 
-         getWritesBuilderList() {
+    public java.util.List<com.google.firestore.v1.Write.Builder> getWritesBuilderList() {
       return getWritesFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Write, com.google.firestore.v1.Write.Builder, com.google.firestore.v1.WriteOrBuilder> 
+            com.google.firestore.v1.Write,
+            com.google.firestore.v1.Write.Builder,
+            com.google.firestore.v1.WriteOrBuilder>
         getWritesFieldBuilder() {
       if (writesBuilder_ == null) {
-        writesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.v1.Write, com.google.firestore.v1.Write.Builder, com.google.firestore.v1.WriteOrBuilder>(
-                writes_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
+        writesBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.v1.Write,
+                com.google.firestore.v1.Write.Builder,
+                com.google.firestore.v1.WriteOrBuilder>(
+                writes_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         writes_ = null;
       }
       return writesBuilder_;
@@ -1517,6 +1591,8 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.ByteString streamToken_ = com.google.protobuf.ByteString.EMPTY;
     /**
+     *
+     *
      * <pre>
      * A stream token that was previously sent by the server.
      * The client should set this field to the token from the most recent
@@ -1531,6 +1607,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>bytes stream_token = 4;</code>
+     *
      * @return The streamToken.
      */
     @java.lang.Override
@@ -1538,6 +1615,8 @@ private static final long serialVersionUID = 0L;
       return streamToken_;
     }
     /**
+     *
+     *
      * <pre>
      * A stream token that was previously sent by the server.
      * The client should set this field to the token from the most recent
@@ -1552,19 +1631,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>bytes stream_token = 4;</code>
+     *
      * @param value The streamToken to set.
      * @return This builder for chaining.
      */
     public Builder setStreamToken(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       streamToken_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A stream token that was previously sent by the server.
      * The client should set this field to the token from the most recent
@@ -1579,31 +1661,31 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>bytes stream_token = 4;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearStreamToken() {
-      
+
       streamToken_ = getDefaultInstance().getStreamToken();
       onChanged();
       return this;
     }
 
-    private com.google.protobuf.MapField<
-        java.lang.String, java.lang.String> labels_;
-    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetLabels() {
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
+
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
       if (labels_ == null) {
-        return com.google.protobuf.MapField.emptyMapField(
-            LabelsDefaultEntryHolder.defaultEntry);
+        return com.google.protobuf.MapField.emptyMapField(LabelsDefaultEntryHolder.defaultEntry);
       }
       return labels_;
     }
+
     private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetMutableLabels() {
-      onChanged();;
+        internalGetMutableLabels() {
+      onChanged();
+      ;
       if (labels_ == null) {
-        labels_ = com.google.protobuf.MapField.newMapField(
-            LabelsDefaultEntryHolder.defaultEntry);
+        labels_ = com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
       }
       if (!labels_.isMutable()) {
         labels_ = labels_.copy();
@@ -1615,28 +1697,30 @@ private static final long serialVersionUID = 0L;
       return internalGetLabels().getMap().size();
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
      *
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
-
     @java.lang.Override
-    public boolean containsLabels(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
+    public boolean containsLabels(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       return internalGetLabels().getMap().containsKey(key);
     }
-    /**
-     * Use {@link #getLabelsMap()} instead.
-     */
+    /** Use {@link #getLabelsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getLabels() {
       return getLabelsMap();
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
@@ -1644,11 +1728,12 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
     @java.lang.Override
-
     public java.util.Map<java.lang.String, java.lang.String> getLabelsMap() {
       return internalGetLabels().getMap();
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
@@ -1656,16 +1741,17 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
     @java.lang.Override
-
     public java.lang.String getLabelsOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue) {
-      if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetLabels().getMap();
+        java.lang.String key, java.lang.String defaultValue) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
+      java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
@@ -1673,12 +1759,11 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
     @java.lang.Override
-
-    public java.lang.String getLabelsOrThrow(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetLabels().getMap();
+    public java.lang.String getLabelsOrThrow(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
+      java.util.Map<java.lang.String, java.lang.String> map = internalGetLabels().getMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
@@ -1686,69 +1771,66 @@ private static final long serialVersionUID = 0L;
     }
 
     public Builder clearLabels() {
-      internalGetMutableLabels().getMutableMap()
-          .clear();
+      internalGetMutableLabels().getMutableMap().clear();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
      *
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
-
-    public Builder removeLabels(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
-      internalGetMutableLabels().getMutableMap()
-          .remove(key);
+    public Builder removeLabels(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
+      internalGetMutableLabels().getMutableMap().remove(key);
       return this;
     }
-    /**
-     * Use alternate mutation accessors instead.
-     */
+    /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.String, java.lang.String>
-    getMutableLabels() {
+    public java.util.Map<java.lang.String, java.lang.String> getMutableLabels() {
       return internalGetMutableLabels().getMutableMap();
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
      *
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
-    public Builder putLabels(
-        java.lang.String key,
-        java.lang.String value) {
-      if (key == null) { throw new NullPointerException("map key"); }
+    public Builder putLabels(java.lang.String key, java.lang.String value) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       if (value == null) {
-  throw new NullPointerException("map value");
-}
+        throw new NullPointerException("map value");
+      }
 
-      internalGetMutableLabels().getMutableMap()
-          .put(key, value);
+      internalGetMutableLabels().getMutableMap().put(key, value);
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Labels associated with this write request.
      * </pre>
      *
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
-
-    public Builder putAllLabels(
-        java.util.Map<java.lang.String, java.lang.String> values) {
-      internalGetMutableLabels().getMutableMap()
-          .putAll(values);
+    public Builder putAllLabels(java.util.Map<java.lang.String, java.lang.String> values) {
+      internalGetMutableLabels().getMutableMap().putAll(values);
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1758,12 +1840,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.WriteRequest)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.WriteRequest)
   private static final com.google.firestore.v1.WriteRequest DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.WriteRequest();
   }
@@ -1772,16 +1854,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<WriteRequest>
-      PARSER = new com.google.protobuf.AbstractParser<WriteRequest>() {
-    @java.lang.Override
-    public WriteRequest parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new WriteRequest(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<WriteRequest> PARSER =
+      new com.google.protobuf.AbstractParser<WriteRequest>() {
+        @java.lang.Override
+        public WriteRequest parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new WriteRequest(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<WriteRequest> parser() {
     return PARSER;
@@ -1796,6 +1878,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.WriteRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

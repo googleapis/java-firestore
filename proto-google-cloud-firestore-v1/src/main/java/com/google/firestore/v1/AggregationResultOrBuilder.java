@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface AggregationResultOrBuilder extends
+public interface AggregationResultOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.AggregationResult)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
    * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
@@ -34,6 +37,8 @@ public interface AggregationResultOrBuilder extends
    */
   int getAggregateFieldsCount();
   /**
+   *
+   *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
    * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
@@ -43,15 +48,13 @@ public interface AggregationResultOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
    */
-  boolean containsAggregateFields(
-      java.lang.String key);
-  /**
-   * Use {@link #getAggregateFieldsMap()} instead.
-   */
+  boolean containsAggregateFields(java.lang.String key);
+  /** Use {@link #getAggregateFieldsMap()} instead. */
   @java.lang.Deprecated
-  java.util.Map<java.lang.String, com.google.firestore.v1.Value>
-  getAggregateFields();
+  java.util.Map<java.lang.String, com.google.firestore.v1.Value> getAggregateFields();
   /**
+   *
+   *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
    * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
@@ -61,9 +64,10 @@ public interface AggregationResultOrBuilder extends
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
    */
-  java.util.Map<java.lang.String, com.google.firestore.v1.Value>
-  getAggregateFieldsMap();
+  java.util.Map<java.lang.String, com.google.firestore.v1.Value> getAggregateFieldsMap();
   /**
+   *
+   *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
    * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
@@ -75,11 +79,13 @@ public interface AggregationResultOrBuilder extends
    */
 
   /* nullable */
-com.google.firestore.v1.Value getAggregateFieldsOrDefault(
+  com.google.firestore.v1.Value getAggregateFieldsOrDefault(
       java.lang.String key,
       /* nullable */
-com.google.firestore.v1.Value defaultValue);
+      com.google.firestore.v1.Value defaultValue);
   /**
+   *
+   *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
    * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
@@ -89,7 +95,5 @@ com.google.firestore.v1.Value defaultValue);
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
    */
-
-  com.google.firestore.v1.Value getAggregateFieldsOrThrow(
-      java.lang.String key);
+  com.google.firestore.v1.Value getAggregateFieldsOrThrow(java.lang.String key);
 }

@@ -19,21 +19,24 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * The response for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.ListDocumentsResponse}
  */
-public final class ListDocumentsResponse extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.ListDocumentsResponse)
     ListDocumentsResponseOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use ListDocumentsResponse.newBuilder() to construct.
   private ListDocumentsResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private ListDocumentsResponse() {
     documents_ = java.util.Collections.emptyList();
     nextPageToken_ = "";
@@ -41,16 +44,15 @@ private static final long serialVersionUID = 0L;
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ListDocumentsResponse();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private ListDocumentsResponse(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -70,28 +72,30 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              documents_ = new java.util.ArrayList<com.google.firestore.v1.Document>();
-              mutable_bitField0_ |= 0x00000001;
+          case 10:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                documents_ = new java.util.ArrayList<com.google.firestore.v1.Document>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              documents_.add(
+                  input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry));
+              break;
             }
-            documents_.add(
-                input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry));
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 18:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            nextPageToken_ = s;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              nextPageToken_ = s;
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -99,8 +103,7 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
         documents_ = java.util.Collections.unmodifiableList(documents_);
@@ -109,22 +112,27 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_ListDocumentsResponse_fieldAccessorTable
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_ListDocumentsResponse_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.ListDocumentsResponse.class, com.google.firestore.v1.ListDocumentsResponse.Builder.class);
+            com.google.firestore.v1.ListDocumentsResponse.class,
+            com.google.firestore.v1.ListDocumentsResponse.Builder.class);
   }
 
   public static final int DOCUMENTS_FIELD_NUMBER = 1;
   private java.util.List<com.google.firestore.v1.Document> documents_;
   /**
+   *
+   *
    * <pre>
    * The Documents found.
    * </pre>
@@ -136,6 +144,8 @@ private static final long serialVersionUID = 0L;
     return documents_;
   }
   /**
+   *
+   *
    * <pre>
    * The Documents found.
    * </pre>
@@ -143,11 +153,13 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder> 
+  public java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder>
       getDocumentsOrBuilderList() {
     return documents_;
   }
   /**
+   *
+   *
    * <pre>
    * The Documents found.
    * </pre>
@@ -159,6 +171,8 @@ private static final long serialVersionUID = 0L;
     return documents_.size();
   }
   /**
+   *
+   *
    * <pre>
    * The Documents found.
    * </pre>
@@ -170,6 +184,8 @@ private static final long serialVersionUID = 0L;
     return documents_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * The Documents found.
    * </pre>
@@ -177,19 +193,21 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Document documents = 1;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.DocumentOrBuilder getDocumentsOrBuilder(
-      int index) {
+  public com.google.firestore.v1.DocumentOrBuilder getDocumentsOrBuilder(int index) {
     return documents_.get(index);
   }
 
   public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 2;
   private volatile java.lang.Object nextPageToken_;
   /**
+   *
+   *
    * <pre>
    * The next page token.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The nextPageToken.
    */
   @java.lang.Override
@@ -198,29 +216,29 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       nextPageToken_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * The next page token.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The bytes for nextPageToken.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getNextPageTokenBytes() {
+  public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       nextPageToken_ = b;
       return b;
     } else {
@@ -229,6 +247,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -240,8 +259,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     for (int i = 0; i < documents_.size(); i++) {
       output.writeMessage(1, documents_.get(i));
     }
@@ -258,8 +276,7 @@ private static final long serialVersionUID = 0L;
 
     size = 0;
     for (int i = 0; i < documents_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, documents_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, documents_.get(i));
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(nextPageToken_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, nextPageToken_);
@@ -272,17 +289,16 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.ListDocumentsResponse)) {
       return super.equals(obj);
     }
-    com.google.firestore.v1.ListDocumentsResponse other = (com.google.firestore.v1.ListDocumentsResponse) obj;
+    com.google.firestore.v1.ListDocumentsResponse other =
+        (com.google.firestore.v1.ListDocumentsResponse) obj;
 
-    if (!getDocumentsList()
-        .equals(other.getDocumentsList())) return false;
-    if (!getNextPageToken()
-        .equals(other.getNextPageToken())) return false;
+    if (!getDocumentsList().equals(other.getDocumentsList())) return false;
+    if (!getNextPageToken().equals(other.getNextPageToken())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -305,118 +321,127 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.ListDocumentsResponse parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.v1.ListDocumentsResponse parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.v1.ListDocumentsResponse parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.ListDocumentsResponse parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.ListDocumentsResponse prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * The response for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.ListDocumentsResponse}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.ListDocumentsResponse)
       com.google.firestore.v1.ListDocumentsResponseOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_ListDocumentsResponse_fieldAccessorTable
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_ListDocumentsResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.ListDocumentsResponse.class, com.google.firestore.v1.ListDocumentsResponse.Builder.class);
+              com.google.firestore.v1.ListDocumentsResponse.class,
+              com.google.firestore.v1.ListDocumentsResponse.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.ListDocumentsResponse.newBuilder()
@@ -424,17 +449,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getDocumentsFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -450,9 +475,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_ListDocumentsResponse_descriptor;
     }
 
     @java.lang.Override
@@ -471,7 +496,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.ListDocumentsResponse buildPartial() {
-      com.google.firestore.v1.ListDocumentsResponse result = new com.google.firestore.v1.ListDocumentsResponse(this);
+      com.google.firestore.v1.ListDocumentsResponse result =
+          new com.google.firestore.v1.ListDocumentsResponse(this);
       int from_bitField0_ = bitField0_;
       if (documentsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
@@ -491,38 +517,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.ListDocumentsResponse) {
-        return mergeFrom((com.google.firestore.v1.ListDocumentsResponse)other);
+        return mergeFrom((com.google.firestore.v1.ListDocumentsResponse) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -549,9 +576,10 @@ private static final long serialVersionUID = 0L;
             documentsBuilder_ = null;
             documents_ = other.documents_;
             bitField0_ = (bitField0_ & ~0x00000001);
-            documentsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getDocumentsFieldBuilder() : null;
+            documentsBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getDocumentsFieldBuilder()
+                    : null;
           } else {
             documentsBuilder_.addAllMessages(other.documents_);
           }
@@ -589,21 +617,28 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.util.List<com.google.firestore.v1.Document> documents_ =
-      java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
+
     private void ensureDocumentsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
         documents_ = new java.util.ArrayList<com.google.firestore.v1.Document>(documents_);
         bitField0_ |= 0x00000001;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> documentsBuilder_;
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
+        documentsBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -618,6 +653,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -632,6 +669,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -646,14 +685,15 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public Builder setDocuments(
-        int index, com.google.firestore.v1.Document value) {
+    public Builder setDocuments(int index, com.google.firestore.v1.Document value) {
       if (documentsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -667,6 +707,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -685,6 +727,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -705,14 +749,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public Builder addDocuments(
-        int index, com.google.firestore.v1.Document value) {
+    public Builder addDocuments(int index, com.google.firestore.v1.Document value) {
       if (documentsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -726,14 +771,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public Builder addDocuments(
-        com.google.firestore.v1.Document.Builder builderForValue) {
+    public Builder addDocuments(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentsBuilder_ == null) {
         ensureDocumentsIsMutable();
         documents_.add(builderForValue.build());
@@ -744,6 +790,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -762,6 +810,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -772,8 +822,7 @@ private static final long serialVersionUID = 0L;
         java.lang.Iterable<? extends com.google.firestore.v1.Document> values) {
       if (documentsBuilder_ == null) {
         ensureDocumentsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, documents_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, documents_);
         onChanged();
       } else {
         documentsBuilder_.addAllMessages(values);
@@ -781,6 +830,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -798,6 +849,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -815,39 +868,44 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public com.google.firestore.v1.Document.Builder getDocumentsBuilder(
-        int index) {
+    public com.google.firestore.v1.Document.Builder getDocumentsBuilder(int index) {
       return getDocumentsFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public com.google.firestore.v1.DocumentOrBuilder getDocumentsOrBuilder(
-        int index) {
+    public com.google.firestore.v1.DocumentOrBuilder getDocumentsOrBuilder(int index) {
       if (documentsBuilder_ == null) {
-        return documents_.get(index);  } else {
+        return documents_.get(index);
+      } else {
         return documentsBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder> 
-         getDocumentsOrBuilderList() {
+    public java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder>
+        getDocumentsOrBuilderList() {
       if (documentsBuilder_ != null) {
         return documentsBuilder_.getMessageOrBuilderList();
       } else {
@@ -855,6 +913,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
@@ -862,42 +922,47 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
     public com.google.firestore.v1.Document.Builder addDocumentsBuilder() {
-      return getDocumentsFieldBuilder().addBuilder(
-          com.google.firestore.v1.Document.getDefaultInstance());
+      return getDocumentsFieldBuilder()
+          .addBuilder(com.google.firestore.v1.Document.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public com.google.firestore.v1.Document.Builder addDocumentsBuilder(
-        int index) {
-      return getDocumentsFieldBuilder().addBuilder(
-          index, com.google.firestore.v1.Document.getDefaultInstance());
+    public com.google.firestore.v1.Document.Builder addDocumentsBuilder(int index) {
+      return getDocumentsFieldBuilder()
+          .addBuilder(index, com.google.firestore.v1.Document.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * The Documents found.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Document documents = 1;</code>
      */
-    public java.util.List<com.google.firestore.v1.Document.Builder> 
-         getDocumentsBuilderList() {
+    public java.util.List<com.google.firestore.v1.Document.Builder> getDocumentsBuilderList() {
       return getDocumentsFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder> 
+            com.google.firestore.v1.Document,
+            com.google.firestore.v1.Document.Builder,
+            com.google.firestore.v1.DocumentOrBuilder>
         getDocumentsFieldBuilder() {
       if (documentsBuilder_ == null) {
-        documentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.v1.Document, com.google.firestore.v1.Document.Builder, com.google.firestore.v1.DocumentOrBuilder>(
-                documents_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
+        documentsBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.v1.Document,
+                com.google.firestore.v1.Document.Builder,
+                com.google.firestore.v1.DocumentOrBuilder>(
+                documents_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         documents_ = null;
       }
       return documentsBuilder_;
@@ -905,18 +970,20 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object nextPageToken_ = "";
     /**
+     *
+     *
      * <pre>
      * The next page token.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return The nextPageToken.
      */
     public java.lang.String getNextPageToken() {
       java.lang.Object ref = nextPageToken_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         nextPageToken_ = s;
         return s;
@@ -925,20 +992,21 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The next page token.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return The bytes for nextPageToken.
      */
-    public com.google.protobuf.ByteString
-        getNextPageTokenBytes() {
+    public com.google.protobuf.ByteString getNextPageTokenBytes() {
       java.lang.Object ref = nextPageToken_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         nextPageToken_ = b;
         return b;
       } else {
@@ -946,61 +1014,68 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * The next page token.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @param value The nextPageToken to set.
      * @return This builder for chaining.
      */
-    public Builder setNextPageToken(
-        java.lang.String value) {
+    public Builder setNextPageToken(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       nextPageToken_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The next page token.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
-      
+
       nextPageToken_ = getDefaultInstance().getNextPageToken();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The next page token.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @param value The bytes for nextPageToken to set.
      * @return This builder for chaining.
      */
-    public Builder setNextPageTokenBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setNextPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       nextPageToken_ = value;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1010,12 +1085,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.ListDocumentsResponse)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.ListDocumentsResponse)
   private static final com.google.firestore.v1.ListDocumentsResponse DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.ListDocumentsResponse();
   }
@@ -1024,16 +1099,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ListDocumentsResponse>
-      PARSER = new com.google.protobuf.AbstractParser<ListDocumentsResponse>() {
-    @java.lang.Override
-    public ListDocumentsResponse parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ListDocumentsResponse(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<ListDocumentsResponse> PARSER =
+      new com.google.protobuf.AbstractParser<ListDocumentsResponse>() {
+        @java.lang.Override
+        public ListDocumentsResponse parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ListDocumentsResponse(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<ListDocumentsResponse> parser() {
     return PARSER;
@@ -1048,6 +1123,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.ListDocumentsResponse getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface RunAggregationQueryResponseOrBuilder extends
+public interface RunAggregationQueryResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.RunAggregationQueryResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * A single aggregation result.
    * Not present when reporting partial progress or when the query produced
@@ -30,10 +33,13 @@ public interface RunAggregationQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>.google.firestore.v1.AggregationResult result = 1;</code>
+   *
    * @return Whether the result field is set.
    */
   boolean hasResult();
   /**
+   *
+   *
    * <pre>
    * A single aggregation result.
    * Not present when reporting partial progress or when the query produced
@@ -41,10 +47,13 @@ public interface RunAggregationQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>.google.firestore.v1.AggregationResult result = 1;</code>
+   *
    * @return The result.
    */
   com.google.firestore.v1.AggregationResult getResult();
   /**
+   *
+   *
    * <pre>
    * A single aggregation result.
    * Not present when reporting partial progress or when the query produced
@@ -56,6 +65,8 @@ public interface RunAggregationQueryResponseOrBuilder extends
   com.google.firestore.v1.AggregationResultOrBuilder getResultOrBuilder();
 
   /**
+   *
+   *
    * <pre>
    * The transaction that was started as part of this request.
    * Only present on the first response when the request requested to start
@@ -63,29 +74,38 @@ public interface RunAggregationQueryResponseOrBuilder extends
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
+   *
    * @return The transaction.
    */
   com.google.protobuf.ByteString getTransaction();
 
   /**
+   *
+   *
    * <pre>
    * The time at which the aggregate value is valid for.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the aggregate value is valid for.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
+   *
    * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
   /**
+   *
+   *
    * <pre>
    * The time at which the aggregate value is valid for.
    * </pre>

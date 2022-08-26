@@ -19,21 +19,24 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * The response for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.PartitionQueryResponse}
  */
-public final class PartitionQueryResponse extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class PartitionQueryResponse extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.PartitionQueryResponse)
     PartitionQueryResponseOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use PartitionQueryResponse.newBuilder() to construct.
   private PartitionQueryResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private PartitionQueryResponse() {
     partitions_ = java.util.Collections.emptyList();
     nextPageToken_ = "";
@@ -41,16 +44,15 @@ private static final long serialVersionUID = 0L;
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new PartitionQueryResponse();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private PartitionQueryResponse(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -70,28 +72,30 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              partitions_ = new java.util.ArrayList<com.google.firestore.v1.Cursor>();
-              mutable_bitField0_ |= 0x00000001;
+          case 10:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                partitions_ = new java.util.ArrayList<com.google.firestore.v1.Cursor>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              partitions_.add(
+                  input.readMessage(com.google.firestore.v1.Cursor.parser(), extensionRegistry));
+              break;
             }
-            partitions_.add(
-                input.readMessage(com.google.firestore.v1.Cursor.parser(), extensionRegistry));
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 18:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            nextPageToken_ = s;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+              nextPageToken_ = s;
+              break;
             }
-            break;
-          }
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -99,8 +103,7 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
         partitions_ = java.util.Collections.unmodifiableList(partitions_);
@@ -109,22 +112,27 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.PartitionQueryResponse.class, com.google.firestore.v1.PartitionQueryResponse.Builder.class);
+            com.google.firestore.v1.PartitionQueryResponse.class,
+            com.google.firestore.v1.PartitionQueryResponse.Builder.class);
   }
 
   public static final int PARTITIONS_FIELD_NUMBER = 1;
   private java.util.List<com.google.firestore.v1.Cursor> partitions_;
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -149,6 +157,8 @@ private static final long serialVersionUID = 0L;
     return partitions_;
   }
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -169,11 +179,13 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.google.firestore.v1.CursorOrBuilder> 
+  public java.util.List<? extends com.google.firestore.v1.CursorOrBuilder>
       getPartitionsOrBuilderList() {
     return partitions_;
   }
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -198,6 +210,8 @@ private static final long serialVersionUID = 0L;
     return partitions_.size();
   }
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -222,6 +236,8 @@ private static final long serialVersionUID = 0L;
     return partitions_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * Partition results.
    * Each partition is a split point that can be used by RunQuery as a starting
@@ -242,14 +258,15 @@ private static final long serialVersionUID = 0L;
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(
-      int index) {
+  public com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(int index) {
     return partitions_.get(index);
   }
 
   public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 2;
   private volatile java.lang.Object nextPageToken_;
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request an additional set of results, up
    * to the number specified by `partition_count` in the PartitionQuery request.
@@ -257,6 +274,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The nextPageToken.
    */
   @java.lang.Override
@@ -265,14 +283,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       nextPageToken_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * A page token that may be used to request an additional set of results, up
    * to the number specified by `partition_count` in the PartitionQuery request.
@@ -280,16 +299,15 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
+   *
    * @return The bytes for nextPageToken.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getNextPageTokenBytes() {
+  public com.google.protobuf.ByteString getNextPageTokenBytes() {
     java.lang.Object ref = nextPageToken_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       nextPageToken_ = b;
       return b;
     } else {
@@ -298,6 +316,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -309,8 +328,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     for (int i = 0; i < partitions_.size(); i++) {
       output.writeMessage(1, partitions_.get(i));
     }
@@ -327,8 +345,7 @@ private static final long serialVersionUID = 0L;
 
     size = 0;
     for (int i = 0; i < partitions_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, partitions_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, partitions_.get(i));
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(nextPageToken_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, nextPageToken_);
@@ -341,17 +358,16 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.PartitionQueryResponse)) {
       return super.equals(obj);
     }
-    com.google.firestore.v1.PartitionQueryResponse other = (com.google.firestore.v1.PartitionQueryResponse) obj;
+    com.google.firestore.v1.PartitionQueryResponse other =
+        (com.google.firestore.v1.PartitionQueryResponse) obj;
 
-    if (!getPartitionsList()
-        .equals(other.getPartitionsList())) return false;
-    if (!getNextPageToken()
-        .equals(other.getNextPageToken())) return false;
+    if (!getPartitionsList().equals(other.getPartitionsList())) return false;
+    if (!getNextPageToken().equals(other.getNextPageToken())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -374,118 +390,127 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.PartitionQueryResponse parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
-  public static com.google.firestore.v1.PartitionQueryResponse parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.v1.PartitionQueryResponse parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.PartitionQueryResponse parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.PartitionQueryResponse prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * The response for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.PartitionQueryResponse}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.PartitionQueryResponse)
       com.google.firestore.v1.PartitionQueryResponseOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_PartitionQueryResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.PartitionQueryResponse.class, com.google.firestore.v1.PartitionQueryResponse.Builder.class);
+              com.google.firestore.v1.PartitionQueryResponse.class,
+              com.google.firestore.v1.PartitionQueryResponse.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.PartitionQueryResponse.newBuilder()
@@ -493,17 +518,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getPartitionsFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -519,9 +544,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
     }
 
     @java.lang.Override
@@ -540,7 +565,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.PartitionQueryResponse buildPartial() {
-      com.google.firestore.v1.PartitionQueryResponse result = new com.google.firestore.v1.PartitionQueryResponse(this);
+      com.google.firestore.v1.PartitionQueryResponse result =
+          new com.google.firestore.v1.PartitionQueryResponse(this);
       int from_bitField0_ = bitField0_;
       if (partitionsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
@@ -560,38 +586,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.PartitionQueryResponse) {
-        return mergeFrom((com.google.firestore.v1.PartitionQueryResponse)other);
+        return mergeFrom((com.google.firestore.v1.PartitionQueryResponse) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -618,9 +645,10 @@ private static final long serialVersionUID = 0L;
             partitionsBuilder_ = null;
             partitions_ = other.partitions_;
             bitField0_ = (bitField0_ & ~0x00000001);
-            partitionsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getPartitionsFieldBuilder() : null;
+            partitionsBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getPartitionsFieldBuilder()
+                    : null;
           } else {
             partitionsBuilder_.addAllMessages(other.partitions_);
           }
@@ -658,21 +686,28 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
     private java.util.List<com.google.firestore.v1.Cursor> partitions_ =
-      java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
+
     private void ensurePartitionsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
         partitions_ = new java.util.ArrayList<com.google.firestore.v1.Cursor>(partitions_);
         bitField0_ |= 0x00000001;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Cursor, com.google.firestore.v1.Cursor.Builder, com.google.firestore.v1.CursorOrBuilder> partitionsBuilder_;
+            com.google.firestore.v1.Cursor,
+            com.google.firestore.v1.Cursor.Builder,
+            com.google.firestore.v1.CursorOrBuilder>
+        partitionsBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -700,6 +735,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -727,6 +764,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -754,6 +793,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -773,8 +814,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public Builder setPartitions(
-        int index, com.google.firestore.v1.Cursor value) {
+    public Builder setPartitions(int index, com.google.firestore.v1.Cursor value) {
       if (partitionsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -788,6 +828,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -819,6 +861,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -852,6 +896,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -871,8 +917,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public Builder addPartitions(
-        int index, com.google.firestore.v1.Cursor value) {
+    public Builder addPartitions(int index, com.google.firestore.v1.Cursor value) {
       if (partitionsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -886,6 +931,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -905,8 +952,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public Builder addPartitions(
-        com.google.firestore.v1.Cursor.Builder builderForValue) {
+    public Builder addPartitions(com.google.firestore.v1.Cursor.Builder builderForValue) {
       if (partitionsBuilder_ == null) {
         ensurePartitionsIsMutable();
         partitions_.add(builderForValue.build());
@@ -917,6 +963,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -948,6 +996,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -971,8 +1021,7 @@ private static final long serialVersionUID = 0L;
         java.lang.Iterable<? extends com.google.firestore.v1.Cursor> values) {
       if (partitionsBuilder_ == null) {
         ensurePartitionsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, partitions_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, partitions_);
         onChanged();
       } else {
         partitionsBuilder_.addAllMessages(values);
@@ -980,6 +1029,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1010,6 +1061,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1040,6 +1093,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1059,11 +1114,12 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public com.google.firestore.v1.Cursor.Builder getPartitionsBuilder(
-        int index) {
+    public com.google.firestore.v1.Cursor.Builder getPartitionsBuilder(int index) {
       return getPartitionsFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1083,14 +1139,16 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(
-        int index) {
+    public com.google.firestore.v1.CursorOrBuilder getPartitionsOrBuilder(int index) {
       if (partitionsBuilder_ == null) {
-        return partitions_.get(index);  } else {
+        return partitions_.get(index);
+      } else {
         return partitionsBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1110,8 +1168,8 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public java.util.List<? extends com.google.firestore.v1.CursorOrBuilder> 
-         getPartitionsOrBuilderList() {
+    public java.util.List<? extends com.google.firestore.v1.CursorOrBuilder>
+        getPartitionsOrBuilderList() {
       if (partitionsBuilder_ != null) {
         return partitionsBuilder_.getMessageOrBuilderList();
       } else {
@@ -1119,6 +1177,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1139,10 +1199,12 @@ private static final long serialVersionUID = 0L;
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
     public com.google.firestore.v1.Cursor.Builder addPartitionsBuilder() {
-      return getPartitionsFieldBuilder().addBuilder(
-          com.google.firestore.v1.Cursor.getDefaultInstance());
+      return getPartitionsFieldBuilder()
+          .addBuilder(com.google.firestore.v1.Cursor.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1162,12 +1224,13 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public com.google.firestore.v1.Cursor.Builder addPartitionsBuilder(
-        int index) {
-      return getPartitionsFieldBuilder().addBuilder(
-          index, com.google.firestore.v1.Cursor.getDefaultInstance());
+    public com.google.firestore.v1.Cursor.Builder addPartitionsBuilder(int index) {
+      return getPartitionsFieldBuilder()
+          .addBuilder(index, com.google.firestore.v1.Cursor.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * Partition results.
      * Each partition is a split point that can be used by RunQuery as a starting
@@ -1187,20 +1250,22 @@ private static final long serialVersionUID = 0L;
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
      */
-    public java.util.List<com.google.firestore.v1.Cursor.Builder> 
-         getPartitionsBuilderList() {
+    public java.util.List<com.google.firestore.v1.Cursor.Builder> getPartitionsBuilderList() {
       return getPartitionsFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.Cursor, com.google.firestore.v1.Cursor.Builder, com.google.firestore.v1.CursorOrBuilder> 
+            com.google.firestore.v1.Cursor,
+            com.google.firestore.v1.Cursor.Builder,
+            com.google.firestore.v1.CursorOrBuilder>
         getPartitionsFieldBuilder() {
       if (partitionsBuilder_ == null) {
-        partitionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.v1.Cursor, com.google.firestore.v1.Cursor.Builder, com.google.firestore.v1.CursorOrBuilder>(
-                partitions_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
+        partitionsBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.v1.Cursor,
+                com.google.firestore.v1.Cursor.Builder,
+                com.google.firestore.v1.CursorOrBuilder>(
+                partitions_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         partitions_ = null;
       }
       return partitionsBuilder_;
@@ -1208,6 +1273,8 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object nextPageToken_ = "";
     /**
+     *
+     *
      * <pre>
      * A page token that may be used to request an additional set of results, up
      * to the number specified by `partition_count` in the PartitionQuery request.
@@ -1215,13 +1282,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return The nextPageToken.
      */
     public java.lang.String getNextPageToken() {
       java.lang.Object ref = nextPageToken_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         nextPageToken_ = s;
         return s;
@@ -1230,6 +1297,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * A page token that may be used to request an additional set of results, up
      * to the number specified by `partition_count` in the PartitionQuery request.
@@ -1237,15 +1306,14 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return The bytes for nextPageToken.
      */
-    public com.google.protobuf.ByteString
-        getNextPageTokenBytes() {
+    public com.google.protobuf.ByteString getNextPageTokenBytes() {
       java.lang.Object ref = nextPageToken_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         nextPageToken_ = b;
         return b;
       } else {
@@ -1253,6 +1321,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * A page token that may be used to request an additional set of results, up
      * to the number specified by `partition_count` in the PartitionQuery request.
@@ -1260,20 +1330,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @param value The nextPageToken to set.
      * @return This builder for chaining.
      */
-    public Builder setNextPageToken(
-        java.lang.String value) {
+    public Builder setNextPageToken(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       nextPageToken_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A page token that may be used to request an additional set of results, up
      * to the number specified by `partition_count` in the PartitionQuery request.
@@ -1281,15 +1353,18 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
-      
+
       nextPageToken_ = getDefaultInstance().getNextPageToken();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * A page token that may be used to request an additional set of results, up
      * to the number specified by `partition_count` in the PartitionQuery request.
@@ -1297,23 +1372,23 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
+     *
      * @param value The bytes for nextPageToken to set.
      * @return This builder for chaining.
      */
-    public Builder setNextPageTokenBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setNextPageTokenBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       nextPageToken_ = value;
       onChanged();
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1323,12 +1398,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.PartitionQueryResponse)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.PartitionQueryResponse)
   private static final com.google.firestore.v1.PartitionQueryResponse DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.PartitionQueryResponse();
   }
@@ -1337,16 +1412,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<PartitionQueryResponse>
-      PARSER = new com.google.protobuf.AbstractParser<PartitionQueryResponse>() {
-    @java.lang.Override
-    public PartitionQueryResponse parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new PartitionQueryResponse(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<PartitionQueryResponse> PARSER =
+      new com.google.protobuf.AbstractParser<PartitionQueryResponse>() {
+        @java.lang.Override
+        public PartitionQueryResponse parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new PartitionQueryResponse(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<PartitionQueryResponse> parser() {
     return PARSER;
@@ -1361,6 +1436,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.PartitionQueryResponse getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

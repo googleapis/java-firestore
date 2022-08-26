@@ -19,37 +19,39 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * The request for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.RunAggregationQueryRequest}
  */
-public final class RunAggregationQueryRequest extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class RunAggregationQueryRequest extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.RunAggregationQueryRequest)
     RunAggregationQueryRequestOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use RunAggregationQueryRequest.newBuilder() to construct.
   private RunAggregationQueryRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private RunAggregationQueryRequest() {
     parent_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new RunAggregationQueryRequest();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private RunAggregationQueryRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -68,66 +70,78 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 10:
+            {
+              java.lang.String s = input.readStringRequireUtf8();
 
-            parent_ = s;
-            break;
-          }
-          case 18: {
-            com.google.firestore.v1.StructuredAggregationQuery.Builder subBuilder = null;
-            if (queryTypeCase_ == 2) {
-              subBuilder = ((com.google.firestore.v1.StructuredAggregationQuery) queryType_).toBuilder();
+              parent_ = s;
+              break;
             }
-            queryType_ =
-                input.readMessage(com.google.firestore.v1.StructuredAggregationQuery.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.v1.StructuredAggregationQuery) queryType_);
-              queryType_ = subBuilder.buildPartial();
+          case 18:
+            {
+              com.google.firestore.v1.StructuredAggregationQuery.Builder subBuilder = null;
+              if (queryTypeCase_ == 2) {
+                subBuilder =
+                    ((com.google.firestore.v1.StructuredAggregationQuery) queryType_).toBuilder();
+              }
+              queryType_ =
+                  input.readMessage(
+                      com.google.firestore.v1.StructuredAggregationQuery.parser(),
+                      extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(
+                    (com.google.firestore.v1.StructuredAggregationQuery) queryType_);
+                queryType_ = subBuilder.buildPartial();
+              }
+              queryTypeCase_ = 2;
+              break;
             }
-            queryTypeCase_ = 2;
-            break;
-          }
-          case 34: {
-            consistencySelector_ = input.readBytes();
-            consistencySelectorCase_ = 4;
-            break;
-          }
-          case 42: {
-            com.google.firestore.v1.TransactionOptions.Builder subBuilder = null;
-            if (consistencySelectorCase_ == 5) {
-              subBuilder = ((com.google.firestore.v1.TransactionOptions) consistencySelector_).toBuilder();
+          case 34:
+            {
+              consistencySelector_ = input.readBytes();
+              consistencySelectorCase_ = 4;
+              break;
             }
-            consistencySelector_ =
-                input.readMessage(com.google.firestore.v1.TransactionOptions.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.v1.TransactionOptions) consistencySelector_);
-              consistencySelector_ = subBuilder.buildPartial();
+          case 42:
+            {
+              com.google.firestore.v1.TransactionOptions.Builder subBuilder = null;
+              if (consistencySelectorCase_ == 5) {
+                subBuilder =
+                    ((com.google.firestore.v1.TransactionOptions) consistencySelector_).toBuilder();
+              }
+              consistencySelector_ =
+                  input.readMessage(
+                      com.google.firestore.v1.TransactionOptions.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(
+                    (com.google.firestore.v1.TransactionOptions) consistencySelector_);
+                consistencySelector_ = subBuilder.buildPartial();
+              }
+              consistencySelectorCase_ = 5;
+              break;
             }
-            consistencySelectorCase_ = 5;
-            break;
-          }
-          case 50: {
-            com.google.protobuf.Timestamp.Builder subBuilder = null;
-            if (consistencySelectorCase_ == 6) {
-              subBuilder = ((com.google.protobuf.Timestamp) consistencySelector_).toBuilder();
+          case 50:
+            {
+              com.google.protobuf.Timestamp.Builder subBuilder = null;
+              if (consistencySelectorCase_ == 6) {
+                subBuilder = ((com.google.protobuf.Timestamp) consistencySelector_).toBuilder();
+              }
+              consistencySelector_ =
+                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.protobuf.Timestamp) consistencySelector_);
+                consistencySelector_ = subBuilder.buildPartial();
+              }
+              consistencySelectorCase_ = 6;
+              break;
             }
-            consistencySelector_ =
-                input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.protobuf.Timestamp) consistencySelector_);
-              consistencySelector_ = subBuilder.buildPartial();
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
             }
-            consistencySelectorCase_ = 6;
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
-            }
-            break;
-          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -135,34 +149,39 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_RunAggregationQueryRequest_fieldAccessorTable
+    return com.google.firestore.v1.FirestoreProto
+        .internal_static_google_firestore_v1_RunAggregationQueryRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.RunAggregationQueryRequest.class, com.google.firestore.v1.RunAggregationQueryRequest.Builder.class);
+            com.google.firestore.v1.RunAggregationQueryRequest.class,
+            com.google.firestore.v1.RunAggregationQueryRequest.Builder.class);
   }
 
   private int queryTypeCase_ = 0;
   private java.lang.Object queryType_;
+
   public enum QueryTypeCase
-      implements com.google.protobuf.Internal.EnumLite,
+      implements
+          com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     STRUCTURED_AGGREGATION_QUERY(2),
     QUERYTYPE_NOT_SET(0);
     private final int value;
+
     private QueryTypeCase(int value) {
       this.value = value;
     }
@@ -178,32 +197,37 @@ private static final long serialVersionUID = 0L;
 
     public static QueryTypeCase forNumber(int value) {
       switch (value) {
-        case 2: return STRUCTURED_AGGREGATION_QUERY;
-        case 0: return QUERYTYPE_NOT_SET;
-        default: return null;
+        case 2:
+          return STRUCTURED_AGGREGATION_QUERY;
+        case 0:
+          return QUERYTYPE_NOT_SET;
+        default:
+          return null;
       }
     }
+
     public int getNumber() {
       return this.value;
     }
   };
 
-  public QueryTypeCase
-  getQueryTypeCase() {
-    return QueryTypeCase.forNumber(
-        queryTypeCase_);
+  public QueryTypeCase getQueryTypeCase() {
+    return QueryTypeCase.forNumber(queryTypeCase_);
   }
 
   private int consistencySelectorCase_ = 0;
   private java.lang.Object consistencySelector_;
+
   public enum ConsistencySelectorCase
-      implements com.google.protobuf.Internal.EnumLite,
+      implements
+          com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     TRANSACTION(4),
     NEW_TRANSACTION(5),
     READ_TIME(6),
     CONSISTENCYSELECTOR_NOT_SET(0);
     private final int value;
+
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
@@ -219,27 +243,33 @@ private static final long serialVersionUID = 0L;
 
     public static ConsistencySelectorCase forNumber(int value) {
       switch (value) {
-        case 4: return TRANSACTION;
-        case 5: return NEW_TRANSACTION;
-        case 6: return READ_TIME;
-        case 0: return CONSISTENCYSELECTOR_NOT_SET;
-        default: return null;
+        case 4:
+          return TRANSACTION;
+        case 5:
+          return NEW_TRANSACTION;
+        case 6:
+          return READ_TIME;
+        case 0:
+          return CONSISTENCYSELECTOR_NOT_SET;
+        default:
+          return null;
       }
     }
+
     public int getNumber() {
       return this.value;
     }
   };
 
-  public ConsistencySelectorCase
-  getConsistencySelectorCase() {
-    return ConsistencySelectorCase.forNumber(
-        consistencySelectorCase_);
+  public ConsistencySelectorCase getConsistencySelectorCase() {
+    return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
   private volatile java.lang.Object parent_;
   /**
+   *
+   *
    * <pre>
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -250,6 +280,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The parent.
    */
   @java.lang.Override
@@ -258,14 +289,15 @@ private static final long serialVersionUID = 0L;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
       parent_ = s;
       return s;
     }
   }
   /**
+   *
+   *
    * <pre>
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
@@ -276,16 +308,15 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+   *
    * @return The bytes for parent.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getParentBytes() {
+  public com.google.protobuf.ByteString getParentBytes() {
     java.lang.Object ref = parent_;
     if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       parent_ = b;
       return b;
     } else {
@@ -295,11 +326,14 @@ private static final long serialVersionUID = 0L;
 
   public static final int STRUCTURED_AGGREGATION_QUERY_FIELD_NUMBER = 2;
   /**
+   *
+   *
    * <pre>
    * An aggregation query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+   *
    * @return Whether the structuredAggregationQuery field is set.
    */
   @java.lang.Override
@@ -307,21 +341,26 @@ private static final long serialVersionUID = 0L;
     return queryTypeCase_ == 2;
   }
   /**
+   *
+   *
    * <pre>
    * An aggregation query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+   *
    * @return The structuredAggregationQuery.
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredAggregationQuery getStructuredAggregationQuery() {
     if (queryTypeCase_ == 2) {
-       return (com.google.firestore.v1.StructuredAggregationQuery) queryType_;
+      return (com.google.firestore.v1.StructuredAggregationQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance();
   }
   /**
+   *
+   *
    * <pre>
    * An aggregation query.
    * </pre>
@@ -329,21 +368,25 @@ private static final long serialVersionUID = 0L;
    * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.StructuredAggregationQueryOrBuilder getStructuredAggregationQueryOrBuilder() {
+  public com.google.firestore.v1.StructuredAggregationQueryOrBuilder
+      getStructuredAggregationQueryOrBuilder() {
     if (queryTypeCase_ == 2) {
-       return (com.google.firestore.v1.StructuredAggregationQuery) queryType_;
+      return (com.google.firestore.v1.StructuredAggregationQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance();
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 4;
   /**
+   *
+   *
    * <pre>
    * Run the aggregation within an already active transaction.
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 4;</code>
+   *
    * @return Whether the transaction field is set.
    */
   @java.lang.Override
@@ -351,12 +394,15 @@ private static final long serialVersionUID = 0L;
     return consistencySelectorCase_ == 4;
   }
   /**
+   *
+   *
    * <pre>
    * Run the aggregation within an already active transaction.
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
    * <code>bytes transaction = 4;</code>
+   *
    * @return The transaction.
    */
   @java.lang.Override
@@ -369,6 +415,8 @@ private static final long serialVersionUID = 0L;
 
   public static final int NEW_TRANSACTION_FIELD_NUMBER = 5;
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
    * The new transaction ID will be returned as the first response in the
@@ -376,6 +424,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>.google.firestore.v1.TransactionOptions new_transaction = 5;</code>
+   *
    * @return Whether the newTransaction field is set.
    */
   @java.lang.Override
@@ -383,6 +432,8 @@ private static final long serialVersionUID = 0L;
     return consistencySelectorCase_ == 5;
   }
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
    * The new transaction ID will be returned as the first response in the
@@ -390,16 +441,19 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>.google.firestore.v1.TransactionOptions new_transaction = 5;</code>
+   *
    * @return The newTransaction.
    */
   @java.lang.Override
   public com.google.firestore.v1.TransactionOptions getNewTransaction() {
     if (consistencySelectorCase_ == 5) {
-       return (com.google.firestore.v1.TransactionOptions) consistencySelector_;
+      return (com.google.firestore.v1.TransactionOptions) consistencySelector_;
     }
     return com.google.firestore.v1.TransactionOptions.getDefaultInstance();
   }
   /**
+   *
+   *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
    * The new transaction ID will be returned as the first response in the
@@ -411,13 +465,15 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public com.google.firestore.v1.TransactionOptionsOrBuilder getNewTransactionOrBuilder() {
     if (consistencySelectorCase_ == 5) {
-       return (com.google.firestore.v1.TransactionOptions) consistencySelector_;
+      return (com.google.firestore.v1.TransactionOptions) consistencySelector_;
     }
     return com.google.firestore.v1.TransactionOptions.getDefaultInstance();
   }
 
   public static final int READ_TIME_FIELD_NUMBER = 6;
   /**
+   *
+   *
    * <pre>
    * Executes the query at the given timestamp.
    * Requires:
@@ -425,6 +481,7 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
    * @return Whether the readTime field is set.
    */
   @java.lang.Override
@@ -432,6 +489,8 @@ private static final long serialVersionUID = 0L;
     return consistencySelectorCase_ == 6;
   }
   /**
+   *
+   *
    * <pre>
    * Executes the query at the given timestamp.
    * Requires:
@@ -439,16 +498,19 @@ private static final long serialVersionUID = 0L;
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
    * @return The readTime.
    */
   @java.lang.Override
   public com.google.protobuf.Timestamp getReadTime() {
     if (consistencySelectorCase_ == 6) {
-       return (com.google.protobuf.Timestamp) consistencySelector_;
+      return (com.google.protobuf.Timestamp) consistencySelector_;
     }
     return com.google.protobuf.Timestamp.getDefaultInstance();
   }
   /**
+   *
+   *
    * <pre>
    * Executes the query at the given timestamp.
    * Requires:
@@ -460,12 +522,13 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
     if (consistencySelectorCase_ == 6) {
-       return (com.google.protobuf.Timestamp) consistencySelector_;
+      return (com.google.protobuf.Timestamp) consistencySelector_;
     }
     return com.google.protobuf.Timestamp.getDefaultInstance();
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -477,8 +540,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
@@ -486,8 +548,7 @@ private static final long serialVersionUID = 0L;
       output.writeMessage(2, (com.google.firestore.v1.StructuredAggregationQuery) queryType_);
     }
     if (consistencySelectorCase_ == 4) {
-      output.writeBytes(
-          4, (com.google.protobuf.ByteString) consistencySelector_);
+      output.writeBytes(4, (com.google.protobuf.ByteString) consistencySelector_);
     }
     if (consistencySelectorCase_ == 5) {
       output.writeMessage(5, (com.google.firestore.v1.TransactionOptions) consistencySelector_);
@@ -508,21 +569,24 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
     }
     if (queryTypeCase_ == 2) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, (com.google.firestore.v1.StructuredAggregationQuery) queryType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              2, (com.google.firestore.v1.StructuredAggregationQuery) queryType_);
     }
     if (consistencySelectorCase_ == 4) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(
-            4, (com.google.protobuf.ByteString) consistencySelector_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeBytesSize(
+              4, (com.google.protobuf.ByteString) consistencySelector_);
     }
     if (consistencySelectorCase_ == 5) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, (com.google.firestore.v1.TransactionOptions) consistencySelector_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              5, (com.google.firestore.v1.TransactionOptions) consistencySelector_);
     }
     if (consistencySelectorCase_ == 6) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, (com.google.protobuf.Timestamp) consistencySelector_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              6, (com.google.protobuf.Timestamp) consistencySelector_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -532,20 +596,20 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.RunAggregationQueryRequest)) {
       return super.equals(obj);
     }
-    com.google.firestore.v1.RunAggregationQueryRequest other = (com.google.firestore.v1.RunAggregationQueryRequest) obj;
+    com.google.firestore.v1.RunAggregationQueryRequest other =
+        (com.google.firestore.v1.RunAggregationQueryRequest) obj;
 
-    if (!getParent()
-        .equals(other.getParent())) return false;
+    if (!getParent().equals(other.getParent())) return false;
     if (!getQueryTypeCase().equals(other.getQueryTypeCase())) return false;
     switch (queryTypeCase_) {
       case 2:
-        if (!getStructuredAggregationQuery()
-            .equals(other.getStructuredAggregationQuery())) return false;
+        if (!getStructuredAggregationQuery().equals(other.getStructuredAggregationQuery()))
+          return false;
         break;
       case 0:
       default:
@@ -553,16 +617,13 @@ private static final long serialVersionUID = 0L;
     if (!getConsistencySelectorCase().equals(other.getConsistencySelectorCase())) return false;
     switch (consistencySelectorCase_) {
       case 4:
-        if (!getTransaction()
-            .equals(other.getTransaction())) return false;
+        if (!getTransaction().equals(other.getTransaction())) return false;
         break;
       case 5:
-        if (!getNewTransaction()
-            .equals(other.getNewTransaction())) return false;
+        if (!getNewTransaction().equals(other.getNewTransaction())) return false;
         break;
       case 6:
-        if (!getReadTime()
-            .equals(other.getReadTime())) return false;
+        if (!getReadTime().equals(other.getReadTime())) return false;
         break;
       case 0:
       default:
@@ -610,117 +671,126 @@ private static final long serialVersionUID = 0L;
   }
 
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
-      java.nio.ByteBuffer data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
+      java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
-  public static com.google.firestore.v1.RunAggregationQueryRequest parseDelimitedFrom(java.io.InputStream input)
+
+  public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.v1.RunAggregationQueryRequest parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.RunAggregationQueryRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.RunAggregationQueryRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * The request for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.RunAggregationQueryRequest}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.RunAggregationQueryRequest)
       com.google.firestore.v1.RunAggregationQueryRequestOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_RunAggregationQueryRequest_fieldAccessorTable
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_RunAggregationQueryRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.RunAggregationQueryRequest.class, com.google.firestore.v1.RunAggregationQueryRequest.Builder.class);
+              com.google.firestore.v1.RunAggregationQueryRequest.class,
+              com.google.firestore.v1.RunAggregationQueryRequest.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.RunAggregationQueryRequest.newBuilder()
@@ -728,16 +798,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -751,9 +820,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.FirestoreProto.internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.FirestoreProto
+          .internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
     }
 
     @java.lang.Override
@@ -772,7 +841,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.RunAggregationQueryRequest buildPartial() {
-      com.google.firestore.v1.RunAggregationQueryRequest result = new com.google.firestore.v1.RunAggregationQueryRequest(this);
+      com.google.firestore.v1.RunAggregationQueryRequest result =
+          new com.google.firestore.v1.RunAggregationQueryRequest(this);
       result.parent_ = parent_;
       if (queryTypeCase_ == 2) {
         if (structuredAggregationQueryBuilder_ == null) {
@@ -808,38 +878,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.RunAggregationQueryRequest) {
-        return mergeFrom((com.google.firestore.v1.RunAggregationQueryRequest)other);
+        return mergeFrom((com.google.firestore.v1.RunAggregationQueryRequest) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -847,36 +918,43 @@ private static final long serialVersionUID = 0L;
     }
 
     public Builder mergeFrom(com.google.firestore.v1.RunAggregationQueryRequest other) {
-      if (other == com.google.firestore.v1.RunAggregationQueryRequest.getDefaultInstance()) return this;
+      if (other == com.google.firestore.v1.RunAggregationQueryRequest.getDefaultInstance())
+        return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
         onChanged();
       }
       switch (other.getQueryTypeCase()) {
-        case STRUCTURED_AGGREGATION_QUERY: {
-          mergeStructuredAggregationQuery(other.getStructuredAggregationQuery());
-          break;
-        }
-        case QUERYTYPE_NOT_SET: {
-          break;
-        }
+        case STRUCTURED_AGGREGATION_QUERY:
+          {
+            mergeStructuredAggregationQuery(other.getStructuredAggregationQuery());
+            break;
+          }
+        case QUERYTYPE_NOT_SET:
+          {
+            break;
+          }
       }
       switch (other.getConsistencySelectorCase()) {
-        case TRANSACTION: {
-          setTransaction(other.getTransaction());
-          break;
-        }
-        case NEW_TRANSACTION: {
-          mergeNewTransaction(other.getNewTransaction());
-          break;
-        }
-        case READ_TIME: {
-          mergeReadTime(other.getReadTime());
-          break;
-        }
-        case CONSISTENCYSELECTOR_NOT_SET: {
-          break;
-        }
+        case TRANSACTION:
+          {
+            setTransaction(other.getTransaction());
+            break;
+          }
+        case NEW_TRANSACTION:
+          {
+            mergeNewTransaction(other.getNewTransaction());
+            break;
+          }
+        case READ_TIME:
+          {
+            mergeReadTime(other.getReadTime());
+            break;
+          }
+        case CONSISTENCYSELECTOR_NOT_SET:
+          {
+            break;
+          }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -897,7 +975,8 @@ private static final long serialVersionUID = 0L;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.RunAggregationQueryRequest) e.getUnfinishedMessage();
+        parsedMessage =
+            (com.google.firestore.v1.RunAggregationQueryRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -906,12 +985,12 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int queryTypeCase_ = 0;
     private java.lang.Object queryType_;
-    public QueryTypeCase
-        getQueryTypeCase() {
-      return QueryTypeCase.forNumber(
-          queryTypeCase_);
+
+    public QueryTypeCase getQueryTypeCase() {
+      return QueryTypeCase.forNumber(queryTypeCase_);
     }
 
     public Builder clearQueryType() {
@@ -923,10 +1002,9 @@ private static final long serialVersionUID = 0L;
 
     private int consistencySelectorCase_ = 0;
     private java.lang.Object consistencySelector_;
-    public ConsistencySelectorCase
-        getConsistencySelectorCase() {
-      return ConsistencySelectorCase.forNumber(
-          consistencySelectorCase_);
+
+    public ConsistencySelectorCase getConsistencySelectorCase() {
+      return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
     }
 
     public Builder clearConsistencySelector() {
@@ -936,9 +1014,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-
     private java.lang.Object parent_ = "";
     /**
+     *
+     *
      * <pre>
      * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
@@ -949,13 +1028,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return The parent.
      */
     public java.lang.String getParent() {
       java.lang.Object ref = parent_;
       if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         parent_ = s;
         return s;
@@ -964,6 +1043,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
@@ -974,15 +1055,14 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return The bytes for parent.
      */
-    public com.google.protobuf.ByteString
-        getParentBytes() {
+    public com.google.protobuf.ByteString getParentBytes() {
       java.lang.Object ref = parent_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         parent_ = b;
         return b;
       } else {
@@ -990,6 +1070,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
@@ -1000,20 +1082,22 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @param value The parent to set.
      * @return This builder for chaining.
      */
-    public Builder setParent(
-        java.lang.String value) {
+    public Builder setParent(java.lang.String value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  
+        throw new NullPointerException();
+      }
+
       parent_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
@@ -1024,15 +1108,18 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-      
+
       parent_ = getDefaultInstance().getParent();
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Required. The parent resource name. In the format:
      * `projects/{project_id}/databases/{database_id}/documents` or
@@ -1043,29 +1130,36 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string parent = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+     *
      * @param value The bytes for parent to set.
      * @return This builder for chaining.
      */
-    public Builder setParentBytes(
-        com.google.protobuf.ByteString value) {
+    public Builder setParentBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+
       parent_ = value;
       onChanged();
       return this;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredAggregationQuery, com.google.firestore.v1.StructuredAggregationQuery.Builder, com.google.firestore.v1.StructuredAggregationQueryOrBuilder> structuredAggregationQueryBuilder_;
+            com.google.firestore.v1.StructuredAggregationQuery,
+            com.google.firestore.v1.StructuredAggregationQuery.Builder,
+            com.google.firestore.v1.StructuredAggregationQueryOrBuilder>
+        structuredAggregationQueryBuilder_;
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
+     *
      * @return Whether the structuredAggregationQuery field is set.
      */
     @java.lang.Override
@@ -1073,11 +1167,15 @@ private static final long serialVersionUID = 0L;
       return queryTypeCase_ == 2;
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
+     *
      * @return The structuredAggregationQuery.
      */
     @java.lang.Override
@@ -1095,13 +1193,17 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
-    public Builder setStructuredAggregationQuery(com.google.firestore.v1.StructuredAggregationQuery value) {
+    public Builder setStructuredAggregationQuery(
+        com.google.firestore.v1.StructuredAggregationQuery value) {
       if (structuredAggregationQueryBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -1115,11 +1217,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
     public Builder setStructuredAggregationQuery(
         com.google.firestore.v1.StructuredAggregationQuery.Builder builderForValue) {
@@ -1133,18 +1238,26 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
-    public Builder mergeStructuredAggregationQuery(com.google.firestore.v1.StructuredAggregationQuery value) {
+    public Builder mergeStructuredAggregationQuery(
+        com.google.firestore.v1.StructuredAggregationQuery value) {
       if (structuredAggregationQueryBuilder_ == null) {
-        if (queryTypeCase_ == 2 &&
-            queryType_ != com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance()) {
-          queryType_ = com.google.firestore.v1.StructuredAggregationQuery.newBuilder((com.google.firestore.v1.StructuredAggregationQuery) queryType_)
-              .mergeFrom(value).buildPartial();
+        if (queryTypeCase_ == 2
+            && queryType_
+                != com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance()) {
+          queryType_ =
+              com.google.firestore.v1.StructuredAggregationQuery.newBuilder(
+                      (com.google.firestore.v1.StructuredAggregationQuery) queryType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           queryType_ = value;
         }
@@ -1160,11 +1273,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
     public Builder clearStructuredAggregationQuery() {
       if (structuredAggregationQueryBuilder_ == null) {
@@ -1183,24 +1299,32 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.Builder getStructuredAggregationQueryBuilder() {
+    public com.google.firestore.v1.StructuredAggregationQuery.Builder
+        getStructuredAggregationQueryBuilder() {
       return getStructuredAggregationQueryFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
     @java.lang.Override
-    public com.google.firestore.v1.StructuredAggregationQueryOrBuilder getStructuredAggregationQueryOrBuilder() {
+    public com.google.firestore.v1.StructuredAggregationQueryOrBuilder
+        getStructuredAggregationQueryOrBuilder() {
       if ((queryTypeCase_ == 2) && (structuredAggregationQueryBuilder_ != null)) {
         return structuredAggregationQueryBuilder_.getMessageOrBuilder();
       } else {
@@ -1211,50 +1335,65 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * An aggregation query.
      * </pre>
      *
-     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;</code>
+     * <code>.google.firestore.v1.StructuredAggregationQuery structured_aggregation_query = 2;
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredAggregationQuery, com.google.firestore.v1.StructuredAggregationQuery.Builder, com.google.firestore.v1.StructuredAggregationQueryOrBuilder> 
+            com.google.firestore.v1.StructuredAggregationQuery,
+            com.google.firestore.v1.StructuredAggregationQuery.Builder,
+            com.google.firestore.v1.StructuredAggregationQueryOrBuilder>
         getStructuredAggregationQueryFieldBuilder() {
       if (structuredAggregationQueryBuilder_ == null) {
         if (!(queryTypeCase_ == 2)) {
           queryType_ = com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance();
         }
-        structuredAggregationQueryBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.StructuredAggregationQuery, com.google.firestore.v1.StructuredAggregationQuery.Builder, com.google.firestore.v1.StructuredAggregationQueryOrBuilder>(
+        structuredAggregationQueryBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.StructuredAggregationQuery,
+                com.google.firestore.v1.StructuredAggregationQuery.Builder,
+                com.google.firestore.v1.StructuredAggregationQueryOrBuilder>(
                 (com.google.firestore.v1.StructuredAggregationQuery) queryType_,
                 getParentForChildren(),
                 isClean());
         queryType_ = null;
       }
       queryTypeCase_ = 2;
-      onChanged();;
+      onChanged();
+      ;
       return structuredAggregationQueryBuilder_;
     }
 
     /**
+     *
+     *
      * <pre>
      * Run the aggregation within an already active transaction.
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
      * @return Whether the transaction field is set.
      */
     public boolean hasTransaction() {
       return consistencySelectorCase_ == 4;
     }
     /**
+     *
+     *
      * <pre>
      * Run the aggregation within an already active transaction.
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
      * @return The transaction.
      */
     public com.google.protobuf.ByteString getTransaction() {
@@ -1264,31 +1403,37 @@ private static final long serialVersionUID = 0L;
       return com.google.protobuf.ByteString.EMPTY;
     }
     /**
+     *
+     *
      * <pre>
      * Run the aggregation within an already active transaction.
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
      * @param value The transaction to set.
      * @return This builder for chaining.
      */
     public Builder setTransaction(com.google.protobuf.ByteString value) {
       if (value == null) {
-    throw new NullPointerException();
-  }
-  consistencySelectorCase_ = 4;
+        throw new NullPointerException();
+      }
+      consistencySelectorCase_ = 4;
       consistencySelector_ = value;
       onChanged();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Run the aggregation within an already active transaction.
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
      * <code>bytes transaction = 4;</code>
+     *
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
@@ -1301,8 +1446,13 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.TransactionOptions, com.google.firestore.v1.TransactionOptions.Builder, com.google.firestore.v1.TransactionOptionsOrBuilder> newTransactionBuilder_;
+            com.google.firestore.v1.TransactionOptions,
+            com.google.firestore.v1.TransactionOptions.Builder,
+            com.google.firestore.v1.TransactionOptionsOrBuilder>
+        newTransactionBuilder_;
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1310,6 +1460,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>.google.firestore.v1.TransactionOptions new_transaction = 5;</code>
+     *
      * @return Whether the newTransaction field is set.
      */
     @java.lang.Override
@@ -1317,6 +1468,8 @@ private static final long serialVersionUID = 0L;
       return consistencySelectorCase_ == 5;
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1324,6 +1477,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>.google.firestore.v1.TransactionOptions new_transaction = 5;</code>
+     *
      * @return The newTransaction.
      */
     @java.lang.Override
@@ -1341,6 +1495,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1363,6 +1519,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1383,6 +1541,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1393,10 +1553,14 @@ private static final long serialVersionUID = 0L;
      */
     public Builder mergeNewTransaction(com.google.firestore.v1.TransactionOptions value) {
       if (newTransactionBuilder_ == null) {
-        if (consistencySelectorCase_ == 5 &&
-            consistencySelector_ != com.google.firestore.v1.TransactionOptions.getDefaultInstance()) {
-          consistencySelector_ = com.google.firestore.v1.TransactionOptions.newBuilder((com.google.firestore.v1.TransactionOptions) consistencySelector_)
-              .mergeFrom(value).buildPartial();
+        if (consistencySelectorCase_ == 5
+            && consistencySelector_
+                != com.google.firestore.v1.TransactionOptions.getDefaultInstance()) {
+          consistencySelector_ =
+              com.google.firestore.v1.TransactionOptions.newBuilder(
+                      (com.google.firestore.v1.TransactionOptions) consistencySelector_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           consistencySelector_ = value;
         }
@@ -1412,6 +1576,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1437,6 +1603,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1449,6 +1617,8 @@ private static final long serialVersionUID = 0L;
       return getNewTransactionFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1469,6 +1639,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
      * The new transaction ID will be returned as the first response in the
@@ -1478,27 +1650,38 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.TransactionOptions new_transaction = 5;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.TransactionOptions, com.google.firestore.v1.TransactionOptions.Builder, com.google.firestore.v1.TransactionOptionsOrBuilder> 
+            com.google.firestore.v1.TransactionOptions,
+            com.google.firestore.v1.TransactionOptions.Builder,
+            com.google.firestore.v1.TransactionOptionsOrBuilder>
         getNewTransactionFieldBuilder() {
       if (newTransactionBuilder_ == null) {
         if (!(consistencySelectorCase_ == 5)) {
           consistencySelector_ = com.google.firestore.v1.TransactionOptions.getDefaultInstance();
         }
-        newTransactionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.TransactionOptions, com.google.firestore.v1.TransactionOptions.Builder, com.google.firestore.v1.TransactionOptionsOrBuilder>(
+        newTransactionBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.TransactionOptions,
+                com.google.firestore.v1.TransactionOptions.Builder,
+                com.google.firestore.v1.TransactionOptionsOrBuilder>(
                 (com.google.firestore.v1.TransactionOptions) consistencySelector_,
                 getParentForChildren(),
                 isClean());
         consistencySelector_ = null;
       }
       consistencySelectorCase_ = 5;
-      onChanged();;
+      onChanged();
+      ;
       return newTransactionBuilder_;
     }
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> readTimeBuilder_;
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        readTimeBuilder_;
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1506,6 +1689,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
      * @return Whether the readTime field is set.
      */
     @java.lang.Override
@@ -1513,6 +1697,8 @@ private static final long serialVersionUID = 0L;
       return consistencySelectorCase_ == 6;
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1520,6 +1706,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
      * @return The readTime.
      */
     @java.lang.Override
@@ -1537,6 +1724,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1559,6 +1748,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1567,8 +1758,7 @@ private static final long serialVersionUID = 0L;
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
-    public Builder setReadTime(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
+    public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         consistencySelector_ = builderForValue.build();
         onChanged();
@@ -1579,6 +1769,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1589,10 +1781,13 @@ private static final long serialVersionUID = 0L;
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (consistencySelectorCase_ == 6 &&
-            consistencySelector_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
-          consistencySelector_ = com.google.protobuf.Timestamp.newBuilder((com.google.protobuf.Timestamp) consistencySelector_)
-              .mergeFrom(value).buildPartial();
+        if (consistencySelectorCase_ == 6
+            && consistencySelector_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          consistencySelector_ =
+              com.google.protobuf.Timestamp.newBuilder(
+                      (com.google.protobuf.Timestamp) consistencySelector_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           consistencySelector_ = value;
         }
@@ -1608,6 +1803,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1633,6 +1830,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1645,6 +1844,8 @@ private static final long serialVersionUID = 0L;
       return getReadTimeFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1665,6 +1866,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Executes the query at the given timestamp.
      * Requires:
@@ -1674,26 +1877,32 @@ private static final long serialVersionUID = 0L;
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
         getReadTimeFieldBuilder() {
       if (readTimeBuilder_ == null) {
         if (!(consistencySelectorCase_ == 6)) {
           consistencySelector_ = com.google.protobuf.Timestamp.getDefaultInstance();
         }
-        readTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
+        readTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
                 (com.google.protobuf.Timestamp) consistencySelector_,
                 getParentForChildren(),
                 isClean());
         consistencySelector_ = null;
       }
       consistencySelectorCase_ = 6;
-      onChanged();;
+      onChanged();
+      ;
       return readTimeBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -1703,12 +1912,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.RunAggregationQueryRequest)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.RunAggregationQueryRequest)
   private static final com.google.firestore.v1.RunAggregationQueryRequest DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.RunAggregationQueryRequest();
   }
@@ -1717,16 +1926,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<RunAggregationQueryRequest>
-      PARSER = new com.google.protobuf.AbstractParser<RunAggregationQueryRequest>() {
-    @java.lang.Override
-    public RunAggregationQueryRequest parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new RunAggregationQueryRequest(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<RunAggregationQueryRequest> PARSER =
+      new com.google.protobuf.AbstractParser<RunAggregationQueryRequest>() {
+        @java.lang.Override
+        public RunAggregationQueryRequest parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RunAggregationQueryRequest(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<RunAggregationQueryRequest> parser() {
     return PARSER;
@@ -1741,6 +1950,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.RunAggregationQueryRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

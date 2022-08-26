@@ -19,37 +19,39 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * Firestore query for running an aggregation over a [StructuredQuery][google.firestore.v1.StructuredQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery}
  */
-public final class StructuredAggregationQuery extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class StructuredAggregationQuery extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredAggregationQuery)
     StructuredAggregationQueryOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use StructuredAggregationQuery.newBuilder() to construct.
   private StructuredAggregationQuery(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
+
   private StructuredAggregationQuery() {
     aggregations_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new StructuredAggregationQuery();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private StructuredAggregationQuery(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -69,36 +71,43 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
-            if (queryTypeCase_ == 1) {
-              subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
+          case 10:
+            {
+              com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
+              if (queryTypeCase_ == 1) {
+                subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
+              }
+              queryType_ =
+                  input.readMessage(
+                      com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
+                queryType_ = subBuilder.buildPartial();
+              }
+              queryTypeCase_ = 1;
+              break;
             }
-            queryType_ =
-                input.readMessage(com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
-              queryType_ = subBuilder.buildPartial();
+          case 26:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                aggregations_ =
+                    new java.util.ArrayList<
+                        com.google.firestore.v1.StructuredAggregationQuery.Aggregation>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              aggregations_.add(
+                  input.readMessage(
+                      com.google.firestore.v1.StructuredAggregationQuery.Aggregation.parser(),
+                      extensionRegistry));
+              break;
             }
-            queryTypeCase_ = 1;
-            break;
-          }
-          case 26: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              aggregations_ = new java.util.ArrayList<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>();
-              mutable_bitField0_ |= 0x00000001;
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
             }
-            aggregations_.add(
-                input.readMessage(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.parser(), extensionRegistry));
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
-            }
-            break;
-          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -106,8 +115,7 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
         aggregations_ = java.util.Collections.unmodifiableList(aggregations_);
@@ -116,51 +124,66 @@ private static final long serialVersionUID = 0L;
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.QueryProto
+        .internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable
+    return com.google.firestore.v1.QueryProto
+        .internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.v1.StructuredAggregationQuery.class, com.google.firestore.v1.StructuredAggregationQuery.Builder.class);
+            com.google.firestore.v1.StructuredAggregationQuery.class,
+            com.google.firestore.v1.StructuredAggregationQuery.Builder.class);
   }
 
-  public interface AggregationOrBuilder extends
+  public interface AggregationOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredAggregationQuery.Aggregation)
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+     *
      * @return Whether the count field is set.
      */
     boolean hasCount();
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+     *
      * @return The count.
      */
     com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count getCount();
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
      */
-    com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder getCountOrBuilder();
+    com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder
+        getCountOrBuilder();
 
     /**
+     *
+     *
      * <pre>
      * Optional. Optional name of the field to store the result of the aggregation into.
      * If not provided, Firestore will pick a default name following the format
@@ -192,10 +215,13 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+     *
      * @return The alias.
      */
     java.lang.String getAlias();
     /**
+     *
+     *
      * <pre>
      * Optional. Optional name of the field to store the result of the aggregation into.
      * If not provided, Firestore will pick a default name following the format
@@ -227,45 +253,48 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+     *
      * @return The bytes for alias.
      */
-    com.google.protobuf.ByteString
-        getAliasBytes();
+    com.google.protobuf.ByteString getAliasBytes();
 
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.OperatorCase getOperatorCase();
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.OperatorCase
+        getOperatorCase();
   }
   /**
+   *
+   *
    * <pre>
    * Defines a aggregation that produces a single result.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation}
    */
-  public static final class Aggregation extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class Aggregation extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredAggregationQuery.Aggregation)
       AggregationOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use Aggregation.newBuilder() to construct.
     private Aggregation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private Aggregation() {
       alias_ = "";
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new Aggregation();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private Aggregation(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -284,33 +313,44 @@ private static final long serialVersionUID = 0L;
             case 0:
               done = true;
               break;
-            case 10: {
-              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder subBuilder = null;
-              if (operatorCase_ == 1) {
-                subBuilder = ((com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_).toBuilder();
+            case 10:
+              {
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder
+                    subBuilder = null;
+                if (operatorCase_ == 1) {
+                  subBuilder =
+                      ((com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
+                              operator_)
+                          .toBuilder();
+                }
+                operator_ =
+                    input.readMessage(
+                        com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+                            .parser(),
+                        extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(
+                      (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
+                          operator_);
+                  operator_ = subBuilder.buildPartial();
+                }
+                operatorCase_ = 1;
+                break;
               }
-              operator_ =
-                  input.readMessage(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_);
-                operator_ = subBuilder.buildPartial();
-              }
-              operatorCase_ = 1;
-              break;
-            }
-            case 58: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 58:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
 
-              alias_ = s;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+                alias_ = s;
+                break;
               }
-              break;
-            }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -318,31 +358,36 @@ private static final long serialVersionUID = 0L;
       } catch (com.google.protobuf.UninitializedMessageException e) {
         throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.class, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder.class);
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.class,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder.class);
     }
 
-    public interface CountOrBuilder extends
+    public interface CountOrBuilder
+        extends
         // @@protoc_insertion_point(interface_extends:google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
         com.google.protobuf.MessageOrBuilder {
 
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -356,11 +401,15 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
+       *
        * @return Whether the upTo field is set.
        */
       boolean hasUpTo();
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -374,11 +423,15 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
+       *
        * @return The upTo.
        */
       com.google.protobuf.Int64Value getUpTo();
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -392,11 +445,14 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
        */
       com.google.protobuf.Int64ValueOrBuilder getUpToOrBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * Count of documents that match the query.
      * The `COUNT(*)` aggregation function operates on the entire document
@@ -405,30 +461,29 @@ private static final long serialVersionUID = 0L;
      *
      * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation.Count}
      */
-    public static final class Count extends
-        com.google.protobuf.GeneratedMessageV3 implements
+    public static final class Count extends com.google.protobuf.GeneratedMessageV3
+        implements
         // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
         CountOrBuilder {
-    private static final long serialVersionUID = 0L;
+      private static final long serialVersionUID = 0L;
       // Use Count.newBuilder() to construct.
       private Count(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
-      private Count() {
-      }
+
+      private Count() {}
 
       @java.lang.Override
       @SuppressWarnings({"unused"})
-      protected java.lang.Object newInstance(
-          UnusedPrivateParameter unused) {
+      protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
         return new Count();
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
-      getUnknownFields() {
+      public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
         return this.unknownFields;
       }
+
       private Count(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -447,26 +502,28 @@ private static final long serialVersionUID = 0L;
               case 0:
                 done = true;
                 break;
-              case 10: {
-                com.google.protobuf.Int64Value.Builder subBuilder = null;
-                if (upTo_ != null) {
-                  subBuilder = upTo_.toBuilder();
-                }
-                upTo_ = input.readMessage(com.google.protobuf.Int64Value.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(upTo_);
-                  upTo_ = subBuilder.buildPartial();
-                }
+              case 10:
+                {
+                  com.google.protobuf.Int64Value.Builder subBuilder = null;
+                  if (upTo_ != null) {
+                    subBuilder = upTo_.toBuilder();
+                  }
+                  upTo_ =
+                      input.readMessage(com.google.protobuf.Int64Value.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(upTo_);
+                    upTo_ = subBuilder.buildPartial();
+                  }
 
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
+                  break;
                 }
-                break;
-              }
+              default:
+                {
+                  if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                    done = true;
+                  }
+                  break;
+                }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -474,29 +531,34 @@ private static final long serialVersionUID = 0L;
         } catch (com.google.protobuf.UninitializedMessageException e) {
           throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(this);
         } finally {
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
+
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.class, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder.class);
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.class,
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder.class);
       }
 
       public static final int UP_TO_FIELD_NUMBER = 1;
       private com.google.protobuf.Int64Value upTo_;
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -510,7 +572,9 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
+       *
        * @return Whether the upTo field is set.
        */
       @java.lang.Override
@@ -518,6 +582,8 @@ private static final long serialVersionUID = 0L;
         return upTo_ != null;
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -531,7 +597,9 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
+       *
        * @return The upTo.
        */
       @java.lang.Override
@@ -539,6 +607,8 @@ private static final long serialVersionUID = 0L;
         return upTo_ == null ? com.google.protobuf.Int64Value.getDefaultInstance() : upTo_;
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional constraint on the maximum number of documents to count.
        * This provides a way to set an upper bound on the number of documents
@@ -552,7 +622,8 @@ private static final long serialVersionUID = 0L;
        * * Must be greater than zero when present.
        * </pre>
        *
-       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+       * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+       * </code>
        */
       @java.lang.Override
       public com.google.protobuf.Int64ValueOrBuilder getUpToOrBuilder() {
@@ -560,6 +631,7 @@ private static final long serialVersionUID = 0L;
       }
 
       private byte memoizedIsInitialized = -1;
+
       @java.lang.Override
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -571,8 +643,7 @@ private static final long serialVersionUID = 0L;
       }
 
       @java.lang.Override
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
+      public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
         if (upTo_ != null) {
           output.writeMessage(1, getUpTo());
         }
@@ -586,8 +657,7 @@ private static final long serialVersionUID = 0L;
 
         size = 0;
         if (upTo_ != null) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, getUpTo());
+          size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getUpTo());
         }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
@@ -597,17 +667,18 @@ private static final long serialVersionUID = 0L;
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
-         return true;
+          return true;
         }
-        if (!(obj instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)) {
+        if (!(obj
+            instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)) {
           return super.equals(obj);
         }
-        com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count other = (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) obj;
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count other =
+            (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) obj;
 
         if (hasUpTo() != other.hasUpTo()) return false;
         if (hasUpTo()) {
-          if (!getUpTo()
-              .equals(other.getUpTo())) return false;
+          if (!getUpTo().equals(other.getUpTo())) return false;
         }
         if (!unknownFields.equals(other.unknownFields)) return false;
         return true;
@@ -630,87 +701,96 @@ private static final long serialVersionUID = 0L;
       }
 
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
-          java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
-          java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+
+      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
+          byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
-          byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
-      }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
+          java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
       }
-      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input);
-      }
-      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseDelimitedFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-      }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
-          com.google.protobuf.CodedInputStream input)
+          java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
       }
+
+      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+      }
+
+      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          parseDelimitedFrom(
+              java.io.InputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+            PARSER, input, extensionRegistry);
+      }
+
+      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
+          com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+      }
+
       public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
       }
 
       @java.lang.Override
-      public Builder newBuilderForType() { return newBuilder(); }
+      public Builder newBuilderForType() {
+        return newBuilder();
+      }
+
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-      public static Builder newBuilder(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count prototype) {
+
+      public static Builder newBuilder(
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
+
       @java.lang.Override
       public Builder toBuilder() {
-        return this == DEFAULT_INSTANCE
-            ? new Builder() : new Builder().mergeFrom(this);
+        return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
       }
 
       @java.lang.Override
@@ -720,6 +800,8 @@ private static final long serialVersionUID = 0L;
         return builder;
       }
       /**
+       *
+       *
        * <pre>
        * Count of documents that match the query.
        * The `COUNT(*)` aggregation function operates on the entire document
@@ -728,38 +810,42 @@ private static final long serialVersionUID = 0L;
        *
        * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation.Count}
        */
-      public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+      public static final class Builder
+          extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+          implements
           // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
           com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+          return com.google.firestore.v1.QueryProto
+              .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
         }
 
         @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable
+          return com.google.firestore.v1.QueryProto
+              .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.class, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder.class);
+                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.class,
+                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder
+                      .class);
         }
 
-        // Construct using com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.newBuilder()
+        // Construct using
+        // com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
 
-        private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
+
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
+          if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
         }
+
         @java.lang.Override
         public Builder clear() {
           super.clear();
@@ -773,19 +859,22 @@ private static final long serialVersionUID = 0L;
         }
 
         @java.lang.Override
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
-          return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
+        public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+          return com.google.firestore.v1.QueryProto
+              .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
         }
 
         @java.lang.Override
-        public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count getDefaultInstanceForType() {
-          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+        public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+            getDefaultInstanceForType() {
+          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+              .getDefaultInstance();
         }
 
         @java.lang.Override
         public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count build() {
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count result = buildPartial();
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count result =
+              buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
@@ -794,7 +883,8 @@ private static final long serialVersionUID = 0L;
 
         @java.lang.Override
         public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count buildPartial() {
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count result = new com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count(this);
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count result =
+              new com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count(this);
           if (upToBuilder_ == null) {
             result.upTo_ = upTo_;
           } else {
@@ -808,46 +898,54 @@ private static final long serialVersionUID = 0L;
         public Builder clone() {
           return super.clone();
         }
+
         @java.lang.Override
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
           return super.setField(field, value);
         }
+
         @java.lang.Override
-        public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+        public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
+
         @java.lang.Override
-        public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
+
         @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
-            int index, java.lang.Object value) {
+            int index,
+            java.lang.Object value) {
           return super.setRepeatedField(field, index, value);
         }
+
         @java.lang.Override
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
           return super.addRepeatedField(field, value);
         }
+
         @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) {
-            return mergeFrom((com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)other);
+          if (other
+              instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) {
+            return mergeFrom(
+                (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count other) {
-          if (other == com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance()) return this;
+        public Builder mergeFrom(
+            com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count other) {
+          if (other
+              == com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+                  .getDefaultInstance()) return this;
           if (other.hasUpTo()) {
             mergeUpTo(other.getUpTo());
           }
@@ -870,7 +968,9 @@ private static final long serialVersionUID = 0L;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) e.getUnfinishedMessage();
+            parsedMessage =
+                (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
+                    e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
             if (parsedMessage != null) {
@@ -882,8 +982,13 @@ private static final long serialVersionUID = 0L;
 
         private com.google.protobuf.Int64Value upTo_;
         private com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder> upToBuilder_;
+                com.google.protobuf.Int64Value,
+                com.google.protobuf.Int64Value.Builder,
+                com.google.protobuf.Int64ValueOrBuilder>
+            upToBuilder_;
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -897,13 +1002,17 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
+         *
          * @return Whether the upTo field is set.
          */
         public boolean hasUpTo() {
           return upToBuilder_ != null || upTo_ != null;
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -917,7 +1026,9 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
+         *
          * @return The upTo.
          */
         public com.google.protobuf.Int64Value getUpTo() {
@@ -928,6 +1039,8 @@ private static final long serialVersionUID = 0L;
           }
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -941,7 +1054,8 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         public Builder setUpTo(com.google.protobuf.Int64Value value) {
           if (upToBuilder_ == null) {
@@ -957,6 +1071,8 @@ private static final long serialVersionUID = 0L;
           return this;
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -970,10 +1086,10 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
-        public Builder setUpTo(
-            com.google.protobuf.Int64Value.Builder builderForValue) {
+        public Builder setUpTo(com.google.protobuf.Int64Value.Builder builderForValue) {
           if (upToBuilder_ == null) {
             upTo_ = builderForValue.build();
             onChanged();
@@ -984,6 +1100,8 @@ private static final long serialVersionUID = 0L;
           return this;
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -997,13 +1115,14 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         public Builder mergeUpTo(com.google.protobuf.Int64Value value) {
           if (upToBuilder_ == null) {
             if (upTo_ != null) {
               upTo_ =
-                com.google.protobuf.Int64Value.newBuilder(upTo_).mergeFrom(value).buildPartial();
+                  com.google.protobuf.Int64Value.newBuilder(upTo_).mergeFrom(value).buildPartial();
             } else {
               upTo_ = value;
             }
@@ -1015,6 +1134,8 @@ private static final long serialVersionUID = 0L;
           return this;
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -1028,7 +1149,8 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         public Builder clearUpTo() {
           if (upToBuilder_ == null) {
@@ -1042,6 +1164,8 @@ private static final long serialVersionUID = 0L;
           return this;
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -1055,14 +1179,17 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         public com.google.protobuf.Int64Value.Builder getUpToBuilder() {
-          
+
           onChanged();
           return getUpToFieldBuilder().getBuilder();
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -1076,17 +1203,19 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         public com.google.protobuf.Int64ValueOrBuilder getUpToOrBuilder() {
           if (upToBuilder_ != null) {
             return upToBuilder_.getMessageOrBuilder();
           } else {
-            return upTo_ == null ?
-                com.google.protobuf.Int64Value.getDefaultInstance() : upTo_;
+            return upTo_ == null ? com.google.protobuf.Int64Value.getDefaultInstance() : upTo_;
           }
         }
         /**
+         *
+         *
          * <pre>
          * Optional. Optional constraint on the maximum number of documents to count.
          * This provides a way to set an upper bound on the number of documents
@@ -1100,21 +1229,26 @@ private static final long serialVersionUID = 0L;
          * * Must be greater than zero when present.
          * </pre>
          *
-         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];</code>
+         * <code>.google.protobuf.Int64Value up_to = 1 [(.google.api.field_behavior) = OPTIONAL];
+         * </code>
          */
         private com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder> 
+                com.google.protobuf.Int64Value,
+                com.google.protobuf.Int64Value.Builder,
+                com.google.protobuf.Int64ValueOrBuilder>
             getUpToFieldBuilder() {
           if (upToBuilder_ == null) {
-            upToBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder>(
-                    getUpTo(),
-                    getParentForChildren(),
-                    isClean());
+            upToBuilder_ =
+                new com.google.protobuf.SingleFieldBuilderV3<
+                    com.google.protobuf.Int64Value,
+                    com.google.protobuf.Int64Value.Builder,
+                    com.google.protobuf.Int64ValueOrBuilder>(
+                    getUpTo(), getParentForChildren(), isClean());
             upTo_ = null;
           }
           return upToBuilder_;
         }
+
         @java.lang.Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1127,30 +1261,33 @@ private static final long serialVersionUID = 0L;
           return super.mergeUnknownFields(unknownFields);
         }
 
-
         // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
       }
 
       // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
-      private static final com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count DEFAULT_INSTANCE;
+      private static final com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          DEFAULT_INSTANCE;
+
       static {
-        DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count();
+        DEFAULT_INSTANCE =
+            new com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count();
       }
 
-      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count getDefaultInstance() {
+      public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          getDefaultInstance() {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Count>
-          PARSER = new com.google.protobuf.AbstractParser<Count>() {
-        @java.lang.Override
-        public Count parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Count(input, extensionRegistry);
-        }
-      };
+      private static final com.google.protobuf.Parser<Count> PARSER =
+          new com.google.protobuf.AbstractParser<Count>() {
+            @java.lang.Override
+            public Count parsePartialFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+              return new Count(input, extensionRegistry);
+            }
+          };
 
       public static com.google.protobuf.Parser<Count> parser() {
         return PARSER;
@@ -1162,20 +1299,23 @@ private static final long serialVersionUID = 0L;
       }
 
       @java.lang.Override
-      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count getDefaultInstanceForType() {
+      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
-
     }
 
     private int operatorCase_ = 0;
     private java.lang.Object operator_;
+
     public enum OperatorCase
-        implements com.google.protobuf.Internal.EnumLite,
+        implements
+            com.google.protobuf.Internal.EnumLite,
             com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       COUNT(1),
       OPERATOR_NOT_SET(0);
       private final int value;
+
       private OperatorCase(int value) {
         this.value = value;
       }
@@ -1191,29 +1331,34 @@ private static final long serialVersionUID = 0L;
 
       public static OperatorCase forNumber(int value) {
         switch (value) {
-          case 1: return COUNT;
-          case 0: return OPERATOR_NOT_SET;
-          default: return null;
+          case 1:
+            return COUNT;
+          case 0:
+            return OPERATOR_NOT_SET;
+          default:
+            return null;
         }
       }
+
       public int getNumber() {
         return this.value;
       }
     };
 
-    public OperatorCase
-    getOperatorCase() {
-      return OperatorCase.forNumber(
-          operatorCase_);
+    public OperatorCase getOperatorCase() {
+      return OperatorCase.forNumber(operatorCase_);
     }
 
     public static final int COUNT_FIELD_NUMBER = 1;
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+     *
      * @return Whether the count field is set.
      */
     @java.lang.Override
@@ -1221,21 +1366,27 @@ private static final long serialVersionUID = 0L;
       return operatorCase_ == 1;
     }
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+     *
      * @return The count.
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count getCount() {
       if (operatorCase_ == 1) {
-         return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
+        return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
       }
-      return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+      return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          .getDefaultInstance();
     }
     /**
+     *
+     *
      * <pre>
      * Count aggregator.
      * </pre>
@@ -1243,16 +1394,20 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
      */
     @java.lang.Override
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder getCountOrBuilder() {
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder
+        getCountOrBuilder() {
       if (operatorCase_ == 1) {
-         return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
+        return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
       }
-      return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+      return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+          .getDefaultInstance();
     }
 
     public static final int ALIAS_FIELD_NUMBER = 7;
     private volatile java.lang.Object alias_;
     /**
+     *
+     *
      * <pre>
      * Optional. Optional name of the field to store the result of the aggregation into.
      * If not provided, Firestore will pick a default name following the format
@@ -1284,6 +1439,7 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+     *
      * @return The alias.
      */
     @java.lang.Override
@@ -1292,14 +1448,15 @@ private static final long serialVersionUID = 0L;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         alias_ = s;
         return s;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Optional name of the field to store the result of the aggregation into.
      * If not provided, Firestore will pick a default name following the format
@@ -1331,16 +1488,15 @@ private static final long serialVersionUID = 0L;
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+     *
      * @return The bytes for alias.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString
-        getAliasBytes() {
+    public com.google.protobuf.ByteString getAliasBytes() {
       java.lang.Object ref = alias_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         alias_ = b;
         return b;
       } else {
@@ -1349,6 +1505,7 @@ private static final long serialVersionUID = 0L;
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1360,10 +1517,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (operatorCase_ == 1) {
-        output.writeMessage(1, (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_);
+        output.writeMessage(
+            1, (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(alias_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, alias_);
@@ -1378,8 +1535,10 @@ private static final long serialVersionUID = 0L;
 
       size = 0;
       if (operatorCase_ == 1) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_);
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                1,
+                (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(alias_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, alias_);
@@ -1392,20 +1551,19 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation)) {
         return super.equals(obj);
       }
-      com.google.firestore.v1.StructuredAggregationQuery.Aggregation other = (com.google.firestore.v1.StructuredAggregationQuery.Aggregation) obj;
+      com.google.firestore.v1.StructuredAggregationQuery.Aggregation other =
+          (com.google.firestore.v1.StructuredAggregationQuery.Aggregation) obj;
 
-      if (!getAlias()
-          .equals(other.getAlias())) return false;
+      if (!getAlias().equals(other.getAlias())) return false;
       if (!getOperatorCase().equals(other.getOperatorCase())) return false;
       switch (operatorCase_) {
         case 1:
-          if (!getCount()
-              .equals(other.getCount())) return false;
+          if (!getCount().equals(other.getCount())) return false;
           break;
         case 0:
         default:
@@ -1437,87 +1595,94 @@ private static final long serialVersionUID = 0L;
     }
 
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.google.firestore.v1.StructuredAggregationQuery.Aggregation prototype) {
+
+    public static Builder newBuilder(
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1527,27 +1692,32 @@ private static final long serialVersionUID = 0L;
       return builder;
     }
     /**
+     *
+     *
      * <pre>
      * Defines a aggregation that produces a single result.
      * </pre>
      *
      * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredAggregationQuery.Aggregation)
         com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.class, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder.class);
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.class,
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder.class);
       }
 
       // Construct using com.google.firestore.v1.StructuredAggregationQuery.Aggregation.newBuilder()
@@ -1555,16 +1725,15 @@ private static final long serialVersionUID = 0L;
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1576,13 +1745,14 @@ private static final long serialVersionUID = 0L;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.v1.QueryProto
+            .internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
       }
 
       @java.lang.Override
-      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation getDefaultInstanceForType() {
+      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation
+          getDefaultInstanceForType() {
         return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance();
       }
 
@@ -1597,7 +1767,8 @@ private static final long serialVersionUID = 0L;
 
       @java.lang.Override
       public com.google.firestore.v1.StructuredAggregationQuery.Aggregation buildPartial() {
-        com.google.firestore.v1.StructuredAggregationQuery.Aggregation result = new com.google.firestore.v1.StructuredAggregationQuery.Aggregation(this);
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation result =
+            new com.google.firestore.v1.StructuredAggregationQuery.Aggregation(this);
         if (operatorCase_ == 1) {
           if (countBuilder_ == null) {
             result.operator_ = operator_;
@@ -1615,58 +1786,66 @@ private static final long serialVersionUID = 0L;
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.google.firestore.v1.StructuredAggregationQuery.Aggregation) {
-          return mergeFrom((com.google.firestore.v1.StructuredAggregationQuery.Aggregation)other);
+          return mergeFrom((com.google.firestore.v1.StructuredAggregationQuery.Aggregation) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.google.firestore.v1.StructuredAggregationQuery.Aggregation other) {
-        if (other == com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance()) return this;
+      public Builder mergeFrom(
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation other) {
+        if (other
+            == com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance())
+          return this;
         if (!other.getAlias().isEmpty()) {
           alias_ = other.alias_;
           onChanged();
         }
         switch (other.getOperatorCase()) {
-          case COUNT: {
-            mergeCount(other.getCount());
-            break;
-          }
-          case OPERATOR_NOT_SET: {
-            break;
-          }
+          case COUNT:
+            {
+              mergeCount(other.getCount());
+              break;
+            }
+          case OPERATOR_NOT_SET:
+            {
+              break;
+            }
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1687,7 +1866,9 @@ private static final long serialVersionUID = 0L;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.google.firestore.v1.StructuredAggregationQuery.Aggregation) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.google.firestore.v1.StructuredAggregationQuery.Aggregation)
+                  e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1696,12 +1877,12 @@ private static final long serialVersionUID = 0L;
         }
         return this;
       }
+
       private int operatorCase_ = 0;
       private java.lang.Object operator_;
-      public OperatorCase
-          getOperatorCase() {
-        return OperatorCase.forNumber(
-            operatorCase_);
+
+      public OperatorCase getOperatorCase() {
+        return OperatorCase.forNumber(operatorCase_);
       }
 
       public Builder clearOperator() {
@@ -1711,15 +1892,20 @@ private static final long serialVersionUID = 0L;
         return this;
       }
 
-
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder> countBuilder_;
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder>
+          countBuilder_;
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+       *
        * @return Whether the count field is set.
        */
       @java.lang.Override
@@ -1727,11 +1913,14 @@ private static final long serialVersionUID = 0L;
         return operatorCase_ == 1;
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
+       *
        * @return The count.
        */
       @java.lang.Override
@@ -1740,22 +1929,27 @@ private static final long serialVersionUID = 0L;
           if (operatorCase_ == 1) {
             return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
           }
-          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+              .getDefaultInstance();
         } else {
           if (operatorCase_ == 1) {
             return countBuilder_.getMessage();
           }
-          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+              .getDefaultInstance();
         }
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
-      public Builder setCount(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count value) {
+      public Builder setCount(
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count value) {
         if (countBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1769,6 +1963,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
@@ -1776,7 +1972,8 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
       public Builder setCount(
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder builderForValue) {
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder
+              builderForValue) {
         if (countBuilder_ == null) {
           operator_ = builderForValue.build();
           onChanged();
@@ -1787,18 +1984,27 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
-      public Builder mergeCount(com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count value) {
+      public Builder mergeCount(
+          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count value) {
         if (countBuilder_ == null) {
-          if (operatorCase_ == 1 &&
-              operator_ != com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance()) {
-            operator_ = com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.newBuilder((com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_)
-                .mergeFrom(value).buildPartial();
+          if (operatorCase_ == 1
+              && operator_
+                  != com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+                      .getDefaultInstance()) {
+            operator_ =
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.newBuilder(
+                        (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count)
+                            operator_)
+                    .mergeFrom(value)
+                    .buildPartial();
           } else {
             operator_ = value;
           }
@@ -1814,6 +2020,8 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
@@ -1837,16 +2045,21 @@ private static final long serialVersionUID = 0L;
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
        *
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
-      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder getCountBuilder() {
+      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder
+          getCountBuilder() {
         return getCountFieldBuilder().getBuilder();
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
@@ -1854,17 +2067,21 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
       @java.lang.Override
-      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder getCountOrBuilder() {
+      public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder
+          getCountOrBuilder() {
         if ((operatorCase_ == 1) && (countBuilder_ != null)) {
           return countBuilder_.getMessageOrBuilder();
         } else {
           if (operatorCase_ == 1) {
             return (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_;
           }
-          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+          return com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+              .getDefaultInstance();
         }
       }
       /**
+       *
+       *
        * <pre>
        * Count aggregator.
        * </pre>
@@ -1872,26 +2089,36 @@ private static final long serialVersionUID = 0L;
        * <code>.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count count = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder> 
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder>
           getCountFieldBuilder() {
         if (countBuilder_ == null) {
           if (!(operatorCase_ == 1)) {
-            operator_ = com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.getDefaultInstance();
+            operator_ =
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count
+                    .getDefaultInstance();
           }
-          countBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder>(
+          countBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count,
+                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count.Builder,
+                  com.google.firestore.v1.StructuredAggregationQuery.Aggregation.CountOrBuilder>(
                   (com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Count) operator_,
                   getParentForChildren(),
                   isClean());
           operator_ = null;
         }
         operatorCase_ = 1;
-        onChanged();;
+        onChanged();
+        ;
         return countBuilder_;
       }
 
       private java.lang.Object alias_ = "";
       /**
+       *
+       *
        * <pre>
        * Optional. Optional name of the field to store the result of the aggregation into.
        * If not provided, Firestore will pick a default name following the format
@@ -1923,13 +2150,13 @@ private static final long serialVersionUID = 0L;
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+       *
        * @return The alias.
        */
       public java.lang.String getAlias() {
         java.lang.Object ref = alias_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           alias_ = s;
           return s;
@@ -1938,6 +2165,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional name of the field to store the result of the aggregation into.
        * If not provided, Firestore will pick a default name following the format
@@ -1969,15 +2198,14 @@ private static final long serialVersionUID = 0L;
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+       *
        * @return The bytes for alias.
        */
-      public com.google.protobuf.ByteString
-          getAliasBytes() {
+      public com.google.protobuf.ByteString getAliasBytes() {
         java.lang.Object ref = alias_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+          com.google.protobuf.ByteString b =
+              com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           alias_ = b;
           return b;
         } else {
@@ -1985,6 +2213,8 @@ private static final long serialVersionUID = 0L;
         }
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional name of the field to store the result of the aggregation into.
        * If not provided, Firestore will pick a default name following the format
@@ -2016,20 +2246,22 @@ private static final long serialVersionUID = 0L;
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+       *
        * @param value The alias to set.
        * @return This builder for chaining.
        */
-      public Builder setAlias(
-          java.lang.String value) {
+      public Builder setAlias(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         alias_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional name of the field to store the result of the aggregation into.
        * If not provided, Firestore will pick a default name following the format
@@ -2061,15 +2293,18 @@ private static final long serialVersionUID = 0L;
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearAlias() {
-        
+
         alias_ = getDefaultInstance().getAlias();
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
        * Optional. Optional name of the field to store the result of the aggregation into.
        * If not provided, Firestore will pick a default name following the format
@@ -2101,20 +2336,21 @@ private static final long serialVersionUID = 0L;
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+       *
        * @param value The bytes for alias to set.
        * @return This builder for chaining.
        */
-      public Builder setAliasBytes(
-          com.google.protobuf.ByteString value) {
+      public Builder setAliasBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         alias_ = value;
         onChanged();
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2127,30 +2363,32 @@ private static final long serialVersionUID = 0L;
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredAggregationQuery.Aggregation)
     }
 
     // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredAggregationQuery.Aggregation)
-    private static final com.google.firestore.v1.StructuredAggregationQuery.Aggregation DEFAULT_INSTANCE;
+    private static final com.google.firestore.v1.StructuredAggregationQuery.Aggregation
+        DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredAggregationQuery.Aggregation();
     }
 
-    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation getDefaultInstance() {
+    public static com.google.firestore.v1.StructuredAggregationQuery.Aggregation
+        getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Aggregation>
-        PARSER = new com.google.protobuf.AbstractParser<Aggregation>() {
-      @java.lang.Override
-      public Aggregation parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Aggregation(input, extensionRegistry);
-      }
-    };
+    private static final com.google.protobuf.Parser<Aggregation> PARSER =
+        new com.google.protobuf.AbstractParser<Aggregation>() {
+          @java.lang.Override
+          public Aggregation parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Aggregation(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<Aggregation> parser() {
       return PARSER;
@@ -2162,20 +2400,23 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation getDefaultInstanceForType() {
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation
+        getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
   private int queryTypeCase_ = 0;
   private java.lang.Object queryType_;
+
   public enum QueryTypeCase
-      implements com.google.protobuf.Internal.EnumLite,
+      implements
+          com.google.protobuf.Internal.EnumLite,
           com.google.protobuf.AbstractMessage.InternalOneOfEnum {
     STRUCTURED_QUERY(1),
     QUERYTYPE_NOT_SET(0);
     private final int value;
+
     private QueryTypeCase(int value) {
       this.value = value;
     }
@@ -2191,29 +2432,34 @@ private static final long serialVersionUID = 0L;
 
     public static QueryTypeCase forNumber(int value) {
       switch (value) {
-        case 1: return STRUCTURED_QUERY;
-        case 0: return QUERYTYPE_NOT_SET;
-        default: return null;
+        case 1:
+          return STRUCTURED_QUERY;
+        case 0:
+          return QUERYTYPE_NOT_SET;
+        default:
+          return null;
       }
     }
+
     public int getNumber() {
       return this.value;
     }
   };
 
-  public QueryTypeCase
-  getQueryTypeCase() {
-    return QueryTypeCase.forNumber(
-        queryTypeCase_);
+  public QueryTypeCase getQueryTypeCase() {
+    return QueryTypeCase.forNumber(queryTypeCase_);
   }
 
   public static final int STRUCTURED_QUERY_FIELD_NUMBER = 1;
   /**
+   *
+   *
    * <pre>
    * Nested structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 1;</code>
+   *
    * @return Whether the structuredQuery field is set.
    */
   @java.lang.Override
@@ -2221,21 +2467,26 @@ private static final long serialVersionUID = 0L;
     return queryTypeCase_ == 1;
   }
   /**
+   *
+   *
    * <pre>
    * Nested structured query.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery structured_query = 1;</code>
+   *
    * @return The structuredQuery.
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredQuery getStructuredQuery() {
     if (queryTypeCase_ == 1) {
-       return (com.google.firestore.v1.StructuredQuery) queryType_;
+      return (com.google.firestore.v1.StructuredQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredQuery.getDefaultInstance();
   }
   /**
+   *
+   *
    * <pre>
    * Nested structured query.
    * </pre>
@@ -2245,82 +2496,106 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder() {
     if (queryTypeCase_ == 1) {
-       return (com.google.firestore.v1.StructuredQuery) queryType_;
+      return (com.google.firestore.v1.StructuredQuery) queryType_;
     }
     return com.google.firestore.v1.StructuredQuery.getDefaultInstance();
   }
 
   public static final int AGGREGATIONS_FIELD_NUMBER = 3;
-  private java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation> aggregations_;
+  private java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>
+      aggregations_;
   /**
+   *
+   *
    * <pre>
    * Optional. Series of aggregations to apply over the results of the `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+   * <code>
+   * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
-  public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation> getAggregationsList() {
+  public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>
+      getAggregationsList() {
     return aggregations_;
   }
   /**
+   *
+   *
    * <pre>
    * Optional. Series of aggregations to apply over the results of the `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+   * <code>
+   * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder> 
+  public java.util.List<
+          ? extends com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>
       getAggregationsOrBuilderList() {
     return aggregations_;
   }
   /**
+   *
+   *
    * <pre>
    * Optional. Series of aggregations to apply over the results of the `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+   * <code>
+   * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
   public int getAggregationsCount() {
     return aggregations_.size();
   }
   /**
+   *
+   *
    * <pre>
    * Optional. Series of aggregations to apply over the results of the `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+   * <code>
+   * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredAggregationQuery.Aggregation getAggregations(int index) {
     return aggregations_.get(index);
   }
   /**
+   *
+   *
    * <pre>
    * Optional. Series of aggregations to apply over the results of the `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
-   * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+   * <code>
+   * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder getAggregationsOrBuilder(
-      int index) {
+  public com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder
+      getAggregationsOrBuilder(int index) {
     return aggregations_.get(index);
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -2332,8 +2607,7 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
     if (queryTypeCase_ == 1) {
       output.writeMessage(1, (com.google.firestore.v1.StructuredQuery) queryType_);
     }
@@ -2350,12 +2624,12 @@ private static final long serialVersionUID = 0L;
 
     size = 0;
     if (queryTypeCase_ == 1) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(1, (com.google.firestore.v1.StructuredQuery) queryType_);
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              1, (com.google.firestore.v1.StructuredQuery) queryType_);
     }
     for (int i = 0; i < aggregations_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, aggregations_.get(i));
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, aggregations_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -2365,20 +2639,19 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.StructuredAggregationQuery)) {
       return super.equals(obj);
     }
-    com.google.firestore.v1.StructuredAggregationQuery other = (com.google.firestore.v1.StructuredAggregationQuery) obj;
+    com.google.firestore.v1.StructuredAggregationQuery other =
+        (com.google.firestore.v1.StructuredAggregationQuery) obj;
 
-    if (!getAggregationsList()
-        .equals(other.getAggregationsList())) return false;
+    if (!getAggregationsList().equals(other.getAggregationsList())) return false;
     if (!getQueryTypeCase().equals(other.getQueryTypeCase())) return false;
     switch (queryTypeCase_) {
       case 1:
-        if (!getStructuredQuery()
-            .equals(other.getStructuredQuery())) return false;
+        if (!getStructuredQuery().equals(other.getStructuredQuery())) return false;
         break;
       case 0:
       default:
@@ -2412,117 +2685,126 @@ private static final long serialVersionUID = 0L;
   }
 
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
-      java.nio.ByteBuffer data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
+      java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
-  }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
-  public static com.google.firestore.v1.StructuredAggregationQuery parseDelimitedFrom(java.io.InputStream input)
+
+  public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      java.io.InputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
+  public static com.google.firestore.v1.StructuredAggregationQuery parseDelimitedFrom(
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
+  }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.StructuredAggregationQuery parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.StructuredAggregationQuery prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * Firestore query for running an aggregation over a [StructuredQuery][google.firestore.v1.StructuredQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.StructuredAggregationQuery)
       com.google.firestore.v1.StructuredAggregationQueryOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.StructuredAggregationQuery.class, com.google.firestore.v1.StructuredAggregationQuery.Builder.class);
+              com.google.firestore.v1.StructuredAggregationQuery.class,
+              com.google.firestore.v1.StructuredAggregationQuery.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.StructuredAggregationQuery.newBuilder()
@@ -2530,17 +2812,17 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         getAggregationsFieldBuilder();
       }
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -2556,9 +2838,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.QueryProto
+          .internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
     }
 
     @java.lang.Override
@@ -2577,7 +2859,8 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public com.google.firestore.v1.StructuredAggregationQuery buildPartial() {
-      com.google.firestore.v1.StructuredAggregationQuery result = new com.google.firestore.v1.StructuredAggregationQuery(this);
+      com.google.firestore.v1.StructuredAggregationQuery result =
+          new com.google.firestore.v1.StructuredAggregationQuery(this);
       int from_bitField0_ = bitField0_;
       if (queryTypeCase_ == 1) {
         if (structuredQueryBuilder_ == null) {
@@ -2604,38 +2887,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.StructuredAggregationQuery) {
-        return mergeFrom((com.google.firestore.v1.StructuredAggregationQuery)other);
+        return mergeFrom((com.google.firestore.v1.StructuredAggregationQuery) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -2643,7 +2927,8 @@ private static final long serialVersionUID = 0L;
     }
 
     public Builder mergeFrom(com.google.firestore.v1.StructuredAggregationQuery other) {
-      if (other == com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance()) return this;
+      if (other == com.google.firestore.v1.StructuredAggregationQuery.getDefaultInstance())
+        return this;
       if (aggregationsBuilder_ == null) {
         if (!other.aggregations_.isEmpty()) {
           if (aggregations_.isEmpty()) {
@@ -2662,22 +2947,25 @@ private static final long serialVersionUID = 0L;
             aggregationsBuilder_ = null;
             aggregations_ = other.aggregations_;
             bitField0_ = (bitField0_ & ~0x00000001);
-            aggregationsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getAggregationsFieldBuilder() : null;
+            aggregationsBuilder_ =
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                    ? getAggregationsFieldBuilder()
+                    : null;
           } else {
             aggregationsBuilder_.addAllMessages(other.aggregations_);
           }
         }
       }
       switch (other.getQueryTypeCase()) {
-        case STRUCTURED_QUERY: {
-          mergeStructuredQuery(other.getStructuredQuery());
-          break;
-        }
-        case QUERYTYPE_NOT_SET: {
-          break;
-        }
+        case STRUCTURED_QUERY:
+          {
+            mergeStructuredQuery(other.getStructuredQuery());
+            break;
+          }
+        case QUERYTYPE_NOT_SET:
+          {
+            break;
+          }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -2698,7 +2986,8 @@ private static final long serialVersionUID = 0L;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.StructuredAggregationQuery) e.getUnfinishedMessage();
+        parsedMessage =
+            (com.google.firestore.v1.StructuredAggregationQuery) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -2707,12 +2996,12 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int queryTypeCase_ = 0;
     private java.lang.Object queryType_;
-    public QueryTypeCase
-        getQueryTypeCase() {
-      return QueryTypeCase.forNumber(
-          queryTypeCase_);
+
+    public QueryTypeCase getQueryTypeCase() {
+      return QueryTypeCase.forNumber(queryTypeCase_);
     }
 
     public Builder clearQueryType() {
@@ -2725,13 +3014,19 @@ private static final long serialVersionUID = 0L;
     private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder> structuredQueryBuilder_;
+            com.google.firestore.v1.StructuredQuery,
+            com.google.firestore.v1.StructuredQuery.Builder,
+            com.google.firestore.v1.StructuredQueryOrBuilder>
+        structuredQueryBuilder_;
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 1;</code>
+     *
      * @return Whether the structuredQuery field is set.
      */
     @java.lang.Override
@@ -2739,11 +3034,14 @@ private static final long serialVersionUID = 0L;
       return queryTypeCase_ == 1;
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery structured_query = 1;</code>
+     *
      * @return The structuredQuery.
      */
     @java.lang.Override
@@ -2761,6 +3059,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2781,6 +3081,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2799,6 +3101,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2807,10 +3111,13 @@ private static final long serialVersionUID = 0L;
      */
     public Builder mergeStructuredQuery(com.google.firestore.v1.StructuredQuery value) {
       if (structuredQueryBuilder_ == null) {
-        if (queryTypeCase_ == 1 &&
-            queryType_ != com.google.firestore.v1.StructuredQuery.getDefaultInstance()) {
-          queryType_ = com.google.firestore.v1.StructuredQuery.newBuilder((com.google.firestore.v1.StructuredQuery) queryType_)
-              .mergeFrom(value).buildPartial();
+        if (queryTypeCase_ == 1
+            && queryType_ != com.google.firestore.v1.StructuredQuery.getDefaultInstance()) {
+          queryType_ =
+              com.google.firestore.v1.StructuredQuery.newBuilder(
+                      (com.google.firestore.v1.StructuredQuery) queryType_)
+                  .mergeFrom(value)
+                  .buildPartial();
         } else {
           queryType_ = value;
         }
@@ -2826,6 +3133,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2849,6 +3158,8 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2859,6 +3170,8 @@ private static final long serialVersionUID = 0L;
       return getStructuredQueryFieldBuilder().getBuilder();
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2877,6 +3190,8 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Nested structured query.
      * </pre>
@@ -2884,46 +3199,63 @@ private static final long serialVersionUID = 0L;
      * <code>.google.firestore.v1.StructuredQuery structured_query = 1;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder> 
+            com.google.firestore.v1.StructuredQuery,
+            com.google.firestore.v1.StructuredQuery.Builder,
+            com.google.firestore.v1.StructuredQueryOrBuilder>
         getStructuredQueryFieldBuilder() {
       if (structuredQueryBuilder_ == null) {
         if (!(queryTypeCase_ == 1)) {
           queryType_ = com.google.firestore.v1.StructuredQuery.getDefaultInstance();
         }
-        structuredQueryBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.firestore.v1.StructuredQuery, com.google.firestore.v1.StructuredQuery.Builder, com.google.firestore.v1.StructuredQueryOrBuilder>(
+        structuredQueryBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.StructuredQuery,
+                com.google.firestore.v1.StructuredQuery.Builder,
+                com.google.firestore.v1.StructuredQueryOrBuilder>(
                 (com.google.firestore.v1.StructuredQuery) queryType_,
                 getParentForChildren(),
                 isClean());
         queryType_ = null;
       }
       queryTypeCase_ = 1;
-      onChanged();;
+      onChanged();
+      ;
       return structuredQueryBuilder_;
     }
 
-    private java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation> aggregations_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>
+        aggregations_ = java.util.Collections.emptyList();
+
     private void ensureAggregationsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
-        aggregations_ = new java.util.ArrayList<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>(aggregations_);
+        aggregations_ =
+            new java.util.ArrayList<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>(
+                aggregations_);
         bitField0_ |= 0x00000001;
-       }
+      }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.StructuredAggregationQuery.Aggregation, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder, com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder> aggregationsBuilder_;
+            com.google.firestore.v1.StructuredAggregationQuery.Aggregation,
+            com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder,
+            com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>
+        aggregationsBuilder_;
 
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation> getAggregationsList() {
+    public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation>
+        getAggregationsList() {
       if (aggregationsBuilder_ == null) {
         return java.util.Collections.unmodifiableList(aggregations_);
       } else {
@@ -2931,13 +3263,17 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public int getAggregationsCount() {
       if (aggregationsBuilder_ == null) {
@@ -2947,15 +3283,20 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation getAggregations(int index) {
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation getAggregations(
+        int index) {
       if (aggregationsBuilder_ == null) {
         return aggregations_.get(index);
       } else {
@@ -2963,13 +3304,17 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder setAggregations(
         int index, com.google.firestore.v1.StructuredAggregationQuery.Aggregation value) {
@@ -2986,16 +3331,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder setAggregations(
-        int index, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder builderForValue) {
+        int index,
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder builderForValue) {
       if (aggregationsBuilder_ == null) {
         ensureAggregationsIsMutable();
         aggregations_.set(index, builderForValue.build());
@@ -3006,15 +3356,20 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public Builder addAggregations(com.google.firestore.v1.StructuredAggregationQuery.Aggregation value) {
+    public Builder addAggregations(
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation value) {
       if (aggregationsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -3028,13 +3383,17 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder addAggregations(
         int index, com.google.firestore.v1.StructuredAggregationQuery.Aggregation value) {
@@ -3051,13 +3410,17 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder addAggregations(
         com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder builderForValue) {
@@ -3071,16 +3434,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder addAggregations(
-        int index, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder builderForValue) {
+        int index,
+        com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder builderForValue) {
       if (aggregationsBuilder_ == null) {
         ensureAggregationsIsMutable();
         aggregations_.add(index, builderForValue.build());
@@ -3091,20 +3459,24 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder addAllAggregations(
-        java.lang.Iterable<? extends com.google.firestore.v1.StructuredAggregationQuery.Aggregation> values) {
+        java.lang.Iterable<? extends com.google.firestore.v1.StructuredAggregationQuery.Aggregation>
+            values) {
       if (aggregationsBuilder_ == null) {
         ensureAggregationsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, aggregations_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, aggregations_);
         onChanged();
       } else {
         aggregationsBuilder_.addAllMessages(values);
@@ -3112,13 +3484,17 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder clearAggregations() {
       if (aggregationsBuilder_ == null) {
@@ -3131,13 +3507,17 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder removeAggregations(int index) {
       if (aggregationsBuilder_ == null) {
@@ -3150,45 +3530,59 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder getAggregationsBuilder(
-        int index) {
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder
+        getAggregationsBuilder(int index) {
       return getAggregationsFieldBuilder().getBuilder(index);
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder getAggregationsOrBuilder(
-        int index) {
+    public com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder
+        getAggregationsOrBuilder(int index) {
       if (aggregationsBuilder_ == null) {
-        return aggregations_.get(index);  } else {
+        return aggregations_.get(index);
+      } else {
         return aggregationsBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public java.util.List<? extends com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder> 
-         getAggregationsOrBuilderList() {
+    public java.util.List<
+            ? extends com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>
+        getAggregationsOrBuilderList() {
       if (aggregationsBuilder_ != null) {
         return aggregationsBuilder_.getMessageOrBuilderList();
       } else {
@@ -3196,62 +3590,81 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder addAggregationsBuilder() {
-      return getAggregationsFieldBuilder().addBuilder(
-          com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance());
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder
+        addAggregationsBuilder() {
+      return getAggregationsFieldBuilder()
+          .addBuilder(
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder addAggregationsBuilder(
-        int index) {
-      return getAggregationsFieldBuilder().addBuilder(
-          index, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance());
+    public com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder
+        addAggregationsBuilder(int index) {
+      return getAggregationsFieldBuilder()
+          .addBuilder(
+              index,
+              com.google.firestore.v1.StructuredAggregationQuery.Aggregation.getDefaultInstance());
     }
     /**
+     *
+     *
      * <pre>
      * Optional. Series of aggregations to apply over the results of the `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
      *
-     * <code>repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
+     * <code>
+     * repeated .google.firestore.v1.StructuredAggregationQuery.Aggregation aggregations = 3 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
-    public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder> 
-         getAggregationsBuilderList() {
+    public java.util.List<com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder>
+        getAggregationsBuilderList() {
       return getAggregationsFieldBuilder().getBuilderList();
     }
+
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.google.firestore.v1.StructuredAggregationQuery.Aggregation, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder, com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder> 
+            com.google.firestore.v1.StructuredAggregationQuery.Aggregation,
+            com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder,
+            com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>
         getAggregationsFieldBuilder() {
       if (aggregationsBuilder_ == null) {
-        aggregationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.google.firestore.v1.StructuredAggregationQuery.Aggregation, com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder, com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>(
-                aggregations_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
+        aggregationsBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation,
+                com.google.firestore.v1.StructuredAggregationQuery.Aggregation.Builder,
+                com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder>(
+                aggregations_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
         aggregations_ = null;
       }
       return aggregationsBuilder_;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -3261,12 +3674,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.StructuredAggregationQuery)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.StructuredAggregationQuery)
   private static final com.google.firestore.v1.StructuredAggregationQuery DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.StructuredAggregationQuery();
   }
@@ -3275,16 +3688,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<StructuredAggregationQuery>
-      PARSER = new com.google.protobuf.AbstractParser<StructuredAggregationQuery>() {
-    @java.lang.Override
-    public StructuredAggregationQuery parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new StructuredAggregationQuery(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<StructuredAggregationQuery> PARSER =
+      new com.google.protobuf.AbstractParser<StructuredAggregationQuery>() {
+        @java.lang.Override
+        public StructuredAggregationQuery parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new StructuredAggregationQuery(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<StructuredAggregationQuery> parser() {
     return PARSER;
@@ -3299,6 +3712,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.StructuredAggregationQuery getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

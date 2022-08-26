@@ -19,36 +19,37 @@
 package com.google.firestore.v1;
 
 /**
+ *
+ *
  * <pre>
  * A map value.
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.MapValue}
  */
-public final class MapValue extends
-    com.google.protobuf.GeneratedMessageV3 implements
+public final class MapValue extends com.google.protobuf.GeneratedMessageV3
+    implements
     // @@protoc_insertion_point(message_implements:google.firestore.v1.MapValue)
     MapValueOrBuilder {
-private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
   // Use MapValue.newBuilder() to construct.
   private MapValue(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private MapValue() {
-  }
+
+  private MapValue() {}
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
-  protected java.lang.Object newInstance(
-      UnusedPrivateParameter unused) {
+  protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new MapValue();
   }
 
   @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet
-  getUnknownFields() {
+  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
     return this.unknownFields;
   }
+
   private MapValue(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -68,26 +69,28 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              fields_ = com.google.protobuf.MapField.newMapField(
-                  FieldsDefaultEntryHolder.defaultEntry);
-              mutable_bitField0_ |= 0x00000001;
+          case 10:
+            {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                fields_ =
+                    com.google.protobuf.MapField.newMapField(FieldsDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000001;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, com.google.firestore.v1.Value>
+                  fields__ =
+                      input.readMessage(
+                          FieldsDefaultEntryHolder.defaultEntry.getParserForType(),
+                          extensionRegistry);
+              fields_.getMutableMap().put(fields__.getKey(), fields__.getValue());
+              break;
             }
-            com.google.protobuf.MapEntry<java.lang.String, com.google.firestore.v1.Value>
-            fields__ = input.readMessage(
-                FieldsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            fields_.getMutableMap().put(
-                fields__.getKey(), fields__.getValue());
-            break;
-          }
-          default: {
-            if (!parseUnknownField(
-                input, unknownFields, extensionRegistry, tag)) {
-              done = true;
+          default:
+            {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
             }
-            break;
-          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -95,57 +98,59 @@ private static final long serialVersionUID = 0L;
     } catch (com.google.protobuf.UninitializedMessageException e) {
       throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
     } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(
-          e).setUnfinishedMessage(this);
+      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
     } finally {
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
   }
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_descriptor;
+
+  public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    return com.google.firestore.v1.DocumentProto
+        .internal_static_google_firestore_v1_MapValue_descriptor;
   }
 
   @SuppressWarnings({"rawtypes"})
   @java.lang.Override
-  protected com.google.protobuf.MapField internalGetMapField(
-      int number) {
+  protected com.google.protobuf.MapField internalGetMapField(int number) {
     switch (number) {
       case 1:
         return internalGetFields();
       default:
-        throw new RuntimeException(
-            "Invalid map field number: " + number);
+        throw new RuntimeException("Invalid map field number: " + number);
     }
   }
+
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_fieldAccessorTable
+    return com.google.firestore.v1.DocumentProto
+        .internal_static_google_firestore_v1_MapValue_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             com.google.firestore.v1.MapValue.class, com.google.firestore.v1.MapValue.Builder.class);
   }
 
   public static final int FIELDS_FIELD_NUMBER = 1;
+
   private static final class FieldsDefaultEntryHolder {
-    static final com.google.protobuf.MapEntry<
-        java.lang.String, com.google.firestore.v1.Value> defaultEntry =
+    static final com.google.protobuf.MapEntry<java.lang.String, com.google.firestore.v1.Value>
+        defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.String, com.google.firestore.v1.Value>newDefaultInstance(
-                com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_FieldsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.STRING,
-                "",
-                com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                com.google.firestore.v1.Value.getDefaultInstance());
+                .<java.lang.String, com.google.firestore.v1.Value>newDefaultInstance(
+                    com.google.firestore.v1.DocumentProto
+                        .internal_static_google_firestore_v1_MapValue_FieldsEntry_descriptor,
+                    com.google.protobuf.WireFormat.FieldType.STRING,
+                    "",
+                    com.google.protobuf.WireFormat.FieldType.MESSAGE,
+                    com.google.firestore.v1.Value.getDefaultInstance());
   }
-  private com.google.protobuf.MapField<
-      java.lang.String, com.google.firestore.v1.Value> fields_;
+
+  private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value> fields_;
+
   private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
-  internalGetFields() {
+      internalGetFields() {
     if (fields_ == null) {
-      return com.google.protobuf.MapField.emptyMapField(
-          FieldsDefaultEntryHolder.defaultEntry);
+      return com.google.protobuf.MapField.emptyMapField(FieldsDefaultEntryHolder.defaultEntry);
     }
     return fields_;
   }
@@ -154,6 +159,8 @@ private static final long serialVersionUID = 0L;
     return internalGetFields().getMap().size();
   }
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -164,22 +171,22 @@ private static final long serialVersionUID = 0L;
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
-
   @java.lang.Override
-  public boolean containsFields(
-      java.lang.String key) {
-    if (key == null) { throw new NullPointerException("map key"); }
+  public boolean containsFields(java.lang.String key) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
     return internalGetFields().getMap().containsKey(key);
   }
-  /**
-   * Use {@link #getFieldsMap()} instead.
-   */
+  /** Use {@link #getFieldsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFields() {
     return getFieldsMap();
   }
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -191,11 +198,12 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
   @java.lang.Override
-
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFieldsMap() {
     return internalGetFields().getMap();
   }
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -207,16 +215,18 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
   @java.lang.Override
-
   public com.google.firestore.v1.Value getFieldsOrDefault(
-      java.lang.String key,
-      com.google.firestore.v1.Value defaultValue) {
-    if (key == null) { throw new NullPointerException("map key"); }
+      java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
     java.util.Map<java.lang.String, com.google.firestore.v1.Value> map =
         internalGetFields().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
+   *
+   *
    * <pre>
    * The map's fields.
    * The map keys represent field names. Field names matching the regular
@@ -228,10 +238,10 @@ private static final long serialVersionUID = 0L;
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
   @java.lang.Override
-
-  public com.google.firestore.v1.Value getFieldsOrThrow(
-      java.lang.String key) {
-    if (key == null) { throw new NullPointerException("map key"); }
+  public com.google.firestore.v1.Value getFieldsOrThrow(java.lang.String key) {
+    if (key == null) {
+      throw new NullPointerException("map key");
+    }
     java.util.Map<java.lang.String, com.google.firestore.v1.Value> map =
         internalGetFields().getMap();
     if (!map.containsKey(key)) {
@@ -241,6 +251,7 @@ private static final long serialVersionUID = 0L;
   }
 
   private byte memoizedIsInitialized = -1;
+
   @java.lang.Override
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -252,14 +263,9 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
-    com.google.protobuf.GeneratedMessageV3
-      .serializeStringMapTo(
-        output,
-        internalGetFields(),
-        FieldsDefaultEntryHolder.defaultEntry,
-        1);
+  public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+    com.google.protobuf.GeneratedMessageV3.serializeStringMapTo(
+        output, internalGetFields(), FieldsDefaultEntryHolder.defaultEntry, 1);
     unknownFields.writeTo(output);
   }
 
@@ -269,15 +275,15 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    for (java.util.Map.Entry<java.lang.String, com.google.firestore.v1.Value> entry
-         : internalGetFields().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.String, com.google.firestore.v1.Value>
-      fields__ = FieldsDefaultEntryHolder.defaultEntry.newBuilderForType()
-          .setKey(entry.getKey())
-          .setValue(entry.getValue())
-          .build();
-      size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, fields__);
+    for (java.util.Map.Entry<java.lang.String, com.google.firestore.v1.Value> entry :
+        internalGetFields().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, com.google.firestore.v1.Value> fields__ =
+          FieldsDefaultEntryHolder.defaultEntry
+              .newBuilderForType()
+              .setKey(entry.getKey())
+              .setValue(entry.getValue())
+              .build();
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, fields__);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -287,15 +293,14 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public boolean equals(final java.lang.Object obj) {
     if (obj == this) {
-     return true;
+      return true;
     }
     if (!(obj instanceof com.google.firestore.v1.MapValue)) {
       return super.equals(obj);
     }
     com.google.firestore.v1.MapValue other = (com.google.firestore.v1.MapValue) obj;
 
-    if (!internalGetFields().equals(
-        other.internalGetFields())) return false;
+    if (!internalGetFields().equals(other.internalGetFields())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -316,140 +321,146 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.google.firestore.v1.MapValue parseFrom(
-      java.nio.ByteBuffer data)
+  public static com.google.firestore.v1.MapValue parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.google.firestore.v1.MapValue parseFrom(
-      com.google.protobuf.ByteString data)
+
+  public static com.google.firestore.v1.MapValue parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.MapValue parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.MapValue parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+      java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+        PARSER, input, extensionRegistry);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
+      com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
+
   public static com.google.firestore.v1.MapValue parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
+    return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+        PARSER, input, extensionRegistry);
   }
 
   @java.lang.Override
-  public Builder newBuilderForType() { return newBuilder(); }
+  public Builder newBuilderForType() {
+    return newBuilder();
+  }
+
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
+
   public static Builder newBuilder(com.google.firestore.v1.MapValue prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
+
   @java.lang.Override
   public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
+    return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
   }
 
   @java.lang.Override
-  protected Builder newBuilderForType(
-      com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+  protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
     Builder builder = new Builder(parent);
     return builder;
   }
   /**
+   *
+   *
    * <pre>
    * A map value.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.MapValue}
    */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+  public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+      implements
       // @@protoc_insertion_point(builder_implements:google.firestore.v1.MapValue)
       com.google.firestore.v1.MapValueOrBuilder {
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_descriptor;
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.v1.DocumentProto
+          .internal_static_google_firestore_v1_MapValue_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMapField(
-        int number) {
+    protected com.google.protobuf.MapField internalGetMapField(int number) {
       switch (number) {
         case 1:
           return internalGetFields();
         default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
+          throw new RuntimeException("Invalid map field number: " + number);
       }
     }
+
     @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMutableMapField(
-        int number) {
+    protected com.google.protobuf.MapField internalGetMutableMapField(int number) {
       switch (number) {
         case 1:
           return internalGetMutableFields();
         default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
+          throw new RuntimeException("Invalid map field number: " + number);
       }
     }
+
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_fieldAccessorTable
+      return com.google.firestore.v1.DocumentProto
+          .internal_static_google_firestore_v1_MapValue_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.v1.MapValue.class, com.google.firestore.v1.MapValue.Builder.class);
+              com.google.firestore.v1.MapValue.class,
+              com.google.firestore.v1.MapValue.Builder.class);
     }
 
     // Construct using com.google.firestore.v1.MapValue.newBuilder()
@@ -457,16 +468,15 @@ private static final long serialVersionUID = 0L;
       maybeForceBuilderInitialization();
     }
 
-    private Builder(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
       maybeForceBuilderInitialization();
     }
+
     private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3
-              .alwaysUseFieldBuilders) {
-      }
+      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
+
     @java.lang.Override
     public Builder clear() {
       super.clear();
@@ -475,9 +485,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return com.google.firestore.v1.DocumentProto.internal_static_google_firestore_v1_MapValue_descriptor;
+    public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      return com.google.firestore.v1.DocumentProto
+          .internal_static_google_firestore_v1_MapValue_descriptor;
     }
 
     @java.lang.Override
@@ -508,38 +518,39 @@ private static final long serialVersionUID = 0L;
     public Builder clone() {
       return super.clone();
     }
+
     @java.lang.Override
     public Builder setField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.setField(field, value);
     }
+
     @java.lang.Override
-    public Builder clearField(
-        com.google.protobuf.Descriptors.FieldDescriptor field) {
+    public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
       return super.clearField(field);
     }
+
     @java.lang.Override
-    public Builder clearOneof(
-        com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+    public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
       return super.clearOneof(oneof);
     }
+
     @java.lang.Override
     public Builder setRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        int index, java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, int index, java.lang.Object value) {
       return super.setRepeatedField(field, index, value);
     }
+
     @java.lang.Override
     public Builder addRepeatedField(
-        com.google.protobuf.Descriptors.FieldDescriptor field,
-        java.lang.Object value) {
+        com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
       return super.addRepeatedField(field, value);
     }
+
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
       if (other instanceof com.google.firestore.v1.MapValue) {
-        return mergeFrom((com.google.firestore.v1.MapValue)other);
+        return mergeFrom((com.google.firestore.v1.MapValue) other);
       } else {
         super.mergeFrom(other);
         return this;
@@ -548,8 +559,7 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.google.firestore.v1.MapValue other) {
       if (other == com.google.firestore.v1.MapValue.getDefaultInstance()) return this;
-      internalGetMutableFields().mergeFrom(
-          other.internalGetFields());
+      internalGetMutableFields().mergeFrom(other.internalGetFields());
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -578,24 +588,25 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+
     private int bitField0_;
 
-    private com.google.protobuf.MapField<
-        java.lang.String, com.google.firestore.v1.Value> fields_;
+    private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value> fields_;
+
     private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
-    internalGetFields() {
+        internalGetFields() {
       if (fields_ == null) {
-        return com.google.protobuf.MapField.emptyMapField(
-            FieldsDefaultEntryHolder.defaultEntry);
+        return com.google.protobuf.MapField.emptyMapField(FieldsDefaultEntryHolder.defaultEntry);
       }
       return fields_;
     }
+
     private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
-    internalGetMutableFields() {
-      onChanged();;
+        internalGetMutableFields() {
+      onChanged();
+      ;
       if (fields_ == null) {
-        fields_ = com.google.protobuf.MapField.newMapField(
-            FieldsDefaultEntryHolder.defaultEntry);
+        fields_ = com.google.protobuf.MapField.newMapField(FieldsDefaultEntryHolder.defaultEntry);
       }
       if (!fields_.isMutable()) {
         fields_ = fields_.copy();
@@ -607,6 +618,8 @@ private static final long serialVersionUID = 0L;
       return internalGetFields().getMap().size();
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -617,22 +630,22 @@ private static final long serialVersionUID = 0L;
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
-
     @java.lang.Override
-    public boolean containsFields(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
+    public boolean containsFields(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       return internalGetFields().getMap().containsKey(key);
     }
-    /**
-     * Use {@link #getFieldsMap()} instead.
-     */
+    /** Use {@link #getFieldsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFields() {
       return getFieldsMap();
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -644,11 +657,12 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
     @java.lang.Override
-
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getFieldsMap() {
       return internalGetFields().getMap();
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -660,16 +674,18 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
     @java.lang.Override
-
     public com.google.firestore.v1.Value getFieldsOrDefault(
-        java.lang.String key,
-        com.google.firestore.v1.Value defaultValue) {
-      if (key == null) { throw new NullPointerException("map key"); }
+        java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       java.util.Map<java.lang.String, com.google.firestore.v1.Value> map =
           internalGetFields().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -681,10 +697,10 @@ private static final long serialVersionUID = 0L;
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
     @java.lang.Override
-
-    public com.google.firestore.v1.Value getFieldsOrThrow(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
+    public com.google.firestore.v1.Value getFieldsOrThrow(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       java.util.Map<java.lang.String, com.google.firestore.v1.Value> map =
           internalGetFields().getMap();
       if (!map.containsKey(key)) {
@@ -694,11 +710,12 @@ private static final long serialVersionUID = 0L;
     }
 
     public Builder clearFields() {
-      internalGetMutableFields().getMutableMap()
-          .clear();
+      internalGetMutableFields().getMutableMap().clear();
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -709,23 +726,21 @@ private static final long serialVersionUID = 0L;
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
-
-    public Builder removeFields(
-        java.lang.String key) {
-      if (key == null) { throw new NullPointerException("map key"); }
-      internalGetMutableFields().getMutableMap()
-          .remove(key);
+    public Builder removeFields(java.lang.String key) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
+      internalGetMutableFields().getMutableMap().remove(key);
       return this;
     }
-    /**
-     * Use alternate mutation accessors instead.
-     */
+    /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.String, com.google.firestore.v1.Value>
-    getMutableFields() {
+    public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getMutableFields() {
       return internalGetMutableFields().getMutableMap();
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -736,19 +751,20 @@ private static final long serialVersionUID = 0L;
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
-    public Builder putFields(
-        java.lang.String key,
-        com.google.firestore.v1.Value value) {
-      if (key == null) { throw new NullPointerException("map key"); }
+    public Builder putFields(java.lang.String key, com.google.firestore.v1.Value value) {
+      if (key == null) {
+        throw new NullPointerException("map key");
+      }
       if (value == null) {
-  throw new NullPointerException("map value");
-}
+        throw new NullPointerException("map value");
+      }
 
-      internalGetMutableFields().getMutableMap()
-          .put(key, value);
+      internalGetMutableFields().getMutableMap().put(key, value);
       return this;
     }
     /**
+     *
+     *
      * <pre>
      * The map's fields.
      * The map keys represent field names. Field names matching the regular
@@ -759,16 +775,14 @@ private static final long serialVersionUID = 0L;
      *
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
      */
-
     public Builder putAllFields(
         java.util.Map<java.lang.String, com.google.firestore.v1.Value> values) {
-      internalGetMutableFields().getMutableMap()
-          .putAll(values);
+      internalGetMutableFields().getMutableMap().putAll(values);
       return this;
     }
+
     @java.lang.Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
+    public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
     }
 
@@ -778,12 +792,12 @@ private static final long serialVersionUID = 0L;
       return super.mergeUnknownFields(unknownFields);
     }
 
-
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.MapValue)
   }
 
   // @@protoc_insertion_point(class_scope:google.firestore.v1.MapValue)
   private static final com.google.firestore.v1.MapValue DEFAULT_INSTANCE;
+
   static {
     DEFAULT_INSTANCE = new com.google.firestore.v1.MapValue();
   }
@@ -792,16 +806,16 @@ private static final long serialVersionUID = 0L;
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<MapValue>
-      PARSER = new com.google.protobuf.AbstractParser<MapValue>() {
-    @java.lang.Override
-    public MapValue parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return new MapValue(input, extensionRegistry);
-    }
-  };
+  private static final com.google.protobuf.Parser<MapValue> PARSER =
+      new com.google.protobuf.AbstractParser<MapValue>() {
+        @java.lang.Override
+        public MapValue parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new MapValue(input, extensionRegistry);
+        }
+      };
 
   public static com.google.protobuf.Parser<MapValue> parser() {
     return PARSER;
@@ -816,6 +830,4 @@ private static final long serialVersionUID = 0L;
   public com.google.firestore.v1.MapValue getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
-
 }
-

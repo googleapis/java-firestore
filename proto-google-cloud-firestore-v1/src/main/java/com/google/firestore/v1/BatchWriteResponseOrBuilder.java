@@ -18,11 +18,14 @@
 
 package com.google.firestore.v1;
 
-public interface BatchWriteResponseOrBuilder extends
+public interface BatchWriteResponseOrBuilder
+    extends
     // @@protoc_insertion_point(interface_extends:google.firestore.v1.BatchWriteResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -31,9 +34,10 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
-  java.util.List<com.google.firestore.v1.WriteResult> 
-      getWriteResultsList();
+  java.util.List<com.google.firestore.v1.WriteResult> getWriteResultsList();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -44,6 +48,8 @@ public interface BatchWriteResponseOrBuilder extends
    */
   com.google.firestore.v1.WriteResult getWriteResults(int index);
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -54,6 +60,8 @@ public interface BatchWriteResponseOrBuilder extends
    */
   int getWriteResultsCount();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -62,9 +70,11 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
-  java.util.List<? extends com.google.firestore.v1.WriteResultOrBuilder> 
+  java.util.List<? extends com.google.firestore.v1.WriteResultOrBuilder>
       getWriteResultsOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The result of applying the writes.
    * This i-th write result corresponds to the i-th write in the
@@ -73,10 +83,11 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.firestore.v1.WriteResult write_results = 1;</code>
    */
-  com.google.firestore.v1.WriteResultOrBuilder getWriteResultsOrBuilder(
-      int index);
+  com.google.firestore.v1.WriteResultOrBuilder getWriteResultsOrBuilder(int index);
 
   /**
+   *
+   *
    * <pre>
    * The status of applying the writes.
    * This i-th write status corresponds to the i-th write in the
@@ -85,9 +96,10 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
-  java.util.List<com.google.rpc.Status> 
-      getStatusList();
+  java.util.List<com.google.rpc.Status> getStatusList();
   /**
+   *
+   *
    * <pre>
    * The status of applying the writes.
    * This i-th write status corresponds to the i-th write in the
@@ -98,6 +110,8 @@ public interface BatchWriteResponseOrBuilder extends
    */
   com.google.rpc.Status getStatus(int index);
   /**
+   *
+   *
    * <pre>
    * The status of applying the writes.
    * This i-th write status corresponds to the i-th write in the
@@ -108,6 +122,8 @@ public interface BatchWriteResponseOrBuilder extends
    */
   int getStatusCount();
   /**
+   *
+   *
    * <pre>
    * The status of applying the writes.
    * This i-th write status corresponds to the i-th write in the
@@ -116,9 +132,10 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
-  java.util.List<? extends com.google.rpc.StatusOrBuilder> 
-      getStatusOrBuilderList();
+  java.util.List<? extends com.google.rpc.StatusOrBuilder> getStatusOrBuilderList();
   /**
+   *
+   *
    * <pre>
    * The status of applying the writes.
    * This i-th write status corresponds to the i-th write in the
@@ -127,6 +144,5 @@ public interface BatchWriteResponseOrBuilder extends
    *
    * <code>repeated .google.rpc.Status status = 2;</code>
    */
-  com.google.rpc.StatusOrBuilder getStatusOrBuilder(
-      int index);
+  com.google.rpc.StatusOrBuilder getStatusOrBuilder(int index);
 }
