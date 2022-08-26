@@ -56,6 +56,8 @@ import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.protobuf.Empty;
@@ -206,6 +208,12 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return firestoreStub.runQueryCallable();
+  }
+
+  @Override
+  public ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    return firestoreStub.runAggregationQueryCallable();
   }
 
   @Override
