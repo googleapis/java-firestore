@@ -197,7 +197,6 @@ public class ITQueryCountTest {
     long readTimeMs1 = msFromTimestamp(snapshot1.getReadTime());
     long readTimeMs2 = msFromTimestamp(snapshot2.getReadTime());
     assertThat(readTimeMs1).isLessThan(readTimeMs2);
-    assertThat(readTimeMs2 - readTimeMs1).isLessThan(500);
   }
 
   @Test
