@@ -266,9 +266,9 @@ public class ITQueryCountTest {
 
     // Populate the collections with documents.
     WriteBatch writeBatch = firestore.batch();
-    Iterator<CollectionReference> collectionIterator = loopInfinitely(collections);
     for (int i = 0; i < numDocumentsToCreate; i++) {
-      createDocumentInCollection(writeBatch, collectionIterator.next());
+      CollectionReference collection = collections.get(i % collections.size());
+      createDocumentInCollection(writeBatch, collection);
     }
 
     writeBatch.commit().get();
@@ -279,34 +279,6 @@ public class ITQueryCountTest {
   /** Converts a {@link Timestamp} to the equivalent number of milliseconds. */
   private static long msFromTimestamp(Timestamp timestamp) {
     return (timestamp.getSeconds() * 1_000) + (timestamp.getNanos() / 1_000_000);
-  }
-
-  /**
-   * Creates and returns an infinite iterator that iterates over the given collection in the same
-   * order as its {@link Collection#iterator} method does, looping around back to the beginning when
-   * it reaches the end.
-   */
-  private static <T> Iterator<T> loopInfinitely(Collection<T> collection) {
-    return new Iterator<T>() {
-      private Iterator<T> it = collection.iterator();
-
-      @Override
-      public boolean hasNext() {
-        // NOTE: it.hasNext() will ALWAYS return true, except in the case that the given collection
-        // is empty.
-        return it.hasNext();
-      }
-
-      @Override
-      public T next() {
-        T element = it.next();
-        // If we've reached the end of the iterator, create a new one.
-        if (!it.hasNext()) {
-          it = collection.iterator();
-        }
-        return element;
-      }
-    };
   }
 
   /**
