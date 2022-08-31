@@ -27,7 +27,9 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.protobuf.ByteString;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @InternalExtensionOnly
 public class AggregateQuery {
@@ -52,7 +54,20 @@ public class AggregateQuery {
 
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
-    RunAggregationQueryRequest request = toProto();
+    return get(null);
+  }
+
+  @Nonnull
+  ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
+    RunAggregationQueryRequest request;
+    {
+      RunAggregationQueryRequest.Builder requestBuilder = toProto().toBuilder();
+      if (transactionId != null) {
+        requestBuilder.setTransaction(transactionId);
+      }
+      request = requestBuilder.build();
+    }
+
     AggregateQueryResponseObserver responseObserver = new AggregateQueryResponseObserver();
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();

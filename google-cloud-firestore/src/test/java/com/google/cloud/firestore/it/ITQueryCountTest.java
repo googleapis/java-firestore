@@ -22,6 +22,7 @@ import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
 
 import com.google.api.core.ApiFuture;
+import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.AggregateQuery;
 import com.google.cloud.firestore.AggregateQuerySnapshot;
@@ -31,10 +32,13 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
+import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,14 +82,14 @@ public class ITQueryCountTest {
 
   @Test
   public void countShouldReturnZeroForEmptyCollection() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(0);
+    CollectionReference collection = createEmptyCollection();
     AggregateQuerySnapshot snapshot = collection.count().get().get();
     assertThat(snapshot.getCount()).isEqualTo(0);
   }
 
   @Test
   public void countShouldReturnNumDocumentsInNonEmptyCollection() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(5);
+    CollectionReference collection = createCollectionWithDocuments(5).collection();
     AggregateQuerySnapshot snapshot = collection.count().get().get();
     assertThat(snapshot.getCount()).isEqualTo(5);
   }
@@ -101,14 +105,14 @@ public class ITQueryCountTest {
 
   @Test
   public void countShouldRespectLimit() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(5);
+    CollectionReference collection = createCollectionWithDocuments(5).collection();
     AggregateQuerySnapshot snapshot = collection.limit(2).count().get().get();
     assertThat(snapshot.getCount()).isEqualTo(2);
   }
 
   @Test
   public void countShouldRespectOffset() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(5);
+    CollectionReference collection = createCollectionWithDocuments(5).collection();
     AggregateQuerySnapshot snapshot = collection.offset(2).count().get().get();
     assertThat(snapshot.getCount()).isEqualTo(3);
   }
@@ -127,7 +131,7 @@ public class ITQueryCountTest {
 
   @Test
   public void countShouldRespectStartAtAndEndAt() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(10);
+    CollectionReference collection = createCollectionWithDocuments(10).collection();
     List<QueryDocumentSnapshot> documentSnapshots = collection.get().get().getDocuments();
     AggregateQuerySnapshot snapshot =
         collection
@@ -149,7 +153,7 @@ public class ITQueryCountTest {
   @Test
   public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsClosed()
       throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(20);
+    CollectionReference collection = createCollectionWithDocuments(20).collection();
     ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
     collection.getFirestore().close();
     assertThat(task.get().getCount()).isEqualTo(20);
@@ -158,7 +162,7 @@ public class ITQueryCountTest {
   @Test
   public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsShutDownGracefully()
       throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(20);
+    CollectionReference collection = createCollectionWithDocuments(20).collection();
     ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
     collection.getFirestore().shutdown();
     assertThat(task.get().getCount()).isEqualTo(20);
@@ -167,7 +171,7 @@ public class ITQueryCountTest {
   @Test
   public void inFlightCountQueriesShouldRunToCompletionWhenFirestoreIsShutDownForcefully()
       throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(20);
+    CollectionReference collection = createCollectionWithDocuments(20).collection();
     ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
     collection.getFirestore().shutdownNow();
     await(task);
@@ -191,7 +195,7 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateSnapshotShouldHaveReasonableReadTime() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(5);
+    CollectionReference collection = createCollectionWithDocuments(5).collection();
     AggregateQuerySnapshot snapshot1 = collection.count().get().get();
     AggregateQuerySnapshot snapshot2 = collection.count().get().get();
     long readTimeMs1 = msFromTimestamp(snapshot1.getReadTime());
@@ -201,7 +205,7 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateSnapshotShouldHaveCorrectQuery() throws Exception {
-    CollectionReference collection = createCollectionWithDocuments(5);
+    CollectionReference collection = createCollectionWithDocuments(5).collection();
     AggregateQuery aggregateQuery = collection.count();
     AggregateQuerySnapshot snapshot1 = aggregateQuery.get().get();
     AggregateQuerySnapshot snapshot2 = aggregateQuery.get().get();
@@ -216,27 +220,123 @@ public class ITQueryCountTest {
     assertThat(aggregateQuery.getQuery()).isSameInstanceAs(collection);
   }
 
+  @Test
+  public void aggregateQueryShouldWorkInATransaction() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(7).collection();
+    ApiFuture<AggregateQuerySnapshot> transactionFuture =
+        collection.getFirestore().runTransaction(t -> t.get(collection.count()).get());
+    AggregateQuerySnapshot snapshot = transactionFuture.get();
+    assertThat(snapshot.getCount()).isEqualTo(7);
+  }
+
+  @Test
+  public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
+    CollectionReference collection = createEmptyCollection();
+    DocumentReference document = createDocumentInCollection(collection);
+    CountDownLatch aggregateQueryExecutedSignal = new CountDownLatch(1);
+    CountDownLatch transactionContinueSignal = new CountDownLatch(1);
+
+    ApiFuture<Object> transactionFuture =
+        collection
+            .getFirestore()
+            .runTransaction(
+                t -> {
+                  t.get(collection.count()).get();
+                  aggregateQueryExecutedSignal.countDown();
+                  transactionContinueSignal.await();
+                  return null;
+                });
+
+    ExecutionException executionException;
+    try {
+      aggregateQueryExecutedSignal.await();
+      ApiFuture<WriteResult> documentSetTask = document.set(singletonMap("abc", "def"));
+      executionException = assertThrows(ExecutionException.class, documentSetTask::get);
+    } finally {
+      transactionContinueSignal.countDown();
+    }
+
+    assertThat(executionException)
+        .hasCauseThat()
+        .hasMessageThat()
+        .ignoringCase()
+        .contains("transaction lock timeout");
+
+    // Wait for the transaction to finish.
+    transactionFuture.get();
+  }
+
+  @Test
+  public void aggregateQueryInATransactionRespectReadTime() throws Exception {
+    CreatedCollectionInfo createdCollectionInfo = createCollectionWithDocuments(10);
+    CollectionReference collection = createdCollectionInfo.collection();
+    List<DocumentReference> documents = createdCollectionInfo.documents();
+
+    // Get a snapshot of the query to get its read time.
+    AggregateQuerySnapshot snapshot = collection.count().get().get();
+    assertThat(snapshot.getCount()).isEqualTo(5);
+
+    // Delete one of the documents from the result set so that, below, we can verify that specifying
+    // the read time before this deletion will count the documents at the old read time.
+    documents.get(0).delete().get();
+
+    ApiFuture<Long> transactionFuture =
+        collection
+            .getFirestore()
+            .runTransaction(
+                t -> t.get(collection.count()).get().getCount(),
+                TransactionOptions.createReadOnlyOptionsBuilder()
+                    .setReadTime(snapshot.getReadTime().toProto())
+                    .build());
+
+    Long transactionCount = transactionFuture.get();
+
+    // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
+    // result, this test will fail when run against the Firestore emulator because it will
+    // incorrectly ignore the read time and return the count of the documents at the current time.
+    assertThat(transactionCount).isEqualTo(4);
+  }
+
   private CollectionReference createEmptyCollection() {
     String collectionPath = "java-" + testName.getMethodName() + "-" + autoId();
     return firestore.collection(collectionPath);
   }
 
-  private CollectionReference createCollectionWithDocuments(int numDocuments)
+  private CreatedCollectionInfo createCollectionWithDocuments(int numDocuments)
       throws ExecutionException, InterruptedException {
     CollectionReference collection = createEmptyCollection();
-    createDocumentsWithKeyValuePair(collection, numDocuments, "key", 42);
-    return collection;
+    List<DocumentReference> createdDocuments =
+        createDocumentsWithKeyValuePair(collection, numDocuments, "key", 42);
+    return CreatedCollectionInfo.create(collection, createdDocuments);
   }
 
-  private void createDocumentsWithKeyValuePair(
+  private List<DocumentReference> createDocumentsWithKeyValuePair(
       CollectionReference collection, int numDocumentsToCreate, String key, int value)
       throws ExecutionException, InterruptedException {
     WriteBatch writeBatch = firestore.batch();
+    ArrayList<DocumentReference> createdDocuments = new ArrayList<>();
     for (int i = 0; i < numDocumentsToCreate; i++) {
       DocumentReference doc = collection.document();
+      createdDocuments.add(doc);
       writeBatch.create(doc, singletonMap(key, value));
     }
     writeBatch.commit().get();
+    return createdDocuments;
+  }
+
+  private List<DocumentReference> createDocumentsInCollection(
+      CollectionReference collection, int numDocumentsToCreate)
+      throws ExecutionException, InterruptedException {
+    return createDocumentsWithKeyValuePair(collection, numDocumentsToCreate, "meaning", 42);
+  }
+
+  private DocumentReference createDocumentInCollection(CollectionReference collection)
+      throws ExecutionException, InterruptedException {
+    WriteBatch writeBatch = collection.getFirestore().batch();
+    DocumentReference createdDocument =
+        createDocumentInCollection(writeBatch, collection, "age", 42);
+    writeBatch.commit();
+    return createdDocument;
   }
 
   private void createDocumentInCollection(WriteBatch writeBatch, CollectionReference collection)
@@ -244,11 +344,12 @@ public class ITQueryCountTest {
     createDocumentInCollection(writeBatch, collection, "age", 42);
   }
 
-  private void createDocumentInCollection(
+  private DocumentReference createDocumentInCollection(
       WriteBatch writeBatch, CollectionReference collection, String key, int value)
       throws ExecutionException, InterruptedException {
     DocumentReference doc = collection.document();
     writeBatch.create(doc, singletonMap(key, value));
+    return doc;
   }
 
   private CollectionGroup createCollectionGroupWithDocuments(int numDocumentsToCreate)
@@ -301,5 +402,18 @@ public class ITQueryCountTest {
     }
 
     executor.shutdown();
+  }
+
+  @AutoValue
+  abstract static class CreatedCollectionInfo {
+
+    abstract CollectionReference collection();
+
+    abstract List<DocumentReference> documents();
+
+    static CreatedCollectionInfo create(
+        CollectionReference collection, List<DocumentReference> documents) {
+      return new AutoValue_ITQueryCountTest_CreatedCollectionInfo(collection, documents);
+    }
   }
 }
