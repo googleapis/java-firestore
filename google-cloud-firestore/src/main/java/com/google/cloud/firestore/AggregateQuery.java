@@ -59,15 +59,7 @@ public class AggregateQuery {
 
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
-    RunAggregationQueryRequest request;
-    {
-      RunAggregationQueryRequest.Builder requestBuilder = toProto().toBuilder();
-      if (transactionId != null) {
-        requestBuilder.setTransaction(transactionId);
-      }
-      request = requestBuilder.build();
-    }
-
+    RunAggregationQueryRequest request = toProto(transactionId);
     AggregateQueryResponseObserver responseObserver = new AggregateQueryResponseObserver();
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
@@ -107,10 +99,18 @@ public class AggregateQuery {
 
   @Nonnull
   public RunAggregationQueryRequest toProto() {
+    return toProto(null);
+  }
+
+  @Nonnull
+  RunAggregationQueryRequest toProto(@Nullable final ByteString transactionId) {
     RunQueryRequest runQueryRequest = query.toProto();
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
     request.setParent(runQueryRequest.getParent());
+    if (transactionId != null) {
+      request.setTransaction(transactionId);
+    }
 
     StructuredAggregationQuery.Builder structuredAggregationQuery =
         request.getStructuredAggregationQueryBuilder();
