@@ -268,7 +268,7 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateQueryInATransactionRespectReadTime() throws Exception {
-    CreatedCollectionInfo createdCollectionInfo = createCollectionWithDocuments(10);
+    CreatedCollectionInfo createdCollectionInfo = createCollectionWithDocuments(5);
     CollectionReference collection = createdCollectionInfo.collection();
     List<DocumentReference> documents = createdCollectionInfo.documents();
 
@@ -294,7 +294,7 @@ public class ITQueryCountTest {
     // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
     // result, this test will fail when run against the Firestore emulator because it will
     // incorrectly ignore the read time and return the count of the documents at the current time.
-    assertThat(transactionCount).isEqualTo(4);
+    assertThat(transactionCount).isEqualTo(5);
   }
 
   private CollectionReference createEmptyCollection() {
