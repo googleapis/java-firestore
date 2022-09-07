@@ -267,7 +267,7 @@ public class ITQueryCountTest {
   }
 
   @Test
-  public void aggregateQueryInATransactionRespectReadTime() throws Exception {
+  public void aggregateQueryInATransactionShouldRespectReadTime() throws Exception {
     CreatedCollectionInfo createdCollectionInfo = createCollectionWithDocuments(5);
     CollectionReference collection = createdCollectionInfo.collection();
     List<DocumentReference> documents = createdCollectionInfo.documents();
