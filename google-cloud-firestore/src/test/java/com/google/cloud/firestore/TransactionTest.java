@@ -19,6 +19,8 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
+import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQuery;
+import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.begin;
 import static com.google.cloud.firestore.LocalFirestoreHelper.beginResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
@@ -37,6 +39,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
@@ -104,6 +107,7 @@ public class TransactionTest {
 
   private DocumentReference documentReference;
   private Query queryReference;
+  private AggregateQuery aggregateQueryReference;
   private TransactionOptions options;
 
   @Before
@@ -112,6 +116,7 @@ public class TransactionTest {
 
     documentReference = firestoreMock.document("coll/doc");
     queryReference = firestoreMock.collection("coll");
+    aggregateQueryReference = queryReference.count();
     options =
         TransactionOptions.create(
             Executors.newSingleThreadExecutor(
@@ -667,6 +672,30 @@ public class TransactionTest {
   }
 
   @Test
+  public void getAggregateQuery() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+
+    doAnswer(aggregationQueryResponse(42))
+        .when(firestoreMock)
+        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+
+    ApiFuture<AggregateQuerySnapshot> transaction =
+        firestoreMock.runTransaction(t -> t.get(aggregateQueryReference).get(), options);
+
+    assertEquals(Long.valueOf(42), transaction.get().getCount());
+
+    List<Message> requests = requestCapture.getAllValues();
+    assertEquals(3, requests.size());
+
+    assertEquals(begin(), requests.get(0));
+    assertEquals(aggregationQuery(TRANSACTION_ID), requests.get(1));
+    assertEquals(commit(TRANSACTION_ID), requests.get(2));
+  }
+
+  @Test
   public void updateDocument() throws Exception {
     doReturn(beginResponse())
         .doReturn(commitResponse(2, 0))
@@ -866,6 +895,40 @@ public class TransactionTest {
     } catch (IllegalArgumentException ignore) {
       // expected
     }
+  }
+
+  @Test
+  public void getShouldThrowWhenInvokedAfterAWriteWithAQuery() throws Exception {
+    doReturn(beginResponse()).when(firestoreMock).sendRequest(Matchers.any(), Matchers.any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runTransaction(
+            t -> {
+              t.set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+              t.get(queryReference);
+              return null;
+            });
+
+    ExecutionException executionException =
+        assertThrows(ExecutionException.class, transaction::get);
+    assertThat(executionException.getCause()).isInstanceOf(IllegalStateException.class);
+  }
+
+  @Test
+  public void getShouldThrowWhenInvokedAfterAWriteWithAnAggregateQuery() throws Exception {
+    doReturn(beginResponse()).when(firestoreMock).sendRequest(Matchers.any(), Matchers.any());
+
+    ApiFuture<String> transaction =
+        firestoreMock.runTransaction(
+            t -> {
+              t.set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+              t.get(aggregateQueryReference);
+              return null;
+            });
+
+    ExecutionException executionException =
+        assertThrows(ExecutionException.class, transaction::get);
+    assertThat(executionException.getCause()).isInstanceOf(IllegalStateException.class);
   }
 
   private ApiException exception(Status.Code code, boolean shouldRetry) {

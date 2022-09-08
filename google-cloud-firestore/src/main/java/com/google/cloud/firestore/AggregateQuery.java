@@ -27,7 +27,9 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.protobuf.ByteString;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @InternalExtensionOnly
 public class AggregateQuery {
@@ -52,7 +54,12 @@ public class AggregateQuery {
 
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
-    RunAggregationQueryRequest request = toProto();
+    return get(null);
+  }
+
+  @Nonnull
+  ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
+    RunAggregationQueryRequest request = toProto(transactionId);
     AggregateQueryResponseObserver responseObserver = new AggregateQueryResponseObserver();
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
@@ -92,10 +99,18 @@ public class AggregateQuery {
 
   @Nonnull
   public RunAggregationQueryRequest toProto() {
+    return toProto(null);
+  }
+
+  @Nonnull
+  RunAggregationQueryRequest toProto(@Nullable final ByteString transactionId) {
     RunQueryRequest runQueryRequest = query.toProto();
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
     request.setParent(runQueryRequest.getParent());
+    if (transactionId != null) {
+      request.setTransaction(transactionId);
+    }
 
     StructuredAggregationQuery.Builder structuredAggregationQuery =
         request.getStructuredAggregationQueryBuilder();
