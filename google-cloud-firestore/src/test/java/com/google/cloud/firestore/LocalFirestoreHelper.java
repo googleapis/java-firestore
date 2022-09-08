@@ -345,7 +345,8 @@ public final class LocalFirestoreHelper {
           RunAggregationQueryResponse.newBuilder()
               .setResult(
                   AggregationResult.newBuilder()
-                      .putAggregateFields("count", Value.newBuilder().setIntegerValue(42).build())
+                      .putAggregateFields(
+                          "count", Value.newBuilder().setIntegerValue(count).build())
                       .build())
               .build()
         },
