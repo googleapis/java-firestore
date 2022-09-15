@@ -276,7 +276,28 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -288,7 +309,28 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -300,7 +342,28 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -311,7 +374,12 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -323,7 +391,12 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -335,7 +408,12 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -346,9 +424,11 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * The number of results to skip.
-   * Applies before limit, but after all other constraints. Must be &gt;= 0 if
-   * specified.
+   * The number of documents to skip before returning the first result.
+   * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
+   * `END AT` but before the `LIMIT` clause.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>int32 offset = 6;</code>
@@ -363,7 +443,8 @@ public interface StructuredQueryOrBuilder
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -377,7 +458,8 @@ public interface StructuredQueryOrBuilder
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -391,7 +473,8 @@ public interface StructuredQueryOrBuilder
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>

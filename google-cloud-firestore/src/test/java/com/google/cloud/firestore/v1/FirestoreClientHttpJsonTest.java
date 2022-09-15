@@ -484,6 +484,17 @@ public class FirestoreClientHttpJsonTest {
   }
 
   @Test
+  public void runAggregationQueryTest() throws Exception {}
+
+  @Test
+  public void runAggregationQueryExceptionTest() throws Exception {
+    ApiException exception =
+        ApiExceptionFactory.createException(
+            new Exception(), FakeStatusCode.of(StatusCode.Code.INVALID_ARGUMENT), false);
+    mockService.addException(exception);
+  }
+
+  @Test
   public void partitionQueryTest() throws Exception {
     Cursor responsesElement = Cursor.newBuilder().build();
     PartitionQueryResponse expectedResponse =

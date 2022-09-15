@@ -64,6 +64,18 @@ public final class QueryProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_StructuredQuery_Projection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_v1_Cursor_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_Cursor_fieldAccessorTable;
@@ -129,14 +141,23 @@ public final class QueryProto {
           + "ds\030\002 \003(\01323.google.firestore.v1.Structure"
           + "dQuery.FieldReference\"E\n\tDirection\022\031\n\025DI"
           + "RECTION_UNSPECIFIED\020\000\022\r\n\tASCENDING\020\001\022\016\n\n"
-          + "DESCENDING\020\002\"D\n\006Cursor\022*\n\006values\030\001 \003(\0132\032"
-          + ".google.firestore.v1.Value\022\016\n\006before\030\002 \001"
-          + "(\010B\303\001\n\027com.google.firestore.v1B\nQueryPro"
-          + "toP\001Z<google.golang.org/genproto/googlea"
-          + "pis/firestore/v1;firestore\242\002\004GCFS\252\002\031Goog"
-          + "le.Cloud.Firestore.V1\312\002\031Google\\Cloud\\Fir"
-          + "estore\\V1\352\002\034Google::Cloud::Firestore::V1"
-          + "b\006proto3"
+          + "DESCENDING\020\002\"\202\003\n\032StructuredAggregationQu"
+          + "ery\022@\n\020structured_query\030\001 \001(\0132$.google.f"
+          + "irestore.v1.StructuredQueryH\000\022V\n\014aggrega"
+          + "tions\030\003 \003(\0132;.google.firestore.v1.Struct"
+          + "uredAggregationQuery.AggregationB\003\340A\001\032\273\001"
+          + "\n\013Aggregation\022R\n\005count\030\001 \001(\0132A.google.fi"
+          + "restore.v1.StructuredAggregationQuery.Ag"
+          + "gregation.CountH\000\022\022\n\005alias\030\007 \001(\tB\003\340A\001\0328\n"
+          + "\005Count\022/\n\005up_to\030\001 \001(\0132\033.google.protobuf."
+          + "Int64ValueB\003\340A\001B\n\n\010operatorB\014\n\nquery_typ"
+          + "e\"D\n\006Cursor\022*\n\006values\030\001 \003(\0132\032.google.fir"
+          + "estore.v1.Value\022\016\n\006before\030\002 \001(\010B\303\001\n\027com."
+          + "google.firestore.v1B\nQueryProtoP\001Z<googl"
+          + "e.golang.org/genproto/googleapis/firesto"
+          + "re/v1;firestore\242\002\004GCFS\252\002\031Google.Cloud.Fi"
+          + "restore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002"
+          + "\034Google::Cloud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -218,14 +239,47 @@ public final class QueryProto {
             new java.lang.String[] {
               "Fields",
             });
-    internal_static_google_firestore_v1_Cursor_descriptor =
+    internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor =
         getDescriptor().getMessageTypes().get(1);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor,
+            new java.lang.String[] {
+              "StructuredQuery", "Aggregations", "QueryType",
+            });
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor =
+        internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor
+            .getNestedTypes()
+            .get(0);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor,
+            new java.lang.String[] {
+              "Count", "Alias", "Operator",
+            });
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor =
+        internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor
+            .getNestedTypes()
+            .get(0);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor,
+            new java.lang.String[] {
+              "UpTo",
+            });
+    internal_static_google_firestore_v1_Cursor_descriptor =
+        getDescriptor().getMessageTypes().get(2);
     internal_static_google_firestore_v1_Cursor_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_Cursor_descriptor,
             new java.lang.String[] {
               "Values", "Before",
             });
+    com.google.protobuf.ExtensionRegistry registry =
+        com.google.protobuf.ExtensionRegistry.newInstance();
+    registry.add(com.google.api.FieldBehaviorProto.fieldBehavior);
+    com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
+        descriptor, registry);
     com.google.api.FieldBehaviorProto.getDescriptor();
     com.google.firestore.v1.DocumentProto.getDescriptor();
     com.google.protobuf.WrappersProto.getDescriptor();
