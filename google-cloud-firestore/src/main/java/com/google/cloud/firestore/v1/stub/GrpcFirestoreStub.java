@@ -50,6 +50,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -157,6 +159,17 @@ public class GrpcFirestoreStub extends FirestoreStub {
               .setResponseMarshaller(ProtoUtils.marshaller(RunQueryResponse.getDefaultInstance()))
               .build();
 
+  private static final MethodDescriptor<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryMethodDescriptor =
+          MethodDescriptor.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName("google.firestore.v1.Firestore/RunAggregationQuery")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(RunAggregationQueryRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(RunAggregationQueryResponse.getDefaultInstance()))
+              .build();
+
   private static final MethodDescriptor<PartitionQueryRequest, PartitionQueryResponse>
       partitionQueryMethodDescriptor =
           MethodDescriptor.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
@@ -227,6 +240,8 @@ public class GrpcFirestoreStub extends FirestoreStub {
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
   private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
   private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
+  private final ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable;
@@ -373,6 +388,17 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   return params.build();
                 })
             .build();
+    GrpcCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQueryTransportSettings =
+            GrpcCallSettings.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
+                .setMethodDescriptor(runAggregationQueryMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
+                      params.put("parent", String.valueOf(request.getParent()));
+                      return params.build();
+                    })
+                .build();
     GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
         partitionQueryTransportSettings =
             GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
@@ -469,6 +495,11 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this.runQueryCallable =
         callableFactory.createServerStreamingCallable(
             runQueryTransportSettings, settings.runQuerySettings(), clientContext);
+    this.runAggregationQueryCallable =
+        callableFactory.createServerStreamingCallable(
+            runAggregationQueryTransportSettings,
+            settings.runAggregationQuerySettings(),
+            clientContext);
     this.partitionQueryCallable =
         callableFactory.createUnaryCallable(
             partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
@@ -557,6 +588,12 @@ public class GrpcFirestoreStub extends FirestoreStub {
   @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return runQueryCallable;
+  }
+
+  @Override
+  public ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    return runAggregationQueryCallable;
   }
 
   @Override

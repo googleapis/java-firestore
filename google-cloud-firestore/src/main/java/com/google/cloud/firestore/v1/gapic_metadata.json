@@ -46,6 +46,9 @@
             "Rollback": {
               "methods": ["rollback", "rollback", "rollbackCallable"]
             },
+            "RunAggregationQuery": {
+              "methods": ["runAggregationQueryCallable"]
+            },
             "RunQuery": {
               "methods": ["runQueryCallable"]
             },

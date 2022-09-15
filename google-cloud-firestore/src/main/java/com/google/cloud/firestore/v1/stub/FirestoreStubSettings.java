@@ -73,6 +73,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -102,16 +104,16 @@ import org.threeten.bp.Duration;
  * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreStubSettings.Builder firestoreSettingsBuilder = FirestoreStubSettings.newBuilder();
  * firestoreSettingsBuilder
  *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder
- *             .getDocumentSettings()
- *             .getRetrySettings()
- *             .toBuilder()
+ *         firestoreSettingsBuilder.getDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreStubSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -139,6 +141,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
   private final UnaryCallSettings<RollbackRequest, Empty> rollbackSettings;
   private final ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings;
+  private final ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings;
   private final PagedCallSettings<
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
       partitionQuerySettings;
@@ -363,6 +367,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     return runQuerySettings;
   }
 
+  /** Returns the object with the settings used for calls to runAggregationQuery. */
+  public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings() {
+    return runAggregationQuerySettings;
+  }
+
   /** Returns the object with the settings used for calls to partitionQuery. */
   public PagedCallSettings<
           PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
@@ -510,6 +520,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     commitSettings = settingsBuilder.commitSettings().build();
     rollbackSettings = settingsBuilder.rollbackSettings().build();
     runQuerySettings = settingsBuilder.runQuerySettings().build();
+    runAggregationQuerySettings = settingsBuilder.runAggregationQuerySettings().build();
     partitionQuerySettings = settingsBuilder.partitionQuerySettings().build();
     writeSettings = settingsBuilder.writeSettings().build();
     listenSettings = settingsBuilder.listenSettings().build();
@@ -536,6 +547,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings;
     private final ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings;
+    private final ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings;
     private final PagedCallSettings.Builder<
             PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
         partitionQuerySettings;
@@ -681,6 +695,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       runQuerySettings = ServerStreamingCallSettings.newBuilder();
+      runAggregationQuerySettings = ServerStreamingCallSettings.newBuilder();
       partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
       writeSettings = StreamingCallSettings.newBuilder();
       listenSettings = StreamingCallSettings.newBuilder();
@@ -716,6 +731,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = settings.commitSettings.toBuilder();
       rollbackSettings = settings.rollbackSettings.toBuilder();
       runQuerySettings = settings.runQuerySettings.toBuilder();
+      runAggregationQuerySettings = settings.runAggregationQuerySettings.toBuilder();
       partitionQuerySettings = settings.partitionQuerySettings.toBuilder();
       writeSettings = settings.writeSettings.toBuilder();
       listenSettings = settings.listenSettings.toBuilder();
@@ -811,6 +827,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
       builder
+          .runAggregationQuerySettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
+
+      builder
           .partitionQuerySettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
@@ -896,6 +917,13 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return runQuerySettings;
+    }
+
+    /** Returns the builder for the settings used for calls to runAggregationQuery. */
+    public ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings() {
+      return runAggregationQuerySettings;
     }
 
     /** Returns the builder for the settings used for calls to partitionQuery. */

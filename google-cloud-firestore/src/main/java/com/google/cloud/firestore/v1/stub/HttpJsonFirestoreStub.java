@@ -52,6 +52,8 @@ import com.google.firestore.v1.ListDocumentsResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -191,7 +193,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("document", request.getDocument()))
+                                  .toBody("document", request.getDocument(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Document>newBuilder()
@@ -262,7 +264,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build()))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BatchGetDocumentsResponse>newBuilder()
@@ -298,7 +300,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build()))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BeginTransactionResponse>newBuilder()
@@ -333,7 +335,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                   .setRequestBodyExtractor(
                       request ->
                           ProtoRestSerializer.create()
-                              .toBody("*", request.toBuilder().clearDatabase().build()))
+                              .toBody("*", request.toBuilder().clearDatabase().build(), false))
                   .build())
           .setResponseParser(
               ProtoMessageResponseParser.<CommitResponse>newBuilder()
@@ -368,7 +370,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                   .setRequestBodyExtractor(
                       request ->
                           ProtoRestSerializer.create()
-                              .toBody("*", request.toBuilder().clearDatabase().build()))
+                              .toBody("*", request.toBuilder().clearDatabase().build(), false))
                   .build())
           .setResponseParser(
               ProtoMessageResponseParser.<Empty>newBuilder()
@@ -406,11 +408,49 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build()))
+                                  .toBody("*", request.toBuilder().clearParent().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<RunQueryResponse>newBuilder()
                       .setDefaultInstance(RunQueryResponse.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryMethodDescriptor =
+          ApiMethodDescriptor.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
+              .setFullMethodName("google.firestore.v1.Firestore/RunAggregationQuery")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.SERVER_STREAMING)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<RunAggregationQueryRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/databases/*/documents}:runAggregationQuery",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<RunAggregationQueryRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setAdditionalPaths(
+                          "/v1/{parent=projects/*/databases/*/documents/*/**}:runAggregationQuery")
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<RunAggregationQueryRequest> serializer =
+                                ProtoRestSerializer.create();
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearParent().build(), false))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<RunAggregationQueryResponse>newBuilder()
+                      .setDefaultInstance(RunAggregationQueryResponse.getDefaultInstance())
                       .setDefaultTypeRegistry(typeRegistry)
                       .build())
               .build();
@@ -444,7 +484,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build()))
+                                  .toBody("*", request.toBuilder().clearParent().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<PartitionQueryResponse>newBuilder()
@@ -482,7 +522,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build()))
+                                  .toBody("*", request.toBuilder().clearParent().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<ListCollectionIdsResponse>newBuilder()
@@ -518,7 +558,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build()))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BatchWriteResponse>newBuilder()
@@ -558,7 +598,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("document", request.getDocument()))
+                                  .toBody("document", request.getDocument(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Document>newBuilder()
@@ -580,6 +620,8 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
   private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
   private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
+  private final ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>
       partitionQueryPagedCallable;
@@ -679,6 +721,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
             .setMethodDescriptor(runQueryMethodDescriptor)
             .setTypeRegistry(typeRegistry)
             .build();
+    HttpJsonCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQueryTransportSettings =
+            HttpJsonCallSettings
+                .<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
+                .setMethodDescriptor(runAggregationQueryMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .build();
     HttpJsonCallSettings<PartitionQueryRequest, PartitionQueryResponse>
         partitionQueryTransportSettings =
             HttpJsonCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
@@ -734,6 +783,11 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
     this.runQueryCallable =
         callableFactory.createServerStreamingCallable(
             runQueryTransportSettings, settings.runQuerySettings(), clientContext);
+    this.runAggregationQueryCallable =
+        callableFactory.createServerStreamingCallable(
+            runAggregationQueryTransportSettings,
+            settings.runAggregationQuerySettings(),
+            clientContext);
     this.partitionQueryCallable =
         callableFactory.createUnaryCallable(
             partitionQueryTransportSettings, settings.partitionQuerySettings(), clientContext);
@@ -773,6 +827,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
     methodDescriptors.add(commitMethodDescriptor);
     methodDescriptors.add(rollbackMethodDescriptor);
     methodDescriptors.add(runQueryMethodDescriptor);
+    methodDescriptors.add(runAggregationQueryMethodDescriptor);
     methodDescriptors.add(partitionQueryMethodDescriptor);
     methodDescriptors.add(listCollectionIdsMethodDescriptor);
     methodDescriptors.add(batchWriteMethodDescriptor);
@@ -831,6 +886,12 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return runQueryCallable;
+  }
+
+  @Override
+  public ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    return runAggregationQueryCallable;
   }
 
   @Override
