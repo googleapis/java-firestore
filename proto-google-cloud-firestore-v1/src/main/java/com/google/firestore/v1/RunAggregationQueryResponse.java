@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,8 +149,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
-   * Not present when reporting partial progress or when the query produced
-   * zero results.
+   * Not present when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -166,8 +165,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
-   * Not present when reporting partial progress or when the query produced
-   * zero results.
+   * Not present when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -185,8 +183,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
-   * Not present when reporting partial progress or when the query produced
-   * zero results.
+   * Not present when reporting partial progress.
    * </pre>
    *
    * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -646,8 +643,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -662,8 +658,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -684,8 +679,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -708,8 +702,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -729,8 +722,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -757,8 +749,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -779,8 +770,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -795,8 +785,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
@@ -815,8 +804,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
-     * Not present when reporting partial progress or when the query produced
-     * zero results.
+     * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>

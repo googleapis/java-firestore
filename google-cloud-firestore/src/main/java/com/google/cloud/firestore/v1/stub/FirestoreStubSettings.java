@@ -104,16 +104,16 @@ import org.threeten.bp.Duration;
  * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreStubSettings.Builder firestoreSettingsBuilder = FirestoreStubSettings.newBuilder();
  * firestoreSettingsBuilder
  *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder
- *             .getDocumentSettings()
- *             .getRetrySettings()
- *             .toBuilder()
+ *         firestoreSettingsBuilder.getDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreStubSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -450,7 +450,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
         .setUseJwtAccessWithScope(true);
   }
 
-  /** Returns a builder for the default ChannelProvider for this service. */
+  /** Returns a builder for the default gRPC ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return InstantiatingGrpcChannelProvider.newBuilder()
         .setMaxInboundMessageSize(Integer.MAX_VALUE);
@@ -468,7 +468,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   }
 
   @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
-  public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
+  public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken("gapic", GaxProperties.getLibraryVersion(FirestoreStubSettings.class))
         .setTransportToken(
@@ -484,7 +484,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             GaxHttpJsonProperties.getHttpJsonVersion());
   }
 
-  /** Returns a new builder for this class. */
+  public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
+    return FirestoreStubSettings.defaultGrpcApiClientHeaderProviderBuilder();
+  }
+
+  /** Returns a new gRPC builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
   }

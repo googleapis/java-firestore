@@ -155,6 +155,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>grpc-google-common-protos</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-conformance-tests</artifactId>
       <version>0.3.4</version>

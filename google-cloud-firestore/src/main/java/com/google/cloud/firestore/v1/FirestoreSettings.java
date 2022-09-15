@@ -86,16 +86,16 @@ import javax.annotation.Generated;
  * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings.Builder firestoreSettingsBuilder = FirestoreSettings.newBuilder();
  * firestoreSettingsBuilder
  *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder
- *             .getDocumentSettings()
- *             .getRetrySettings()
- *             .toBuilder()
+ *         firestoreSettingsBuilder.getDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -216,7 +216,7 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultCredentialsProviderBuilder();
   }
 
-  /** Returns a builder for the default ChannelProvider for this service. */
+  /** Returns a builder for the default gRPC ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return FirestoreStubSettings.defaultGrpcTransportProviderBuilder();
   }
@@ -237,7 +237,7 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultApiClientHeaderProviderBuilder();
   }
 
-  /** Returns a new builder for this class. */
+  /** Returns a new gRPC builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
   }

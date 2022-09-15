@@ -75,6 +75,7 @@ import org.junit.Test;
 @Generated("by gapic-generator-java")
 public class FirestoreAdminClientTest {
   private static MockFirestoreAdmin mockFirestoreAdmin;
+  private static MockLocations mockLocations;
   private static MockServiceHelper mockServiceHelper;
   private LocalChannelProvider channelProvider;
   private FirestoreAdminClient client;
@@ -82,9 +83,11 @@ public class FirestoreAdminClientTest {
   @BeforeClass
   public static void startStaticServer() {
     mockFirestoreAdmin = new MockFirestoreAdmin();
+    mockLocations = new MockLocations();
     mockServiceHelper =
         new MockServiceHelper(
-            UUID.randomUUID().toString(), Arrays.<MockGrpcService>asList(mockFirestoreAdmin));
+            UUID.randomUUID().toString(),
+            Arrays.<MockGrpcService>asList(mockFirestoreAdmin, mockLocations));
     mockServiceHelper.start();
   }
 
