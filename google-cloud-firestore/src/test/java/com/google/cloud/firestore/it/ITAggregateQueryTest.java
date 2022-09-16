@@ -36,13 +36,7 @@ public class ITAggregateQueryTest {
 
   @Before
   public void setUpFirestore() {
-    // TODO(dconeybe) Remove the hardcoded "host" and "projectId" once COUNT is supported by prod.
-    firestore =
-        FirestoreOptions.newBuilder()
-            .setHost("localhost:8080")
-            .setProjectId("my-cool-project")
-            .build()
-            .getService();
+    firestore = FirestoreOptions.newBuilder().build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
