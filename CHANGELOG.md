@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.0](https://github.com/googleapis/java-firestore/compare/v3.4.2...v3.5.0) (2022-09-16)
+
+
+### Features
+
+* Add firestore aggregation query apis to the stable googleapis branch ([#1030](https://github.com/googleapis/java-firestore/issues/1030)) ([0e3e2ac](https://github.com/googleapis/java-firestore/commit/0e3e2ac98d1e505e7fe9bb17b2bdb8e7089776cf))
+
+
+### Dependencies
+
+* Update actions/setup-java action to v3 ([#1031](https://github.com/googleapis/java-firestore/issues/1031)) ([1aae546](https://github.com/googleapis/java-firestore/commit/1aae5463ae781787a529d424be2d145718250781))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.2 ([#1032](https://github.com/googleapis/java-firestore/issues/1032)) ([9b68360](https://github.com/googleapis/java-firestore/commit/9b6836031c7af75e4fc3350f36bef425d97cbfeb))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.3 ([#1034](https://github.com/googleapis/java-firestore/issues/1034)) ([5acd8e4](https://github.com/googleapis/java-firestore/commit/5acd8e415f966a7a902cae6ad324f70377b75528))
+
 ## [3.4.2](https://github.com/googleapis/java-firestore/compare/v3.4.1...v3.4.2) (2022-08-24)
 
 
