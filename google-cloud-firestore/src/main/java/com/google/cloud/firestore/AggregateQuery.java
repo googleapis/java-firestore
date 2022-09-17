@@ -31,8 +31,9 @@ import com.google.protobuf.ByteString;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+// TODO(count) Make this class public
 @InternalExtensionOnly
-public class AggregateQuery {
+class AggregateQuery {
 
   /**
    * The "alias" to specify in the {@link RunAggregationQueryRequest} proto when running a count

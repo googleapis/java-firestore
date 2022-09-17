@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.it;
+package com.google.cloud.firestore;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.cloud.firestore.AggregateQuery;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.Query;
 import com.google.common.base.Preconditions;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+// TODO(count) Move this class back into the "it" subdirectory.
 @RunWith(JUnit4.class)
 public class ITAggregateQueryTest {
 

@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.it;
+package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assume.assumeTrue;
 
+import com.google.api.client.util.Preconditions;
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.AggregateQuery;
-import com.google.cloud.firestore.AggregateQuerySnapshot;
-import com.google.cloud.firestore.CollectionGroup;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.TransactionOptions;
-import com.google.cloud.firestore.WriteBatch;
-import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -51,16 +41,27 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+// TODO(count) Move this class back into the "it" subdirectory.
 @RunWith(JUnit4.class)
 public class ITQueryCountTest {
 
   @Rule public TestName testName = new TestName();
 
+  private FirestoreOptions firestoreOptions;
   private Firestore firestore;
 
   @Before
+  public void setUpFirestoreOptions() {
+    firestoreOptions = FirestoreOptions.newBuilder().build();
+    // TODO(count) Remove the assumeTrue() below once count queries are supported in prod.
+    assumeTrue(
+        "Count queries are only supported in the Firestore Emulator (for now)",
+        firestoreOptions.getHost().startsWith("localhost"));
+  }
+
+  @Before
   public void setUpFirestore() {
-    firestore = FirestoreOptions.newBuilder().build().getService();
+    firestore = firestoreOptions.getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");

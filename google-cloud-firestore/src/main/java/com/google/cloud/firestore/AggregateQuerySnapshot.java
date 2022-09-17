@@ -22,8 +22,9 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+// TODO(count) Make this class public
 @InternalExtensionOnly
-public class AggregateQuerySnapshot {
+class AggregateQuerySnapshot {
 
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
