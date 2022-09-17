@@ -22,10 +22,10 @@ import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.api.client.util.Preconditions;
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
