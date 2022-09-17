@@ -685,7 +685,7 @@ public class TransactionTest {
     ApiFuture<AggregateQuerySnapshot> transaction =
         firestoreMock.runTransaction(t -> t.get(aggregateQueryReference).get(), options);
 
-    assertEquals(Long.valueOf(42), transaction.get().getCount());
+    assertEquals(42, transaction.get().getCount());
 
     List<Message> requests = requestCapture.getAllValues();
     assertEquals(3, requests.size());

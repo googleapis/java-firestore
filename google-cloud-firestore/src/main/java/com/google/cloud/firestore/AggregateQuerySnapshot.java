@@ -20,7 +20,6 @@ import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 // TODO(count) Make this class public
 @InternalExtensionOnly
@@ -46,8 +45,7 @@ class AggregateQuerySnapshot {
     return readTime;
   }
 
-  @Nullable
-  public Long getCount() {
+  public long getCount() {
     return count;
   }
 
