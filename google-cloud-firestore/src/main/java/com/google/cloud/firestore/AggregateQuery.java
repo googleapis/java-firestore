@@ -28,6 +28,7 @@ import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.protobuf.ByteString;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -73,24 +74,41 @@ class AggregateQuery {
   private final class AggregateQueryResponseObserver
       implements ResponseObserver<RunAggregationQueryResponse> {
 
-    private final SettableApiFuture<AggregateQuerySnapshot> future = SettableApiFuture.create();
+    private AtomicReference<SettableApiFuture<AggregateQuerySnapshot>> future =
+        new AtomicReference<>(SettableApiFuture.create());
+    private StreamController streamController;
 
     SettableApiFuture<AggregateQuerySnapshot> getFuture() {
-      return future;
+      return future.get();
     }
 
     @Override
-    public void onStart(StreamController streamController) {}
+    public void onStart(StreamController streamController) {
+      this.streamController = streamController;
+    }
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      SettableApiFuture<AggregateQuerySnapshot> future = this.future.getAndSet(null);
+      if (future == null) {
+        return;
+      }
+
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
       long count = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT).getIntegerValue();
       future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
+
+      // Close the stream to avoid it dangling, since we're not expecting any more responses.
+      streamController.cancel();
     }
 
     @Override
     public void onError(Throwable throwable) {
+      SettableApiFuture<AggregateQuerySnapshot> future = this.future.getAndSet(null);
+      if (future == null) {
+        return;
+      }
+
       future.setException(throwable);
     }
 
