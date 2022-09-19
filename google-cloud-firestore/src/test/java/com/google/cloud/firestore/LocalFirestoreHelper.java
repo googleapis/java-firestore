@@ -18,11 +18,13 @@ package com.google.cloud.firestore;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ResponseObserver;
+import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
@@ -359,6 +361,7 @@ public final class LocalFirestoreHelper {
     return invocation -> {
       Object[] args = invocation.getArguments();
       ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      observer.onStart(mock(StreamController.class));
       for (T resp : response) {
         observer.onResponse(resp);
       }
@@ -375,6 +378,7 @@ public final class LocalFirestoreHelper {
     return invocation -> {
       Object[] args = invocation.getArguments();
       ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      observer.onStart(mock(StreamController.class));
       for (T resp : response) {
         observer.onResponse(resp);
       }
