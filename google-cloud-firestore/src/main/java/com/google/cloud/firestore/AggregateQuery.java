@@ -28,7 +28,7 @@ import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.protobuf.ByteString;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -74,12 +74,12 @@ class AggregateQuery {
   private final class AggregateQueryResponseObserver
       implements ResponseObserver<RunAggregationQueryResponse> {
 
-    private AtomicReference<SettableApiFuture<AggregateQuerySnapshot>> future =
-        new AtomicReference<>(SettableApiFuture.create());
+    private final SettableApiFuture<AggregateQuerySnapshot> future = SettableApiFuture.create();
+    private final AtomicBoolean isFutureNotified = new AtomicBoolean(false);
     private StreamController streamController;
 
     SettableApiFuture<AggregateQuerySnapshot> getFuture() {
-      return future.get();
+      return future;
     }
 
     @Override
@@ -89,8 +89,7 @@ class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      SettableApiFuture<AggregateQuerySnapshot> future = this.future.getAndSet(null);
-      if (future == null) {
+      if (!isFutureNotified.compareAndSet(false, true)) {
         return;
       }
 
@@ -104,8 +103,7 @@ class AggregateQuery {
 
     @Override
     public void onError(Throwable throwable) {
-      SettableApiFuture<AggregateQuerySnapshot> future = this.future.getAndSet(null);
-      if (future == null) {
+      if (!isFutureNotified.compareAndSet(false, true)) {
         return;
       }
 
