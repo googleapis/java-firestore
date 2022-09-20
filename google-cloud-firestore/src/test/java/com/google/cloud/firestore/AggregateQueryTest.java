@@ -17,7 +17,9 @@
 package com.google.cloud.firestore;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.mock;
 
+import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -71,5 +73,26 @@ public class AggregateQueryTest {
     AggregateQuery aggregateQuery1 = new AggregateQuery(mockQuery);
     AggregateQuery aggregateQuery2 = new AggregateQuery(mockQuery);
     assertThat(aggregateQuery1.equals(aggregateQuery2)).isTrue();
+  }
+
+  @Test
+  public void toProtoFromProtoRoundTripShouldProduceEqualAggregateQueryObjects() {
+    FirestoreImpl firestore =
+        new FirestoreImpl(
+            FirestoreOptions.newBuilder().setProjectId("test-project").build(),
+            mock(FirestoreRpc.class));
+    Query query1 = firestore.collection("abc");
+    Query query2 = firestore.collection("def").whereEqualTo("age", 42).limit(5000).orderBy("name");
+    AggregateQuery countQuery1 = query1.count();
+    AggregateQuery countQuery2 = query2.count();
+    AggregateQuery countQuery1Recreated =
+        AggregateQuery.fromProto(firestore, countQuery1.toProto());
+    AggregateQuery countQuery2Recreated =
+        AggregateQuery.fromProto(firestore, countQuery2.toProto());
+    assertThat(countQuery1).isNotSameInstanceAs(countQuery1Recreated);
+    assertThat(countQuery2).isNotSameInstanceAs(countQuery2Recreated);
+    assertThat(countQuery1).isEqualTo(countQuery1Recreated);
+    assertThat(countQuery2).isEqualTo(countQuery2Recreated);
+    assertThat(countQuery1).isNotEqualTo(countQuery2);
   }
 }
