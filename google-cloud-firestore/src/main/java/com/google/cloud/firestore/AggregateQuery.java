@@ -27,6 +27,7 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -94,7 +95,19 @@ class AggregateQuery {
       }
 
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
-      long count = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT).getIntegerValue();
+      Value value = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT);
+      if (value == null) {
+        throw new IllegalArgumentException(
+            "RunAggregationQueryResponse is missing required alias: " + ALIAS_COUNT);
+      } else if (value.getValueTypeCase() != Value.ValueTypeCase.INTEGER_VALUE) {
+        throw new IllegalArgumentException(
+            "RunAggregationQueryResponse alias "
+                + ALIAS_COUNT
+                + " has incorrect type: "
+                + value.getValueTypeCase());
+      }
+      long count = value.getIntegerValue();
+
       future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
 
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
