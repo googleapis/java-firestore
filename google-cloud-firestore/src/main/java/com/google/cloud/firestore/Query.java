@@ -1847,6 +1847,12 @@ public class Query {
     return false;
   }
 
+  // TODO(count) Make this method public
+  @Nonnull
+  AggregateQuery count() {
+    return new AggregateQuery(this);
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *
