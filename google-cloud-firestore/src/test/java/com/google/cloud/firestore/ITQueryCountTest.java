@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
@@ -286,9 +287,15 @@ public class ITQueryCountTest {
 
     Long transactionCount = transactionFuture.get();
 
-    // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
-    // result, this test will fail when run against the Firestore emulator because it will
-    // incorrectly ignore the read time and return the count of the documents at the current time.
+    // Put this assumption as close to the end of this method as possible, so that at least the code
+    // above can be _executed_, even if we end up skipping the assertThat() check below.
+    assumeFalse(
+        "Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). "
+            + "As a result, this test will fail when run against the Firestore emulator "
+            + "because it will incorrectly ignore the read time and return the count "
+            + "of the documents at the current time.",
+        isRunningAgainstFirestoreEmulator());
+
     assertThat(transactionCount).isEqualTo(5);
   }
 
@@ -397,6 +404,11 @@ public class ITQueryCountTest {
     }
 
     executor.shutdown();
+  }
+
+  /** Returns whether the tests are running against the Firestore emulator. */
+  private boolean isRunningAgainstFirestoreEmulator() {
+    return firestore.getOptions().getHost().startsWith("localhost:");
   }
 
   @AutoValue
