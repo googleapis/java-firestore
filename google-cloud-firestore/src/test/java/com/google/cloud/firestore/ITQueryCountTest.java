@@ -20,7 +20,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
@@ -216,11 +215,6 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
-    assumeTrue(
-        "Skip this test when running against production because "
-            + "it appears that production is failing to lock the counted documents b/248152832",
-        isRunningAgainstFirestoreEmulator());
-
     CollectionReference collection = createEmptyCollection();
     DocumentReference document = createDocumentInCollection(collection);
     CountDownLatch aggregateQueryExecutedSignal = new CountDownLatch(1);
@@ -392,11 +386,6 @@ public class ITQueryCountTest {
     }
 
     executor.shutdown();
-  }
-
-  /** Returns whether the tests are running against the Firestore emulator. */
-  private boolean isRunningAgainstFirestoreEmulator() {
-    return firestore.getOptions().getHost().startsWith("localhost:");
   }
 
   @AutoValue
