@@ -1846,9 +1846,8 @@ public class Query {
     return false;
   }
 
-  // TODO(count) Make this method public
   @Nonnull
-  AggregateQuery count() {
+  public AggregateQuery count() {
     return new AggregateQuery(this);
   }
 

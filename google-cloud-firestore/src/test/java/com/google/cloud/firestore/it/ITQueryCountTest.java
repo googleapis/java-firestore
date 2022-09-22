@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.AggregateQuery;
+import com.google.cloud.firestore.AggregateQuerySnapshot;
+import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.TransactionOptions;
+import com.google.cloud.firestore.WriteBatch;
+import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,27 +52,16 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-// TODO(count) Move this class back into the "it" subdirectory.
 @RunWith(JUnit4.class)
 public class ITQueryCountTest {
 
   @Rule public TestName testName = new TestName();
 
-  private FirestoreOptions firestoreOptions;
   private Firestore firestore;
 
   @Before
-  public void setUpFirestoreOptions() {
-    firestoreOptions = FirestoreOptions.newBuilder().build();
-    // TODO(count) Remove the assumeTrue() below once count queries are supported in prod.
-    assumeTrue(
-        "Count queries are only supported in the Firestore Emulator (for now)",
-        firestoreOptions.getHost().startsWith("localhost"));
-  }
-
-  @Before
   public void setUpFirestore() {
-    firestore = firestoreOptions.getService();
+    firestore = FirestoreOptions.newBuilder().build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
@@ -286,9 +286,15 @@ public class ITQueryCountTest {
 
     Long transactionCount = transactionFuture.get();
 
-    // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
-    // result, this test will fail when run against the Firestore emulator because it will
-    // incorrectly ignore the read time and return the count of the documents at the current time.
+    // Put this assumption as close to the end of this method as possible, so that at least the code
+    // above can be _executed_, even if we end up skipping the assertThat() check below.
+    assumeFalse(
+        "Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). "
+            + "As a result, this test will fail when run against the Firestore emulator "
+            + "because it will incorrectly ignore the read time and return the count "
+            + "of the documents at the current time.",
+        firestore.getOptions().getHost().startsWith("localhost:"));
+
     assertThat(transactionCount).isEqualTo(5);
   }
 

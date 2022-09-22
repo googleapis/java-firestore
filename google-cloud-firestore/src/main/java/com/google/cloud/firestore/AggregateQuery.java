@@ -33,9 +33,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-// TODO(count) Make this class public
 @InternalExtensionOnly
-class AggregateQuery {
+public class AggregateQuery {
 
   /**
    * The "alias" to specify in the {@link RunAggregationQueryRequest} proto when running a count

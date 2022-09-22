@@ -21,9 +21,8 @@ import com.google.cloud.Timestamp;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-// TODO(count) Make this class public
 @InternalExtensionOnly
-class AggregateQuerySnapshot {
+public class AggregateQuerySnapshot {
 
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
