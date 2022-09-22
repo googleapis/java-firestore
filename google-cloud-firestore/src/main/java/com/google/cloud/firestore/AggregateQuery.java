@@ -90,6 +90,10 @@ class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      // Ignore subsequent response messages. The RunAggregationQuery RPC returns a stream of
+      // responses (rather than just a single response); however, only the first response of the
+      // stream is actually used. Any more responses are technically errors, but since the Future
+      // will have already been notified, we just drop any unexpected responses.
       if (!isFutureNotified.compareAndSet(false, true)) {
         return;
       }
