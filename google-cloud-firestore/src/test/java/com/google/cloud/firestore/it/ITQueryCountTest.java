@@ -291,15 +291,9 @@ public class ITQueryCountTest {
 
     Long transactionCount = transactionFuture.get();
 
-    // Put this assumption as close to the end of this method as possible, so that at least the code
-    // above can be _executed_, even if we end up skipping the assertThat() check below.
-    assumeFalse(
-        "Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). "
-            + "As a result, this test will fail when run against the Firestore emulator "
-            + "because it will incorrectly ignore the read time and return the count "
-            + "of the documents at the current time.",
-        firestore.getOptions().getHost().startsWith("localhost:"));
-
+    // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
+    // result, this test will fail when run against the Firestore emulator because it will
+    // incorrectly ignore the read time and return the count of the documents at the current time.
     assertThat(transactionCount).isEqualTo(5);
   }
 
