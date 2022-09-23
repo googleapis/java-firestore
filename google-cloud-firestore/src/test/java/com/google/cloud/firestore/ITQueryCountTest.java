@@ -47,21 +47,11 @@ public class ITQueryCountTest {
 
   @Rule public TestName testName = new TestName();
 
-  private FirestoreOptions firestoreOptions;
   private Firestore firestore;
 
   @Before
-  public void setUpFirestoreOptions() {
-    firestoreOptions = FirestoreOptions.newBuilder().build();
-    // TODO(count) Remove the assumeTrue() below once count queries are supported in prod.
-    assumeTrue(
-        "Count queries are only supported in the Firestore Emulator (for now)",
-        firestoreOptions.getHost().startsWith("localhost"));
-  }
-
-  @Before
   public void setUpFirestore() {
-    firestore = firestoreOptions.getService();
+    firestore = FirestoreOptions.newBuilder().build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
@@ -226,6 +216,11 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
+    assumeTrue(
+        "Skip this test when running against production because "
+            + "it appears that production is failing to lock the counted documents b/248152832",
+        isRunningAgainstFirestoreEmulator());
+
     CollectionReference collection = createEmptyCollection();
     DocumentReference document = createDocumentInCollection(collection);
     CountDownLatch aggregateQueryExecutedSignal = new CountDownLatch(1);
@@ -397,6 +392,11 @@ public class ITQueryCountTest {
     }
 
     executor.shutdown();
+  }
+
+  /** Returns whether the tests are running against the Firestore emulator. */
+  private boolean isRunningAgainstFirestoreEmulator() {
+    return firestore.getOptions().getHost().startsWith("localhost:");
   }
 
   @AutoValue
