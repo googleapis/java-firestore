@@ -20,7 +20,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
