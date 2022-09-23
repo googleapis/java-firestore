@@ -137,6 +137,14 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void countShouldReturnNumberOfDocumentsForPartitionQuery() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(3).collection();
+    Query query = collection.select("abc");
+    AggregateQuerySnapshot snapshot = query.count().get().get();
+    assertThat(snapshot.getCount()).isEqualTo(3);
+  }
+
+  @Test
   public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsClosed()
       throws Exception {
     CollectionReference collection = createCollectionWithDocuments(20).collection();
