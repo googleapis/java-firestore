@@ -21,6 +21,7 @@ import com.google.cloud.Timestamp;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
+/** The results of executing an {@link AggregateQuery}. */
 @InternalExtensionOnly
 public class AggregateQuerySnapshot {
 
@@ -34,32 +35,57 @@ public class AggregateQuerySnapshot {
     this.count = count;
   }
 
+  /** Returns the query that was executed to produce this result. */
   @Nonnull
   public AggregateQuery getQuery() {
     return query;
   }
 
+  /** Returns the time at which this snapshot was read. */
   @Nonnull
   public Timestamp getReadTime() {
     return readTime;
   }
 
+  /** Returns the number of documents in the result set of the underlying query. */
   public long getCount() {
     return count;
   }
 
+  /**
+   * Compares this object with the given object for equality.
+   *
+   * <p>This object is considered "equal" to the other object if and only if all of the following
+   * conditions are satisfied:
+   *
+   * <ol>
+   *   <li>{@code object} is a non-null instance of {@link AggregateQuerySnapshot}.
+   *   <li>The {@link AggregateQuery} of {@code object} compares equal to that of this object.
+   *   <li>{@code object} has the same read time as this object.
+   *   <li>{@code object} has the same results as this object.
+   * </ol>
+   *
+   * @param object The object to compare to this object for equality.
+   * @return {@code true} if this object is "equal" to the given object, as defined above, or {@code
+   *     false} otherwise.
+   */
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
+  public boolean equals(Object object) {
+    if (object == this) {
       return true;
-    } else if (!(obj instanceof AggregateQuerySnapshot)) {
+    } else if (!(object instanceof AggregateQuerySnapshot)) {
       return false;
     }
 
-    AggregateQuerySnapshot other = (AggregateQuerySnapshot) obj;
+    AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
     return query.equals(other.query) && readTime.equals(other.readTime) && count == other.count;
   }
 
+  /**
+   * Calculates and returns the hash code for this object.
+   *
+   * @return the hash code for this object.
+   */
   @Override
   public int hashCode() {
     return Objects.hash(query, readTime, count);
