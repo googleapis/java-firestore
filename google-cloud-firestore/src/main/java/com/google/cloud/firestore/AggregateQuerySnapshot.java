@@ -61,7 +61,6 @@ public class AggregateQuerySnapshot {
    * <ol>
    *   <li>{@code object} is a non-null instance of {@link AggregateQuerySnapshot}.
    *   <li>The {@link AggregateQuery} of {@code object} compares equal to that of this object.
-   *   <li>{@code object} has the same read time as this object.
    *   <li>{@code object} has the same results as this object.
    * </ol>
    *
@@ -78,7 +77,9 @@ public class AggregateQuerySnapshot {
     }
 
     AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
-    return query.equals(other.query) && readTime.equals(other.readTime) && count == other.count;
+
+    // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
+    return query.equals(other.query) && count == other.count;
   }
 
   /**
@@ -88,6 +89,6 @@ public class AggregateQuerySnapshot {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(query, readTime, count);
+    return Objects.hash(query, count);
   }
 }

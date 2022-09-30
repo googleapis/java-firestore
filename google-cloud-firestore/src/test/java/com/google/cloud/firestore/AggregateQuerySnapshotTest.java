@@ -84,12 +84,12 @@ public class AggregateQuerySnapshotTest {
   }
 
   @Test
-  public void hashCodeShouldReturnDifferentHashCodeWhenConstructedDifferentTimestamp() {
+  public void hashCodeShouldReturnSameHashCodeWhenConstructedDifferentTimestamp() {
     AggregateQuerySnapshot snapshot1 =
         new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 =
         new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp2, 42);
-    assertThat(snapshot1.hashCode()).isNotEqualTo(snapshot2.hashCode());
+    assertThat(snapshot1.hashCode()).isEqualTo(snapshot2.hashCode());
   }
 
   @Test
@@ -125,12 +125,12 @@ public class AggregateQuerySnapshotTest {
   }
 
   @Test
-  public void equalsShouldReturnFalseWhenGivenAnAggregateQuerySnapshotWithADifferentReadTime() {
+  public void equalsShouldReturnTrueWhenGivenAnAggregateQuerySnapshotWithADifferentReadTime() {
     AggregateQuerySnapshot snapshot1 =
         new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp, 42);
     AggregateQuerySnapshot snapshot2 =
         new AggregateQuerySnapshot(sampleAggregateQuery, sampleTimestamp2, 42);
-    assertThat(snapshot1.equals(snapshot2)).isFalse();
+    assertThat(snapshot1.equals(snapshot2)).isTrue();
   }
 
   @Test
