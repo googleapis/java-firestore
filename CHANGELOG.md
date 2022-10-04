@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.6.0](https://github.com/googleapis/java-firestore/compare/v3.5.0...v3.6.0) (2022-10-04)
+
+
+### Features
+
+* Count queries (not available for use yet) ([#1033](https://github.com/googleapis/java-firestore/issues/1033)) ([8b60612](https://github.com/googleapis/java-firestore/commit/8b60612f1922a4c377fac357ee7f4304362622f3))
+* Make count queries publicly available for use ([#1042](https://github.com/googleapis/java-firestore/issues/1042)) ([1c8d242](https://github.com/googleapis/java-firestore/commit/1c8d2428d94ab8b3c18a8cad14daa2a1e39af369))
+
+
+### Documentation
+
+* AggregateQuery.java: describe why we ignore subsequent responses ([#1041](https://github.com/googleapis/java-firestore/issues/1041)) ([8150544](https://github.com/googleapis/java-firestore/commit/8150544aee0aa04a5e6239dbc4994ddd056393ba))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.4 ([#1053](https://github.com/googleapis/java-firestore/issues/1053)) ([9b4c26e](https://github.com/googleapis/java-firestore/commit/9b4c26eac062fa73c8b275978f35c5bfb8cdfc21))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.14 ([#1045](https://github.com/googleapis/java-firestore/issues/1045)) ([04b3861](https://github.com/googleapis/java-firestore/commit/04b3861d874dcd63713e62bd7717097ca8f68a3c))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.14 ([#1046](https://github.com/googleapis/java-firestore/issues/1046)) ([6631a58](https://github.com/googleapis/java-firestore/commit/6631a58553a12e1f48d060d0b87cfa8683492b94))
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.9.1 ([#1039](https://github.com/googleapis/java-firestore/issues/1039)) ([84423f4](https://github.com/googleapis/java-firestore/commit/84423f4db6e35f9d30a34a5bc2d29050380840ec))
+
 ## [3.5.0](https://github.com/googleapis/java-firestore/compare/v3.4.2...v3.5.0) (2022-09-16)
 
 
