@@ -53,100 +53,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     return this.unknownFields;
   }
 
-  private PartitionQueryRequest(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              parent_ = s;
-              break;
-            }
-          case 18:
-            {
-              com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
-              if (queryTypeCase_ == 2) {
-                subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
-              }
-              queryType_ =
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
-                queryType_ = subBuilder.buildPartial();
-              }
-              queryTypeCase_ = 2;
-              break;
-            }
-          case 24:
-            {
-              partitionCount_ = input.readInt64();
-              break;
-            }
-          case 34:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              pageToken_ = s;
-              break;
-            }
-          case 40:
-            {
-              pageSize_ = input.readInt32();
-              break;
-            }
-          case 50:
-            {
-              com.google.protobuf.Timestamp.Builder subBuilder = null;
-              if (consistencySelectorCase_ == 6) {
-                subBuilder = ((com.google.protobuf.Timestamp) consistencySelector_).toBuilder();
-              }
-              consistencySelector_ =
-                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.protobuf.Timestamp) consistencySelector_);
-                consistencySelector_ = subBuilder.buildPartial();
-              }
-              consistencySelectorCase_ = 6;
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (com.google.protobuf.UninitializedMessageException e) {
-      throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_PartitionQueryRequest_descriptor;
@@ -565,7 +471,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     if (consistencySelectorCase_ == 6) {
       output.writeMessage(6, (com.google.protobuf.Timestamp) consistencySelector_);
     }
-    unknownFields.writeTo(output);
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -596,7 +502,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               6, (com.google.protobuf.Timestamp) consistencySelector_);
     }
-    size += unknownFields.getSerializedSize();
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -632,7 +538,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       case 0:
       default:
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -667,7 +573,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       case 0:
       default:
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -796,17 +702,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     }
 
     // Construct using com.google.firestore.v1.PartitionQueryRequest.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
@@ -814,12 +713,18 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       super.clear();
       parent_ = "";
 
+      if (structuredQueryBuilder_ != null) {
+        structuredQueryBuilder_.clear();
+      }
       partitionCount_ = 0L;
 
       pageToken_ = "";
 
       pageSize_ = 0;
 
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.clear();
+      }
       queryTypeCase_ = 0;
       queryType_ = null;
       consistencySelectorCase_ = 0;
@@ -956,7 +861,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             break;
           }
       }
-      this.mergeUnknownFields(other.unknownFields);
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -971,17 +876,67 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.PartitionQueryRequest parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                parent_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 18:
+              {
+                input.readMessage(getStructuredQueryFieldBuilder().getBuilder(), extensionRegistry);
+                queryTypeCase_ = 2;
+                break;
+              } // case 18
+            case 24:
+              {
+                partitionCount_ = input.readInt64();
+
+                break;
+              } // case 24
+            case 34:
+              {
+                pageToken_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 34
+            case 40:
+              {
+                pageSize_ = input.readInt32();
+
+                break;
+              } // case 40
+            case 50:
+              {
+                input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
+                consistencySelectorCase_ = 6;
+                break;
+              } // case 50
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.PartitionQueryRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -1909,7 +1864,18 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PartitionQueryRequest(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
