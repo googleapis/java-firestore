@@ -33,9 +33,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-// TODO(count) Make this class public
+/** A query that calculates aggregations over an underlying query. */
 @InternalExtensionOnly
-class AggregateQuery {
+public class AggregateQuery {
 
   /**
    * The "alias" to specify in the {@link RunAggregationQueryRequest} proto when running a count
@@ -50,11 +50,17 @@ class AggregateQuery {
     this.query = query;
   }
 
+  /** Returns the query whose aggregations will be calculated by this object. */
   @Nonnull
   public Query getQuery() {
     return query;
   }
 
+  /**
+   * Executes this query.
+   *
+   * @return An {@link ApiFuture} that will be resolved with the results of the query.
+   */
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
     return get(null);
@@ -90,6 +96,10 @@ class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      // Ignore subsequent response messages. The RunAggregationQuery RPC returns a stream of
+      // responses (rather than just a single response); however, only the first response of the
+      // stream is actually used. Any more responses are technically errors, but since the Future
+      // will have already been notified, we just drop any unexpected responses.
       if (!isFutureNotified.compareAndSet(false, true)) {
         return;
       }
@@ -127,6 +137,12 @@ class AggregateQuery {
     public void onComplete() {}
   }
 
+  /**
+   * Returns the {@link RunAggregationQueryRequest} that this AggregateQuery instance represents.
+   * The request contain the serialized form of all aggregations and Query constraints.
+   *
+   * @return the serialized RunAggregationQueryRequest
+   */
   @Nonnull
   public RunAggregationQueryRequest toProto() {
     return toProto(null);
@@ -155,6 +171,17 @@ class AggregateQuery {
     return request.build();
   }
 
+  /**
+   * Returns an AggregateQuery instance that can be used to execute the provided {@link
+   * RunAggregationQueryRequest}.
+   *
+   * <p>Only RunAggregationQueryRequests that pertain to the same project as the Firestore instance
+   * can be deserialized.
+   *
+   * @param firestore a Firestore instance to apply the query to.
+   * @param proto the serialized RunAggregationQueryRequest.
+   * @return a AggregateQuery instance that can be used to execute the RunAggregationQueryRequest.
+   */
   @Nonnull
   public static AggregateQuery fromProto(Firestore firestore, RunAggregationQueryRequest proto) {
     RunQueryRequest runQueryRequest =
@@ -166,19 +193,40 @@ class AggregateQuery {
     return new AggregateQuery(query);
   }
 
+  /**
+   * Calculates and returns the hash code for this object.
+   *
+   * @return the hash code for this object.
+   */
   @Override
   public int hashCode() {
     return query.hashCode();
   }
 
+  /**
+   * Compares this object with the given object for equality.
+   *
+   * <p>This object is considered "equal" to the other object if and only if all of the following
+   * conditions are satisfied:
+   *
+   * <ol>
+   *   <li>{@code object} is a non-null instance of {@link AggregateQuery}.
+   *   <li>{@code object} performs the same aggregations as this {@link AggregateQuery}.
+   *   <li>The underlying {@link Query} of {@code object} compares equal to that of this object.
+   * </ol>
+   *
+   * @param object The object to compare to this object for equality.
+   * @return {@code true} if this object is "equal" to the given object, as defined above, or {@code
+   *     false} otherwise.
+   */
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
+  public boolean equals(Object object) {
+    if (object == this) {
       return true;
-    } else if (!(obj instanceof AggregateQuery)) {
+    } else if (!(object instanceof AggregateQuery)) {
       return false;
     }
-    AggregateQuery other = (AggregateQuery) obj;
+    AggregateQuery other = (AggregateQuery) object;
     return query.equals(other.query);
   }
 }

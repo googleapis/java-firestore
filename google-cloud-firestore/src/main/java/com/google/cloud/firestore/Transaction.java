@@ -191,7 +191,6 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     return query.get(transactionId);
   }
 
-  // TODO(count) Make this method public
   /**
    * Returns the result from the provided aggregate query. Holds a pessimistic lock on all accessed
    * documents.
@@ -199,7 +198,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @return The result of the aggregation.
    */
   @Nonnull
-  ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
+  public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     return query.get(transactionId);

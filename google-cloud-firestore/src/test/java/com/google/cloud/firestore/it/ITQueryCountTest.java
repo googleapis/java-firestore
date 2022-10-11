@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.common.truth.Truth.assertThat;
@@ -24,6 +24,18 @@ import static org.junit.Assert.assertThrows;
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.AggregateQuery;
+import com.google.cloud.firestore.AggregateQuerySnapshot;
+import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.TransactionOptions;
+import com.google.cloud.firestore.WriteBatch;
+import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +52,6 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-// TODO(count) Move this class back into the "it" subdirectory.
 @RunWith(JUnit4.class)
 public class ITQueryCountTest {
 
@@ -135,6 +146,14 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void countShouldReturnNumberOfDocumentsForPartitionQuery() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(3).collection();
+    Query query = collection.select("abc");
+    AggregateQuerySnapshot snapshot = query.count().get().get();
+    assertThat(snapshot.getCount()).isEqualTo(3);
+  }
+
+  @Test
   public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsClosed()
       throws Exception {
     CollectionReference collection = createCollectionWithDocuments(20).collection();
@@ -215,6 +234,11 @@ public class ITQueryCountTest {
 
   @Test
   public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
+    assumeTrue(
+        "Skip this test when running against production because "
+            + "it appears that production is failing to lock the counted documents b/248152832",
+        isRunningAgainstFirestoreEmulator());
+
     CollectionReference collection = createEmptyCollection();
     DocumentReference document = createDocumentInCollection(collection);
     CountDownLatch aggregateQueryExecutedSignal = new CountDownLatch(1);
@@ -274,10 +298,6 @@ public class ITQueryCountTest {
                     .build());
 
     Long transactionCount = transactionFuture.get();
-
-    // NOTE: Snapshot reads are not yet implemented in the Firestore emulator (b/220918135). As a
-    // result, this test will fail when run against the Firestore emulator because it will
-    // incorrectly ignore the read time and return the count of the documents at the current time.
     assertThat(transactionCount).isEqualTo(5);
   }
 
@@ -386,6 +406,11 @@ public class ITQueryCountTest {
     }
 
     executor.shutdown();
+  }
+
+  /** Returns whether the tests are running against the Firestore emulator. */
+  private boolean isRunningAgainstFirestoreEmulator() {
+    return firestore.getOptions().getHost().startsWith("localhost:");
   }
 
   @AutoValue
