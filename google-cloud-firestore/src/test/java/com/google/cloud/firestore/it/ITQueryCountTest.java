@@ -62,7 +62,7 @@ public class ITQueryCountTest {
 
   @Before
   public void setUpFirestore() {
-    firestore = FirestoreOptions.newBuilder().setHost("localhost:8080").setProjectId("dconeybe-testing").build().getService();
+    firestore = FirestoreOptions.newBuilder().build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
