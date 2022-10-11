@@ -23,12 +23,15 @@ import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
+import io.opencensus.trace.AttributeValue;
+import io.opencensus.trace.Tracing;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,6 +76,13 @@ public class AggregateQuery {
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
 
+    Tracing.getTracer()
+        .getCurrentSpan()
+        .addAnnotation(
+            TraceUtil.SPAN_NAME_RUNAGGREGATIONQUERY + ": Start",
+            ImmutableMap.of(
+                "transactional", AttributeValue.booleanAttributeValue(transactionId != null)));
+
     query.rpcContext.streamRequest(request, responseObserver, callable);
 
     return responseObserver.getFuture();
@@ -104,6 +114,10 @@ public class AggregateQuery {
         return;
       }
 
+      Tracing.getTracer()
+          .getCurrentSpan()
+          .addAnnotation(TraceUtil.SPAN_NAME_RUNAGGREGATIONQUERY + ": Received response");
+
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
       Value value = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT);
       if (value == null) {
@@ -130,11 +144,29 @@ public class AggregateQuery {
         return;
       }
 
-      future.setException(throwable);
+      if (shouldRetry(throwable)) {
+        Tracing.getTracer()
+            .getCurrentSpan()
+            .addAnnotation(TraceUtil.SPAN_NAME_RUNAGGREGATIONQUERY + ": Retryable Error");
+      } else {
+        Tracing.getTracer()
+            .getCurrentSpan()
+            .addAnnotation(TraceUtil.SPAN_NAME_RUNAGGREGATIONQUERY + ": Error");
+        future.setException(throwable);
+      }
     }
 
     @Override
-    public void onComplete() {}
+    public void onComplete() {
+      Tracing.getTracer()
+          .getCurrentSpan()
+          .addAnnotation(TraceUtil.SPAN_NAME_RUNAGGREGATIONQUERY + ": Completed");
+    }
+
+    private boolean shouldRetry(Throwable throwable) {
+      // TODO(dconeybe): implement this b/244385181
+      return false;
+    }
   }
 
   /**

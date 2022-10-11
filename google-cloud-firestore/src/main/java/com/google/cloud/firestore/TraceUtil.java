@@ -45,6 +45,7 @@ final class TraceUtil {
   static final String SPAN_NAME_COMMIT = "CloudFirestoreOperation.Commit";
   static final String SPAN_NAME_ROLLBACK = "CloudFirestoreOperation.Rollback";
   static final String SPAN_NAME_RUNQUERY = "CloudFirestoreOperation.RunQuery";
+  static final String SPAN_NAME_RUNAGGREGATIONQUERY = "CloudFirestoreOperation.RunAggregationQuery";
   static final String SPAN_NAME_PARTITIONQUERY = "CloudFirestoreOperation.partitionQuery";
   static final String SPAN_NAME_LISTEN = "CloudFirestoreOperation.Listen";
   static final String SPAN_NAME_BATCHGETDOCUMENTS = "CloudFirestoreOperation.BatchGetDocuments";
