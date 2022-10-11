@@ -31,6 +31,7 @@ import com.google.cloud.firestore.CollectionGroup;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
@@ -45,6 +46,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import io.grpc.Status;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -62,7 +65,7 @@ public class ITQueryCountTest {
 
   @Before
   public void setUpFirestore() {
-    firestore = FirestoreOptions.newBuilder().build().getService();
+    firestore = FirestoreOptions.newBuilder().setHost("localhost:8080").setProjectId("dconeybe-testing").build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
@@ -137,6 +140,15 @@ public class ITQueryCountTest {
             .get()
             .get();
     assertThat(snapshot.getCount()).isEqualTo(6);
+  }
+
+  @Test
+  public void countQueriesShouldFailIfCollectionNameIsInvalid() {
+    CollectionReference collection = createEmptyCollection().document().collection("__invalid__");
+    ApiFuture<AggregateQuerySnapshot> future = collection.count().get();
+    ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
+    assertThat(executionException).hasCauseThat().hasMessageThat().contains("__invalid__");
+    assertThat(executionException).hasCauseThat().hasMessageThat().contains("INVALID_ARGUMENT");
   }
 
   @Test
