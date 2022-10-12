@@ -55,7 +55,9 @@ public class ExampleFirestoreWriteReadTest {
 
   @AfterClass
   public static void tearDown() {
-    deleteCollection(firestore.collection(collectionId), 1);
+    if (firestore != null && collectionId != null) {
+      deleteCollection(firestore.collection(collectionId), 1);
+    }
   }
 
   @Test
