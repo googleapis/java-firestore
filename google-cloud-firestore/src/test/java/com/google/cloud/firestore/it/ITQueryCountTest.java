@@ -140,6 +140,15 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void countQueriesShouldFailIfCollectionNameIsInvalid() {
+    CollectionReference collection = createEmptyCollection().document().collection("__invalid__");
+    ApiFuture<AggregateQuerySnapshot> future = collection.count().get();
+    ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
+    assertThat(executionException).hasCauseThat().hasMessageThat().contains("__invalid__");
+    assertThat(executionException).hasCauseThat().hasMessageThat().contains("INVALID_ARGUMENT");
+  }
+
+  @Test
   public void countShouldReturnNumberOfDocumentsForCollectionGroups() throws Exception {
     CollectionGroup collectionGroup = createCollectionGroupWithDocuments(13);
     AggregateQuerySnapshot snapshot = collectionGroup.count().get().get();
