@@ -1672,27 +1672,15 @@ public class Query {
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
-            if (transactionId != null) {
-              // Transactional queries are retried via the transaction runner.
-              return false;
-            }
-
             if (lastDocument == null) {
               // Only retry if we have received a single result. Retries for RPCs with initial
               // failure are handled by Google Gax, which also implements backoff.
               return false;
             }
 
-            if (!isRetryableError(t)) {
-              return false;
-            }
-
-            if (rpcContext.getTotalRequestTimeout().isZero()) {
-              return true;
-            }
-
-            Duration duration = Duration.ofNanos(rpcContext.getClock().nanoTime() - startTimeNanos);
-            return duration.compareTo(rpcContext.getTotalRequestTimeout()) < 0;
+            Set<StatusCode.Code> retryableCodes =
+                FirestoreSettings.newBuilder().runQuerySettings().getRetryableCodes();
+            return shouldRetryQuery(t, transactionId, startTimeNanos, retryableCodes);
           }
         };
 
@@ -1831,19 +1819,40 @@ public class Query {
   }
 
   /** Verifies whether the given exception is retryable based on the RunQuery configuration. */
-  private boolean isRetryableError(Throwable throwable) {
+  private boolean isRetryableError(Throwable throwable, Set<StatusCode.Code> retryableCodes) {
     if (!(throwable instanceof FirestoreException)) {
       return false;
     }
-    Set<StatusCode.Code> codes =
-        FirestoreSettings.newBuilder().runQuerySettings().getRetryableCodes();
     Status status = ((FirestoreException) throwable).getStatus();
-    for (StatusCode.Code code : codes) {
+    for (StatusCode.Code code : retryableCodes) {
       if (code.equals(StatusCode.Code.valueOf(status.getCode().name()))) {
         return true;
       }
     }
     return false;
+  }
+
+  /** Returns whether a query that failed in the given scenario should be retried. */
+  boolean shouldRetryQuery(
+      Throwable throwable,
+      @Nullable ByteString transactionId,
+      long startTimeNanos,
+      Set<StatusCode.Code> retryableCodes) {
+    if (transactionId != null) {
+      // Transactional queries are retried via the transaction runner.
+      return false;
+    }
+
+    if (!isRetryableError(throwable, retryableCodes)) {
+      return false;
+    }
+
+    if (rpcContext.getTotalRequestTimeout().isZero()) {
+      return true;
+    }
+
+    Duration duration = Duration.ofNanos(rpcContext.getClock().nanoTime() - startTimeNanos);
+    return duration.compareTo(rpcContext.getTotalRequestTimeout()) < 0;
   }
 
   /**
