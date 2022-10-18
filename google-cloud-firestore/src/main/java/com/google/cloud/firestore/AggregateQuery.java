@@ -21,14 +21,17 @@ import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
+import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,25 +71,68 @@ public class AggregateQuery {
 
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
-    RunAggregationQueryRequest request = toProto(transactionId);
-    AggregateQueryResponseObserver responseObserver = new AggregateQueryResponseObserver();
+    AggregateQueryResponseDeliverer responseDeliverer =
+        new AggregateQueryResponseDeliverer(
+            transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+    runQuery(responseDeliverer);
+    return responseDeliverer.getFuture();
+  }
+
+  private void runQuery(AggregateQueryResponseDeliverer responseDeliverer) {
+    RunAggregationQueryRequest request = toProto(responseDeliverer.getTransactionId());
+    AggregateQueryResponseObserver responseObserver =
+        new AggregateQueryResponseObserver(responseDeliverer);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
-
     query.rpcContext.streamRequest(request, responseObserver, callable);
+  }
 
-    return responseObserver.getFuture();
+  private final class AggregateQueryResponseDeliverer {
+
+    @Nullable private final ByteString transactionId;
+    private final long startTimeNanos;
+    private final SettableApiFuture<AggregateQuerySnapshot> future = SettableApiFuture.create();
+    private final AtomicBoolean isFutureCompleted = new AtomicBoolean(false);
+
+    AggregateQueryResponseDeliverer(@Nullable ByteString transactionId, long startTimeNanos) {
+      this.transactionId = transactionId;
+      this.startTimeNanos = startTimeNanos;
+    }
+
+    ApiFuture<AggregateQuerySnapshot> getFuture() {
+      return future;
+    }
+
+    @Nullable
+    ByteString getTransactionId() {
+      return transactionId;
+    }
+
+    long getStartTimeNanos() {
+      return startTimeNanos;
+    }
+
+    void deliverResult(long count, Timestamp readTime) {
+      if (isFutureCompleted.compareAndSet(false, true)) {
+        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
+      }
+    }
+
+    void deliverError(Throwable throwable) {
+      if (isFutureCompleted.compareAndSet(false, true)) {
+        future.setException(throwable);
+      }
+    }
   }
 
   private final class AggregateQueryResponseObserver
       implements ResponseObserver<RunAggregationQueryResponse> {
 
-    private final SettableApiFuture<AggregateQuerySnapshot> future = SettableApiFuture.create();
-    private final AtomicBoolean isFutureNotified = new AtomicBoolean(false);
+    private final AggregateQueryResponseDeliverer responseDeliverer;
     private StreamController streamController;
 
-    SettableApiFuture<AggregateQuerySnapshot> getFuture() {
-      return future;
+    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
+      this.responseDeliverer = responseDeliverer;
     }
 
     @Override
@@ -96,14 +142,10 @@ public class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      // Ignore subsequent response messages. The RunAggregationQuery RPC returns a stream of
-      // responses (rather than just a single response); however, only the first response of the
-      // stream is actually used. Any more responses are technically errors, but since the Future
-      // will have already been notified, we just drop any unexpected responses.
-      if (!isFutureNotified.compareAndSet(false, true)) {
-        return;
-      }
+      // Close the stream to avoid it dangling, since we're not expecting any more responses.
+      streamController.cancel();
 
+      // Extract the count and read time from the RunAggregationQueryResponse.
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
       Value value = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT);
       if (value == null) {
@@ -118,19 +160,30 @@ public class AggregateQuery {
       }
       long count = value.getIntegerValue();
 
-      future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
-
-      // Close the stream to avoid it dangling, since we're not expecting any more responses.
-      streamController.cancel();
+      // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC, meaning
+      // that `onResponse()` can be called multiple times, it _should_ only be called once for count
+      // queries. But even if it is called more than once, `responseDeliverer` will drop superfluous
+      // results.
+      responseDeliverer.deliverResult(count, readTime);
     }
 
     @Override
     public void onError(Throwable throwable) {
-      if (!isFutureNotified.compareAndSet(false, true)) {
-        return;
+      if (shouldRetry(throwable)) {
+        runQuery(responseDeliverer);
+      } else {
+        responseDeliverer.deliverError(throwable);
       }
+    }
 
-      future.setException(throwable);
+    private boolean shouldRetry(Throwable throwable) {
+      Set<StatusCode.Code> retryableCodes =
+          FirestoreSettings.newBuilder().runAggregationQuerySettings().getRetryableCodes();
+      return query.shouldRetryQuery(
+          throwable,
+          responseDeliverer.getTransactionId(),
+          responseDeliverer.getStartTimeNanos(),
+          retryableCodes);
     }
 
     @Override
