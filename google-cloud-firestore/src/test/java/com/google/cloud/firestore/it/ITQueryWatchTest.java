@@ -384,19 +384,110 @@ public final class ITQueryWatchTest {
     listenerAssertions.addedIdsIsAnyOf(emptyList(), asList("doc2", "doc3"));
   }
 
-  /** Verifies that QuerySnapshot for limitToLast() queries work with startAt. */
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with startAt when the full limit is
+   * used in the result set.
+   */
   @Test
-  public void limitToLastWithStartAt() throws Exception {
+  public void limitToLastWithStartAtFullLimit() throws Exception {
     for (int i = 0; i < 10; i++) {
       setDocument("doc" + i, Collections.singletonMap("counter", i));
     }
-    Query query = randomColl.orderBy("counter").startAt(5).limitToLast(2);
+    Query query = randomColl.orderBy("counter").startAt(5).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc7", "doc8", "doc9");
+  }
 
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with startAt when the partial limit
+   * is used in the result set.
+   */
+  @Test
+  public void limitToLastWithStartAtPartialLimit() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").startAt(8).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc8", "doc9");
+  }
+
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with startAfter when the full limit
+   * is used in the result set.
+   */
+  @Test
+  public void limitToLastWithStartAfterFullLimit() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").startAfter(5).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc7", "doc8", "doc9");
+  }
+
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with startAfter when the partial
+   * limit is used in the result set.
+   */
+  @Test
+  public void limitToLastWithStartAfterPartialLimit() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").startAfter(7).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc8", "doc9");
+  }
+
+  /** Verifies that QuerySnapshot for limitToLast() queries work with endAt. */
+  @Test
+  public void limitToLastWithEndAt() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").endAt(5).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc3", "doc4", "doc5");
+  }
+
+  /** Verifies that QuerySnapshot for limitToLast() queries work with endBefore. */
+  @Test
+  public void limitToLastWithEndBefore() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").endBefore(5).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc2", "doc3", "doc4");
+  }
+
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with both startAt and endAt when the
+   * full limit is used in the result set.
+   */
+  @Test
+  public void limitToLastWithStartAtAndEndAtFullLimit() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").startAt(3).endAt(6).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc4", "doc5", "doc6");
+  }
+
+  /**
+   * Verifies that QuerySnapshot for limitToLast() queries work with both startAt and endAt when the
+   * partial limit is used in the result set.
+   */
+  @Test
+  public void limitToLastWithStartAtAndEndAtPartialLimit() throws Exception {
+    for (int i = 0; i < 10; i++) {
+      setDocument("doc" + i, Collections.singletonMap("counter", i));
+    }
+    Query query = randomColl.orderBy("counter").startAt(5).endAt(6).limitToLast(3);
+    assertQueryResultContainsDocsInOrder(query, "doc5", "doc6");
+  }
+
+  private static void assertQueryResultContainsDocsInOrder(Query query, String... docIds)
+      throws ExecutionException, InterruptedException {
     QuerySnapshot snapshot = query.get().get();
-
     ImmutableList<String> actualDocIds =
         snapshot.getDocuments().stream().map(DocumentSnapshot::getId).collect(toImmutableList());
-    assertThat(actualDocIds).containsExactly("doc7", "doc8", "doc9").inOrder();
+    assertThat(actualDocIds).containsExactlyElementsIn(docIds).inOrder();
   }
 
   @Test
