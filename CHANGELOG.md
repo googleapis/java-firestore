@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.7.0](https://github.com/googleapis/java-firestore/compare/v3.6.0...v3.7.0) (2022-10-22)
+
+
+### Features
+
+* Add retry logic to COUNT queries ([#1062](https://github.com/googleapis/java-firestore/issues/1062)) ([5789e4b](https://github.com/googleapis/java-firestore/commit/5789e4b57f38e8cab82bc720b28578e86d82a2cc))
+
+
+### Bug Fixes
+
+* Fix limitToLast queries with cursors ([#1072](https://github.com/googleapis/java-firestore/issues/1072)) ([e9e1548](https://github.com/googleapis/java-firestore/commit/e9e15489112d49a7f8716300ec9af504fcfb5786))
+
+
+### Dependencies
+
+* Update beam.version to v2.42.0 ([#1066](https://github.com/googleapis/java-firestore/issues/1066)) ([03de01a](https://github.com/googleapis/java-firestore/commit/03de01ab58ab3d312bef63c54b202b8c911cef54))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.5 ([#1071](https://github.com/googleapis/java-firestore/issues/1071)) ([4c3f122](https://github.com/googleapis/java-firestore/commit/4c3f12286424ce7601a106b4338bc89b67ad51fb))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.16 ([#1064](https://github.com/googleapis/java-firestore/issues/1064)) ([a7ddc9e](https://github.com/googleapis/java-firestore/commit/a7ddc9e7fe708bd07595973c56fb2e392917915d))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.15 ([#1065](https://github.com/googleapis/java-firestore/issues/1065)) ([d9e7803](https://github.com/googleapis/java-firestore/commit/d9e7803d257b0edfae8648b925e040c7a6fcdb60))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.16 ([#1069](https://github.com/googleapis/java-firestore/issues/1069)) ([97ef50a](https://github.com/googleapis/java-firestore/commit/97ef50a518c5b207b28e0a81022cc96ed4e5e5ae))
+
 ## [3.6.0](https://github.com/googleapis/java-firestore/compare/v3.5.0...v3.6.0) (2022-10-04)
 
 
