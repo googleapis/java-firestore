@@ -1289,10 +1289,12 @@ public class Query {
   StructuredQuery.Builder buildQuery() {
     StructuredQuery.Builder structuredQuery = buildWithoutClientTranslation();
     if (options.getLimitType().equals(LimitType.Last)) {
-      // Apply client translation for limitToLast.
+      structuredQuery.clearOrderBy();
+      structuredQuery.clearStartAt();
+      structuredQuery.clearEndAt();
 
+      // Apply client translation for limitToLast.
       if (!options.getFieldOrders().isEmpty()) {
-        structuredQuery.clearOrderBy();
         for (FieldOrder order : options.getFieldOrders()) {
           // Flip the orderBy directions since we want the last results
           order =
@@ -1306,7 +1308,6 @@ public class Query {
       }
 
       if (options.getStartCursor() != null) {
-        structuredQuery.clearEndAt();
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
             options
@@ -1318,7 +1319,6 @@ public class Query {
       }
 
       if (options.getEndCursor() != null) {
-        structuredQuery.clearStartAt();
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
             options
