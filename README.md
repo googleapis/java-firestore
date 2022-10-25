@@ -13,6 +13,8 @@ Java idiomatic client for [Cloud Firestore][product-docs].
 
 If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file
 
+Small change to make CI run...
+
 ```xml
 <dependencyManagement>
   <dependencies>
