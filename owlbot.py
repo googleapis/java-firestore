@@ -84,5 +84,6 @@ java.common_templates(excludes=[
     '.kokoro/nightly/integration.cfg',
     '.kokoro/nightly/java11-integration.cfg',
     '.kokoro/nightly/samples.cfg',
-    '.kokoro/build.sh'
+    '.kokoro/build.sh',
+    'samples/snapshot/pom.xml'
 ])
