@@ -488,6 +488,32 @@ public class ITSystemTest {
     assertEquals(2L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
+    @Test
+  public void multipleInequalityQueryOnSameProperty() throws Exception {
+    addDocument("foo", 1);
+    addDocument("foo", 2);
+
+    QuerySnapshot querySnapshot = randomColl.whereGreaterThan("foo", 1).whereLessThanOrEqualTo("foo",2).get().get();
+    assertEquals(1, querySnapshot.size());
+    assertEquals(2L, querySnapshot.getDocuments().get(0).get("foo"));
+  }
+
+  @Test
+  public void invalidMultipleInequalityQuery() throws Exception {
+    addDocument("foo", 1,"bar", 2);
+    addDocument("foo", 2, "bar", 3);
+
+    try {
+      randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar",3).get().get();
+      fail();
+    }
+    catch(Exception e ) {
+      assertTrue(
+              e.getMessage().contains("INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]"));
+    }
+
+  }
+
   @Test
   public void greaterThanOrEqualQuery() throws Exception {
     addDocument("foo", 1);
