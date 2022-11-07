@@ -153,6 +153,57 @@ public final class ITQueryWatchTest {
   }
 
   /**
+   * Testing multiple inequality filters on same and different properties, and validate the error message returned for
+   * invalid filter.
+   */
+  @Test
+  public void inequalityFilterOnSameProperty() throws Exception {
+    setDocument("doc", map("foo", 1, "bar", 2));
+
+    final Query query = randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2);
+    QuerySnapshotEventListener listener =
+            QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCountDownLatch.awaitInitialEvents();
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
+    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
+    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsAnyOf(emptyList());
+  }
+
+  @Test
+  public void inequalityFilterOnDifferentProperty() throws Exception {
+    setDocument("doc1", map("foo", "1", "bar", 1));
+
+    final Query query = randomColl.whereGreaterThan("foo", "0").whereLessThan("bar", 2);
+    QuerySnapshotEventListener listener =
+            QuerySnapshotEventListener.builder().setExpectError().build();
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCountDownLatch.awaitError();
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.hasError();
+    FirestoreException error = listener.receivedEvents.get(0).getError();
+    assertThat(error)
+            .hasMessageThat()
+            .ignoringCase()
+            .contains("Backend ended Listen stream: Cannot have inequality filters on multiple properties: bar");
+  }
+  
+  /**
    *
    *
    * <ol>
@@ -532,6 +583,10 @@ public final class ITQueryWatchTest {
     ListenerEvent(@Nullable QuerySnapshot value, @Nullable FirestoreException error) {
       this.value = value;
       this.error = error;
+    }
+
+    @Nullable FirestoreException getError(){
+      return error;
     }
   }
 
