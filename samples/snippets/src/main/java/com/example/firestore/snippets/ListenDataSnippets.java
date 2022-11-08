@@ -49,7 +49,6 @@ public class ListenDataSnippets {
   Map<String, Object> listenToDocument() throws Exception {
     final SettableApiFuture<Map<String, Object>> future = SettableApiFuture.create();
 
-    // [START listen_to_document]
     // [START firestore_listen_document]
     DocumentReference docRef = db.collection("cities").document("SF");
     docRef.addSnapshotListener(
@@ -74,7 +73,6 @@ public class ListenDataSnippets {
           }
         });
     // [END firestore_listen_document]
-    // [END listen_to_document]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
@@ -83,7 +81,6 @@ public class ListenDataSnippets {
   List<String> listenForMultiple() throws Exception {
     final SettableApiFuture<List<String>> future = SettableApiFuture.create();
 
-    // [START listen_to_multiple]
     // [START firestore_listen_query_snapshots]
     db.collection("cities")
         .whereEqualTo("state", "CA")
@@ -112,7 +109,6 @@ public class ListenDataSnippets {
               }
             });
     // [END firestore_listen_query_snapshots]
-    // [END listen_to_multiple]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
@@ -121,7 +117,6 @@ public class ListenDataSnippets {
   List<DocumentChange> listenForChanges() throws Exception {
     SettableApiFuture<List<DocumentChange>> future = SettableApiFuture.create();
 
-    // [START listen_for_changes]
     // [START firestore_listen_query_changes]
     db.collection("cities")
         .whereEqualTo("state", "CA")
@@ -158,14 +153,12 @@ public class ListenDataSnippets {
               }
             });
     // [END firestore_listen_query_changes]
-    // [END listen_for_changes]
 
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
 
   /** Demonstrate how to detach an event listener. */
   void detachListener() {
-    // [START detach_errors]
     // [START firestore_listen_detach]
     Query query = db.collection("cities");
     ListenerRegistration registration =
@@ -184,12 +177,10 @@ public class ListenDataSnippets {
     // Stop listening to changes
     registration.remove();
     // [END firestore_listen_detach]
-    // [END detach_errors]
   }
 
   /** Demonstrate how to handle listening errors. */
   void listenErrors() {
-    // [START listen_errors]
     // [START firestore_listen_handle_error]
     db.collection("cities")
         .addSnapshotListener(
@@ -210,7 +201,6 @@ public class ListenDataSnippets {
               }
             });
     // [END firestore_listen_handle_error]
-    // [END listen_errors]
   }
 
   /** Closes the gRPC channels associated with this instance and frees up their resources. */
