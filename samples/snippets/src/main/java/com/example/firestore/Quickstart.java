@@ -157,6 +157,7 @@ public class Quickstart {
 
   void retrieveAllDocuments() throws Exception {
     // [START fs_get_all]
+    // [START firestore_setup_dataset_read]
     // asynchronously retrieve all users
     ApiFuture<QuerySnapshot> query = db.collection("users").get();
     // ...
@@ -172,6 +173,7 @@ public class Quickstart {
       System.out.println("Last: " + document.getString("last"));
       System.out.println("Born: " + document.getLong("born"));
     }
+    // [END firestore_setup_dataset_read]
     // [END fs_get_all]
   }
 

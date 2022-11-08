@@ -342,7 +342,9 @@ class QueryDataSnippets {
   Query createRangeWithOrderByQuery() {
     CollectionReference cities = db.collection("cities");
     // [START fs_range_order_by_query]
+    // [START firestore_query_order_with_filter]
     Query query = cities.whereGreaterThan("population", 2500000L).orderBy("population");
+    // [END firestore_query_order_with_filter]
     // [END fs_range_order_by_query]
     return query;
   }
