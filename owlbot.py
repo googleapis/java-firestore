@@ -85,5 +85,9 @@ java.common_templates(excludes=[
     '.kokoro/nightly/java11-integration.cfg',
     '.kokoro/nightly/samples.cfg',
     '.kokoro/build.sh',
-    'samples/snapshot/pom.xml'
+    'samples/snapshot/pom.xml',
+    '.kokoro/release/publish_javadoc.sh',
+    '.kokoro/release/publish_javadoc11.sh',
+    '.kokoro/release/stage.sh',
+    'renovate.json'
 ])
