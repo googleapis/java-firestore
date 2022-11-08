@@ -198,6 +198,14 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
     assertEquals((Long) 150L, data.getLong("population"));
   }
 
+  @Test
+  public void testSnapshotReads() throws Exception {
+
+    DocumentSnapshot doc = manageDataSnippets.runSnapshotReads();
+    // Assert that population value is exactly the one from the write operation
+    assertEquals((Long) 860008L, doc.getLong("population"));
+  }
+
   @AfterClass
   public static void tearDown() throws Exception {
     manageDataSnippets.deleteCollection(db.collection("cities"), 10);
