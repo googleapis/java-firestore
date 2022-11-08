@@ -181,7 +181,7 @@ class ManageDataSnippets {
   /** Partially update fields of a document using a map (field => value). */
   void updateUsingMap() throws Exception {
     db.collection("cities").document("DC").set(new City("Washington D.C.")).get();
-    // [START firestore_data_set_doc_update]
+    // [START firestore_data_set_document_update]
     // update multiple fields using a map
     DocumentReference docRef = db.collection("cities").document("DC");
 
@@ -194,7 +194,7 @@ class ManageDataSnippets {
     ApiFuture<WriteResult> writeResult = docRef.update(updates);
     // ...
     System.out.println("Update time : " + writeResult.get().getUpdateTime());
-    // [END firestore_data_set_doc_update]
+    // [END firestore_data_set_document_update]
   }
 
   /** Partially update fields of a document using a map (field => value). */
