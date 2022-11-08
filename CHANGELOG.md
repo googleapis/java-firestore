@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.7.1](https://github.com/googleapis/java-firestore/compare/v3.7.0...v3.7.1) (2022-11-08)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.6 ([#1092](https://github.com/googleapis/java-firestore/issues/1092)) ([019840f](https://github.com/googleapis/java-firestore/commit/019840fb0883fb41cdc294f09e35f39745a78cb4))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.17 ([#1087](https://github.com/googleapis/java-firestore/issues/1087)) ([a78be32](https://github.com/googleapis/java-firestore/commit/a78be324ccd0ba2ebff429447b8ce0fe39727360))
+
 ## [3.7.0](https://github.com/googleapis/java-firestore/compare/v3.6.0...v3.7.0) (2022-10-22)
 
 
