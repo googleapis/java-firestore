@@ -6,7 +6,13 @@
 
 # The @googleapis/api-firestore @googleapis/firestore-dpe is the default owner for changes in this repo
 *                       @googleapis/yoshi-java @googleapis/api-firestore @googleapis/firestore-dpe
+
+# for handwritten libraries, keep codeowner_team in .repo-metadata.json as owner
 **/*.java               @googleapis/api-firestore @googleapis/firestore-dpe
+
 
 # The java-samples-reviewers team is the default owner for samples changes
 samples/**/*.java       @googleapis/java-samples-reviewers
+
+# Generated snippets should not be owned by samples reviewers
+samples/snippets/generated/       @googleapis/yoshi-java
