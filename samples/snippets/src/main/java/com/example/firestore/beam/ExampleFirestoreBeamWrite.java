@@ -20,7 +20,6 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
-import java.util.UUID;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.firestore.FirestoreIO;
@@ -33,7 +32,7 @@ public class ExampleFirestoreBeamWrite {
   private static final FirestoreOptions FIRESTORE_OPTIONS = FirestoreOptions.getDefaultInstance();
 
   public static void main(String[] args) {
-    runWrite(args, "cities-collection-" + UUID.randomUUID().toString().substring(0, 10));
+    runWrite(args, "cities-beam-sample");
   }
 
   public static void runWrite(String[] args, String collectionId) {

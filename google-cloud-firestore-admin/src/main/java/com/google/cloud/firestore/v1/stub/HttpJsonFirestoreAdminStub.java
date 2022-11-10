@@ -118,7 +118,8 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                           })
                       .setRequestBodyExtractor(
                           request ->
-                              ProtoRestSerializer.create().toBody("index", request.getIndex()))
+                              ProtoRestSerializer.create()
+                                  .toBody("index", request.getIndex(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Operation>newBuilder()
@@ -290,7 +291,8 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                           })
                       .setRequestBodyExtractor(
                           request ->
-                              ProtoRestSerializer.create().toBody("field", request.getField()))
+                              ProtoRestSerializer.create()
+                                  .toBody("field", request.getField(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Operation>newBuilder()
@@ -365,7 +367,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearName().build()))
+                                  .toBody("*", request.toBuilder().clearName().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Operation>newBuilder()
@@ -404,7 +406,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearName().build()))
+                                  .toBody("*", request.toBuilder().clearName().build(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Operation>newBuilder()
@@ -511,7 +513,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("database", request.getDatabase()))
+                                  .toBody("database", request.getDatabase(), false))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Operation>newBuilder()

@@ -20,7 +20,7 @@
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <beam.version>2.40.0</beam.version>
+    <beam.version>2.42.0</beam.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -30,7 +30,7 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-firestore</artifactId>
-      <version>3.3.0</version>
+      <version>3.7.1</version>
     </dependency>
     <!-- [END firestore_install_without_bom] -->
 

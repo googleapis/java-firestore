@@ -52,6 +52,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -79,8 +81,11 @@ import javax.annotation.Generated;
  * calls that map to API methods. Sample code to get started:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
  *   GetDocumentRequest request =
  *       GetDocumentRequest.newBuilder()
@@ -120,8 +125,11 @@ import javax.annotation.Generated;
  * <p>To customize credentials:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder()
  *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
@@ -132,8 +140,11 @@ import javax.annotation.Generated;
  * <p>To customize the endpoint:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder().setEndpoint(myEndpoint).build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
@@ -143,13 +154,12 @@ import javax.annotation.Generated;
  * the wire:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
- * FirestoreSettings firestoreSettings =
- *     FirestoreSettings.newBuilder()
- *         .setTransportChannelProvider(
- *             FirestoreSettings.defaultHttpJsonTransportProviderBuilder().build())
- *         .build();
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+ * FirestoreSettings firestoreSettings = FirestoreSettings.newHttpJsonBuilder().build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
  * }</pre>
  *
@@ -210,8 +220,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   GetDocumentRequest request =
    *       GetDocumentRequest.newBuilder()
@@ -236,8 +249,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   GetDocumentRequest request =
    *       GetDocumentRequest.newBuilder()
@@ -261,8 +277,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -294,8 +313,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -327,8 +349,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListDocumentsRequest request =
    *       ListDocumentsRequest.newBuilder()
@@ -366,8 +391,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   Document document = Document.newBuilder().build();
    *   DocumentMask updateMask = DocumentMask.newBuilder().build();
@@ -397,8 +425,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   UpdateDocumentRequest request =
    *       UpdateDocumentRequest.newBuilder()
@@ -425,8 +456,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   UpdateDocumentRequest request =
    *       UpdateDocumentRequest.newBuilder()
@@ -452,8 +486,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String name = "name3373707";
    *   firestoreClient.deleteDocument(name);
@@ -476,8 +513,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   DeleteDocumentRequest request =
    *       DeleteDocumentRequest.newBuilder()
@@ -502,8 +542,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   DeleteDocumentRequest request =
    *       DeleteDocumentRequest.newBuilder()
@@ -530,8 +573,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchGetDocumentsRequest request =
    *       BatchGetDocumentsRequest.newBuilder()
@@ -559,8 +605,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   BeginTransactionResponse response = firestoreClient.beginTransaction(database);
@@ -584,8 +633,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BeginTransactionRequest request =
    *       BeginTransactionRequest.newBuilder()
@@ -610,8 +662,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BeginTransactionRequest request =
    *       BeginTransactionRequest.newBuilder()
@@ -637,8 +692,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   List<Write> writes = new ArrayList<>();
@@ -665,8 +723,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CommitRequest request =
    *       CommitRequest.newBuilder()
@@ -692,8 +753,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CommitRequest request =
    *       CommitRequest.newBuilder()
@@ -718,8 +782,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String database = "database1789464955";
    *   ByteString transaction = ByteString.EMPTY;
@@ -745,8 +812,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RollbackRequest request =
    *       RollbackRequest.newBuilder()
@@ -771,8 +841,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RollbackRequest request =
    *       RollbackRequest.newBuilder()
@@ -796,8 +869,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
    *   ServerStream<RunQueryResponse> stream = firestoreClient.runQueryCallable().call(request);
@@ -813,6 +889,44 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
+   * Runs an aggregation query.
+   *
+   * <p>Rather than producing [Document][google.firestore.v1.Document] results like
+   * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API allows running an
+   * aggregation to produce a series of [AggregationResult][google.firestore.v1.AggregationResult]
+   * server-side.
+   *
+   * <p>High-Level Example:
+   *
+   * <p>``` -- Return the number of documents in table given a filter. SELECT COUNT(&#42;) FROM (
+   * SELECT &#42; FROM k where a = true ); ```
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
+   *   RunAggregationQueryRequest request =
+   *       RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
+   *   ServerStream<RunAggregationQueryResponse> stream =
+   *       firestoreClient.runAggregationQueryCallable().call(request);
+   *   for (RunAggregationQueryResponse response : stream) {
+   *     // Do something when a response is received.
+   *   }
+   * }
+   * }</pre>
+   */
+  public final ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    return stub.runAggregationQueryCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
    * Partitions a query by returning partition cursors that can be used to run the query in
    * parallel. The returned partition cursors are split points that can be used by RunQuery as
    * starting/end points for the query results.
@@ -820,8 +934,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -852,8 +969,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -884,8 +1004,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   PartitionQueryRequest request =
    *       PartitionQueryRequest.newBuilder()
@@ -921,8 +1044,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BidiStream<WriteRequest, WriteResponse> bidiStream = firestoreClient.writeCallable().call();
    *   WriteRequest request =
@@ -951,8 +1077,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BidiStream<ListenRequest, ListenResponse> bidiStream =
    *       firestoreClient.listenCallable().call();
@@ -979,8 +1108,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   String parent = "parent-995424086";
    *   for (String element : firestoreClient.listCollectionIds(parent).iterateAll()) {
@@ -1007,8 +1139,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -1036,8 +1171,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -1066,8 +1204,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   ListCollectionIdsRequest request =
    *       ListCollectionIdsRequest.newBuilder()
@@ -1111,8 +1252,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchWriteRequest request =
    *       BatchWriteRequest.newBuilder()
@@ -1146,8 +1290,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   BatchWriteRequest request =
    *       BatchWriteRequest.newBuilder()
@@ -1173,8 +1320,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CreateDocumentRequest request =
    *       CreateDocumentRequest.newBuilder()
@@ -1202,8 +1352,11 @@ public class FirestoreClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
-   * // This snippet has been automatically generated for illustrative purposes only.
-   * // It may require modifications to work in your environment.
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   CreateDocumentRequest request =
    *       CreateDocumentRequest.newBuilder()

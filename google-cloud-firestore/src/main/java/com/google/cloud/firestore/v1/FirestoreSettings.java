@@ -56,6 +56,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -84,16 +86,16 @@ import javax.annotation.Generated;
  * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
  * <pre>{@code
- * // This snippet has been automatically generated for illustrative purposes only.
- * // It may require modifications to work in your environment.
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings.Builder firestoreSettingsBuilder = FirestoreSettings.newBuilder();
  * firestoreSettingsBuilder
  *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder
- *             .getDocumentSettings()
- *             .getRetrySettings()
- *             .toBuilder()
+ *         firestoreSettingsBuilder.getDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -148,6 +150,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   /** Returns the object with the settings used for calls to runQuery. */
   public ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings() {
     return ((FirestoreStubSettings) getStubSettings()).runQuerySettings();
+  }
+
+  /** Returns the object with the settings used for calls to runAggregationQuery. */
+  public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings() {
+    return ((FirestoreStubSettings) getStubSettings()).runAggregationQuerySettings();
   }
 
   /** Returns the object with the settings used for calls to partitionQuery. */
@@ -346,6 +354,13 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return getStubSettingsBuilder().runQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to runAggregationQuery. */
+    public ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings() {
+      return getStubSettingsBuilder().runAggregationQuerySettings();
     }
 
     /** Returns the builder for the settings used for calls to partitionQuery. */
