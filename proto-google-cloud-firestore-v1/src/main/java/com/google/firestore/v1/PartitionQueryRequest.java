@@ -53,83 +53,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     return this.unknownFields;
   }
 
-  private PartitionQueryRequest(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              parent_ = s;
-              break;
-            }
-          case 18:
-            {
-              com.google.firestore.v1.StructuredQuery.Builder subBuilder = null;
-              if (queryTypeCase_ == 2) {
-                subBuilder = ((com.google.firestore.v1.StructuredQuery) queryType_).toBuilder();
-              }
-              queryType_ =
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.StructuredQuery) queryType_);
-                queryType_ = subBuilder.buildPartial();
-              }
-              queryTypeCase_ = 2;
-              break;
-            }
-          case 24:
-            {
-              partitionCount_ = input.readInt64();
-              break;
-            }
-          case 34:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              pageToken_ = s;
-              break;
-            }
-          case 40:
-            {
-              pageSize_ = input.readInt32();
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_PartitionQueryRequest_descriptor;
@@ -187,6 +110,50 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
 
   public QueryTypeCase getQueryTypeCase() {
     return QueryTypeCase.forNumber(queryTypeCase_);
+  }
+
+  private int consistencySelectorCase_ = 0;
+  private java.lang.Object consistencySelector_;
+
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+    READ_TIME(6),
+    CONSISTENCYSELECTOR_NOT_SET(0);
+    private final int value;
+
+    private ConsistencySelectorCase(int value) {
+      this.value = value;
+    }
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ConsistencySelectorCase valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ConsistencySelectorCase forNumber(int value) {
+      switch (value) {
+        case 6:
+          return READ_TIME;
+        case 0:
+          return CONSISTENCYSELECTOR_NOT_SET;
+        default:
+          return null;
+      }
+    }
+
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public ConsistencySelectorCase getConsistencySelectorCase() {
+    return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
@@ -418,6 +385,60 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     return pageSize_;
   }
 
+  public static final int READ_TIME_FIELD_NUMBER = 6;
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return Whether the readTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasReadTime() {
+    return consistencySelectorCase_ == 6;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return The readTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getReadTime() {
+    if (consistencySelectorCase_ == 6) {
+      return (com.google.protobuf.Timestamp) consistencySelector_;
+    }
+    return com.google.protobuf.Timestamp.getDefaultInstance();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
+    if (consistencySelectorCase_ == 6) {
+      return (com.google.protobuf.Timestamp) consistencySelector_;
+    }
+    return com.google.protobuf.Timestamp.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -447,7 +468,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     if (pageSize_ != 0) {
       output.writeInt32(5, pageSize_);
     }
-    unknownFields.writeTo(output);
+    if (consistencySelectorCase_ == 6) {
+      output.writeMessage(6, (com.google.protobuf.Timestamp) consistencySelector_);
+    }
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -473,7 +497,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     if (pageSize_ != 0) {
       size += com.google.protobuf.CodedOutputStream.computeInt32Size(5, pageSize_);
     }
-    size += unknownFields.getSerializedSize();
+    if (consistencySelectorCase_ == 6) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              6, (com.google.protobuf.Timestamp) consistencySelector_);
+    }
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -501,7 +530,15 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       case 0:
       default:
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getConsistencySelectorCase().equals(other.getConsistencySelectorCase())) return false;
+    switch (consistencySelectorCase_) {
+      case 6:
+        if (!getReadTime().equals(other.getReadTime())) return false;
+        break;
+      case 0:
+      default:
+    }
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -528,7 +565,15 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       case 0:
       default:
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    switch (consistencySelectorCase_) {
+      case 6:
+        hash = (37 * hash) + READ_TIME_FIELD_NUMBER;
+        hash = (53 * hash) + getReadTime().hashCode();
+        break;
+      case 0:
+      default:
+    }
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -657,17 +702,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     }
 
     // Construct using com.google.firestore.v1.PartitionQueryRequest.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
@@ -675,14 +713,22 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       super.clear();
       parent_ = "";
 
+      if (structuredQueryBuilder_ != null) {
+        structuredQueryBuilder_.clear();
+      }
       partitionCount_ = 0L;
 
       pageToken_ = "";
 
       pageSize_ = 0;
 
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.clear();
+      }
       queryTypeCase_ = 0;
       queryType_ = null;
+      consistencySelectorCase_ = 0;
+      consistencySelector_ = null;
       return this;
     }
 
@@ -721,7 +767,15 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       result.partitionCount_ = partitionCount_;
       result.pageToken_ = pageToken_;
       result.pageSize_ = pageSize_;
+      if (consistencySelectorCase_ == 6) {
+        if (readTimeBuilder_ == null) {
+          result.consistencySelector_ = consistencySelector_;
+        } else {
+          result.consistencySelector_ = readTimeBuilder_.build();
+        }
+      }
       result.queryTypeCase_ = queryTypeCase_;
+      result.consistencySelectorCase_ = consistencySelectorCase_;
       onBuilt();
       return result;
     }
@@ -796,7 +850,18 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             break;
           }
       }
-      this.mergeUnknownFields(other.unknownFields);
+      switch (other.getConsistencySelectorCase()) {
+        case READ_TIME:
+          {
+            mergeReadTime(other.getReadTime());
+            break;
+          }
+        case CONSISTENCYSELECTOR_NOT_SET:
+          {
+            break;
+          }
+      }
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -811,17 +876,67 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.PartitionQueryRequest parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                parent_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 18:
+              {
+                input.readMessage(getStructuredQueryFieldBuilder().getBuilder(), extensionRegistry);
+                queryTypeCase_ = 2;
+                break;
+              } // case 18
+            case 24:
+              {
+                partitionCount_ = input.readInt64();
+
+                break;
+              } // case 24
+            case 34:
+              {
+                pageToken_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 34
+            case 40:
+              {
+                pageSize_ = input.readInt32();
+
+                break;
+              } // case 40
+            case 50:
+              {
+                input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
+                consistencySelectorCase_ = 6;
+                break;
+              } // case 50
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.PartitionQueryRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -835,6 +950,20 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public Builder clearQueryType() {
       queryTypeCase_ = 0;
       queryType_ = null;
+      onChanged();
+      return this;
+    }
+
+    private int consistencySelectorCase_ = 0;
+    private java.lang.Object consistencySelector_;
+
+    public ConsistencySelectorCase getConsistencySelectorCase() {
+      return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
+    }
+
+    public Builder clearConsistencySelector() {
+      consistencySelectorCase_ = 0;
+      consistencySelector_ = null;
       onChanged();
       return this;
     }
@@ -1087,8 +1216,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       } else {
         if (queryTypeCase_ == 2) {
           structuredQueryBuilder_.mergeFrom(value);
+        } else {
+          structuredQueryBuilder_.setMessage(value);
         }
-        structuredQueryBuilder_.setMessage(value);
       }
       queryTypeCase_ = 2;
       return this;
@@ -1484,6 +1614,224 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       return this;
     }
 
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        readTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
+     * @return Whether the readTime field is set.
+     */
+    @java.lang.Override
+    public boolean hasReadTime() {
+      return consistencySelectorCase_ == 6;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     *
+     * @return The readTime.
+     */
+    @java.lang.Override
+    public com.google.protobuf.Timestamp getReadTime() {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 6) {
+          return (com.google.protobuf.Timestamp) consistencySelector_;
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      } else {
+        if (consistencySelectorCase_ == 6) {
+          return readTimeBuilder_.getMessage();
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    public Builder setReadTime(com.google.protobuf.Timestamp value) {
+      if (readTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        consistencySelector_ = value;
+        onChanged();
+      } else {
+        readTimeBuilder_.setMessage(value);
+      }
+      consistencySelectorCase_ = 6;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (readTimeBuilder_ == null) {
+        consistencySelector_ = builderForValue.build();
+        onChanged();
+      } else {
+        readTimeBuilder_.setMessage(builderForValue.build());
+      }
+      consistencySelectorCase_ = 6;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 6
+            && consistencySelector_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          consistencySelector_ =
+              com.google.protobuf.Timestamp.newBuilder(
+                      (com.google.protobuf.Timestamp) consistencySelector_)
+                  .mergeFrom(value)
+                  .buildPartial();
+        } else {
+          consistencySelector_ = value;
+        }
+        onChanged();
+      } else {
+        if (consistencySelectorCase_ == 6) {
+          readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
+        }
+      }
+      consistencySelectorCase_ = 6;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    public Builder clearReadTime() {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 6) {
+          consistencySelectorCase_ = 0;
+          consistencySelector_ = null;
+          onChanged();
+        }
+      } else {
+        if (consistencySelectorCase_ == 6) {
+          consistencySelectorCase_ = 0;
+          consistencySelector_ = null;
+        }
+        readTimeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
+      return getReadTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    @java.lang.Override
+    public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
+      if ((consistencySelectorCase_ == 6) && (readTimeBuilder_ != null)) {
+        return readTimeBuilder_.getMessageOrBuilder();
+      } else {
+        if (consistencySelectorCase_ == 6) {
+          return (com.google.protobuf.Timestamp) consistencySelector_;
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 6;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getReadTimeFieldBuilder() {
+      if (readTimeBuilder_ == null) {
+        if (!(consistencySelectorCase_ == 6)) {
+          consistencySelector_ = com.google.protobuf.Timestamp.getDefaultInstance();
+        }
+        readTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                (com.google.protobuf.Timestamp) consistencySelector_,
+                getParentForChildren(),
+                isClean());
+        consistencySelector_ = null;
+      }
+      consistencySelectorCase_ = 6;
+      onChanged();
+      ;
+      return readTimeBuilder_;
+    }
+
     @java.lang.Override
     public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
@@ -1516,7 +1864,18 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PartitionQueryRequest(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

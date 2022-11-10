@@ -11,7 +11,7 @@ Java idiomatic client for [Cloud Firestore][product-docs].
 
 ## Quickstart
 
-If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file
+If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file:
 
 ```xml
 <dependencyManagement>
@@ -19,7 +19,7 @@ If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>libraries-bom</artifactId>
-      <version>24.3.0</version>
+      <version>26.1.4</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -41,28 +41,28 @@ If you are using Maven without BOM, add this to your dependencies:
 <dependency>
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.0.12</version>
+  <version>3.7.1</version>
 </dependency>
 
 ```
 
-If you are using Gradle 5.x or later, add this to your dependencies
+If you are using Gradle 5.x or later, add this to your dependencies:
 
 ```Groovy
-implementation platform('com.google.cloud:libraries-bom:24.3.0')
+implementation platform('com.google.cloud:libraries-bom:26.1.4')
 
 implementation 'com.google.cloud:google-cloud-firestore'
 ```
-If you are using Gradle without BOM, add this to your dependencies
+If you are using Gradle without BOM, add this to your dependencies:
 
 ```Groovy
-implementation 'com.google.cloud:google-cloud-firestore:3.0.12'
+implementation 'com.google.cloud:google-cloud-firestore:3.7.1'
 ```
 
-If you are using SBT, add this to your dependencies
+If you are using SBT, add this to your dependencies:
 
 ```Scala
-libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.0.12"
+libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.7.1"
 ```
 
 ## Authentication
@@ -106,7 +106,11 @@ Samples are in the [`samples/`](https://github.com/googleapis/java-firestore/tre
 
 | Sample                      | Source Code                       | Try it |
 | --------------------------- | --------------------------------- | ------ |
+| Native Image Firestore Sample | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/native-image-sample/src/main/java/com/example/firestore/NativeImageFirestoreSample.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/native-image-sample/src/main/java/com/example/firestore/NativeImageFirestoreSample.java) |
+| Person | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/native-image-sample/src/main/java/com/example/firestore/Person.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/native-image-sample/src/main/java/com/example/firestore/Person.java) |
 | Quickstart | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/Quickstart.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/Quickstart.java) |
+| Example Firestore Beam Read | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/beam/ExampleFirestoreBeamRead.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/beam/ExampleFirestoreBeamRead.java) |
+| Example Firestore Beam Write | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/beam/ExampleFirestoreBeamWrite.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/beam/ExampleFirestoreBeamWrite.java) |
 | Listen Data Snippets | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/snippets/ListenDataSnippets.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/snippets/ListenDataSnippets.java) |
 | Manage Data Snippets | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/snippets/ManageDataSnippets.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/snippets/ManageDataSnippets.java) |
 | Query Data Snippets | [source code](https://github.com/googleapis/java-firestore/blob/main/samples/snippets/src/main/java/com/example/firestore/snippets/QueryDataSnippets.java) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/java-firestore&page=editor&open_in_editor=samples/snippets/src/main/java/com/example/firestore/snippets/QueryDataSnippets.java) |

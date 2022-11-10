@@ -178,5 +178,46 @@ public interface PartitionQueryRequestOrBuilder
    */
   int getPageSize();
 
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return Whether the readTime field is set.
+   */
+  boolean hasReadTime();
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   *
+   * @return The readTime.
+   */
+  com.google.protobuf.Timestamp getReadTime();
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 6;</code>
+   */
+  com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
+
   public com.google.firestore.v1.PartitionQueryRequest.QueryTypeCase getQueryTypeCase();
+
+  public com.google.firestore.v1.PartitionQueryRequest.ConsistencySelectorCase
+      getConsistencySelectorCase();
 }

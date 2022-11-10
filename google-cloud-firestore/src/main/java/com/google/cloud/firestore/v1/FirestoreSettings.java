@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.google.api.core.BetaApi;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
+import com.google.api.gax.httpjson.InstantiatingHttpJsonChannelProvider;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.ClientSettings;
@@ -55,6 +56,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -83,14 +86,16 @@ import javax.annotation.Generated;
  * <p>For example, to set the total timeout of getDocument to 30 seconds:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings.Builder firestoreSettingsBuilder = FirestoreSettings.newBuilder();
  * firestoreSettingsBuilder
  *     .getDocumentSettings()
  *     .setRetrySettings(
- *         firestoreSettingsBuilder
- *             .getDocumentSettings()
- *             .getRetrySettings()
- *             .toBuilder()
+ *         firestoreSettingsBuilder.getDocumentSettings().getRetrySettings().toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreSettings firestoreSettings = firestoreSettingsBuilder.build();
@@ -145,6 +150,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   /** Returns the object with the settings used for calls to runQuery. */
   public ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings() {
     return ((FirestoreStubSettings) getStubSettings()).runQuerySettings();
+  }
+
+  /** Returns the object with the settings used for calls to runAggregationQuery. */
+  public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQuerySettings() {
+    return ((FirestoreStubSettings) getStubSettings()).runAggregationQuerySettings();
   }
 
   /** Returns the object with the settings used for calls to partitionQuery. */
@@ -205,9 +216,16 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultCredentialsProviderBuilder();
   }
 
-  /** Returns a builder for the default ChannelProvider for this service. */
+  /** Returns a builder for the default gRPC ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
     return FirestoreStubSettings.defaultGrpcTransportProviderBuilder();
+  }
+
+  /** Returns a builder for the default REST ChannelProvider for this service. */
+  @BetaApi
+  public static InstantiatingHttpJsonChannelProvider.Builder
+      defaultHttpJsonTransportProviderBuilder() {
+    return FirestoreStubSettings.defaultHttpJsonTransportProviderBuilder();
   }
 
   public static TransportChannelProvider defaultTransportChannelProvider() {
@@ -219,9 +237,15 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultApiClientHeaderProviderBuilder();
   }
 
-  /** Returns a new builder for this class. */
+  /** Returns a new gRPC builder for this class. */
   public static Builder newBuilder() {
     return Builder.createDefault();
+  }
+
+  /** Returns a new REST builder for this class. */
+  @BetaApi
+  public static Builder newHttpJsonBuilder() {
+    return Builder.createHttpJsonDefault();
   }
 
   /** Returns a new builder for this class. */
@@ -259,6 +283,11 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
 
     private static Builder createDefault() {
       return new Builder(FirestoreStubSettings.newBuilder());
+    }
+
+    @BetaApi
+    private static Builder createHttpJsonDefault() {
+      return new Builder(FirestoreStubSettings.newHttpJsonBuilder());
     }
 
     public FirestoreStubSettings.Builder getStubSettingsBuilder() {
@@ -325,6 +354,13 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return getStubSettingsBuilder().runQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to runAggregationQuery. */
+    public ServerStreamingCallSettings.Builder<
+            RunAggregationQueryRequest, RunAggregationQueryResponse>
+        runAggregationQuerySettings() {
+      return getStubSettingsBuilder().runAggregationQuerySettings();
     }
 
     /** Returns the builder for the settings used for calls to partitionQuery. */

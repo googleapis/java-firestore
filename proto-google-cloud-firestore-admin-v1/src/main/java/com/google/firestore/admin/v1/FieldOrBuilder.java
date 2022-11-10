@@ -27,7 +27,7 @@ public interface FieldOrBuilder
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -51,7 +51,7 @@ public interface FieldOrBuilder
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The name.
    */
@@ -60,7 +60,7 @@ public interface FieldOrBuilder
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -84,7 +84,7 @@ public interface FieldOrBuilder
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The bytes for name.
    */
@@ -133,4 +133,45 @@ public interface FieldOrBuilder
    * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
    */
   com.google.firestore.admin.v1.Field.IndexConfigOrBuilder getIndexConfigOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return Whether the ttlConfig field is set.
+   */
+  boolean hasTtlConfig();
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return The ttlConfig.
+   */
+  com.google.firestore.admin.v1.Field.TtlConfig getTtlConfig();
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   */
+  com.google.firestore.admin.v1.Field.TtlConfigOrBuilder getTtlConfigOrBuilder();
 }

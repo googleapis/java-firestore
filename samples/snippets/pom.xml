@@ -21,6 +21,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <beam.version>2.42.0</beam.version>
     <!-- Define a default empty value property which can be overridden on the command line if
         necessary by passing `-Dfirestore.project.id="some-id"` when running maven exec -->
     <firestore.project.id/>
@@ -33,7 +34,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>24.3.0</version>
+        <version>26.1.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -46,6 +47,18 @@
       <artifactId>google-cloud-firestore</artifactId>
     </dependency>
     <!-- [END firestore_install_with_bom] -->
+
+    <!--  used for beam samples-->
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-runners-direct-java</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -66,23 +79,32 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
+            <!-- to run quickstart:
+            mvn exec:exec@quickstart -Dfirestore.project.id="your-firestore-project-id"-->
+            <id>quickstart</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>com.example.firestore.Quickstart</argument>
+                <argument>${firestore.project.id}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>beam-sample</id>
             <goals>
               <goal>exec</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <executable>java</executable>
-          <arguments>
-            <argument>-classpath</argument>
-            <classpath/>
-            <argument>com.example.firestore.Quickstart</argument>
-            <argument>${firestore.project.id}</argument>
-          </arguments>
-        </configuration>
       </plugin>
     </plugins>
   </build>

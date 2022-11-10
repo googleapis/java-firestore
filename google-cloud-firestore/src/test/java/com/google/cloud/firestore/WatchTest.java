@@ -32,9 +32,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
+import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.InternalException;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.WatchTest.SnapshotDocument.ChangeType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
@@ -391,6 +393,19 @@ public class WatchTest {
         awaitException(null);
       }
     }
+  }
+
+  @Test
+  public void queryWatchRetriesOnInternalException() throws InterruptedException {
+    addQueryListener();
+    awaitAddTarget();
+    send(addTarget());
+    destroy(new InternalException(null, GrpcStatusCode.of(Code.INTERNAL), true));
+    awaitAddTarget();
+    send(addTarget());
+    send(current());
+    send(snapshot());
+    awaitQuerySnapshot();
   }
 
   @Test
@@ -991,7 +1006,11 @@ public class WatchTest {
   }
 
   private void destroy(Code code) {
-    streamObserverCapture.getValue().onError(new StatusException(io.grpc.Status.fromCode(code)));
+    destroy(new StatusException(io.grpc.Status.fromCode(code)));
+  }
+
+  private void destroy(Exception e) {
+    streamObserverCapture.getValue().onError(e);
   }
 
   private void close() {

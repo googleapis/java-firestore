@@ -43,7 +43,6 @@ public class Quickstart {
     // [START firestore_setup_client_create]
     // Option 1: Initialize a Firestore client with a specific `projectId` and
     //           authorization credential.
-    // [START fs_initialize_project_id]
     // [START firestore_setup_client_create_with_project_id]
     FirestoreOptions firestoreOptions =
         FirestoreOptions.getDefaultInstance().toBuilder()
@@ -51,7 +50,6 @@ public class Quickstart {
             .setCredentials(GoogleCredentials.getApplicationDefault())
             .build();
     Firestore db = firestoreOptions.getService();
-    // [END fs_initialize_project_id]
     // [END firestore_setup_client_create_with_project_id]
     // [END firestore_setup_client_create]
     this.db = db;
@@ -65,10 +63,8 @@ public class Quickstart {
 
     // Option 2: Initialize a Firestore client with default values inferred from
     //           your environment.
-    // [START fs_initialize]
     Firestore db = FirestoreOptions.getDefaultInstance().getService();
     // [END firestore_setup_client_create]
-    // [END fs_initialize]
     this.db = db;
   }
 
@@ -84,7 +80,6 @@ public class Quickstart {
   void addDocument(String docName) throws Exception {
     switch (docName) {
       case "alovelace": {
-        // [START fs_add_data_1]
         // [START firestore_setup_dataset_pt1]
         DocumentReference docRef = db.collection("users").document("alovelace");
         // Add document data  with id "alovelace" using a hashmap
@@ -98,11 +93,9 @@ public class Quickstart {
         // result.get() blocks on response
         System.out.println("Update time : " + result.get().getUpdateTime());
         // [END firestore_setup_dataset_pt1]
-        // [END fs_add_data_1]
         break;
       }
       case "aturing": {
-        // [START fs_add_data_2]
         // [START firestore_setup_dataset_pt2]
         DocumentReference docRef = db.collection("users").document("aturing");
         // Add document data with an additional field ("middle")
@@ -115,7 +108,6 @@ public class Quickstart {
         ApiFuture<WriteResult> result = docRef.set(data);
         System.out.println("Update time : " + result.get().getUpdateTime());
         // [END firestore_setup_dataset_pt2]
-        // [END fs_add_data_2]
         break;
       }
       case "cbabbage": {
@@ -135,7 +127,7 @@ public class Quickstart {
   }
 
   void runQuery() throws Exception {
-    // [START fs_add_query]
+    // [START firestore_setup_add_query]
     // asynchronously query for all users born before 1900
     ApiFuture<QuerySnapshot> query =
         db.collection("users").whereLessThan("born", 1900).get();
@@ -152,11 +144,11 @@ public class Quickstart {
       System.out.println("Last: " + document.getString("last"));
       System.out.println("Born: " + document.getLong("born"));
     }
-    // [END fs_add_query]
+    // [END firestore_setup_add_query]
   }
 
   void retrieveAllDocuments() throws Exception {
-    // [START fs_get_all]
+    // [START firestore_setup_dataset_read]
     // asynchronously retrieve all users
     ApiFuture<QuerySnapshot> query = db.collection("users").get();
     // ...
@@ -172,7 +164,7 @@ public class Quickstart {
       System.out.println("Last: " + document.getString("last"));
       System.out.println("Born: " + document.getLong("born"));
     }
-    // [END fs_get_all]
+    // [END firestore_setup_dataset_read]
   }
 
   void run() throws Exception {

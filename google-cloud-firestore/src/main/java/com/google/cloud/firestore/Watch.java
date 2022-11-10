@@ -570,6 +570,9 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
       return ((StatusRuntimeException) throwable).getStatus();
     } else if (throwable instanceof StatusException) {
       return ((StatusException) throwable).getStatus();
+    } else if (throwable instanceof ApiException
+        && ((ApiException) throwable).getStatusCode().getTransportCode() instanceof Code) {
+      return ((Code) ((ApiException) throwable).getStatusCode().getTransportCode()).toStatus();
     }
     return null;
   }

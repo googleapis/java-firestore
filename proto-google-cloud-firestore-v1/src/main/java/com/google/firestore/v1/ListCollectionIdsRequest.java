@@ -53,62 +53,6 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     return this.unknownFields;
   }
 
-  private ListCollectionIdsRequest(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              parent_ = s;
-              break;
-            }
-          case 16:
-            {
-              pageSize_ = input.readInt32();
-              break;
-            }
-          case 26:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              pageToken_ = s;
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_ListCollectionIdsRequest_descriptor;
@@ -122,6 +66,50 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         .ensureFieldAccessorsInitialized(
             com.google.firestore.v1.ListCollectionIdsRequest.class,
             com.google.firestore.v1.ListCollectionIdsRequest.Builder.class);
+  }
+
+  private int consistencySelectorCase_ = 0;
+  private java.lang.Object consistencySelector_;
+
+  public enum ConsistencySelectorCase
+      implements
+          com.google.protobuf.Internal.EnumLite,
+          com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+    READ_TIME(4),
+    CONSISTENCYSELECTOR_NOT_SET(0);
+    private final int value;
+
+    private ConsistencySelectorCase(int value) {
+      this.value = value;
+    }
+    /**
+     * @param value The number of the enum to look for.
+     * @return The enum associated with the given number.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ConsistencySelectorCase valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ConsistencySelectorCase forNumber(int value) {
+      switch (value) {
+        case 4:
+          return READ_TIME;
+        case 0:
+          return CONSISTENCYSELECTOR_NOT_SET;
+        default:
+          return null;
+      }
+    }
+
+    public int getNumber() {
+      return this.value;
+    }
+  };
+
+  public ConsistencySelectorCase getConsistencySelectorCase() {
+    return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
@@ -248,6 +236,60 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     }
   }
 
+  public static final int READ_TIME_FIELD_NUMBER = 4;
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return Whether the readTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasReadTime() {
+    return consistencySelectorCase_ == 4;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   *
+   * @return The readTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getReadTime() {
+    if (consistencySelectorCase_ == 4) {
+      return (com.google.protobuf.Timestamp) consistencySelector_;
+    }
+    return com.google.protobuf.Timestamp.getDefaultInstance();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Reads documents as they were at the given time.
+   * This may not be older than 270 seconds.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp read_time = 4;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
+    if (consistencySelectorCase_ == 4) {
+      return (com.google.protobuf.Timestamp) consistencySelector_;
+    }
+    return com.google.protobuf.Timestamp.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -271,7 +313,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pageToken_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pageToken_);
     }
-    unknownFields.writeTo(output);
+    if (consistencySelectorCase_ == 4) {
+      output.writeMessage(4, (com.google.protobuf.Timestamp) consistencySelector_);
+    }
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -289,7 +334,12 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pageToken_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pageToken_);
     }
-    size += unknownFields.getSerializedSize();
+    if (consistencySelectorCase_ == 4) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              4, (com.google.protobuf.Timestamp) consistencySelector_);
+    }
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -308,7 +358,15 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     if (!getParent().equals(other.getParent())) return false;
     if (getPageSize() != other.getPageSize()) return false;
     if (!getPageToken().equals(other.getPageToken())) return false;
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getConsistencySelectorCase().equals(other.getConsistencySelectorCase())) return false;
+    switch (consistencySelectorCase_) {
+      case 4:
+        if (!getReadTime().equals(other.getReadTime())) return false;
+        break;
+      case 0:
+      default:
+    }
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -325,7 +383,15 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     hash = (53 * hash) + getPageSize();
     hash = (37 * hash) + PAGE_TOKEN_FIELD_NUMBER;
     hash = (53 * hash) + getPageToken().hashCode();
-    hash = (29 * hash) + unknownFields.hashCode();
+    switch (consistencySelectorCase_) {
+      case 4:
+        hash = (37 * hash) + READ_TIME_FIELD_NUMBER;
+        hash = (53 * hash) + getReadTime().hashCode();
+        break;
+      case 0:
+      default:
+    }
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -454,17 +520,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     }
 
     // Construct using com.google.firestore.v1.ListCollectionIdsRequest.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
@@ -476,6 +535,11 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
 
       pageToken_ = "";
 
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.clear();
+      }
+      consistencySelectorCase_ = 0;
+      consistencySelector_ = null;
       return this;
     }
 
@@ -506,6 +570,14 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       result.parent_ = parent_;
       result.pageSize_ = pageSize_;
       result.pageToken_ = pageToken_;
+      if (consistencySelectorCase_ == 4) {
+        if (readTimeBuilder_ == null) {
+          result.consistencySelector_ = consistencySelector_;
+        } else {
+          result.consistencySelector_ = readTimeBuilder_.build();
+        }
+      }
+      result.consistencySelectorCase_ = consistencySelectorCase_;
       onBuilt();
       return result;
     }
@@ -567,7 +639,18 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         pageToken_ = other.pageToken_;
         onChanged();
       }
-      this.mergeUnknownFields(other.unknownFields);
+      switch (other.getConsistencySelectorCase()) {
+        case READ_TIME:
+          {
+            mergeReadTime(other.getReadTime());
+            break;
+          }
+        case CONSISTENCYSELECTOR_NOT_SET:
+          {
+            break;
+          }
+      }
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -582,17 +665,69 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.ListCollectionIdsRequest parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                parent_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 16:
+              {
+                pageSize_ = input.readInt32();
+
+                break;
+              } // case 16
+            case 26:
+              {
+                pageToken_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 26
+            case 34:
+              {
+                input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
+                consistencySelectorCase_ = 4;
+                break;
+              } // case 34
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.ListCollectionIdsRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
+      return this;
+    }
+
+    private int consistencySelectorCase_ = 0;
+    private java.lang.Object consistencySelector_;
+
+    public ConsistencySelectorCase getConsistencySelectorCase() {
+      return ConsistencySelectorCase.forNumber(consistencySelectorCase_);
+    }
+
+    public Builder clearConsistencySelector() {
+      consistencySelectorCase_ = 0;
+      consistencySelector_ = null;
+      onChanged();
       return this;
     }
 
@@ -880,6 +1015,224 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       return this;
     }
 
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        readTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     *
+     * @return Whether the readTime field is set.
+     */
+    @java.lang.Override
+    public boolean hasReadTime() {
+      return consistencySelectorCase_ == 4;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     *
+     * @return The readTime.
+     */
+    @java.lang.Override
+    public com.google.protobuf.Timestamp getReadTime() {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 4) {
+          return (com.google.protobuf.Timestamp) consistencySelector_;
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      } else {
+        if (consistencySelectorCase_ == 4) {
+          return readTimeBuilder_.getMessage();
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    public Builder setReadTime(com.google.protobuf.Timestamp value) {
+      if (readTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        consistencySelector_ = value;
+        onChanged();
+      } else {
+        readTimeBuilder_.setMessage(value);
+      }
+      consistencySelectorCase_ = 4;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (readTimeBuilder_ == null) {
+        consistencySelector_ = builderForValue.build();
+        onChanged();
+      } else {
+        readTimeBuilder_.setMessage(builderForValue.build());
+      }
+      consistencySelectorCase_ = 4;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 4
+            && consistencySelector_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          consistencySelector_ =
+              com.google.protobuf.Timestamp.newBuilder(
+                      (com.google.protobuf.Timestamp) consistencySelector_)
+                  .mergeFrom(value)
+                  .buildPartial();
+        } else {
+          consistencySelector_ = value;
+        }
+        onChanged();
+      } else {
+        if (consistencySelectorCase_ == 4) {
+          readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
+        }
+      }
+      consistencySelectorCase_ = 4;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    public Builder clearReadTime() {
+      if (readTimeBuilder_ == null) {
+        if (consistencySelectorCase_ == 4) {
+          consistencySelectorCase_ = 0;
+          consistencySelector_ = null;
+          onChanged();
+        }
+      } else {
+        if (consistencySelectorCase_ == 4) {
+          consistencySelectorCase_ = 0;
+          consistencySelector_ = null;
+        }
+        readTimeBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
+      return getReadTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    @java.lang.Override
+    public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
+      if ((consistencySelectorCase_ == 4) && (readTimeBuilder_ != null)) {
+        return readTimeBuilder_.getMessageOrBuilder();
+      } else {
+        if (consistencySelectorCase_ == 4) {
+          return (com.google.protobuf.Timestamp) consistencySelector_;
+        }
+        return com.google.protobuf.Timestamp.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Reads documents as they were at the given time.
+     * This may not be older than 270 seconds.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp read_time = 4;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getReadTimeFieldBuilder() {
+      if (readTimeBuilder_ == null) {
+        if (!(consistencySelectorCase_ == 4)) {
+          consistencySelector_ = com.google.protobuf.Timestamp.getDefaultInstance();
+        }
+        readTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                (com.google.protobuf.Timestamp) consistencySelector_,
+                getParentForChildren(),
+                isClean());
+        consistencySelector_ = null;
+      }
+      consistencySelectorCase_ = 4;
+      onChanged();
+      ;
+      return readTimeBuilder_;
+    }
+
     @java.lang.Override
     public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
@@ -912,7 +1265,18 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new ListCollectionIdsRequest(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

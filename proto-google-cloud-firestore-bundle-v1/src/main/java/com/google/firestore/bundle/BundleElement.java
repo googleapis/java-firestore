@@ -54,111 +54,6 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
     return this.unknownFields;
   }
 
-  private BundleElement(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              com.google.firestore.bundle.BundleMetadata.Builder subBuilder = null;
-              if (elementTypeCase_ == 1) {
-                subBuilder =
-                    ((com.google.firestore.bundle.BundleMetadata) elementType_).toBuilder();
-              }
-              elementType_ =
-                  input.readMessage(
-                      com.google.firestore.bundle.BundleMetadata.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.bundle.BundleMetadata) elementType_);
-                elementType_ = subBuilder.buildPartial();
-              }
-              elementTypeCase_ = 1;
-              break;
-            }
-          case 18:
-            {
-              com.google.firestore.bundle.NamedQuery.Builder subBuilder = null;
-              if (elementTypeCase_ == 2) {
-                subBuilder = ((com.google.firestore.bundle.NamedQuery) elementType_).toBuilder();
-              }
-              elementType_ =
-                  input.readMessage(
-                      com.google.firestore.bundle.NamedQuery.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.bundle.NamedQuery) elementType_);
-                elementType_ = subBuilder.buildPartial();
-              }
-              elementTypeCase_ = 2;
-              break;
-            }
-          case 26:
-            {
-              com.google.firestore.bundle.BundledDocumentMetadata.Builder subBuilder = null;
-              if (elementTypeCase_ == 3) {
-                subBuilder =
-                    ((com.google.firestore.bundle.BundledDocumentMetadata) elementType_)
-                        .toBuilder();
-              }
-              elementType_ =
-                  input.readMessage(
-                      com.google.firestore.bundle.BundledDocumentMetadata.parser(),
-                      extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(
-                    (com.google.firestore.bundle.BundledDocumentMetadata) elementType_);
-                elementType_ = subBuilder.buildPartial();
-              }
-              elementTypeCase_ = 3;
-              break;
-            }
-          case 34:
-            {
-              com.google.firestore.v1.Document.Builder subBuilder = null;
-              if (elementTypeCase_ == 4) {
-                subBuilder = ((com.google.firestore.v1.Document) elementType_).toBuilder();
-              }
-              elementType_ =
-                  input.readMessage(com.google.firestore.v1.Document.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.firestore.v1.Document) elementType_);
-                elementType_ = subBuilder.buildPartial();
-              }
-              elementTypeCase_ = 4;
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.bundle.BundleProto
         .internal_static_google_firestore_bundle_BundleElement_descriptor;
@@ -378,7 +273,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
     if (elementTypeCase_ == 4) {
       output.writeMessage(4, (com.google.firestore.v1.Document) elementType_);
     }
-    unknownFields.writeTo(output);
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -407,7 +302,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               4, (com.google.firestore.v1.Document) elementType_);
     }
-    size += unknownFields.getSerializedSize();
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -440,7 +335,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       case 0:
       default:
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -471,7 +366,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       case 0:
       default:
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -604,22 +499,27 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
     }
 
     // Construct using com.google.firestore.bundle.BundleElement.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      if (metadataBuilder_ != null) {
+        metadataBuilder_.clear();
+      }
+      if (namedQueryBuilder_ != null) {
+        namedQueryBuilder_.clear();
+      }
+      if (documentMetadataBuilder_ != null) {
+        documentMetadataBuilder_.clear();
+      }
+      if (documentBuilder_ != null) {
+        documentBuilder_.clear();
+      }
       elementTypeCase_ = 0;
       elementType_ = null;
       return this;
@@ -753,7 +653,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
             break;
           }
       }
-      this.mergeUnknownFields(other.unknownFields);
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -768,17 +668,56 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.bundle.BundleElement parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                input.readMessage(getMetadataFieldBuilder().getBuilder(), extensionRegistry);
+                elementTypeCase_ = 1;
+                break;
+              } // case 10
+            case 18:
+              {
+                input.readMessage(getNamedQueryFieldBuilder().getBuilder(), extensionRegistry);
+                elementTypeCase_ = 2;
+                break;
+              } // case 18
+            case 26:
+              {
+                input.readMessage(
+                    getDocumentMetadataFieldBuilder().getBuilder(), extensionRegistry);
+                elementTypeCase_ = 3;
+                break;
+              } // case 26
+            case 34:
+              {
+                input.readMessage(getDocumentFieldBuilder().getBuilder(), extensionRegistry);
+                elementTypeCase_ = 4;
+                break;
+              } // case 34
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.bundle.BundleElement) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -871,8 +810,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 1) {
           metadataBuilder_.mergeFrom(value);
+        } else {
+          metadataBuilder_.setMessage(value);
         }
-        metadataBuilder_.setMessage(value);
       }
       elementTypeCase_ = 1;
       return this;
@@ -1011,8 +951,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 2) {
           namedQueryBuilder_.mergeFrom(value);
+        } else {
+          namedQueryBuilder_.setMessage(value);
         }
-        namedQueryBuilder_.setMessage(value);
       }
       elementTypeCase_ = 2;
       return this;
@@ -1154,8 +1095,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 3) {
           documentMetadataBuilder_.mergeFrom(value);
+        } else {
+          documentMetadataBuilder_.setMessage(value);
         }
-        documentMetadataBuilder_.setMessage(value);
       }
       elementTypeCase_ = 3;
       return this;
@@ -1296,8 +1238,9 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       } else {
         if (elementTypeCase_ == 4) {
           documentBuilder_.mergeFrom(value);
+        } else {
+          documentBuilder_.setMessage(value);
         }
-        documentBuilder_.setMessage(value);
       }
       elementTypeCase_ = 4;
       return this;
@@ -1391,7 +1334,18 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new BundleElement(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

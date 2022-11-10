@@ -54,66 +54,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     return this.unknownFields;
   }
 
-  private Field(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              name_ = s;
-              break;
-            }
-          case 18:
-            {
-              com.google.firestore.admin.v1.Field.IndexConfig.Builder subBuilder = null;
-              if (indexConfig_ != null) {
-                subBuilder = indexConfig_.toBuilder();
-              }
-              indexConfig_ =
-                  input.readMessage(
-                      com.google.firestore.admin.v1.Field.IndexConfig.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(indexConfig_);
-                indexConfig_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FieldProto
         .internal_static_google_firestore_admin_v1_Field_descriptor;
@@ -282,75 +222,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
-    }
-
-    private IndexConfig(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10:
-              {
-                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                  indexes_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index>();
-                  mutable_bitField0_ |= 0x00000001;
-                }
-                indexes_.add(
-                    input.readMessage(
-                        com.google.firestore.admin.v1.Index.parser(), extensionRegistry));
-                break;
-              }
-            case 16:
-              {
-                usesAncestorConfig_ = input.readBool();
-                break;
-              }
-            case 26:
-              {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                ancestorField_ = s;
-                break;
-              }
-            case 32:
-              {
-                reverting_ = input.readBool();
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          indexes_ = java.util.Collections.unmodifiableList(indexes_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -560,7 +431,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (reverting_ != false) {
         output.writeBool(4, reverting_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -581,7 +452,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (reverting_ != false) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(4, reverting_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -601,7 +472,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (getUsesAncestorConfig() != other.getUsesAncestorConfig()) return false;
       if (!getAncestorField().equals(other.getAncestorField())) return false;
       if (getReverting() != other.getReverting()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -622,7 +493,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       hash = (53 * hash) + getAncestorField().hashCode();
       hash = (37 * hash) + REVERTING_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getReverting());
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -753,19 +624,10 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       }
 
       // Construct using com.google.firestore.admin.v1.Field.IndexConfig.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-          getIndexesFieldBuilder();
-        }
       }
 
       @java.lang.Override
@@ -773,10 +635,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         super.clear();
         if (indexesBuilder_ == null) {
           indexes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          indexes_ = null;
           indexesBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         usesAncestorConfig_ = false;
 
         ancestorField_ = "";
@@ -912,7 +775,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         if (other.getReverting() != false) {
           setReverting(other.getReverting());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -927,18 +790,62 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.admin.v1.Field.IndexConfig parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10:
+                {
+                  com.google.firestore.admin.v1.Index m =
+                      input.readMessage(
+                          com.google.firestore.admin.v1.Index.parser(), extensionRegistry);
+                  if (indexesBuilder_ == null) {
+                    ensureIndexesIsMutable();
+                    indexes_.add(m);
+                  } else {
+                    indexesBuilder_.addMessage(m);
+                  }
+                  break;
+                } // case 10
+              case 16:
+                {
+                  usesAncestorConfig_ = input.readBool();
+
+                  break;
+                } // case 16
+              case 26:
+                {
+                  ancestorField_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 26
+              case 32:
+                {
+                  reverting_ = input.readBool();
+
+                  break;
+                } // case 32
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.admin.v1.Field.IndexConfig) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -1568,7 +1475,19 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new IndexConfig(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -1587,13 +1506,841 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
   }
 
+  public interface TtlConfigOrBuilder
+      extends
+      // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Field.TtlConfig)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The state of the TTL configuration.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The enum numeric value on the wire for state.
+     */
+    int getStateValue();
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The state of the TTL configuration.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The state.
+     */
+    com.google.firestore.admin.v1.Field.TtlConfig.State getState();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The TTL (time-to-live) configuration for documents that have this `Field`
+   * set.
+   * Storing a timestamp value into a TTL-enabled field will be treated as
+   * the document's absolute expiration time. Using any other data type or
+   * leaving the field absent will disable the TTL for the individual document.
+   * </pre>
+   *
+   * Protobuf type {@code google.firestore.admin.v1.Field.TtlConfig}
+   */
+  public static final class TtlConfig extends com.google.protobuf.GeneratedMessageV3
+      implements
+      // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.Field.TtlConfig)
+      TtlConfigOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use TtlConfig.newBuilder() to construct.
+    private TtlConfig(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private TtlConfig() {
+      state_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+      return new TtlConfig();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+      return this.unknownFields;
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.google.firestore.admin.v1.FieldProto
+          .internal_static_google_firestore_admin_v1_Field_TtlConfig_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.google.firestore.admin.v1.FieldProto
+          .internal_static_google_firestore_admin_v1_Field_TtlConfig_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.google.firestore.admin.v1.Field.TtlConfig.class,
+              com.google.firestore.admin.v1.Field.TtlConfig.Builder.class);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * The state of applying the TTL configuration to all documents.
+     * </pre>
+     *
+     * Protobuf enum {@code google.firestore.admin.v1.Field.TtlConfig.State}
+     */
+    public enum State implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       *
+       *
+       * <pre>
+       * The state is unspecified or unknown.
+       * </pre>
+       *
+       * <code>STATE_UNSPECIFIED = 0;</code>
+       */
+      STATE_UNSPECIFIED(0),
+      /**
+       *
+       *
+       * <pre>
+       * The TTL is being applied. There is an active long-running operation to
+       * track the change. Newly written documents will have TTLs applied as
+       * requested. Requested TTLs on existing documents are still being
+       * processed. When TTLs on all existing documents have been processed, the
+       * state will move to 'ACTIVE'.
+       * </pre>
+       *
+       * <code>CREATING = 1;</code>
+       */
+      CREATING(1),
+      /**
+       *
+       *
+       * <pre>
+       * The TTL is active for all documents.
+       * </pre>
+       *
+       * <code>ACTIVE = 2;</code>
+       */
+      ACTIVE(2),
+      /**
+       *
+       *
+       * <pre>
+       * The TTL configuration could not be enabled for all existing documents.
+       * Newly written documents will continue to have their TTL applied.
+       * The LRO returned when last attempting to enable TTL for this `Field`
+       * has failed, and may have more details.
+       * </pre>
+       *
+       * <code>NEEDS_REPAIR = 3;</code>
+       */
+      NEEDS_REPAIR(3),
+      UNRECOGNIZED(-1),
+      ;
+
+      /**
+       *
+       *
+       * <pre>
+       * The state is unspecified or unknown.
+       * </pre>
+       *
+       * <code>STATE_UNSPECIFIED = 0;</code>
+       */
+      public static final int STATE_UNSPECIFIED_VALUE = 0;
+      /**
+       *
+       *
+       * <pre>
+       * The TTL is being applied. There is an active long-running operation to
+       * track the change. Newly written documents will have TTLs applied as
+       * requested. Requested TTLs on existing documents are still being
+       * processed. When TTLs on all existing documents have been processed, the
+       * state will move to 'ACTIVE'.
+       * </pre>
+       *
+       * <code>CREATING = 1;</code>
+       */
+      public static final int CREATING_VALUE = 1;
+      /**
+       *
+       *
+       * <pre>
+       * The TTL is active for all documents.
+       * </pre>
+       *
+       * <code>ACTIVE = 2;</code>
+       */
+      public static final int ACTIVE_VALUE = 2;
+      /**
+       *
+       *
+       * <pre>
+       * The TTL configuration could not be enabled for all existing documents.
+       * Newly written documents will continue to have their TTL applied.
+       * The LRO returned when last attempting to enable TTL for this `Field`
+       * has failed, and may have more details.
+       * </pre>
+       *
+       * <code>NEEDS_REPAIR = 3;</code>
+       */
+      public static final int NEEDS_REPAIR_VALUE = 3;
+
+      public final int getNumber() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalArgumentException(
+              "Can't get the number of an unknown enum value.");
+        }
+        return value;
+      }
+
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static State valueOf(int value) {
+        return forNumber(value);
+      }
+
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
+      public static State forNumber(int value) {
+        switch (value) {
+          case 0:
+            return STATE_UNSPECIFIED;
+          case 1:
+            return CREATING;
+          case 2:
+            return ACTIVE;
+          case 3:
+            return NEEDS_REPAIR;
+          default:
+            return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<State> internalGetValueMap() {
+        return internalValueMap;
+      }
+
+      private static final com.google.protobuf.Internal.EnumLiteMap<State> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<State>() {
+            public State findValueByNumber(int number) {
+              return State.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
+        return getDescriptor().getValues().get(ordinal());
+      }
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+        return getDescriptor();
+      }
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.google.firestore.admin.v1.Field.TtlConfig.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final State[] VALUES = values();
+
+      public static State valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+        }
+        if (desc.getIndex() == -1) {
+          return UNRECOGNIZED;
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int value;
+
+      private State(int value) {
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Field.TtlConfig.State)
+    }
+
+    public static final int STATE_FIELD_NUMBER = 1;
+    private int state_;
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The state of the TTL configuration.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The enum numeric value on the wire for state.
+     */
+    @java.lang.Override
+    public int getStateValue() {
+      return state_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The state of the TTL configuration.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The state.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Field.TtlConfig.State getState() {
+      @SuppressWarnings("deprecation")
+      com.google.firestore.admin.v1.Field.TtlConfig.State result =
+          com.google.firestore.admin.v1.Field.TtlConfig.State.valueOf(state_);
+      return result == null
+          ? com.google.firestore.admin.v1.Field.TtlConfig.State.UNRECOGNIZED
+          : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+      if (state_
+          != com.google.firestore.admin.v1.Field.TtlConfig.State.STATE_UNSPECIFIED.getNumber()) {
+        output.writeEnum(1, state_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (state_
+          != com.google.firestore.admin.v1.Field.TtlConfig.State.STATE_UNSPECIFIED.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, state_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.google.firestore.admin.v1.Field.TtlConfig)) {
+        return super.equals(obj);
+      }
+      com.google.firestore.admin.v1.Field.TtlConfig other =
+          (com.google.firestore.admin.v1.Field.TtlConfig) obj;
+
+      if (state_ != other.state_) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + STATE_FIELD_NUMBER;
+      hash = (53 * hash) + state_;
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(com.google.firestore.admin.v1.Field.TtlConfig prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL (time-to-live) configuration for documents that have this `Field`
+     * set.
+     * Storing a timestamp value into a TTL-enabled field will be treated as
+     * the document's absolute expiration time. Using any other data type or
+     * leaving the field absent will disable the TTL for the individual document.
+     * </pre>
+     *
+     * Protobuf type {@code google.firestore.admin.v1.Field.TtlConfig}
+     */
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
+        // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.Field.TtlConfig)
+        com.google.firestore.admin.v1.Field.TtlConfigOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.admin.v1.FieldProto
+            .internal_static_google_firestore_admin_v1_Field_TtlConfig_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.google.firestore.admin.v1.FieldProto
+            .internal_static_google_firestore_admin_v1_Field_TtlConfig_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.google.firestore.admin.v1.Field.TtlConfig.class,
+                com.google.firestore.admin.v1.Field.TtlConfig.Builder.class);
+      }
+
+      // Construct using com.google.firestore.admin.v1.Field.TtlConfig.newBuilder()
+      private Builder() {}
+
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+      }
+
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        state_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.google.firestore.admin.v1.FieldProto
+            .internal_static_google_firestore_admin_v1_Field_TtlConfig_descriptor;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Field.TtlConfig getDefaultInstanceForType() {
+        return com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Field.TtlConfig build() {
+        com.google.firestore.admin.v1.Field.TtlConfig result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Field.TtlConfig buildPartial() {
+        com.google.firestore.admin.v1.Field.TtlConfig result =
+            new com.google.firestore.admin.v1.Field.TtlConfig(this);
+        result.state_ = state_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.setField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @java.lang.Override
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index,
+          java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.google.firestore.admin.v1.Field.TtlConfig) {
+          return mergeFrom((com.google.firestore.admin.v1.Field.TtlConfig) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.google.firestore.admin.v1.Field.TtlConfig other) {
+        if (other == com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance())
+          return this;
+        if (other.state_ != 0) {
+          setStateValue(other.getStateValue());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8:
+                {
+                  state_ = input.readEnum();
+
+                  break;
+                } // case 8
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+
+      private int state_ = 0;
+      /**
+       *
+       *
+       * <pre>
+       * Output only. The state of the TTL configuration.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+       * </code>
+       *
+       * @return The enum numeric value on the wire for state.
+       */
+      @java.lang.Override
+      public int getStateValue() {
+        return state_;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Output only. The state of the TTL configuration.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+       * </code>
+       *
+       * @param value The enum numeric value on the wire for state to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStateValue(int value) {
+
+        state_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Output only. The state of the TTL configuration.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+       * </code>
+       *
+       * @return The state.
+       */
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Field.TtlConfig.State getState() {
+        @SuppressWarnings("deprecation")
+        com.google.firestore.admin.v1.Field.TtlConfig.State result =
+            com.google.firestore.admin.v1.Field.TtlConfig.State.valueOf(state_);
+        return result == null
+            ? com.google.firestore.admin.v1.Field.TtlConfig.State.UNRECOGNIZED
+            : result;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Output only. The state of the TTL configuration.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+       * </code>
+       *
+       * @param value The state to set.
+       * @return This builder for chaining.
+       */
+      public Builder setState(com.google.firestore.admin.v1.Field.TtlConfig.State value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        state_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Output only. The state of the TTL configuration.
+       * </pre>
+       *
+       * <code>
+       * .google.firestore.admin.v1.Field.TtlConfig.State state = 1 [(.google.api.field_behavior) = OUTPUT_ONLY];
+       * </code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearState() {
+
+        state_ = 0;
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+      // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.Field.TtlConfig)
+    }
+
+    // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.Field.TtlConfig)
+    private static final com.google.firestore.admin.v1.Field.TtlConfig DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new com.google.firestore.admin.v1.Field.TtlConfig();
+    }
+
+    public static com.google.firestore.admin.v1.Field.TtlConfig getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<TtlConfig> PARSER =
+        new com.google.protobuf.AbstractParser<TtlConfig>() {
+          @java.lang.Override
+          public TtlConfig parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
+          }
+        };
+
+    public static com.google.protobuf.Parser<TtlConfig> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TtlConfig> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Field.TtlConfig getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+  }
+
   public static final int NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object name_;
   /**
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -1617,7 +2364,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The name.
    */
@@ -1637,7 +2384,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A field name of the form
+   * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
@@ -1661,7 +2408,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * have their own `Field` index configuration.
    * </pre>
    *
-   * <code>string name = 1;</code>
+   * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
    *
    * @return The bytes for name.
    */
@@ -1735,6 +2482,60 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     return getIndexConfig();
   }
 
+  public static final int TTL_CONFIG_FIELD_NUMBER = 3;
+  private com.google.firestore.admin.v1.Field.TtlConfig ttlConfig_;
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return Whether the ttlConfig field is set.
+   */
+  @java.lang.Override
+  public boolean hasTtlConfig() {
+    return ttlConfig_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   *
+   * @return The ttlConfig.
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Field.TtlConfig getTtlConfig() {
+    return ttlConfig_ == null
+        ? com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance()
+        : ttlConfig_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The TTL configuration for this `Field`.
+   * Setting or unsetting this will enable or disable the TTL for
+   * documents that have this `Field`.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Field.TtlConfigOrBuilder getTtlConfigOrBuilder() {
+    return getTtlConfig();
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -1755,7 +2556,10 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     if (indexConfig_ != null) {
       output.writeMessage(2, getIndexConfig());
     }
-    unknownFields.writeTo(output);
+    if (ttlConfig_ != null) {
+      output.writeMessage(3, getTtlConfig());
+    }
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -1770,7 +2574,10 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     if (indexConfig_ != null) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, getIndexConfig());
     }
-    size += unknownFields.getSerializedSize();
+    if (ttlConfig_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, getTtlConfig());
+    }
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -1790,7 +2597,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     if (hasIndexConfig()) {
       if (!getIndexConfig().equals(other.getIndexConfig())) return false;
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (hasTtlConfig() != other.hasTtlConfig()) return false;
+    if (hasTtlConfig()) {
+      if (!getTtlConfig().equals(other.getTtlConfig())) return false;
+    }
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -1807,7 +2618,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       hash = (37 * hash) + INDEX_CONFIG_FIELD_NUMBER;
       hash = (53 * hash) + getIndexConfig().hashCode();
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    if (hasTtlConfig()) {
+      hash = (37 * hash) + TTL_CONFIG_FIELD_NUMBER;
+      hash = (53 * hash) + getTtlConfig().hashCode();
+    }
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -1937,17 +2752,10 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     // Construct using com.google.firestore.admin.v1.Field.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
@@ -1960,6 +2768,12 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       } else {
         indexConfig_ = null;
         indexConfigBuilder_ = null;
+      }
+      if (ttlConfigBuilder_ == null) {
+        ttlConfig_ = null;
+      } else {
+        ttlConfig_ = null;
+        ttlConfigBuilder_ = null;
       }
       return this;
     }
@@ -1992,6 +2806,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         result.indexConfig_ = indexConfig_;
       } else {
         result.indexConfig_ = indexConfigBuilder_.build();
+      }
+      if (ttlConfigBuilder_ == null) {
+        result.ttlConfig_ = ttlConfig_;
+      } else {
+        result.ttlConfig_ = ttlConfigBuilder_.build();
       }
       onBuilt();
       return result;
@@ -2049,7 +2868,10 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (other.hasIndexConfig()) {
         mergeIndexConfig(other.getIndexConfig());
       }
-      this.mergeUnknownFields(other.unknownFields);
+      if (other.hasTtlConfig()) {
+        mergeTtlConfig(other.getTtlConfig());
+      }
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -2064,17 +2886,49 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.admin.v1.Field parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                name_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 18:
+              {
+                input.readMessage(getIndexConfigFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 18
+            case 26:
+              {
+                input.readMessage(getTtlConfigFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 26
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.admin.v1.Field) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -2083,7 +2937,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A field name of the form
+     * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
@@ -2107,7 +2961,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * have their own `Field` index configuration.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return The name.
      */
@@ -2126,7 +2980,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A field name of the form
+     * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
@@ -2150,7 +3004,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * have their own `Field` index configuration.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return The bytes for name.
      */
@@ -2169,7 +3023,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A field name of the form
+     * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
@@ -2193,7 +3047,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * have their own `Field` index configuration.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @param value The name to set.
      * @return This builder for chaining.
@@ -2211,7 +3065,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A field name of the form
+     * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
@@ -2235,7 +3089,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * have their own `Field` index configuration.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @return This builder for chaining.
      */
@@ -2249,7 +3103,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A field name of the form
+     * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
@@ -2273,7 +3127,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * have their own `Field` index configuration.
      * </pre>
      *
-     * <code>string name = 1;</code>
+     * <code>string name = 1 [(.google.api.field_behavior) = REQUIRED];</code>
      *
      * @param value The bytes for name to set.
      * @return This builder for chaining.
@@ -2502,6 +3356,210 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       return indexConfigBuilder_;
     }
 
+    private com.google.firestore.admin.v1.Field.TtlConfig ttlConfig_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.admin.v1.Field.TtlConfig,
+            com.google.firestore.admin.v1.Field.TtlConfig.Builder,
+            com.google.firestore.admin.v1.Field.TtlConfigOrBuilder>
+        ttlConfigBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     *
+     * @return Whether the ttlConfig field is set.
+     */
+    public boolean hasTtlConfig() {
+      return ttlConfigBuilder_ != null || ttlConfig_ != null;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     *
+     * @return The ttlConfig.
+     */
+    public com.google.firestore.admin.v1.Field.TtlConfig getTtlConfig() {
+      if (ttlConfigBuilder_ == null) {
+        return ttlConfig_ == null
+            ? com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance()
+            : ttlConfig_;
+      } else {
+        return ttlConfigBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public Builder setTtlConfig(com.google.firestore.admin.v1.Field.TtlConfig value) {
+      if (ttlConfigBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ttlConfig_ = value;
+        onChanged();
+      } else {
+        ttlConfigBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public Builder setTtlConfig(
+        com.google.firestore.admin.v1.Field.TtlConfig.Builder builderForValue) {
+      if (ttlConfigBuilder_ == null) {
+        ttlConfig_ = builderForValue.build();
+        onChanged();
+      } else {
+        ttlConfigBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public Builder mergeTtlConfig(com.google.firestore.admin.v1.Field.TtlConfig value) {
+      if (ttlConfigBuilder_ == null) {
+        if (ttlConfig_ != null) {
+          ttlConfig_ =
+              com.google.firestore.admin.v1.Field.TtlConfig.newBuilder(ttlConfig_)
+                  .mergeFrom(value)
+                  .buildPartial();
+        } else {
+          ttlConfig_ = value;
+        }
+        onChanged();
+      } else {
+        ttlConfigBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public Builder clearTtlConfig() {
+      if (ttlConfigBuilder_ == null) {
+        ttlConfig_ = null;
+        onChanged();
+      } else {
+        ttlConfig_ = null;
+        ttlConfigBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public com.google.firestore.admin.v1.Field.TtlConfig.Builder getTtlConfigBuilder() {
+
+      onChanged();
+      return getTtlConfigFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    public com.google.firestore.admin.v1.Field.TtlConfigOrBuilder getTtlConfigOrBuilder() {
+      if (ttlConfigBuilder_ != null) {
+        return ttlConfigBuilder_.getMessageOrBuilder();
+      } else {
+        return ttlConfig_ == null
+            ? com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance()
+            : ttlConfig_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The TTL configuration for this `Field`.
+     * Setting or unsetting this will enable or disable the TTL for
+     * documents that have this `Field`.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.admin.v1.Field.TtlConfig,
+            com.google.firestore.admin.v1.Field.TtlConfig.Builder,
+            com.google.firestore.admin.v1.Field.TtlConfigOrBuilder>
+        getTtlConfigFieldBuilder() {
+      if (ttlConfigBuilder_ == null) {
+        ttlConfigBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.admin.v1.Field.TtlConfig,
+                com.google.firestore.admin.v1.Field.TtlConfig.Builder,
+                com.google.firestore.admin.v1.Field.TtlConfigOrBuilder>(
+                getTtlConfig(), getParentForChildren(), isClean());
+        ttlConfig_ = null;
+      }
+      return ttlConfigBuilder_;
+    }
+
     @java.lang.Override
     public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
       return super.setUnknownFields(unknownFields);
@@ -2534,7 +3592,18 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Field(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

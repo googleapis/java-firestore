@@ -18,16 +18,19 @@ package com.google.cloud.firestore;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ResponseObserver;
+import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.v1.AggregationResult;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
@@ -44,8 +47,12 @@ import com.google.firestore.v1.DocumentTransform.FieldTransform;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Precondition;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
+import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.StructuredQuery.CollectionSelector;
 import com.google.firestore.v1.StructuredQuery.CompositeFilter;
@@ -311,12 +318,89 @@ public final class LocalFirestoreHelper {
     return streamingResponse(responses, throwable);
   }
 
+  /** Returns a stream of responses when RunQueryResponse.done set to true */
+  public static Answer<RunQueryResponse> queryResponseWithDone(
+      boolean callWithoutOnComplete, String... documentNames) {
+    RunQueryResponse[] responses = new RunQueryResponse[documentNames.length];
+
+    for (int i = 0; i < documentNames.length; ++i) {
+      final RunQueryResponse.Builder runQueryResponse = RunQueryResponse.newBuilder();
+      runQueryResponse.setDocument(
+          Document.newBuilder().setName(documentNames[i]).putAllFields(SINGLE_FIELD_PROTO));
+      runQueryResponse.setReadTime(
+          com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
+      if (i == (documentNames.length - 1)) {
+        runQueryResponse.setDone(true);
+      }
+      responses[i] = runQueryResponse.build();
+    }
+    if (callWithoutOnComplete) {
+      return streamingResponseWithoutOnComplete(responses);
+    } else {
+      return streamingResponse(responses, null);
+    }
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse() {
+    return aggregationQueryResponse(42);
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(int count) {
+    return aggregationQueryResponse(count, null);
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(
+      int count, @Nullable Timestamp readTime) {
+    return streamingResponse(
+        new RunAggregationQueryResponse[] {
+          createRunAggregationQueryResponse(count, readTime),
+        },
+        /*throwable=*/ null);
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(Throwable throwable) {
+    return streamingResponse(new RunAggregationQueryResponse[] {}, throwable);
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponses(
+      int count1, int count2) {
+    return streamingResponse(
+        new RunAggregationQueryResponse[] {
+          createRunAggregationQueryResponse(count1, null),
+          createRunAggregationQueryResponse(count2, null),
+        },
+        /*throwable=*/ null);
+  }
+
+  public static Answer<RunAggregationQueryResponse> aggregationQueryResponses(
+      int count1, Throwable throwable) {
+    return streamingResponse(
+        new RunAggregationQueryResponse[] {
+          createRunAggregationQueryResponse(count1, null),
+        },
+        throwable);
+  }
+
+  private static RunAggregationQueryResponse createRunAggregationQueryResponse(
+      int count, @Nullable Timestamp timestamp) {
+    RunAggregationQueryResponse.Builder builder = RunAggregationQueryResponse.newBuilder();
+    builder.setResult(
+        AggregationResult.newBuilder()
+            .putAggregateFields("count", Value.newBuilder().setIntegerValue(count).build())
+            .build());
+    if (timestamp != null) {
+      builder.setReadTime(timestamp.toProto());
+    }
+    return builder.build();
+  }
+
   /** Returns a stream of responses followed by an optional exception. */
   public static <T> Answer<T> streamingResponse(
       final T[] response, @Nullable final Throwable throwable) {
     return invocation -> {
       Object[] args = invocation.getArguments();
       ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      observer.onStart(mock(StreamController.class));
       for (T resp : response) {
         observer.onResponse(resp);
       }
@@ -324,6 +408,19 @@ public final class LocalFirestoreHelper {
         observer.onError(throwable);
       }
       observer.onComplete();
+      return null;
+    };
+  }
+
+  /** Returns a stream of responses even though onComplete() wasn't triggered */
+  public static <T> Answer<T> streamingResponseWithoutOnComplete(final T[] response) {
+    return invocation -> {
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
+      observer.onStart(mock(StreamController.class));
+      for (T resp : response) {
+        observer.onResponse(resp);
+      }
       return null;
     };
   }
@@ -539,6 +636,32 @@ public final class LocalFirestoreHelper {
     return filter(operator, path, string(value));
   }
 
+  public static StructuredQuery.Filter fieldFilter(
+      String path, StructuredQuery.FieldFilter.Operator operator, String value) {
+    StructuredQuery.FieldFilter.Builder builder =
+        FieldFilter.newBuilder()
+            .setField(StructuredQuery.FieldReference.newBuilder().setFieldPath(path))
+            .setOp(operator)
+            .setValue(Value.newBuilder().setStringValue(value).build());
+    return StructuredQuery.Filter.newBuilder().setFieldFilter(builder).build();
+  }
+
+  public static StructuredQuery.Filter andFilters(StructuredQuery.Filter... filters) {
+    return compositeFilter(CompositeFilter.Operator.AND, Arrays.asList(filters));
+  }
+
+  public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
+    // TODO(orquery): Replace this with Operator.OR once it's available.
+    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+  }
+
+  private static StructuredQuery.Filter compositeFilter(
+      StructuredQuery.CompositeFilter.Operator operator, List<StructuredQuery.Filter> filters) {
+    StructuredQuery.CompositeFilter.Builder builder =
+        StructuredQuery.CompositeFilter.newBuilder().setOp(operator).addAllFilters(filters);
+    return StructuredQuery.Filter.newBuilder().setCompositeFilter(builder).build();
+  }
+
   public static StructuredQuery filter(
       StructuredQuery.FieldFilter.Operator operator, String path, Value value) {
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
@@ -626,6 +749,44 @@ public final class LocalFirestoreHelper {
     }
 
     return request.build();
+  }
+
+  public static RunAggregationQueryRequest aggregationQuery() {
+    return aggregationQuery((String) null);
+  }
+
+  public static RunAggregationQueryRequest aggregationQuery(@Nullable String transactionId) {
+    RunQueryRequest runQueryRequest = query(TRANSACTION_ID, false);
+
+    RunAggregationQueryRequest.Builder request =
+        RunAggregationQueryRequest.newBuilder()
+            .setParent(runQueryRequest.getParent())
+            .setStructuredAggregationQuery(
+                StructuredAggregationQuery.newBuilder()
+                    .setStructuredQuery(runQueryRequest.getStructuredQuery())
+                    .addAggregations(
+                        Aggregation.newBuilder()
+                            .setAlias("count")
+                            .setCount(Aggregation.Count.getDefaultInstance())));
+
+    if (transactionId != null) {
+      request.setTransaction(ByteString.copyFromUtf8(transactionId));
+    }
+
+    return request.build();
+  }
+
+  public static RunAggregationQueryRequest aggregationQuery(RunQueryRequest runQueryRequest) {
+    return RunAggregationQueryRequest.newBuilder()
+        .setParent(runQueryRequest.getParent())
+        .setStructuredAggregationQuery(
+            StructuredAggregationQuery.newBuilder()
+                .setStructuredQuery(runQueryRequest.getStructuredQuery())
+                .addAggregations(
+                    Aggregation.newBuilder()
+                        .setAlias("count")
+                        .setCount(Aggregation.Count.getDefaultInstance())))
+        .build();
   }
 
   public static BatchGetDocumentsRequest get() {

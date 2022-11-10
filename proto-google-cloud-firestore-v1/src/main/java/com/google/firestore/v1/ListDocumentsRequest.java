@@ -55,118 +55,6 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     return this.unknownFields;
   }
 
-  private ListDocumentsRequest(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              parent_ = s;
-              break;
-            }
-          case 18:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              collectionId_ = s;
-              break;
-            }
-          case 24:
-            {
-              pageSize_ = input.readInt32();
-              break;
-            }
-          case 34:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              pageToken_ = s;
-              break;
-            }
-          case 50:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              orderBy_ = s;
-              break;
-            }
-          case 58:
-            {
-              com.google.firestore.v1.DocumentMask.Builder subBuilder = null;
-              if (mask_ != null) {
-                subBuilder = mask_.toBuilder();
-              }
-              mask_ =
-                  input.readMessage(
-                      com.google.firestore.v1.DocumentMask.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(mask_);
-                mask_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          case 66:
-            {
-              consistencySelectorCase_ = 8;
-              consistencySelector_ = input.readBytes();
-              break;
-            }
-          case 82:
-            {
-              com.google.protobuf.Timestamp.Builder subBuilder = null;
-              if (consistencySelectorCase_ == 10) {
-                subBuilder = ((com.google.protobuf.Timestamp) consistencySelector_).toBuilder();
-              }
-              consistencySelector_ =
-                  input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom((com.google.protobuf.Timestamp) consistencySelector_);
-                consistencySelector_ = subBuilder.buildPartial();
-              }
-              consistencySelectorCase_ = 10;
-              break;
-            }
-          case 96:
-            {
-              showMissing_ = input.readBool();
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_ListDocumentsRequest_descriptor;
@@ -660,7 +548,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     if (showMissing_ != false) {
       output.writeBool(12, showMissing_);
     }
-    unknownFields.writeTo(output);
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -700,7 +588,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     if (showMissing_ != false) {
       size += com.google.protobuf.CodedOutputStream.computeBoolSize(12, showMissing_);
     }
-    size += unknownFields.getSerializedSize();
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -737,7 +625,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       case 0:
       default:
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -776,7 +664,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       case 0:
       default:
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -905,17 +793,10 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     }
 
     // Construct using com.google.firestore.v1.ListDocumentsRequest.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
     }
 
     @java.lang.Override
@@ -936,6 +817,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       } else {
         mask_ = null;
         maskBuilder_ = null;
+      }
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.clear();
       }
       showMissing_ = false;
 
@@ -1080,7 +964,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             break;
           }
       }
-      this.mergeUnknownFields(other.unknownFields);
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -1095,17 +979,85 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.ListDocumentsRequest parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                parent_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 18:
+              {
+                collectionId_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 18
+            case 24:
+              {
+                pageSize_ = input.readInt32();
+
+                break;
+              } // case 24
+            case 34:
+              {
+                pageToken_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 34
+            case 50:
+              {
+                orderBy_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 50
+            case 58:
+              {
+                input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 58
+            case 66:
+              {
+                consistencySelector_ = input.readBytes();
+                consistencySelectorCase_ = 8;
+                break;
+              } // case 66
+            case 82:
+              {
+                input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
+                consistencySelectorCase_ = 10;
+                break;
+              } // case 82
+            case 96:
+              {
+                showMissing_ = input.readBool();
+
+                break;
+              } // case 96
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.ListDocumentsRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -2016,8 +1968,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       } else {
         if (consistencySelectorCase_ == 10) {
           readTimeBuilder_.mergeFrom(value);
+        } else {
+          readTimeBuilder_.setMessage(value);
         }
-        readTimeBuilder_.setMessage(value);
       }
       consistencySelectorCase_ = 10;
       return this;
@@ -2216,7 +2169,18 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new ListDocumentsRequest(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

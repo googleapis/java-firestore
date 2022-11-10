@@ -422,6 +422,54 @@ public final class FirestoreGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.RunAggregationQueryRequest,
+          com.google.firestore.v1.RunAggregationQueryResponse>
+      getRunAggregationQueryMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "RunAggregationQuery",
+      requestType = com.google.firestore.v1.RunAggregationQueryRequest.class,
+      responseType = com.google.firestore.v1.RunAggregationQueryResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.RunAggregationQueryRequest,
+          com.google.firestore.v1.RunAggregationQueryResponse>
+      getRunAggregationQueryMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.RunAggregationQueryRequest,
+            com.google.firestore.v1.RunAggregationQueryResponse>
+        getRunAggregationQueryMethod;
+    if ((getRunAggregationQueryMethod = FirestoreGrpc.getRunAggregationQueryMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getRunAggregationQueryMethod = FirestoreGrpc.getRunAggregationQueryMethod) == null) {
+          FirestoreGrpc.getRunAggregationQueryMethod =
+              getRunAggregationQueryMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.RunAggregationQueryRequest,
+                          com.google.firestore.v1.RunAggregationQueryResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "RunAggregationQuery"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.RunAggregationQueryRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.RunAggregationQueryResponse
+                                  .getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreMethodDescriptorSupplier("RunAggregationQuery"))
+                      .build();
+        }
+      }
+    }
+    return getRunAggregationQueryMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.v1.PartitionQueryRequest,
           com.google.firestore.v1.PartitionQueryResponse>
       getPartitionQueryMethod;
@@ -862,6 +910,29 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Runs an aggregation query.
+     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
+     * this API allows running an aggregation to produce a series of
+     * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
+     * High-Level Example:
+     * ```
+     * -- Return the number of documents in table given a filter.
+     * SELECT COUNT(*) FROM ( SELECT * FROM k where a = true );
+     * ```
+     * </pre>
+     */
+    public void runAggregationQuery(
+        com.google.firestore.v1.RunAggregationQueryRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.RunAggregationQueryResponse>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getRunAggregationQueryMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Partitions a query by returning partition cursors that can be used to run
      * the query in parallel. The returned partition cursors are split points that
      * can be used by RunQuery as starting/end points for the query results.
@@ -1009,6 +1080,13 @@ public final class FirestoreGrpc {
                   new MethodHandlers<
                       com.google.firestore.v1.RunQueryRequest,
                       com.google.firestore.v1.RunQueryResponse>(this, METHODID_RUN_QUERY)))
+          .addMethod(
+              getRunAggregationQueryMethod(),
+              io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+                  new MethodHandlers<
+                      com.google.firestore.v1.RunAggregationQueryRequest,
+                      com.google.firestore.v1.RunAggregationQueryResponse>(
+                      this, METHODID_RUN_AGGREGATION_QUERY)))
           .addMethod(
               getPartitionQueryMethod(),
               io.grpc.stub.ServerCalls.asyncUnaryCall(
@@ -1215,6 +1293,31 @@ public final class FirestoreGrpc {
         io.grpc.stub.StreamObserver<com.google.firestore.v1.RunQueryResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncServerStreamingCall(
           getChannel().newCall(getRunQueryMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Runs an aggregation query.
+     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
+     * this API allows running an aggregation to produce a series of
+     * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
+     * High-Level Example:
+     * ```
+     * -- Return the number of documents in table given a filter.
+     * SELECT COUNT(*) FROM ( SELECT * FROM k where a = true );
+     * ```
+     * </pre>
+     */
+    public void runAggregationQuery(
+        com.google.firestore.v1.RunAggregationQueryRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.RunAggregationQueryResponse>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getRunAggregationQueryMethod(), getCallOptions()),
+          request,
+          responseObserver);
     }
 
     /**
@@ -1457,6 +1560,27 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.RunQueryRequest request) {
       return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
           getChannel(), getRunQueryMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Runs an aggregation query.
+     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
+     * this API allows running an aggregation to produce a series of
+     * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
+     * High-Level Example:
+     * ```
+     * -- Return the number of documents in table given a filter.
+     * SELECT COUNT(*) FROM ( SELECT * FROM k where a = true );
+     * ```
+     * </pre>
+     */
+    public java.util.Iterator<com.google.firestore.v1.RunAggregationQueryResponse>
+        runAggregationQuery(com.google.firestore.v1.RunAggregationQueryRequest request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getRunAggregationQueryMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1711,12 +1835,13 @@ public final class FirestoreGrpc {
   private static final int METHODID_COMMIT = 6;
   private static final int METHODID_ROLLBACK = 7;
   private static final int METHODID_RUN_QUERY = 8;
-  private static final int METHODID_PARTITION_QUERY = 9;
-  private static final int METHODID_LIST_COLLECTION_IDS = 10;
-  private static final int METHODID_BATCH_WRITE = 11;
-  private static final int METHODID_CREATE_DOCUMENT = 12;
-  private static final int METHODID_WRITE = 13;
-  private static final int METHODID_LISTEN = 14;
+  private static final int METHODID_RUN_AGGREGATION_QUERY = 9;
+  private static final int METHODID_PARTITION_QUERY = 10;
+  private static final int METHODID_LIST_COLLECTION_IDS = 11;
+  private static final int METHODID_BATCH_WRITE = 12;
+  private static final int METHODID_CREATE_DOCUMENT = 13;
+  private static final int METHODID_WRITE = 14;
+  private static final int METHODID_LISTEN = 15;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1783,6 +1908,12 @@ public final class FirestoreGrpc {
           serviceImpl.runQuery(
               (com.google.firestore.v1.RunQueryRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.RunQueryResponse>)
+                  responseObserver);
+          break;
+        case METHODID_RUN_AGGREGATION_QUERY:
+          serviceImpl.runAggregationQuery(
+              (com.google.firestore.v1.RunAggregationQueryRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.RunAggregationQueryResponse>)
                   responseObserver);
           break;
         case METHODID_PARTITION_QUERY:
@@ -1891,6 +2022,7 @@ public final class FirestoreGrpc {
                       .addMethod(getCommitMethod())
                       .addMethod(getRollbackMethod())
                       .addMethod(getRunQueryMethod())
+                      .addMethod(getRunAggregationQueryMethod())
                       .addMethod(getPartitionQueryMethod())
                       .addMethod(getWriteMethod())
                       .addMethod(getListenMethod())

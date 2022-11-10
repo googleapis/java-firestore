@@ -1,5 +1,259 @@
 # Changelog
 
+## [3.7.1](https://github.com/googleapis/java-firestore/compare/v3.7.0...v3.7.1) (2022-11-08)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.6 ([#1092](https://github.com/googleapis/java-firestore/issues/1092)) ([019840f](https://github.com/googleapis/java-firestore/commit/019840fb0883fb41cdc294f09e35f39745a78cb4))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.17 ([#1087](https://github.com/googleapis/java-firestore/issues/1087)) ([a78be32](https://github.com/googleapis/java-firestore/commit/a78be324ccd0ba2ebff429447b8ce0fe39727360))
+
+## [3.7.0](https://github.com/googleapis/java-firestore/compare/v3.6.0...v3.7.0) (2022-10-22)
+
+
+### Features
+
+* Add retry logic to COUNT queries ([#1062](https://github.com/googleapis/java-firestore/issues/1062)) ([5789e4b](https://github.com/googleapis/java-firestore/commit/5789e4b57f38e8cab82bc720b28578e86d82a2cc))
+
+
+### Bug Fixes
+
+* Fix limitToLast queries with cursors ([#1072](https://github.com/googleapis/java-firestore/issues/1072)) ([e9e1548](https://github.com/googleapis/java-firestore/commit/e9e15489112d49a7f8716300ec9af504fcfb5786))
+
+
+### Dependencies
+
+* Update beam.version to v2.42.0 ([#1066](https://github.com/googleapis/java-firestore/issues/1066)) ([03de01a](https://github.com/googleapis/java-firestore/commit/03de01ab58ab3d312bef63c54b202b8c911cef54))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.5 ([#1071](https://github.com/googleapis/java-firestore/issues/1071)) ([4c3f122](https://github.com/googleapis/java-firestore/commit/4c3f12286424ce7601a106b4338bc89b67ad51fb))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.16 ([#1064](https://github.com/googleapis/java-firestore/issues/1064)) ([a7ddc9e](https://github.com/googleapis/java-firestore/commit/a7ddc9e7fe708bd07595973c56fb2e392917915d))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.15 ([#1065](https://github.com/googleapis/java-firestore/issues/1065)) ([d9e7803](https://github.com/googleapis/java-firestore/commit/d9e7803d257b0edfae8648b925e040c7a6fcdb60))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.16 ([#1069](https://github.com/googleapis/java-firestore/issues/1069)) ([97ef50a](https://github.com/googleapis/java-firestore/commit/97ef50a518c5b207b28e0a81022cc96ed4e5e5ae))
+
+## [3.6.0](https://github.com/googleapis/java-firestore/compare/v3.5.0...v3.6.0) (2022-10-04)
+
+
+### Features
+
+* Count queries (not available for use yet) ([#1033](https://github.com/googleapis/java-firestore/issues/1033)) ([8b60612](https://github.com/googleapis/java-firestore/commit/8b60612f1922a4c377fac357ee7f4304362622f3))
+* Make count queries publicly available for use ([#1042](https://github.com/googleapis/java-firestore/issues/1042)) ([1c8d242](https://github.com/googleapis/java-firestore/commit/1c8d2428d94ab8b3c18a8cad14daa2a1e39af369))
+
+
+### Documentation
+
+* AggregateQuery.java: describe why we ignore subsequent responses ([#1041](https://github.com/googleapis/java-firestore/issues/1041)) ([8150544](https://github.com/googleapis/java-firestore/commit/8150544aee0aa04a5e6239dbc4994ddd056393ba))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.4 ([#1053](https://github.com/googleapis/java-firestore/issues/1053)) ([9b4c26e](https://github.com/googleapis/java-firestore/commit/9b4c26eac062fa73c8b275978f35c5bfb8cdfc21))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.14 ([#1045](https://github.com/googleapis/java-firestore/issues/1045)) ([04b3861](https://github.com/googleapis/java-firestore/commit/04b3861d874dcd63713e62bd7717097ca8f68a3c))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.14 ([#1046](https://github.com/googleapis/java-firestore/issues/1046)) ([6631a58](https://github.com/googleapis/java-firestore/commit/6631a58553a12e1f48d060d0b87cfa8683492b94))
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.9.1 ([#1039](https://github.com/googleapis/java-firestore/issues/1039)) ([84423f4](https://github.com/googleapis/java-firestore/commit/84423f4db6e35f9d30a34a5bc2d29050380840ec))
+
+## [3.5.0](https://github.com/googleapis/java-firestore/compare/v3.4.2...v3.5.0) (2022-09-16)
+
+
+### Features
+
+* Add firestore aggregation query apis to the stable googleapis branch ([#1030](https://github.com/googleapis/java-firestore/issues/1030)) ([0e3e2ac](https://github.com/googleapis/java-firestore/commit/0e3e2ac98d1e505e7fe9bb17b2bdb8e7089776cf))
+
+
+### Dependencies
+
+* Update actions/setup-java action to v3 ([#1031](https://github.com/googleapis/java-firestore/issues/1031)) ([1aae546](https://github.com/googleapis/java-firestore/commit/1aae5463ae781787a529d424be2d145718250781))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.2 ([#1032](https://github.com/googleapis/java-firestore/issues/1032)) ([9b68360](https://github.com/googleapis/java-firestore/commit/9b6836031c7af75e4fc3350f36bef425d97cbfeb))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.3 ([#1034](https://github.com/googleapis/java-firestore/issues/1034)) ([5acd8e4](https://github.com/googleapis/java-firestore/commit/5acd8e415f966a7a902cae6ad324f70377b75528))
+
+## [3.4.2](https://github.com/googleapis/java-firestore/compare/v3.4.1...v3.4.2) (2022-08-24)
+
+
+### Dependencies
+
+* update beam.version to v2.41.0 ([#1022](https://github.com/googleapis/java-firestore/issues/1022)) ([fb14e2f](https://github.com/googleapis/java-firestore/commit/fb14e2fe0fe20614d1973c3be32f7d108a112028))
+
+## [3.4.1](https://github.com/googleapis/java-firestore/compare/v3.4.0...v3.4.1) (2022-08-19)
+
+
+### Bug Fixes
+
+* declare gson as runtime rather than test ([#1004](https://github.com/googleapis/java-firestore/issues/1004)) ([e37e997](https://github.com/googleapis/java-firestore/commit/e37e997075288844c2fb1807b166007177ebea2f))
+
+## [3.4.0](https://github.com/googleapis/java-firestore/compare/v3.3.0...v3.4.0) (2022-08-03)
+
+
+### Features
+
+* Support for Composite Filters. ([#975](https://github.com/googleapis/java-firestore/issues/975)) ([9d0653a](https://github.com/googleapis/java-firestore/commit/9d0653aa5e488af847ae1c8fbbd9ae60bac9149a))
+
+
+### Bug Fixes
+
+* update gapic-generator-java with mock service generation fixes ([#960](https://github.com/googleapis/java-firestore/issues/960)) ([a9338ff](https://github.com/googleapis/java-firestore/commit/a9338ff8c0039111f1e1da9db460626a7b2c98ec))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v3 ([#1000](https://github.com/googleapis/java-firestore/issues/1000)) ([a3c4ec5](https://github.com/googleapis/java-firestore/commit/a3c4ec5db33fc0217e2d5c9c0799570a0a63a2d0))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.12 ([#972](https://github.com/googleapis/java-firestore/issues/972)) ([8cf33b0](https://github.com/googleapis/java-firestore/commit/8cf33b053d784cd2d03ed1d6c37fe17e9f96d677))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.13 ([#988](https://github.com/googleapis/java-firestore/issues/988)) ([f8d9496](https://github.com/googleapis/java-firestore/commit/f8d949688e2eba095d008d6a36bb71cc9860fd61))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.13 ([#989](https://github.com/googleapis/java-firestore/issues/989)) ([4c768e3](https://github.com/googleapis/java-firestore/commit/4c768e3939b2820b8c93216df4fc1bd7352253a1))
+* update dependency org.junit.vintage:junit-vintage-engine to v5.9.0 ([#997](https://github.com/googleapis/java-firestore/issues/997)) ([d4dd4d8](https://github.com/googleapis/java-firestore/commit/d4dd4d8b9f83f54900eae7ea119e24e0e68c551b))
+
+## [3.3.0](https://github.com/googleapis/java-firestore/compare/v3.2.0...v3.3.0) (2022-07-01)
+
+
+### Features
+
+* add logical termination for RunQueryResponse ([#956](https://github.com/googleapis/java-firestore/issues/956)) ([1d869c8](https://github.com/googleapis/java-firestore/commit/1d869c8fbe5e4009bbded2fb24f978f7cf48c515))
+
+
+### Bug Fixes
+
+* add build script for JDK 17 native image testing ([#965](https://github.com/googleapis/java-firestore/issues/965)) ([963e384](https://github.com/googleapis/java-firestore/commit/963e384b254056b6879744ba0b5d69fc0699f0bf))
+
+
+### Performance Improvements
+
+* Change how proto was called in Query.java ([#970](https://github.com/googleapis/java-firestore/issues/970)) ([f6f6352](https://github.com/googleapis/java-firestore/commit/f6f63520e93d9b3db0a915be58ea3cd37cec68d2))
+
+
+### Dependencies
+
+* update beam.version to v2.40.0 ([#978](https://github.com/googleapis/java-firestore/issues/978)) ([44276f8](https://github.com/googleapis/java-firestore/commit/44276f84ac927e02105608d81bb198f45793f823))
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.13.0 ([#974](https://github.com/googleapis/java-firestore/issues/974)) ([6def73d](https://github.com/googleapis/java-firestore/commit/6def73dbdbdc645d1148b9cc8e390e307a6896d4))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.12 ([#973](https://github.com/googleapis/java-firestore/issues/973)) ([bfb4ec9](https://github.com/googleapis/java-firestore/commit/bfb4ec9f9de6114259328bbe9a14c0cc7fae84c8))
+
+## [3.2.0](https://github.com/googleapis/java-firestore/compare/v3.1.0...v3.2.0) (2022-05-23)
+
+
+### Features
+
+* enable RunQueryResponse.done ([#942](https://github.com/googleapis/java-firestore/issues/942)) ([055b029](https://github.com/googleapis/java-firestore/commit/055b02930a455c253f443dcbacf935b5c8e37991))
+
+
+### Documentation
+
+* **sample:** remove unused native-image-support module ([#952](https://github.com/googleapis/java-firestore/issues/952)) ([17c2de9](https://github.com/googleapis/java-firestore/commit/17c2de9594c8ea549ed623ea482420f00fc7b6b6))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.12.0 ([#959](https://github.com/googleapis/java-firestore/issues/959)) ([f1d6b17](https://github.com/googleapis/java-firestore/commit/f1d6b17550556a6e1ce3cd734a5425b94da4aa6d))
+
+## [3.1.0](https://github.com/googleapis/java-firestore/compare/v3.0.21...v3.1.0) (2022-04-21)
+
+
+### Features
+
+* relocate Firestore native image configuration from java-core ([#941](https://github.com/googleapis/java-firestore/issues/941)) ([900a7a8](https://github.com/googleapis/java-firestore/commit/900a7a855fab436aea3d221139e8c986f188d4be))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.10.0 ([#945](https://github.com/googleapis/java-firestore/issues/945)) ([5b2e318](https://github.com/googleapis/java-firestore/commit/5b2e3189cde0973edb524df88e71f8901f84b136))
+* update dependency com.google.cloud:native-image-support to v0.13.1 ([#944](https://github.com/googleapis/java-firestore/issues/944)) ([b3b474f](https://github.com/googleapis/java-firestore/commit/b3b474f44167985b52cb1fb7e7b4c42be1c58112))
+
+### [3.0.21](https://github.com/googleapis/java-firestore/compare/v3.0.20...v3.0.21) (2022-03-30)
+
+
+### Bug Fixes
+
+* change REST binding for ListDocuments to support root collection ([#900](https://github.com/googleapis/java-firestore/issues/900)) ([aabd4ac](https://github.com/googleapis/java-firestore/commit/aabd4ac4e43e1c58ec25e51117980f4396a3e8d9))
+* **java:** move test native image configs to test/resources ([#929](https://github.com/googleapis/java-firestore/issues/929)) ([9ed6c5e](https://github.com/googleapis/java-firestore/commit/9ed6c5ea50c02411df2c94e782caba1954fd1f73))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.9.0 ([#932](https://github.com/googleapis/java-firestore/issues/932)) ([abebae7](https://github.com/googleapis/java-firestore/commit/abebae7fd9fde7d971150ffcfc010eaa7952932d))
+* update dependency com.google.cloud:native-image-support to v0.12.11 ([#931](https://github.com/googleapis/java-firestore/issues/931)) ([0e1e3c5](https://github.com/googleapis/java-firestore/commit/0e1e3c598628c13c30cb7a51314d109c2106a678))
+
+### [3.0.20](https://github.com/googleapis/java-firestore/compare/v3.0.19...v3.0.20) (2022-03-24)
+
+
+### Dependencies
+
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.11 ([#923](https://github.com/googleapis/java-firestore/issues/923)) ([43f24b1](https://github.com/googleapis/java-firestore/commit/43f24b12d0c79551f1bc3eb13f3af8c38630f0ca))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.11 ([#924](https://github.com/googleapis/java-firestore/issues/924)) ([70b0d00](https://github.com/googleapis/java-firestore/commit/70b0d001cb4199745e665a9d13731a9ca320ed93))
+
+### [3.0.19](https://github.com/googleapis/java-firestore/compare/v3.0.18...v3.0.19) (2022-03-14)
+
+
+### Bug Fixes
+
+* **java:** fix native image Kokoro test setup ([#919](https://github.com/googleapis/java-firestore/issues/919)) ([7d905a5](https://github.com/googleapis/java-firestore/commit/7d905a5f2c687c1f099d2d976f9708b605b66a60))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.10 ([#917](https://github.com/googleapis/java-firestore/issues/917)) ([0a650e0](https://github.com/googleapis/java-firestore/commit/0a650e02ff1b0aea7d78b95c743358eff999b8aa))
+
+### [3.0.18](https://github.com/googleapis/java-firestore/compare/v3.0.17...v3.0.18) (2022-03-10)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.9 ([#912](https://github.com/googleapis/java-firestore/issues/912)) ([fedf824](https://github.com/googleapis/java-firestore/commit/fedf824a3bf66e245ef3eb10c85d8209c418d6fa))
+
+### [3.0.17](https://github.com/googleapis/java-firestore/compare/v3.0.16...v3.0.17) (2022-03-09)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.8 ([#909](https://github.com/googleapis/java-firestore/issues/909)) ([2580d8f](https://github.com/googleapis/java-firestore/commit/2580d8fa0fa35d69160c73fadfb3c817e126fc2b))
+
+### [3.0.16](https://github.com/googleapis/java-firestore/compare/v3.0.15...v3.0.16) (2022-03-08)
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.7 ([#902](https://github.com/googleapis/java-firestore/issues/902)) ([843dd0e](https://github.com/googleapis/java-firestore/commit/843dd0e9988f26f688c2b73f6a247092b7bea6ef))
+
+### [3.0.15](https://github.com/googleapis/java-firestore/compare/v3.0.14...v3.0.15) (2022-03-02)
+
+
+### Documentation
+
+* **sample:** Use Java 8 for native image sample ([#893](https://github.com/googleapis/java-firestore/issues/893)) ([5955f54](https://github.com/googleapis/java-firestore/commit/5955f54f49637e4a4d22df34dbcddacfef269d34))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:google-cloud-shared-dependencies to v2.8.0 ([#895](https://github.com/googleapis/java-firestore/issues/895)) ([bf1951d](https://github.com/googleapis/java-firestore/commit/bf1951d760f4ba431caa18ecbc0505a5d99f2ae2))
+* update dependency com.google.cloud:native-image-support to v0.12.6 ([#898](https://github.com/googleapis/java-firestore/issues/898)) ([73606e5](https://github.com/googleapis/java-firestore/commit/73606e5617ff54daf60db720aed1436005d50fb5))
+
+### [3.0.14](https://github.com/googleapis/java-firestore/compare/v3.0.13...v3.0.14) (2022-03-01)
+
+
+### Bug Fixes
+
+* fix groupID for artifacts ([#890](https://github.com/googleapis/java-firestore/issues/890)) ([bb46bcb](https://github.com/googleapis/java-firestore/commit/bb46bcb5f52b1f5fb4e3fe7acfb7e74b6fc4eb4b))
+* **java:** add reflection configuration for native image tests ([#878](https://github.com/googleapis/java-firestore/issues/878)) ([1938113](https://github.com/googleapis/java-firestore/commit/19381131ab3c7a7a458e333de9929336fe4edcc9))
+
+
+### Dependencies
+
+* update actions/setup-java action to v3 ([#888](https://github.com/googleapis/java-firestore/issues/888)) ([07130f9](https://github.com/googleapis/java-firestore/commit/07130f961091bac19393dd13bff4826584509bd4))
+* update dependency com.google.cloud:native-image-support to v0.12.5 ([#889](https://github.com/googleapis/java-firestore/issues/889)) ([5f4ffcb](https://github.com/googleapis/java-firestore/commit/5f4ffcbe6de3081a47a137be06be9ca6f0969ed5))
+* update dependency org.graalvm.buildtools:junit-platform-native to v0.9.10 ([#880](https://github.com/googleapis/java-firestore/issues/880)) ([a3a9684](https://github.com/googleapis/java-firestore/commit/a3a96846e33e5ca53038c1d03a1f6734796c773f))
+
+### [3.0.13](https://github.com/googleapis/java-firestore/compare/v3.0.12...v3.0.13) (2022-02-22)
+
+
+### Bug Fixes
+
+* retry watch on InternalException ([#875](https://github.com/googleapis/java-firestore/issues/875)) ([a76a0fd](https://github.com/googleapis/java-firestore/commit/a76a0fddbcd8996667a4ee239b3d74ee096161c6))
+
+
+### Documentation
+
+* **sample:** Add sample for native image support in Firestore ([#872](https://github.com/googleapis/java-firestore/issues/872)) ([a01fe88](https://github.com/googleapis/java-firestore/commit/a01fe88f17286a2988a4e4e52d11fc4aa43c5f83))
+
+
+### Dependencies
+
+* update dependency com.google.cloud:native-image-support to v0.12.4 ([#882](https://github.com/googleapis/java-firestore/issues/882)) ([b2aeb1a](https://github.com/googleapis/java-firestore/commit/b2aeb1a7c8f1baa428f1a718ea145fef77f439fb))
+* update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.10 ([#881](https://github.com/googleapis/java-firestore/issues/881)) ([036f7f8](https://github.com/googleapis/java-firestore/commit/036f7f83b1ec4846af91613136cc793c637f43c1))
+
 ### [3.0.12](https://github.com/googleapis/java-firestore/compare/v3.0.11...v3.0.12) (2022-02-04)
 
 

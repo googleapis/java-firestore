@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -103,6 +105,11 @@ public abstract class FirestoreStub implements BackgroundResource {
 
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     throw new UnsupportedOperationException("Not implemented: runQueryCallable()");
+  }
+
+  public ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
+      runAggregationQueryCallable() {
+    throw new UnsupportedOperationException("Not implemented: runAggregationQueryCallable()");
   }
 
   public UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>

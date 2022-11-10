@@ -16,17 +16,22 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.Filter.*;
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_SNAPSHOT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.andFilters;
 import static com.google.cloud.firestore.LocalFirestoreHelper.endAt;
+import static com.google.cloud.firestore.LocalFirestoreHelper.fieldFilter;
 import static com.google.cloud.firestore.LocalFirestoreHelper.filter;
 import static com.google.cloud.firestore.LocalFirestoreHelper.limit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.offset;
+import static com.google.cloud.firestore.LocalFirestoreHelper.orFilters;
 import static com.google.cloud.firestore.LocalFirestoreHelper.order;
 import static com.google.cloud.firestore.LocalFirestoreHelper.query;
 import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponseWithDone;
 import static com.google.cloud.firestore.LocalFirestoreHelper.reference;
 import static com.google.cloud.firestore.LocalFirestoreHelper.select;
 import static com.google.cloud.firestore.LocalFirestoreHelper.startAt;
@@ -45,14 +50,15 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Query.ComparisonFilter;
-import com.google.cloud.firestore.Query.FieldFilter;
+import com.google.cloud.firestore.Query.ComparisonFilterInternal;
+import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.io.BaseEncoding;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
+import com.google.firestore.v1.StructuredQuery.CollectionSelector;
 import com.google.firestore.v1.StructuredQuery.Direction;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.Value;
@@ -327,6 +333,42 @@ public class QueryTest {
     for (RunQueryRequest actual : runQuery.getAllValues()) {
       assertEquals(expected.next(), actual);
     }
+  }
+
+  @Test
+  public void withCompositeFilter() throws Exception {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    // a == 10 && (b==20 || c==30 || (d==40 && e>50) || f==60)
+    query
+        .where(
+            and(
+                equalTo("a", "10"),
+                or(
+                    equalTo("b", "20"),
+                    equalTo("c", "30"),
+                    and(equalTo("d", "40"), greaterThan("e", "50")),
+                    and(equalTo("f", "60")),
+                    or(and()))))
+        .get()
+        .get();
+
+    StructuredQuery.Filter a = fieldFilter("a", Operator.EQUAL, "10");
+    StructuredQuery.Filter b = fieldFilter("b", Operator.EQUAL, "20");
+    StructuredQuery.Filter c = fieldFilter("c", Operator.EQUAL, "30");
+    StructuredQuery.Filter d = fieldFilter("d", Operator.EQUAL, "40");
+    StructuredQuery.Filter e = fieldFilter("e", Operator.GREATER_THAN, "50");
+    StructuredQuery.Filter f = fieldFilter("f", Operator.EQUAL, "60");
+    StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
+    structuredQuery.setWhere(andFilters(a, orFilters(b, c, andFilters(d, e), f)));
+    structuredQuery.addFrom(CollectionSelector.newBuilder().setCollectionId("coll").build());
+
+    assertEquals(structuredQuery.build(), runQuery.getValue().getStructuredQuery());
   }
 
   @Test
@@ -953,6 +995,86 @@ public class QueryTest {
   }
 
   @Test
+  public void successfulReturnWithoutOnComplete() throws Exception {
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+  }
+
+  @Test
+  /**
+   * onComplete() will be called twice. The first time is when it detects RunQueryResponse.done set
+   * to true. The second time is when it receives half close
+   */
+  public void successfulReturnCallsOnCompleteTwice() throws Exception {
+    doAnswer(
+            queryResponseWithDone(
+                /* callWithoutOnComplete */ false, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
+        .when(firestoreMock)
+        .streamRequest(
+            runQuery.capture(),
+            streamObserverCapture.capture(),
+            Matchers.<ServerStreamingCallable>any());
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+    final int[] counter = {0};
+
+    query.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            counter[0]++;
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+
+    // Wait for some time to see whether onCompleted() has been called more than once
+    Thread.sleep(200);
+    assertEquals(1, counter[0]);
+  }
+
+  @Test
   public void retriesAfterRetryableError() throws Exception {
     final boolean[] returnError = new boolean[] {true};
 
@@ -1179,6 +1301,66 @@ public class QueryTest {
     assertSerialization(query);
   }
 
+  @Test
+  public void serializationTestWithEmptyCompositeFilter() {
+    assertSerialization(query);
+    query.where(or());
+    assertSerialization(query);
+    query.where(and());
+    assertSerialization(query);
+    query.where(and(or(and(or()))));
+    assertSerialization(query);
+  }
+
+  @Test
+  public void serializationTestWithSingleFilterCompositeFilters() {
+    // Test the special handling of a composite filter that has only 1 filter inside it. Such filter
+    // is equivalent to its sub-filter. For example: AND(a==10) is the same as a==10.
+    assertSerialization(query);
+    // a == 10
+    query.where(or(equalTo("a", 10)));
+    assertSerialization(query);
+
+    // b > 20
+    query.where(and(greaterThan("b", 20)));
+    assertSerialization(query);
+
+    // c == 30
+    query.where(or(and(or(and(equalTo("c", 30))))));
+    assertSerialization(query);
+  }
+
+  @Test
+  public void serializationTestWithNestedCompositeFilters() {
+    assertSerialization(query);
+    // a IN [1,2]
+    query.where(inArray("a", Arrays.asList(1, 2)));
+    assertSerialization(query);
+    // a IN [1,2] && (b==20 || c==30 || (d==40 && e>50)) || f==60
+    query.where(
+        or(
+            equalTo("b", 20),
+            equalTo("c", 30),
+            and(equalTo("d", 40), greaterThan("e", 50)),
+            and(equalTo("f", 60)),
+            or(and())));
+    assertSerialization(query);
+    query = query.orderBy("l");
+    assertSerialization(query);
+    query = query.startAt("o");
+    assertSerialization(query);
+    query = query.startAfter("p");
+    assertSerialization(query);
+    query = query.endBefore("q");
+    assertSerialization(query);
+    query = query.endAt("r");
+    assertSerialization(query);
+    query = query.limit(8);
+    assertSerialization(query);
+    query = query.offset(9);
+    assertSerialization(query);
+  }
+
   private void assertSerialization(Query query) {
     RunQueryRequest runQueryRequest = query.toProto();
     Query deserializedQuery = Query.fromProto(firestoreMock, runQueryRequest);
@@ -1239,15 +1421,11 @@ public class QueryTest {
     ResourcePath path = query.options.getParentPath();
     assertEquals("projects/test-project/databases/(default)/documents", path.getName());
     assertEquals("testing-collection", query.options.getCollectionId());
-    FieldFilter next = query.options.getFieldFilters().iterator().next();
-    assertEquals("enabled", next.fieldReference.getFieldPath());
-
-    if (next instanceof ComparisonFilter) {
-      ComparisonFilter comparisonFilter = (ComparisonFilter) next;
-      assertFalse(comparisonFilter.isInequalityFilter());
-      assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
-    } else {
-      fail("expect filter to be a comparison filter");
-    }
+    FilterInternal next = query.options.getFilters().iterator().next();
+    assertTrue(next instanceof ComparisonFilterInternal);
+    ComparisonFilterInternal comparisonFilter = (ComparisonFilterInternal) next;
+    assertEquals("enabled", comparisonFilter.fieldReference.getFieldPath());
+    assertFalse(comparisonFilter.isInequalityFilter());
+    assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
   }
 }

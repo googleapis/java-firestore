@@ -28,6 +28,26 @@ public final class FirestoreAdminProto {
   }
 
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_ListDatabasesRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_ListDatabasesRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_ListDatabasesResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_ListDatabasesResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_GetDatabaseRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_GetDatabaseRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_UpdateDatabaseRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_UpdateDatabaseRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_UpdateDatabaseMetadata_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_UpdateDatabaseMetadata_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_CreateIndexRequest_fieldAccessorTable;
@@ -84,101 +104,126 @@ public final class FirestoreAdminProto {
           + "min.proto\022\031google.firestore.admin.v1\032\034go"
           + "ogle/api/annotations.proto\032\027google/api/c"
           + "lient.proto\032\037google/api/field_behavior.p"
-          + "roto\032\031google/api/resource.proto\032%google/"
-          + "firestore/admin/v1/field.proto\032%google/f"
-          + "irestore/admin/v1/index.proto\032#google/lo"
-          + "ngrunning/operations.proto\032\033google/proto"
-          + "buf/empty.proto\032 google/protobuf/field_m"
-          + "ask.proto\"\214\001\n\022CreateIndexRequest\022@\n\006pare"
-          + "nt\030\001 \001(\tB0\340A\002\372A*\n(firestore.googleapis.c"
-          + "om/CollectionGroup\0224\n\005index\030\002 \001(\0132 .goog"
-          + "le.firestore.admin.v1.IndexB\003\340A\002\"\215\001\n\022Lis"
-          + "tIndexesRequest\022@\n\006parent\030\001 \001(\tB0\340A\002\372A*\n"
-          + "(firestore.googleapis.com/CollectionGrou"
-          + "p\022\016\n\006filter\030\002 \001(\t\022\021\n\tpage_size\030\003 \001(\005\022\022\n\n"
-          + "page_token\030\004 \001(\t\"a\n\023ListIndexesResponse\022"
-          + "1\n\007indexes\030\001 \003(\0132 .google.firestore.admi"
-          + "n.v1.Index\022\027\n\017next_page_token\030\002 \001(\t\"G\n\017G"
-          + "etIndexRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036fi"
-          + "restore.googleapis.com/Index\"J\n\022DeleteIn"
-          + "dexRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036firest"
-          + "ore.googleapis.com/Index\"{\n\022UpdateFieldR"
-          + "equest\0224\n\005field\030\001 \001(\0132 .google.firestore"
-          + ".admin.v1.FieldB\003\340A\002\022/\n\013update_mask\030\002 \001("
-          + "\0132\032.google.protobuf.FieldMask\"G\n\017GetFiel"
-          + "dRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036firestor"
-          + "e.googleapis.com/Field\"\214\001\n\021ListFieldsReq"
-          + "uest\022@\n\006parent\030\001 \001(\tB0\340A\002\372A*\n(firestore."
-          + "googleapis.com/CollectionGroup\022\016\n\006filter"
-          + "\030\002 \001(\t\022\021\n\tpage_size\030\003 \001(\005\022\022\n\npage_token\030"
-          + "\004 \001(\t\"_\n\022ListFieldsResponse\0220\n\006fields\030\001 "
-          + "\003(\0132 .google.firestore.admin.v1.Field\022\027\n"
-          + "\017next_page_token\030\002 \001(\t\"\204\001\n\026ExportDocumen"
-          + "tsRequest\0227\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firesto"
-          + "re.googleapis.com/Database\022\026\n\016collection"
-          + "_ids\030\002 \003(\t\022\031\n\021output_uri_prefix\030\003 \001(\t\"\203\001"
-          + "\n\026ImportDocumentsRequest\0227\n\004name\030\001 \001(\tB)"
-          + "\340A\002\372A#\n!firestore.googleapis.com/Databas"
-          + "e\022\026\n\016collection_ids\030\002 \003(\t\022\030\n\020input_uri_p"
-          + "refix\030\003 \001(\t2\365\016\n\016FirestoreAdmin\022\333\001\n\013Creat"
-          + "eIndex\022-.google.firestore.admin.v1.Creat"
-          + "eIndexRequest\032\035.google.longrunning.Opera"
-          + "tion\"~\202\323\344\223\002G\">/v1/{parent=projects/*/dat"
-          + "abases/*/collectionGroups/*}/indexes:\005in"
-          + "dex\332A\014parent,index\312A\037\n\005Index\022\026IndexOpera"
-          + "tionMetadata\022\275\001\n\013ListIndexes\022-.google.fi"
-          + "restore.admin.v1.ListIndexesRequest\032..go"
-          + "ogle.firestore.admin.v1.ListIndexesRespo"
-          + "nse\"O\202\323\344\223\002@\022>/v1/{parent=projects/*/data"
-          + "bases/*/collectionGroups/*}/indexes\332A\006pa"
-          + "rent\022\247\001\n\010GetIndex\022*.google.firestore.adm"
-          + "in.v1.GetIndexRequest\032 .google.firestore"
-          + ".admin.v1.Index\"M\202\323\344\223\002@\022>/v1/{name=proje"
-          + "cts/*/databases/*/collectionGroups/*/ind"
-          + "exes/*}\332A\004name\022\243\001\n\013DeleteIndex\022-.google."
-          + "firestore.admin.v1.DeleteIndexRequest\032\026."
-          + "google.protobuf.Empty\"M\202\323\344\223\002@*>/v1/{name"
+          + "roto\032\031google/api/resource.proto\032(google/"
+          + "firestore/admin/v1/database.proto\032%googl"
+          + "e/firestore/admin/v1/field.proto\032%google"
+          + "/firestore/admin/v1/index.proto\032#google/"
+          + "longrunning/operations.proto\032\033google/pro"
+          + "tobuf/empty.proto\032 google/protobuf/field"
+          + "_mask.proto\"Q\n\024ListDatabasesRequest\0229\n\006p"
+          + "arent\030\001 \001(\tB)\340A\002\372A#\022!firestore.googleapi"
+          + "s.com/Database\"O\n\025ListDatabasesResponse\022"
+          + "6\n\tdatabases\030\001 \003(\0132#.google.firestore.ad"
+          + "min.v1.Database\"M\n\022GetDatabaseRequest\0227\n"
+          + "\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.googleapi"
+          + "s.com/Database\"\204\001\n\025UpdateDatabaseRequest"
+          + "\022:\n\010database\030\001 \001(\0132#.google.firestore.ad"
+          + "min.v1.DatabaseB\003\340A\002\022/\n\013update_mask\030\002 \001("
+          + "\0132\032.google.protobuf.FieldMask\"\030\n\026UpdateD"
+          + "atabaseMetadata\"\214\001\n\022CreateIndexRequest\022@"
+          + "\n\006parent\030\001 \001(\tB0\340A\002\372A*\n(firestore.google"
+          + "apis.com/CollectionGroup\0224\n\005index\030\002 \001(\0132"
+          + " .google.firestore.admin.v1.IndexB\003\340A\002\"\215"
+          + "\001\n\022ListIndexesRequest\022@\n\006parent\030\001 \001(\tB0\340"
+          + "A\002\372A*\n(firestore.googleapis.com/Collecti"
+          + "onGroup\022\016\n\006filter\030\002 \001(\t\022\021\n\tpage_size\030\003 \001"
+          + "(\005\022\022\n\npage_token\030\004 \001(\t\"a\n\023ListIndexesRes"
+          + "ponse\0221\n\007indexes\030\001 \003(\0132 .google.firestor"
+          + "e.admin.v1.Index\022\027\n\017next_page_token\030\002 \001("
+          + "\t\"G\n\017GetIndexRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372"
+          + "A \n\036firestore.googleapis.com/Index\"J\n\022De"
+          + "leteIndexRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036"
+          + "firestore.googleapis.com/Index\"{\n\022Update"
+          + "FieldRequest\0224\n\005field\030\001 \001(\0132 .google.fir"
+          + "estore.admin.v1.FieldB\003\340A\002\022/\n\013update_mas"
+          + "k\030\002 \001(\0132\032.google.protobuf.FieldMask\"G\n\017G"
+          + "etFieldRequest\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036fi"
+          + "restore.googleapis.com/Field\"\214\001\n\021ListFie"
+          + "ldsRequest\022@\n\006parent\030\001 \001(\tB0\340A\002\372A*\n(fire"
+          + "store.googleapis.com/CollectionGroup\022\016\n\006"
+          + "filter\030\002 \001(\t\022\021\n\tpage_size\030\003 \001(\005\022\022\n\npage_"
+          + "token\030\004 \001(\t\"_\n\022ListFieldsResponse\0220\n\006fie"
+          + "lds\030\001 \003(\0132 .google.firestore.admin.v1.Fi"
+          + "eld\022\027\n\017next_page_token\030\002 \001(\t\"\204\001\n\026ExportD"
+          + "ocumentsRequest\0227\n\004name\030\001 \001(\tB)\340A\002\372A#\n!f"
+          + "irestore.googleapis.com/Database\022\026\n\016coll"
+          + "ection_ids\030\002 \003(\t\022\031\n\021output_uri_prefix\030\003 "
+          + "\001(\t\"\203\001\n\026ImportDocumentsRequest\0227\n\004name\030\001"
+          + " \001(\tB)\340A\002\372A#\n!firestore.googleapis.com/D"
+          + "atabase\022\026\n\016collection_ids\030\002 \003(\t\022\030\n\020input"
+          + "_uri_prefix\030\003 \001(\t2\222\023\n\016FirestoreAdmin\022\333\001\n"
+          + "\013CreateIndex\022-.google.firestore.admin.v1"
+          + ".CreateIndexRequest\032\035.google.longrunning"
+          + ".Operation\"~\202\323\344\223\002G\">/v1/{parent=projects"
+          + "/*/databases/*/collectionGroups/*}/index"
+          + "es:\005index\332A\014parent,index\312A\037\n\005Index\022\026Inde"
+          + "xOperationMetadata\022\275\001\n\013ListIndexes\022-.goo"
+          + "gle.firestore.admin.v1.ListIndexesReques"
+          + "t\032..google.firestore.admin.v1.ListIndexe"
+          + "sResponse\"O\202\323\344\223\002@\022>/v1/{parent=projects/"
+          + "*/databases/*/collectionGroups/*}/indexe"
+          + "s\332A\006parent\022\247\001\n\010GetIndex\022*.google.firesto"
+          + "re.admin.v1.GetIndexRequest\032 .google.fir"
+          + "estore.admin.v1.Index\"M\202\323\344\223\002@\022>/v1/{name"
           + "=projects/*/databases/*/collectionGroups"
-          + "/*/indexes/*}\332A\004name\022\246\001\n\010GetField\022*.goog"
-          + "le.firestore.admin.v1.GetFieldRequest\032 ."
-          + "google.firestore.admin.v1.Field\"L\202\323\344\223\002?\022"
-          + "=/v1/{name=projects/*/databases/*/collec"
-          + "tionGroups/*/fields/*}\332A\004name\022\331\001\n\013Update"
-          + "Field\022-.google.firestore.admin.v1.Update"
-          + "FieldRequest\032\035.google.longrunning.Operat"
-          + "ion\"|\202\323\344\223\002L2C/v1/{field.name=projects/*/"
-          + "databases/*/collectionGroups/*/fields/*}"
-          + ":\005field\332A\005field\312A\037\n\005Field\022\026FieldOperatio"
-          + "nMetadata\022\271\001\n\nListFields\022,.google.firest"
-          + "ore.admin.v1.ListFieldsRequest\032-.google."
-          + "firestore.admin.v1.ListFieldsResponse\"N\202"
-          + "\323\344\223\002?\022=/v1/{parent=projects/*/databases/"
-          + "*/collectionGroups/*}/fields\332A\006parent\022\335\001"
-          + "\n\017ExportDocuments\0221.google.firestore.adm"
-          + "in.v1.ExportDocumentsRequest\032\035.google.lo"
-          + "ngrunning.Operation\"x\202\323\344\223\0026\"1/v1/{name=p"
-          + "rojects/*/databases/*}:exportDocuments:\001"
-          + "*\332A\004name\312A2\n\027ExportDocumentsResponse\022\027Ex"
-          + "portDocumentsMetadata\022\333\001\n\017ImportDocument"
-          + "s\0221.google.firestore.admin.v1.ImportDocu"
-          + "mentsRequest\032\035.google.longrunning.Operat"
-          + "ion\"v\202\323\344\223\0026\"1/v1/{name=projects/*/databa"
-          + "ses/*}:importDocuments:\001*\332A\004name\312A0\n\025goo"
-          + "gle.protobuf.Empty\022\027ImportDocumentsMetad"
-          + "ata\032v\312A\030firestore.googleapis.com\322AXhttps"
-          + "://www.googleapis.com/auth/cloud-platfor"
-          + "m,https://www.googleapis.com/auth/datast"
-          + "oreB\252\003\n\035com.google.firestore.admin.v1B\023F"
-          + "irestoreAdminProtoP\001Z>google.golang.org/"
-          + "genproto/googleapis/firestore/admin/v1;a"
-          + "dmin\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Adm"
-          + "in.V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352"
-          + "\002#Google::Cloud::Firestore::Admin::V1\352AL"
-          + "\n!firestore.googleapis.com/Database\022\'pro"
-          + "jects/{project}/databases/{database}\352Aq\n"
-          + "(firestore.googleapis.com/CollectionGrou"
-          + "p\022Eprojects/{project}/databases/{databas"
-          + "e}/collectionGroups/{collection}b\006proto3"
+          + "/*/indexes/*}\332A\004name\022\243\001\n\013DeleteIndex\022-.g"
+          + "oogle.firestore.admin.v1.DeleteIndexRequ"
+          + "est\032\026.google.protobuf.Empty\"M\202\323\344\223\002@*>/v1"
+          + "/{name=projects/*/databases/*/collection"
+          + "Groups/*/indexes/*}\332A\004name\022\246\001\n\010GetField\022"
+          + "*.google.firestore.admin.v1.GetFieldRequ"
+          + "est\032 .google.firestore.admin.v1.Field\"L\202"
+          + "\323\344\223\002?\022=/v1/{name=projects/*/databases/*/"
+          + "collectionGroups/*/fields/*}\332A\004name\022\331\001\n\013"
+          + "UpdateField\022-.google.firestore.admin.v1."
+          + "UpdateFieldRequest\032\035.google.longrunning."
+          + "Operation\"|\202\323\344\223\002L2C/v1/{field.name=proje"
+          + "cts/*/databases/*/collectionGroups/*/fie"
+          + "lds/*}:\005field\332A\005field\312A\037\n\005Field\022\026FieldOp"
+          + "erationMetadata\022\271\001\n\nListFields\022,.google."
+          + "firestore.admin.v1.ListFieldsRequest\032-.g"
+          + "oogle.firestore.admin.v1.ListFieldsRespo"
+          + "nse\"N\202\323\344\223\002?\022=/v1/{parent=projects/*/data"
+          + "bases/*/collectionGroups/*}/fields\332A\006par"
+          + "ent\022\335\001\n\017ExportDocuments\0221.google.firesto"
+          + "re.admin.v1.ExportDocumentsRequest\032\035.goo"
+          + "gle.longrunning.Operation\"x\202\323\344\223\0026\"1/v1/{"
+          + "name=projects/*/databases/*}:exportDocum"
+          + "ents:\001*\332A\004name\312A2\n\027ExportDocumentsRespon"
+          + "se\022\027ExportDocumentsMetadata\022\333\001\n\017ImportDo"
+          + "cuments\0221.google.firestore.admin.v1.Impo"
+          + "rtDocumentsRequest\032\035.google.longrunning."
+          + "Operation\"v\202\323\344\223\0026\"1/v1/{name=projects/*/"
+          + "databases/*}:importDocuments:\001*\332A\004name\312A"
+          + "0\n\025google.protobuf.Empty\022\027ImportDocument"
+          + "sMetadata\022\223\001\n\013GetDatabase\022-.google.fires"
+          + "tore.admin.v1.GetDatabaseRequest\032#.googl"
+          + "e.firestore.admin.v1.Database\"0\202\323\344\223\002#\022!/"
+          + "v1/{name=projects/*/databases/*}\332A\004name\022"
+          + "\246\001\n\rListDatabases\022/.google.firestore.adm"
+          + "in.v1.ListDatabasesRequest\0320.google.fire"
+          + "store.admin.v1.ListDatabasesResponse\"2\202\323"
+          + "\344\223\002#\022!/v1/{parent=projects/*}/databases\332"
+          + "A\006parent\022\333\001\n\016UpdateDatabase\0220.google.fir"
+          + "estore.admin.v1.UpdateDatabaseRequest\032\035."
+          + "google.longrunning.Operation\"x\202\323\344\223\00262*/v"
+          + "1/{database.name=projects/*/databases/*}"
+          + ":\010database\332A\024database,update_mask\312A\"\n\010Da"
+          + "tabase\022\026UpdateDatabaseMetadata\032v\312A\030fires"
+          + "tore.googleapis.com\322AXhttps://www.google"
+          + "apis.com/auth/cloud-platform,https://www"
+          + ".googleapis.com/auth/datastoreB\252\003\n\035com.g"
+          + "oogle.firestore.admin.v1B\023FirestoreAdmin"
+          + "ProtoP\001Z>google.golang.org/genproto/goog"
+          + "leapis/firestore/admin/v1;admin\242\002\004GCFS\252\002"
+          + "\037Google.Cloud.Firestore.Admin.V1\312\002\037Googl"
+          + "e\\Cloud\\Firestore\\Admin\\V1\352\002#Google::Clo"
+          + "ud::Firestore::Admin::V1\352AL\n!firestore.g"
+          + "oogleapis.com/Location\022\'projects/{projec"
+          + "t}/locations/{location}\352Aq\n(firestore.go"
+          + "ogleapis.com/CollectionGroup\022Eprojects/{"
+          + "project}/databases/{database}/collection"
+          + "Groups/{collection}b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -188,14 +233,53 @@ public final class FirestoreAdminProto {
               com.google.api.ClientProto.getDescriptor(),
               com.google.api.FieldBehaviorProto.getDescriptor(),
               com.google.api.ResourceProto.getDescriptor(),
+              com.google.firestore.admin.v1.DatabaseProto.getDescriptor(),
               com.google.firestore.admin.v1.FieldProto.getDescriptor(),
               com.google.firestore.admin.v1.IndexProto.getDescriptor(),
               com.google.longrunning.OperationsProto.getDescriptor(),
               com.google.protobuf.EmptyProto.getDescriptor(),
               com.google.protobuf.FieldMaskProto.getDescriptor(),
             });
-    internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor =
+    internal_static_google_firestore_admin_v1_ListDatabasesRequest_descriptor =
         getDescriptor().getMessageTypes().get(0);
+    internal_static_google_firestore_admin_v1_ListDatabasesRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_ListDatabasesRequest_descriptor,
+            new java.lang.String[] {
+              "Parent",
+            });
+    internal_static_google_firestore_admin_v1_ListDatabasesResponse_descriptor =
+        getDescriptor().getMessageTypes().get(1);
+    internal_static_google_firestore_admin_v1_ListDatabasesResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_ListDatabasesResponse_descriptor,
+            new java.lang.String[] {
+              "Databases",
+            });
+    internal_static_google_firestore_admin_v1_GetDatabaseRequest_descriptor =
+        getDescriptor().getMessageTypes().get(2);
+    internal_static_google_firestore_admin_v1_GetDatabaseRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_GetDatabaseRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_UpdateDatabaseRequest_descriptor =
+        getDescriptor().getMessageTypes().get(3);
+    internal_static_google_firestore_admin_v1_UpdateDatabaseRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_UpdateDatabaseRequest_descriptor,
+            new java.lang.String[] {
+              "Database", "UpdateMask",
+            });
+    internal_static_google_firestore_admin_v1_UpdateDatabaseMetadata_descriptor =
+        getDescriptor().getMessageTypes().get(4);
+    internal_static_google_firestore_admin_v1_UpdateDatabaseMetadata_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_UpdateDatabaseMetadata_descriptor,
+            new java.lang.String[] {});
+    internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor =
+        getDescriptor().getMessageTypes().get(5);
     internal_static_google_firestore_admin_v1_CreateIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor,
@@ -203,7 +287,7 @@ public final class FirestoreAdminProto {
               "Parent", "Index",
             });
     internal_static_google_firestore_admin_v1_ListIndexesRequest_descriptor =
-        getDescriptor().getMessageTypes().get(1);
+        getDescriptor().getMessageTypes().get(6);
     internal_static_google_firestore_admin_v1_ListIndexesRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListIndexesRequest_descriptor,
@@ -211,7 +295,7 @@ public final class FirestoreAdminProto {
               "Parent", "Filter", "PageSize", "PageToken",
             });
     internal_static_google_firestore_admin_v1_ListIndexesResponse_descriptor =
-        getDescriptor().getMessageTypes().get(2);
+        getDescriptor().getMessageTypes().get(7);
     internal_static_google_firestore_admin_v1_ListIndexesResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListIndexesResponse_descriptor,
@@ -219,7 +303,7 @@ public final class FirestoreAdminProto {
               "Indexes", "NextPageToken",
             });
     internal_static_google_firestore_admin_v1_GetIndexRequest_descriptor =
-        getDescriptor().getMessageTypes().get(3);
+        getDescriptor().getMessageTypes().get(8);
     internal_static_google_firestore_admin_v1_GetIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetIndexRequest_descriptor,
@@ -227,7 +311,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_DeleteIndexRequest_descriptor =
-        getDescriptor().getMessageTypes().get(4);
+        getDescriptor().getMessageTypes().get(9);
     internal_static_google_firestore_admin_v1_DeleteIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_DeleteIndexRequest_descriptor,
@@ -235,7 +319,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_UpdateFieldRequest_descriptor =
-        getDescriptor().getMessageTypes().get(5);
+        getDescriptor().getMessageTypes().get(10);
     internal_static_google_firestore_admin_v1_UpdateFieldRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_UpdateFieldRequest_descriptor,
@@ -243,7 +327,7 @@ public final class FirestoreAdminProto {
               "Field", "UpdateMask",
             });
     internal_static_google_firestore_admin_v1_GetFieldRequest_descriptor =
-        getDescriptor().getMessageTypes().get(6);
+        getDescriptor().getMessageTypes().get(11);
     internal_static_google_firestore_admin_v1_GetFieldRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetFieldRequest_descriptor,
@@ -251,7 +335,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_ListFieldsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(7);
+        getDescriptor().getMessageTypes().get(12);
     internal_static_google_firestore_admin_v1_ListFieldsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListFieldsRequest_descriptor,
@@ -259,7 +343,7 @@ public final class FirestoreAdminProto {
               "Parent", "Filter", "PageSize", "PageToken",
             });
     internal_static_google_firestore_admin_v1_ListFieldsResponse_descriptor =
-        getDescriptor().getMessageTypes().get(8);
+        getDescriptor().getMessageTypes().get(13);
     internal_static_google_firestore_admin_v1_ListFieldsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListFieldsResponse_descriptor,
@@ -267,7 +351,7 @@ public final class FirestoreAdminProto {
               "Fields", "NextPageToken",
             });
     internal_static_google_firestore_admin_v1_ExportDocumentsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(9);
+        getDescriptor().getMessageTypes().get(14);
     internal_static_google_firestore_admin_v1_ExportDocumentsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ExportDocumentsRequest_descriptor,
@@ -275,7 +359,7 @@ public final class FirestoreAdminProto {
               "Name", "CollectionIds", "OutputUriPrefix",
             });
     internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(10);
+        getDescriptor().getMessageTypes().get(15);
     internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor,
@@ -298,6 +382,7 @@ public final class FirestoreAdminProto {
     com.google.api.ClientProto.getDescriptor();
     com.google.api.FieldBehaviorProto.getDescriptor();
     com.google.api.ResourceProto.getDescriptor();
+    com.google.firestore.admin.v1.DatabaseProto.getDescriptor();
     com.google.firestore.admin.v1.FieldProto.getDescriptor();
     com.google.firestore.admin.v1.IndexProto.getDescriptor();
     com.google.longrunning.OperationsProto.getDescriptor();

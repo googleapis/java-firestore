@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.BetaApi;
 import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.httpjson.longrunning.OperationsClient;
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.api.gax.paging.AbstractFixedSizeCollection;
 import com.google.api.gax.paging.AbstractPage;
@@ -32,6 +33,7 @@ import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
@@ -40,6 +42,7 @@ import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldName;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
@@ -47,14 +50,19 @@ import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexName;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListDatabasesRequest;
+import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
+import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
-import com.google.longrunning.OperationsClient;
 import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,13 +70,42 @@ import javax.annotation.Generated;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
- * Service Description: Operations are created by service `FirestoreAdmin`, but are accessed via
- * service `google.longrunning.Operations`.
+ * Service Description: The Cloud Firestore Admin API.
+ *
+ * <p>This API provides several administrative services for Cloud Firestore.
+ *
+ * <p>Project, Database, Namespace, Collection, Collection Group, and Document are used as defined
+ * in the Google Cloud Firestore API.
+ *
+ * <p>Operation: An Operation represents work being performed in the background.
+ *
+ * <p>The index service manages Cloud Firestore indexes.
+ *
+ * <p>Index creation is performed asynchronously. An Operation resource is created for each such
+ * asynchronous operation. The state of the operation (including any errors encountered) may be
+ * queried via the Operation resource.
+ *
+ * <p>The Operations collection provides a record of actions performed for the specified Project
+ * (including any Operations in progress). Operations are not created directly but through calls on
+ * other collections or resources.
+ *
+ * <p>An Operation that is done may be deleted so that it is no longer listed as part of the
+ * Operation collection. Operations are garbage collected after 30 days. By default, ListOperations
+ * will only return in progress and failed operations. To list completed operation, issue a
+ * ListOperations request with the filter `done: true`.
+ *
+ * <p>Operations are created by service `FirestoreAdmin`, but are accessed via service
+ * `google.longrunning.Operations`.
  *
  * <p>This class provides the ability to make remote calls to the backing service through method
  * calls that map to API methods. Sample code to get started:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
  *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
  *   Index response = firestoreAdminClient.getIndex(name);
@@ -104,6 +141,11 @@ import javax.annotation.Generated;
  * <p>To customize credentials:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreAdminSettings firestoreAdminSettings =
  *     FirestoreAdminSettings.newBuilder()
  *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
@@ -114,8 +156,27 @@ import javax.annotation.Generated;
  * <p>To customize the endpoint:
  *
  * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreAdminSettings firestoreAdminSettings =
  *     FirestoreAdminSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
+ * }</pre>
+ *
+ * <p>To use REST (HTTP1.1/JSON) transport (instead of gRPC) for sending and receiving requests over
+ * the wire:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+ * FirestoreAdminSettings firestoreAdminSettings =
+ *     FirestoreAdminSettings.newHttpJsonBuilder().build();
  * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
  * }</pre>
  *
@@ -125,7 +186,8 @@ import javax.annotation.Generated;
 public class FirestoreAdminClient implements BackgroundResource {
   private final FirestoreAdminSettings settings;
   private final FirestoreAdminStub stub;
-  private final OperationsClient operationsClient;
+  private final OperationsClient httpJsonOperationsClient;
+  private final com.google.longrunning.OperationsClient operationsClient;
 
   /** Constructs an instance of FirestoreAdminClient with default settings. */
   public static final FirestoreAdminClient create() throws IOException {
@@ -145,7 +207,6 @@ public class FirestoreAdminClient implements BackgroundResource {
    * Constructs an instance of FirestoreAdminClient, using the given stub for making calls. This is
    * for advanced usage - prefer using create(FirestoreAdminSettings).
    */
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public static final FirestoreAdminClient create(FirestoreAdminStub stub) {
     return new FirestoreAdminClient(stub);
   }
@@ -158,21 +219,23 @@ public class FirestoreAdminClient implements BackgroundResource {
   protected FirestoreAdminClient(FirestoreAdminSettings settings) throws IOException {
     this.settings = settings;
     this.stub = ((FirestoreAdminStubSettings) settings.getStubSettings()).createStub();
-    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());
+    this.operationsClient =
+        com.google.longrunning.OperationsClient.create(this.stub.getOperationsStub());
+    this.httpJsonOperationsClient = OperationsClient.create(this.stub.getHttpJsonOperationsStub());
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   protected FirestoreAdminClient(FirestoreAdminStub stub) {
     this.settings = null;
     this.stub = stub;
-    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());
+    this.operationsClient =
+        com.google.longrunning.OperationsClient.create(this.stub.getOperationsStub());
+    this.httpJsonOperationsClient = OperationsClient.create(this.stub.getHttpJsonOperationsStub());
   }
 
   public final FirestoreAdminSettings getSettings() {
     return settings;
   }
 
-  @BetaApi("A restructuring of stub classes is planned, so this may break in the future")
   public FirestoreAdminStub getStub() {
     return stub;
   }
@@ -181,8 +244,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * Returns the OperationsClient that can be used to query the status of a long-running operation
    * returned by another API method call.
    */
-  public final OperationsClient getOperationsClient() {
+  public final com.google.longrunning.OperationsClient getOperationsClient() {
     return operationsClient;
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  @BetaApi
+  public final OperationsClient getHttpJsonOperationsClient() {
+    return httpJsonOperationsClient;
   }
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
@@ -195,6 +267,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CollectionGroupName parent =
    *       CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
@@ -228,6 +305,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]").toString();
    *   Index index = Index.newBuilder().build();
@@ -257,6 +339,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CreateIndexRequest request =
    *       CreateIndexRequest.newBuilder()
@@ -286,6 +373,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CreateIndexRequest request =
    *       CreateIndexRequest.newBuilder()
@@ -315,6 +407,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CreateIndexRequest request =
    *       CreateIndexRequest.newBuilder()
@@ -339,6 +436,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CollectionGroupName parent =
    *       CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
@@ -367,6 +469,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]").toString();
    *   for (Index element : firestoreAdminClient.listIndexes(parent).iterateAll()) {
@@ -391,6 +498,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListIndexesRequest request =
    *       ListIndexesRequest.newBuilder()
@@ -420,6 +532,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListIndexesRequest request =
    *       ListIndexesRequest.newBuilder()
@@ -449,6 +566,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListIndexesRequest request =
    *       ListIndexesRequest.newBuilder()
@@ -460,7 +582,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     ListIndexesResponse response = firestoreAdminClient.listIndexesCallable().call(request);
-   *     for (Index element : response.getResponsesList()) {
+   *     for (Index element : response.getIndexesList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();
@@ -484,6 +606,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
    *   Index response = firestoreAdminClient.getIndex(name);
@@ -507,6 +634,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString();
    *   Index response = firestoreAdminClient.getIndex(name);
@@ -529,6 +661,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   GetIndexRequest request =
    *       GetIndexRequest.newBuilder()
@@ -553,6 +690,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   GetIndexRequest request =
    *       GetIndexRequest.newBuilder()
@@ -576,6 +718,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   IndexName name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]");
    *   firestoreAdminClient.deleteIndex(name);
@@ -599,6 +746,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String name = IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString();
    *   firestoreAdminClient.deleteIndex(name);
@@ -621,6 +773,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   DeleteIndexRequest request =
    *       DeleteIndexRequest.newBuilder()
@@ -645,6 +802,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   DeleteIndexRequest request =
    *       DeleteIndexRequest.newBuilder()
@@ -668,6 +830,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   FieldName name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]");
    *   Field response = firestoreAdminClient.getField(name);
@@ -691,6 +858,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String name = FieldName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[FIELD]").toString();
    *   Field response = firestoreAdminClient.getField(name);
@@ -713,6 +885,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   GetFieldRequest request =
    *       GetFieldRequest.newBuilder()
@@ -737,6 +914,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   GetFieldRequest request =
    *       GetFieldRequest.newBuilder()
@@ -772,6 +954,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   Field field = Field.newBuilder().build();
    *   Field response = firestoreAdminClient.updateFieldAsync(field).get();
@@ -805,6 +992,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   UpdateFieldRequest request =
    *       UpdateFieldRequest.newBuilder()
@@ -842,6 +1034,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   UpdateFieldRequest request =
    *       UpdateFieldRequest.newBuilder()
@@ -879,6 +1076,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   UpdateFieldRequest request =
    *       UpdateFieldRequest.newBuilder()
@@ -902,11 +1104,16 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   CollectionGroupName parent =
    *       CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]");
@@ -933,11 +1140,16 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String parent = CollectionGroupName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]").toString();
    *   for (Field element : firestoreAdminClient.listFields(parent).iterateAll()) {
@@ -962,11 +1174,16 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListFieldsRequest request =
    *       ListFieldsRequest.newBuilder()
@@ -996,11 +1213,16 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListFieldsRequest request =
    *       ListFieldsRequest.newBuilder()
@@ -1029,11 +1251,16 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false`.
+   * filter set to `indexConfig.usesAncestorConfig:false` .
    *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ListFieldsRequest request =
    *       ListFieldsRequest.newBuilder()
@@ -1045,7 +1272,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .build();
    *   while (true) {
    *     ListFieldsResponse response = firestoreAdminClient.listFieldsCallable().call(request);
-   *     for (Field element : response.getResponsesList()) {
+   *     for (Field element : response.getFieldsList()) {
    *       // doThingsWith(element);
    *     }
    *     String nextPageToken = response.getNextPageToken();
@@ -1071,9 +1298,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
    *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(name).get();
@@ -1100,9 +1335,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
    *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(name).get();
@@ -1128,9 +1371,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ExportDocumentsRequest request =
    *       ExportDocumentsRequest.newBuilder()
@@ -1159,9 +1410,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ExportDocumentsRequest request =
    *       ExportDocumentsRequest.newBuilder()
@@ -1191,9 +1450,17 @@ public class FirestoreAdminClient implements BackgroundResource {
    * associated operation is done. If an export operation is cancelled before completion it may
    * leave partial data behind in Google Cloud Storage.
    *
+   * <p>For more details on export behavior and output format, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/export-import
+   *
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ExportDocumentsRequest request =
    *       ExportDocumentsRequest.newBuilder()
@@ -1222,6 +1489,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
    *   firestoreAdminClient.importDocumentsAsync(name).get();
@@ -1249,6 +1521,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
    *   firestoreAdminClient.importDocumentsAsync(name).get();
@@ -1274,6 +1551,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ImportDocumentsRequest request =
    *       ImportDocumentsRequest.newBuilder()
@@ -1303,6 +1585,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ImportDocumentsRequest request =
    *       ImportDocumentsRequest.newBuilder()
@@ -1332,6 +1619,11 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Sample code:
    *
    * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
    *   ImportDocumentsRequest request =
    *       ImportDocumentsRequest.newBuilder()
@@ -1348,6 +1640,344 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return stub.importDocumentsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   Database response = firestoreAdminClient.getDatabase(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(DatabaseName name) {
+    GetDatabaseRequest request =
+        GetDatabaseRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return getDatabase(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   Database response = firestoreAdminClient.getDatabase(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(String name) {
+    GetDatabaseRequest request = GetDatabaseRequest.newBuilder().setName(name).build();
+    return getDatabase(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetDatabaseRequest request =
+   *       GetDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   Database response = firestoreAdminClient.getDatabase(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Database getDatabase(GetDatabaseRequest request) {
+    return getDatabaseCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetDatabaseRequest request =
+   *       GetDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ApiFuture<Database> future = firestoreAdminClient.getDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable() {
+    return stub.getDatabaseCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ProjectName parent = ProjectName.of("[PROJECT]");
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(ProjectName parent) {
+    ListDatabasesRequest request =
+        ListDatabasesRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .build();
+    return listDatabases(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = ProjectName.of("[PROJECT]").toString();
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(String parent) {
+    ListDatabasesRequest request = ListDatabasesRequest.newBuilder().setParent(parent).build();
+    return listDatabases(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListDatabasesRequest request =
+   *       ListDatabasesRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .build();
+   *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatabasesResponse listDatabases(ListDatabasesRequest request) {
+    return listDatabasesCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all the databases in the project.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListDatabasesRequest request =
+   *       ListDatabasesRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .build();
+   *   ApiFuture<ListDatabasesResponse> future =
+   *       firestoreAdminClient.listDatabasesCallable().futureCall(request);
+   *   // Do something.
+   *   ListDatabasesResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ListDatabasesRequest, ListDatabasesResponse> listDatabasesCallable() {
+    return stub.listDatabasesCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   Database database = Database.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Database response = firestoreAdminClient.updateDatabaseAsync(database, updateMask).get();
+   * }
+   * }</pre>
+   *
+   * @param database Required. The database to update.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, UpdateDatabaseMetadata> updateDatabaseAsync(
+      Database database, FieldMask updateMask) {
+    UpdateDatabaseRequest request =
+        UpdateDatabaseRequest.newBuilder().setDatabase(database).setUpdateMask(updateMask).build();
+    return updateDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Database response = firestoreAdminClient.updateDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, UpdateDatabaseMetadata> updateDatabaseAsync(
+      UpdateDatabaseRequest request) {
+    return updateDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture<Database, UpdateDatabaseMetadata> future =
+   *       firestoreAdminClient.updateDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
+      updateDatabaseOperationCallable() {
+    return stub.updateDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateDatabaseRequest request =
+   *       UpdateDatabaseRequest.newBuilder()
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.updateDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable() {
+    return stub.updateDatabaseCallable();
   }
 
   @Override

@@ -40,6 +40,10 @@ public final class OperationProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_FieldOperationMetadata_IndexConfigDelta_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_FieldOperationMetadata_TtlConfigDelta_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_FieldOperationMetadata_TtlConfigDelta_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_admin_v1_ExportDocumentsMetadata_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_ExportDocumentsMetadata_fieldAccessorTable;
@@ -67,63 +71,69 @@ public final class OperationProto {
       "\n)google/firestore/admin/v1/operation.pr"
           + "oto\022\031google.firestore.admin.v1\032%google/f"
           + "irestore/admin/v1/index.proto\032\037google/pr"
-          + "otobuf/timestamp.proto\032\034google/api/annot"
-          + "ations.proto\"\275\002\n\026IndexOperationMetadata\022"
-          + ".\n\nstart_time\030\001 \001(\0132\032.google.protobuf.Ti"
-          + "mestamp\022,\n\010end_time\030\002 \001(\0132\032.google.proto"
-          + "buf.Timestamp\022\r\n\005index\030\003 \001(\t\0228\n\005state\030\004 "
-          + "\001(\0162).google.firestore.admin.v1.Operatio"
-          + "nState\022?\n\022progress_documents\030\005 \001(\0132#.goo"
-          + "gle.firestore.admin.v1.Progress\022;\n\016progr"
-          + "ess_bytes\030\006 \001(\0132#.google.firestore.admin"
-          + ".v1.Progress\"\210\005\n\026FieldOperationMetadata\022"
-          + ".\n\nstart_time\030\001 \001(\0132\032.google.protobuf.Ti"
-          + "mestamp\022,\n\010end_time\030\002 \001(\0132\032.google.proto"
-          + "buf.Timestamp\022\r\n\005field\030\003 \001(\t\022_\n\023index_co"
-          + "nfig_deltas\030\004 \003(\0132B.google.firestore.adm"
-          + "in.v1.FieldOperationMetadata.IndexConfig"
-          + "Delta\0228\n\005state\030\005 \001(\0162).google.firestore."
+          + "otobuf/timestamp.proto\"\275\002\n\026IndexOperatio"
+          + "nMetadata\022.\n\nstart_time\030\001 \001(\0132\032.google.p"
+          + "rotobuf.Timestamp\022,\n\010end_time\030\002 \001(\0132\032.go"
+          + "ogle.protobuf.Timestamp\022\r\n\005index\030\003 \001(\t\0228"
+          + "\n\005state\030\004 \001(\0162).google.firestore.admin.v"
+          + "1.OperationState\022?\n\022progress_documents\030\005"
+          + " \001(\0132#.google.firestore.admin.v1.Progres"
+          + "s\022;\n\016progress_bytes\030\006 \001(\0132#.google.fires"
+          + "tore.admin.v1.Progress\"\231\007\n\026FieldOperatio"
+          + "nMetadata\022.\n\nstart_time\030\001 \001(\0132\032.google.p"
+          + "rotobuf.Timestamp\022,\n\010end_time\030\002 \001(\0132\032.go"
+          + "ogle.protobuf.Timestamp\022\r\n\005field\030\003 \001(\t\022_"
+          + "\n\023index_config_deltas\030\004 \003(\0132B.google.fir"
+          + "estore.admin.v1.FieldOperationMetadata.I"
+          + "ndexConfigDelta\0228\n\005state\030\005 \001(\0162).google."
+          + "firestore.admin.v1.OperationState\022?\n\022pro"
+          + "gress_documents\030\006 \001(\0132#.google.firestore"
+          + ".admin.v1.Progress\022;\n\016progress_bytes\030\007 \001"
+          + "(\0132#.google.firestore.admin.v1.Progress\022"
+          + "Z\n\020ttl_config_delta\030\010 \001(\0132@.google.fires"
+          + "tore.admin.v1.FieldOperationMetadata.Ttl"
+          + "ConfigDelta\032\347\001\n\020IndexConfigDelta\022b\n\013chan"
+          + "ge_type\030\001 \001(\0162M.google.firestore.admin.v"
+          + "1.FieldOperationMetadata.IndexConfigDelt"
+          + "a.ChangeType\022/\n\005index\030\002 \001(\0132 .google.fir"
+          + "estore.admin.v1.Index\">\n\nChangeType\022\033\n\027C"
+          + "HANGE_TYPE_UNSPECIFIED\020\000\022\007\n\003ADD\020\001\022\n\n\006REM"
+          + "OVE\020\002\032\262\001\n\016TtlConfigDelta\022`\n\013change_type\030"
+          + "\001 \001(\0162K.google.firestore.admin.v1.FieldO"
+          + "perationMetadata.TtlConfigDelta.ChangeTy"
+          + "pe\">\n\nChangeType\022\033\n\027CHANGE_TYPE_UNSPECIF"
+          + "IED\020\000\022\007\n\003ADD\020\001\022\n\n\006REMOVE\020\002\"\354\002\n\027ExportDoc"
+          + "umentsMetadata\022.\n\nstart_time\030\001 \001(\0132\032.goo"
+          + "gle.protobuf.Timestamp\022,\n\010end_time\030\002 \001(\013"
+          + "2\032.google.protobuf.Timestamp\022B\n\017operatio"
+          + "n_state\030\003 \001(\0162).google.firestore.admin.v"
+          + "1.OperationState\022?\n\022progress_documents\030\004"
+          + " \001(\0132#.google.firestore.admin.v1.Progres"
+          + "s\022;\n\016progress_bytes\030\005 \001(\0132#.google.fires"
+          + "tore.admin.v1.Progress\022\026\n\016collection_ids"
+          + "\030\006 \003(\t\022\031\n\021output_uri_prefix\030\007 \001(\t\"\353\002\n\027Im"
+          + "portDocumentsMetadata\022.\n\nstart_time\030\001 \001("
+          + "\0132\032.google.protobuf.Timestamp\022,\n\010end_tim"
+          + "e\030\002 \001(\0132\032.google.protobuf.Timestamp\022B\n\017o"
+          + "peration_state\030\003 \001(\0162).google.firestore."
           + "admin.v1.OperationState\022?\n\022progress_docu"
-          + "ments\030\006 \001(\0132#.google.firestore.admin.v1."
-          + "Progress\022;\n\016progress_bytes\030\007 \001(\0132#.googl"
-          + "e.firestore.admin.v1.Progress\032\347\001\n\020IndexC"
-          + "onfigDelta\022b\n\013change_type\030\001 \001(\0162M.google"
-          + ".firestore.admin.v1.FieldOperationMetada"
-          + "ta.IndexConfigDelta.ChangeType\022/\n\005index\030"
-          + "\002 \001(\0132 .google.firestore.admin.v1.Index\""
-          + ">\n\nChangeType\022\033\n\027CHANGE_TYPE_UNSPECIFIED"
-          + "\020\000\022\007\n\003ADD\020\001\022\n\n\006REMOVE\020\002\"\354\002\n\027ExportDocume"
-          + "ntsMetadata\022.\n\nstart_time\030\001 \001(\0132\032.google"
-          + ".protobuf.Timestamp\022,\n\010end_time\030\002 \001(\0132\032."
-          + "google.protobuf.Timestamp\022B\n\017operation_s"
-          + "tate\030\003 \001(\0162).google.firestore.admin.v1.O"
-          + "perationState\022?\n\022progress_documents\030\004 \001("
-          + "\0132#.google.firestore.admin.v1.Progress\022;"
-          + "\n\016progress_bytes\030\005 \001(\0132#.google.firestor"
-          + "e.admin.v1.Progress\022\026\n\016collection_ids\030\006 "
-          + "\003(\t\022\031\n\021output_uri_prefix\030\007 \001(\t\"\353\002\n\027Impor"
-          + "tDocumentsMetadata\022.\n\nstart_time\030\001 \001(\0132\032"
-          + ".google.protobuf.Timestamp\022,\n\010end_time\030\002"
-          + " \001(\0132\032.google.protobuf.Timestamp\022B\n\017oper"
-          + "ation_state\030\003 \001(\0162).google.firestore.adm"
-          + "in.v1.OperationState\022?\n\022progress_documen"
-          + "ts\030\004 \001(\0132#.google.firestore.admin.v1.Pro"
-          + "gress\022;\n\016progress_bytes\030\005 \001(\0132#.google.f"
-          + "irestore.admin.v1.Progress\022\026\n\016collection"
-          + "_ids\030\006 \003(\t\022\030\n\020input_uri_prefix\030\007 \001(\t\"4\n\027"
-          + "ExportDocumentsResponse\022\031\n\021output_uri_pr"
-          + "efix\030\001 \001(\t\":\n\010Progress\022\026\n\016estimated_work"
-          + "\030\001 \001(\003\022\026\n\016completed_work\030\002 \001(\003*\236\001\n\016Opera"
-          + "tionState\022\037\n\033OPERATION_STATE_UNSPECIFIED"
-          + "\020\000\022\020\n\014INITIALIZING\020\001\022\016\n\nPROCESSING\020\002\022\016\n\n"
-          + "CANCELLING\020\003\022\016\n\nFINALIZING\020\004\022\016\n\nSUCCESSF"
-          + "UL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\342\001\n\035com."
-          + "google.firestore.admin.v1B\016OperationProt"
-          + "oP\001Z>google.golang.org/genproto/googleap"
-          + "is/firestore/admin/v1;admin\242\002\004GCFS\252\002\037Goo"
-          + "gle.Cloud.Firestore.Admin.V1\312\002\037Google\\Cl"
-          + "oud\\Firestore\\Admin\\V1\352\002#Google::Cloud::"
-          + "Firestore::Admin::V1b\006proto3"
+          + "ments\030\004 \001(\0132#.google.firestore.admin.v1."
+          + "Progress\022;\n\016progress_bytes\030\005 \001(\0132#.googl"
+          + "e.firestore.admin.v1.Progress\022\026\n\016collect"
+          + "ion_ids\030\006 \003(\t\022\030\n\020input_uri_prefix\030\007 \001(\t\""
+          + "4\n\027ExportDocumentsResponse\022\031\n\021output_uri"
+          + "_prefix\030\001 \001(\t\":\n\010Progress\022\026\n\016estimated_w"
+          + "ork\030\001 \001(\003\022\026\n\016completed_work\030\002 \001(\003*\236\001\n\016Op"
+          + "erationState\022\037\n\033OPERATION_STATE_UNSPECIF"
+          + "IED\020\000\022\020\n\014INITIALIZING\020\001\022\016\n\nPROCESSING\020\002\022"
+          + "\016\n\nCANCELLING\020\003\022\016\n\nFINALIZING\020\004\022\016\n\nSUCCE"
+          + "SSFUL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\342\001\n\035c"
+          + "om.google.firestore.admin.v1B\016OperationP"
+          + "rotoP\001Z>google.golang.org/genproto/googl"
+          + "eapis/firestore/admin/v1;admin\242\002\004GCFS\252\002\037"
+          + "Google.Cloud.Firestore.Admin.V1\312\002\037Google"
+          + "\\Cloud\\Firestore\\Admin\\V1\352\002#Google::Clou"
+          + "d::Firestore::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -131,7 +141,6 @@ public final class OperationProto {
             new com.google.protobuf.Descriptors.FileDescriptor[] {
               com.google.firestore.admin.v1.IndexProto.getDescriptor(),
               com.google.protobuf.TimestampProto.getDescriptor(),
-              com.google.api.AnnotationsProto.getDescriptor(),
             });
     internal_static_google_firestore_admin_v1_IndexOperationMetadata_descriptor =
         getDescriptor().getMessageTypes().get(0);
@@ -154,6 +163,7 @@ public final class OperationProto {
               "State",
               "ProgressDocuments",
               "ProgressBytes",
+              "TtlConfigDelta",
             });
     internal_static_google_firestore_admin_v1_FieldOperationMetadata_IndexConfigDelta_descriptor =
         internal_static_google_firestore_admin_v1_FieldOperationMetadata_descriptor
@@ -164,6 +174,16 @@ public final class OperationProto {
             internal_static_google_firestore_admin_v1_FieldOperationMetadata_IndexConfigDelta_descriptor,
             new java.lang.String[] {
               "ChangeType", "Index",
+            });
+    internal_static_google_firestore_admin_v1_FieldOperationMetadata_TtlConfigDelta_descriptor =
+        internal_static_google_firestore_admin_v1_FieldOperationMetadata_descriptor
+            .getNestedTypes()
+            .get(1);
+    internal_static_google_firestore_admin_v1_FieldOperationMetadata_TtlConfigDelta_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_FieldOperationMetadata_TtlConfigDelta_descriptor,
+            new java.lang.String[] {
+              "ChangeType",
             });
     internal_static_google_firestore_admin_v1_ExportDocumentsMetadata_descriptor =
         getDescriptor().getMessageTypes().get(2);
@@ -211,7 +231,6 @@ public final class OperationProto {
             });
     com.google.firestore.admin.v1.IndexProto.getDescriptor();
     com.google.protobuf.TimestampProto.getDescriptor();
-    com.google.api.AnnotationsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

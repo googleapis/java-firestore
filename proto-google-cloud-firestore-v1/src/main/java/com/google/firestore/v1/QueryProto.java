@@ -64,6 +64,18 @@ public final class QueryProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_StructuredQuery_Projection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_v1_Cursor_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_v1_Cursor_fieldAccessorTable;
@@ -77,74 +89,83 @@ public final class QueryProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\037google/firestore/v1/query.proto\022\023googl"
-          + "e.firestore.v1\032\"google/firestore/v1/docu"
-          + "ment.proto\032\036google/protobuf/wrappers.pro"
-          + "to\032\034google/api/annotations.proto\"\266\017\n\017Str"
-          + "ucturedQuery\022?\n\006select\030\001 \001(\0132/.google.fi"
-          + "restore.v1.StructuredQuery.Projection\022E\n"
-          + "\004from\030\002 \003(\01327.google.firestore.v1.Struct"
-          + "uredQuery.CollectionSelector\022:\n\005where\030\003 "
-          + "\001(\0132+.google.firestore.v1.StructuredQuer"
-          + "y.Filter\022<\n\010order_by\030\004 \003(\0132*.google.fire"
-          + "store.v1.StructuredQuery.Order\022-\n\010start_"
-          + "at\030\007 \001(\0132\033.google.firestore.v1.Cursor\022+\n"
-          + "\006end_at\030\010 \001(\0132\033.google.firestore.v1.Curs"
-          + "or\022\016\n\006offset\030\006 \001(\005\022*\n\005limit\030\005 \001(\0132\033.goog"
-          + "le.protobuf.Int32Value\032D\n\022CollectionSele"
-          + "ctor\022\025\n\rcollection_id\030\002 \001(\t\022\027\n\017all_desce"
-          + "ndants\030\003 \001(\010\032\375\001\n\006Filter\022P\n\020composite_fil"
-          + "ter\030\001 \001(\01324.google.firestore.v1.Structur"
-          + "edQuery.CompositeFilterH\000\022H\n\014field_filte"
-          + "r\030\002 \001(\01320.google.firestore.v1.Structured"
-          + "Query.FieldFilterH\000\022H\n\014unary_filter\030\003 \001("
-          + "\01320.google.firestore.v1.StructuredQuery."
-          + "UnaryFilterH\000B\r\n\013filter_type\032\311\001\n\017Composi"
-          + "teFilter\022I\n\002op\030\001 \001(\0162=.google.firestore."
-          + "v1.StructuredQuery.CompositeFilter.Opera"
-          + "tor\022<\n\007filters\030\002 \003(\0132+.google.firestore."
-          + "v1.StructuredQuery.Filter\"-\n\010Operator\022\030\n"
-          + "\024OPERATOR_UNSPECIFIED\020\000\022\007\n\003AND\020\001\032\230\003\n\013Fie"
-          + "ldFilter\022B\n\005field\030\001 \001(\01323.google.firesto"
-          + "re.v1.StructuredQuery.FieldReference\022E\n\002"
-          + "op\030\002 \001(\01629.google.firestore.v1.Structure"
-          + "dQuery.FieldFilter.Operator\022)\n\005value\030\003 \001"
-          + "(\0132\032.google.firestore.v1.Value\"\322\001\n\010Opera"
-          + "tor\022\030\n\024OPERATOR_UNSPECIFIED\020\000\022\r\n\tLESS_TH"
-          + "AN\020\001\022\026\n\022LESS_THAN_OR_EQUAL\020\002\022\020\n\014GREATER_"
-          + "THAN\020\003\022\031\n\025GREATER_THAN_OR_EQUAL\020\004\022\t\n\005EQU"
-          + "AL\020\005\022\r\n\tNOT_EQUAL\020\006\022\022\n\016ARRAY_CONTAINS\020\007\022"
-          + "\006\n\002IN\020\010\022\026\n\022ARRAY_CONTAINS_ANY\020\t\022\n\n\006NOT_I"
-          + "N\020\n\032\212\002\n\013UnaryFilter\022E\n\002op\030\001 \001(\01629.google"
-          + ".firestore.v1.StructuredQuery.UnaryFilte"
-          + "r.Operator\022D\n\005field\030\002 \001(\01323.google.fires"
-          + "tore.v1.StructuredQuery.FieldReferenceH\000"
-          + "\"^\n\010Operator\022\030\n\024OPERATOR_UNSPECIFIED\020\000\022\n"
-          + "\n\006IS_NAN\020\002\022\013\n\007IS_NULL\020\003\022\016\n\nIS_NOT_NAN\020\004\022"
-          + "\017\n\013IS_NOT_NULL\020\005B\016\n\014operand_type\032\216\001\n\005Ord"
-          + "er\022B\n\005field\030\001 \001(\01323.google.firestore.v1."
-          + "StructuredQuery.FieldReference\022A\n\tdirect"
-          + "ion\030\002 \001(\0162..google.firestore.v1.Structur"
-          + "edQuery.Direction\032$\n\016FieldReference\022\022\n\nf"
-          + "ield_path\030\002 \001(\t\032Q\n\nProjection\022C\n\006fields\030"
-          + "\002 \003(\01323.google.firestore.v1.StructuredQu"
-          + "ery.FieldReference\"E\n\tDirection\022\031\n\025DIREC"
-          + "TION_UNSPECIFIED\020\000\022\r\n\tASCENDING\020\001\022\016\n\nDES"
-          + "CENDING\020\002\"D\n\006Cursor\022*\n\006values\030\001 \003(\0132\032.go"
-          + "ogle.firestore.v1.Value\022\016\n\006before\030\002 \001(\010B"
-          + "\303\001\n\027com.google.firestore.v1B\nQueryProtoP"
-          + "\001Z<google.golang.org/genproto/googleapis"
-          + "/firestore/v1;firestore\242\002\004GCFS\252\002\031Google."
-          + "Cloud.Firestore.V1\312\002\031Google\\Cloud\\Firest"
-          + "ore\\V1\352\002\034Google::Cloud::Firestore::V1b\006p"
-          + "roto3"
+          + "e.firestore.v1\032\037google/api/field_behavio"
+          + "r.proto\032\"google/firestore/v1/document.pr"
+          + "oto\032\036google/protobuf/wrappers.proto\"\266\017\n\017"
+          + "StructuredQuery\022?\n\006select\030\001 \001(\0132/.google"
+          + ".firestore.v1.StructuredQuery.Projection"
+          + "\022E\n\004from\030\002 \003(\01327.google.firestore.v1.Str"
+          + "ucturedQuery.CollectionSelector\022:\n\005where"
+          + "\030\003 \001(\0132+.google.firestore.v1.StructuredQ"
+          + "uery.Filter\022<\n\010order_by\030\004 \003(\0132*.google.f"
+          + "irestore.v1.StructuredQuery.Order\022-\n\010sta"
+          + "rt_at\030\007 \001(\0132\033.google.firestore.v1.Cursor"
+          + "\022+\n\006end_at\030\010 \001(\0132\033.google.firestore.v1.C"
+          + "ursor\022\016\n\006offset\030\006 \001(\005\022*\n\005limit\030\005 \001(\0132\033.g"
+          + "oogle.protobuf.Int32Value\032D\n\022CollectionS"
+          + "elector\022\025\n\rcollection_id\030\002 \001(\t\022\027\n\017all_de"
+          + "scendants\030\003 \001(\010\032\375\001\n\006Filter\022P\n\020composite_"
+          + "filter\030\001 \001(\01324.google.firestore.v1.Struc"
+          + "turedQuery.CompositeFilterH\000\022H\n\014field_fi"
+          + "lter\030\002 \001(\01320.google.firestore.v1.Structu"
+          + "redQuery.FieldFilterH\000\022H\n\014unary_filter\030\003"
+          + " \001(\01320.google.firestore.v1.StructuredQue"
+          + "ry.UnaryFilterH\000B\r\n\013filter_type\032\311\001\n\017Comp"
+          + "ositeFilter\022I\n\002op\030\001 \001(\0162=.google.firesto"
+          + "re.v1.StructuredQuery.CompositeFilter.Op"
+          + "erator\022<\n\007filters\030\002 \003(\0132+.google.firesto"
+          + "re.v1.StructuredQuery.Filter\"-\n\010Operator"
+          + "\022\030\n\024OPERATOR_UNSPECIFIED\020\000\022\007\n\003AND\020\001\032\230\003\n\013"
+          + "FieldFilter\022B\n\005field\030\001 \001(\01323.google.fire"
+          + "store.v1.StructuredQuery.FieldReference\022"
+          + "E\n\002op\030\002 \001(\01629.google.firestore.v1.Struct"
+          + "uredQuery.FieldFilter.Operator\022)\n\005value\030"
+          + "\003 \001(\0132\032.google.firestore.v1.Value\"\322\001\n\010Op"
+          + "erator\022\030\n\024OPERATOR_UNSPECIFIED\020\000\022\r\n\tLESS"
+          + "_THAN\020\001\022\026\n\022LESS_THAN_OR_EQUAL\020\002\022\020\n\014GREAT"
+          + "ER_THAN\020\003\022\031\n\025GREATER_THAN_OR_EQUAL\020\004\022\t\n\005"
+          + "EQUAL\020\005\022\r\n\tNOT_EQUAL\020\006\022\022\n\016ARRAY_CONTAINS"
+          + "\020\007\022\006\n\002IN\020\010\022\026\n\022ARRAY_CONTAINS_ANY\020\t\022\n\n\006NO"
+          + "T_IN\020\n\032\212\002\n\013UnaryFilter\022E\n\002op\030\001 \001(\01629.goo"
+          + "gle.firestore.v1.StructuredQuery.UnaryFi"
+          + "lter.Operator\022D\n\005field\030\002 \001(\01323.google.fi"
+          + "restore.v1.StructuredQuery.FieldReferenc"
+          + "eH\000\"^\n\010Operator\022\030\n\024OPERATOR_UNSPECIFIED\020"
+          + "\000\022\n\n\006IS_NAN\020\002\022\013\n\007IS_NULL\020\003\022\016\n\nIS_NOT_NAN"
+          + "\020\004\022\017\n\013IS_NOT_NULL\020\005B\016\n\014operand_type\032\216\001\n\005"
+          + "Order\022B\n\005field\030\001 \001(\01323.google.firestore."
+          + "v1.StructuredQuery.FieldReference\022A\n\tdir"
+          + "ection\030\002 \001(\0162..google.firestore.v1.Struc"
+          + "turedQuery.Direction\032$\n\016FieldReference\022\022"
+          + "\n\nfield_path\030\002 \001(\t\032Q\n\nProjection\022C\n\006fiel"
+          + "ds\030\002 \003(\01323.google.firestore.v1.Structure"
+          + "dQuery.FieldReference\"E\n\tDirection\022\031\n\025DI"
+          + "RECTION_UNSPECIFIED\020\000\022\r\n\tASCENDING\020\001\022\016\n\n"
+          + "DESCENDING\020\002\"\202\003\n\032StructuredAggregationQu"
+          + "ery\022@\n\020structured_query\030\001 \001(\0132$.google.f"
+          + "irestore.v1.StructuredQueryH\000\022V\n\014aggrega"
+          + "tions\030\003 \003(\0132;.google.firestore.v1.Struct"
+          + "uredAggregationQuery.AggregationB\003\340A\001\032\273\001"
+          + "\n\013Aggregation\022R\n\005count\030\001 \001(\0132A.google.fi"
+          + "restore.v1.StructuredAggregationQuery.Ag"
+          + "gregation.CountH\000\022\022\n\005alias\030\007 \001(\tB\003\340A\001\0328\n"
+          + "\005Count\022/\n\005up_to\030\001 \001(\0132\033.google.protobuf."
+          + "Int64ValueB\003\340A\001B\n\n\010operatorB\014\n\nquery_typ"
+          + "e\"D\n\006Cursor\022*\n\006values\030\001 \003(\0132\032.google.fir"
+          + "estore.v1.Value\022\016\n\006before\030\002 \001(\010B\303\001\n\027com."
+          + "google.firestore.v1B\nQueryProtoP\001Z<googl"
+          + "e.golang.org/genproto/googleapis/firesto"
+          + "re/v1;firestore\242\002\004GCFS\252\002\031Google.Cloud.Fi"
+          + "restore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002"
+          + "\034Google::Cloud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
             descriptorData,
             new com.google.protobuf.Descriptors.FileDescriptor[] {
+              com.google.api.FieldBehaviorProto.getDescriptor(),
               com.google.firestore.v1.DocumentProto.getDescriptor(),
               com.google.protobuf.WrappersProto.getDescriptor(),
-              com.google.api.AnnotationsProto.getDescriptor(),
             });
     internal_static_google_firestore_v1_StructuredQuery_descriptor =
         getDescriptor().getMessageTypes().get(0);
@@ -218,17 +239,50 @@ public final class QueryProto {
             new java.lang.String[] {
               "Fields",
             });
-    internal_static_google_firestore_v1_Cursor_descriptor =
+    internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor =
         getDescriptor().getMessageTypes().get(1);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor,
+            new java.lang.String[] {
+              "StructuredQuery", "Aggregations", "QueryType",
+            });
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor =
+        internal_static_google_firestore_v1_StructuredAggregationQuery_descriptor
+            .getNestedTypes()
+            .get(0);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor,
+            new java.lang.String[] {
+              "Count", "Alias", "Operator",
+            });
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor =
+        internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_descriptor
+            .getNestedTypes()
+            .get(0);
+    internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_v1_StructuredAggregationQuery_Aggregation_Count_descriptor,
+            new java.lang.String[] {
+              "UpTo",
+            });
+    internal_static_google_firestore_v1_Cursor_descriptor =
+        getDescriptor().getMessageTypes().get(2);
     internal_static_google_firestore_v1_Cursor_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_Cursor_descriptor,
             new java.lang.String[] {
               "Values", "Before",
             });
+    com.google.protobuf.ExtensionRegistry registry =
+        com.google.protobuf.ExtensionRegistry.newInstance();
+    registry.add(com.google.api.FieldBehaviorProto.fieldBehavior);
+    com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
+        descriptor, registry);
+    com.google.api.FieldBehaviorProto.getDescriptor();
     com.google.firestore.v1.DocumentProto.getDescriptor();
     com.google.protobuf.WrappersProto.getDescriptor();
-    com.google.api.AnnotationsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

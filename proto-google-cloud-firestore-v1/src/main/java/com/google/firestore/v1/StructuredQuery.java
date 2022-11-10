@@ -53,158 +53,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     return this.unknownFields;
   }
 
-  private StructuredQuery(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    int mutable_bitField0_ = 0;
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              com.google.firestore.v1.StructuredQuery.Projection.Builder subBuilder = null;
-              if (select_ != null) {
-                subBuilder = select_.toBuilder();
-              }
-              select_ =
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.Projection.parser(),
-                      extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(select_);
-                select_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          case 18:
-            {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                from_ =
-                    new java.util.ArrayList<
-                        com.google.firestore.v1.StructuredQuery.CollectionSelector>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              from_.add(
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.CollectionSelector.parser(),
-                      extensionRegistry));
-              break;
-            }
-          case 26:
-            {
-              com.google.firestore.v1.StructuredQuery.Filter.Builder subBuilder = null;
-              if (where_ != null) {
-                subBuilder = where_.toBuilder();
-              }
-              where_ =
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.Filter.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(where_);
-                where_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          case 34:
-            {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                orderBy_ = new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Order>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              orderBy_.add(
-                  input.readMessage(
-                      com.google.firestore.v1.StructuredQuery.Order.parser(), extensionRegistry));
-              break;
-            }
-          case 42:
-            {
-              com.google.protobuf.Int32Value.Builder subBuilder = null;
-              if (limit_ != null) {
-                subBuilder = limit_.toBuilder();
-              }
-              limit_ =
-                  input.readMessage(com.google.protobuf.Int32Value.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(limit_);
-                limit_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          case 48:
-            {
-              offset_ = input.readInt32();
-              break;
-            }
-          case 58:
-            {
-              com.google.firestore.v1.Cursor.Builder subBuilder = null;
-              if (startAt_ != null) {
-                subBuilder = startAt_.toBuilder();
-              }
-              startAt_ =
-                  input.readMessage(com.google.firestore.v1.Cursor.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(startAt_);
-                startAt_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          case 66:
-            {
-              com.google.firestore.v1.Cursor.Builder subBuilder = null;
-              if (endAt_ != null) {
-                subBuilder = endAt_.toBuilder();
-              }
-              endAt_ =
-                  input.readMessage(com.google.firestore.v1.Cursor.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(endAt_);
-                endAt_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        from_ = java.util.Collections.unmodifiableList(from_);
-      }
-      if (((mutable_bitField0_ & 0x00000002) != 0)) {
-        orderBy_ = java.util.Collections.unmodifiableList(orderBy_);
-      }
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.QueryProto
         .internal_static_google_firestore_v1_StructuredQuery_descriptor;
@@ -458,55 +306,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       return this.unknownFields;
     }
 
-    private CollectionSelector(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 18:
-              {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                collectionId_ = s;
-                break;
-              }
-            case 24:
-              {
-                allDescendants_ = input.readBool();
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.QueryProto
           .internal_static_google_firestore_v1_StructuredQuery_CollectionSelector_descriptor;
@@ -613,7 +412,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (allDescendants_ != false) {
         output.writeBool(3, allDescendants_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -628,7 +427,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (allDescendants_ != false) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(3, allDescendants_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -646,7 +445,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
       if (!getCollectionId().equals(other.getCollectionId())) return false;
       if (getAllDescendants() != other.getAllDescendants()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -661,7 +460,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       hash = (53 * hash) + getCollectionId().hashCode();
       hash = (37 * hash) + ALL_DESCENDANTS_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getAllDescendants());
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -793,17 +592,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.CollectionSelector.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
@@ -903,7 +695,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (other.getAllDescendants() != false) {
           setAllDescendants(other.getAllDescendants());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -918,18 +710,43 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.CollectionSelector parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 18:
+                {
+                  collectionId_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 18
+              case 24:
+                {
+                  allDescendants_ = input.readBool();
+
+                  break;
+                } // case 24
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.CollectionSelector) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -1136,7 +953,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new CollectionSelector(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -1297,103 +1126,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
-    }
-
-    private Filter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10:
-              {
-                com.google.firestore.v1.StructuredQuery.CompositeFilter.Builder subBuilder = null;
-                if (filterTypeCase_ == 1) {
-                  subBuilder =
-                      ((com.google.firestore.v1.StructuredQuery.CompositeFilter) filterType_)
-                          .toBuilder();
-                }
-                filterType_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.CompositeFilter.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(
-                      (com.google.firestore.v1.StructuredQuery.CompositeFilter) filterType_);
-                  filterType_ = subBuilder.buildPartial();
-                }
-                filterTypeCase_ = 1;
-                break;
-              }
-            case 18:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldFilter.Builder subBuilder = null;
-                if (filterTypeCase_ == 2) {
-                  subBuilder =
-                      ((com.google.firestore.v1.StructuredQuery.FieldFilter) filterType_)
-                          .toBuilder();
-                }
-                filterType_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldFilter.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(
-                      (com.google.firestore.v1.StructuredQuery.FieldFilter) filterType_);
-                  filterType_ = subBuilder.buildPartial();
-                }
-                filterTypeCase_ = 2;
-                break;
-              }
-            case 26:
-              {
-                com.google.firestore.v1.StructuredQuery.UnaryFilter.Builder subBuilder = null;
-                if (filterTypeCase_ == 3) {
-                  subBuilder =
-                      ((com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_)
-                          .toBuilder();
-                }
-                filterType_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.UnaryFilter.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(
-                      (com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_);
-                  filterType_ = subBuilder.buildPartial();
-                }
-                filterTypeCase_ = 3;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -1639,7 +1371,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (filterTypeCase_ == 3) {
         output.writeMessage(3, (com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1663,7 +1395,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             com.google.protobuf.CodedOutputStream.computeMessageSize(
                 3, (com.google.firestore.v1.StructuredQuery.UnaryFilter) filterType_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1693,7 +1425,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         case 0:
         default:
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1720,7 +1452,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         case 0:
         default:
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1851,22 +1583,24 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.Filter.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        if (compositeFilterBuilder_ != null) {
+          compositeFilterBuilder_.clear();
+        }
+        if (fieldFilterBuilder_ != null) {
+          fieldFilterBuilder_.clear();
+        }
+        if (unaryFilterBuilder_ != null) {
+          unaryFilterBuilder_.clear();
+        }
         filterTypeCase_ = 0;
         filterType_ = null;
         return this;
@@ -1991,7 +1725,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               break;
             }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -2006,17 +1740,50 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.Filter parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10:
+                {
+                  input.readMessage(
+                      getCompositeFilterFieldBuilder().getBuilder(), extensionRegistry);
+                  filterTypeCase_ = 1;
+                  break;
+                } // case 10
+              case 18:
+                {
+                  input.readMessage(getFieldFilterFieldBuilder().getBuilder(), extensionRegistry);
+                  filterTypeCase_ = 2;
+                  break;
+                } // case 18
+              case 26:
+                {
+                  input.readMessage(getUnaryFilterFieldBuilder().getBuilder(), extensionRegistry);
+                  filterTypeCase_ = 3;
+                  break;
+                } // case 26
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.google.firestore.v1.StructuredQuery.Filter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -2149,8 +1916,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 1) {
             compositeFilterBuilder_.mergeFrom(value);
+          } else {
+            compositeFilterBuilder_.setMessage(value);
           }
-          compositeFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 1;
         return this;
@@ -2362,8 +2130,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 2) {
             fieldFilterBuilder_.mergeFrom(value);
+          } else {
+            fieldFilterBuilder_.setMessage(value);
           }
-          fieldFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 2;
         return this;
@@ -2573,8 +2342,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (filterTypeCase_ == 3) {
             unaryFilterBuilder_.mergeFrom(value);
+          } else {
+            unaryFilterBuilder_.setMessage(value);
           }
-          unaryFilterBuilder_.setMessage(value);
         }
         filterTypeCase_ = 3;
         return this;
@@ -2704,7 +2474,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new Filter(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -2758,7 +2540,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2769,7 +2552,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2780,7 +2564,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2791,7 +2576,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2803,7 +2589,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -2845,67 +2632,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       return this.unknownFields;
     }
 
-    private CompositeFilter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8:
-              {
-                int rawValue = input.readEnum();
-
-                op_ = rawValue;
-                break;
-              }
-            case 18:
-              {
-                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                  filters_ =
-                      new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Filter>();
-                  mutable_bitField0_ |= 0x00000001;
-                }
-                filters_.add(
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.Filter.parser(),
-                        extensionRegistry));
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          filters_ = java.util.Collections.unmodifiableList(filters_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.QueryProto
           .internal_static_google_firestore_v1_StructuredQuery_CompositeFilter_descriptor;
@@ -2945,7 +2671,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The results are required to satisfy each of the combined filters.
+       * Documents are required to satisfy all of the combined filters.
        * </pre>
        *
        * <code>AND = 1;</code>
@@ -2968,7 +2694,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The results are required to satisfy each of the combined filters.
+       * Documents are required to satisfy all of the combined filters.
        * </pre>
        *
        * <code>AND = 1;</code>
@@ -3103,7 +2829,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3117,7 +2844,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3132,7 +2860,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3146,7 +2875,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3160,7 +2890,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The list of filters to combine.
-     * Must contain at least one filter.
+     * Requires:
+     * * At least one filter is present.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3192,7 +2923,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       for (int i = 0; i < filters_.size(); i++) {
         output.writeMessage(2, filters_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -3209,7 +2940,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       for (int i = 0; i < filters_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, filters_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -3227,7 +2958,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
       if (op_ != other.op_) return false;
       if (!getFiltersList().equals(other.getFiltersList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -3244,7 +2975,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         hash = (37 * hash) + FILTERS_FIELD_NUMBER;
         hash = (53 * hash) + getFiltersList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -3376,19 +3107,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.CompositeFilter.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-          getFiltersFieldBuilder();
-        }
       }
 
       @java.lang.Override
@@ -3398,10 +3120,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
 
         if (filtersBuilder_ == null) {
           filters_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          filters_ = null;
           filtersBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -3522,7 +3245,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -3537,18 +3260,51 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.CompositeFilter parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8:
+                {
+                  op_ = input.readEnum();
+
+                  break;
+                } // case 8
+              case 18:
+                {
+                  com.google.firestore.v1.StructuredQuery.Filter m =
+                      input.readMessage(
+                          com.google.firestore.v1.StructuredQuery.Filter.parser(),
+                          extensionRegistry);
+                  if (filtersBuilder_ == null) {
+                    ensureFiltersIsMutable();
+                    filters_.add(m);
+                  } else {
+                    filtersBuilder_.addMessage(m);
+                  }
+                  break;
+                } // case 18
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.CompositeFilter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -3669,7 +3425,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3686,7 +3443,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3703,7 +3461,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3720,7 +3479,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3743,7 +3503,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3764,7 +3525,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3787,7 +3549,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3810,7 +3573,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3831,7 +3595,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3852,7 +3617,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3873,7 +3639,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3893,7 +3660,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3913,7 +3681,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3926,7 +3695,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3944,7 +3714,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3962,7 +3733,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3976,7 +3748,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -3990,7 +3763,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        * <pre>
        * The list of filters to combine.
-       * Must contain at least one filter.
+       * Requires:
+       * * At least one filter is present.
        * </pre>
        *
        * <code>repeated .google.firestore.v1.StructuredQuery.Filter filters = 2;</code>
@@ -4050,7 +3824,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new CompositeFilter(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -4201,82 +3987,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
-    }
-
-    private FieldFilter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
-                if (field_ != null) {
-                  subBuilder = field_.toBuilder();
-                }
-                field_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(field_);
-                  field_ = subBuilder.buildPartial();
-                }
-
-                break;
-              }
-            case 16:
-              {
-                int rawValue = input.readEnum();
-
-                op_ = rawValue;
-                break;
-              }
-            case 26:
-              {
-                com.google.firestore.v1.Value.Builder subBuilder = null;
-                if (value_ != null) {
-                  subBuilder = value_.toBuilder();
-                }
-                value_ =
-                    input.readMessage(com.google.firestore.v1.Value.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(value_);
-                  value_ = subBuilder.buildPartial();
-                }
-
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -4832,7 +4542,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (value_ != null) {
         output.writeMessage(3, getValue());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -4852,7 +4562,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (value_ != null) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, getValue());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4877,7 +4587,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (hasValue()) {
         if (!getValue().equals(other.getValue())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -4898,7 +4608,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         hash = (37 * hash) + VALUE_FIELD_NUMBER;
         hash = (53 * hash) + getValue().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -5030,17 +4740,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.FieldFilter.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
@@ -5159,7 +4862,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (other.hasValue()) {
           mergeValue(other.getValue());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -5174,18 +4877,49 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.FieldFilter parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10:
+                {
+                  input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
+
+                  break;
+                } // case 10
+              case 16:
+                {
+                  op_ = input.readEnum();
+
+                  break;
+                } // case 16
+              case 26:
+                {
+                  input.readMessage(getValueFieldBuilder().getBuilder(), extensionRegistry);
+
+                  break;
+                } // case 26
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.FieldFilter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -5680,7 +5414,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new FieldFilter(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -5798,70 +5544,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
-    }
-
-    private UnaryFilter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8:
-              {
-                int rawValue = input.readEnum();
-
-                op_ = rawValue;
-                break;
-              }
-            case 18:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
-                if (operandTypeCase_ == 2) {
-                  subBuilder =
-                      ((com.google.firestore.v1.StructuredQuery.FieldReference) operandType_)
-                          .toBuilder();
-                }
-                operandType_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(
-                      (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
-                  operandType_ = subBuilder.buildPartial();
-                }
-                operandTypeCase_ = 2;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -6250,7 +5932,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         output.writeMessage(
             2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -6269,7 +5951,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             com.google.protobuf.CodedOutputStream.computeMessageSize(
                 2, (com.google.firestore.v1.StructuredQuery.FieldReference) operandType_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -6294,7 +5976,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         case 0:
         default:
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -6315,7 +5997,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         case 0:
         default:
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -6447,17 +6129,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.UnaryFilter.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
@@ -6465,6 +6140,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         super.clear();
         op_ = 0;
 
+        if (fieldBuilder_ != null) {
+          fieldBuilder_.clear();
+        }
         operandTypeCase_ = 0;
         operandType_ = null;
         return this;
@@ -6569,7 +6247,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               break;
             }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -6584,18 +6262,43 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.UnaryFilter parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8:
+                {
+                  op_ = input.readEnum();
+
+                  break;
+                } // case 8
+              case 18:
+                {
+                  input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
+                  operandTypeCase_ = 2;
+                  break;
+                } // case 18
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.UnaryFilter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -6819,8 +6522,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           if (operandTypeCase_ == 2) {
             fieldBuilder_.mergeFrom(value);
+          } else {
+            fieldBuilder_.setMessage(value);
           }
-          fieldBuilder_.setMessage(value);
         }
         operandTypeCase_ = 2;
         return this;
@@ -6950,7 +6654,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new UnaryFilter(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -7066,67 +6782,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
-    }
-
-    private Order(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10:
-              {
-                com.google.firestore.v1.StructuredQuery.FieldReference.Builder subBuilder = null;
-                if (field_ != null) {
-                  subBuilder = field_.toBuilder();
-                }
-                field_ =
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(field_);
-                  field_ = subBuilder.buildPartial();
-                }
-
-                break;
-              }
-            case 16:
-              {
-                int rawValue = input.readEnum();
-
-                direction_ = rawValue;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -7251,7 +6906,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
         output.writeEnum(2, direction_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -7267,7 +6922,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           != com.google.firestore.v1.StructuredQuery.Direction.DIRECTION_UNSPECIFIED.getNumber()) {
         size += com.google.protobuf.CodedOutputStream.computeEnumSize(2, direction_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -7288,7 +6943,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (!getField().equals(other.getField())) return false;
       }
       if (direction_ != other.direction_) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -7305,7 +6960,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
       hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
       hash = (53 * hash) + direction_;
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -7436,17 +7091,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.Order.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
@@ -7551,7 +7199,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (other.direction_ != 0) {
           setDirectionValue(other.getDirectionValue());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -7566,17 +7214,43 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.Order parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10:
+                {
+                  input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
+
+                  break;
+                } // case 10
+              case 16:
+                {
+                  direction_ = input.readEnum();
+
+                  break;
+                } // case 16
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.google.firestore.v1.StructuredQuery.Order) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -7892,7 +7566,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new Order(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -7917,12 +7603,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     *
+     *
+     * <pre>
+     * The relative path of the document being referenced.
+     * Requires:
+     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * </pre>
+     *
      * <code>string field_path = 2;</code>
      *
      * @return The fieldPath.
      */
     java.lang.String getFieldPath();
     /**
+     *
+     *
+     * <pre>
+     * The relative path of the document being referenced.
+     * Requires:
+     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * </pre>
+     *
      * <code>string field_path = 2;</code>
      *
      * @return The bytes for fieldPath.
@@ -7933,7 +7635,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A reference to a field, such as `max(messages.time) as max_time`.
+   * A reference to a field in a document, ex: `stats.operations`.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
@@ -7963,50 +7665,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       return this.unknownFields;
     }
 
-    private FieldReference(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 18:
-              {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                fieldPath_ = s;
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.QueryProto
           .internal_static_google_firestore_v1_StructuredQuery_FieldReference_descriptor;
@@ -8025,6 +7683,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public static final int FIELD_PATH_FIELD_NUMBER = 2;
     private volatile java.lang.Object fieldPath_;
     /**
+     *
+     *
+     * <pre>
+     * The relative path of the document being referenced.
+     * Requires:
+     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * </pre>
+     *
      * <code>string field_path = 2;</code>
      *
      * @return The fieldPath.
@@ -8042,6 +7708,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
     }
     /**
+     *
+     *
+     * <pre>
+     * The relative path of the document being referenced.
+     * Requires:
+     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * </pre>
+     *
      * <code>string field_path = 2;</code>
      *
      * @return The bytes for fieldPath.
@@ -8076,7 +7750,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(fieldPath_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fieldPath_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -8088,7 +7762,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(fieldPath_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fieldPath_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -8105,7 +7779,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           (com.google.firestore.v1.StructuredQuery.FieldReference) obj;
 
       if (!getFieldPath().equals(other.getFieldPath())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -8118,7 +7792,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + FIELD_PATH_FIELD_NUMBER;
       hash = (53 * hash) + getFieldPath().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -8224,7 +7898,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A reference to a field, such as `max(messages.time) as max_time`.
+     * A reference to a field in a document, ex: `stats.operations`.
      * </pre>
      *
      * Protobuf type {@code google.firestore.v1.StructuredQuery.FieldReference}
@@ -8250,17 +7924,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
 
       @java.lang.Override
@@ -8352,7 +8019,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           fieldPath_ = other.fieldPath_;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -8367,23 +8034,50 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.FieldReference parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 18:
+                {
+                  fieldPath_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 18
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.FieldReference) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
       private java.lang.Object fieldPath_ = "";
       /**
+       *
+       *
+       * <pre>
+       * The relative path of the document being referenced.
+       * Requires:
+       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * </pre>
+       *
        * <code>string field_path = 2;</code>
        *
        * @return The fieldPath.
@@ -8400,6 +8094,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       }
       /**
+       *
+       *
+       * <pre>
+       * The relative path of the document being referenced.
+       * Requires:
+       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * </pre>
+       *
        * <code>string field_path = 2;</code>
        *
        * @return The bytes for fieldPath.
@@ -8416,6 +8118,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
       }
       /**
+       *
+       *
+       * <pre>
+       * The relative path of the document being referenced.
+       * Requires:
+       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * </pre>
+       *
        * <code>string field_path = 2;</code>
        *
        * @param value The fieldPath to set.
@@ -8431,6 +8141,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
       /**
+       *
+       *
+       * <pre>
+       * The relative path of the document being referenced.
+       * Requires:
+       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * </pre>
+       *
        * <code>string field_path = 2;</code>
        *
        * @return This builder for chaining.
@@ -8442,6 +8160,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
       /**
+       *
+       *
+       * <pre>
+       * The relative path of the document being referenced.
+       * Requires:
+       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * </pre>
+       *
        * <code>string field_path = 2;</code>
        *
        * @param value The bytes for fieldPath to set.
@@ -8491,7 +8217,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new FieldReference(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -8611,61 +8349,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       return this.unknownFields;
     }
 
-    private Projection(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 18:
-              {
-                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                  fields_ =
-                      new java.util.ArrayList<
-                          com.google.firestore.v1.StructuredQuery.FieldReference>();
-                  mutable_bitField0_ |= 0x00000001;
-                }
-                fields_.add(
-                    input.readMessage(
-                        com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
-                        extensionRegistry));
-                break;
-              }
-            default:
-              {
-                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          fields_ = java.util.Collections.unmodifiableList(fields_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.QueryProto
           .internal_static_google_firestore_v1_StructuredQuery_Projection_descriptor;
@@ -8778,7 +8461,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       for (int i = 0; i < fields_.size(); i++) {
         output.writeMessage(2, fields_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -8790,7 +8473,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       for (int i = 0; i < fields_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, fields_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -8807,7 +8490,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           (com.google.firestore.v1.StructuredQuery.Projection) obj;
 
       if (!getFieldsList().equals(other.getFieldsList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -8822,7 +8505,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         hash = (37 * hash) + FIELDS_FIELD_NUMBER;
         hash = (53 * hash) + getFieldsList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -8953,19 +8636,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
 
       // Construct using com.google.firestore.v1.StructuredQuery.Projection.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
+      private Builder() {}
 
       private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-          getFieldsFieldBuilder();
-        }
       }
 
       @java.lang.Override
@@ -8973,10 +8647,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         super.clear();
         if (fieldsBuilder_ == null) {
           fields_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          fields_ = null;
           fieldsBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -9093,7 +8768,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -9108,18 +8783,45 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.firestore.v1.StructuredQuery.Projection parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 18:
+                {
+                  com.google.firestore.v1.StructuredQuery.FieldReference m =
+                      input.readMessage(
+                          com.google.firestore.v1.StructuredQuery.FieldReference.parser(),
+                          extensionRegistry);
+                  if (fieldsBuilder_ == null) {
+                    ensureFieldsIsMutable();
+                    fields_.add(m);
+                  } else {
+                    fieldsBuilder_.addMessage(m);
+                  }
+                  break;
+                } // case 18
+              default:
+                {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage =
-              (com.google.firestore.v1.StructuredQuery.Projection) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
 
@@ -9558,7 +9260,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-            return new Projection(input, extensionRegistry);
+            Builder builder = newBuilder();
+            try {
+              builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+              throw e.asInvalidProtocolBufferException()
+                  .setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+              throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
           }
         };
 
@@ -9751,19 +9465,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * The order to apply to the query results.
-   * Firestore guarantees a stable ordering through the following rules:
-   *  * Any field required to appear in `order_by`, that is not already
-   *    specified in `order_by`, is appended to the order in field name order
-   *    by default.
+   * Firestore allows callers to provide a full ordering, a partial ordering, or
+   * no ordering at all. In all cases, Firestore guarantees a stable ordering
+   * through the following rules:
+   *  * The `order_by` is required to reference all fields used with an
+   *    inequality filter.
+   *  * All fields that are required to be in the `order_by` but are not already
+   *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
-   *  * `SELECT * FROM Foo ORDER BY A` becomes
-   *    `SELECT * FROM Foo ORDER BY A, __name__`
-   *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-   *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-   *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-   *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+   *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+   *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+   *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+   *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+   *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
    * </pre>
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -9777,19 +9493,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * The order to apply to the query results.
-   * Firestore guarantees a stable ordering through the following rules:
-   *  * Any field required to appear in `order_by`, that is not already
-   *    specified in `order_by`, is appended to the order in field name order
-   *    by default.
+   * Firestore allows callers to provide a full ordering, a partial ordering, or
+   * no ordering at all. In all cases, Firestore guarantees a stable ordering
+   * through the following rules:
+   *  * The `order_by` is required to reference all fields used with an
+   *    inequality filter.
+   *  * All fields that are required to be in the `order_by` but are not already
+   *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
-   *  * `SELECT * FROM Foo ORDER BY A` becomes
-   *    `SELECT * FROM Foo ORDER BY A, __name__`
-   *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-   *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-   *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-   *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+   *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+   *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+   *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+   *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+   *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
    * </pre>
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -9804,19 +9522,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * The order to apply to the query results.
-   * Firestore guarantees a stable ordering through the following rules:
-   *  * Any field required to appear in `order_by`, that is not already
-   *    specified in `order_by`, is appended to the order in field name order
-   *    by default.
+   * Firestore allows callers to provide a full ordering, a partial ordering, or
+   * no ordering at all. In all cases, Firestore guarantees a stable ordering
+   * through the following rules:
+   *  * The `order_by` is required to reference all fields used with an
+   *    inequality filter.
+   *  * All fields that are required to be in the `order_by` but are not already
+   *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
-   *  * `SELECT * FROM Foo ORDER BY A` becomes
-   *    `SELECT * FROM Foo ORDER BY A, __name__`
-   *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-   *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-   *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-   *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+   *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+   *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+   *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+   *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+   *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
    * </pre>
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -9830,19 +9550,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * The order to apply to the query results.
-   * Firestore guarantees a stable ordering through the following rules:
-   *  * Any field required to appear in `order_by`, that is not already
-   *    specified in `order_by`, is appended to the order in field name order
-   *    by default.
+   * Firestore allows callers to provide a full ordering, a partial ordering, or
+   * no ordering at all. In all cases, Firestore guarantees a stable ordering
+   * through the following rules:
+   *  * The `order_by` is required to reference all fields used with an
+   *    inequality filter.
+   *  * All fields that are required to be in the `order_by` but are not already
+   *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
-   *  * `SELECT * FROM Foo ORDER BY A` becomes
-   *    `SELECT * FROM Foo ORDER BY A, __name__`
-   *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-   *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-   *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-   *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+   *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+   *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+   *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+   *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+   *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
    * </pre>
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -9856,19 +9578,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * The order to apply to the query results.
-   * Firestore guarantees a stable ordering through the following rules:
-   *  * Any field required to appear in `order_by`, that is not already
-   *    specified in `order_by`, is appended to the order in field name order
-   *    by default.
+   * Firestore allows callers to provide a full ordering, a partial ordering, or
+   * no ordering at all. In all cases, Firestore guarantees a stable ordering
+   * through the following rules:
+   *  * The `order_by` is required to reference all fields used with an
+   *    inequality filter.
+   *  * All fields that are required to be in the `order_by` but are not already
+   *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
-   *  * `SELECT * FROM Foo ORDER BY A` becomes
-   *    `SELECT * FROM Foo ORDER BY A, __name__`
-   *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-   *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-   *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-   *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+   *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+   *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+   *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+   *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+   *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
    * </pre>
    *
    * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -9884,7 +9608,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -9899,7 +9644,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -9914,7 +9680,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A starting point for the query results.
+   * A potential prefix of a position in the result set to start the query at.
+   * The ordering of the result set is based on the `ORDER BY` clause of the
+   * original query.
+   * ```
+   * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+   * ```
+   * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   * Cursors can reference either the full ordering or a prefix of the location,
+   * though it cannot reference more fields than what are in the provided
+   * `ORDER BY`.
+   * Continuing off the example above, attaching the following start cursors
+   * will have varying impact:
+   * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+   *    b &gt; 2 AND __name__ &gt; /k/123`.
+   * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   * Unlike `OFFSET` which requires scanning over the first N results to skip,
+   * a start cursor allows the query to begin at a logical position. This
+   * position is not required to match an actual result, it will scan forward
+   * from this position to find the next document.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -9930,7 +9717,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -9945,7 +9737,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -9960,7 +9757,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A end point for the query results.
+   * A potential prefix of a position in the result set to end the query at.
+   * This is similar to `START_AT` but with it controlling the end position
+   * rather than the start position.
+   * Requires:
+   * * The number of values cannot be greater than the number of fields
+   *   specified in the `ORDER BY` clause.
    * </pre>
    *
    * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -9976,9 +9778,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The number of results to skip.
-   * Applies before limit, but after all other constraints. Must be &gt;= 0 if
-   * specified.
+   * The number of documents to skip before returning the first result.
+   * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
+   * `END AT` but before the `LIMIT` clause.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>int32 offset = 6;</code>
@@ -9998,7 +9802,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -10015,7 +9820,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -10032,7 +9838,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    * <pre>
    * The maximum number of results to return.
    * Applies after all other constraints.
-   * Must be &gt;= 0 if specified.
+   * Requires:
+   * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
    * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -10080,7 +9887,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     if (endAt_ != null) {
       output.writeMessage(8, getEndAt());
     }
-    unknownFields.writeTo(output);
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -10113,7 +9920,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     if (endAt_ != null) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(8, getEndAt());
     }
-    size += unknownFields.getSerializedSize();
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -10151,7 +9958,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     if (hasLimit()) {
       if (!getLimit().equals(other.getLimit())) return false;
     }
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -10192,7 +9999,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       hash = (37 * hash) + LIMIT_FIELD_NUMBER;
       hash = (53 * hash) + getLimit().hashCode();
     }
-    hash = (29 * hash) + unknownFields.hashCode();
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -10321,20 +10128,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     // Construct using com.google.firestore.v1.StructuredQuery.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-        getFromFieldBuilder();
-        getOrderByFieldBuilder();
-      }
     }
 
     @java.lang.Override
@@ -10348,10 +10145,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
       if (fromBuilder_ == null) {
         from_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
+        from_ = null;
         fromBuilder_.clear();
       }
+      bitField0_ = (bitField0_ & ~0x00000001);
       if (whereBuilder_ == null) {
         where_ = null;
       } else {
@@ -10360,10 +10158,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       }
       if (orderByBuilder_ == null) {
         orderBy_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
       } else {
+        orderBy_ = null;
         orderByBuilder_.clear();
       }
+      bitField0_ = (bitField0_ & ~0x00000002);
       if (startAtBuilder_ == null) {
         startAt_ = null;
       } else {
@@ -10577,7 +10376,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       if (other.hasLimit()) {
         mergeLimit(other.getLimit());
       }
-      this.mergeUnknownFields(other.unknownFields);
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -10592,17 +10391,94 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.StructuredQuery parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                input.readMessage(getSelectFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 10
+            case 18:
+              {
+                com.google.firestore.v1.StructuredQuery.CollectionSelector m =
+                    input.readMessage(
+                        com.google.firestore.v1.StructuredQuery.CollectionSelector.parser(),
+                        extensionRegistry);
+                if (fromBuilder_ == null) {
+                  ensureFromIsMutable();
+                  from_.add(m);
+                } else {
+                  fromBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
+            case 26:
+              {
+                input.readMessage(getWhereFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 26
+            case 34:
+              {
+                com.google.firestore.v1.StructuredQuery.Order m =
+                    input.readMessage(
+                        com.google.firestore.v1.StructuredQuery.Order.parser(), extensionRegistry);
+                if (orderByBuilder_ == null) {
+                  ensureOrderByIsMutable();
+                  orderBy_.add(m);
+                } else {
+                  orderByBuilder_.addMessage(m);
+                }
+                break;
+              } // case 34
+            case 42:
+              {
+                input.readMessage(getLimitFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 42
+            case 48:
+              {
+                offset_ = input.readInt32();
+
+                break;
+              } // case 48
+            case 58:
+              {
+                input.readMessage(getStartAtFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 58
+            case 66:
+              {
+                input.readMessage(getEndAtFieldBuilder().getBuilder(), extensionRegistry);
+
+                break;
+              } // case 66
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.StructuredQuery) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -11366,19 +11242,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11395,19 +11273,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11424,19 +11304,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11453,19 +11335,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11488,19 +11372,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11521,19 +11407,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11556,19 +11444,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11591,19 +11481,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11624,19 +11516,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11657,19 +11551,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11690,19 +11586,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11722,19 +11620,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11754,19 +11654,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11779,19 +11681,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11808,19 +11712,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11838,19 +11744,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11864,19 +11772,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11890,19 +11800,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * The order to apply to the query results.
-     * Firestore guarantees a stable ordering through the following rules:
-     *  * Any field required to appear in `order_by`, that is not already
-     *    specified in `order_by`, is appended to the order in field name order
-     *    by default.
+     * Firestore allows callers to provide a full ordering, a partial ordering, or
+     * no ordering at all. In all cases, Firestore guarantees a stable ordering
+     * through the following rules:
+     *  * The `order_by` is required to reference all fields used with an
+     *    inequality filter.
+     *  * All fields that are required to be in the `order_by` but are not already
+     *    present are appended in lexicographical ordering of the field name.
      *  * If an order on `__name__` is not specified, it is appended by default.
      * Fields are appended with the same sort direction as the last order
      * specified, or 'ASCENDING' if no order was specified. For example:
-     *  * `SELECT * FROM Foo ORDER BY A` becomes
-     *    `SELECT * FROM Foo ORDER BY A, __name__`
-     *  * `SELECT * FROM Foo ORDER BY A DESC` becomes
-     *    `SELECT * FROM Foo ORDER BY A DESC, __name__ DESC`
-     *  * `SELECT * FROM Foo WHERE A &gt; 1` becomes
-     *    `SELECT * FROM Foo WHERE A &gt; 1 ORDER BY A, __name__`
+     *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
+     *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
+     *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
+     *  * `WHERE __name__ &gt; ... AND a &gt; 1` becomes
+     *     `WHERE __name__ &gt; ... AND a &gt; 1 ORDER BY a ASC, __name__ ASC`
      * </pre>
      *
      * <code>repeated .google.firestore.v1.StructuredQuery.Order order_by = 4;</code>
@@ -11939,7 +11851,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -11953,7 +11886,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -11971,7 +11925,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -11993,7 +11968,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12012,7 +12008,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12036,7 +12053,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12056,7 +12094,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12070,7 +12129,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12086,7 +12166,28 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A starting point for the query results.
+     * A potential prefix of a position in the result set to start the query at.
+     * The ordering of the result set is based on the `ORDER BY` clause of the
+     * original query.
+     * ```
+     * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
+     * ```
+     * This query's results are ordered by `(b ASC, __name__ ASC)`.
+     * Cursors can reference either the full ordering or a prefix of the location,
+     * though it cannot reference more fields than what are in the provided
+     * `ORDER BY`.
+     * Continuing off the example above, attaching the following start cursors
+     * will have varying impact:
+     * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
+     *    b &gt; 2 AND __name__ &gt; /k/123`.
+     * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+     * Unlike `OFFSET` which requires scanning over the first N results to skip,
+     * a start cursor allows the query to begin at a logical position. This
+     * position is not required to match an actual result, it will scan forward
+     * from this position to find the next document.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
@@ -12118,7 +12219,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12132,7 +12238,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12150,7 +12261,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12172,7 +12288,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12191,7 +12312,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12215,7 +12341,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12235,7 +12366,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12249,7 +12385,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12265,7 +12406,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A end point for the query results.
+     * A potential prefix of a position in the result set to end the query at.
+     * This is similar to `START_AT` but with it controlling the end position
+     * rather than the start position.
+     * Requires:
+     * * The number of values cannot be greater than the number of fields
+     *   specified in the `ORDER BY` clause.
      * </pre>
      *
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
@@ -12292,9 +12438,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The number of results to skip.
-     * Applies before limit, but after all other constraints. Must be &gt;= 0 if
-     * specified.
+     * The number of documents to skip before returning the first result.
+     * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
+     * `END AT` but before the `LIMIT` clause.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>int32 offset = 6;</code>
@@ -12309,9 +12457,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The number of results to skip.
-     * Applies before limit, but after all other constraints. Must be &gt;= 0 if
-     * specified.
+     * The number of documents to skip before returning the first result.
+     * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
+     * `END AT` but before the `LIMIT` clause.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>int32 offset = 6;</code>
@@ -12329,9 +12479,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The number of results to skip.
-     * Applies before limit, but after all other constraints. Must be &gt;= 0 if
-     * specified.
+     * The number of documents to skip before returning the first result.
+     * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
+     * `END AT` but before the `LIMIT` clause.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>int32 offset = 6;</code>
@@ -12357,7 +12509,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12373,7 +12526,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12393,7 +12547,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12417,7 +12572,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12438,7 +12594,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12464,7 +12621,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12486,7 +12644,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12502,7 +12661,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12520,7 +12680,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The maximum number of results to return.
      * Applies after all other constraints.
-     * Must be &gt;= 0 if specified.
+     * Requires:
+     * * The value must be greater than or equal to zero if specified.
      * </pre>
      *
      * <code>.google.protobuf.Int32Value limit = 5;</code>
@@ -12574,7 +12735,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new StructuredQuery(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

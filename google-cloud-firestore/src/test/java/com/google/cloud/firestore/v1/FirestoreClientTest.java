@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.common.collect.Lists;
+import com.google.firestore.v1.AggregationResult;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.BatchWriteRequest;
@@ -56,6 +57,8 @@ import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
@@ -88,6 +91,7 @@ import org.junit.Test;
 @Generated("by gapic-generator-java")
 public class FirestoreClientTest {
   private static MockFirestore mockFirestore;
+  private static MockLocations mockLocations;
   private static MockServiceHelper mockServiceHelper;
   private LocalChannelProvider channelProvider;
   private FirestoreClient client;
@@ -95,9 +99,11 @@ public class FirestoreClientTest {
   @BeforeClass
   public static void startStaticServer() {
     mockFirestore = new MockFirestore();
+    mockLocations = new MockLocations();
     mockServiceHelper =
         new MockServiceHelper(
-            UUID.randomUUID().toString(), Arrays.<MockGrpcService>asList(mockFirestore));
+            UUID.randomUUID().toString(),
+            Arrays.<MockGrpcService>asList(mockFirestore, mockLocations));
     mockServiceHelper.start();
   }
 
@@ -535,6 +541,52 @@ public class FirestoreClientTest {
   }
 
   @Test
+  public void runAggregationQueryTest() throws Exception {
+    RunAggregationQueryResponse expectedResponse =
+        RunAggregationQueryResponse.newBuilder()
+            .setResult(AggregationResult.newBuilder().build())
+            .setTransaction(ByteString.EMPTY)
+            .setReadTime(Timestamp.newBuilder().build())
+            .build();
+    mockFirestore.addResponse(expectedResponse);
+    RunAggregationQueryRequest request =
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
+
+    MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
+
+    ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
+        client.runAggregationQueryCallable();
+    callable.serverStreamingCall(request, responseObserver);
+
+    List<RunAggregationQueryResponse> actualResponses = responseObserver.future().get();
+    Assert.assertEquals(1, actualResponses.size());
+    Assert.assertEquals(expectedResponse, actualResponses.get(0));
+  }
+
+  @Test
+  public void runAggregationQueryExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+    RunAggregationQueryRequest request =
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
+
+    MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
+
+    ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
+        client.runAggregationQueryCallable();
+    callable.serverStreamingCall(request, responseObserver);
+
+    try {
+      List<RunAggregationQueryResponse> actualResponses = responseObserver.future().get();
+      Assert.fail("No exception thrown");
+    } catch (ExecutionException e) {
+      Assert.assertTrue(e.getCause() instanceof InvalidArgumentException);
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
   public void partitionQueryTest() throws Exception {
     Cursor responsesElement = Cursor.newBuilder().build();
     PartitionQueryResponse expectedResponse =
@@ -568,6 +620,7 @@ public class FirestoreClientTest {
     Assert.assertEquals(request.getPartitionCount(), actualRequest.getPartitionCount());
     Assert.assertEquals(request.getPageToken(), actualRequest.getPageToken());
     Assert.assertEquals(request.getPageSize(), actualRequest.getPageSize());
+    Assert.assertEquals(request.getReadTime(), actualRequest.getReadTime());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),

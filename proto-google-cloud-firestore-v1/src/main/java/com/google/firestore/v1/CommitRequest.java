@@ -54,69 +54,6 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     return this.unknownFields;
   }
 
-  private CommitRequest(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    this();
-    if (extensionRegistry == null) {
-      throw new java.lang.NullPointerException();
-    }
-    int mutable_bitField0_ = 0;
-    com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-        com.google.protobuf.UnknownFieldSet.newBuilder();
-    try {
-      boolean done = false;
-      while (!done) {
-        int tag = input.readTag();
-        switch (tag) {
-          case 0:
-            done = true;
-            break;
-          case 10:
-            {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              database_ = s;
-              break;
-            }
-          case 18:
-            {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              writes_.add(
-                  input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry));
-              break;
-            }
-          case 26:
-            {
-              transaction_ = input.readBytes();
-              break;
-            }
-          default:
-            {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-        }
-      }
-    } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-      throw e.setUnfinishedMessage(this);
-    } catch (java.io.IOException e) {
-      throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-    } finally {
-      if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        writes_ = java.util.Collections.unmodifiableList(writes_);
-      }
-      this.unknownFields = unknownFields.build();
-      makeExtensionsImmutable();
-    }
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_CommitRequest_descriptor;
@@ -297,7 +234,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     if (!transaction_.isEmpty()) {
       output.writeBytes(3, transaction_);
     }
-    unknownFields.writeTo(output);
+    getUnknownFields().writeTo(output);
   }
 
   @java.lang.Override
@@ -315,7 +252,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     if (!transaction_.isEmpty()) {
       size += com.google.protobuf.CodedOutputStream.computeBytesSize(3, transaction_);
     }
-    size += unknownFields.getSerializedSize();
+    size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
   }
@@ -333,7 +270,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     if (!getDatabase().equals(other.getDatabase())) return false;
     if (!getWritesList().equals(other.getWritesList())) return false;
     if (!getTransaction().equals(other.getTransaction())) return false;
-    if (!unknownFields.equals(other.unknownFields)) return false;
+    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
 
@@ -352,7 +289,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     }
     hash = (37 * hash) + TRANSACTION_FIELD_NUMBER;
     hash = (53 * hash) + getTransaction().hashCode();
-    hash = (29 * hash) + unknownFields.hashCode();
+    hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
@@ -480,19 +417,10 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     }
 
     // Construct using com.google.firestore.v1.CommitRequest.newBuilder()
-    private Builder() {
-      maybeForceBuilderInitialization();
-    }
+    private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       super(parent);
-      maybeForceBuilderInitialization();
-    }
-
-    private void maybeForceBuilderInitialization() {
-      if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-        getWritesFieldBuilder();
-      }
     }
 
     @java.lang.Override
@@ -502,10 +430,11 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
 
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
       } else {
+        writes_ = null;
         writesBuilder_.clear();
       }
+      bitField0_ = (bitField0_ & ~0x00000001);
       transaction_ = com.google.protobuf.ByteString.EMPTY;
 
       return this;
@@ -630,7 +559,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
       if (other.getTransaction() != com.google.protobuf.ByteString.EMPTY) {
         setTransaction(other.getTransaction());
       }
-      this.mergeUnknownFields(other.unknownFields);
+      this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
     }
@@ -645,17 +574,55 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.google.firestore.v1.CommitRequest parsedMessage = null;
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       try {
-        parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10:
+              {
+                database_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 10
+            case 18:
+              {
+                com.google.firestore.v1.Write m =
+                    input.readMessage(com.google.firestore.v1.Write.parser(), extensionRegistry);
+                if (writesBuilder_ == null) {
+                  ensureWritesIsMutable();
+                  writes_.add(m);
+                } else {
+                  writesBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
+            case 26:
+              {
+                transaction_ = input.readBytes();
+
+                break;
+              } // case 26
+            default:
+              {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+          } // switch (tag)
+        } // while (!done)
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.google.firestore.v1.CommitRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
-        if (parsedMessage != null) {
-          mergeFrom(parsedMessage);
-        }
-      }
+        onChanged();
+      } // finally
       return this;
     }
 
@@ -1222,7 +1189,18 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CommitRequest(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 

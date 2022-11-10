@@ -46,41 +46,39 @@ public final class IndexProto {
     java.lang.String[] descriptorData = {
       "\n%google/firestore/admin/v1/index.proto\022"
           + "\031google.firestore.admin.v1\032\031google/api/r"
-          + "esource.proto\032\034google/api/annotations.pr"
-          + "oto\"\243\006\n\005Index\022\014\n\004name\030\001 \001(\t\022@\n\013query_sco"
-          + "pe\030\002 \001(\0162+.google.firestore.admin.v1.Ind"
-          + "ex.QueryScope\022;\n\006fields\030\003 \003(\0132+.google.f"
-          + "irestore.admin.v1.Index.IndexField\0225\n\005st"
-          + "ate\030\004 \001(\0162&.google.firestore.admin.v1.In"
-          + "dex.State\032\275\002\n\nIndexField\022\022\n\nfield_path\030\001"
-          + " \001(\t\022B\n\005order\030\002 \001(\01621.google.firestore.a"
-          + "dmin.v1.Index.IndexField.OrderH\000\022O\n\014arra"
-          + "y_config\030\003 \001(\01627.google.firestore.admin."
-          + "v1.Index.IndexField.ArrayConfigH\000\"=\n\005Ord"
-          + "er\022\025\n\021ORDER_UNSPECIFIED\020\000\022\r\n\tASCENDING\020\001"
-          + "\022\016\n\nDESCENDING\020\002\"9\n\013ArrayConfig\022\034\n\030ARRAY"
-          + "_CONFIG_UNSPECIFIED\020\000\022\014\n\010CONTAINS\020\001B\014\n\nv"
-          + "alue_mode\"O\n\nQueryScope\022\033\n\027QUERY_SCOPE_U"
-          + "NSPECIFIED\020\000\022\016\n\nCOLLECTION\020\001\022\024\n\020COLLECTI"
-          + "ON_GROUP\020\002\"I\n\005State\022\025\n\021STATE_UNSPECIFIED"
-          + "\020\000\022\014\n\010CREATING\020\001\022\t\n\005READY\020\002\022\020\n\014NEEDS_REP"
-          + "AIR\020\003:z\352Aw\n\036firestore.googleapis.com/Ind"
-          + "ex\022Uprojects/{project}/databases/{databa"
-          + "se}/collectionGroups/{collection}/indexe"
-          + "s/{index}B\336\001\n\035com.google.firestore.admin"
-          + ".v1B\nIndexProtoP\001Z>google.golang.org/gen"
-          + "proto/googleapis/firestore/admin/v1;admi"
-          + "n\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin."
-          + "V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#G"
-          + "oogle::Cloud::Firestore::Admin::V1b\006prot"
-          + "o3"
+          + "esource.proto\"\243\006\n\005Index\022\014\n\004name\030\001 \001(\t\022@\n"
+          + "\013query_scope\030\002 \001(\0162+.google.firestore.ad"
+          + "min.v1.Index.QueryScope\022;\n\006fields\030\003 \003(\0132"
+          + "+.google.firestore.admin.v1.Index.IndexF"
+          + "ield\0225\n\005state\030\004 \001(\0162&.google.firestore.a"
+          + "dmin.v1.Index.State\032\275\002\n\nIndexField\022\022\n\nfi"
+          + "eld_path\030\001 \001(\t\022B\n\005order\030\002 \001(\01621.google.f"
+          + "irestore.admin.v1.Index.IndexField.Order"
+          + "H\000\022O\n\014array_config\030\003 \001(\01627.google.firest"
+          + "ore.admin.v1.Index.IndexField.ArrayConfi"
+          + "gH\000\"=\n\005Order\022\025\n\021ORDER_UNSPECIFIED\020\000\022\r\n\tA"
+          + "SCENDING\020\001\022\016\n\nDESCENDING\020\002\"9\n\013ArrayConfi"
+          + "g\022\034\n\030ARRAY_CONFIG_UNSPECIFIED\020\000\022\014\n\010CONTA"
+          + "INS\020\001B\014\n\nvalue_mode\"O\n\nQueryScope\022\033\n\027QUE"
+          + "RY_SCOPE_UNSPECIFIED\020\000\022\016\n\nCOLLECTION\020\001\022\024"
+          + "\n\020COLLECTION_GROUP\020\002\"I\n\005State\022\025\n\021STATE_U"
+          + "NSPECIFIED\020\000\022\014\n\010CREATING\020\001\022\t\n\005READY\020\002\022\020\n"
+          + "\014NEEDS_REPAIR\020\003:z\352Aw\n\036firestore.googleap"
+          + "is.com/Index\022Uprojects/{project}/databas"
+          + "es/{database}/collectionGroups/{collecti"
+          + "on}/indexes/{index}B\336\001\n\035com.google.fires"
+          + "tore.admin.v1B\nIndexProtoP\001Z>google.gola"
+          + "ng.org/genproto/googleapis/firestore/adm"
+          + "in/v1;admin\242\002\004GCFS\252\002\037Google.Cloud.Firest"
+          + "ore.Admin.V1\312\002\037Google\\Cloud\\Firestore\\Ad"
+          + "min\\V1\352\002#Google::Cloud::Firestore::Admin"
+          + "::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
             descriptorData,
             new com.google.protobuf.Descriptors.FileDescriptor[] {
               com.google.api.ResourceProto.getDescriptor(),
-              com.google.api.AnnotationsProto.getDescriptor(),
             });
     internal_static_google_firestore_admin_v1_Index_descriptor =
         getDescriptor().getMessageTypes().get(0);
@@ -104,7 +102,6 @@ public final class IndexProto {
     com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
         descriptor, registry);
     com.google.api.ResourceProto.getDescriptor();
-    com.google.api.AnnotationsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
