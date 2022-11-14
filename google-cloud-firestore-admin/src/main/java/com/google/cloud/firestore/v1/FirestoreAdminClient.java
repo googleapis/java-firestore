@@ -176,10 +176,7 @@ import javax.annotation.Generated;
  * // - It may require specifying regional endpoints when creating the service client as shown in
  * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreAdminSettings firestoreAdminSettings =
- *     FirestoreAdminSettings.newBuilder()
- *         .setTransportChannelProvider(
- *             FirestoreAdminSettings.defaultHttpJsonTransportProviderBuilder().build())
- *         .build();
+ *     FirestoreAdminSettings.newHttpJsonBuilder().build();
  * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
  * }</pre>
  *
