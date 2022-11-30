@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.7.3](https://github.com/googleapis/java-firestore/compare/v3.7.2...v3.7.3) (2022-11-21)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.18 ([#1132](https://github.com/googleapis/java-firestore/issues/1132)) ([6b57290](https://github.com/googleapis/java-firestore/commit/6b572900bc792c18d8f161fb1d1a01b72a9962d9))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.18 ([#1133](https://github.com/googleapis/java-firestore/issues/1133)) ([8cb45ae](https://github.com/googleapis/java-firestore/commit/8cb45aebb9424187ae4c7ed00cb337b73baac0d7))
+
+## [3.7.2](https://github.com/googleapis/java-firestore/compare/v3.7.1...v3.7.2) (2022-11-18)
+
+
+### Dependencies
+
+* Update beam.version to v2.43.0 ([#1127](https://github.com/googleapis/java-firestore/issues/1127)) ([ff1df71](https://github.com/googleapis/java-firestore/commit/ff1df71f96b7c6c1fda0e53cdca5097b024d9812))
+
+## [3.7.1](https://github.com/googleapis/java-firestore/compare/v3.7.0...v3.7.1) (2022-11-08)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.0.6 ([#1092](https://github.com/googleapis/java-firestore/issues/1092)) ([019840f](https://github.com/googleapis/java-firestore/commit/019840fb0883fb41cdc294f09e35f39745a78cb4))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.17 ([#1087](https://github.com/googleapis/java-firestore/issues/1087)) ([a78be32](https://github.com/googleapis/java-firestore/commit/a78be324ccd0ba2ebff429447b8ce0fe39727360))
+
 ## [3.7.0](https://github.com/googleapis/java-firestore/compare/v3.6.0...v3.7.0) (2022-10-22)
 
 
