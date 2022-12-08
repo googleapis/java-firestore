@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.4](https://github.com/googleapis/java-firestore/compare/v3.7.3...v3.7.4) (2022-12-08)
+
+
+### Dependencies
+
+* Update multiple dependencies atomically ([#1145](https://github.com/googleapis/java-firestore/issues/1145)) ([36bb40b](https://github.com/googleapis/java-firestore/commit/36bb40b97fb3a2eb44b35437fe0322644dc2bffd))
+
 ## [3.7.3](https://github.com/googleapis/java-firestore/compare/v3.7.2...v3.7.3) (2022-11-21)
 
 
