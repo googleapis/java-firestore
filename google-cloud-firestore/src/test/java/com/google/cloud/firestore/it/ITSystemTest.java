@@ -280,6 +280,24 @@ public class ITSystemTest {
   }
 
   @Test
+  public void setWithMaximumAndMerge() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("max", 1L)).get();
+    docRef.set(Collections.singletonMap("max", FieldValue.maximum(2)), SetOptions.merge()).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(2L, docSnap.get("max"));
+  }
+
+  @Test
+  public void setWithMinimumAndMerge() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("min", 1L)).get();
+    docRef.set(Collections.singletonMap("min", FieldValue.minimum(2)), SetOptions.merge()).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(1L, docSnap.get("min"));
+  }
+
+  @Test
   public void mergeDocumentWithServerTimestamp() throws Exception {
     Map<String, Object> originalMap = LocalFirestoreHelper.map("a", "b");
     Map<String, FieldValue> updateMap = map("c", FieldValue.serverTimestamp());
@@ -1390,6 +1408,42 @@ public class ITSystemTest {
     docRef.update("sum", FieldValue.increment(2.2)).get();
     DocumentSnapshot docSnap = docRef.get().get();
     assertEquals(3.3, (Double) docSnap.get("sum"), DOUBLE_EPSILON);
+  }
+
+  @Test
+  public void integerMaximum() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("max", 1L)).get();
+    docRef.update("max", FieldValue.maximum(2)).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(2L, docSnap.get("max"));
+  }
+
+  @Test
+  public void floatMaximum() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("max", 1.1)).get();
+    docRef.update("max", FieldValue.maximum(2.2)).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(2.2, (Double) docSnap.get("max"), DOUBLE_EPSILON);
+  }
+
+  @Test
+  public void integerMinimum() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("min", 1L)).get();
+    docRef.update("min", FieldValue.minimum(2)).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(1L, docSnap.get("min"));
+  }
+
+  @Test
+  public void floatMinimum() throws ExecutionException, InterruptedException {
+    DocumentReference docRef = randomColl.document();
+    docRef.set(Collections.singletonMap("min", 1.1)).get();
+    docRef.update("min", FieldValue.minimum(2.2)).get();
+    DocumentSnapshot docSnap = docRef.get().get();
+    assertEquals(1.1, (Double) docSnap.get("min"), DOUBLE_EPSILON);
   }
 
   @Test
