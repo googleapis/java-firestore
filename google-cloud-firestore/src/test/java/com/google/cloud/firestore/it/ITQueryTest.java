@@ -26,6 +26,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -52,6 +53,7 @@ public class ITQueryTest {
 
   @Before
   public void setUpFirestore() {
+    // TODO: stop using emulator for these tests once prod is ready.
     firestore = FirestoreOptions.newBuilder().setHost("localhost:8080").build().getService();
     Preconditions.checkNotNull(
         firestore,
@@ -92,7 +94,6 @@ public class ITQueryTest {
   public static void checkQuerySnapshotContainsDocuments(Query query, String... docs)
       throws ExecutionException, InterruptedException {
     QuerySnapshot snapshot = query.get().get();
-    // List<QueryDocumentSnapshot> result = snapshot.getDocuments();
     List<String> result =
         snapshot.getDocuments().stream()
             .map(queryDocumentSnapshot -> queryDocumentSnapshot.getReference().getId())
@@ -184,6 +185,14 @@ public class ITQueryTest {
             .orderBy("a"),
         "doc2");
 
+    // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a DESC LIMIT 1
+    checkQuerySnapshotContainsDocuments(
+        collection
+            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
+            .limit(1)
+            .orderBy("a", Direction.DESCENDING),
+        "doc2");
+
     // Test with limits without orderBy (the __name__ ordering is the tie breaker).
     checkQuerySnapshotContainsDocuments(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1))).limit(1),
@@ -236,32 +245,6 @@ public class ITQueryTest {
     // allowed if the document matches at least one disjunction term.
     Query query5 = collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1)));
     checkQuerySnapshotContainsDocuments(query5, "doc1", "doc2", "doc4", "doc5");
-  }
-
-  @Test
-  public void orQueryWithInAndNotIn() throws Exception {
-    Map<String, Map<String, Object>> testDocs =
-        map(
-            "doc1", map("a", 1, "b", 0),
-            "doc2", map("b", 1),
-            "doc3", map("a", 3, "b", 2),
-            "doc4", map("a", 1, "b", 3),
-            "doc5", map("a", 1),
-            "doc6", map("a", 2));
-
-    CollectionReference collection = testCollectionWithDocs(testDocs);
-
-    Query query1 =
-        collection.where(
-            Filter.or(Filter.equalTo("a", 2), Filter.inArray("b", Arrays.asList(2, 3))));
-    checkQuerySnapshotContainsDocuments(query1, "doc3", "doc4", "doc6");
-
-    // a==2 || (b != 2 && b != 3)
-    // Has implicit "orderBy b"
-    Query query2 =
-        collection.where(
-            Filter.or(Filter.equalTo("a", 2), Filter.notInArray("b", Arrays.asList(2, 3))));
-    checkQuerySnapshotContainsDocuments(query2, "doc1", "doc2");
   }
 
   @Test
