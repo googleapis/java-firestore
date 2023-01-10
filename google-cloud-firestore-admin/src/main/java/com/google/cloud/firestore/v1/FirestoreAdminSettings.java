@@ -91,7 +91,10 @@ import javax.annotation.Generated;
  * firestoreAdminSettingsBuilder
  *     .getIndexSettings()
  *     .setRetrySettings(
- *         firestoreAdminSettingsBuilder.getIndexSettings().getRetrySettings().toBuilder()
+ *         firestoreAdminSettingsBuilder
+ *             .getIndexSettings()
+ *             .getRetrySettings()
+ *             .toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreAdminSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
