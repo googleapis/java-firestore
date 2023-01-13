@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.5](https://github.com/googleapis/java-firestore/compare/v3.7.4...v3.7.5) (2023-01-13)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.1.1 ([#1157](https://github.com/googleapis/java-firestore/issues/1157)) ([c7c688b](https://github.com/googleapis/java-firestore/commit/c7c688b1357edfc61f1f86b2c282b80ddb48f2c4))
+
 ## [3.7.4](https://github.com/googleapis/java-firestore/compare/v3.7.3...v3.7.4) (2022-12-08)
 
 
