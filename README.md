@@ -56,13 +56,13 @@ implementation 'com.google.cloud:google-cloud-firestore'
 If you are using Gradle without BOM, add this to your dependencies:
 
 ```Groovy
-implementation 'com.google.cloud:google-cloud-firestore:3.7.4'
+implementation 'com.google.cloud:google-cloud-firestore:3.7.6'
 ```
 
 If you are using SBT, add this to your dependencies:
 
 ```Scala
-libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.7.4"
+libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.7.6"
 ```
 
 ## Authentication
