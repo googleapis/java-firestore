@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.6](https://github.com/googleapis/java-firestore/compare/v3.7.5...v3.7.6) (2023-01-13)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.9.2 ([#1158](https://github.com/googleapis/java-firestore/issues/1158)) ([418b2bf](https://github.com/googleapis/java-firestore/commit/418b2bfed98f3e88dac63771e4b55f2b157fe184))
+
 ## [3.7.5](https://github.com/googleapis/java-firestore/compare/v3.7.4...v3.7.5) (2023-01-13)
 
 
