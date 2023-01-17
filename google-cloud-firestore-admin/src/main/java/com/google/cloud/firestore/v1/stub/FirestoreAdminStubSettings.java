@@ -111,7 +111,10 @@ import org.threeten.bp.Duration;
  * firestoreAdminSettingsBuilder
  *     .getIndexSettings()
  *     .setRetrySettings(
- *         firestoreAdminSettingsBuilder.getIndexSettings().getRetrySettings().toBuilder()
+ *         firestoreAdminSettingsBuilder
+ *             .getIndexSettings()
+ *             .getRetrySettings()
+ *             .toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
  *             .build());
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
