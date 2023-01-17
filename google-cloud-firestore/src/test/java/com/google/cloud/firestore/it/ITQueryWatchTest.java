@@ -91,11 +91,6 @@ public final class ITQueryWatchTest {
     firestore.close();
   }
 
-  /** Returns whether the tests are running against the Firestore emulator. */
-  private boolean isRunningAgainstFirestoreEmulator() {
-    return firestore.getOptions().getHost().startsWith("localhost:");
-  }
-
   /**
    *
    *
@@ -189,7 +184,7 @@ public final class ITQueryWatchTest {
   public void inequalityFilterOnDifferentProperties() throws Exception {
     assumeFalse(
             "Skip this test when running against emulator",
-            isRunningAgainstFirestoreEmulator());
+            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
 
     setDocument("doc1", map("foo", "1", "bar", 1));
 
