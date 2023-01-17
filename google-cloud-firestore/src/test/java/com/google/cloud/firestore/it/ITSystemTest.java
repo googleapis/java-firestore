@@ -166,6 +166,11 @@ public class ITSystemTest {
     return documentIds;
   }
 
+  /** Returns whether the tests are running against the Firestore emulator. */
+  private boolean isRunningAgainstFirestoreEmulator() {
+    return firestore.getOptions().getHost().startsWith("localhost:");
+  }
+
   @Test
   public void getAll() throws Exception {
     DocumentReference ref1 = randomColl.document("doc1");
@@ -503,7 +508,7 @@ public class ITSystemTest {
   public void multipleInequalityQueryOnDifferentProperties() throws Exception {
     assumeFalse(
             "Skip this test when running against emulator",
-            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+            isRunningAgainstFirestoreEmulator());
 
     addDocument("foo", 1, "bar", 2);
 
