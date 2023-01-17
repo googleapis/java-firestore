@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -489,7 +490,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void multipleInequalityQueryOnSameProperty() throws Exception {
+  public void multipleInequalityQueryOnSameProperties() throws Exception {
     addDocument("foo", 1);
 
     QuerySnapshot querySnapshot = randomColl
@@ -499,7 +500,11 @@ public class ITSystemTest {
   }
 
   @Test
-  public void invalidMultipleInequalityQuery() throws Exception {
+  public void multipleInequalityQueryOnDifferentProperties() throws Exception {
+    assumeFalse(
+            "Skip this test when running against emulator",
+            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+
     addDocument("foo", 1, "bar", 2);
 
     try {

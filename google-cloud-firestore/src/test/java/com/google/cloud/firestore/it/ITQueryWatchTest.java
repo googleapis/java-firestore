@@ -23,6 +23,7 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
@@ -157,7 +158,7 @@ public final class ITQueryWatchTest {
    * invalid filter.
    */
   @Test
-  public void inequalityFilterOnSameProperty() throws Exception {
+  public void inequalityFilterOnSameProperties() throws Exception {
     setDocument("doc", map("foo", 1, "bar", 2));
 
     final Query query = randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2);
@@ -180,7 +181,11 @@ public final class ITQueryWatchTest {
   }
 
   @Test
-  public void inequalityFilterOnDifferentProperty() throws Exception {
+  public void inequalityFilterOnDifferentProperties() throws Exception {
+    assumeFalse(
+            "Skip this test when running against emulator",
+            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+
     setDocument("doc1", map("foo", "1", "bar", 1));
 
     final Query query = randomColl.whereGreaterThan("foo", "0").whereLessThan("bar", 2);
@@ -200,9 +205,9 @@ public final class ITQueryWatchTest {
     assertThat(error)
             .hasMessageThat()
             .ignoringCase()
-            .contains("Backend ended Listen stream: Cannot have inequality filters on multiple properties: bar");
+            .contains("Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]");
   }
-  
+
   /**
    *
    *

@@ -247,7 +247,7 @@ public class ITQueryCountTest {
     assumeTrue(
         "Skip this test when running against production because "
             + "it appears that production is failing to lock the counted documents b/248152832",
-        isRunningAgainstFirestoreEmulator());
+        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
 
     CollectionReference collection = createEmptyCollection();
     DocumentReference document = createDocumentInCollection(collection);
@@ -418,10 +418,6 @@ public class ITQueryCountTest {
     executor.shutdown();
   }
 
-  /** Returns whether the tests are running against the Firestore emulator. */
-  private boolean isRunningAgainstFirestoreEmulator() {
-    return firestore.getOptions().getHost().startsWith("localhost:");
-  }
 
   @AutoValue
   abstract static class CreatedCollectionInfo {
