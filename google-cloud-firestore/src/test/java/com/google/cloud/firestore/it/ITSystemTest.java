@@ -493,8 +493,8 @@ public class ITSystemTest {
   public void multipleInequalityQueryOnSameProperties() throws Exception {
     addDocument("foo", 1);
 
-    QuerySnapshot querySnapshot = randomColl
-            .whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2).get().get();
+    QuerySnapshot querySnapshot =
+        randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2).get().get();
     assertEquals(1, querySnapshot.size());
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
@@ -502,8 +502,8 @@ public class ITSystemTest {
   @Test
   public void multipleInequalityQueryOnDifferentProperties() throws Exception {
     assumeFalse(
-            "Skip this test when running against emulator",
-            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+        "Skip this test when running against emulator",
+        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
 
     addDocument("foo", 1, "bar", 2);
 
@@ -512,7 +512,9 @@ public class ITSystemTest {
       fail();
     } catch (Exception e) {
       assertTrue(
-        e.getMessage().contains("INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]"));
+          e.getMessage()
+              .contains(
+                  "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]"));
     }
   }
 

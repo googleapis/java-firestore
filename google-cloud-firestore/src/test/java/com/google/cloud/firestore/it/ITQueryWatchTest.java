@@ -154,8 +154,8 @@ public final class ITQueryWatchTest {
   }
 
   /**
-   * Testing multiple inequality filters on same and different properties, and validate the error message returned for
-   * invalid filter.
+   * Testing multiple inequality filters on same and different properties, and validate the error
+   * message returned for invalid filter.
    */
   @Test
   public void inequalityFilterOnSameProperties() throws Exception {
@@ -163,7 +163,7 @@ public final class ITQueryWatchTest {
 
     final Query query = randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2);
     QuerySnapshotEventListener listener =
-            QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
+        QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -183,14 +183,14 @@ public final class ITQueryWatchTest {
   @Test
   public void inequalityFilterOnDifferentProperties() throws Exception {
     assumeFalse(
-            "Skip this test when running against emulator",
-            TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+        "Skip this test when running against emulator",
+        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
 
     setDocument("doc1", map("foo", "1", "bar", 1));
 
     final Query query = randomColl.whereGreaterThan("foo", "0").whereLessThan("bar", 2);
     QuerySnapshotEventListener listener =
-            QuerySnapshotEventListener.builder().setExpectError().build();
+        QuerySnapshotEventListener.builder().setExpectError().build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -203,9 +203,10 @@ public final class ITQueryWatchTest {
     listenerAssertions.hasError();
     FirestoreException error = listener.receivedEvents.get(0).getError();
     assertThat(error)
-            .hasMessageThat()
-            .ignoringCase()
-            .contains("Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]");
+        .hasMessageThat()
+        .ignoringCase()
+        .contains(
+            "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]");
   }
 
   /**
@@ -590,7 +591,8 @@ public final class ITQueryWatchTest {
       this.error = error;
     }
 
-    @Nullable FirestoreException getError(){
+    @Nullable
+    FirestoreException getError() {
       return error;
     }
   }

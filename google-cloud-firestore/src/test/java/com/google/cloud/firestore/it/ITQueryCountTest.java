@@ -418,7 +418,6 @@ public class ITQueryCountTest {
     executor.shutdown();
   }
 
-
   @AutoValue
   abstract static class CreatedCollectionInfo {
 
