@@ -157,7 +157,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -272,7 +274,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PARTITION_COUNT_FIELD_NUMBER = 3;
-  private long partitionCount_;
+  private long partitionCount_ = 0L;
   /**
    *
    *
@@ -296,7 +298,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PAGE_TOKEN_FIELD_NUMBER = 4;
-  private volatile java.lang.Object pageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pageToken_ = "";
   /**
    *
    *
@@ -363,7 +367,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PAGE_SIZE_FIELD_NUMBER = 5;
-  private int pageSize_;
+  private int pageSize_ = 0;
   /**
    *
    *
@@ -711,17 +715,14 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       if (structuredQueryBuilder_ != null) {
         structuredQueryBuilder_.clear();
       }
       partitionCount_ = 0L;
-
       pageToken_ = "";
-
       pageSize_ = 0;
-
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
@@ -756,28 +757,41 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public com.google.firestore.v1.PartitionQueryRequest buildPartial() {
       com.google.firestore.v1.PartitionQueryRequest result =
           new com.google.firestore.v1.PartitionQueryRequest(this);
-      result.parent_ = parent_;
-      if (queryTypeCase_ == 2) {
-        if (structuredQueryBuilder_ == null) {
-          result.queryType_ = queryType_;
-        } else {
-          result.queryType_ = structuredQueryBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.partitionCount_ = partitionCount_;
-      result.pageToken_ = pageToken_;
-      result.pageSize_ = pageSize_;
-      if (consistencySelectorCase_ == 6) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.queryTypeCase_ = queryTypeCase_;
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.PartitionQueryRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.partitionCount_ = partitionCount_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.pageToken_ = pageToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.pageSize_ = pageSize_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.PartitionQueryRequest result) {
+      result.queryTypeCase_ = queryTypeCase_;
+      result.queryType_ = this.queryType_;
+      if (queryTypeCase_ == 2 && structuredQueryBuilder_ != null) {
+        result.queryType_ = structuredQueryBuilder_.build();
+      }
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 6 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -827,6 +841,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (other == com.google.firestore.v1.PartitionQueryRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.getPartitionCount() != 0L) {
@@ -834,6 +849,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       if (!other.getPageToken().isEmpty()) {
         pageToken_ = other.pageToken_;
+        bitField0_ |= 0x00000008;
         onChanged();
       }
       if (other.getPageSize() != 0) {
@@ -890,7 +906,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -902,19 +918,19 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             case 24:
               {
                 partitionCount_ = input.readInt64();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 34:
               {
                 pageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 40:
               {
                 pageSize_ = input.readInt32();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 40
             case 50:
@@ -967,6 +983,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -1038,8 +1056,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1058,8 +1076,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1083,8 +1101,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1322,7 +1340,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       queryTypeCase_ = 2;
       onChanged();
-      ;
       return structuredQueryBuilder_;
     }
 
@@ -1369,6 +1386,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public Builder setPartitionCount(long value) {
 
       partitionCount_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1390,7 +1408,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPartitionCount() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       partitionCount_ = 0L;
       onChanged();
       return this;
@@ -1484,8 +1502,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1510,8 +1528,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPageToken() {
-
       pageToken_ = getDefaultInstance().getPageToken();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1541,8 +1559,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1588,6 +1606,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public Builder setPageSize(int value) {
 
       pageSize_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1608,7 +1627,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPageSize() {
-
+      bitField0_ = (bitField0_ & ~0x00000010);
       pageSize_ = 0;
       onChanged();
       return this;
@@ -1828,7 +1847,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       consistencySelectorCase_ = 6;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

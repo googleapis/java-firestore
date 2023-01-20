@@ -119,7 +119,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -170,6 +172,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
   }
 
   public static final int DOCUMENTS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private com.google.protobuf.LazyStringList documents_;
   /**
    *
@@ -291,7 +295,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 4;
@@ -724,14 +728,13 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
       documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
       if (newTransactionBuilder_ != null) {
@@ -769,38 +772,43 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     public com.google.firestore.v1.BatchGetDocumentsRequest buildPartial() {
       com.google.firestore.v1.BatchGetDocumentsRequest result =
           new com.google.firestore.v1.BatchGetDocumentsRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.database_ = database_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        documents_ = documents_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.documents_ = documents_;
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
-      }
-      if (consistencySelectorCase_ == 4) {
-        result.consistencySelector_ = consistencySelector_;
-      }
-      if (consistencySelectorCase_ == 5) {
-        if (newTransactionBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = newTransactionBuilder_.build();
-        }
-      }
-      if (consistencySelectorCase_ == 7) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartialRepeatedFields(
+        com.google.firestore.v1.BatchGetDocumentsRequest result) {
+      if (((bitField0_ & 0x00000002) != 0)) {
+        documents_ = documents_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000002);
+      }
+      result.documents_ = documents_;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.BatchGetDocumentsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.BatchGetDocumentsRequest result) {
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 5 && newTransactionBuilder_ != null) {
+        result.consistencySelector_ = newTransactionBuilder_.build();
+      }
+      if (consistencySelectorCase_ == 7 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -851,12 +859,13 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
         return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.documents_.isEmpty()) {
         if (documents_.isEmpty()) {
           documents_ = other.documents_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureDocumentsIsMutable();
           documents_.addAll(other.documents_);
@@ -916,7 +925,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -929,7 +938,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
             case 26:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
@@ -1047,8 +1056,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1065,8 +1074,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1088,8 +1097,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1098,9 +1107,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
         com.google.protobuf.LazyStringArrayList.EMPTY;
 
     private void ensureDocumentsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         documents_ = new com.google.protobuf.LazyStringArrayList(documents_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
     /**
@@ -1259,7 +1268,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      */
     public Builder clearDocuments() {
       documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1309,7 +1318,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -1348,11 +1357,11 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1369,11 +1378,11 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1389,19 +1398,18 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1416,14 +1424,13 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1438,7 +1445,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -1794,7 +1801,6 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
       consistencySelectorCase_ = 5;
       onChanged();
-      ;
       return newTransactionBuilder_;
     }
 
@@ -2012,7 +2018,6 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
       consistencySelectorCase_ = 7;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

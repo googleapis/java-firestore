@@ -239,7 +239,7 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 3;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
@@ -310,7 +310,7 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -561,15 +561,14 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (foundBuilder_ != null) {
         foundBuilder_.clear();
       }
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       resultCase_ = 0;
@@ -601,25 +600,30 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
     public com.google.firestore.v1.BatchGetDocumentsResponse buildPartial() {
       com.google.firestore.v1.BatchGetDocumentsResponse result =
           new com.google.firestore.v1.BatchGetDocumentsResponse(this);
-      if (resultCase_ == 1) {
-        if (foundBuilder_ == null) {
-          result.result_ = result_;
-        } else {
-          result.result_ = foundBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (resultCase_ == 2) {
-        result.result_ = result_;
-      }
-      result.transaction_ = transaction_;
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
-      }
-      result.resultCase_ = resultCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.BatchGetDocumentsResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.transaction_ = transaction_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.BatchGetDocumentsResponse result) {
+      result.resultCase_ = resultCase_;
+      result.result_ = this.result_;
+      if (resultCase_ == 1 && foundBuilder_ != null) {
+        result.result_ = foundBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -734,13 +738,13 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
             case 26:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             default:
@@ -773,6 +777,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.Document,
@@ -976,7 +982,6 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       }
       resultCase_ = 1;
       onChanged();
-      ;
       return foundBuilder_;
     }
 
@@ -1156,8 +1161,8 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1175,7 +1180,7 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;
@@ -1202,7 +1207,7 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1243,11 +1248,11 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1265,11 +1270,11 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1286,17 +1291,18 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1312,14 +1318,13 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1335,7 +1340,7 @@ public final class BatchGetDocumentsResponse extends com.google.protobuf.Generat
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }

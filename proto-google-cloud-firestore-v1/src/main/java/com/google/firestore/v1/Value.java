@@ -183,9 +183,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    */
   public com.google.protobuf.NullValue getNullValue() {
     if (valueTypeCase_ == 11) {
-      @SuppressWarnings("deprecation")
       com.google.protobuf.NullValue result =
-          com.google.protobuf.NullValue.valueOf((java.lang.Integer) valueType_);
+          com.google.protobuf.NullValue.forNumber((java.lang.Integer) valueType_);
       return result == null ? com.google.protobuf.NullValue.UNRECOGNIZED : result;
     }
     return com.google.protobuf.NullValue.NULL_VALUE;
@@ -1062,6 +1061,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (timestampValueBuilder_ != null) {
         timestampValueBuilder_.clear();
       }
@@ -1102,58 +1102,33 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Value buildPartial() {
       com.google.firestore.v1.Value result = new com.google.firestore.v1.Value(this);
-      if (valueTypeCase_ == 11) {
-        result.valueType_ = valueType_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (valueTypeCase_ == 1) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 2) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 3) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 10) {
-        if (timestampValueBuilder_ == null) {
-          result.valueType_ = valueType_;
-        } else {
-          result.valueType_ = timestampValueBuilder_.build();
-        }
-      }
-      if (valueTypeCase_ == 17) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 18) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 5) {
-        result.valueType_ = valueType_;
-      }
-      if (valueTypeCase_ == 8) {
-        if (geoPointValueBuilder_ == null) {
-          result.valueType_ = valueType_;
-        } else {
-          result.valueType_ = geoPointValueBuilder_.build();
-        }
-      }
-      if (valueTypeCase_ == 9) {
-        if (arrayValueBuilder_ == null) {
-          result.valueType_ = valueType_;
-        } else {
-          result.valueType_ = arrayValueBuilder_.build();
-        }
-      }
-      if (valueTypeCase_ == 6) {
-        if (mapValueBuilder_ == null) {
-          result.valueType_ = valueType_;
-        } else {
-          result.valueType_ = mapValueBuilder_.build();
-        }
-      }
-      result.valueTypeCase_ = valueTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Value result) {
+      int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.Value result) {
+      result.valueTypeCase_ = valueTypeCase_;
+      result.valueType_ = this.valueType_;
+      if (valueTypeCase_ == 10 && timestampValueBuilder_ != null) {
+        result.valueType_ = timestampValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 8 && geoPointValueBuilder_ != null) {
+        result.valueType_ = geoPointValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 9 && arrayValueBuilder_ != null) {
+        result.valueType_ = arrayValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 6 && mapValueBuilder_ != null) {
+        result.valueType_ = mapValueBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -1392,6 +1367,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private int bitField0_;
+
     /**
      *
      *
@@ -1457,9 +1434,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.protobuf.NullValue getNullValue() {
       if (valueTypeCase_ == 11) {
-        @SuppressWarnings("deprecation")
         com.google.protobuf.NullValue result =
-            com.google.protobuf.NullValue.valueOf((java.lang.Integer) valueType_);
+            com.google.protobuf.NullValue.forNumber((java.lang.Integer) valueType_);
         return result == null ? com.google.protobuf.NullValue.UNRECOGNIZED : result;
       }
       return com.google.protobuf.NullValue.NULL_VALUE;
@@ -1549,6 +1525,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setBooleanValue(boolean value) {
+
       valueTypeCase_ = 1;
       valueType_ = value;
       onChanged();
@@ -1618,6 +1595,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setIntegerValue(long value) {
+
       valueTypeCase_ = 2;
       valueType_ = value;
       onChanged();
@@ -1687,6 +1665,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setDoubleValue(double value) {
+
       valueTypeCase_ = 3;
       valueType_ = value;
       onChanged();
@@ -1932,7 +1911,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       }
       valueTypeCase_ = 10;
       onChanged();
-      ;
       return timestampValueBuilder_;
     }
 
@@ -2505,7 +2483,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       }
       valueTypeCase_ = 8;
       onChanged();
-      ;
       return geoPointValueBuilder_;
     }
 
@@ -2730,7 +2707,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       }
       valueTypeCase_ = 9;
       onChanged();
-      ;
       return arrayValueBuilder_;
     }
 
@@ -2937,7 +2913,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       }
       valueTypeCase_ = 6;
       onChanged();
-      ;
       return mapValueBuilder_;
     }
 

@@ -70,7 +70,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -125,6 +127,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int COLLECTION_IDS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private com.google.protobuf.LazyStringList collectionIds_;
   /**
    *
@@ -190,7 +194,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int INPUT_URI_PREFIX_FIELD_NUMBER = 3;
-  private volatile java.lang.Object inputUriPrefix_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object inputUriPrefix_ = "";
   /**
    *
    *
@@ -468,12 +474,11 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       inputUriPrefix_ = "";
-
       return this;
     }
 
@@ -501,16 +506,31 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     public com.google.firestore.admin.v1.ImportDocumentsRequest buildPartial() {
       com.google.firestore.admin.v1.ImportDocumentsRequest result =
           new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.name_ = name_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.collectionIds_ = collectionIds_;
-      result.inputUriPrefix_ = inputUriPrefix_;
       onBuilt();
       return result;
+    }
+
+    private void buildPartialRepeatedFields(
+        com.google.firestore.admin.v1.ImportDocumentsRequest result) {
+      if (((bitField0_ & 0x00000002) != 0)) {
+        collectionIds_ = collectionIds_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000002);
+      }
+      result.collectionIds_ = collectionIds_;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ImportDocumentsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.inputUriPrefix_ = inputUriPrefix_;
+      }
     }
 
     @java.lang.Override
@@ -561,12 +581,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -575,6 +596,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       if (!other.getInputUriPrefix().isEmpty()) {
         inputUriPrefix_ = other.inputUriPrefix_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -606,7 +628,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -619,7 +641,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
             case 26:
               {
                 inputUriPrefix_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             default:
@@ -711,8 +733,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -731,8 +753,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -756,8 +778,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -766,9 +788,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         com.google.protobuf.LazyStringArrayList.EMPTY;
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
     /**
@@ -911,7 +933,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      */
     public Builder clearCollectionIds() {
       collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1012,8 +1034,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (value == null) {
         throw new NullPointerException();
       }
-
       inputUriPrefix_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1033,8 +1055,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearInputUriPrefix() {
-
       inputUriPrefix_ = getDefaultInstance().getInputUriPrefix();
+      bitField0_ = (bitField0_ & ~0x00000004);
       onChanged();
       return this;
     }
@@ -1059,8 +1081,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       inputUriPrefix_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
