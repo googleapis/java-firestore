@@ -73,7 +73,9 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int DOCUMENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object document_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object document_ = "";
   /**
    *
    *
@@ -122,6 +124,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int REMOVED_TARGET_IDS_FIELD_NUMBER = 6;
+
+  @SuppressWarnings("serial")
   private com.google.protobuf.Internal.IntList removedTargetIds_;
   /**
    *
@@ -216,7 +220,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -460,14 +464,12 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       document_ = "";
-
       removedTargetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       return this;
@@ -497,20 +499,30 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.DocumentDelete buildPartial() {
       com.google.firestore.v1.DocumentDelete result =
           new com.google.firestore.v1.DocumentDelete(this);
-      int from_bitField0_ = bitField0_;
-      result.document_ = document_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        removedTargetIds_.makeImmutable();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      }
-      result.removedTargetIds_ = removedTargetIds_;
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.DocumentDelete result) {
+      if (((bitField0_ & 0x00000002) != 0)) {
+        removedTargetIds_.makeImmutable();
+        bitField0_ = (bitField0_ & ~0x00000002);
+      }
+      result.removedTargetIds_ = removedTargetIds_;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.DocumentDelete result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.document_ = document_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -560,12 +572,13 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.DocumentDelete.getDefaultInstance()) return this;
       if (!other.getDocument().isEmpty()) {
         document_ = other.document_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.removedTargetIds_.isEmpty()) {
         if (removedTargetIds_.isEmpty()) {
           removedTargetIds_ = other.removedTargetIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureRemovedTargetIdsIsMutable();
           removedTargetIds_.addAll(other.removedTargetIds_);
@@ -604,13 +617,13 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 document_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 34:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 34
             case 48:
@@ -711,8 +724,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       document_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -728,8 +741,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearDocument() {
-
       document_ = getDefaultInstance().getDocument();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -750,8 +763,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       document_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -759,9 +772,9 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
     private com.google.protobuf.Internal.IntList removedTargetIds_ = emptyIntList();
 
     private void ensureRemovedTargetIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         removedTargetIds_ = mutableCopy(removedTargetIds_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
     /**
@@ -776,7 +789,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * @return A list containing the removedTargetIds.
      */
     public java.util.List<java.lang.Integer> getRemovedTargetIdsList() {
-      return ((bitField0_ & 0x00000001) != 0)
+      return ((bitField0_ & 0x00000002) != 0)
           ? java.util.Collections.unmodifiableList(removedTargetIds_)
           : removedTargetIds_;
     }
@@ -823,6 +836,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setRemovedTargetIds(int index, int value) {
+
       ensureRemovedTargetIdsIsMutable();
       removedTargetIds_.setInt(index, value);
       onChanged();
@@ -841,6 +855,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder addRemovedTargetIds(int value) {
+
       ensureRemovedTargetIdsIsMutable();
       removedTargetIds_.addInt(value);
       onChanged();
@@ -877,7 +892,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearRemovedTargetIds() {
       removedTargetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -901,7 +916,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -938,11 +953,11 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -958,11 +973,11 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -977,17 +992,18 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1001,14 +1017,13 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1022,7 +1037,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }

@@ -114,7 +114,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
-    return getDocument();
+    return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
 
   public static final int UPDATE_MASK_FIELD_NUMBER = 2;
@@ -177,7 +177,9 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getUpdateMaskOrBuilder() {
-    return getUpdateMask();
+    return updateMask_ == null
+        ? com.google.firestore.v1.DocumentMask.getDefaultInstance()
+        : updateMask_;
   }
 
   public static final int MASK_FIELD_NUMBER = 3;
@@ -229,7 +231,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   public static final int CURRENT_DOCUMENT_FIELD_NUMBER = 4;
@@ -280,7 +282,9 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
-    return getCurrentDocument();
+    return currentDocument_ == null
+        ? com.google.firestore.v1.Precondition.getDefaultInstance()
+        : currentDocument_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -527,28 +531,25 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (documentBuilder_ == null) {
-        document_ = null;
-      } else {
-        document_ = null;
+      bitField0_ = 0;
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-      } else {
-        updateMask_ = null;
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-      } else {
-        currentDocument_ = null;
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
       return this;
@@ -578,28 +579,28 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     public com.google.firestore.v1.UpdateDocumentRequest buildPartial() {
       com.google.firestore.v1.UpdateDocumentRequest result =
           new com.google.firestore.v1.UpdateDocumentRequest(this);
-      if (documentBuilder_ == null) {
-        result.document_ = document_;
-      } else {
-        result.document_ = documentBuilder_.build();
-      }
-      if (updateMaskBuilder_ == null) {
-        result.updateMask_ = updateMask_;
-      } else {
-        result.updateMask_ = updateMaskBuilder_.build();
-      }
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
-      }
-      if (currentDocumentBuilder_ == null) {
-        result.currentDocument_ = currentDocument_;
-      } else {
-        result.currentDocument_ = currentDocumentBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.UpdateDocumentRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.document_ = documentBuilder_ == null ? document_ : documentBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.updateMask_ = updateMaskBuilder_ == null ? updateMask_ : updateMaskBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.currentDocument_ =
+            currentDocumentBuilder_ == null ? currentDocument_ : currentDocumentBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -688,25 +689,25 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
             case 10:
               {
                 input.readMessage(getDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getUpdateMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
               {
                 input.readMessage(getCurrentDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             default:
@@ -725,6 +726,8 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.firestore.v1.Document document_;
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -746,7 +749,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the document field is set.
      */
     public boolean hasDocument() {
-      return documentBuilder_ != null || document_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
@@ -787,11 +790,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         document_ = value;
-        onChanged();
       } else {
         documentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -808,11 +811,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
         document_ = builderForValue.build();
-        onChanged();
       } else {
         documentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -828,19 +831,18 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
-        if (document_ != null) {
-          document_ =
-              com.google.firestore.v1.Document.newBuilder(document_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && document_ != null
+            && document_ != com.google.firestore.v1.Document.getDefaultInstance()) {
+          getDocumentBuilder().mergeFrom(value);
         } else {
           document_ = value;
         }
-        onChanged();
       } else {
         documentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -855,14 +857,13 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </code>
      */
     public Builder clearDocument() {
-      if (documentBuilder_ == null) {
-        document_ = null;
-        onChanged();
-      } else {
-        document_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -877,7 +878,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </code>
      */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getDocumentFieldBuilder().getBuilder();
     }
@@ -952,7 +953,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
-      return updateMaskBuilder_ != null || updateMask_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -999,11 +1000,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         updateMask_ = value;
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1023,11 +1024,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     public Builder setUpdateMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (updateMaskBuilder_ == null) {
         updateMask_ = builderForValue.build();
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1046,19 +1047,18 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeUpdateMask(com.google.firestore.v1.DocumentMask value) {
       if (updateMaskBuilder_ == null) {
-        if (updateMask_ != null) {
-          updateMask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(updateMask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && updateMask_ != null
+            && updateMask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getUpdateMaskBuilder().mergeFrom(value);
         } else {
           updateMask_ = value;
         }
-        onChanged();
       } else {
         updateMaskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1076,14 +1076,13 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask update_mask = 2;</code>
      */
     public Builder clearUpdateMask() {
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-        onChanged();
-      } else {
-        updateMask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1101,7 +1100,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask update_mask = 2;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getUpdateMaskBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getUpdateMaskFieldBuilder().getBuilder();
     }
@@ -1179,7 +1178,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -1218,11 +1217,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1239,11 +1238,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1259,19 +1258,18 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1286,14 +1284,13 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1308,7 +1305,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask mask = 3;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -1377,7 +1374,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
-      return currentDocumentBuilder_ != null || currentDocument_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1416,11 +1413,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         currentDocument_ = value;
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1437,11 +1434,11 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
         com.google.firestore.v1.Precondition.Builder builderForValue) {
       if (currentDocumentBuilder_ == null) {
         currentDocument_ = builderForValue.build();
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1456,19 +1453,18 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeCurrentDocument(com.google.firestore.v1.Precondition value) {
       if (currentDocumentBuilder_ == null) {
-        if (currentDocument_ != null) {
-          currentDocument_ =
-              com.google.firestore.v1.Precondition.newBuilder(currentDocument_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && currentDocument_ != null
+            && currentDocument_ != com.google.firestore.v1.Precondition.getDefaultInstance()) {
+          getCurrentDocumentBuilder().mergeFrom(value);
         } else {
           currentDocument_ = value;
         }
-        onChanged();
       } else {
         currentDocumentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1482,14 +1478,13 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.Precondition current_document = 4;</code>
      */
     public Builder clearCurrentDocument() {
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-        onChanged();
-      } else {
-        currentDocument_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1503,7 +1498,7 @@ public final class UpdateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.Precondition current_document = 4;</code>
      */
     public com.google.firestore.v1.Precondition.Builder getCurrentDocumentBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getCurrentDocumentFieldBuilder().getBuilder();
     }

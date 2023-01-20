@@ -947,7 +947,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int FIELD_PATH_FIELD_NUMBER = 1;
-    private volatile java.lang.Object fieldPath_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object fieldPath_ = "";
     /**
      *
      *
@@ -1047,9 +1049,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
       if (valueModeCase_ == 2) {
-        @SuppressWarnings("deprecation")
         com.google.firestore.admin.v1.Index.IndexField.Order result =
-            com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
+            com.google.firestore.admin.v1.Index.IndexField.Order.forNumber(
                 (java.lang.Integer) valueMode_);
         return result == null
             ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED
@@ -1103,9 +1104,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
       if (valueModeCase_ == 3) {
-        @SuppressWarnings("deprecation")
         com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result =
-            com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
+            com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.forNumber(
                 (java.lang.Integer) valueMode_);
         return result == null
             ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED
@@ -1354,8 +1354,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         fieldPath_ = "";
-
         valueModeCase_ = 0;
         valueMode_ = null;
         return this;
@@ -1385,16 +1385,24 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.admin.v1.Index.IndexField buildPartial() {
         com.google.firestore.admin.v1.Index.IndexField result =
             new com.google.firestore.admin.v1.Index.IndexField(this);
-        result.fieldPath_ = fieldPath_;
-        if (valueModeCase_ == 2) {
-          result.valueMode_ = valueMode_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        if (valueModeCase_ == 3) {
-          result.valueMode_ = valueMode_;
-        }
-        result.valueModeCase_ = valueModeCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.admin.v1.Index.IndexField result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.fieldPath_ = fieldPath_;
+        }
+      }
+
+      private void buildPartialOneofs(com.google.firestore.admin.v1.Index.IndexField result) {
+        result.valueModeCase_ = valueModeCase_;
+        result.valueMode_ = this.valueMode_;
       }
 
       @java.lang.Override
@@ -1447,6 +1455,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           return this;
         if (!other.getFieldPath().isEmpty()) {
           fieldPath_ = other.fieldPath_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         switch (other.getValueModeCase()) {
@@ -1494,7 +1503,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
               case 10:
                 {
                   fieldPath_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               case 16:
@@ -1541,6 +1550,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         onChanged();
         return this;
       }
+
+      private int bitField0_;
 
       private java.lang.Object fieldPath_ = "";
       /**
@@ -1609,8 +1620,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         if (value == null) {
           throw new NullPointerException();
         }
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1628,8 +1639,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearFieldPath() {
-
         fieldPath_ = getDefaultInstance().getFieldPath();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1652,8 +1663,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1727,9 +1738,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public com.google.firestore.admin.v1.Index.IndexField.Order getOrder() {
         if (valueModeCase_ == 2) {
-          @SuppressWarnings("deprecation")
           com.google.firestore.admin.v1.Index.IndexField.Order result =
-              com.google.firestore.admin.v1.Index.IndexField.Order.valueOf(
+              com.google.firestore.admin.v1.Index.IndexField.Order.forNumber(
                   (java.lang.Integer) valueMode_);
           return result == null
               ? com.google.firestore.admin.v1.Index.IndexField.Order.UNRECOGNIZED
@@ -1845,9 +1855,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig() {
         if (valueModeCase_ == 3) {
-          @SuppressWarnings("deprecation")
           com.google.firestore.admin.v1.Index.IndexField.ArrayConfig result =
-              com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.valueOf(
+              com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.forNumber(
                   (java.lang.Integer) valueMode_);
           return result == null
               ? com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.UNRECOGNIZED
@@ -1962,7 +1971,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -2017,7 +2028,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int QUERY_SCOPE_FIELD_NUMBER = 2;
-  private int queryScope_;
+  private int queryScope_ = 0;
   /**
    *
    *
@@ -2056,13 +2067,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Index.QueryScope result =
-        com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
+        com.google.firestore.admin.v1.Index.QueryScope.forNumber(queryScope_);
     return result == null ? com.google.firestore.admin.v1.Index.QueryScope.UNRECOGNIZED : result;
   }
 
   public static final int FIELDS_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.admin.v1.Index.IndexField> fields_;
   /**
    *
@@ -2172,7 +2184,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int STATE_FIELD_NUMBER = 4;
-  private int state_;
+  private int state_ = 0;
   /**
    *
    *
@@ -2201,9 +2213,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Index.State getState() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Index.State result =
-        com.google.firestore.admin.v1.Index.State.valueOf(state_);
+        com.google.firestore.admin.v1.Index.State.forNumber(state_);
     return result == null ? com.google.firestore.admin.v1.Index.State.UNRECOGNIZED : result;
   }
 
@@ -2434,19 +2445,17 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       queryScope_ = 0;
-
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
       } else {
         fields_ = null;
         fieldsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000004);
       state_ = 0;
-
       return this;
     }
 
@@ -2473,21 +2482,37 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.admin.v1.Index buildPartial() {
       com.google.firestore.admin.v1.Index result = new com.google.firestore.admin.v1.Index(this);
-      int from_bitField0_ = bitField0_;
-      result.name_ = name_;
-      result.queryScope_ = queryScope_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.admin.v1.Index result) {
       if (fieldsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           fields_ = java.util.Collections.unmodifiableList(fields_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.fields_ = fields_;
       } else {
         result.fields_ = fieldsBuilder_.build();
       }
-      result.state_ = state_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.Index result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.queryScope_ = queryScope_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.state_ = state_;
+      }
     }
 
     @java.lang.Override
@@ -2537,6 +2562,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.admin.v1.Index.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.queryScope_ != 0) {
@@ -2546,7 +2572,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         if (!other.fields_.isEmpty()) {
           if (fields_.isEmpty()) {
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensureFieldsIsMutable();
             fields_.addAll(other.fields_);
@@ -2559,7 +2585,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             fieldsBuilder_.dispose();
             fieldsBuilder_ = null;
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
             fieldsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFieldsFieldBuilder()
@@ -2601,13 +2627,13 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 16:
               {
                 queryScope_ = input.readEnum();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 16
             case 26:
@@ -2626,7 +2652,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             case 32:
               {
                 state_ = input.readEnum();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 32
             default:
@@ -2718,8 +2744,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -2738,8 +2764,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -2763,8 +2789,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -2808,8 +2834,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setQueryScopeValue(int value) {
-
       queryScope_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -2831,9 +2857,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.Index.QueryScope getQueryScope() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Index.QueryScope result =
-          com.google.firestore.admin.v1.Index.QueryScope.valueOf(queryScope_);
+          com.google.firestore.admin.v1.Index.QueryScope.forNumber(queryScope_);
       return result == null ? com.google.firestore.admin.v1.Index.QueryScope.UNRECOGNIZED : result;
     }
     /**
@@ -2857,7 +2882,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000002;
       queryScope_ = value.getNumber();
       onChanged();
       return this;
@@ -2879,7 +2904,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearQueryScope() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       queryScope_ = 0;
       onChanged();
       return this;
@@ -2889,9 +2914,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureFieldsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000004) != 0)) {
         fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>(fields_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000004;
       }
     }
 
@@ -3195,7 +3220,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     public Builder clearFields() {
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
       } else {
         fieldsBuilder_.clear();
@@ -3373,7 +3398,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.admin.v1.Index.IndexField,
                 com.google.firestore.admin.v1.Index.IndexField.Builder,
                 com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>(
-                fields_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                fields_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
         fields_ = null;
       }
       return fieldsBuilder_;
@@ -3408,8 +3433,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setStateValue(int value) {
-
       state_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -3426,9 +3451,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.Index.State getState() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Index.State result =
-          com.google.firestore.admin.v1.Index.State.valueOf(state_);
+          com.google.firestore.admin.v1.Index.State.forNumber(state_);
       return result == null ? com.google.firestore.admin.v1.Index.State.UNRECOGNIZED : result;
     }
     /**
@@ -3447,7 +3471,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000008;
       state_ = value.getNumber();
       onChanged();
       return this;
@@ -3464,7 +3488,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearState() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       state_ = 0;
       onChanged();
       return this;

@@ -118,7 +118,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -177,7 +179,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int COLLECTION_ID_FIELD_NUMBER = 2;
-  private volatile java.lang.Object collectionId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object collectionId_ = "";
   /**
    *
    *
@@ -228,7 +232,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PAGE_SIZE_FIELD_NUMBER = 3;
-  private int pageSize_;
+  private int pageSize_ = 0;
   /**
    *
    *
@@ -246,7 +250,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PAGE_TOKEN_FIELD_NUMBER = 4;
-  private volatile java.lang.Object pageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pageToken_ = "";
   /**
    *
    *
@@ -295,7 +301,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int ORDER_BY_FIELD_NUMBER = 6;
-  private volatile java.lang.Object orderBy_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object orderBy_ = "";
   /**
    *
    *
@@ -392,7 +400,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 8;
@@ -485,7 +493,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int SHOW_MISSING_FIELD_NUMBER = 12;
-  private boolean showMissing_;
+  private boolean showMissing_ = false;
   /**
    *
    *
@@ -802,27 +810,21 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       collectionId_ = "";
-
       pageSize_ = 0;
-
       pageToken_ = "";
-
       orderBy_ = "";
-
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
       showMissing_ = false;
-
       consistencySelectorCase_ = 0;
       consistencySelector_ = null;
       return this;
@@ -852,30 +854,45 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public com.google.firestore.v1.ListDocumentsRequest buildPartial() {
       com.google.firestore.v1.ListDocumentsRequest result =
           new com.google.firestore.v1.ListDocumentsRequest(this);
-      result.parent_ = parent_;
-      result.collectionId_ = collectionId_;
-      result.pageSize_ = pageSize_;
-      result.pageToken_ = pageToken_;
-      result.orderBy_ = orderBy_;
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (consistencySelectorCase_ == 8) {
-        result.consistencySelector_ = consistencySelector_;
-      }
-      if (consistencySelectorCase_ == 10) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.showMissing_ = showMissing_;
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListDocumentsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.collectionId_ = collectionId_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.pageSize_ = pageSize_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.pageToken_ = pageToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.orderBy_ = orderBy_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.showMissing_ = showMissing_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.ListDocumentsRequest result) {
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 10 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -925,10 +942,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (other == com.google.firestore.v1.ListDocumentsRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getCollectionId().isEmpty()) {
         collectionId_ = other.collectionId_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       if (other.getPageSize() != 0) {
@@ -936,10 +955,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
       if (!other.getPageToken().isEmpty()) {
         pageToken_ = other.pageToken_;
+        bitField0_ |= 0x00000008;
         onChanged();
       }
       if (!other.getOrderBy().isEmpty()) {
         orderBy_ = other.orderBy_;
+        bitField0_ |= 0x00000010;
         onChanged();
       }
       if (other.hasMask()) {
@@ -993,37 +1014,37 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 collectionId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 24:
               {
                 pageSize_ = input.readInt32();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 34:
               {
                 pageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 50:
               {
                 orderBy_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 50
             case 58:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 58
             case 66:
@@ -1041,7 +1062,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             case 96:
               {
                 showMissing_ = input.readBool();
-
+                bitField0_ |= 0x00000100;
                 break;
               } // case 96
             default:
@@ -1074,6 +1095,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -1151,8 +1174,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1173,8 +1196,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1200,8 +1223,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1270,8 +1293,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1288,8 +1311,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearCollectionId() {
-
       collectionId_ = getDefaultInstance().getCollectionId();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1311,8 +1334,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1348,6 +1371,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public Builder setPageSize(int value) {
 
       pageSize_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1363,7 +1387,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearPageSize() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       pageSize_ = 0;
       onChanged();
       return this;
@@ -1430,8 +1454,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1447,8 +1471,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearPageToken() {
-
       pageToken_ = getDefaultInstance().getPageToken();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1469,8 +1493,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1536,8 +1560,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       orderBy_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1553,8 +1577,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearOrderBy() {
-
       orderBy_ = getDefaultInstance().getOrderBy();
+      bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
@@ -1575,8 +1599,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       orderBy_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1601,7 +1625,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      *
@@ -1640,11 +1664,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -1661,11 +1685,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -1681,19 +1705,18 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000020) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -1708,14 +1731,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1730,7 +1752,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000020;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -2066,7 +2088,6 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
       consistencySelectorCase_ = 10;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 
@@ -2111,6 +2132,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public Builder setShowMissing(boolean value) {
 
       showMissing_ = value;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2131,7 +2153,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearShowMissing() {
-
+      bitField0_ = (bitField0_ & ~0x00000100);
       showMissing_ = false;
       onChanged();
       return this;

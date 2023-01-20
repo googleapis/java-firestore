@@ -508,6 +508,7 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (metadataBuilder_ != null) {
         metadataBuilder_.clear();
       }
@@ -549,37 +550,33 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.bundle.BundleElement buildPartial() {
       com.google.firestore.bundle.BundleElement result =
           new com.google.firestore.bundle.BundleElement(this);
-      if (elementTypeCase_ == 1) {
-        if (metadataBuilder_ == null) {
-          result.elementType_ = elementType_;
-        } else {
-          result.elementType_ = metadataBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (elementTypeCase_ == 2) {
-        if (namedQueryBuilder_ == null) {
-          result.elementType_ = elementType_;
-        } else {
-          result.elementType_ = namedQueryBuilder_.build();
-        }
-      }
-      if (elementTypeCase_ == 3) {
-        if (documentMetadataBuilder_ == null) {
-          result.elementType_ = elementType_;
-        } else {
-          result.elementType_ = documentMetadataBuilder_.build();
-        }
-      }
-      if (elementTypeCase_ == 4) {
-        if (documentBuilder_ == null) {
-          result.elementType_ = elementType_;
-        } else {
-          result.elementType_ = documentBuilder_.build();
-        }
-      }
-      result.elementTypeCase_ = elementTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.bundle.BundleElement result) {
+      int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartialOneofs(com.google.firestore.bundle.BundleElement result) {
+      result.elementTypeCase_ = elementTypeCase_;
+      result.elementType_ = this.elementType_;
+      if (elementTypeCase_ == 1 && metadataBuilder_ != null) {
+        result.elementType_ = metadataBuilder_.build();
+      }
+      if (elementTypeCase_ == 2 && namedQueryBuilder_ != null) {
+        result.elementType_ = namedQueryBuilder_.build();
+      }
+      if (elementTypeCase_ == 3 && documentMetadataBuilder_ != null) {
+        result.elementType_ = documentMetadataBuilder_.build();
+      }
+      if (elementTypeCase_ == 4 && documentBuilder_ != null) {
+        result.elementType_ = documentBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -735,6 +732,8 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private int bitField0_;
+
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.bundle.BundleMetadata,
             com.google.firestore.bundle.BundleMetadata.Builder,
@@ -872,7 +871,6 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       }
       elementTypeCase_ = 1;
       onChanged();
-      ;
       return metadataBuilder_;
     }
 
@@ -1013,7 +1011,6 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       }
       elementTypeCase_ = 2;
       onChanged();
-      ;
       return namedQueryBuilder_;
     }
 
@@ -1159,7 +1156,6 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       }
       elementTypeCase_ = 3;
       onChanged();
-      ;
       return documentMetadataBuilder_;
     }
 
@@ -1298,7 +1294,6 @@ public final class BundleElement extends com.google.protobuf.GeneratedMessageV3
       }
       elementTypeCase_ = 4;
       onChanged();
-      ;
       return documentBuilder_;
     }
 

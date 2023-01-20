@@ -68,6 +68,8 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
   }
 
   public static final int DATABASES_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.admin.v1.Database> databases_;
   /**
    *
@@ -335,6 +337,7 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (databasesBuilder_ == null) {
         databases_ = java.util.Collections.emptyList();
       } else {
@@ -369,7 +372,16 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     public com.google.firestore.admin.v1.ListDatabasesResponse buildPartial() {
       com.google.firestore.admin.v1.ListDatabasesResponse result =
           new com.google.firestore.admin.v1.ListDatabasesResponse(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(
+        com.google.firestore.admin.v1.ListDatabasesResponse result) {
       if (databasesBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           databases_ = java.util.Collections.unmodifiableList(databases_);
@@ -379,8 +391,10 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
       } else {
         result.databases_ = databasesBuilder_.build();
       }
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ListDatabasesResponse result) {
+      int from_bitField0_ = bitField0_;
     }
 
     @java.lang.Override

@@ -66,7 +66,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int TARGET_ID_FIELD_NUMBER = 1;
-  private int targetId_;
+  private int targetId_ = 0;
   /**
    *
    *
@@ -84,7 +84,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int COUNT_FIELD_NUMBER = 2;
-  private int count_;
+  private int count_ = 0;
   /**
    *
    *
@@ -308,10 +308,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       targetId_ = 0;
-
       count_ = 0;
-
       return this;
     }
 
@@ -339,10 +338,21 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     public com.google.firestore.v1.ExistenceFilter buildPartial() {
       com.google.firestore.v1.ExistenceFilter result =
           new com.google.firestore.v1.ExistenceFilter(this);
-      result.targetId_ = targetId_;
-      result.count_ = count_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ExistenceFilter result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.targetId_ = targetId_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.count_ = count_;
+      }
     }
 
     @java.lang.Override
@@ -425,13 +435,13 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
             case 8:
               {
                 targetId_ = input.readInt32();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 8
             case 16:
               {
                 count_ = input.readInt32();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 16
             default:
@@ -450,6 +460,8 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private int targetId_;
     /**
@@ -482,6 +494,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     public Builder setTargetId(int value) {
 
       targetId_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -497,7 +510,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearTargetId() {
-
+      bitField0_ = (bitField0_ & ~0x00000001);
       targetId_ = 0;
       onChanged();
       return this;
@@ -538,6 +551,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     public Builder setCount(int value) {
 
       count_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -555,7 +569,7 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearCount() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       count_ = 0;
       onChanged();
       return this;
