@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
@@ -499,23 +500,25 @@ public class ITSystemTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
+  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
   public void multipleInequalityQueryOnDifferentProperties() throws Exception {
     assumeFalse(
-        "Skip this test when running against emulator",
-        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+        "Skip this test when running against emulator because the fix is only applied in the "
+            + "production",
+        isRunningAgainstFirestoreEmulator(firestore));
 
     addDocument("foo", 1, "bar", 2);
 
-    try {
-      randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get();
-      fail();
-    } catch (Exception e) {
-      assertTrue(
-          e.getMessage()
-              .contains(
-                  "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]"));
-    }
+    ExecutionException executionException =
+        assertThrows(
+            ExecutionException.class,
+            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
+    assertThat(executionException)
+        .hasCauseThat()
+        .hasMessageThat()
+        .contains(
+            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
   }
 
   @Test

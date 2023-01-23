@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -180,11 +181,13 @@ public final class ITQueryWatchTest {
     listenerAssertions.removedIdsIsAnyOf(emptyList());
   }
 
+  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
   public void inequalityFilterOnDifferentProperties() throws Exception {
     assumeFalse(
-        "Skip this test when running against emulator",
-        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+        "Skip this test when running against emulator because the fix is only applied in the "
+            + "production",
+        isRunningAgainstFirestoreEmulator(firestore));
 
     setDocument("doc1", map("foo", "1", "bar", 1));
 
