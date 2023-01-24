@@ -359,10 +359,14 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getUpdateMaskOrBuilder() {
-    return getUpdateMask();
+    return updateMask_ == null
+        ? com.google.firestore.v1.DocumentMask.getDefaultInstance()
+        : updateMask_;
   }
 
   public static final int UPDATE_TRANSFORMS_FIELD_NUMBER = 7;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform>
       updateTransforms_;
   /**
@@ -502,7 +506,9 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
-    return getCurrentDocument();
+    return currentDocument_ == null
+        ? com.google.firestore.v1.Precondition.getDefaultInstance()
+        : currentDocument_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -781,16 +787,16 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (updateBuilder_ != null) {
         updateBuilder_.clear();
       }
       if (transformBuilder_ != null) {
         transformBuilder_.clear();
       }
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-      } else {
-        updateMask_ = null;
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
       if (updateTransformsBuilder_ == null) {
@@ -799,11 +805,10 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
         updateTransforms_ = null;
         updateTransformsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-      } else {
-        currentDocument_ = null;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
       operationCase_ = 0;
@@ -834,46 +839,47 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Write buildPartial() {
       com.google.firestore.v1.Write result = new com.google.firestore.v1.Write(this);
-      int from_bitField0_ = bitField0_;
-      if (operationCase_ == 1) {
-        if (updateBuilder_ == null) {
-          result.operation_ = operation_;
-        } else {
-          result.operation_ = updateBuilder_.build();
-        }
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (operationCase_ == 2) {
-        result.operation_ = operation_;
-      }
-      if (operationCase_ == 6) {
-        if (transformBuilder_ == null) {
-          result.operation_ = operation_;
-        } else {
-          result.operation_ = transformBuilder_.build();
-        }
-      }
-      if (updateMaskBuilder_ == null) {
-        result.updateMask_ = updateMask_;
-      } else {
-        result.updateMask_ = updateMaskBuilder_.build();
-      }
+      buildPartialOneofs(result);
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.Write result) {
       if (updateTransformsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000010) != 0)) {
           updateTransforms_ = java.util.Collections.unmodifiableList(updateTransforms_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.updateTransforms_ = updateTransforms_;
       } else {
         result.updateTransforms_ = updateTransformsBuilder_.build();
       }
-      if (currentDocumentBuilder_ == null) {
-        result.currentDocument_ = currentDocument_;
-      } else {
-        result.currentDocument_ = currentDocumentBuilder_.build();
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Write result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.updateMask_ = updateMaskBuilder_ == null ? updateMask_ : updateMaskBuilder_.build();
       }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.currentDocument_ =
+            currentDocumentBuilder_ == null ? currentDocument_ : currentDocumentBuilder_.build();
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.Write result) {
       result.operationCase_ = operationCase_;
-      onBuilt();
-      return result;
+      result.operation_ = this.operation_;
+      if (operationCase_ == 1 && updateBuilder_ != null) {
+        result.operation_ = updateBuilder_.build();
+      }
+      if (operationCase_ == 6 && transformBuilder_ != null) {
+        result.operation_ = transformBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -928,7 +934,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
         if (!other.updateTransforms_.isEmpty()) {
           if (updateTransforms_.isEmpty()) {
             updateTransforms_ = other.updateTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000010);
           } else {
             ensureUpdateTransformsIsMutable();
             updateTransforms_.addAll(other.updateTransforms_);
@@ -941,7 +947,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
             updateTransformsBuilder_.dispose();
             updateTransformsBuilder_ = null;
             updateTransforms_ = other.updateTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000010);
             updateTransformsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getUpdateTransformsFieldBuilder()
@@ -1019,13 +1025,13 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
             case 26:
               {
                 input.readMessage(getUpdateMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 26
             case 34:
               {
                 input.readMessage(getCurrentDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 34
             case 50:
@@ -1284,7 +1290,6 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
       }
       operationCase_ = 1;
       onChanged();
-      ;
       return updateBuilder_;
     }
 
@@ -1633,7 +1638,6 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
       }
       operationCase_ = 6;
       onChanged();
-      ;
       return transformBuilder_;
     }
 
@@ -1663,7 +1667,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
-      return updateMaskBuilder_ != null || updateMask_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1716,11 +1720,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         updateMask_ = value;
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1743,11 +1747,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     public Builder setUpdateMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (updateMaskBuilder_ == null) {
         updateMask_ = builderForValue.build();
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1769,19 +1773,18 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeUpdateMask(com.google.firestore.v1.DocumentMask value) {
       if (updateMaskBuilder_ == null) {
-        if (updateMask_ != null) {
-          updateMask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(updateMask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && updateMask_ != null
+            && updateMask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getUpdateMaskBuilder().mergeFrom(value);
         } else {
           updateMask_ = value;
         }
-        onChanged();
       } else {
         updateMaskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1802,14 +1805,13 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.v1.DocumentMask update_mask = 3;</code>
      */
     public Builder clearUpdateMask() {
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-        onChanged();
-      } else {
-        updateMask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1830,7 +1832,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.v1.DocumentMask update_mask = 3;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getUpdateMaskBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getUpdateMaskFieldBuilder().getBuilder();
     }
@@ -1898,11 +1900,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
         updateTransforms_ = java.util.Collections.emptyList();
 
     private void ensureUpdateTransformsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000010) != 0)) {
         updateTransforms_ =
             new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>(
                 updateTransforms_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000010;
       }
     }
 
@@ -2169,7 +2171,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     public Builder clearUpdateTransforms() {
       if (updateTransformsBuilder_ == null) {
         updateTransforms_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
       } else {
         updateTransformsBuilder_.clear();
@@ -2327,7 +2329,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
                 com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>(
                 updateTransforms_,
-                ((bitField0_ & 0x00000001) != 0),
+                ((bitField0_ & 0x00000010) != 0),
                 getParentForChildren(),
                 isClean());
         updateTransforms_ = null;
@@ -2354,7 +2356,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
-      return currentDocumentBuilder_ != null || currentDocument_ != null;
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      *
@@ -2393,11 +2395,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         currentDocument_ = value;
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -2414,11 +2416,11 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
         com.google.firestore.v1.Precondition.Builder builderForValue) {
       if (currentDocumentBuilder_ == null) {
         currentDocument_ = builderForValue.build();
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -2433,19 +2435,18 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeCurrentDocument(com.google.firestore.v1.Precondition value) {
       if (currentDocumentBuilder_ == null) {
-        if (currentDocument_ != null) {
-          currentDocument_ =
-              com.google.firestore.v1.Precondition.newBuilder(currentDocument_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000020) != 0)
+            && currentDocument_ != null
+            && currentDocument_ != com.google.firestore.v1.Precondition.getDefaultInstance()) {
+          getCurrentDocumentBuilder().mergeFrom(value);
         } else {
           currentDocument_ = value;
         }
-        onChanged();
       } else {
         currentDocumentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -2459,14 +2460,13 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.v1.Precondition current_document = 4;</code>
      */
     public Builder clearCurrentDocument() {
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-        onChanged();
-      } else {
-        currentDocument_ = null;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -2480,7 +2480,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.v1.Precondition current_document = 4;</code>
      */
     public com.google.firestore.v1.Precondition.Builder getCurrentDocumentBuilder() {
-
+      bitField0_ |= 0x00000020;
       onChanged();
       return getCurrentDocumentFieldBuilder().getBuilder();
     }

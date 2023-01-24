@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.7.8](https://github.com/googleapis/java-firestore/compare/v3.7.7...v3.7.8) (2023-01-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.1.2 ([#1174](https://github.com/googleapis/java-firestore/issues/1174)) ([187a9be](https://github.com/googleapis/java-firestore/commit/187a9be1695d21abed12b60b8de2649f7afe54a3))
+
+## [3.7.7](https://github.com/googleapis/java-firestore/compare/v3.7.6...v3.7.7) (2023-01-18)
+
+
+### Dependencies
+
+* Update beam.version to v2.44.0 ([#1166](https://github.com/googleapis/java-firestore/issues/1166)) ([3364d6e](https://github.com/googleapis/java-firestore/commit/3364d6e859f43145beeab81817db4e524740a00b))
+
 ## [3.7.6](https://github.com/googleapis/java-firestore/compare/v3.7.5...v3.7.6) (2023-01-13)
 
 

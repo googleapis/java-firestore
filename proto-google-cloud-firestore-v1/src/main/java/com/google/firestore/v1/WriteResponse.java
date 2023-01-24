@@ -70,7 +70,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int STREAM_ID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object streamId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object streamId_ = "";
   /**
    *
    *
@@ -121,7 +123,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int STREAM_TOKEN_FIELD_NUMBER = 2;
-  private com.google.protobuf.ByteString streamToken_;
+  private com.google.protobuf.ByteString streamToken_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
@@ -141,6 +143,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int WRITE_RESULTS_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.WriteResult> writeResults_;
   /**
    *
@@ -265,7 +269,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCommitTimeOrBuilder() {
-    return getCommitTime();
+    return commitTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : commitTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -497,21 +501,19 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       streamId_ = "";
-
       streamToken_ = com.google.protobuf.ByteString.EMPTY;
-
       if (writeResultsBuilder_ == null) {
         writeResults_ = java.util.Collections.emptyList();
       } else {
         writeResults_ = null;
         writeResultsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (commitTimeBuilder_ == null) {
-        commitTime_ = null;
-      } else {
-        commitTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      commitTime_ = null;
+      if (commitTimeBuilder_ != null) {
+        commitTimeBuilder_.dispose();
         commitTimeBuilder_ = null;
       }
       return this;
@@ -541,25 +543,37 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.WriteResponse buildPartial() {
       com.google.firestore.v1.WriteResponse result =
           new com.google.firestore.v1.WriteResponse(this);
-      int from_bitField0_ = bitField0_;
-      result.streamId_ = streamId_;
-      result.streamToken_ = streamToken_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.WriteResponse result) {
       if (writeResultsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           writeResults_ = java.util.Collections.unmodifiableList(writeResults_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.writeResults_ = writeResults_;
       } else {
         result.writeResults_ = writeResultsBuilder_.build();
       }
-      if (commitTimeBuilder_ == null) {
-        result.commitTime_ = commitTime_;
-      } else {
-        result.commitTime_ = commitTimeBuilder_.build();
+    }
+
+    private void buildPartial0(com.google.firestore.v1.WriteResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.streamId_ = streamId_;
       }
-      onBuilt();
-      return result;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.streamToken_ = streamToken_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.commitTime_ = commitTimeBuilder_ == null ? commitTime_ : commitTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -609,6 +623,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.WriteResponse.getDefaultInstance()) return this;
       if (!other.getStreamId().isEmpty()) {
         streamId_ = other.streamId_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.getStreamToken() != com.google.protobuf.ByteString.EMPTY) {
@@ -618,7 +633,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
         if (!other.writeResults_.isEmpty()) {
           if (writeResults_.isEmpty()) {
             writeResults_ = other.writeResults_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensureWriteResultsIsMutable();
             writeResults_.addAll(other.writeResults_);
@@ -631,7 +646,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             writeResultsBuilder_.dispose();
             writeResultsBuilder_ = null;
             writeResults_ = other.writeResults_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
             writeResultsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getWriteResultsFieldBuilder()
@@ -673,13 +688,13 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 streamId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 streamToken_ = input.readBytes();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
@@ -698,7 +713,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
             case 34:
               {
                 input.readMessage(getCommitTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             default:
@@ -784,8 +799,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       streamId_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -802,8 +817,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearStreamId() {
-
       streamId_ = getDefaultInstance().getStreamId();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -825,8 +840,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       streamId_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -867,8 +882,8 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       streamToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -886,7 +901,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearStreamToken() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       streamToken_ = getDefaultInstance().getStreamToken();
       onChanged();
       return this;
@@ -896,9 +911,9 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureWriteResultsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000004) != 0)) {
         writeResults_ = new java.util.ArrayList<com.google.firestore.v1.WriteResult>(writeResults_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000004;
       }
     }
 
@@ -1135,7 +1150,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     public Builder clearWriteResults() {
       if (writeResultsBuilder_ == null) {
         writeResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
       } else {
         writeResultsBuilder_.clear();
@@ -1271,7 +1286,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.WriteResult,
                 com.google.firestore.v1.WriteResult.Builder,
                 com.google.firestore.v1.WriteResultOrBuilder>(
-                writeResults_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                writeResults_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
         writeResults_ = null;
       }
       return writeResultsBuilder_;
@@ -1296,7 +1311,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the commitTime field is set.
      */
     public boolean hasCommitTime() {
-      return commitTimeBuilder_ != null || commitTime_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1335,11 +1350,11 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         commitTime_ = value;
-        onChanged();
       } else {
         commitTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1355,11 +1370,11 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
     public Builder setCommitTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (commitTimeBuilder_ == null) {
         commitTime_ = builderForValue.build();
-        onChanged();
       } else {
         commitTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1374,17 +1389,18 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeCommitTime(com.google.protobuf.Timestamp value) {
       if (commitTimeBuilder_ == null) {
-        if (commitTime_ != null) {
-          commitTime_ =
-              com.google.protobuf.Timestamp.newBuilder(commitTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && commitTime_ != null
+            && commitTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getCommitTimeBuilder().mergeFrom(value);
         } else {
           commitTime_ = value;
         }
-        onChanged();
       } else {
         commitTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1398,14 +1414,13 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
      */
     public Builder clearCommitTime() {
-      if (commitTimeBuilder_ == null) {
-        commitTime_ = null;
-        onChanged();
-      } else {
-        commitTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      commitTime_ = null;
+      if (commitTimeBuilder_ != null) {
+        commitTimeBuilder_.dispose();
         commitTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1419,7 +1434,7 @@ public final class WriteResponse extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp commit_time = 4;</code>
      */
     public com.google.protobuf.Timestamp.Builder getCommitTimeBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getCommitTimeFieldBuilder().getBuilder();
     }

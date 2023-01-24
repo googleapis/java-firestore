@@ -133,7 +133,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     }
 
     public static final int RETRY_TRANSACTION_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString retryTransaction_;
+    private com.google.protobuf.ByteString retryTransaction_ = com.google.protobuf.ByteString.EMPTY;
     /**
      *
      *
@@ -350,8 +350,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         retryTransaction_ = com.google.protobuf.ByteString.EMPTY;
-
         return this;
       }
 
@@ -379,9 +379,18 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       public com.google.firestore.v1.TransactionOptions.ReadWrite buildPartial() {
         com.google.firestore.v1.TransactionOptions.ReadWrite result =
             new com.google.firestore.v1.TransactionOptions.ReadWrite(this);
-        result.retryTransaction_ = retryTransaction_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.TransactionOptions.ReadWrite result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.retryTransaction_ = retryTransaction_;
+        }
       }
 
       @java.lang.Override
@@ -464,7 +473,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
               case 10:
                 {
                   retryTransaction_ = input.readBytes();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               default:
@@ -483,6 +492,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
         } // finally
         return this;
       }
+
+      private int bitField0_;
 
       private com.google.protobuf.ByteString retryTransaction_ =
           com.google.protobuf.ByteString.EMPTY;
@@ -517,8 +528,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
         if (value == null) {
           throw new NullPointerException();
         }
-
         retryTransaction_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -534,7 +545,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        * @return This builder for chaining.
        */
       public Builder clearRetryTransaction() {
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         retryTransaction_ = getDefaultInstance().getRetryTransaction();
         onChanged();
         return this;
@@ -1010,6 +1021,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (readTimeBuilder_ != null) {
           readTimeBuilder_.clear();
         }
@@ -1042,16 +1054,24 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       public com.google.firestore.v1.TransactionOptions.ReadOnly buildPartial() {
         com.google.firestore.v1.TransactionOptions.ReadOnly result =
             new com.google.firestore.v1.TransactionOptions.ReadOnly(this);
-        if (consistencySelectorCase_ == 2) {
-          if (readTimeBuilder_ == null) {
-            result.consistencySelector_ = consistencySelector_;
-          } else {
-            result.consistencySelector_ = readTimeBuilder_.build();
-          }
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        result.consistencySelectorCase_ = consistencySelectorCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.TransactionOptions.ReadOnly result) {
+        int from_bitField0_ = bitField0_;
+      }
+
+      private void buildPartialOneofs(com.google.firestore.v1.TransactionOptions.ReadOnly result) {
+        result.consistencySelectorCase_ = consistencySelectorCase_;
+        result.consistencySelector_ = this.consistencySelector_;
+        if (consistencySelectorCase_ == 2 && readTimeBuilder_ != null) {
+          result.consistencySelector_ = readTimeBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -1175,6 +1195,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
         onChanged();
         return this;
       }
+
+      private int bitField0_;
 
       private com.google.protobuf.SingleFieldBuilderV3<
               com.google.protobuf.Timestamp,
@@ -1390,7 +1412,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
         }
         consistencySelectorCase_ = 2;
         onChanged();
-        ;
         return readTimeBuilder_;
       }
 
@@ -1834,6 +1855,7 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (readOnlyBuilder_ != null) {
         readOnlyBuilder_.clear();
       }
@@ -1869,23 +1891,27 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     public com.google.firestore.v1.TransactionOptions buildPartial() {
       com.google.firestore.v1.TransactionOptions result =
           new com.google.firestore.v1.TransactionOptions(this);
-      if (modeCase_ == 2) {
-        if (readOnlyBuilder_ == null) {
-          result.mode_ = mode_;
-        } else {
-          result.mode_ = readOnlyBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (modeCase_ == 3) {
-        if (readWriteBuilder_ == null) {
-          result.mode_ = mode_;
-        } else {
-          result.mode_ = readWriteBuilder_.build();
-        }
-      }
-      result.modeCase_ = modeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.TransactionOptions result) {
+      int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.TransactionOptions result) {
+      result.modeCase_ = modeCase_;
+      result.mode_ = this.mode_;
+      if (modeCase_ == 2 && readOnlyBuilder_ != null) {
+        result.mode_ = readOnlyBuilder_.build();
+      }
+      if (modeCase_ == 3 && readWriteBuilder_ != null) {
+        result.mode_ = readWriteBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2017,6 +2043,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.TransactionOptions.ReadOnly,
@@ -2224,7 +2252,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       }
       modeCase_ = 2;
       onChanged();
-      ;
       return readOnlyBuilder_;
     }
 
@@ -2434,7 +2461,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       }
       modeCase_ = 3;
       onChanged();
-      ;
       return readWriteBuilder_;
     }
 

@@ -30,6 +30,7 @@ import com.google.api.gax.httpjson.HttpJsonStubCallableFactory;
 import com.google.api.gax.httpjson.ProtoMessageRequestFormatter;
 import com.google.api.gax.httpjson.ProtoMessageResponseParser;
 import com.google.api.gax.httpjson.ProtoRestSerializer;
+import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
@@ -49,6 +50,8 @@ import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
 import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListDocumentsResponse;
+import com.google.firestore.v1.ListenRequest;
+import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
 import com.google.firestore.v1.RollbackRequest;
@@ -57,6 +60,8 @@ import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.UpdateDocumentRequest;
+import com.google.firestore.v1.WriteRequest;
+import com.google.firestore.v1.WriteResponse;
 import com.google.protobuf.Empty;
 import com.google.protobuf.TypeRegistry;
 import java.io.IOException;
@@ -939,6 +944,18 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   @Override
   public UnaryCallable<CreateDocumentRequest, Document> createDocumentCallable() {
     return createDocumentCallable;
+  }
+
+  @Override
+  public BidiStreamingCallable<WriteRequest, WriteResponse> writeCallable() {
+    throw new UnsupportedOperationException(
+        "Not implemented: writeCallable(). REST transport is not implemented for this method yet.");
+  }
+
+  @Override
+  public BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable() {
+    throw new UnsupportedOperationException(
+        "Not implemented: listenCallable(). REST transport is not implemented for this method yet.");
   }
 
   @Override

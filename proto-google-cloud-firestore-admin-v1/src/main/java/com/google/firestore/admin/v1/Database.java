@@ -597,7 +597,9 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -648,7 +650,9 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int LOCATION_ID_FIELD_NUMBER = 9;
-  private volatile java.lang.Object locationId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object locationId_ = "";
   /**
    *
    *
@@ -699,7 +703,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TYPE_FIELD_NUMBER = 10;
-  private int type_;
+  private int type_ = 0;
   /**
    *
    *
@@ -732,16 +736,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Database.DatabaseType getType() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Database.DatabaseType result =
-        com.google.firestore.admin.v1.Database.DatabaseType.valueOf(type_);
+        com.google.firestore.admin.v1.Database.DatabaseType.forNumber(type_);
     return result == null
         ? com.google.firestore.admin.v1.Database.DatabaseType.UNRECOGNIZED
         : result;
   }
 
   public static final int CONCURRENCY_MODE_FIELD_NUMBER = 15;
-  private int concurrencyMode_;
+  private int concurrencyMode_ = 0;
   /**
    *
    *
@@ -770,16 +773,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Database.ConcurrencyMode getConcurrencyMode() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Database.ConcurrencyMode result =
-        com.google.firestore.admin.v1.Database.ConcurrencyMode.valueOf(concurrencyMode_);
+        com.google.firestore.admin.v1.Database.ConcurrencyMode.forNumber(concurrencyMode_);
     return result == null
         ? com.google.firestore.admin.v1.Database.ConcurrencyMode.UNRECOGNIZED
         : result;
   }
 
   public static final int APP_ENGINE_INTEGRATION_MODE_FIELD_NUMBER = 19;
-  private int appEngineIntegrationMode_;
+  private int appEngineIntegrationMode_ = 0;
   /**
    *
    *
@@ -813,9 +815,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   @java.lang.Override
   public com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
       getAppEngineIntegrationMode() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.Database.AppEngineIntegrationMode result =
-        com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.valueOf(
+        com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.forNumber(
             appEngineIntegrationMode_);
     return result == null
         ? com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.UNRECOGNIZED
@@ -823,7 +824,9 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int KEY_PREFIX_FIELD_NUMBER = 20;
-  private volatile java.lang.Object keyPrefix_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object keyPrefix_ = "";
   /**
    *
    *
@@ -882,7 +885,9 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int ETAG_FIELD_NUMBER = 99;
-  private volatile java.lang.Object etag_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object etag_ = "";
   /**
    *
    *
@@ -1200,20 +1205,14 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       locationId_ = "";
-
       type_ = 0;
-
       concurrencyMode_ = 0;
-
       appEngineIntegrationMode_ = 0;
-
       keyPrefix_ = "";
-
       etag_ = "";
-
       return this;
     }
 
@@ -1241,15 +1240,36 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.admin.v1.Database buildPartial() {
       com.google.firestore.admin.v1.Database result =
           new com.google.firestore.admin.v1.Database(this);
-      result.name_ = name_;
-      result.locationId_ = locationId_;
-      result.type_ = type_;
-      result.concurrencyMode_ = concurrencyMode_;
-      result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
-      result.keyPrefix_ = keyPrefix_;
-      result.etag_ = etag_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.Database result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.locationId_ = locationId_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.type_ = type_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.concurrencyMode_ = concurrencyMode_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.keyPrefix_ = keyPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.etag_ = etag_;
+      }
     }
 
     @java.lang.Override
@@ -1299,10 +1319,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.admin.v1.Database.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getLocationId().isEmpty()) {
         locationId_ = other.locationId_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       if (other.type_ != 0) {
@@ -1316,10 +1338,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       if (!other.getKeyPrefix().isEmpty()) {
         keyPrefix_ = other.keyPrefix_;
+        bitField0_ |= 0x00000020;
         onChanged();
       }
       if (!other.getEtag().isEmpty()) {
         etag_ = other.etag_;
+        bitField0_ |= 0x00000040;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -1351,43 +1375,43 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 74:
               {
                 locationId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 74
             case 80:
               {
                 type_ = input.readEnum();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 80
             case 120:
               {
                 concurrencyMode_ = input.readEnum();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 120
             case 152:
               {
                 appEngineIntegrationMode_ = input.readEnum();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 152
             case 162:
               {
                 keyPrefix_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 162
             case 794:
               {
                 etag_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000040;
                 break;
               } // case 794
             default:
@@ -1406,6 +1430,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -1471,8 +1497,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1489,8 +1515,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1512,8 +1538,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1582,8 +1608,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       locationId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1600,8 +1626,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearLocationId() {
-
       locationId_ = getDefaultInstance().getLocationId();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1623,8 +1649,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       locationId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1662,8 +1688,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setTypeValue(int value) {
-
       type_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1682,9 +1708,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.Database.DatabaseType getType() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Database.DatabaseType result =
-          com.google.firestore.admin.v1.Database.DatabaseType.valueOf(type_);
+          com.google.firestore.admin.v1.Database.DatabaseType.forNumber(type_);
       return result == null
           ? com.google.firestore.admin.v1.Database.DatabaseType.UNRECOGNIZED
           : result;
@@ -1707,7 +1732,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000004;
       type_ = value.getNumber();
       onChanged();
       return this;
@@ -1726,7 +1751,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearType() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       type_ = 0;
       onChanged();
       return this;
@@ -1761,8 +1786,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setConcurrencyModeValue(int value) {
-
       concurrencyMode_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1779,9 +1804,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.Database.ConcurrencyMode getConcurrencyMode() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Database.ConcurrencyMode result =
-          com.google.firestore.admin.v1.Database.ConcurrencyMode.valueOf(concurrencyMode_);
+          com.google.firestore.admin.v1.Database.ConcurrencyMode.forNumber(concurrencyMode_);
       return result == null
           ? com.google.firestore.admin.v1.Database.ConcurrencyMode.UNRECOGNIZED
           : result;
@@ -1803,7 +1827,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000008;
       concurrencyMode_ = value.getNumber();
       onChanged();
       return this;
@@ -1820,7 +1844,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearConcurrencyMode() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       concurrencyMode_ = 0;
       onChanged();
       return this;
@@ -1859,8 +1883,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setAppEngineIntegrationModeValue(int value) {
-
       appEngineIntegrationMode_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1880,9 +1904,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
         getAppEngineIntegrationMode() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Database.AppEngineIntegrationMode result =
-          com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.valueOf(
+          com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.forNumber(
               appEngineIntegrationMode_);
       return result == null
           ? com.google.firestore.admin.v1.Database.AppEngineIntegrationMode.UNRECOGNIZED
@@ -1907,7 +1930,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000010;
       appEngineIntegrationMode_ = value.getNumber();
       onChanged();
       return this;
@@ -1926,7 +1949,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearAppEngineIntegrationMode() {
-
+      bitField0_ = (bitField0_ & ~0x00000010);
       appEngineIntegrationMode_ = 0;
       onChanged();
       return this;
@@ -2008,8 +2031,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       keyPrefix_ = value;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -2030,8 +2053,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearKeyPrefix() {
-
       keyPrefix_ = getDefaultInstance().getKeyPrefix();
+      bitField0_ = (bitField0_ & ~0x00000020);
       onChanged();
       return this;
     }
@@ -2057,8 +2080,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       keyPrefix_ = value;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -2130,8 +2153,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       etag_ = value;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -2149,8 +2172,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearEtag() {
-
       etag_ = getDefaultInstance().getEtag();
+      bitField0_ = (bitField0_ & ~0x00000040);
       onChanged();
       return this;
     }
@@ -2173,8 +2196,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       etag_ = value;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }

@@ -77,7 +77,6 @@ public interface AggregationResultOrBuilder
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
    */
-
   /* nullable */
   com.google.firestore.v1.Value getAggregateFieldsOrDefault(
       java.lang.String key,

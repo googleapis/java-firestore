@@ -68,7 +68,9 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -166,7 +168,9 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder() {
-    return getCurrentDocument();
+    return currentDocument_ == null
+        ? com.google.firestore.v1.Precondition.getDefaultInstance()
+        : currentDocument_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -380,12 +384,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-      } else {
-        currentDocument_ = null;
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
       return this;
@@ -415,14 +418,22 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
     public com.google.firestore.v1.DeleteDocumentRequest buildPartial() {
       com.google.firestore.v1.DeleteDocumentRequest result =
           new com.google.firestore.v1.DeleteDocumentRequest(this);
-      result.name_ = name_;
-      if (currentDocumentBuilder_ == null) {
-        result.currentDocument_ = currentDocument_;
-      } else {
-        result.currentDocument_ = currentDocumentBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.DeleteDocumentRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.currentDocument_ =
+            currentDocumentBuilder_ == null ? currentDocument_ : currentDocumentBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -472,6 +483,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
       if (other == com.google.firestore.v1.DeleteDocumentRequest.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasCurrentDocument()) {
@@ -506,13 +518,13 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getCurrentDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -531,6 +543,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -596,8 +610,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -614,8 +628,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -637,8 +651,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -662,7 +676,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the currentDocument field is set.
      */
     public boolean hasCurrentDocument() {
-      return currentDocumentBuilder_ != null || currentDocument_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -701,11 +715,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         currentDocument_ = value;
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -722,11 +736,11 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
         com.google.firestore.v1.Precondition.Builder builderForValue) {
       if (currentDocumentBuilder_ == null) {
         currentDocument_ = builderForValue.build();
-        onChanged();
       } else {
         currentDocumentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -741,19 +755,18 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeCurrentDocument(com.google.firestore.v1.Precondition value) {
       if (currentDocumentBuilder_ == null) {
-        if (currentDocument_ != null) {
-          currentDocument_ =
-              com.google.firestore.v1.Precondition.newBuilder(currentDocument_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && currentDocument_ != null
+            && currentDocument_ != com.google.firestore.v1.Precondition.getDefaultInstance()) {
+          getCurrentDocumentBuilder().mergeFrom(value);
         } else {
           currentDocument_ = value;
         }
-        onChanged();
       } else {
         currentDocumentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -767,14 +780,13 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.Precondition current_document = 2;</code>
      */
     public Builder clearCurrentDocument() {
-      if (currentDocumentBuilder_ == null) {
-        currentDocument_ = null;
-        onChanged();
-      } else {
-        currentDocument_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      currentDocument_ = null;
+      if (currentDocumentBuilder_ != null) {
+        currentDocumentBuilder_.dispose();
         currentDocumentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -788,7 +800,7 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.Precondition current_document = 2;</code>
      */
     public com.google.firestore.v1.Precondition.Builder getCurrentDocumentBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getCurrentDocumentFieldBuilder().getBuilder();
     }
