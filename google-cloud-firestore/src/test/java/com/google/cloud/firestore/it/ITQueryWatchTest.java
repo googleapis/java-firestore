@@ -159,7 +159,7 @@ public final class ITQueryWatchTest {
    * message returned for invalid filter.
    */
   @Test
-  public void inequalityFilterOnSameProperties() throws Exception {
+  public void inequalityFilterOnSamePropertiesShouldBeSupported() throws Exception {
     setDocument("doc", map("foo", 1, "bar", 2));
 
     final Query query = randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2);
@@ -172,7 +172,6 @@ public final class ITQueryWatchTest {
     } finally {
       registration.remove();
     }
-
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
@@ -183,7 +182,7 @@ public final class ITQueryWatchTest {
 
   /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void inequalityFilterOnDifferentProperties() throws Exception {
+  public void inequalityFilterOnDifferentPropertiesShouldThrow() throws Exception {
     assumeFalse(
         "Skip this test when running against emulator because the fix is only applied in the "
             + "production",
@@ -204,7 +203,7 @@ public final class ITQueryWatchTest {
 
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.hasError();
-    FirestoreException error = listener.receivedEvents.get(0).getError();
+    FirestoreException error = listener.receivedEvents.get(0).error;
     assertThat(error)
         .hasMessageThat()
         .ignoringCase()
@@ -592,11 +591,6 @@ public final class ITQueryWatchTest {
     ListenerEvent(@Nullable QuerySnapshot value, @Nullable FirestoreException error) {
       this.value = value;
       this.error = error;
-    }
-
-    @Nullable
-    FirestoreException getError() {
-      return error;
     }
   }
 

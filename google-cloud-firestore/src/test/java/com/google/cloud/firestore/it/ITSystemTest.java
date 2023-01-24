@@ -491,7 +491,7 @@ public class ITSystemTest {
   }
 
   @Test
-  public void multipleInequalityQueryOnSameProperties() throws Exception {
+  public void multipleInequalityQueryOnSamePropertiesShouldBeSupported() throws Exception {
     addDocument("foo", 1);
 
     QuerySnapshot querySnapshot =
@@ -502,7 +502,7 @@ public class ITSystemTest {
 
   /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void multipleInequalityQueryOnDifferentProperties() throws Exception {
+  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
     assumeFalse(
         "Skip this test when running against emulator because the fix is only applied in the "
             + "production",
