@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.7.9](https://github.com/googleapis/java-firestore/compare/v3.7.8...v3.7.9) (2023-01-27)
+
+
+### Bug Fixes
+
+* **java:** Fix error message returned for  invalid snapshot listener inequality filter ([#1093](https://github.com/googleapis/java-firestore/issues/1093)) ([bf7f4a3](https://github.com/googleapis/java-firestore/commit/bf7f4a3b87311437a364cadaf46da4cb018a28c7))
+* **java:** Skip fixing poms for special modules ([#1744](https://github.com/googleapis/java-firestore/issues/1744)) ([#1172](https://github.com/googleapis/java-firestore/issues/1172)) ([222be48](https://github.com/googleapis/java-firestore/commit/222be4882971e5175ae7b9b029cc83047a5a7163))
+
 ## [3.7.8](https://github.com/googleapis/java-firestore/compare/v3.7.7...v3.7.8) (2023-01-20)
 
 
