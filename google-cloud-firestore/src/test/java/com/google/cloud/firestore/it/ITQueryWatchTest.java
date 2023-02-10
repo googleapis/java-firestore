@@ -46,12 +46,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -206,9 +202,10 @@ public final class ITQueryWatchTest {
     FirestoreException error = listener.receivedEvents.get(0).error;
     assertThat(error)
         .hasMessageThat()
-        .ignoringCase()
-        .contains(
-            "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]");
+        .isIn(Arrays.asList(
+                "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]",
+                "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [bar, foo]"
+        ));
   }
 
   /**
