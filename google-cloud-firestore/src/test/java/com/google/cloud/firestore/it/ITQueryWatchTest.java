@@ -207,7 +207,7 @@ public final class ITQueryWatchTest {
     assertThat(error)
         .hasMessageThat()
         .isIn(
-            List.of(
+            asList(
                 "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]",
                 "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [bar, foo]"));
   }
