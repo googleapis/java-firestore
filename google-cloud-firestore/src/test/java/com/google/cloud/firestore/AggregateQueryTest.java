@@ -20,6 +20,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -33,45 +34,54 @@ public class AggregateQueryTest {
 
   @Test
   public void getQueryShouldReturnTheQuerySpecifiedToTheConstructor() {
-    AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery.getQuery()).isSameInstanceAs(mockQuery);
   }
 
   @Test
   public void hashCodeShouldReturnHashCodeOfUnderlyingQuery() {
-    AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery.hashCode()).isEqualTo(mockQuery.hashCode());
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenNull() {
-    AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery.equals(null)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenADifferentObject() {
-    AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery.equals("Not An AggregateQuery")).isFalse();
   }
 
   @Test
   public void equalsShouldReturnFalseWhenGivenAnAggregateQueryWithADifferentQuery() {
-    AggregateQuery aggregateQuery1 = new AggregateQuery(mockQuery);
-    AggregateQuery aggregateQuery2 = new AggregateQuery(mockQuery2);
+    AggregateQuery aggregateQuery1 =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
+    AggregateQuery aggregateQuery2 =
+        new AggregateQuery(mockQuery2, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery1.equals(aggregateQuery2)).isFalse();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenTheSameAggregateQueryInstance() {
-    AggregateQuery aggregateQuery = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery.equals(aggregateQuery)).isTrue();
   }
 
   @Test
   public void equalsShouldReturnTrueWhenGivenAnAggregateQueryWithTheSameQuery() {
-    AggregateQuery aggregateQuery1 = new AggregateQuery(mockQuery);
-    AggregateQuery aggregateQuery2 = new AggregateQuery(mockQuery);
+    AggregateQuery aggregateQuery1 =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
+    AggregateQuery aggregateQuery2 =
+        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
     assertThat(aggregateQuery1.equals(aggregateQuery2)).isTrue();
   }
 

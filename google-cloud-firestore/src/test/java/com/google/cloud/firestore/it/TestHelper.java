@@ -16,7 +16,11 @@
 
 package com.google.cloud.firestore.it;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class TestHelper {
   /** Make constructor private to prevent creating instances. */
@@ -25,5 +29,30 @@ public final class TestHelper {
   /** Returns whether the tests are running against the Firestore emulator. */
   static boolean isRunningAgainstFirestoreEmulator(Firestore firestore) {
     return firestore.getOptions().getHost().startsWith("localhost:");
+  }
+
+  /**
+   * Blocks the calling thread until the given future completes. Note that this method does not
+   * check the success or failure of the future; it returns regardless of its success or failure.
+   */
+  public static void await(ApiFuture<?> future) throws InterruptedException {
+    AtomicBoolean done = new AtomicBoolean(false);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    future.addListener(
+        () -> {
+          synchronized (done) {
+            done.set(true);
+            done.notifyAll();
+          }
+        },
+        executor);
+
+    synchronized (done) {
+      while (!done.get()) {
+        done.wait();
+      }
+    }
+
+    executor.shutdown();
   }
 }
