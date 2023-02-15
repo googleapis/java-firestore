@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
+ * The response from
+ * [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BatchWriteResponse}
@@ -69,6 +70,8 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
   }
 
   public static final int WRITE_RESULTS_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.WriteResult> writeResults_;
   /**
    *
@@ -148,6 +151,8 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
   }
 
   public static final int STATUS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.rpc.Status> status_;
   /**
    *
@@ -401,7 +406,8 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
+   * The response from
+   * [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BatchWriteResponse}
@@ -435,6 +441,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (writeResultsBuilder_ == null) {
         writeResults_ = java.util.Collections.emptyList();
       } else {
@@ -476,7 +483,15 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
     public com.google.firestore.v1.BatchWriteResponse buildPartial() {
       com.google.firestore.v1.BatchWriteResponse result =
           new com.google.firestore.v1.BatchWriteResponse(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.BatchWriteResponse result) {
       if (writeResultsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           writeResults_ = java.util.Collections.unmodifiableList(writeResults_);
@@ -495,8 +510,10 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
       } else {
         result.status_ = statusBuilder_.build();
       }
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.BatchWriteResponse result) {
+      int from_bitField0_ = bitField0_;
     }
 
     @java.lang.Override

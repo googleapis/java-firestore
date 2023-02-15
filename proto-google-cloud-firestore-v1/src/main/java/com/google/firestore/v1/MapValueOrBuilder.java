@@ -81,7 +81,6 @@ public interface MapValueOrBuilder
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
-
   /* nullable */
   com.google.firestore.v1.Value getFieldsOrDefault(
       java.lang.String key,

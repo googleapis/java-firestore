@@ -78,7 +78,8 @@ public interface ListDocumentsResponseOrBuilder
    *
    *
    * <pre>
-   * The next page token.
+   * A token to retrieve the next page of documents.
+   * If this field is omitted, there are no subsequent pages.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
@@ -90,7 +91,8 @@ public interface ListDocumentsResponseOrBuilder
    *
    *
    * <pre>
-   * The next page token.
+   * A token to retrieve the next page of documents.
+   * If this field is omitted, there are no subsequent pages.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>

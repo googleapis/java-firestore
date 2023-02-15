@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
+ * The request for
+ * [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.ListDocumentsRequest}
@@ -118,7 +119,9 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -177,16 +180,20 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int COLLECTION_ID_FIELD_NUMBER = 2;
-  private volatile java.lang.Object collectionId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object collectionId_ = "";
   /**
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-   * or `messages`.
+   * Optional. The collection ID, relative to `parent`, to list.
+   * For example: `chatrooms` or `messages`.
+   * This is optional, and when not provided, Firestore will list documents
+   * from all collections under the provided `parent`.
    * </pre>
    *
-   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The collectionId.
    */
@@ -206,11 +213,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-   * or `messages`.
+   * Optional. The collection ID, relative to `parent`, to list.
+   * For example: `chatrooms` or `messages`.
+   * This is optional, and when not provided, Firestore will list documents
+   * from all collections under the provided `parent`.
    * </pre>
    *
-   * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+   * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The bytes for collectionId.
    */
@@ -228,15 +237,16 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PAGE_SIZE_FIELD_NUMBER = 3;
-  private int pageSize_;
+  private int pageSize_ = 0;
   /**
    *
    *
    * <pre>
-   * The maximum number of documents to return.
+   * Optional. The maximum number of documents to return in a single response.
+   * Firestore may return fewer than this value.
    * </pre>
    *
-   * <code>int32 page_size = 3;</code>
+   * <code>int32 page_size = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The pageSize.
    */
@@ -246,15 +256,20 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PAGE_TOKEN_FIELD_NUMBER = 4;
-  private volatile java.lang.Object pageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pageToken_ = "";
   /**
    *
    *
    * <pre>
-   * The `next_page_token` value returned from a previous List request, if any.
+   * Optional. A page token, received from a previous `ListDocuments` response.
+   * Provide this to retrieve the subsequent page. When paginating, all other
+   * parameters (with the exception of `page_size`) must match the values set
+   * in the request that generated the page token.
    * </pre>
    *
-   * <code>string page_token = 4;</code>
+   * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The pageToken.
    */
@@ -274,10 +289,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The `next_page_token` value returned from a previous List request, if any.
+   * Optional. A page token, received from a previous `ListDocuments` response.
+   * Provide this to retrieve the subsequent page. When paginating, all other
+   * parameters (with the exception of `page_size`) must match the values set
+   * in the request that generated the page token.
    * </pre>
    *
-   * <code>string page_token = 4;</code>
+   * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The bytes for pageToken.
    */
@@ -295,15 +313,21 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int ORDER_BY_FIELD_NUMBER = 6;
-  private volatile java.lang.Object orderBy_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object orderBy_ = "";
   /**
    *
    *
    * <pre>
-   * The order to sort results by. For example: `priority desc, name`.
+   * Optional. The optional ordering of the documents to return.
+   * For example: `priority desc, __name__ desc`.
+   * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+   * used in Firestore queries but in a string representation. When absent,
+   * documents are ordered based on `__name__ ASC`.
    * </pre>
    *
-   * <code>string order_by = 6;</code>
+   * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The orderBy.
    */
@@ -323,10 +347,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The order to sort results by. For example: `priority desc, name`.
+   * Optional. The optional ordering of the documents to return.
+   * For example: `priority desc, __name__ desc`.
+   * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+   * used in Firestore queries but in a string representation. When absent,
+   * documents are ordered based on `__name__ ASC`.
    * </pre>
    *
-   * <code>string order_by = 6;</code>
+   * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The bytes for orderBy.
    */
@@ -349,12 +377,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The fields to return. If not set, returns all fields.
+   * Optional. The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
    *
-   * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    *
    * @return Whether the mask field is set.
    */
@@ -366,12 +395,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The fields to return. If not set, returns all fields.
+   * Optional. The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
    *
-   * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    *
    * @return The mask.
    */
@@ -383,16 +413,17 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The fields to return. If not set, returns all fields.
+   * Optional. The fields to return. If not set, returns all fields.
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
    *
-   * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+   * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 8;
@@ -400,7 +431,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Perform the read as part of an already active transaction.
    * </pre>
    *
    * <code>bytes transaction = 8;</code>
@@ -415,7 +446,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Reads documents in a transaction.
+   * Perform the read as part of an already active transaction.
    * </pre>
    *
    * <code>bytes transaction = 8;</code>
@@ -435,7 +466,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Reads documents as they were at the given time.
+   * Perform the read at the provided time.
    * This may not be older than 270 seconds.
    * </pre>
    *
@@ -451,7 +482,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Reads documents as they were at the given time.
+   * Perform the read at the provided time.
    * This may not be older than 270 seconds.
    * </pre>
    *
@@ -470,7 +501,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * Reads documents as they were at the given time.
+   * Perform the read at the provided time.
    * This may not be older than 270 seconds.
    * </pre>
    *
@@ -485,17 +516,18 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int SHOW_MISSING_FIELD_NUMBER = 12;
-  private boolean showMissing_;
+  private boolean showMissing_ = false;
   /**
    *
    *
    * <pre>
-   * If the list should show missing documents. A missing document is a
-   * document that does not exist but has sub-documents. These documents will
-   * be returned with a key but will not have fields, [Document.create_time][google.firestore.v1.Document.create_time],
-   * or [Document.update_time][google.firestore.v1.Document.update_time] set.
-   * Requests with `show_missing` may not specify `where` or
-   * `order_by`.
+   * If the list should show missing documents.
+   * A document is missing if it does not exist, but there are sub-documents
+   * nested underneath it. When true, such missing documents will be returned
+   * with a key but will not have fields,
+   * [`create_time`][google.firestore.v1.Document.create_time], or
+   * [`update_time`][google.firestore.v1.Document.update_time] set.
+   * Requests with `show_missing` may not specify `where` or `order_by`.
    * </pre>
    *
    * <code>bool show_missing = 12;</code>
@@ -768,7 +800,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
    *
    *
    * <pre>
-   * The request for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
+   * The request for
+   * [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.ListDocumentsRequest}
@@ -802,27 +835,21 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       collectionId_ = "";
-
       pageSize_ = 0;
-
       pageToken_ = "";
-
       orderBy_ = "";
-
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
       showMissing_ = false;
-
       consistencySelectorCase_ = 0;
       consistencySelector_ = null;
       return this;
@@ -852,30 +879,45 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public com.google.firestore.v1.ListDocumentsRequest buildPartial() {
       com.google.firestore.v1.ListDocumentsRequest result =
           new com.google.firestore.v1.ListDocumentsRequest(this);
-      result.parent_ = parent_;
-      result.collectionId_ = collectionId_;
-      result.pageSize_ = pageSize_;
-      result.pageToken_ = pageToken_;
-      result.orderBy_ = orderBy_;
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (consistencySelectorCase_ == 8) {
-        result.consistencySelector_ = consistencySelector_;
-      }
-      if (consistencySelectorCase_ == 10) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.showMissing_ = showMissing_;
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListDocumentsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.collectionId_ = collectionId_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.pageSize_ = pageSize_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.pageToken_ = pageToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.orderBy_ = orderBy_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.showMissing_ = showMissing_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.ListDocumentsRequest result) {
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 10 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -925,10 +967,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (other == com.google.firestore.v1.ListDocumentsRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getCollectionId().isEmpty()) {
         collectionId_ = other.collectionId_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       if (other.getPageSize() != 0) {
@@ -936,10 +980,12 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
       if (!other.getPageToken().isEmpty()) {
         pageToken_ = other.pageToken_;
+        bitField0_ |= 0x00000008;
         onChanged();
       }
       if (!other.getOrderBy().isEmpty()) {
         orderBy_ = other.orderBy_;
+        bitField0_ |= 0x00000010;
         onChanged();
       }
       if (other.hasMask()) {
@@ -993,37 +1039,37 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 collectionId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 24:
               {
                 pageSize_ = input.readInt32();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 34:
               {
                 pageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 50:
               {
                 orderBy_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 50
             case 58:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 58
             case 66:
@@ -1041,7 +1087,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
             case 96:
               {
                 showMissing_ = input.readBool();
-
+                bitField0_ |= 0x00000100;
                 break;
               } // case 96
             default:
@@ -1074,6 +1120,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -1151,8 +1199,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1173,8 +1221,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1200,8 +1248,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1211,11 +1259,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-     * or `messages`.
+     * Optional. The collection ID, relative to `parent`, to list.
+     * For example: `chatrooms` or `messages`.
+     * This is optional, and when not provided, Firestore will list documents
+     * from all collections under the provided `parent`.
      * </pre>
      *
-     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The collectionId.
      */
@@ -1234,11 +1284,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-     * or `messages`.
+     * Optional. The collection ID, relative to `parent`, to list.
+     * For example: `chatrooms` or `messages`.
+     * This is optional, and when not provided, Firestore will list documents
+     * from all collections under the provided `parent`.
      * </pre>
      *
-     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The bytes for collectionId.
      */
@@ -1257,11 +1309,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-     * or `messages`.
+     * Optional. The collection ID, relative to `parent`, to list.
+     * For example: `chatrooms` or `messages`.
+     * This is optional, and when not provided, Firestore will list documents
+     * from all collections under the provided `parent`.
      * </pre>
      *
-     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The collectionId to set.
      * @return This builder for chaining.
@@ -1270,8 +1324,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1279,17 +1333,19 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-     * or `messages`.
+     * Optional. The collection ID, relative to `parent`, to list.
+     * For example: `chatrooms` or `messages`.
+     * This is optional, and when not provided, Firestore will list documents
+     * from all collections under the provided `parent`.
      * </pre>
      *
-     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearCollectionId() {
-
       collectionId_ = getDefaultInstance().getCollectionId();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1297,11 +1353,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`
-     * or `messages`.
+     * Optional. The collection ID, relative to `parent`, to list.
+     * For example: `chatrooms` or `messages`.
+     * This is optional, and when not provided, Firestore will list documents
+     * from all collections under the provided `parent`.
      * </pre>
      *
-     * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
+     * <code>string collection_id = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The bytes for collectionId to set.
      * @return This builder for chaining.
@@ -1311,8 +1369,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1322,10 +1380,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The maximum number of documents to return.
+     * Optional. The maximum number of documents to return in a single response.
+     * Firestore may return fewer than this value.
      * </pre>
      *
-     * <code>int32 page_size = 3;</code>
+     * <code>int32 page_size = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The pageSize.
      */
@@ -1337,10 +1396,11 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The maximum number of documents to return.
+     * Optional. The maximum number of documents to return in a single response.
+     * Firestore may return fewer than this value.
      * </pre>
      *
-     * <code>int32 page_size = 3;</code>
+     * <code>int32 page_size = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The pageSize to set.
      * @return This builder for chaining.
@@ -1348,6 +1408,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public Builder setPageSize(int value) {
 
       pageSize_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1355,15 +1416,16 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The maximum number of documents to return.
+     * Optional. The maximum number of documents to return in a single response.
+     * Firestore may return fewer than this value.
      * </pre>
      *
-     * <code>int32 page_size = 3;</code>
+     * <code>int32 page_size = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearPageSize() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       pageSize_ = 0;
       onChanged();
       return this;
@@ -1374,10 +1436,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The `next_page_token` value returned from a previous List request, if any.
+     * Optional. A page token, received from a previous `ListDocuments` response.
+     * Provide this to retrieve the subsequent page. When paginating, all other
+     * parameters (with the exception of `page_size`) must match the values set
+     * in the request that generated the page token.
      * </pre>
      *
-     * <code>string page_token = 4;</code>
+     * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The pageToken.
      */
@@ -1396,10 +1461,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The `next_page_token` value returned from a previous List request, if any.
+     * Optional. A page token, received from a previous `ListDocuments` response.
+     * Provide this to retrieve the subsequent page. When paginating, all other
+     * parameters (with the exception of `page_size`) must match the values set
+     * in the request that generated the page token.
      * </pre>
      *
-     * <code>string page_token = 4;</code>
+     * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The bytes for pageToken.
      */
@@ -1418,10 +1486,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The `next_page_token` value returned from a previous List request, if any.
+     * Optional. A page token, received from a previous `ListDocuments` response.
+     * Provide this to retrieve the subsequent page. When paginating, all other
+     * parameters (with the exception of `page_size`) must match the values set
+     * in the request that generated the page token.
      * </pre>
      *
-     * <code>string page_token = 4;</code>
+     * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The pageToken to set.
      * @return This builder for chaining.
@@ -1430,8 +1501,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1439,16 +1510,19 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The `next_page_token` value returned from a previous List request, if any.
+     * Optional. A page token, received from a previous `ListDocuments` response.
+     * Provide this to retrieve the subsequent page. When paginating, all other
+     * parameters (with the exception of `page_size`) must match the values set
+     * in the request that generated the page token.
      * </pre>
      *
-     * <code>string page_token = 4;</code>
+     * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearPageToken() {
-
       pageToken_ = getDefaultInstance().getPageToken();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1456,10 +1530,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The `next_page_token` value returned from a previous List request, if any.
+     * Optional. A page token, received from a previous `ListDocuments` response.
+     * Provide this to retrieve the subsequent page. When paginating, all other
+     * parameters (with the exception of `page_size`) must match the values set
+     * in the request that generated the page token.
      * </pre>
      *
-     * <code>string page_token = 4;</code>
+     * <code>string page_token = 4 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The bytes for pageToken to set.
      * @return This builder for chaining.
@@ -1469,8 +1546,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1480,10 +1557,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The order to sort results by. For example: `priority desc, name`.
+     * Optional. The optional ordering of the documents to return.
+     * For example: `priority desc, __name__ desc`.
+     * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+     * used in Firestore queries but in a string representation. When absent,
+     * documents are ordered based on `__name__ ASC`.
      * </pre>
      *
-     * <code>string order_by = 6;</code>
+     * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The orderBy.
      */
@@ -1502,10 +1583,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The order to sort results by. For example: `priority desc, name`.
+     * Optional. The optional ordering of the documents to return.
+     * For example: `priority desc, __name__ desc`.
+     * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+     * used in Firestore queries but in a string representation. When absent,
+     * documents are ordered based on `__name__ ASC`.
      * </pre>
      *
-     * <code>string order_by = 6;</code>
+     * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The bytes for orderBy.
      */
@@ -1524,10 +1609,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The order to sort results by. For example: `priority desc, name`.
+     * Optional. The optional ordering of the documents to return.
+     * For example: `priority desc, __name__ desc`.
+     * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+     * used in Firestore queries but in a string representation. When absent,
+     * documents are ordered based on `__name__ ASC`.
      * </pre>
      *
-     * <code>string order_by = 6;</code>
+     * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The orderBy to set.
      * @return This builder for chaining.
@@ -1536,8 +1625,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       orderBy_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1545,16 +1634,20 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The order to sort results by. For example: `priority desc, name`.
+     * Optional. The optional ordering of the documents to return.
+     * For example: `priority desc, __name__ desc`.
+     * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+     * used in Firestore queries but in a string representation. When absent,
+     * documents are ordered based on `__name__ ASC`.
      * </pre>
      *
-     * <code>string order_by = 6;</code>
+     * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearOrderBy() {
-
       orderBy_ = getDefaultInstance().getOrderBy();
+      bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
@@ -1562,10 +1655,14 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The order to sort results by. For example: `priority desc, name`.
+     * Optional. The optional ordering of the documents to return.
+     * For example: `priority desc, __name__ desc`.
+     * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
+     * used in Firestore queries but in a string representation. When absent,
+     * documents are ordered based on `__name__ ASC`.
      * </pre>
      *
-     * <code>string order_by = 6;</code>
+     * <code>string order_by = 6 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The bytes for orderBy to set.
      * @return This builder for chaining.
@@ -1575,8 +1672,8 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       orderBy_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1591,28 +1688,30 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      *
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      *
      * @return The mask.
      */
@@ -1627,12 +1726,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder setMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
@@ -1640,97 +1740,99 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000020) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000020;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -1738,12 +1840,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
       if (maskBuilder_ != null) {
@@ -1756,12 +1859,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * The fields to return. If not set, returns all fields.
+     * Optional. The fields to return. If not set, returns all fields.
      * If a document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
      *
-     * <code>.google.firestore.v1.DocumentMask mask = 7;</code>
+     * <code>.google.firestore.v1.DocumentMask mask = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.DocumentMask,
@@ -1784,7 +1888,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Perform the read as part of an already active transaction.
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
@@ -1798,7 +1902,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Perform the read as part of an already active transaction.
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
@@ -1815,7 +1919,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Perform the read as part of an already active transaction.
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
@@ -1836,7 +1940,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents in a transaction.
+     * Perform the read as part of an already active transaction.
      * </pre>
      *
      * <code>bytes transaction = 8;</code>
@@ -1861,7 +1965,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -1877,7 +1981,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -1903,7 +2007,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -1926,7 +2030,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -1946,7 +2050,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -1979,7 +2083,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -2005,7 +2109,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -2018,7 +2122,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -2039,7 +2143,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * Reads documents as they were at the given time.
+     * Perform the read at the provided time.
      * This may not be older than 270 seconds.
      * </pre>
      *
@@ -2066,7 +2170,6 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
       }
       consistencySelectorCase_ = 10;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 
@@ -2075,12 +2178,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * If the list should show missing documents. A missing document is a
-     * document that does not exist but has sub-documents. These documents will
-     * be returned with a key but will not have fields, [Document.create_time][google.firestore.v1.Document.create_time],
-     * or [Document.update_time][google.firestore.v1.Document.update_time] set.
-     * Requests with `show_missing` may not specify `where` or
-     * `order_by`.
+     * If the list should show missing documents.
+     * A document is missing if it does not exist, but there are sub-documents
+     * nested underneath it. When true, such missing documents will be returned
+     * with a key but will not have fields,
+     * [`create_time`][google.firestore.v1.Document.create_time], or
+     * [`update_time`][google.firestore.v1.Document.update_time] set.
+     * Requests with `show_missing` may not specify `where` or `order_by`.
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
@@ -2095,12 +2199,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * If the list should show missing documents. A missing document is a
-     * document that does not exist but has sub-documents. These documents will
-     * be returned with a key but will not have fields, [Document.create_time][google.firestore.v1.Document.create_time],
-     * or [Document.update_time][google.firestore.v1.Document.update_time] set.
-     * Requests with `show_missing` may not specify `where` or
-     * `order_by`.
+     * If the list should show missing documents.
+     * A document is missing if it does not exist, but there are sub-documents
+     * nested underneath it. When true, such missing documents will be returned
+     * with a key but will not have fields,
+     * [`create_time`][google.firestore.v1.Document.create_time], or
+     * [`update_time`][google.firestore.v1.Document.update_time] set.
+     * Requests with `show_missing` may not specify `where` or `order_by`.
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
@@ -2111,6 +2216,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
     public Builder setShowMissing(boolean value) {
 
       showMissing_ = value;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2118,12 +2224,13 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      *
      *
      * <pre>
-     * If the list should show missing documents. A missing document is a
-     * document that does not exist but has sub-documents. These documents will
-     * be returned with a key but will not have fields, [Document.create_time][google.firestore.v1.Document.create_time],
-     * or [Document.update_time][google.firestore.v1.Document.update_time] set.
-     * Requests with `show_missing` may not specify `where` or
-     * `order_by`.
+     * If the list should show missing documents.
+     * A document is missing if it does not exist, but there are sub-documents
+     * nested underneath it. When true, such missing documents will be returned
+     * with a key but will not have fields,
+     * [`create_time`][google.firestore.v1.Document.create_time], or
+     * [`update_time`][google.firestore.v1.Document.update_time] set.
+     * Requests with `show_missing` may not specify `where` or `order_by`.
      * </pre>
      *
      * <code>bool show_missing = 12;</code>
@@ -2131,7 +2238,7 @@ public final class ListDocumentsRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearShowMissing() {
-
+      bitField0_ = (bitField0_ & ~0x00000100);
       showMissing_ = false;
       onChanged();
       return this;

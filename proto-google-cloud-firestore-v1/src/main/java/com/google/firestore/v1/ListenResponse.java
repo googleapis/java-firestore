@@ -279,8 +279,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-   * relevant to that target).
+   * A [Document][google.firestore.v1.Document] has been removed from a target
+   * (because it is no longer relevant to that target).
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -295,8 +295,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-   * relevant to that target).
+   * A [Document][google.firestore.v1.Document] has been removed from a target
+   * (because it is no longer relevant to that target).
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -314,8 +314,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-   * relevant to that target).
+   * A [Document][google.firestore.v1.Document] has been removed from a target
+   * (because it is no longer relevant to that target).
    * </pre>
    *
    * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -659,6 +659,7 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (targetChangeBuilder_ != null) {
         targetChangeBuilder_.clear();
       }
@@ -703,44 +704,36 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.ListenResponse buildPartial() {
       com.google.firestore.v1.ListenResponse result =
           new com.google.firestore.v1.ListenResponse(this);
-      if (responseTypeCase_ == 2) {
-        if (targetChangeBuilder_ == null) {
-          result.responseType_ = responseType_;
-        } else {
-          result.responseType_ = targetChangeBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (responseTypeCase_ == 3) {
-        if (documentChangeBuilder_ == null) {
-          result.responseType_ = responseType_;
-        } else {
-          result.responseType_ = documentChangeBuilder_.build();
-        }
-      }
-      if (responseTypeCase_ == 4) {
-        if (documentDeleteBuilder_ == null) {
-          result.responseType_ = responseType_;
-        } else {
-          result.responseType_ = documentDeleteBuilder_.build();
-        }
-      }
-      if (responseTypeCase_ == 6) {
-        if (documentRemoveBuilder_ == null) {
-          result.responseType_ = responseType_;
-        } else {
-          result.responseType_ = documentRemoveBuilder_.build();
-        }
-      }
-      if (responseTypeCase_ == 5) {
-        if (filterBuilder_ == null) {
-          result.responseType_ = responseType_;
-        } else {
-          result.responseType_ = filterBuilder_.build();
-        }
-      }
-      result.responseTypeCase_ = responseTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListenResponse result) {
+      int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.ListenResponse result) {
+      result.responseTypeCase_ = responseTypeCase_;
+      result.responseType_ = this.responseType_;
+      if (responseTypeCase_ == 2 && targetChangeBuilder_ != null) {
+        result.responseType_ = targetChangeBuilder_.build();
+      }
+      if (responseTypeCase_ == 3 && documentChangeBuilder_ != null) {
+        result.responseType_ = documentChangeBuilder_.build();
+      }
+      if (responseTypeCase_ == 4 && documentDeleteBuilder_ != null) {
+        result.responseType_ = documentDeleteBuilder_.build();
+      }
+      if (responseTypeCase_ == 6 && documentRemoveBuilder_ != null) {
+        result.responseType_ = documentRemoveBuilder_.build();
+      }
+      if (responseTypeCase_ == 5 && filterBuilder_ != null) {
+        result.responseType_ = filterBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -905,6 +898,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.TargetChange,
@@ -1111,7 +1106,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
       responseTypeCase_ = 2;
       onChanged();
-      ;
       return targetChangeBuilder_;
     }
 
@@ -1321,7 +1315,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
       responseTypeCase_ = 3;
       onChanged();
-      ;
       return documentChangeBuilder_;
     }
 
@@ -1531,7 +1524,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
       responseTypeCase_ = 4;
       onChanged();
-      ;
       return documentDeleteBuilder_;
     }
 
@@ -1544,8 +1536,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1560,8 +1552,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1586,8 +1578,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1609,8 +1601,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1630,8 +1622,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1663,8 +1655,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1689,8 +1681,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1702,8 +1694,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1723,8 +1715,8 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A [Document][google.firestore.v1.Document] has been removed from a target (because it is no longer
-     * relevant to that target).
+     * A [Document][google.firestore.v1.Document] has been removed from a target
+     * (because it is no longer relevant to that target).
      * </pre>
      *
      * <code>.google.firestore.v1.DocumentRemove document_remove = 6;</code>
@@ -1750,7 +1742,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
       responseTypeCase_ = 6;
       onChanged();
-      ;
       return documentRemoveBuilder_;
     }
 
@@ -1986,7 +1977,6 @@ public final class ListenResponse extends com.google.protobuf.GeneratedMessageV3
       }
       responseTypeCase_ = 5;
       onChanged();
-      ;
       return filterBuilder_;
     }
 

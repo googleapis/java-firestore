@@ -62,7 +62,8 @@ public interface StructuredAggregationQueryOrBuilder
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -77,7 +78,8 @@ public interface StructuredAggregationQueryOrBuilder
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -91,7 +93,8 @@ public interface StructuredAggregationQueryOrBuilder
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -105,7 +108,8 @@ public interface StructuredAggregationQueryOrBuilder
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -120,7 +124,8 @@ public interface StructuredAggregationQueryOrBuilder
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>

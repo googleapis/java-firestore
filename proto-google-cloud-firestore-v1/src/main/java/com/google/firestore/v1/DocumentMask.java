@@ -26,7 +26,8 @@ package com.google.firestore.v1;
  * Used to restrict a get or update operation on a document to a subset of its
  * fields.
  * This is different from standard field masks, as this is always scoped to a
- * [Document][google.firestore.v1.Document], and takes in account the dynamic nature of [Value][google.firestore.v1.Value].
+ * [Document][google.firestore.v1.Document], and takes in account the dynamic
+ * nature of [Value][google.firestore.v1.Value].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.DocumentMask}
@@ -72,13 +73,16 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int FIELD_PATHS_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private com.google.protobuf.LazyStringList fieldPaths_;
   /**
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -92,8 +96,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -107,8 +112,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -123,8 +129,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -308,7 +315,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
    * Used to restrict a get or update operation on a document to a subset of its
    * fields.
    * This is different from standard field masks, as this is always scoped to a
-   * [Document][google.firestore.v1.Document], and takes in account the dynamic nature of [Value][google.firestore.v1.Value].
+   * [Document][google.firestore.v1.Document], and takes in account the dynamic
+   * nature of [Value][google.firestore.v1.Value].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.DocumentMask}
@@ -342,6 +350,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       fieldPaths_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       bitField0_ = (bitField0_ & ~0x00000001);
       return this;
@@ -370,14 +379,24 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.DocumentMask buildPartial() {
       com.google.firestore.v1.DocumentMask result = new com.google.firestore.v1.DocumentMask(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.DocumentMask result) {
       if (((bitField0_ & 0x00000001) != 0)) {
         fieldPaths_ = fieldPaths_.getUnmodifiableView();
         bitField0_ = (bitField0_ & ~0x00000001);
       }
       result.fieldPaths_ = fieldPaths_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.DocumentMask result) {
+      int from_bitField0_ = bitField0_;
     }
 
     @java.lang.Override
@@ -500,8 +519,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -515,8 +535,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -530,8 +551,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -546,8 +568,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -562,8 +585,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -585,8 +609,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -607,8 +632,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -626,8 +652,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>
@@ -644,8 +671,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-     * path syntax reference.
+     * The list of field paths in the mask. See
+     * [Document.fields][google.firestore.v1.Document.fields] for a field path
+     * syntax reference.
      * </pre>
      *
      * <code>repeated string field_paths = 1;</code>

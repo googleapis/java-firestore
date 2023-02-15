@@ -322,7 +322,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int COLLECTION_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object collectionId_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object collectionId_ = "";
     /**
      *
      *
@@ -373,7 +375,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int ALL_DESCENDANTS_FIELD_NUMBER = 3;
-    private boolean allDescendants_;
+    private boolean allDescendants_ = false;
     /**
      *
      *
@@ -601,10 +603,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         collectionId_ = "";
-
         allDescendants_ = false;
-
         return this;
       }
 
@@ -633,10 +634,22 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.CollectionSelector buildPartial() {
         com.google.firestore.v1.StructuredQuery.CollectionSelector result =
             new com.google.firestore.v1.StructuredQuery.CollectionSelector(this);
-        result.collectionId_ = collectionId_;
-        result.allDescendants_ = allDescendants_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(
+          com.google.firestore.v1.StructuredQuery.CollectionSelector result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.collectionId_ = collectionId_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.allDescendants_ = allDescendants_;
+        }
       }
 
       @java.lang.Override
@@ -690,6 +703,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           return this;
         if (!other.getCollectionId().isEmpty()) {
           collectionId_ = other.collectionId_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (other.getAllDescendants() != false) {
@@ -724,13 +738,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 18:
                 {
                   collectionId_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 18
               case 24:
                 {
                   allDescendants_ = input.readBool();
-
+                  bitField0_ |= 0x00000002;
                   break;
                 } // case 24
               default:
@@ -749,6 +763,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } // finally
         return this;
       }
+
+      private int bitField0_;
 
       private java.lang.Object collectionId_ = "";
       /**
@@ -814,8 +830,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
         collectionId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -832,8 +848,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearCollectionId() {
-
         collectionId_ = getDefaultInstance().getCollectionId();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -855,8 +871,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         collectionId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -896,6 +912,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public Builder setAllDescendants(boolean value) {
 
         allDescendants_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -913,7 +930,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearAllDescendants() {
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         allDescendants_ = false;
         onChanged();
         return this;
@@ -1592,6 +1609,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (compositeFilterBuilder_ != null) {
           compositeFilterBuilder_.clear();
         }
@@ -1630,30 +1648,30 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.Filter buildPartial() {
         com.google.firestore.v1.StructuredQuery.Filter result =
             new com.google.firestore.v1.StructuredQuery.Filter(this);
-        if (filterTypeCase_ == 1) {
-          if (compositeFilterBuilder_ == null) {
-            result.filterType_ = filterType_;
-          } else {
-            result.filterType_ = compositeFilterBuilder_.build();
-          }
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        if (filterTypeCase_ == 2) {
-          if (fieldFilterBuilder_ == null) {
-            result.filterType_ = filterType_;
-          } else {
-            result.filterType_ = fieldFilterBuilder_.build();
-          }
-        }
-        if (filterTypeCase_ == 3) {
-          if (unaryFilterBuilder_ == null) {
-            result.filterType_ = filterType_;
-          } else {
-            result.filterType_ = unaryFilterBuilder_.build();
-          }
-        }
-        result.filterTypeCase_ = filterTypeCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.Filter result) {
+        int from_bitField0_ = bitField0_;
+      }
+
+      private void buildPartialOneofs(com.google.firestore.v1.StructuredQuery.Filter result) {
+        result.filterTypeCase_ = filterTypeCase_;
+        result.filterType_ = this.filterType_;
+        if (filterTypeCase_ == 1 && compositeFilterBuilder_ != null) {
+          result.filterType_ = compositeFilterBuilder_.build();
+        }
+        if (filterTypeCase_ == 2 && fieldFilterBuilder_ != null) {
+          result.filterType_ = fieldFilterBuilder_.build();
+        }
+        if (filterTypeCase_ == 3 && unaryFilterBuilder_ != null) {
+          result.filterType_ = unaryFilterBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -1800,6 +1818,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         onChanged();
         return this;
       }
+
+      private int bitField0_;
 
       private com.google.protobuf.SingleFieldBuilderV3<
               com.google.firestore.v1.StructuredQuery.CompositeFilter,
@@ -2013,7 +2033,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
         filterTypeCase_ = 1;
         onChanged();
-        ;
         return compositeFilterBuilder_;
       }
 
@@ -2225,7 +2244,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
         filterTypeCase_ = 2;
         onChanged();
-        ;
         return fieldFilterBuilder_;
       }
 
@@ -2437,7 +2455,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
         filterTypeCase_ = 3;
         onChanged();
-        ;
         return unaryFilterBuilder_;
       }
 
@@ -2677,6 +2694,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>AND = 1;</code>
        */
       AND(1),
+      /**
+       *
+       *
+       * <pre>
+       * Documents are required to satisfy at least one of the combined filters.
+       * </pre>
+       *
+       * <code>OR = 2;</code>
+       */
+      OR(2),
       UNRECOGNIZED(-1),
       ;
 
@@ -2700,6 +2727,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>AND = 1;</code>
        */
       public static final int AND_VALUE = 1;
+      /**
+       *
+       *
+       * <pre>
+       * Documents are required to satisfy at least one of the combined filters.
+       * </pre>
+       *
+       * <code>OR = 2;</code>
+       */
+      public static final int OR_VALUE = 2;
 
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
@@ -2729,6 +2766,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             return OPERATOR_UNSPECIFIED;
           case 1:
             return AND;
+          case 2:
+            return OR;
           default:
             return null;
         }
@@ -2785,7 +2824,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int OP_FIELD_NUMBER = 1;
-    private int op_;
+    private int op_ = 0;
     /**
      *
      *
@@ -2814,15 +2853,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator result =
-          com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.valueOf(op_);
+          com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.forNumber(op_);
       return result == null
           ? com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.UNRECOGNIZED
           : result;
     }
 
     public static final int FILTERS_FIELD_NUMBER = 2;
+
+    @SuppressWarnings("serial")
     private java.util.List<com.google.firestore.v1.StructuredQuery.Filter> filters_;
     /**
      *
@@ -3116,15 +3156,15 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         op_ = 0;
-
         if (filtersBuilder_ == null) {
           filters_ = java.util.Collections.emptyList();
         } else {
           filters_ = null;
           filtersBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -3152,19 +3192,32 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.CompositeFilter buildPartial() {
         com.google.firestore.v1.StructuredQuery.CompositeFilter result =
             new com.google.firestore.v1.StructuredQuery.CompositeFilter(this);
-        int from_bitField0_ = bitField0_;
-        result.op_ = op_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(
+          com.google.firestore.v1.StructuredQuery.CompositeFilter result) {
         if (filtersBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000002) != 0)) {
             filters_ = java.util.Collections.unmodifiableList(filters_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.filters_ = filters_;
         } else {
           result.filters_ = filtersBuilder_.build();
         }
-        onBuilt();
-        return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.CompositeFilter result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.op_ = op_;
+        }
       }
 
       @java.lang.Override
@@ -3222,7 +3275,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           if (!other.filters_.isEmpty()) {
             if (filters_.isEmpty()) {
               filters_ = other.filters_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensureFiltersIsMutable();
               filters_.addAll(other.filters_);
@@ -3235,7 +3288,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               filtersBuilder_.dispose();
               filtersBuilder_ = null;
               filters_ = other.filters_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               filtersBuilder_ =
                   com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                       ? getFiltersFieldBuilder()
@@ -3274,7 +3327,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 8:
                 {
                   op_ = input.readEnum();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 8
               case 18:
@@ -3339,8 +3392,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
-
         op_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -3357,9 +3410,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator getOp() {
-        @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator result =
-            com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.valueOf(op_);
+            com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.forNumber(op_);
         return result == null
             ? com.google.firestore.v1.StructuredQuery.CompositeFilter.Operator.UNRECOGNIZED
             : result;
@@ -3380,7 +3432,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
+        bitField0_ |= 0x00000001;
         op_ = value.getNumber();
         onChanged();
         return this;
@@ -3397,7 +3449,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearOp() {
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         op_ = 0;
         onChanged();
         return this;
@@ -3407,10 +3459,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           java.util.Collections.emptyList();
 
       private void ensureFiltersIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           filters_ =
               new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Filter>(filters_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
         }
       }
 
@@ -3648,7 +3700,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public Builder clearFilters() {
         if (filtersBuilder_ == null) {
           filters_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           filtersBuilder_.clear();
@@ -3785,7 +3837,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                   com.google.firestore.v1.StructuredQuery.Filter,
                   com.google.firestore.v1.StructuredQuery.Filter.Builder,
                   com.google.firestore.v1.StructuredQuery.FilterOrBuilder>(
-                  filters_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                  filters_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
           filters_ = null;
         }
         return filtersBuilder_;
@@ -4430,11 +4482,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-      return getField();
+      return field_ == null
+          ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
+          : field_;
     }
 
     public static final int OP_FIELD_NUMBER = 2;
-    private int op_;
+    private int op_ = 0;
     /**
      *
      *
@@ -4463,9 +4517,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.FieldFilter.Operator result =
-          com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.valueOf(op_);
+          com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.forNumber(op_);
       return result == null
           ? com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.UNRECOGNIZED
           : result;
@@ -4514,7 +4567,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.ValueOrBuilder getValueOrBuilder() {
-      return getValue();
+      return value_ == null ? com.google.firestore.v1.Value.getDefaultInstance() : value_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -4749,18 +4802,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (fieldBuilder_ == null) {
-          field_ = null;
-        } else {
-          field_ = null;
+        bitField0_ = 0;
+        field_ = null;
+        if (fieldBuilder_ != null) {
+          fieldBuilder_.dispose();
           fieldBuilder_ = null;
         }
         op_ = 0;
-
-        if (valueBuilder_ == null) {
-          value_ = null;
-        } else {
-          value_ = null;
+        value_ = null;
+        if (valueBuilder_ != null) {
+          valueBuilder_.dispose();
           valueBuilder_ = null;
         }
         return this;
@@ -4790,19 +4841,24 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.FieldFilter buildPartial() {
         com.google.firestore.v1.StructuredQuery.FieldFilter result =
             new com.google.firestore.v1.StructuredQuery.FieldFilter(this);
-        if (fieldBuilder_ == null) {
-          result.field_ = field_;
-        } else {
-          result.field_ = fieldBuilder_.build();
-        }
-        result.op_ = op_;
-        if (valueBuilder_ == null) {
-          result.value_ = value_;
-        } else {
-          result.value_ = valueBuilder_.build();
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.FieldFilter result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.field_ = fieldBuilder_ == null ? field_ : fieldBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.op_ = op_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.value_ = valueBuilder_ == null ? value_ : valueBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -4891,19 +4947,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 10:
                 {
                   input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               case 16:
                 {
                   op_ = input.readEnum();
-
+                  bitField0_ |= 0x00000002;
                   break;
                 } // case 16
               case 26:
                 {
                   input.readMessage(getValueFieldBuilder().getBuilder(), extensionRegistry);
-
+                  bitField0_ |= 0x00000004;
                   break;
                 } // case 26
               default:
@@ -4923,6 +4979,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
 
+      private int bitField0_;
+
       private com.google.firestore.v1.StructuredQuery.FieldReference field_;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.google.firestore.v1.StructuredQuery.FieldReference,
@@ -4941,7 +4999,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return Whether the field field is set.
        */
       public boolean hasField() {
-        return fieldBuilder_ != null || field_ != null;
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        *
@@ -4978,11 +5036,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             throw new NullPointerException();
           }
           field_ = value;
-          onChanged();
         } else {
           fieldBuilder_.setMessage(value);
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -4998,11 +5056,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
         if (fieldBuilder_ == null) {
           field_ = builderForValue.build();
-          onChanged();
         } else {
           fieldBuilder_.setMessage(builderForValue.build());
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -5016,19 +5074,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
         if (fieldBuilder_ == null) {
-          if (field_ != null) {
-            field_ =
-                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(field_)
-                    .mergeFrom(value)
-                    .buildPartial();
+          if (((bitField0_ & 0x00000001) != 0)
+              && field_ != null
+              && field_
+                  != com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()) {
+            getFieldBuilder().mergeFrom(value);
           } else {
             field_ = value;
           }
-          onChanged();
         } else {
           fieldBuilder_.mergeFrom(value);
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -5041,14 +5099,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
        */
       public Builder clearField() {
-        if (fieldBuilder_ == null) {
-          field_ = null;
-          onChanged();
-        } else {
-          field_ = null;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        field_ = null;
+        if (fieldBuilder_ != null) {
+          fieldBuilder_.dispose();
           fieldBuilder_ = null;
         }
-
+        onChanged();
         return this;
       }
       /**
@@ -5061,7 +5118,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
        */
       public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
-
+        bitField0_ |= 0x00000001;
         onChanged();
         return getFieldFieldBuilder().getBuilder();
       }
@@ -5138,8 +5195,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
-
         op_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -5156,9 +5213,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.FieldFilter.Operator getOp() {
-        @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.FieldFilter.Operator result =
-            com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.valueOf(op_);
+            com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.forNumber(op_);
         return result == null
             ? com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.UNRECOGNIZED
             : result;
@@ -5179,7 +5235,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
+        bitField0_ |= 0x00000002;
         op_ = value.getNumber();
         onChanged();
         return this;
@@ -5196,7 +5252,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearOp() {
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         op_ = 0;
         onChanged();
         return this;
@@ -5220,7 +5276,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return Whether the value field is set.
        */
       public boolean hasValue() {
-        return valueBuilder_ != null || value_ != null;
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        *
@@ -5255,11 +5311,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             throw new NullPointerException();
           }
           value_ = value;
-          onChanged();
         } else {
           valueBuilder_.setMessage(value);
         }
-
+        bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -5274,11 +5330,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public Builder setValue(com.google.firestore.v1.Value.Builder builderForValue) {
         if (valueBuilder_ == null) {
           value_ = builderForValue.build();
-          onChanged();
         } else {
           valueBuilder_.setMessage(builderForValue.build());
         }
-
+        bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -5292,17 +5348,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       public Builder mergeValue(com.google.firestore.v1.Value value) {
         if (valueBuilder_ == null) {
-          if (value_ != null) {
-            value_ =
-                com.google.firestore.v1.Value.newBuilder(value_).mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000004) != 0)
+              && value_ != null
+              && value_ != com.google.firestore.v1.Value.getDefaultInstance()) {
+            getValueBuilder().mergeFrom(value);
           } else {
             value_ = value;
           }
-          onChanged();
         } else {
           valueBuilder_.mergeFrom(value);
         }
-
+        bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -5315,14 +5372,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.Value value = 3;</code>
        */
       public Builder clearValue() {
-        if (valueBuilder_ == null) {
-          value_ = null;
-          onChanged();
-        } else {
-          value_ = null;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        value_ = null;
+        if (valueBuilder_ != null) {
+          valueBuilder_.dispose();
           valueBuilder_ = null;
         }
-
+        onChanged();
         return this;
       }
       /**
@@ -5335,7 +5391,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.Value value = 3;</code>
        */
       public com.google.firestore.v1.Value.Builder getValueBuilder() {
-
+        bitField0_ |= 0x00000004;
         onChanged();
         return getValueFieldBuilder().getBuilder();
       }
@@ -5821,7 +5877,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int OP_FIELD_NUMBER = 1;
-    private int op_;
+    private int op_ = 0;
     /**
      *
      *
@@ -5850,9 +5906,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
-          com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
+          com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.forNumber(op_);
       return result == null
           ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
           : result;
@@ -6138,8 +6193,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         op_ = 0;
-
         if (fieldBuilder_ != null) {
           fieldBuilder_.clear();
         }
@@ -6172,17 +6227,27 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.UnaryFilter buildPartial() {
         com.google.firestore.v1.StructuredQuery.UnaryFilter result =
             new com.google.firestore.v1.StructuredQuery.UnaryFilter(this);
-        result.op_ = op_;
-        if (operandTypeCase_ == 2) {
-          if (fieldBuilder_ == null) {
-            result.operandType_ = operandType_;
-          } else {
-            result.operandType_ = fieldBuilder_.build();
-          }
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        result.operandTypeCase_ = operandTypeCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.UnaryFilter result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.op_ = op_;
+        }
+      }
+
+      private void buildPartialOneofs(com.google.firestore.v1.StructuredQuery.UnaryFilter result) {
+        result.operandTypeCase_ = operandTypeCase_;
+        result.operandType_ = this.operandType_;
+        if (operandTypeCase_ == 2 && fieldBuilder_ != null) {
+          result.operandType_ = fieldBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -6276,7 +6341,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 8:
                 {
                   op_ = input.readEnum();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 8
               case 18:
@@ -6316,6 +6381,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
 
+      private int bitField0_;
+
       private int op_ = 0;
       /**
        *
@@ -6345,8 +6412,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setOpValue(int value) {
-
         op_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -6363,9 +6430,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator getOp() {
-        @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator result =
-            com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.valueOf(op_);
+            com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.forNumber(op_);
         return result == null
             ? com.google.firestore.v1.StructuredQuery.UnaryFilter.Operator.UNRECOGNIZED
             : result;
@@ -6386,7 +6452,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
+        bitField0_ |= 0x00000001;
         op_ = value.getNumber();
         onChanged();
         return this;
@@ -6403,7 +6469,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearOp() {
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         op_ = 0;
         onChanged();
         return this;
@@ -6617,7 +6683,6 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         }
         operandTypeCase_ = 2;
         onChanged();
-        ;
         return fieldBuilder_;
       }
 
@@ -6844,11 +6909,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.FieldReferenceOrBuilder getFieldOrBuilder() {
-      return getField();
+      return field_ == null
+          ? com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()
+          : field_;
     }
 
     public static final int DIRECTION_FIELD_NUMBER = 2;
-    private int direction_;
+    private int direction_ = 0;
     /**
      *
      *
@@ -6877,9 +6944,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     @java.lang.Override
     public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.v1.StructuredQuery.Direction result =
-          com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
+          com.google.firestore.v1.StructuredQuery.Direction.forNumber(direction_);
       return result == null
           ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
           : result;
@@ -7100,14 +7166,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (fieldBuilder_ == null) {
-          field_ = null;
-        } else {
-          field_ = null;
+        bitField0_ = 0;
+        field_ = null;
+        if (fieldBuilder_ != null) {
+          fieldBuilder_.dispose();
           fieldBuilder_ = null;
         }
         direction_ = 0;
-
         return this;
       }
 
@@ -7135,14 +7200,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.Order buildPartial() {
         com.google.firestore.v1.StructuredQuery.Order result =
             new com.google.firestore.v1.StructuredQuery.Order(this);
-        if (fieldBuilder_ == null) {
-          result.field_ = field_;
-        } else {
-          result.field_ = fieldBuilder_.build();
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        result.direction_ = direction_;
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.Order result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.field_ = fieldBuilder_ == null ? field_ : fieldBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.direction_ = direction_;
+        }
       }
 
       @java.lang.Override
@@ -7228,13 +7300,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 10:
                 {
                   input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               case 16:
                 {
                   direction_ = input.readEnum();
-
+                  bitField0_ |= 0x00000002;
                   break;
                 } // case 16
               default:
@@ -7254,6 +7326,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
 
+      private int bitField0_;
+
       private com.google.firestore.v1.StructuredQuery.FieldReference field_;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.google.firestore.v1.StructuredQuery.FieldReference,
@@ -7272,7 +7346,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return Whether the field field is set.
        */
       public boolean hasField() {
-        return fieldBuilder_ != null || field_ != null;
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        *
@@ -7309,11 +7383,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             throw new NullPointerException();
           }
           field_ = value;
-          onChanged();
         } else {
           fieldBuilder_.setMessage(value);
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7329,11 +7403,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           com.google.firestore.v1.StructuredQuery.FieldReference.Builder builderForValue) {
         if (fieldBuilder_ == null) {
           field_ = builderForValue.build();
-          onChanged();
         } else {
           fieldBuilder_.setMessage(builderForValue.build());
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7347,19 +7421,19 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       public Builder mergeField(com.google.firestore.v1.StructuredQuery.FieldReference value) {
         if (fieldBuilder_ == null) {
-          if (field_ != null) {
-            field_ =
-                com.google.firestore.v1.StructuredQuery.FieldReference.newBuilder(field_)
-                    .mergeFrom(value)
-                    .buildPartial();
+          if (((bitField0_ & 0x00000001) != 0)
+              && field_ != null
+              && field_
+                  != com.google.firestore.v1.StructuredQuery.FieldReference.getDefaultInstance()) {
+            getFieldBuilder().mergeFrom(value);
           } else {
             field_ = value;
           }
-          onChanged();
         } else {
           fieldBuilder_.mergeFrom(value);
         }
-
+        bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7372,14 +7446,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
        */
       public Builder clearField() {
-        if (fieldBuilder_ == null) {
-          field_ = null;
-          onChanged();
-        } else {
-          field_ = null;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        field_ = null;
+        if (fieldBuilder_ != null) {
+          fieldBuilder_.dispose();
           fieldBuilder_ = null;
         }
-
+        onChanged();
         return this;
       }
       /**
@@ -7392,7 +7465,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <code>.google.firestore.v1.StructuredQuery.FieldReference field = 1;</code>
        */
       public com.google.firestore.v1.StructuredQuery.FieldReference.Builder getFieldBuilder() {
-
+        bitField0_ |= 0x00000001;
         onChanged();
         return getFieldFieldBuilder().getBuilder();
       }
@@ -7469,8 +7542,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder setDirectionValue(int value) {
-
         direction_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -7487,9 +7560,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        */
       @java.lang.Override
       public com.google.firestore.v1.StructuredQuery.Direction getDirection() {
-        @SuppressWarnings("deprecation")
         com.google.firestore.v1.StructuredQuery.Direction result =
-            com.google.firestore.v1.StructuredQuery.Direction.valueOf(direction_);
+            com.google.firestore.v1.StructuredQuery.Direction.forNumber(direction_);
         return result == null
             ? com.google.firestore.v1.StructuredQuery.Direction.UNRECOGNIZED
             : result;
@@ -7510,7 +7582,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
+        bitField0_ |= 0x00000002;
         direction_ = value.getNumber();
         onChanged();
         return this;
@@ -7527,7 +7599,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearDirection() {
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         direction_ = 0;
         onChanged();
         return this;
@@ -7608,7 +7680,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The relative path of the document being referenced.
      * Requires:
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string field_path = 2;</code>
@@ -7622,7 +7695,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The relative path of the document being referenced.
      * Requires:
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string field_path = 2;</code>
@@ -7681,14 +7755,17 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int FIELD_PATH_FIELD_NUMBER = 2;
-    private volatile java.lang.Object fieldPath_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object fieldPath_ = "";
     /**
      *
      *
      * <pre>
      * The relative path of the document being referenced.
      * Requires:
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string field_path = 2;</code>
@@ -7713,7 +7790,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The relative path of the document being referenced.
      * Requires:
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string field_path = 2;</code>
@@ -7933,8 +8011,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         fieldPath_ = "";
-
         return this;
       }
 
@@ -7962,9 +8040,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.FieldReference buildPartial() {
         com.google.firestore.v1.StructuredQuery.FieldReference result =
             new com.google.firestore.v1.StructuredQuery.FieldReference(this);
-        result.fieldPath_ = fieldPath_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.FieldReference result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.fieldPath_ = fieldPath_;
+        }
       }
 
       @java.lang.Override
@@ -8017,6 +8104,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           return this;
         if (!other.getFieldPath().isEmpty()) {
           fieldPath_ = other.fieldPath_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -8048,7 +8136,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
               case 18:
                 {
                   fieldPath_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 18
               default:
@@ -8068,6 +8156,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         return this;
       }
 
+      private int bitField0_;
+
       private java.lang.Object fieldPath_ = "";
       /**
        *
@@ -8075,7 +8165,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The relative path of the document being referenced.
        * Requires:
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string field_path = 2;</code>
@@ -8099,7 +8190,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The relative path of the document being referenced.
        * Requires:
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string field_path = 2;</code>
@@ -8123,7 +8215,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The relative path of the document being referenced.
        * Requires:
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string field_path = 2;</code>
@@ -8135,8 +8228,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (value == null) {
           throw new NullPointerException();
         }
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -8146,7 +8239,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The relative path of the document being referenced.
        * Requires:
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string field_path = 2;</code>
@@ -8154,8 +8248,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * @return This builder for chaining.
        */
       public Builder clearFieldPath() {
-
         fieldPath_ = getDefaultInstance().getFieldPath();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -8165,7 +8259,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The relative path of the document being referenced.
        * Requires:
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string field_path = 2;</code>
@@ -8178,8 +8273,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -8365,6 +8460,8 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     }
 
     public static final int FIELDS_FIELD_NUMBER = 2;
+
+    @SuppressWarnings("serial")
     private java.util.List<com.google.firestore.v1.StructuredQuery.FieldReference> fields_;
     /**
      *
@@ -8645,6 +8742,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (fieldsBuilder_ == null) {
           fields_ = java.util.Collections.emptyList();
         } else {
@@ -8679,7 +8777,16 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
       public com.google.firestore.v1.StructuredQuery.Projection buildPartial() {
         com.google.firestore.v1.StructuredQuery.Projection result =
             new com.google.firestore.v1.StructuredQuery.Projection(this);
-        int from_bitField0_ = bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(
+          com.google.firestore.v1.StructuredQuery.Projection result) {
         if (fieldsBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             fields_ = java.util.Collections.unmodifiableList(fields_);
@@ -8689,8 +8796,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         } else {
           result.fields_ = fieldsBuilder_.build();
         }
-        onBuilt();
-        return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.StructuredQuery.Projection result) {
+        int from_bitField0_ = bitField0_;
       }
 
       @java.lang.Override
@@ -9336,10 +9445,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.ProjectionOrBuilder getSelectOrBuilder() {
-    return getSelect();
+    return select_ == null
+        ? com.google.firestore.v1.StructuredQuery.Projection.getDefaultInstance()
+        : select_;
   }
 
   public static final int FROM_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.StructuredQuery.CollectionSelector> from_;
   /**
    *
@@ -9455,10 +9568,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    */
   @java.lang.Override
   public com.google.firestore.v1.StructuredQuery.FilterOrBuilder getWhereOrBuilder() {
-    return getWhere();
+    return where_ == null
+        ? com.google.firestore.v1.StructuredQuery.Filter.getDefaultInstance()
+        : where_;
   }
 
   public static final int ORDER_BY_FIELD_NUMBER = 4;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.StructuredQuery.Order> orderBy_;
   /**
    *
@@ -9708,7 +9825,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    */
   @java.lang.Override
   public com.google.firestore.v1.CursorOrBuilder getStartAtOrBuilder() {
-    return getStartAt();
+    return startAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : startAt_;
   }
 
   public static final int END_AT_FIELD_NUMBER = 8;
@@ -9769,11 +9886,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    */
   @java.lang.Override
   public com.google.firestore.v1.CursorOrBuilder getEndAtOrBuilder() {
-    return getEndAt();
+    return endAt_ == null ? com.google.firestore.v1.Cursor.getDefaultInstance() : endAt_;
   }
 
   public static final int OFFSET_FIELD_NUMBER = 6;
-  private int offset_;
+  private int offset_ = 0;
   /**
    *
    *
@@ -9846,7 +9963,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    */
   @java.lang.Override
   public com.google.protobuf.Int32ValueOrBuilder getLimitOrBuilder() {
-    return getLimit();
+    return limit_ == null ? com.google.protobuf.Int32Value.getDefaultInstance() : limit_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -10137,10 +10254,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (selectBuilder_ == null) {
-        select_ = null;
-      } else {
-        select_ = null;
+      bitField0_ = 0;
+      select_ = null;
+      if (selectBuilder_ != null) {
+        selectBuilder_.dispose();
         selectBuilder_ = null;
       }
       if (fromBuilder_ == null) {
@@ -10149,11 +10266,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         from_ = null;
         fromBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (whereBuilder_ == null) {
-        where_ = null;
-      } else {
-        where_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      where_ = null;
+      if (whereBuilder_ != null) {
+        whereBuilder_.dispose();
         whereBuilder_ = null;
       }
       if (orderByBuilder_ == null) {
@@ -10162,25 +10278,21 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         orderBy_ = null;
         orderByBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000002);
-      if (startAtBuilder_ == null) {
-        startAt_ = null;
-      } else {
-        startAt_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      startAt_ = null;
+      if (startAtBuilder_ != null) {
+        startAtBuilder_.dispose();
         startAtBuilder_ = null;
       }
-      if (endAtBuilder_ == null) {
-        endAt_ = null;
-      } else {
-        endAt_ = null;
+      endAt_ = null;
+      if (endAtBuilder_ != null) {
+        endAtBuilder_.dispose();
         endAtBuilder_ = null;
       }
       offset_ = 0;
-
-      if (limitBuilder_ == null) {
-        limit_ = null;
-      } else {
-        limit_ = null;
+      limit_ = null;
+      if (limitBuilder_ != null) {
+        limitBuilder_.dispose();
         limitBuilder_ = null;
       }
       return this;
@@ -10210,53 +10322,55 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public com.google.firestore.v1.StructuredQuery buildPartial() {
       com.google.firestore.v1.StructuredQuery result =
           new com.google.firestore.v1.StructuredQuery(this);
-      int from_bitField0_ = bitField0_;
-      if (selectBuilder_ == null) {
-        result.select_ = select_;
-      } else {
-        result.select_ = selectBuilder_.build();
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.StructuredQuery result) {
       if (fromBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           from_ = java.util.Collections.unmodifiableList(from_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.from_ = from_;
       } else {
         result.from_ = fromBuilder_.build();
       }
-      if (whereBuilder_ == null) {
-        result.where_ = where_;
-      } else {
-        result.where_ = whereBuilder_.build();
-      }
       if (orderByBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           orderBy_ = java.util.Collections.unmodifiableList(orderBy_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.orderBy_ = orderBy_;
       } else {
         result.orderBy_ = orderByBuilder_.build();
       }
-      if (startAtBuilder_ == null) {
-        result.startAt_ = startAt_;
-      } else {
-        result.startAt_ = startAtBuilder_.build();
+    }
+
+    private void buildPartial0(com.google.firestore.v1.StructuredQuery result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.select_ = selectBuilder_ == null ? select_ : selectBuilder_.build();
       }
-      if (endAtBuilder_ == null) {
-        result.endAt_ = endAt_;
-      } else {
-        result.endAt_ = endAtBuilder_.build();
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.where_ = whereBuilder_ == null ? where_ : whereBuilder_.build();
       }
-      result.offset_ = offset_;
-      if (limitBuilder_ == null) {
-        result.limit_ = limit_;
-      } else {
-        result.limit_ = limitBuilder_.build();
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.startAt_ = startAtBuilder_ == null ? startAt_ : startAtBuilder_.build();
       }
-      onBuilt();
-      return result;
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.endAt_ = endAtBuilder_ == null ? endAt_ : endAtBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.offset_ = offset_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.limit_ = limitBuilder_ == null ? limit_ : limitBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -10311,7 +10425,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (!other.from_.isEmpty()) {
           if (from_.isEmpty()) {
             from_ = other.from_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureFromIsMutable();
             from_.addAll(other.from_);
@@ -10324,7 +10438,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             fromBuilder_.dispose();
             fromBuilder_ = null;
             from_ = other.from_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             fromBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFromFieldBuilder()
@@ -10341,7 +10455,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         if (!other.orderBy_.isEmpty()) {
           if (orderBy_.isEmpty()) {
             orderBy_ = other.orderBy_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureOrderByIsMutable();
             orderBy_.addAll(other.orderBy_);
@@ -10354,7 +10468,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             orderByBuilder_.dispose();
             orderByBuilder_ = null;
             orderBy_ = other.orderBy_;
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000008);
             orderByBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getOrderByFieldBuilder()
@@ -10405,7 +10519,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             case 10:
               {
                 input.readMessage(getSelectFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -10425,7 +10539,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             case 26:
               {
                 input.readMessage(getWhereFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
@@ -10444,25 +10558,25 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
             case 42:
               {
                 input.readMessage(getLimitFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000080;
                 break;
               } // case 42
             case 48:
               {
                 offset_ = input.readInt32();
-
+                bitField0_ |= 0x00000040;
                 break;
               } // case 48
             case 58:
               {
                 input.readMessage(getStartAtFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 58
             case 66:
               {
                 input.readMessage(getEndAtFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 66
             default:
@@ -10502,7 +10616,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return Whether the select field is set.
      */
     public boolean hasSelect() {
-      return selectBuilder_ != null || select_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
@@ -10539,11 +10653,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         select_ = value;
-        onChanged();
       } else {
         selectBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -10559,11 +10673,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         com.google.firestore.v1.StructuredQuery.Projection.Builder builderForValue) {
       if (selectBuilder_ == null) {
         select_ = builderForValue.build();
-        onChanged();
       } else {
         selectBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -10577,19 +10691,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     public Builder mergeSelect(com.google.firestore.v1.StructuredQuery.Projection value) {
       if (selectBuilder_ == null) {
-        if (select_ != null) {
-          select_ =
-              com.google.firestore.v1.StructuredQuery.Projection.newBuilder(select_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && select_ != null
+            && select_ != com.google.firestore.v1.StructuredQuery.Projection.getDefaultInstance()) {
+          getSelectBuilder().mergeFrom(value);
         } else {
           select_ = value;
         }
-        onChanged();
       } else {
         selectBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -10602,14 +10715,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
      */
     public Builder clearSelect() {
-      if (selectBuilder_ == null) {
-        select_ = null;
-        onChanged();
-      } else {
-        select_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      select_ = null;
+      if (selectBuilder_ != null) {
+        selectBuilder_.dispose();
         selectBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -10622,7 +10734,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
      */
     public com.google.firestore.v1.StructuredQuery.Projection.Builder getSelectBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getSelectFieldBuilder().getBuilder();
     }
@@ -10674,11 +10786,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         java.util.Collections.emptyList();
 
     private void ensureFromIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         from_ =
             new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.CollectionSelector>(
                 from_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
 
@@ -10900,7 +11012,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder clearFrom() {
       if (fromBuilder_ == null) {
         from_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
       } else {
         fromBuilder_.clear();
@@ -11029,7 +11141,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                 com.google.firestore.v1.StructuredQuery.CollectionSelector,
                 com.google.firestore.v1.StructuredQuery.CollectionSelector.Builder,
                 com.google.firestore.v1.StructuredQuery.CollectionSelectorOrBuilder>(
-                from_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                from_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
         from_ = null;
       }
       return fromBuilder_;
@@ -11053,7 +11165,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return Whether the where field is set.
      */
     public boolean hasWhere() {
-      return whereBuilder_ != null || where_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -11090,11 +11202,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         where_ = value;
-        onChanged();
       } else {
         whereBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -11110,11 +11222,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         com.google.firestore.v1.StructuredQuery.Filter.Builder builderForValue) {
       if (whereBuilder_ == null) {
         where_ = builderForValue.build();
-        onChanged();
       } else {
         whereBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -11128,19 +11240,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     public Builder mergeWhere(com.google.firestore.v1.StructuredQuery.Filter value) {
       if (whereBuilder_ == null) {
-        if (where_ != null) {
-          where_ =
-              com.google.firestore.v1.StructuredQuery.Filter.newBuilder(where_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && where_ != null
+            && where_ != com.google.firestore.v1.StructuredQuery.Filter.getDefaultInstance()) {
+          getWhereBuilder().mergeFrom(value);
         } else {
           where_ = value;
         }
-        onChanged();
       } else {
         whereBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -11153,14 +11264,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
      */
     public Builder clearWhere() {
-      if (whereBuilder_ == null) {
-        where_ = null;
-        onChanged();
-      } else {
-        where_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      where_ = null;
+      if (whereBuilder_ != null) {
+        whereBuilder_.dispose();
         whereBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -11173,7 +11283,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.StructuredQuery.Filter where = 3;</code>
      */
     public com.google.firestore.v1.StructuredQuery.Filter.Builder getWhereBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getWhereFieldBuilder().getBuilder();
     }
@@ -11225,9 +11335,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
         java.util.Collections.emptyList();
 
     private void ensureOrderByIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!((bitField0_ & 0x00000008) != 0)) {
         orderBy_ = new java.util.ArrayList<com.google.firestore.v1.StructuredQuery.Order>(orderBy_);
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000008;
       }
     }
 
@@ -11608,7 +11718,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder clearOrderBy() {
       if (orderByBuilder_ == null) {
         orderBy_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
       } else {
         orderByBuilder_.clear();
@@ -11835,7 +11945,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
                 com.google.firestore.v1.StructuredQuery.Order,
                 com.google.firestore.v1.StructuredQuery.Order.Builder,
                 com.google.firestore.v1.StructuredQuery.OrderOrBuilder>(
-                orderBy_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
+                orderBy_, ((bitField0_ & 0x00000008) != 0), getParentForChildren(), isClean());
         orderBy_ = null;
       }
       return orderByBuilder_;
@@ -11880,7 +11990,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return Whether the startAt field is set.
      */
     public boolean hasStartAt() {
-      return startAtBuilder_ != null || startAt_ != null;
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      *
@@ -11957,11 +12067,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         startAt_ = value;
-        onChanged();
       } else {
         startAtBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -11997,11 +12107,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder setStartAt(com.google.firestore.v1.Cursor.Builder builderForValue) {
       if (startAtBuilder_ == null) {
         startAt_ = builderForValue.build();
-        onChanged();
       } else {
         startAtBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -12036,17 +12146,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     public Builder mergeStartAt(com.google.firestore.v1.Cursor value) {
       if (startAtBuilder_ == null) {
-        if (startAt_ != null) {
-          startAt_ =
-              com.google.firestore.v1.Cursor.newBuilder(startAt_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000010) != 0)
+            && startAt_ != null
+            && startAt_ != com.google.firestore.v1.Cursor.getDefaultInstance()) {
+          getStartAtBuilder().mergeFrom(value);
         } else {
           startAt_ = value;
         }
-        onChanged();
       } else {
         startAtBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -12080,14 +12191,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
      */
     public Builder clearStartAt() {
-      if (startAtBuilder_ == null) {
-        startAt_ = null;
-        onChanged();
-      } else {
-        startAt_ = null;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      startAt_ = null;
+      if (startAtBuilder_ != null) {
+        startAtBuilder_.dispose();
         startAtBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -12121,7 +12231,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.Cursor start_at = 7;</code>
      */
     public com.google.firestore.v1.Cursor.Builder getStartAtBuilder() {
-
+      bitField0_ |= 0x00000010;
       onChanged();
       return getStartAtFieldBuilder().getBuilder();
     }
@@ -12232,7 +12342,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return Whether the endAt field is set.
      */
     public boolean hasEndAt() {
-      return endAtBuilder_ != null || endAt_ != null;
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      *
@@ -12277,11 +12387,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         endAt_ = value;
-        onChanged();
       } else {
         endAtBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -12301,11 +12411,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder setEndAt(com.google.firestore.v1.Cursor.Builder builderForValue) {
       if (endAtBuilder_ == null) {
         endAt_ = builderForValue.build();
-        onChanged();
       } else {
         endAtBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -12324,17 +12434,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     public Builder mergeEndAt(com.google.firestore.v1.Cursor value) {
       if (endAtBuilder_ == null) {
-        if (endAt_ != null) {
-          endAt_ =
-              com.google.firestore.v1.Cursor.newBuilder(endAt_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000020) != 0)
+            && endAt_ != null
+            && endAt_ != com.google.firestore.v1.Cursor.getDefaultInstance()) {
+          getEndAtBuilder().mergeFrom(value);
         } else {
           endAt_ = value;
         }
-        onChanged();
       } else {
         endAtBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000020;
+      onChanged();
       return this;
     }
     /**
@@ -12352,14 +12463,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
      */
     public Builder clearEndAt() {
-      if (endAtBuilder_ == null) {
-        endAt_ = null;
-        onChanged();
-      } else {
-        endAt_ = null;
+      bitField0_ = (bitField0_ & ~0x00000020);
+      endAt_ = null;
+      if (endAtBuilder_ != null) {
+        endAtBuilder_.dispose();
         endAtBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -12377,7 +12487,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.firestore.v1.Cursor end_at = 8;</code>
      */
     public com.google.firestore.v1.Cursor.Builder getEndAtBuilder() {
-
+      bitField0_ |= 0x00000020;
       onChanged();
       return getEndAtFieldBuilder().getBuilder();
     }
@@ -12472,6 +12582,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder setOffset(int value) {
 
       offset_ = value;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -12491,7 +12602,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearOffset() {
-
+      bitField0_ = (bitField0_ & ~0x00000040);
       offset_ = 0;
       onChanged();
       return this;
@@ -12518,7 +12629,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * @return Whether the limit field is set.
      */
     public boolean hasLimit() {
-      return limitBuilder_ != null || limit_ != null;
+      return ((bitField0_ & 0x00000080) != 0);
     }
     /**
      *
@@ -12559,11 +12670,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
           throw new NullPointerException();
         }
         limit_ = value;
-        onChanged();
       } else {
         limitBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000080;
+      onChanged();
       return this;
     }
     /**
@@ -12581,11 +12692,11 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
     public Builder setLimit(com.google.protobuf.Int32Value.Builder builderForValue) {
       if (limitBuilder_ == null) {
         limit_ = builderForValue.build();
-        onChanged();
       } else {
         limitBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000080;
+      onChanged();
       return this;
     }
     /**
@@ -12602,17 +12713,18 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      */
     public Builder mergeLimit(com.google.protobuf.Int32Value value) {
       if (limitBuilder_ == null) {
-        if (limit_ != null) {
-          limit_ =
-              com.google.protobuf.Int32Value.newBuilder(limit_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000080) != 0)
+            && limit_ != null
+            && limit_ != com.google.protobuf.Int32Value.getDefaultInstance()) {
+          getLimitBuilder().mergeFrom(value);
         } else {
           limit_ = value;
         }
-        onChanged();
       } else {
         limitBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000080;
+      onChanged();
       return this;
     }
     /**
@@ -12628,14 +12740,13 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.protobuf.Int32Value limit = 5;</code>
      */
     public Builder clearLimit() {
-      if (limitBuilder_ == null) {
-        limit_ = null;
-        onChanged();
-      } else {
-        limit_ = null;
+      bitField0_ = (bitField0_ & ~0x00000080);
+      limit_ = null;
+      if (limitBuilder_ != null) {
+        limitBuilder_.dispose();
         limitBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -12651,7 +12762,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      * <code>.google.protobuf.Int32Value limit = 5;</code>
      */
     public com.google.protobuf.Int32Value.Builder getLimitBuilder() {
-
+      bitField0_ |= 0x00000080;
       onChanged();
       return getLimitFieldBuilder().getBuilder();
     }

@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+ * The response for
+ * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BeginTransactionResponse}
@@ -68,7 +69,7 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 1;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
@@ -248,7 +249,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
    *
    *
    * <pre>
-   * The response for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+   * The response for
+   * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BeginTransactionResponse}
@@ -282,8 +284,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
       return this;
     }
 
@@ -311,9 +313,18 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
     public com.google.firestore.v1.BeginTransactionResponse buildPartial() {
       com.google.firestore.v1.BeginTransactionResponse result =
           new com.google.firestore.v1.BeginTransactionResponse(this);
-      result.transaction_ = transaction_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.BeginTransactionResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.transaction_ = transaction_;
+      }
     }
 
     @java.lang.Override
@@ -394,7 +405,7 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
             case 10:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             default:
@@ -413,6 +424,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
     /**
@@ -446,8 +459,8 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -463,7 +476,7 @@ public final class BeginTransactionResponse extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000001);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;

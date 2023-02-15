@@ -94,6 +94,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
                     com.google.firestore.v1.Value.getDefaultInstance());
   }
 
+  @SuppressWarnings("serial")
   private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
       aggregateFields_;
 
@@ -114,7 +115,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-   * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+   * The key is the
+   * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
    * equals the number of aggregation functions in the query.
    * </pre>
@@ -139,7 +141,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-   * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+   * The key is the
+   * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
    * equals the number of aggregation functions in the query.
    * </pre>
@@ -155,7 +158,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-   * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+   * The key is the
+   * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
    * equals the number of aggregation functions in the query.
    * </pre>
@@ -163,8 +167,10 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.Value getAggregateFieldsOrDefault(
-      java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+  public /* nullable */ com.google.firestore.v1.Value getAggregateFieldsOrDefault(
+      java.lang.String key,
+      /* nullable */
+      com.google.firestore.v1.Value defaultValue) {
     if (key == null) {
       throw new NullPointerException("map key");
     }
@@ -177,7 +183,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-   * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+   * The key is the
+   * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
    * equals the number of aggregation functions in the query.
    * </pre>
@@ -426,6 +433,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       internalGetMutableAggregateFields().clear();
       return this;
     }
@@ -454,11 +462,19 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     public com.google.firestore.v1.AggregationResult buildPartial() {
       com.google.firestore.v1.AggregationResult result =
           new com.google.firestore.v1.AggregationResult(this);
-      int from_bitField0_ = bitField0_;
-      result.aggregateFields_ = internalGetAggregateFields();
-      result.aggregateFields_.makeImmutable();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.AggregationResult result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.aggregateFields_ = internalGetAggregateFields();
+        result.aggregateFields_.makeImmutable();
+      }
     }
 
     @java.lang.Override
@@ -507,6 +523,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     public Builder mergeFrom(com.google.firestore.v1.AggregationResult other) {
       if (other == com.google.firestore.v1.AggregationResult.getDefaultInstance()) return this;
       internalGetMutableAggregateFields().mergeFrom(other.internalGetAggregateFields());
+      bitField0_ |= 0x00000001;
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -543,6 +560,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
                 internalGetMutableAggregateFields()
                     .getMutableMap()
                     .put(aggregateFields__.getKey(), aggregateFields__.getValue());
+                bitField0_ |= 0x00000001;
                 break;
               } // case 18
             default:
@@ -578,8 +596,6 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
 
     private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
         internalGetMutableAggregateFields() {
-      onChanged();
-      ;
       if (aggregateFields_ == null) {
         aggregateFields_ =
             com.google.protobuf.MapField.newMapField(
@@ -588,6 +604,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
       if (!aggregateFields_.isMutable()) {
         aggregateFields_ = aggregateFields_.copy();
       }
+      bitField0_ |= 0x00000001;
+      onChanged();
       return aggregateFields_;
     }
 
@@ -599,7 +617,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -624,7 +643,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -640,7 +660,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -648,8 +669,10 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      * <code>map&lt;string, .google.firestore.v1.Value&gt; aggregate_fields = 2;</code>
      */
     @java.lang.Override
-    public com.google.firestore.v1.Value getAggregateFieldsOrDefault(
-        java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+    public /* nullable */ com.google.firestore.v1.Value getAggregateFieldsOrDefault(
+        java.lang.String key,
+        /* nullable */
+        com.google.firestore.v1.Value defaultValue) {
       if (key == null) {
         throw new NullPointerException("map key");
       }
@@ -662,7 +685,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -683,6 +707,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     }
 
     public Builder clearAggregateFields() {
+      bitField0_ = (bitField0_ & ~0x00000001);
       internalGetMutableAggregateFields().getMutableMap().clear();
       return this;
     }
@@ -691,7 +716,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -709,6 +735,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value>
         getMutableAggregateFields() {
+      bitField0_ |= 0x00000001;
       return internalGetMutableAggregateFields().getMutableMap();
     }
     /**
@@ -716,7 +743,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -730,8 +758,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
       if (value == null) {
         throw new NullPointerException("map value");
       }
-
       internalGetMutableAggregateFields().getMutableMap().put(key, value);
+      bitField0_ |= 0x00000001;
       return this;
     }
     /**
@@ -739,7 +767,8 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
-     * The key is the [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
+     * The key is the
+     * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
      * equals the number of aggregation functions in the query.
      * </pre>
@@ -749,6 +778,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
     public Builder putAllAggregateFields(
         java.util.Map<java.lang.String, com.google.firestore.v1.Value> values) {
       internalGetMutableAggregateFields().getMutableMap().putAll(values);
+      bitField0_ |= 0x00000001;
       return this;
     }
 

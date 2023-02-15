@@ -1,5 +1,70 @@
 # Changelog
 
+## [3.7.10](https://github.com/googleapis/java-firestore/compare/v3.7.9...v3.7.10) (2023-02-06)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.2.0 ([#1185](https://github.com/googleapis/java-firestore/issues/1185)) ([42c34da](https://github.com/googleapis/java-firestore/commit/42c34dabe3ecb89401967f0f25593cfcfb63bc94))
+
+## [3.7.9](https://github.com/googleapis/java-firestore/compare/v3.7.8...v3.7.9) (2023-01-27)
+
+
+### Bug Fixes
+
+* **java:** Fix error message returned for  invalid snapshot listener inequality filter ([#1093](https://github.com/googleapis/java-firestore/issues/1093)) ([bf7f4a3](https://github.com/googleapis/java-firestore/commit/bf7f4a3b87311437a364cadaf46da4cb018a28c7))
+* **java:** Skip fixing poms for special modules ([#1744](https://github.com/googleapis/java-firestore/issues/1744)) ([#1172](https://github.com/googleapis/java-firestore/issues/1172)) ([222be48](https://github.com/googleapis/java-firestore/commit/222be4882971e5175ae7b9b029cc83047a5a7163))
+
+## [3.7.8](https://github.com/googleapis/java-firestore/compare/v3.7.7...v3.7.8) (2023-01-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.1.2 ([#1174](https://github.com/googleapis/java-firestore/issues/1174)) ([187a9be](https://github.com/googleapis/java-firestore/commit/187a9be1695d21abed12b60b8de2649f7afe54a3))
+
+## [3.7.7](https://github.com/googleapis/java-firestore/compare/v3.7.6...v3.7.7) (2023-01-18)
+
+
+### Dependencies
+
+* Update beam.version to v2.44.0 ([#1166](https://github.com/googleapis/java-firestore/issues/1166)) ([3364d6e](https://github.com/googleapis/java-firestore/commit/3364d6e859f43145beeab81817db4e524740a00b))
+
+## [3.7.6](https://github.com/googleapis/java-firestore/compare/v3.7.5...v3.7.6) (2023-01-13)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.9.2 ([#1158](https://github.com/googleapis/java-firestore/issues/1158)) ([418b2bf](https://github.com/googleapis/java-firestore/commit/418b2bfed98f3e88dac63771e4b55f2b157fe184))
+
+## [3.7.5](https://github.com/googleapis/java-firestore/compare/v3.7.4...v3.7.5) (2023-01-13)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.1.1 ([#1157](https://github.com/googleapis/java-firestore/issues/1157)) ([c7c688b](https://github.com/googleapis/java-firestore/commit/c7c688b1357edfc61f1f86b2c282b80ddb48f2c4))
+
+## [3.7.4](https://github.com/googleapis/java-firestore/compare/v3.7.3...v3.7.4) (2022-12-08)
+
+
+### Dependencies
+
+* Update multiple dependencies atomically ([#1145](https://github.com/googleapis/java-firestore/issues/1145)) ([36bb40b](https://github.com/googleapis/java-firestore/commit/36bb40b97fb3a2eb44b35437fe0322644dc2bffd))
+
+## [3.7.3](https://github.com/googleapis/java-firestore/compare/v3.7.2...v3.7.3) (2022-11-21)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.18 ([#1132](https://github.com/googleapis/java-firestore/issues/1132)) ([6b57290](https://github.com/googleapis/java-firestore/commit/6b572900bc792c18d8f161fb1d1a01b72a9962d9))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.18 ([#1133](https://github.com/googleapis/java-firestore/issues/1133)) ([8cb45ae](https://github.com/googleapis/java-firestore/commit/8cb45aebb9424187ae4c7ed00cb337b73baac0d7))
+
+## [3.7.2](https://github.com/googleapis/java-firestore/compare/v3.7.1...v3.7.2) (2022-11-18)
+
+
+### Dependencies
+
+* Update beam.version to v2.43.0 ([#1127](https://github.com/googleapis/java-firestore/issues/1127)) ([ff1df71](https://github.com/googleapis/java-firestore/commit/ff1df71f96b7c6c1fda0e53cdca5097b024d9812))
+
 ## [3.7.1](https://github.com/googleapis/java-firestore/compare/v3.7.0...v3.7.1) (2022-11-08)
 
 

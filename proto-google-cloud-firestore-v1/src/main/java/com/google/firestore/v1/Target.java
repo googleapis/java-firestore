@@ -182,6 +182,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int DOCUMENTS_FIELD_NUMBER = 2;
+
+    @SuppressWarnings("serial")
     private com.google.protobuf.LazyStringList documents_;
     /**
      *
@@ -460,6 +462,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
@@ -489,14 +492,25 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.v1.Target.DocumentsTarget buildPartial() {
         com.google.firestore.v1.Target.DocumentsTarget result =
             new com.google.firestore.v1.Target.DocumentsTarget(this);
-        int from_bitField0_ = bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(
+          com.google.firestore.v1.Target.DocumentsTarget result) {
         if (((bitField0_ & 0x00000001) != 0)) {
           documents_ = documents_.getUnmodifiableView();
           bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.documents_ = documents_;
-        onBuilt();
-        return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.Target.DocumentsTarget result) {
+        int from_bitField0_ = bitField0_;
       }
 
       @java.lang.Override
@@ -1039,7 +1053,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int PARENT_FIELD_NUMBER = 1;
-    private volatile java.lang.Object parent_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object parent_ = "";
     /**
      *
      *
@@ -1371,8 +1387,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         parent_ = "";
-
         if (structuredQueryBuilder_ != null) {
           structuredQueryBuilder_.clear();
         }
@@ -1405,17 +1421,27 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.v1.Target.QueryTarget buildPartial() {
         com.google.firestore.v1.Target.QueryTarget result =
             new com.google.firestore.v1.Target.QueryTarget(this);
-        result.parent_ = parent_;
-        if (queryTypeCase_ == 2) {
-          if (structuredQueryBuilder_ == null) {
-            result.queryType_ = queryType_;
-          } else {
-            result.queryType_ = structuredQueryBuilder_.build();
-          }
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        result.queryTypeCase_ = queryTypeCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.Target.QueryTarget result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.parent_ = parent_;
+        }
+      }
+
+      private void buildPartialOneofs(com.google.firestore.v1.Target.QueryTarget result) {
+        result.queryTypeCase_ = queryTypeCase_;
+        result.queryType_ = this.queryType_;
+        if (queryTypeCase_ == 2 && structuredQueryBuilder_ != null) {
+          result.queryType_ = structuredQueryBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -1467,6 +1493,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         if (other == com.google.firestore.v1.Target.QueryTarget.getDefaultInstance()) return this;
         if (!other.getParent().isEmpty()) {
           parent_ = other.parent_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         switch (other.getQueryTypeCase()) {
@@ -1509,7 +1536,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
               case 10:
                 {
                   parent_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               case 18:
@@ -1549,6 +1576,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         onChanged();
         return this;
       }
+
+      private int bitField0_;
 
       private java.lang.Object parent_ = "";
       /**
@@ -1626,8 +1655,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         if (value == null) {
           throw new NullPointerException();
         }
-
         parent_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1648,8 +1677,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearParent() {
-
         parent_ = getDefaultInstance().getParent();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1675,8 +1704,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         parent_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1887,7 +1916,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
         queryTypeCase_ = 2;
         onChanged();
-        ;
         return structuredQueryBuilder_;
       }
 
@@ -2156,7 +2184,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   * A resume token from a prior
+   * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2172,7 +2201,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   * A resume token from a prior
+   * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2243,7 +2273,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TARGET_ID_FIELD_NUMBER = 5;
-  private int targetId_;
+  private int targetId_ = 0;
   /**
    *
    *
@@ -2262,7 +2292,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int ONCE_FIELD_NUMBER = 6;
-  private boolean once_;
+  private boolean once_ = false;
   /**
    *
    *
@@ -2560,6 +2590,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (queryBuilder_ != null) {
         queryBuilder_.clear();
       }
@@ -2570,9 +2601,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         readTimeBuilder_.clear();
       }
       targetId_ = 0;
-
       once_ = false;
-
       targetTypeCase_ = 0;
       targetType_ = null;
       resumeTypeCase_ = 0;
@@ -2603,36 +2632,38 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Target buildPartial() {
       com.google.firestore.v1.Target result = new com.google.firestore.v1.Target(this);
-      if (targetTypeCase_ == 2) {
-        if (queryBuilder_ == null) {
-          result.targetType_ = targetType_;
-        } else {
-          result.targetType_ = queryBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (targetTypeCase_ == 3) {
-        if (documentsBuilder_ == null) {
-          result.targetType_ = targetType_;
-        } else {
-          result.targetType_ = documentsBuilder_.build();
-        }
-      }
-      if (resumeTypeCase_ == 4) {
-        result.resumeType_ = resumeType_;
-      }
-      if (resumeTypeCase_ == 11) {
-        if (readTimeBuilder_ == null) {
-          result.resumeType_ = resumeType_;
-        } else {
-          result.resumeType_ = readTimeBuilder_.build();
-        }
-      }
-      result.targetId_ = targetId_;
-      result.once_ = once_;
-      result.targetTypeCase_ = targetTypeCase_;
-      result.resumeTypeCase_ = resumeTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Target result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.targetId_ = targetId_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.once_ = once_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.Target result) {
+      result.targetTypeCase_ = targetTypeCase_;
+      result.targetType_ = this.targetType_;
+      if (targetTypeCase_ == 2 && queryBuilder_ != null) {
+        result.targetType_ = queryBuilder_.build();
+      }
+      if (targetTypeCase_ == 3 && documentsBuilder_ != null) {
+        result.targetType_ = documentsBuilder_.build();
+      }
+      result.resumeTypeCase_ = resumeTypeCase_;
+      result.resumeType_ = this.resumeType_;
+      if (resumeTypeCase_ == 11 && readTimeBuilder_ != null) {
+        result.resumeType_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2765,13 +2796,13 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
             case 40:
               {
                 targetId_ = input.readInt32();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 40
             case 48:
               {
                 once_ = input.readBool();
-
+                bitField0_ |= 0x00000020;
                 break;
               } // case 48
             case 90:
@@ -2824,6 +2855,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.Target.QueryTarget,
@@ -3030,7 +3063,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       targetTypeCase_ = 2;
       onChanged();
-      ;
       return queryBuilder_;
     }
 
@@ -3240,7 +3272,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       targetTypeCase_ = 3;
       onChanged();
-      ;
       return documentsBuilder_;
     }
 
@@ -3248,7 +3279,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     * A resume token from a prior
+     * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3263,7 +3295,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     * A resume token from a prior
+     * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3281,7 +3314,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     * A resume token from a prior
+     * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3303,7 +3337,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     * A resume token from a prior
+     * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3531,7 +3566,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       resumeTypeCase_ = 11;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 
@@ -3568,6 +3602,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     public Builder setTargetId(int value) {
 
       targetId_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -3584,7 +3619,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearTargetId() {
-
+      bitField0_ = (bitField0_ & ~0x00000010);
       targetId_ = 0;
       onChanged();
       return this;
@@ -3621,6 +3656,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     public Builder setOnce(boolean value) {
 
       once_ = value;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -3636,7 +3672,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearOnce() {
-
+      bitField0_ = (bitField0_ & ~0x00000020);
       once_ = false;
       onChanged();
       return this;
