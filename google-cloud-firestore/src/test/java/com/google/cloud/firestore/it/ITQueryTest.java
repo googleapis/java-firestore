@@ -23,6 +23,7 @@ import com.google.api.client.util.Preconditions;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Filter;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
@@ -52,6 +53,7 @@ public class ITQueryTest {
 
   @Before
   public void setUpFirestore() {
+    firestore = FirestoreOptions.newBuilder().build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
