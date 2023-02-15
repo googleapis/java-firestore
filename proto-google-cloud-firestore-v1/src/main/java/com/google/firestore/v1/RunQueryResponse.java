@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
+ * The response for
+ * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.RunQueryResponse}
@@ -119,8 +120,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * <pre>
    * The transaction that was started as part of this request.
    * Can only be set in the first response, and only if
-   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-   * If set, no other fields will be set in this response.
+   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+   * was set in the request. If set, no other fields will be set in this
+   * response.
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
@@ -518,7 +520,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * The response for [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
+   * The response for
+   * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.RunQueryResponse}
@@ -787,8 +790,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
@@ -805,8 +809,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
@@ -829,8 +834,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>

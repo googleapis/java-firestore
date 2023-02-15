@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
+ * The response for
+ * [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.RunAggregationQueryResponse}
@@ -377,7 +378,8 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The response for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
+   * The response for
+   * [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.RunAggregationQueryResponse}

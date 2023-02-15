@@ -27,8 +27,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -40,8 +41,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -53,8 +55,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -67,8 +70,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>

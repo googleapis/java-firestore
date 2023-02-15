@@ -23,10 +23,11 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A [Document][google.firestore.v1.Document] has been deleted.
- * May be the result of multiple [writes][google.firestore.v1.Write], including updates, the
- * last of which deleted the [Document][google.firestore.v1.Document].
- * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be returned for the same logical
- * delete, if multiple targets are affected.
+ * May be the result of multiple [writes][google.firestore.v1.Write], including
+ * updates, the last of which deleted the
+ * [Document][google.firestore.v1.Document].
+ * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be
+ * returned for the same logical delete, if multiple targets are affected.
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.DocumentDelete}
@@ -80,7 +81,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+   * The resource name of the [Document][google.firestore.v1.Document] that was
+   * deleted.
    * </pre>
    *
    * <code>string document = 1;</code>
@@ -103,7 +105,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+   * The resource name of the [Document][google.firestore.v1.Document] that was
+   * deleted.
    * </pre>
    *
    * <code>string document = 1;</code>
@@ -427,10 +430,11 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A [Document][google.firestore.v1.Document] has been deleted.
-   * May be the result of multiple [writes][google.firestore.v1.Write], including updates, the
-   * last of which deleted the [Document][google.firestore.v1.Document].
-   * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be returned for the same logical
-   * delete, if multiple targets are affected.
+   * May be the result of multiple [writes][google.firestore.v1.Write], including
+   * updates, the last of which deleted the
+   * [Document][google.firestore.v1.Document].
+   * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be
+   * returned for the same logical delete, if multiple targets are affected.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.DocumentDelete}
@@ -668,7 +672,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+     * The resource name of the [Document][google.firestore.v1.Document] that was
+     * deleted.
      * </pre>
      *
      * <code>string document = 1;</code>
@@ -690,7 +695,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+     * The resource name of the [Document][google.firestore.v1.Document] that was
+     * deleted.
      * </pre>
      *
      * <code>string document = 1;</code>
@@ -712,7 +718,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+     * The resource name of the [Document][google.firestore.v1.Document] that was
+     * deleted.
      * </pre>
      *
      * <code>string document = 1;</code>
@@ -733,7 +740,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+     * The resource name of the [Document][google.firestore.v1.Document] that was
+     * deleted.
      * </pre>
      *
      * <code>string document = 1;</code>
@@ -750,7 +758,8 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+     * The resource name of the [Document][google.firestore.v1.Document] that was
+     * deleted.
      * </pre>
      *
      * <code>string document = 1;</code>
