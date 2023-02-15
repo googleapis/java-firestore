@@ -76,11 +76,7 @@ public class FirestoreClientHttpJsonTest {
         new MockHttpService(
             HttpJsonFirestoreStub.getMethodDescriptors(), FirestoreSettings.getDefaultEndpoint());
     FirestoreSettings settings =
-        FirestoreSettings.newHttpJsonBuilder()
-            .setTransportChannelProvider(
-                FirestoreSettings.defaultHttpJsonTransportProviderBuilder()
-                    .setHttpTransport(mockService)
-                    .build())
+        FirestoreSettings.newBuilder()
             .setCredentialsProvider(NoCredentialsProvider.create())
             .build();
     client = FirestoreClient.create(settings);
