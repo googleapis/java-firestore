@@ -27,7 +27,8 @@ public interface DocumentRemoveOrBuilder
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that has gone out of view.
+   * The resource name of the [Document][google.firestore.v1.Document] that has
+   * gone out of view.
    * </pre>
    *
    * <code>string document = 1;</code>
@@ -39,7 +40,8 @@ public interface DocumentRemoveOrBuilder
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that has gone out of view.
+   * The resource name of the [Document][google.firestore.v1.Document] that has
+   * gone out of view.
    * </pre>
    *
    * <code>string document = 1;</code>

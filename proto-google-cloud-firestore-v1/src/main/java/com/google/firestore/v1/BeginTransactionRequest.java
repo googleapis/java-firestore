@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+ * The request for
+ * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BeginTransactionRequest}
@@ -350,7 +351,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * The request for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+   * The request for
+   * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BeginTransactionRequest}

@@ -26,7 +26,7 @@
  * <p>Cloud Firestore is a fast, fully managed, serverless, cloud-native NoSQL document database
  * that simplifies storing, syncing, and querying data for your mobile, web, and IoT apps at global
  * scale. Its client libraries provide live synchronization and offline support, while its security
- * features and integrations with Firebase and Google Cloud Platform (GCP) accelerate building truly
+ * features and integrations with Firebase and Google Cloud Platform accelerate building truly
  * serverless apps.
  *
  * <p>Sample for FirestoreClient:

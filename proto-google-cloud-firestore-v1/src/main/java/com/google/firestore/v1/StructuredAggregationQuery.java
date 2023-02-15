@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * Firestore query for running an aggregation over a [StructuredQuery][google.firestore.v1.StructuredQuery].
+ * Firestore query for running an aggregation over a
+ * [StructuredQuery][google.firestore.v1.StructuredQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery}
@@ -112,7 +113,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Optional name of the field to store the result of the aggregation into.
+     * Optional. Optional name of the field to store the result of the
+     * aggregation into.
      * If not provided, Firestore will pick a default name following the format
      * `field_&lt;incremental_id++&gt;`. For example:
      * ```
@@ -138,7 +140,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      * ```
      * Requires:
      * * Must be unique across all aggregation aliases.
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -150,7 +153,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Optional name of the field to store the result of the aggregation into.
+     * Optional. Optional name of the field to store the result of the
+     * aggregation into.
      * If not provided, Firestore will pick a default name following the format
      * `field_&lt;incremental_id++&gt;`. For example:
      * ```
@@ -176,7 +180,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      * ```
      * Requires:
      * * Must be unique across all aggregation aliases.
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -246,7 +251,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -268,7 +274,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -290,7 +297,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -362,7 +370,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -387,7 +396,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -412,7 +422,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional constraint on the maximum number of documents to count.
+       * Optional. Optional constraint on the maximum number of documents to
+       * count.
        * This provides a way to set an upper bound on the number of documents
        * to scan, limiting latency and cost.
        * Unspecified is interpreted as no bound.
@@ -811,7 +822,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -835,7 +847,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -863,7 +876,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -895,7 +909,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -924,7 +939,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -959,7 +975,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -988,7 +1005,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -1012,7 +1030,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -1038,7 +1057,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          *
          *
          * <pre>
-         * Optional. Optional constraint on the maximum number of documents to count.
+         * Optional. Optional constraint on the maximum number of documents to
+         * count.
          * This provides a way to set an upper bound on the number of documents
          * to scan, limiting latency and cost.
          * Unspecified is interpreted as no bound.
@@ -1244,7 +1264,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Optional name of the field to store the result of the aggregation into.
+     * Optional. Optional name of the field to store the result of the
+     * aggregation into.
      * If not provided, Firestore will pick a default name following the format
      * `field_&lt;incremental_id++&gt;`. For example:
      * ```
@@ -1270,7 +1291,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      * ```
      * Requires:
      * * Must be unique across all aggregation aliases.
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -1293,7 +1315,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Optional name of the field to store the result of the aggregation into.
+     * Optional. Optional name of the field to store the result of the
+     * aggregation into.
      * If not provided, Firestore will pick a default name following the format
      * `field_&lt;incremental_id++&gt;`. For example:
      * ```
@@ -1319,7 +1342,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      * ```
      * Requires:
      * * Must be unique across all aggregation aliases.
-     * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * limitations.
      * </pre>
      *
      * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -1989,7 +2013,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional name of the field to store the result of the aggregation into.
+       * Optional. Optional name of the field to store the result of the
+       * aggregation into.
        * If not provided, Firestore will pick a default name following the format
        * `field_&lt;incremental_id++&gt;`. For example:
        * ```
@@ -2015,7 +2040,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * ```
        * Requires:
        * * Must be unique across all aggregation aliases.
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -2037,7 +2063,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional name of the field to store the result of the aggregation into.
+       * Optional. Optional name of the field to store the result of the
+       * aggregation into.
        * If not provided, Firestore will pick a default name following the format
        * `field_&lt;incremental_id++&gt;`. For example:
        * ```
@@ -2063,7 +2090,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * ```
        * Requires:
        * * Must be unique across all aggregation aliases.
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -2085,7 +2113,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional name of the field to store the result of the aggregation into.
+       * Optional. Optional name of the field to store the result of the
+       * aggregation into.
        * If not provided, Firestore will pick a default name following the format
        * `field_&lt;incremental_id++&gt;`. For example:
        * ```
@@ -2111,7 +2140,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * ```
        * Requires:
        * * Must be unique across all aggregation aliases.
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -2132,7 +2162,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional name of the field to store the result of the aggregation into.
+       * Optional. Optional name of the field to store the result of the
+       * aggregation into.
        * If not provided, Firestore will pick a default name following the format
        * `field_&lt;incremental_id++&gt;`. For example:
        * ```
@@ -2158,7 +2189,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * ```
        * Requires:
        * * Must be unique across all aggregation aliases.
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -2175,7 +2207,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *
        *
        * <pre>
-       * Optional. Optional name of the field to store the result of the aggregation into.
+       * Optional. Optional name of the field to store the result of the
+       * aggregation into.
        * If not provided, Firestore will pick a default name following the format
        * `field_&lt;incremental_id++&gt;`. For example:
        * ```
@@ -2201,7 +2234,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * ```
        * Requires:
        * * Must be unique across all aggregation aliases.
-       * * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * limitations.
        * </pre>
        *
        * <code>string alias = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
@@ -2391,7 +2425,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -2409,7 +2444,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -2428,7 +2464,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -2445,7 +2482,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -2462,7 +2500,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Optional. Series of aggregations to apply over the results of the `structured_query`.
+   * Optional. Series of aggregations to apply over the results of the
+   * `structured_query`.
    * Requires:
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
@@ -2666,7 +2705,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Firestore query for running an aggregation over a [StructuredQuery][google.firestore.v1.StructuredQuery].
+   * Firestore query for running an aggregation over a
+   * [StructuredQuery][google.firestore.v1.StructuredQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery}
@@ -3168,7 +3208,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3189,7 +3230,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3209,7 +3251,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3230,7 +3273,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3257,7 +3301,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3282,7 +3327,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3309,7 +3355,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3336,7 +3383,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3360,7 +3408,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3385,7 +3434,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3410,7 +3460,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3433,7 +3484,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3456,7 +3508,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3473,7 +3526,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3494,7 +3548,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3516,7 +3571,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3535,7 +3591,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>
@@ -3555,7 +3612,8 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Optional. Series of aggregations to apply over the results of the `structured_query`.
+     * Optional. Series of aggregations to apply over the results of the
+     * `structured_query`.
      * Requires:
      * * A minimum of one and maximum of five aggregations per query.
      * </pre>

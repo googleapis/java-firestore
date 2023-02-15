@@ -56,7 +56,8 @@ public interface CreateDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -68,7 +69,8 @@ public interface CreateDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>

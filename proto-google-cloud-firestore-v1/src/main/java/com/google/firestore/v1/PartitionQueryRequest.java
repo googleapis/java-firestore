@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+ * The request for
+ * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.PartitionQueryRequest}
@@ -681,7 +682,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The request for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+   * The request for
+   * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.PartitionQueryRequest}

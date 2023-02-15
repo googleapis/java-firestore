@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.DeleteDocument][google.firestore.v1.Firestore.DeleteDocument].
+ * The request for
+ * [Firestore.DeleteDocument][google.firestore.v1.Firestore.DeleteDocument].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.DeleteDocumentRequest}
@@ -350,7 +351,8 @@ public final class DeleteDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The request for [Firestore.DeleteDocument][google.firestore.v1.Firestore.DeleteDocument].
+   * The request for
+   * [Firestore.DeleteDocument][google.firestore.v1.Firestore.DeleteDocument].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.DeleteDocumentRequest}

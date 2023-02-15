@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
+ * The response from
+ * [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BatchWriteResponse}
@@ -405,7 +406,8 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The response from [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
+   * The response from
+   * [Firestore.BatchWrite][google.firestore.v1.Firestore.BatchWrite].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BatchWriteResponse}

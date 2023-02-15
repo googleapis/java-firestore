@@ -74,7 +74,7 @@ import javax.annotation.Generated;
  * <p>Cloud Firestore is a fast, fully managed, serverless, cloud-native NoSQL document database
  * that simplifies storing, syncing, and querying data for your mobile, web, and IoT apps at global
  * scale. Its client libraries provide live synchronization and offline support, while its security
- * features and integrations with Firebase and Google Cloud Platform (GCP) accelerate building truly
+ * features and integrations with Firebase and Google Cloud Platform accelerate building truly
  * serverless apps.
  *
  * <p>This class provides the ability to make remote calls to the backing service through method
@@ -1039,7 +1039,8 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Streams batches of document updates and deletes, in order.
+   * Streams batches of document updates and deletes, in order. This method is only available via
+   * the gRPC API (not REST).
    *
    * <p>Sample code:
    *
@@ -1072,7 +1073,7 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Listens to changes.
+   * Listens to changes. This method is only available via the gRPC API (not REST).
    *
    * <p>Sample code:
    *

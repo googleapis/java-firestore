@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
+ * The response for
+ * [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.ListDocumentsResponse}
@@ -147,7 +148,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The next page token.
+   * A token to retrieve the next page of documents.
+   * If this field is omitted, there are no subsequent pages.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
@@ -170,7 +172,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The next page token.
+   * A token to retrieve the next page of documents.
+   * If this field is omitted, there are no subsequent pages.
    * </pre>
    *
    * <code>string next_page_token = 2;</code>
@@ -364,7 +367,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The response for [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
+   * The response for
+   * [Firestore.ListDocuments][google.firestore.v1.Firestore.ListDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.ListDocumentsResponse}
@@ -954,7 +958,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The next page token.
+     * A token to retrieve the next page of documents.
+     * If this field is omitted, there are no subsequent pages.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
@@ -976,7 +981,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The next page token.
+     * A token to retrieve the next page of documents.
+     * If this field is omitted, there are no subsequent pages.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
@@ -998,7 +1004,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The next page token.
+     * A token to retrieve the next page of documents.
+     * If this field is omitted, there are no subsequent pages.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
@@ -1019,7 +1026,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The next page token.
+     * A token to retrieve the next page of documents.
+     * If this field is omitted, there are no subsequent pages.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
@@ -1036,7 +1044,8 @@ public final class ListDocumentsResponse extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * The next page token.
+     * A token to retrieve the next page of documents.
+     * If this field is omitted, there are no subsequent pages.
      * </pre>
      *
      * <code>string next_page_token = 2;</code>
