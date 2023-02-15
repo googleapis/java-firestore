@@ -29,8 +29,13 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
+import com.google.firestore.v1.StructuredAggregationQuery.Aggregation.OperatorCase;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -49,8 +54,11 @@ public class AggregateQuery {
 
   @Nonnull private final Query query;
 
-  AggregateQuery(@Nonnull Query query) {
+  @Nonnull private List<AggregateField> aggregateFieldList;
+
+  AggregateQuery(@Nonnull Query query, @Nonnull List<AggregateField> aggregateFields) {
     this.query = query;
+    this.aggregateFieldList = aggregateFields;
   }
 
   /** Returns the query whose aggregations will be calculated by this object. */
@@ -112,9 +120,9 @@ public class AggregateQuery {
       return startTimeNanos;
     }
 
-    void deliverResult(long count, Timestamp readTime) {
+    void deliverResult(Map<String, Value> data, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
-        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
+        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, data));
       }
     }
 
@@ -147,24 +155,11 @@ public class AggregateQuery {
 
       // Extract the count and read time from the RunAggregationQueryResponse.
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
-      Value value = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT);
-      if (value == null) {
-        throw new IllegalArgumentException(
-            "RunAggregationQueryResponse is missing required alias: " + ALIAS_COUNT);
-      } else if (value.getValueTypeCase() != Value.ValueTypeCase.INTEGER_VALUE) {
-        throw new IllegalArgumentException(
-            "RunAggregationQueryResponse alias "
-                + ALIAS_COUNT
-                + " has incorrect type: "
-                + value.getValueTypeCase());
-      }
-      long count = value.getIntegerValue();
 
       // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC, meaning
-      // that `onResponse()` can be called multiple times, it _should_ only be called once for count
-      // queries. But even if it is called more than once, `responseDeliverer` will drop superfluous
-      // results.
-      responseDeliverer.deliverResult(count, readTime);
+      // that `onResponse()` can be called multiple times, it _should_ only be called once. But even
+      // if it is called more than once, `responseDeliverer` will drop superfluous results.
+      responseDeliverer.deliverResult(response.getResult().getAggregateFieldsMap(), readTime);
     }
 
     @Override
@@ -243,7 +238,23 @@ public class AggregateQuery {
             .setStructuredQuery(proto.getStructuredAggregationQuery().getStructuredQuery())
             .build();
     Query query = Query.fromProto(firestore, runQueryRequest);
-    return new AggregateQuery(query);
+
+    List<AggregateField> aggregateFields = new ArrayList<>();
+    List<Aggregation> aggregations = proto.getStructuredAggregationQuery().getAggregationsList();
+    aggregations.forEach(
+        aggregation -> {
+          // TODO(ehsann): update once new protos are added.
+          OperatorCase operator = aggregation.getOperatorCase();
+          if (operator.equals(OperatorCase.COUNT)) {
+            aggregateFields.add(AggregateField.count());
+            // } else if(oc.equals(OperatorCase.AVERAGE)) {
+            //   aggregateFields.add(AggregateField.average(aggregation.getField().toString()));
+          } else {
+            // error: unsupported aggregation.
+          }
+        });
+
+    return new AggregateQuery(query, aggregateFields);
   }
 
   /**

@@ -61,6 +61,7 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -1869,7 +1870,18 @@ public class Query {
    */
   @Nonnull
   public AggregateQuery count() {
-    return new AggregateQuery(this);
+    return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
+  }
+
+  // TODO(ehsan)
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {
+    // TODO(ehsan)
+    List<AggregateField> aggregateFieldList = new ArrayList<>();
+    aggregateFieldList.add(aggregateField1);
+    aggregateFieldList.addAll(Arrays.asList(aggregateFields));
+    return new AggregateQuery(this, aggregateFieldList);
   }
 
   /**

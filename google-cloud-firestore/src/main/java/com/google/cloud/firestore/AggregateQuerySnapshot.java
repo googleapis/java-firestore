@@ -18,8 +18,11 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
+import com.google.firestore.v1.Value;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** The results of executing an {@link AggregateQuery}. */
 @InternalExtensionOnly
@@ -27,12 +30,13 @@ public class AggregateQuerySnapshot {
 
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
-  private final long count;
+  private final Map<String, Value> data;
 
-  AggregateQuerySnapshot(@Nonnull AggregateQuery query, @Nonnull Timestamp readTime, long count) {
+  AggregateQuerySnapshot(
+      @Nonnull AggregateQuery query, @Nonnull Timestamp readTime, Map<String, Value> data) {
     this.query = query;
     this.readTime = readTime;
-    this.count = count;
+    this.data = data;
   }
 
   /** Returns the query that was executed to produce this result. */
@@ -49,7 +53,73 @@ public class AggregateQuerySnapshot {
 
   /** Returns the number of documents in the result set of the underlying query. */
   public long getCount() {
-    return count;
+    AggregateField countField = AggregateField.count();
+    Value value = get(countField);
+    if (value.getValueTypeCase() != Value.ValueTypeCase.INTEGER_VALUE) {
+      throw new IllegalArgumentException(
+          "RunAggregationQueryResponse alias "
+              + countField.getAlias()
+              + " has incorrect type: "
+              + value.getValueTypeCase());
+    }
+    return value.getIntegerValue();
+  }
+
+  // TODO(ehsan): Should this return Value or Object?
+  // Returns a result from the server without loss of precision. No coercion of data types.
+  // Throws java.lang.RuntimeException if the `aggregateField` was not requested
+  //   when calling `query.aggregate(...)`
+  @Nullable
+  public Value get(@Nonnull AggregateField aggregateField) {
+    if (!data.containsKey(aggregateField.getAlias())) {
+      throw new IllegalArgumentException(
+          "RunAggregationQueryResponse is missing required alias for: "
+              + aggregateField.getOperator()
+              + "("
+              + aggregateField.getFieldPath()
+              + ")");
+    }
+    return data.get(aggregateField.getAlias());
+  }
+
+  // TODO(ehsan)
+  // APPROVED (FOR ANDROID) IN COUNT - CLARIFICATIONS ADDED
+  // Special overload for "average" because it always evaluates to a double.
+  // Throws RuntimeException if the `aggregateField` was not requested
+  //   when calling `query.aggregate(...)`
+  @Nullable
+  public Double get(@Nonnull AggregateField.AverageAggregateField averageAggregateField) {
+    return null;
+  }
+
+  // TODO(ehsan)
+  // APPROVED (FOR ANDROID) IN COUNT - CLARIFICATIONS ADDED
+  // Behaves the same as DocumentSnapshot.getDouble(field) with respect to
+  // retrieving a value that is not a floating point number. Coerces all numeric values
+  // and throws a RuntimeException if the result of the aggregate is non-numeric.
+  //
+  // Numeric coercion (matches existing behavior in DocumentSnapshot):
+  //   * If the result is a long, this may result in a loss of precision in coercion to double.
+  @Nullable
+  public Double getDouble(@Nonnull AggregateField aggregateField) {
+    // TODO(ehsann)
+    return null;
+  }
+
+  // TODO(ehsan)
+  // APPROVED (FOR ANDROID) IN COUNT - CLARIFICATIONS ADDED
+  // Behaves the same as DocumentSnapshot.getLong(field) with respect to
+  // retrieving a value that is not a floating point number. Coerces numeric values
+  // and throws on other types. TBD what happens on infinite and NaN values?
+  //
+  // Numeric coercion (matches existing behavior in DocumentSnapshot):
+  //   * Result is NaN - returns 0L
+  //   * Result is +/- infinity - returns Long.MAX_VALUE/MIN_VALUE
+  //   * Result is greater than Long.MAX_VALUE/MIN_VALUE - returns Long.MAX_VALUE/MIN_VALUE
+  @Nullable
+  public Long getLong(@Nonnull AggregateField aggregateField) {
+    // TODO(ehsann)
+    return null;
   }
 
   /**
@@ -79,7 +149,9 @@ public class AggregateQuerySnapshot {
     AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
 
     // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
-    return query.equals(other.query) && count == other.count;
+    // TODO(ehsan): Why do we not compare read time?
+    // two aggregations performed on the same collection at different times are different snapshots.
+    return query.equals(other.query) && data.equals(other.data);
   }
 
   /**
@@ -89,6 +161,6 @@ public class AggregateQuerySnapshot {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(query, count);
+    return Objects.hash(query, data);
   }
 }
