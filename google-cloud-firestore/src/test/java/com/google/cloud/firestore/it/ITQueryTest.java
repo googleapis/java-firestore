@@ -23,7 +23,6 @@ import com.google.api.client.util.Preconditions;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Filter;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
@@ -53,8 +52,6 @@ public class ITQueryTest {
 
   @Before
   public void setUpFirestore() {
-    // TODO: stop using emulator for these tests once prod is ready.
-    firestore = FirestoreOptions.newBuilder().setHost("localhost:8080").build().getService();
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
