@@ -21,7 +21,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <beam.version>2.44.0</beam.version>
+    <beam.version>2.45.0</beam.version>
     <!-- Define a default empty value property which can be overridden on the command line if
         necessary by passing `-Dfirestore.project.id="some-id"` when running maven exec -->
     <firestore.project.id/>
@@ -34,7 +34,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>26.7.0</version>
+        <version>26.8.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
