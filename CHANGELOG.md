@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.8.0](https://github.com/googleapis/java-firestore/compare/v3.7.10...v3.8.0) (2023-02-15)
+
+
+### Features
+
+* Add `OR` query support ([#1198](https://github.com/googleapis/java-firestore/issues/1198)) ([566b788](https://github.com/googleapis/java-firestore/commit/566b7884fd462630195dc2ffee79cc5345c80c03))
+
+
+### Dependencies
+
+* Update beam.version to v2.45.0 ([#1201](https://github.com/googleapis/java-firestore/issues/1201)) ([196a75d](https://github.com/googleapis/java-firestore/commit/196a75d4708ec8b1e61c114ea815a66eb5ab27f4))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.20 ([#1196](https://github.com/googleapis/java-firestore/issues/1196)) ([51fe67c](https://github.com/googleapis/java-firestore/commit/51fe67c59d674ea76332f5c0b0fccd9a2c10d39c))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.20 ([#1197](https://github.com/googleapis/java-firestore/issues/1197)) ([a66b8b4](https://github.com/googleapis/java-firestore/commit/a66b8b4e38a8109753769bcbda2dcb2ae8d58692))
+
 ## [3.7.10](https://github.com/googleapis/java-firestore/compare/v3.7.9...v3.7.10) (2023-02-06)
 
 
