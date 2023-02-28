@@ -1,18 +1,3 @@
-/*
- * Copyright 2020 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.google.firestore.v1;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
@@ -26,8 +11,8 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
  * document database that simplifies storing, syncing, and querying data for
  * your mobile, web, and IoT apps at global scale. Its client libraries provide
  * live synchronization and offline support, while its security features and
- * integrations with Firebase and Google Cloud Platform (GCP) accelerate
- * building truly serverless apps.
+ * integrations with Firebase and Google Cloud Platform accelerate building
+ * truly serverless apps.
  * </pre>
  */
 @javax.annotation.Generated(
@@ -772,8 +757,8 @@ public final class FirestoreGrpc {
    * document database that simplifies storing, syncing, and querying data for
    * your mobile, web, and IoT apps at global scale. Its client libraries provide
    * live synchronization and offline support, while its security features and
-   * integrations with Firebase and Google Cloud Platform (GCP) accelerate
-   * building truly serverless apps.
+   * integrations with Firebase and Google Cloud Platform accelerate building
+   * truly serverless apps.
    * </pre>
    */
   public abstract static class FirestoreImplBase implements io.grpc.BindableService {
@@ -911,8 +896,9 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Runs an aggregation query.
-     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
-     * this API allows running an aggregation to produce a series of
+     * Rather than producing [Document][google.firestore.v1.Document] results like
+     * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API
+     * allows running an aggregation to produce a series of
      * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
      * High-Level Example:
      * ```
@@ -950,7 +936,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Streams batches of document updates and deletes, in order.
+     * Streams batches of document updates and deletes, in order. This method is
+     * only available via the gRPC API (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -963,7 +950,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes.
+     * Listens to changes. This method is only available via the gRPC API (not
+     * REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
@@ -995,7 +983,8 @@ public final class FirestoreGrpc {
      * The BatchWrite method does not apply the write operations atomically
      * and can apply them out of order. Method does not allow more than one write
      * per document. Each write succeeds or fails independently. See the
-     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+     * success status of each write.
      * If you require an atomically applied set of writes, use
      * [Commit][google.firestore.v1.Firestore.Commit] instead.
      * </pre>
@@ -1138,8 +1127,8 @@ public final class FirestoreGrpc {
    * document database that simplifies storing, syncing, and querying data for
    * your mobile, web, and IoT apps at global scale. Its client libraries provide
    * live synchronization and offline support, while its security features and
-   * integrations with Firebase and Google Cloud Platform (GCP) accelerate
-   * building truly serverless apps.
+   * integrations with Firebase and Google Cloud Platform accelerate building
+   * truly serverless apps.
    * </pre>
    */
   public static final class FirestoreStub extends io.grpc.stub.AbstractAsyncStub<FirestoreStub> {
@@ -1300,8 +1289,9 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Runs an aggregation query.
-     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
-     * this API allows running an aggregation to produce a series of
+     * Rather than producing [Document][google.firestore.v1.Document] results like
+     * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API
+     * allows running an aggregation to produce a series of
      * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
      * High-Level Example:
      * ```
@@ -1343,7 +1333,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Streams batches of document updates and deletes, in order.
+     * Streams batches of document updates and deletes, in order. This method is
+     * only available via the gRPC API (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -1356,7 +1347,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes.
+     * Listens to changes. This method is only available via the gRPC API (not
+     * REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
@@ -1390,7 +1382,8 @@ public final class FirestoreGrpc {
      * The BatchWrite method does not apply the write operations atomically
      * and can apply them out of order. Method does not allow more than one write
      * per document. Each write succeeds or fails independently. See the
-     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+     * success status of each write.
      * If you require an atomically applied set of writes, use
      * [Commit][google.firestore.v1.Firestore.Commit] instead.
      * </pre>
@@ -1428,8 +1421,8 @@ public final class FirestoreGrpc {
    * document database that simplifies storing, syncing, and querying data for
    * your mobile, web, and IoT apps at global scale. Its client libraries provide
    * live synchronization and offline support, while its security features and
-   * integrations with Firebase and Google Cloud Platform (GCP) accelerate
-   * building truly serverless apps.
+   * integrations with Firebase and Google Cloud Platform accelerate building
+   * truly serverless apps.
    * </pre>
    */
   public static final class FirestoreBlockingStub
@@ -1567,8 +1560,9 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Runs an aggregation query.
-     * Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery],
-     * this API allows running an aggregation to produce a series of
+     * Rather than producing [Document][google.firestore.v1.Document] results like
+     * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API
+     * allows running an aggregation to produce a series of
      * [AggregationResult][google.firestore.v1.AggregationResult] server-side.
      * High-Level Example:
      * ```
@@ -1619,7 +1613,8 @@ public final class FirestoreGrpc {
      * The BatchWrite method does not apply the write operations atomically
      * and can apply them out of order. Method does not allow more than one write
      * per document. Each write succeeds or fails independently. See the
-     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+     * success status of each write.
      * If you require an atomically applied set of writes, use
      * [Commit][google.firestore.v1.Firestore.Commit] instead.
      * </pre>
@@ -1653,8 +1648,8 @@ public final class FirestoreGrpc {
    * document database that simplifies storing, syncing, and querying data for
    * your mobile, web, and IoT apps at global scale. Its client libraries provide
    * live synchronization and offline support, while its security features and
-   * integrations with Firebase and Google Cloud Platform (GCP) accelerate
-   * building truly serverless apps.
+   * integrations with Firebase and Google Cloud Platform accelerate building
+   * truly serverless apps.
    * </pre>
    */
   public static final class FirestoreFutureStub
@@ -1800,7 +1795,8 @@ public final class FirestoreGrpc {
      * The BatchWrite method does not apply the write operations atomically
      * and can apply them out of order. Method does not allow more than one write
      * per document. Each write succeeds or fails independently. See the
-     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
+     * [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the
+     * success status of each write.
      * If you require an atomically applied set of writes, use
      * [Commit][google.firestore.v1.Firestore.Commit] instead.
      * </pre>
