@@ -74,7 +74,7 @@ import javax.annotation.Generated;
  * <p>Cloud Firestore is a fast, fully managed, serverless, cloud-native NoSQL document database
  * that simplifies storing, syncing, and querying data for your mobile, web, and IoT apps at global
  * scale. Its client libraries provide live synchronization and offline support, while its security
- * features and integrations with Firebase and Google Cloud Platform (GCP) accelerate building truly
+ * features and integrations with Firebase and Google Cloud Platform accelerate building truly
  * serverless apps.
  *
  * <p>This class provides the ability to make remote calls to the backing service through method
@@ -147,19 +147,6 @@ import javax.annotation.Generated;
  * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreSettings firestoreSettings =
  *     FirestoreSettings.newBuilder().setEndpoint(myEndpoint).build();
- * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
- * }</pre>
- *
- * <p>To use REST (HTTP1.1/JSON) transport (instead of gRPC) for sending and receiving requests over
- * the wire:
- *
- * <pre>{@code
- * // This snippet has been automatically generated and should be regarded as a code template only.
- * // It will require modifications to work:
- * // - It may require correct/in-range values for request initialization.
- * // - It may require specifying regional endpoints when creating the service client as shown in
- * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
- * FirestoreSettings firestoreSettings = FirestoreSettings.newHttpJsonBuilder().build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
  * }</pre>
  *
@@ -1039,7 +1026,8 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Streams batches of document updates and deletes, in order.
+   * Streams batches of document updates and deletes, in order. This method is only available via
+   * the gRPC API (not REST).
    *
    * <p>Sample code:
    *
@@ -1072,7 +1060,7 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Listens to changes.
+   * Listens to changes. This method is only available via the gRPC API (not REST).
    *
    * <p>Sample code:
    *

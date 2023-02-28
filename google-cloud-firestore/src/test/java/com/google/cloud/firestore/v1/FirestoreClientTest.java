@@ -91,7 +91,6 @@ import org.junit.Test;
 @Generated("by gapic-generator-java")
 public class FirestoreClientTest {
   private static MockFirestore mockFirestore;
-  private static MockLocations mockLocations;
   private static MockServiceHelper mockServiceHelper;
   private LocalChannelProvider channelProvider;
   private FirestoreClient client;
@@ -99,11 +98,9 @@ public class FirestoreClientTest {
   @BeforeClass
   public static void startStaticServer() {
     mockFirestore = new MockFirestore();
-    mockLocations = new MockLocations();
     mockServiceHelper =
         new MockServiceHelper(
-            UUID.randomUUID().toString(),
-            Arrays.<MockGrpcService>asList(mockFirestore, mockLocations));
+            UUID.randomUUID().toString(), Arrays.<MockGrpcService>asList(mockFirestore));
     mockServiceHelper.start();
   }
 

@@ -1877,7 +1877,6 @@ public class Query {
   @Nonnull
   public AggregateQuery aggregate(
       @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {
-    // TODO(ehsan)
     List<AggregateField> aggregateFieldList = new ArrayList<>();
     aggregateFieldList.add(aggregateField1);
     aggregateFieldList.addAll(Arrays.asList(aggregateFields));

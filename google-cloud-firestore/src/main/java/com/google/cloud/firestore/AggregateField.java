@@ -60,6 +60,18 @@ public abstract class AggregateField {
     return null;
   }
 
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof CountAggregateField) {
+      return ((CountAggregateField) other).equals(this);
+    } else if (other instanceof AverageAggregateField) {
+      return ((AverageAggregateField) other).equals(this);
+    } else if (other instanceof SumAggregateField) {
+      return ((SumAggregateField) other).equals(this);
+    }
+    return false;
+  }
+
   public static class SumAggregateField extends AggregateField {
     private SumAggregateField(FieldPath field) {
       fieldPath = field;
@@ -80,7 +92,13 @@ public abstract class AggregateField {
       return "sum";
     }
 
-    private FieldPath fieldPath;
+    @Override
+    public boolean equals(Object other) {
+      return other instanceof SumAggregateField
+          && ((SumAggregateField) other).fieldPath.equals(fieldPath);
+    }
+
+    private final FieldPath fieldPath;
   }
 
   public static class AverageAggregateField extends AggregateField {
@@ -104,7 +122,13 @@ public abstract class AggregateField {
       return "avg";
     }
 
-    private FieldPath fieldPath;
+    @Override
+    public boolean equals(Object other) {
+      return other instanceof AverageAggregateField
+          && ((AverageAggregateField) other).fieldPath.equals(fieldPath);
+    }
+
+    private final FieldPath fieldPath;
   }
 
   public static class CountAggregateField extends AggregateField {
@@ -123,6 +147,11 @@ public abstract class AggregateField {
     @Nullable
     public String getOperator() {
       return "count";
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      return other instanceof CountAggregateField;
     }
   }
 }

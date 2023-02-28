@@ -54,15 +54,21 @@ public class AggregateQuerySnapshot {
   /** Returns the number of documents in the result set of the underlying query. */
   public long getCount() {
     AggregateField countField = AggregateField.count();
-    Value value = get(countField);
-    if (value.getValueTypeCase() != Value.ValueTypeCase.INTEGER_VALUE) {
+    Object value = get(countField);
+    if (value == null) {
+      throw new IllegalArgumentException(
+              "RunAggregationQueryResponse alias "
+                      + countField.getAlias()
+                      + " is null");
+    }
+    else if (!(value instanceof Long)) {
       throw new IllegalArgumentException(
           "RunAggregationQueryResponse alias "
               + countField.getAlias()
               + " has incorrect type: "
-              + value.getValueTypeCase());
+              + value.getClass().getName());
     }
-    return value.getIntegerValue();
+    return (Long) value;
   }
 
   // TODO(ehsan): Should this return Value or Object?
@@ -70,7 +76,7 @@ public class AggregateQuerySnapshot {
   // Throws java.lang.RuntimeException if the `aggregateField` was not requested
   //   when calling `query.aggregate(...)`
   @Nullable
-  public Value get(@Nonnull AggregateField aggregateField) {
+  public Object get(@Nonnull AggregateField aggregateField) {
     if (!data.containsKey(aggregateField.getAlias())) {
       throw new IllegalArgumentException(
           "RunAggregationQueryResponse is missing required alias for: "
@@ -79,17 +85,23 @@ public class AggregateQuerySnapshot {
               + aggregateField.getFieldPath()
               + ")");
     }
-    return data.get(aggregateField.getAlias());
+    Value value = data.get(aggregateField.getAlias());
+    if(value.hasDoubleValue()) {
+      return value.getDoubleValue();
+    } else if(value.hasIntegerValue()) {
+      return value.getIntegerValue();
+    } else {
+      throw new IllegalStateException("Found aggregation result that is not an integer nor double");
+    }
   }
 
   // TODO(ehsan)
-  // APPROVED (FOR ANDROID) IN COUNT - CLARIFICATIONS ADDED
   // Special overload for "average" because it always evaluates to a double.
   // Throws RuntimeException if the `aggregateField` was not requested
   //   when calling `query.aggregate(...)`
   @Nullable
   public Double get(@Nonnull AggregateField.AverageAggregateField averageAggregateField) {
-    return null;
+    return (Double) get((AggregateField) averageAggregateField);
   }
 
   // TODO(ehsan)

@@ -661,13 +661,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
 
   public static final HttpJsonFirestoreStub create(ClientContext clientContext) throws IOException {
     return new HttpJsonFirestoreStub(
-        FirestoreStubSettings.newHttpJsonBuilder().build(), clientContext);
+        FirestoreStubSettings.newBuilder().build(), clientContext);
   }
 
   public static final HttpJsonFirestoreStub create(
       ClientContext clientContext, HttpJsonStubCallableFactory callableFactory) throws IOException {
     return new HttpJsonFirestoreStub(
-        FirestoreStubSettings.newHttpJsonBuilder().build(), clientContext, callableFactory);
+        FirestoreStubSettings.newBuilder().build(), clientContext, callableFactory);
   }
 
   /**

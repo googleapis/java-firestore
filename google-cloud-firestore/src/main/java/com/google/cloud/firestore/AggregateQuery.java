@@ -25,13 +25,8 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.v1.FirestoreSettings;
-import com.google.firestore.v1.RunAggregationQueryRequest;
-import com.google.firestore.v1.RunAggregationQueryResponse;
-import com.google.firestore.v1.RunQueryRequest;
-import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.firestore.v1.*;
 import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
-import com.google.firestore.v1.StructuredAggregationQuery.Aggregation.OperatorCase;
-import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
@@ -210,12 +205,24 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    StructuredAggregationQuery.Aggregation.Builder aggregation =
-        StructuredAggregationQuery.Aggregation.newBuilder();
-    aggregation.setCount(StructuredAggregationQuery.Aggregation.Count.getDefaultInstance());
-    aggregation.setAlias(ALIAS_COUNT);
-    structuredAggregationQuery.addAggregations(aggregation);
-
+    List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
+    aggregateFieldList.forEach(aggregateField -> {
+      StructuredAggregationQuery.Aggregation.Builder aggregation = StructuredAggregationQuery.Aggregation.newBuilder();
+      if(aggregateField instanceof AggregateField.CountAggregateField) {
+        aggregation.setCount(StructuredAggregationQuery.Aggregation.Count.getDefaultInstance());
+      } else if(aggregateField instanceof AggregateField.SumAggregateField) {
+        StructuredQuery.FieldReference field = StructuredQuery.FieldReference.newBuilder().setFieldPath(aggregateField.getFieldPath()).build();
+        aggregation.setSum(StructuredAggregationQuery.Aggregation.Sum.newBuilder().setField(field).build());
+      } else if(aggregateField instanceof AggregateField.AverageAggregateField) {
+        StructuredQuery.FieldReference field = StructuredQuery.FieldReference.newBuilder().setFieldPath(aggregateField.getFieldPath()).build();
+        aggregation.setAvg(StructuredAggregationQuery.Aggregation.Avg.newBuilder().setField(field).build());
+      } else {
+        throw new RuntimeException("Unsupported aggregation");
+      }
+      aggregation.setAlias(aggregateField.getAlias());
+      aggregations.add(aggregation.build());
+    });
+    structuredAggregationQuery.addAllAggregations(aggregations);
     return request.build();
   }
 
@@ -243,17 +250,17 @@ public class AggregateQuery {
     List<Aggregation> aggregations = proto.getStructuredAggregationQuery().getAggregationsList();
     aggregations.forEach(
         aggregation -> {
-          // TODO(ehsann): update once new protos are added.
-          OperatorCase operator = aggregation.getOperatorCase();
-          if (operator.equals(OperatorCase.COUNT)) {
+          if (aggregation.hasCount()) {
             aggregateFields.add(AggregateField.count());
-            // } else if(oc.equals(OperatorCase.AVERAGE)) {
-            //   aggregateFields.add(AggregateField.average(aggregation.getField().toString()));
+          } else if (aggregation.hasAvg()) {
+            aggregateFields.add(
+                AggregateField.average(aggregation.getAvg().getField().getFieldPath()));
+          } else if (aggregation.hasSum()) {
+            aggregateFields.add(AggregateField.sum(aggregation.getSum().getField().getFieldPath()));
           } else {
-            // error: unsupported aggregation.
+            throw new RuntimeException("Unsupported aggregation");
           }
         });
-
     return new AggregateQuery(query, aggregateFields);
   }
 
