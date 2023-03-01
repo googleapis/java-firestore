@@ -276,8 +276,7 @@ public class ITQueryAggregationsTest {
     }
     assertThat(exception).isNotNull();
     assertThat(exception.getMessage())
-        .isNotEqualTo(
-            "The 'average' aggregation for field 'pages' was not requested in the aggregation query");
+        .isEqualTo("'average(pages)' was not requested in the aggregation query.");
     exception = null;
     try {
       snapshot.get(sum("foo"));
@@ -286,8 +285,7 @@ public class ITQueryAggregationsTest {
     }
     assertThat(exception).isNotNull();
     assertThat(exception.getMessage())
-        .isNotEqualTo(
-            "The 'sum' aggregation for field 'foo' was not requested in the aggregation query");
+        .isEqualTo("'sum(foo)' was not requested in the aggregation query.");
   }
 
   @Test
@@ -496,6 +494,23 @@ public class ITQueryAggregationsTest {
     Object sum = snapshot.get(sum("rating"));
     assertThat(sum instanceof Double).isTrue();
     assertThat(sum).isEqualTo(Double.POSITIVE_INFINITY);
+    assertThat(snapshot.getDouble(sum("rating"))).isEqualTo(Double.POSITIVE_INFINITY);
+    assertThat(snapshot.getLong(sum("rating"))).isEqualTo(Long.MAX_VALUE);
+  }
+
+  @Test
+  public void performsSumThatIsNegativeInfinity() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "a", map("author", "authorA", "title", "titleA", "rating", -Double.MAX_VALUE),
+            "b", map("author", "authorB", "title", "titleB", "rating", -Double.MAX_VALUE));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
+    Object sum = snapshot.get(sum("rating"));
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum).isEqualTo(Double.NEGATIVE_INFINITY);
+    assertThat(snapshot.getDouble(sum("rating"))).isEqualTo(Double.NEGATIVE_INFINITY);
+    assertThat(snapshot.getLong(sum("rating"))).isEqualTo(Long.MIN_VALUE);
   }
 
   @Test
@@ -572,6 +587,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(5);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(5L);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(5.0);
   }
 
   @Test
@@ -583,6 +600,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(10);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(10L);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(10.0);
   }
 
   @Test
@@ -595,6 +614,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(10);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(10L);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(10.0);
   }
 
   @Test
@@ -607,6 +628,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(4.5);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(4.5);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(4L);
   }
 
   @Test
@@ -618,10 +641,12 @@ public class ITQueryAggregationsTest {
             "c", map("author", "authorC", "title", "titleC", "rating", 10));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
-    // TODO: isEqualTo(9.2) fails with:
+    // TODO: isEqualTo(9.2) or isEqualTo(9.2d) fails with:
     // Expected :9.2
     // Actual   :9.200000000000001
     assertThat(snapshot.get(average("rating"))).isEqualTo(27.6 / 3);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(27.6 / 3);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(9L);
   }
 
   @Test
@@ -633,6 +658,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(9.5);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(9.5d);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(9L);
   }
 
   @Test
@@ -644,6 +671,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(0);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(0.0d);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(0L);
   }
 
   @Test
@@ -653,9 +682,12 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(Double.MIN_VALUE);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(Double.MIN_VALUE);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(0);
   }
 
   // TODO: This test fails. The average returned is Infinity.
+  // TODO: The reference implementation expects average to be Double.MAX_VALUE.
   @Ignore
   @Test
   public void performsAverageThatCouldOverflowIEEE754DuringAccumulation() throws Exception {
@@ -668,6 +700,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(Double.MAX_VALUE);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(Double.MAX_VALUE);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(Long.MAX_VALUE);
   }
 
   @Test
@@ -685,6 +719,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(Double.NaN);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(Double.NaN);
+    assertThat(snapshot.getLong(average("rating"))).isEqualTo(0L);
   }
 
   @Test
@@ -693,6 +729,8 @@ public class ITQueryAggregationsTest {
     AggregateQuerySnapshot snapshot =
         collection.whereGreaterThan("pages", 200).aggregate(average("pages")).get().get();
     assertThat(snapshot.get(average("pages"))).isEqualTo(null);
+    assertThat(snapshot.getDouble(average("pages"))).isEqualTo(null);
+    assertThat(snapshot.getLong(average("pages"))).isEqualTo(null);
   }
 
   @Test

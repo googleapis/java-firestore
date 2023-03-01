@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,31 +46,48 @@ public abstract class AggregateField {
     return new AverageAggregateField(fieldPath);
   }
 
-  @Nullable
-  public String getAlias() {
-    return null;
+  @Nullable FieldPath fieldPath;
+
+  /** Returns the alias used internally for this aggregate field. */
+  String getAlias() {
+    // Use $operator_$field format if it's an aggregation of a specific field. For example: sum_foo,
+    // average_bar.
+    // Use $operator format if there's no field. For example: count.
+    return getOperator() + (fieldPath == null ? "" : "_" + fieldPath.getEncodedPath());
   }
 
-  @Nullable
-  public String getFieldPath() {
-    return null;
+  /**
+   * Returns the field on which the aggregation takes place. Returns an empty string if there's no
+   * field (e.g. for count).
+   */
+  String getFieldPath() {
+    return fieldPath == null ? "" : fieldPath.getEncodedPath();
   }
 
-  @Nullable
-  public String getOperator() {
-    return null;
-  }
+  /** Returns a string representation of this aggregation's operator. For example: "sum" */
+  abstract String getOperator();
 
+  /**
+   * Returns true if the given object is equal to this object. Two `AggregateField` objects are
+   * considered equal if they have the same operator and operate on the same field.
+   */
   @Override
   public boolean equals(Object other) {
-    if (other instanceof CountAggregateField) {
-      return ((CountAggregateField) other).equals(this);
-    } else if (other instanceof AverageAggregateField) {
-      return ((AverageAggregateField) other).equals(this);
-    } else if (other instanceof SumAggregateField) {
-      return ((SumAggregateField) other).equals(this);
+    if (this == other) {
+      return true;
     }
-    return false;
+    if (!(other instanceof AggregateField)) {
+      return false;
+    }
+    AggregateField otherAggregateField = (AggregateField) other;
+    return getOperator().equals(otherAggregateField.getOperator())
+        && getFieldPath().equals(otherAggregateField.getFieldPath());
+  }
+
+  /** Calculates and returns the hash code for this object. */
+  @Override
+  public int hashCode() {
+    return Objects.hash(getOperator(), getFieldPath());
   }
 
   public static class SumAggregateField extends AggregateField {
@@ -78,27 +96,9 @@ public abstract class AggregateField {
     }
 
     @Override
-    public String getAlias() {
-      return "sum_" + fieldPath.getEncodedPath();
-    }
-
-    public String getFieldPath() {
-      return fieldPath.getEncodedPath();
-    }
-
-    @Override
-    @Nullable
     public String getOperator() {
       return "sum";
     }
-
-    @Override
-    public boolean equals(Object other) {
-      return other instanceof SumAggregateField
-          && ((SumAggregateField) other).fieldPath.equals(fieldPath);
-    }
-
-    private final FieldPath fieldPath;
   }
 
   public static class AverageAggregateField extends AggregateField {
@@ -107,51 +107,17 @@ public abstract class AggregateField {
     }
 
     @Override
-    public String getAlias() {
-      return "avg_" + fieldPath.getEncodedPath();
-    }
-
-    @Override
-    public String getFieldPath() {
-      return fieldPath.getEncodedPath();
-    }
-
-    @Override
-    @Nullable
     public String getOperator() {
       return "average";
     }
-
-    @Override
-    public boolean equals(Object other) {
-      return other instanceof AverageAggregateField
-          && ((AverageAggregateField) other).fieldPath.equals(fieldPath);
-    }
-
-    private final FieldPath fieldPath;
   }
 
   public static class CountAggregateField extends AggregateField {
     private CountAggregateField() {}
 
     @Override
-    public String getAlias() {
-      return "count";
-    }
-
-    public String getFieldPath() {
-      return "";
-    }
-
-    @Override
-    @Nullable
     public String getOperator() {
       return "count";
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      return other instanceof CountAggregateField;
     }
   }
 }

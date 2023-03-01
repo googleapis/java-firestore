@@ -78,10 +78,11 @@ public class AggregateQuerySnapshot {
     // throw.
     if (!data.containsKey(aggregateField.getAlias())) {
       throw new IllegalArgumentException(
-          "The '"
+          "'"
               + aggregateField.getOperator()
-              + "' aggregation for field '"
+              + "("
               + aggregateField.getFieldPath()
+              + ")"
               + "' was not requested in the aggregation query.");
     }
     Value value = data.get(aggregateField.getAlias());
@@ -96,7 +97,7 @@ public class AggregateQuerySnapshot {
     }
   }
 
-  // TODO(ehsan): add documentation.
+  // TODO(ehsan): add public documentation.
   // Special overload for "average" because it always evaluates to a double.
   // Throws RuntimeException if the `aggregateField` was not requested
   //   when calling `query.aggregate(...)`
@@ -105,7 +106,7 @@ public class AggregateQuerySnapshot {
     return (Double) get((AggregateField) averageAggregateField);
   }
 
-  // TODO(ehsan): add documentation.
+  // TODO(ehsan): add public documentation.
   // Behaves the same as DocumentSnapshot.getDouble(field) with respect to
   // retrieving a value that is not a floating point number. Coerces all numeric values
   // and throws a RuntimeException if the result of the aggregate is non-numeric.
@@ -114,13 +115,14 @@ public class AggregateQuerySnapshot {
   //   * If the result is a long, this may result in a loss of precision in coercion to double.
   @Nullable
   public Double getDouble(@Nonnull AggregateField aggregateField) {
-    return (Double) get(aggregateField);
+    Number result = (Number) get(aggregateField);
+    return result == null ? null : result.doubleValue();
   }
 
-  // TODO(ehsan): add documentation.
+  // TODO(ehsan): add public documentation.
   // Behaves the same as DocumentSnapshot.getLong(field) with respect to
   // retrieving a value that is not a floating point number. Coerces numeric values
-  // and throws on other types. TBD what happens on infinite and NaN values?
+  // and throws on other types.
   //
   // Numeric coercion (matches existing behavior in DocumentSnapshot):
   //   * Result is NaN - returns 0L
@@ -128,7 +130,8 @@ public class AggregateQuerySnapshot {
   //   * Result is greater than Long.MAX_VALUE/MIN_VALUE - returns Long.MAX_VALUE/MIN_VALUE
   @Nullable
   public Long getLong(@Nonnull AggregateField aggregateField) {
-    return (Long) get(aggregateField);
+    Number result = (Number) get(aggregateField);
+    return result == null ? null : result.longValue();
   }
 
   /**
