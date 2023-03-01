@@ -1873,7 +1873,17 @@ public class Query {
     return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
   }
 
-  // TODO(ehsan)
+  /**
+   * Calculates the specified aggregations over the documents in the result
+   * set of the given query, without actually downloading the documents.
+   *
+   * <p>Using this function to perform aggregations is efficient because only the
+   * final aggregation values, not the documents' data, is downloaded. This
+   * function can even perform aggregations of the documents if the result set
+   * would be prohibitively large to download entirely (e.g. thousands of documents).
+   *
+   * @return a query that performs aggregations on the documents in the result set of this query.
+   */
   @Nonnull
   public AggregateQuery aggregate(
       @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {

@@ -30,10 +30,10 @@ public class AggregateQuerySnapshot {
 
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
-  private final Map<String, Value> data;
+  @Nonnull private final Map<String, Value> data;
 
   AggregateQuerySnapshot(
-      @Nonnull AggregateQuery query, @Nonnull Timestamp readTime, Map<String, Value> data) {
+      @Nonnull AggregateQuery query, @Nonnull Timestamp readTime, @Nonnull Map<String, Value> data) {
     this.query = query;
     this.readTime = readTime;
     this.data = data;
@@ -68,13 +68,13 @@ public class AggregateQuerySnapshot {
     return (Long) value;
   }
 
-  // TODO(ehsan): add documentation.
+  // TODO(sum/avg): add public documentation.
   // Returns a result from the server without loss of precision. No coercion of data types.
   // Throws java.lang.RuntimeException if the `aggregateField` was not requested
   //   when calling `query.aggregate(...)`
   @Nullable
   public Object get(@Nonnull AggregateField aggregateField) {
-    // TODO(ehsan): Web returns 'undefined' for such cases. Double check that other SDKs should
+    // TODO(sum/avg): Web returns 'undefined' for such cases. Double check that other SDKs should
     // throw.
     if (!data.containsKey(aggregateField.getAlias())) {
       throw new IllegalArgumentException(
@@ -97,7 +97,7 @@ public class AggregateQuerySnapshot {
     }
   }
 
-  // TODO(ehsan): add public documentation.
+  // TODO(sum/avg): add public documentation.
   // Special overload for "average" because it always evaluates to a double.
   // Throws RuntimeException if the `aggregateField` was not requested
   //   when calling `query.aggregate(...)`
@@ -106,7 +106,7 @@ public class AggregateQuerySnapshot {
     return (Double) get((AggregateField) averageAggregateField);
   }
 
-  // TODO(ehsan): add public documentation.
+  // TODO(sum/avg): add public documentation.
   // Behaves the same as DocumentSnapshot.getDouble(field) with respect to
   // retrieving a value that is not a floating point number. Coerces all numeric values
   // and throws a RuntimeException if the result of the aggregate is non-numeric.
@@ -119,7 +119,7 @@ public class AggregateQuerySnapshot {
     return result == null ? null : result.doubleValue();
   }
 
-  // TODO(ehsan): add public documentation.
+  // TODO(sum/avg): add public documentation.
   // Behaves the same as DocumentSnapshot.getLong(field) with respect to
   // retrieving a value that is not a floating point number. Coerces numeric values
   // and throws on other types.
@@ -161,7 +161,7 @@ public class AggregateQuerySnapshot {
     AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
 
     // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
-    // TODO(ehsan): Why do we not compare read time?
+    // TODO(sum/avg): Why do we not compare read time?
     // two aggregations performed on the same collection at different times are different snapshots.
     return query.equals(other.query) && data.equals(other.data);
   }

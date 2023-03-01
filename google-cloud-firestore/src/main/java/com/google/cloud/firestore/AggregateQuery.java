@@ -112,7 +112,7 @@ public class AggregateQuery {
       return startTimeNanos;
     }
 
-    void deliverResult(Map<String, Value> data, Timestamp readTime) {
+    void deliverResult(@Nonnull Map<String, Value> data, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
         future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, data));
       }
