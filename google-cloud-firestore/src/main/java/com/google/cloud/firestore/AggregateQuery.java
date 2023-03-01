@@ -28,10 +28,7 @@ import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.firestore.v1.*;
 import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
 import com.google.protobuf.ByteString;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -205,7 +202,8 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
+    // We use a Set here to automatically remove duplicates.
+    Set<StructuredAggregationQuery.Aggregation> aggregations = new HashSet<>();
     for (AggregateField aggregateField : aggregateFieldList) {
       Aggregation.Builder aggregation = Aggregation.newBuilder();
       if (aggregateField instanceof AggregateField.CountAggregateField) {
