@@ -33,7 +33,9 @@ public class AggregateQuerySnapshot {
   @Nonnull private final Map<String, Value> data;
 
   AggregateQuerySnapshot(
-      @Nonnull AggregateQuery query, @Nonnull Timestamp readTime, @Nonnull Map<String, Value> data) {
+      @Nonnull AggregateQuery query,
+      @Nonnull Timestamp readTime,
+      @Nonnull Map<String, Value> data) {
     this.query = query;
     this.readTime = readTime;
     this.data = data;
@@ -68,10 +70,14 @@ public class AggregateQuerySnapshot {
     return (Long) value;
   }
 
-  // TODO(sum/avg): add public documentation.
-  // Returns a result from the server without loss of precision. No coercion of data types.
-  // Throws java.lang.RuntimeException if the `aggregateField` was not requested
-  //   when calling `query.aggregate(...)`
+  /**
+   * Returns the result of the given aggregation from the server without coercion of data types.
+   * Throws java.lang.RuntimeException if the `aggregateField` was not requested when calling
+   * `query.aggregate(...)`.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given aggregation.
+   */
   @Nullable
   public Object get(@Nonnull AggregateField aggregateField) {
     // TODO(sum/avg): Web returns 'undefined' for such cases. Double check that other SDKs should
@@ -97,37 +103,43 @@ public class AggregateQuerySnapshot {
     }
   }
 
-  // TODO(sum/avg): add public documentation.
-  // Special overload for "average" because it always evaluates to a double.
-  // Throws RuntimeException if the `aggregateField` was not requested
-  //   when calling `query.aggregate(...)`
+  /**
+   * Returns the result of the given average aggregation. Since the result of an average aggregation
+   * performed by the server is always a double, this convenience overload can be used in lieu of
+   * the above `get` method. Throws java.lang.RuntimeException if the `aggregateField` was not
+   * requested when calling `query.aggregate(...)`.
+   *
+   * @param averageAggregateField The average aggregation for which the value is requested.
+   * @return The result of the given average aggregation.
+   */
   @Nullable
   public Double get(@Nonnull AggregateField.AverageAggregateField averageAggregateField) {
     return (Double) get((AggregateField) averageAggregateField);
   }
 
-  // TODO(sum/avg): add public documentation.
-  // Behaves the same as DocumentSnapshot.getDouble(field) with respect to
-  // retrieving a value that is not a floating point number. Coerces all numeric values
-  // and throws a RuntimeException if the result of the aggregate is non-numeric.
-  //
-  // Numeric coercion (matches existing behavior in DocumentSnapshot):
-  //   * If the result is a long, this may result in a loss of precision in coercion to double.
+  /**
+   * Returns the result of the given aggregation as a double. Coerces all numeric values and throws
+   * a RuntimeException if the result of the aggregate is non-numeric. In the case of coercion of
+   * long to double, uses java.lang.Long.doubleValue to perform the conversion, and may result in a
+   * loss of precision.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given average aggregation as a double.
+   */
   @Nullable
   public Double getDouble(@Nonnull AggregateField aggregateField) {
     Number result = (Number) get(aggregateField);
     return result == null ? null : result.doubleValue();
   }
 
-  // TODO(sum/avg): add public documentation.
-  // Behaves the same as DocumentSnapshot.getLong(field) with respect to
-  // retrieving a value that is not a floating point number. Coerces numeric values
-  // and throws on other types.
-  //
-  // Numeric coercion (matches existing behavior in DocumentSnapshot):
-  //   * Result is NaN - returns 0L
-  //   * Result is +/- infinity - returns Long.MAX_VALUE/MIN_VALUE
-  //   * Result is greater than Long.MAX_VALUE/MIN_VALUE - returns Long.MAX_VALUE/MIN_VALUE
+  /**
+   * Returns the result of the given aggregation as a long. Coerces all numeric values and throws a
+   * RuntimeException if the result of the aggregate is non-numeric. In case of coercion of double
+   * to long, uses java.lang.Double.longValue to perform the conversion.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given average aggregation as a long.
+   */
   @Nullable
   public Long getLong(@Nonnull AggregateField aggregateField) {
     Number result = (Number) get(aggregateField);
