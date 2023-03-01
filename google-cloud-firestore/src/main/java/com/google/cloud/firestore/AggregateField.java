@@ -50,8 +50,7 @@ public abstract class AggregateField {
 
   /** Returns the alias used internally for this aggregate field. */
   String getAlias() {
-    // Use $operator_$field format if it's an aggregation of a specific field. For example: sum_foo,
-    // average_bar.
+    // Use $operator_$field format if it's an aggregation of a specific field. For example: sum_foo.
     // Use $operator format if there's no field. For example: count.
     return getOperator() + (fieldPath == null ? "" : "_" + fieldPath.getEncodedPath());
   }

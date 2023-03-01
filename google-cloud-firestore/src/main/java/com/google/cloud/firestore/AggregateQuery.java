@@ -205,20 +205,20 @@ public class AggregateQuery {
     // We use a Set here to automatically remove duplicates.
     Set<StructuredAggregationQuery.Aggregation> aggregations = new HashSet<>();
     for (AggregateField aggregateField : aggregateFieldList) {
+      // If there's a field for this aggregation, build its proto.
+      StructuredQuery.FieldReference field = null;
+      if(!aggregateField.getFieldPath().isEmpty()) {
+        field = StructuredQuery.FieldReference.newBuilder()
+                .setFieldPath(aggregateField.getFieldPath())
+                .build();
+      }
+      // Build the aggregation proto.
       Aggregation.Builder aggregation = Aggregation.newBuilder();
       if (aggregateField instanceof AggregateField.CountAggregateField) {
         aggregation.setCount(Aggregation.Count.getDefaultInstance());
       } else if (aggregateField instanceof AggregateField.SumAggregateField) {
-        StructuredQuery.FieldReference field =
-            StructuredQuery.FieldReference.newBuilder()
-                .setFieldPath(aggregateField.getFieldPath())
-                .build();
         aggregation.setSum(Aggregation.Sum.newBuilder().setField(field).build());
       } else if (aggregateField instanceof AggregateField.AverageAggregateField) {
-        StructuredQuery.FieldReference field =
-            StructuredQuery.FieldReference.newBuilder()
-                .setFieldPath(aggregateField.getFieldPath())
-                .build();
         aggregation.setAvg(Aggregation.Avg.newBuilder().setField(field).build());
       } else {
         throw new RuntimeException("Unsupported aggregation");
@@ -262,7 +262,7 @@ public class AggregateQuery {
           } else if (aggregation.hasSum()) {
             aggregateFields.add(AggregateField.sum(aggregation.getSum().getField().getFieldPath()));
           } else {
-            throw new RuntimeException("Unsupported aggregation");
+            throw new RuntimeException("Unsupported aggregation.");
           }
         });
     return new AggregateQuery(query, aggregateFields);
