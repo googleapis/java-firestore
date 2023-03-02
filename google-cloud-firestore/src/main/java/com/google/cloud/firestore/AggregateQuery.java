@@ -207,8 +207,9 @@ public class AggregateQuery {
     for (AggregateField aggregateField : aggregateFieldList) {
       // If there's a field for this aggregation, build its proto.
       StructuredQuery.FieldReference field = null;
-      if(!aggregateField.getFieldPath().isEmpty()) {
-        field = StructuredQuery.FieldReference.newBuilder()
+      if (!aggregateField.getFieldPath().isEmpty()) {
+        field =
+            StructuredQuery.FieldReference.newBuilder()
                 .setFieldPath(aggregateField.getFieldPath())
                 .build();
       }
@@ -275,7 +276,7 @@ public class AggregateQuery {
    */
   @Override
   public int hashCode() {
-    return query.hashCode();
+    return Objects.hash(query, aggregateFieldList);
   }
 
   /**
@@ -302,6 +303,6 @@ public class AggregateQuery {
       return false;
     }
     AggregateQuery other = (AggregateQuery) object;
-    return query.equals(other.query);
+    return query.equals(other.query) && aggregateFieldList.equals(other.aggregateFieldList);
   }
 }
