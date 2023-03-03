@@ -216,6 +216,7 @@
     <module>proto-google-cloud-firestore-bundle-v1</module>
     <module>google-cloud-firestore-admin</module>
     <module>google-cloud-firestore-bom</module>
+    <module>google-cloud-firestore-jdk17</module>
   </modules>
 
   <reporting>
