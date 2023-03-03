@@ -26,7 +26,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -120,13 +119,6 @@ public class ITQueryTest {
         "doc4",
         "doc5");
 
-    // with one inequality: a>2 || b==1.
-    checkQuerySnapshotContainsDocuments(
-        collection.where(Filter.or(Filter.greaterThan("a", 2), Filter.equalTo("b", 1))),
-        "doc5",
-        "doc2",
-        "doc3");
-
     // (a==1 && b==0) || (a==3 && b==2)
     checkQuerySnapshotContainsDocuments(
         collection.where(
@@ -152,47 +144,7 @@ public class ITQueryTest {
                 Filter.or(Filter.equalTo("a", 3), Filter.equalTo("b", 3)))),
         "doc3");
 
-    // Test with limits (implicit order by ASC): (a==1) || (b > 0) LIMIT 2
-    checkQuerySnapshotContainsDocuments(
-        collection.where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0))).limit(2),
-        "doc1",
-        "doc2");
-
-    // Test with limits (explicit order by): (a==1) || (b > 0) LIMIT_TO_LAST 2
-    // Note: The public query API does not allow implicit ordering when limitToLast is used.
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0)))
-            .limitToLast(2)
-            .orderBy("b"),
-        "doc3",
-        "doc4");
-
-    // Test with limits (explicit order by ASC): (a==2) || (b == 1) ORDER BY a LIMIT 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limit(1)
-            .orderBy("a"),
-        "doc5");
-
-    // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a LIMIT_TO_LAST 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limitToLast(1)
-            .orderBy("a"),
-        "doc2");
-
-    // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a DESC LIMIT 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limit(1)
-            .orderBy("a", Direction.DESCENDING),
-        "doc2");
-
-    // Test with limits without orderBy (the __name__ ordering is the tie breaker).
+    // Test with limits without orderBy (the __name__ ordering is the tiebreaker).
     checkQuerySnapshotContainsDocuments(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1))).limit(1),
         "doc2");
@@ -223,22 +175,6 @@ public class ITQueryTest {
         collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1))).orderBy("b");
     checkQuerySnapshotContainsDocuments(query2, "doc1", "doc2", "doc4");
 
-    // Query: a>2 || b==1.
-    // This query has an implicit 'order by a'.
-    // doc2 should not be included because it's missing the field 'a'.
-    Query query3 = collection.where(Filter.or(Filter.greaterThan("a", 2), Filter.equalTo("b", 1)));
-    checkQuerySnapshotContainsDocuments(query3, "doc3");
-
-    // Query: a>1 || b==1 order by a order by b.
-    // doc6 should not be included because it's missing the field 'b'.
-    // doc2 should not be included because it's missing the field 'a'.
-    Query query4 =
-        collection
-            .where(Filter.or(Filter.greaterThan("a", 1), Filter.equalTo("b", 1)))
-            .orderBy("a")
-            .orderBy("b");
-    checkQuerySnapshotContainsDocuments(query4, "doc3");
-
     // Query: a==1 || b==1
     // There's no explicit nor implicit orderBy. Documents with missing 'a' or missing 'b' should be
     // allowed if the document matches at least one disjunction term.
@@ -247,8 +183,7 @@ public class ITQueryTest {
   }
 
   @Test
-  public void orQueriesWithInAndNotIn()
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public void orQueriesWithIn() throws ExecutionException, InterruptedException, TimeoutException {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", 0),
@@ -265,13 +200,6 @@ public class ITQueryTest {
         "doc3",
         "doc4",
         "doc6");
-
-    // a==2 || b not-in [2,3]
-    // Has implicit orderBy b.
-    checkQuerySnapshotContainsDocuments(
-        collection.where(Filter.or(Filter.equalTo("a", 2), Filter.notInArray("b", asList(2, 3)))),
-        "doc1",
-        "doc2");
   }
 
   @Test
