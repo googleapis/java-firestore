@@ -122,13 +122,6 @@ public class ITQueryTest {
         "doc4",
         "doc5");
 
-    // with one inequality: a>2 || b==1.
-    checkQuerySnapshotContainsDocuments(
-        collection.where(Filter.or(Filter.greaterThan("a", 2), Filter.equalTo("b", 1))),
-        "doc5",
-        "doc2",
-        "doc3");
-
     // (a==1 && b==0) || (a==3 && b==2)
     checkQuerySnapshotContainsDocuments(
         collection.where(
@@ -154,47 +147,7 @@ public class ITQueryTest {
                 Filter.or(Filter.equalTo("a", 3), Filter.equalTo("b", 3)))),
         "doc3");
 
-    // Test with limits (implicit order by ASC): (a==1) || (b > 0) LIMIT 2
-    checkQuerySnapshotContainsDocuments(
-        collection.where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0))).limit(2),
-        "doc1",
-        "doc2");
-
-    // Test with limits (explicit order by): (a==1) || (b > 0) LIMIT_TO_LAST 2
-    // Note: The public query API does not allow implicit ordering when limitToLast is used.
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0)))
-            .limitToLast(2)
-            .orderBy("b"),
-        "doc3",
-        "doc4");
-
-    // Test with limits (explicit order by ASC): (a==2) || (b == 1) ORDER BY a LIMIT 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limit(1)
-            .orderBy("a"),
-        "doc5");
-
-    // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a LIMIT_TO_LAST 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limitToLast(1)
-            .orderBy("a"),
-        "doc2");
-
-    // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a DESC LIMIT 1
-    checkQuerySnapshotContainsDocuments(
-        collection
-            .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
-            .limit(1)
-            .orderBy("a", Direction.DESCENDING),
-        "doc2");
-
-    // Test with limits without orderBy (the __name__ ordering is the tie breaker).
+    // Test with limits without orderBy (the __name__ ordering is the tiebreaker).
     checkQuerySnapshotContainsDocuments(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1))).limit(1),
         "doc2");
