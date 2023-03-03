@@ -17,14 +17,12 @@
 package com.google.cloud.firestore;
 
 import com.google.firestore.v1.StructuredQuery;
-import com.google.firestore.v1.StructuredQuery.CompositeFilter;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** @hide */
 public class Filter {
   static class UnaryFilter extends Filter {
     private final FieldPath field;
