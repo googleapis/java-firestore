@@ -1331,12 +1331,12 @@ public class QueryTest {
   }
 
   @Test
-  public void serializationTestWithNestedCompositeFilters() {
+  public void serializationTestWithNestedCompositeFiltersOuterAnd() {
     assertSerialization(query);
     // a IN [1,2]
     query.where(inArray("a", Arrays.asList(1, 2)));
     assertSerialization(query);
-    // a IN [1,2] && (b==20 || c==30 || (d==40 && e>50)) || f==60
+    // a IN [1,2] && (b==20 || c==30 || (d==40 && e>50) || f==60)
     query.where(
         or(
             equalTo("b", 20),
@@ -1344,6 +1344,36 @@ public class QueryTest {
             and(equalTo("d", 40), greaterThan("e", 50)),
             and(equalTo("f", 60)),
             or(and())));
+    assertSerialization(query);
+    query = query.orderBy("l");
+    assertSerialization(query);
+    query = query.startAt("o");
+    assertSerialization(query);
+    query = query.startAfter("p");
+    assertSerialization(query);
+    query = query.endBefore("q");
+    assertSerialization(query);
+    query = query.endAt("r");
+    assertSerialization(query);
+    query = query.limit(8);
+    assertSerialization(query);
+    query = query.offset(9);
+    assertSerialization(query);
+  }
+
+  @Test
+  public void serializationTestWithNestedCompositeFiltersOuterOr() {
+    assertSerialization(query);
+    // a IN [1,2] || (b==20 && c==30 && (d==40 || e>50) && f==60)
+    query.where(
+        or(
+            inArray("a", Arrays.asList(1, 2)),
+            and(
+                equalTo("b", 20),
+                equalTo("c", 30),
+                or(equalTo("d", 40), greaterThan("e", 50)),
+                and(equalTo("f", 60)),
+                or(and()))));
     assertSerialization(query);
     query = query.orderBy("l");
     assertSerialization(query);

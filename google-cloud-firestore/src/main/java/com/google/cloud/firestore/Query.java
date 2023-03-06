@@ -888,8 +888,13 @@ public class Query {
     return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, NOT_IN, values));
   }
 
-  // TODO(orquery): This method will become public API. Change visibility and add documentation.
-  Query where(com.google.cloud.firestore.Filter filter) {
+  /**
+   * Creates and returns a new Query with the additional filter.
+   *
+   * @param filter The new filter to apply to the existing query.
+   * @return The newly created Query.
+   */
+  public Query where(com.google.cloud.firestore.Filter filter) {
     Preconditions.checkState(
         options.getStartCursor() == null && options.getEndCursor() == null,
         "Cannot call a where() clause after defining a boundary with startAt(), "
