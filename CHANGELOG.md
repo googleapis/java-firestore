@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.9.0](https://github.com/googleapis/java-firestore/compare/v3.8.2...v3.9.0) (2023-03-06)
+
+
+### Features
+
+* Enable `OR` Query support. ([#1007](https://github.com/googleapis/java-firestore/issues/1007)) ([e502cd4](https://github.com/googleapis/java-firestore/commit/e502cd4a91396360815f540d6058291a75e15951))
+
 ## [3.8.2](https://github.com/googleapis/java-firestore/compare/v3.8.1...v3.8.2) (2023-03-02)
 
 
