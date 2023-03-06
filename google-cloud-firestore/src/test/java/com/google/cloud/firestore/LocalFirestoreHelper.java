@@ -651,8 +651,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
-    // TODO(orquery): Replace this with Operator.OR once it's available.
-    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+    return compositeFilter(CompositeFilter.Operator.OR, Arrays.asList(filters));
   }
 
   private static StructuredQuery.Filter compositeFilter(
