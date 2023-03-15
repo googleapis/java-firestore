@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.9.1](https://github.com/googleapis/java-firestore/compare/v3.9.0...v3.9.1) (2023-03-15)
+
+
+### Dependencies
+
+* Update beam.version to v2.46.0 ([#1228](https://github.com/googleapis/java-firestore/issues/1228)) ([ffc853f](https://github.com/googleapis/java-firestore/commit/ffc853fa85956dd635c79bdd12b0ae38165cbdbb))
+
 ## [3.9.0](https://github.com/googleapis/java-firestore/compare/v3.8.2...v3.9.0) (2023-03-06)
 
 
