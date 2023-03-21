@@ -41,7 +41,7 @@ If you are using Maven without BOM, add this to your dependencies:
 <dependency>
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.9.0</version>
+  <version>3.9.1</version>
 </dependency>
 
 ```
@@ -64,6 +64,7 @@ If you are using SBT, add this to your dependencies:
 ```Scala
 libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.9.1"
 ```
+<!-- {x-version-update-end} -->
 
 ## Authentication
 
