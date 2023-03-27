@@ -5,12 +5,16 @@ import static com.google.cloud.firestore.AggregateField.sum;
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.cloud.firestore.it.TestHelper.await;
+import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.cloud.firestore.*;
 import com.google.common.base.Preconditions;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -91,6 +95,26 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
+  public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
+    assumeFalse(
+        "Skip this test when running against the emulator because it does not require composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    CollectionReference collection = testCollectionWithDocs(testDocs1);
+    AggregateQuery aggregateQuery =
+        collection
+            .whereEqualTo("key1", 42)
+            .whereLessThan("key2", 42)
+            .aggregate(AggregateField.count());
+    ExecutionException executionException =
+        assertThrows(ExecutionException.class, () -> aggregateQuery.get().get());
+    assertThat(executionException)
+        .hasCauseThat()
+        .hasMessageThat()
+        .containsMatch("/index.*https:\\/\\/console\\.firebase\\.google\\.com/");
+  }
+
+  @Test
   public void canRunSumQuery() throws Exception {
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("pages")).get().get();
@@ -115,15 +139,36 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
-  public void getCorrectTypeForSum() throws Exception {
-    CollectionReference collection = testCollectionWithDocs(testDocs1);
-    AggregateQuerySnapshot snapshot = collection.aggregate(sum("pages")).get().get();
-    Object sum = snapshot.get(sum("pages"));
+  public void getCorrectTypeForSumLong() throws Exception {
+    Map<String, Map<String, Object>> testDocs = map("a", map("foo", 100), "b", map("foo", 100));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot = collection.aggregate(sum("foo")).get().get();
+    Object sum = snapshot.get(sum("foo"));
     assertThat(sum instanceof Long).isTrue();
   }
 
   @Test
-  public void getCorrectTypeForAverage() throws Exception {
+  public void getCorrectTypeForSumDouble() throws Exception {
+    Map<String, Map<String, Object>> testDocs = map("a", map("foo", 100.5), "b", map("foo", 100));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot = collection.aggregate(sum("foo")).get().get();
+    Object sum = snapshot.get(sum("foo"));
+    assertThat(sum instanceof Double).isTrue();
+  }
+
+  @Test
+  public void getCorrectTypeForSumNaN() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map("a", map("foo", 100.5), "b", map("foo", Double.NaN));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot = collection.aggregate(sum("foo")).get().get();
+    Object sum = snapshot.get(sum("foo"));
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum.equals(Double.NaN));
+  }
+
+  @Test
+  public void getCorrectTypeForAverageDouble() throws Exception {
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("pages")).get().get();
     Object average = snapshot.get((AggregateField) average("pages"));
@@ -131,7 +176,28 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
+  public void getCorrectTypeForAverageNaN() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map("a", map("foo", 100.5), "b", map("foo", Double.NaN));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot = collection.aggregate(average("foo")).get().get();
+    Object sum = snapshot.get(average("foo"));
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum.equals(Double.NaN));
+  }
+
+  @Test
+  public void getCorrectTypeForAverageNull() throws Exception {
+    CollectionReference collection = testCollection();
+    AggregateQuerySnapshot snapshot = collection.aggregate(average("bar")).get().get();
+    Object sum = snapshot.get(average("bar"));
+    assertThat(sum == null).isTrue();
+  }
+
+  @Test
   public void canPerformMaxAggregations() throws Exception {
+    // TODO: Update these tests once aggregate de-duplication is implemented and more aggregation
+    // types are available.
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateField f1 = sum("pages");
     AggregateField f2 = average("pages");
@@ -148,6 +214,8 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void cannotPerformMoreThanMaxAggregations() throws Exception {
+    // TODO: Update these tests once aggregate de-duplication is implemented and more aggregation
+    // types are available.
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateField f1 = sum("pages");
     AggregateField f2 = average("pages");
@@ -280,7 +348,7 @@ public class ITQueryAggregationsTest {
     exception = null;
     try {
       snapshot.get(sum("foo"));
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       exception = e;
     }
     assertThat(exception).isNotNull();
@@ -427,7 +495,9 @@ public class ITQueryAggregationsTest {
             "c", map("author", "authorC", "title", "titleC", "rating", 3));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
-    assertThat(snapshot.get(sum("rating"))).isEqualTo(12.5);
+    Object sum = snapshot.get(sum("rating"));
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum).isEqualTo(12.5);
   }
 
   @Test
@@ -439,21 +509,22 @@ public class ITQueryAggregationsTest {
             "c", map("author", "authorC", "title", "titleC", "rating", 3.5));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
-    assertThat(snapshot.get(sum("rating"))).isEqualTo(13);
+    Object sum = snapshot.get(sum("rating"));
+    assertThat(sum instanceof Long).isTrue();
+    assertThat(sum).isEqualTo(13);
   }
 
-  // TODO: Does Integer.MAX_VALUE serve the purpose of this test?
   @Test
-  public void performsSumThatOverflowsMaxInt() throws Exception {
+  public void performsSumThatOverflowsMaxLong() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
-            "a", map("author", "authorA", "title", "titleA", "rating", Integer.MAX_VALUE),
-            "b", map("author", "authorB", "title", "titleB", "rating", Integer.MAX_VALUE));
+            "a", map("author", "authorA", "title", "titleA", "rating", Long.MAX_VALUE),
+            "b", map("author", "authorB", "title", "titleB", "rating", Long.MAX_VALUE));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
     Object sum = snapshot.get(sum("rating"));
-    assertThat(sum instanceof Long).isTrue();
-    assertThat(sum).isEqualTo(Long.parseLong("4294967294"));
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum).isEqualTo((double) Long.MAX_VALUE + (double) Long.MAX_VALUE);
   }
 
   @Test
@@ -599,6 +670,7 @@ public class ITQueryAggregationsTest {
             "b", map("author", "authorB", "title", "titleB", "rating", 9.5));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
+    assertThat(snapshot.get(average("rating")) instanceof Double).isTrue();
     assertThat(snapshot.get(average("rating"))).isEqualTo(10);
     assertThat(snapshot.getLong(average("rating"))).isEqualTo(10L);
     assertThat(snapshot.getDouble(average("rating"))).isEqualTo(10.0);

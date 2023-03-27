@@ -27,28 +27,29 @@ public abstract class AggregateField {
   }
 
   @Nonnull
-  public static SumAggregateField sum(String field) {
+  public static SumAggregateField sum(@Nonnull String field) {
     return new SumAggregateField(FieldPath.fromDotSeparatedString(field));
   }
 
   @Nonnull
-  public static SumAggregateField sum(FieldPath fieldPath) {
+  public static SumAggregateField sum(@Nonnull FieldPath fieldPath) {
     return new SumAggregateField(fieldPath);
   }
 
   @Nonnull
-  public static AverageAggregateField average(String field) {
+  public static AverageAggregateField average(@Nonnull String field) {
     return new AverageAggregateField(FieldPath.fromDotSeparatedString(field));
   }
 
   @Nonnull
-  public static AverageAggregateField average(FieldPath fieldPath) {
+  public static AverageAggregateField average(@Nonnull FieldPath fieldPath) {
     return new AverageAggregateField(fieldPath);
   }
 
   @Nullable FieldPath fieldPath;
 
   /** Returns the alias used internally for this aggregate field. */
+  @Nonnull
   String getAlias() {
     // Use $operator_$field format if it's an aggregation of a specific field. For example: sum_foo.
     // Use $operator format if there's no field. For example: count.
@@ -59,12 +60,13 @@ public abstract class AggregateField {
    * Returns the field on which the aggregation takes place. Returns an empty string if there's no
    * field (e.g. for count).
    */
+  @Nonnull
   String getFieldPath() {
     return fieldPath == null ? "" : fieldPath.getEncodedPath();
   }
 
   /** Returns a string representation of this aggregation's operator. For example: "sum" */
-  abstract String getOperator();
+  abstract @Nonnull String getOperator();
 
   /**
    * Returns true if the given object is equal to this object. Two `AggregateField` objects are
@@ -90,22 +92,24 @@ public abstract class AggregateField {
   }
 
   public static class SumAggregateField extends AggregateField {
-    private SumAggregateField(FieldPath field) {
+    private SumAggregateField(@Nonnull FieldPath field) {
       fieldPath = field;
     }
 
     @Override
+    @Nonnull
     public String getOperator() {
       return "sum";
     }
   }
 
   public static class AverageAggregateField extends AggregateField {
-    private AverageAggregateField(FieldPath field) {
+    private AverageAggregateField(@Nonnull FieldPath field) {
       fieldPath = field;
     }
 
     @Override
+    @Nonnull
     public String getOperator() {
       return "average";
     }
@@ -115,6 +119,7 @@ public abstract class AggregateField {
     private CountAggregateField() {}
 
     @Override
+    @Nonnull
     public String getOperator() {
       return "count";
     }

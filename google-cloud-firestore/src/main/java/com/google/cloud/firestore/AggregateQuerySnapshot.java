@@ -70,6 +70,12 @@ public class AggregateQuerySnapshot {
     return (Long) value;
   }
 
+  /** Returns the number of documents in the result set of the underlying query. */
+  @SuppressWarnings({"unused"})
+  public long get(@Nonnull AggregateField.CountAggregateField unused) {
+    return getCount();
+  }
+
   /**
    * Returns the result of the given aggregation from the server without coercion of data types.
    * Throws java.lang.RuntimeException if the `aggregateField` was not requested when calling
@@ -80,8 +86,6 @@ public class AggregateQuerySnapshot {
    */
   @Nullable
   public Object get(@Nonnull AggregateField aggregateField) {
-    // TODO(sum/avg): Web returns 'undefined' for such cases. Double check that other SDKs should
-    // throw.
     if (!data.containsKey(aggregateField.getAlias())) {
       throw new IllegalArgumentException(
           "'"

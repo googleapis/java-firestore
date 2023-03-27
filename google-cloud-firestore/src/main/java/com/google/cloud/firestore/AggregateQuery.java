@@ -145,7 +145,7 @@ public class AggregateQuery {
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();
 
-      // Extract the count and read time from the RunAggregationQueryResponse.
+      // Extract the aggregations and read time from the RunAggregationQueryResponse.
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
 
       // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC, meaning

@@ -1882,7 +1882,8 @@ public class Query {
    * the documents if the result set would be prohibitively large to download entirely (e.g.
    * thousands of documents).
    *
-   * @return a query that performs aggregations on the documents in the result set of this query.
+   * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
+   *     of this query.
    */
   @Nonnull
   public AggregateQuery aggregate(
