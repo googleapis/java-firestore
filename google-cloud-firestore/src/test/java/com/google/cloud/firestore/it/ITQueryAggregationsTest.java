@@ -196,7 +196,7 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void canPerformMaxAggregations() throws Exception {
-    // TODO: Update these tests once aggregate de-duplication is implemented and more aggregation
+    // TODO: Update this test once aggregate de-duplication is implemented and more aggregation
     // types are available.
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateField f1 = sum("pages");
@@ -214,7 +214,7 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void cannotPerformMoreThanMaxAggregations() throws Exception {
-    // TODO: Update these tests once aggregate de-duplication is implemented and more aggregation
+    // TODO: Update this test once aggregate de-duplication is implemented and more aggregation
     // types are available.
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateField f1 = sum("pages");
