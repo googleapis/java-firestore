@@ -95,7 +95,7 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
-  public void aggregateQueryInATransactionShouldLockTheCountedDocuments() throws Exception {
+  public void aggregateErrorMessageIfIndexIsMissing() throws Exception {
     assumeFalse(
         "Skip this test when running against the emulator because it does not require composite index creation.",
         isRunningAgainstFirestoreEmulator(firestore));
