@@ -53,7 +53,27 @@ public abstract class AggregateField {
   String getAlias() {
     // Use $operator_$field format if it's an aggregation of a specific field. For example: sum_foo.
     // Use $operator format if there's no field. For example: count.
-    return getOperator() + (fieldPath == null ? "" : "_" + fieldPath.getEncodedPath());
+    //
+    // Note: If the fieldPath contains characters that need to be escaped, we need to do further
+    // processing. Example:
+    // field:                  contains`invalid
+    // field.getEncodedPath(): `contains\`invalid`
+    // alias:                  `sum_contains\`invalid`
+    if (fieldPath == null) {
+      return getOperator();
+    }
+    String encodedFieldPath = fieldPath.getEncodedPath();
+    boolean hasEscapedChars =
+        encodedFieldPath.startsWith("`")
+            && encodedFieldPath.endsWith("`")
+            && encodedFieldPath.length() > 1;
+    String maybeBacktick = hasEscapedChars ? "`" : "";
+    // Strip away the leading and trailing backticks.
+    encodedFieldPath =
+        hasEscapedChars
+            ? encodedFieldPath.substring(1, encodedFieldPath.length() - 1)
+            : encodedFieldPath;
+    return maybeBacktick + getOperator() + "_" + encodedFieldPath + maybeBacktick;
   }
 
   /**
