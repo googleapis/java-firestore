@@ -177,8 +177,6 @@ public class AggregateQuerySnapshot {
     AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
 
     // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
-    // TODO(sum/avg): Why do we not compare read time?
-    // two aggregations performed on the same collection at different times are different snapshots.
     return query.equals(other.query) && data.equals(other.data);
   }
 
