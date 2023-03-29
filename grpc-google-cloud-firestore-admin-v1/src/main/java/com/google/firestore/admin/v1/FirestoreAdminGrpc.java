@@ -643,7 +643,7 @@ public final class FirestoreAdminGrpc {
    * service `google.longrunning.Operations`.
    * </pre>
    */
-  public abstract static class FirestoreAdminImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      *
@@ -654,7 +654,7 @@ public final class FirestoreAdminGrpc {
      * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
-    public void createIndex(
+    default void createIndex(
         com.google.firestore.admin.v1.CreateIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -668,7 +668,7 @@ public final class FirestoreAdminGrpc {
      * Lists composite indexes.
      * </pre>
      */
-    public void listIndexes(
+    default void listIndexes(
         com.google.firestore.admin.v1.ListIndexesRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListIndexesResponse>
             responseObserver) {
@@ -683,7 +683,7 @@ public final class FirestoreAdminGrpc {
      * Gets a composite index.
      * </pre>
      */
-    public void getIndex(
+    default void getIndex(
         com.google.firestore.admin.v1.GetIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Index> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetIndexMethod(), responseObserver);
@@ -696,7 +696,7 @@ public final class FirestoreAdminGrpc {
      * Deletes a composite index.
      * </pre>
      */
-    public void deleteIndex(
+    default void deleteIndex(
         com.google.firestore.admin.v1.DeleteIndexRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -710,7 +710,7 @@ public final class FirestoreAdminGrpc {
      * Gets the metadata and configuration for a Field.
      * </pre>
      */
-    public void getField(
+    default void getField(
         com.google.firestore.admin.v1.GetFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Field> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetFieldMethod(), responseObserver);
@@ -733,7 +733,7 @@ public final class FirestoreAdminGrpc {
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
      * </pre>
      */
-    public void updateField(
+    default void updateField(
         com.google.firestore.admin.v1.UpdateFieldRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -751,7 +751,7 @@ public final class FirestoreAdminGrpc {
      * `indexConfig.usesAncestorConfig:false` .
      * </pre>
      */
-    public void listFields(
+    default void listFields(
         com.google.firestore.admin.v1.ListFieldsRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListFieldsResponse>
             responseObserver) {
@@ -774,7 +774,7 @@ public final class FirestoreAdminGrpc {
      * https://cloud.google.com/firestore/docs/manage-data/export-import
      * </pre>
      */
-    public void exportDocuments(
+    default void exportDocuments(
         com.google.firestore.admin.v1.ExportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -792,7 +792,7 @@ public final class FirestoreAdminGrpc {
      * that a subset of the data has already been imported to Cloud Firestore.
      * </pre>
      */
-    public void importDocuments(
+    default void importDocuments(
         com.google.firestore.admin.v1.ImportDocumentsRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -806,7 +806,7 @@ public final class FirestoreAdminGrpc {
      * Gets information about a database.
      * </pre>
      */
-    public void getDatabase(
+    default void getDatabase(
         com.google.firestore.admin.v1.GetDatabaseRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Database> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
@@ -820,7 +820,7 @@ public final class FirestoreAdminGrpc {
      * List all the databases in the project.
      * </pre>
      */
-    public void listDatabases(
+    default void listDatabases(
         com.google.firestore.admin.v1.ListDatabasesRequest request,
         io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListDatabasesResponse>
             responseObserver) {
@@ -835,97 +835,51 @@ public final class FirestoreAdminGrpc {
      * Updates a database.
      * </pre>
      */
-    public void updateDatabase(
+    default void updateDatabase(
         com.google.firestore.admin.v1.UpdateDatabaseRequest request,
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
           getUpdateDatabaseMethod(), responseObserver);
     }
+  }
+
+  /**
+   * Base class for the server implementation of the service FirestoreAdmin.
+   *
+   * <pre>
+   * The Cloud Firestore Admin API.
+   * This API provides several administrative services for Cloud Firestore.
+   * Project, Database, Namespace, Collection, Collection Group, and Document are
+   * used as defined in the Google Cloud Firestore API.
+   * Operation: An Operation represents work being performed in the background.
+   * The index service manages Cloud Firestore indexes.
+   * Index creation is performed asynchronously.
+   * An Operation resource is created for each such asynchronous operation.
+   * The state of the operation (including any errors encountered)
+   * may be queried via the Operation resource.
+   * The Operations collection provides a record of actions performed for the
+   * specified Project (including any Operations in progress). Operations are not
+   * created directly but through calls on other collections or resources.
+   * An Operation that is done may be deleted so that it is no longer listed as
+   * part of the Operation collection. Operations are garbage collected after
+   * 30 days. By default, ListOperations will only return in progress and failed
+   * operations. To list completed operation, issue a ListOperations request with
+   * the filter `done: true`.
+   * Operations are created by service `FirestoreAdmin`, but are accessed via
+   * service `google.longrunning.Operations`.
+   * </pre>
+   */
+  public abstract static class FirestoreAdminImplBase
+      implements io.grpc.BindableService, AsyncService {
 
     @java.lang.Override
     public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-              getCreateIndexMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.CreateIndexRequest,
-                      com.google.longrunning.Operation>(this, METHODID_CREATE_INDEX)))
-          .addMethod(
-              getListIndexesMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.ListIndexesRequest,
-                      com.google.firestore.admin.v1.ListIndexesResponse>(
-                      this, METHODID_LIST_INDEXES)))
-          .addMethod(
-              getGetIndexMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.GetIndexRequest,
-                      com.google.firestore.admin.v1.Index>(this, METHODID_GET_INDEX)))
-          .addMethod(
-              getDeleteIndexMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>(
-                      this, METHODID_DELETE_INDEX)))
-          .addMethod(
-              getGetFieldMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.GetFieldRequest,
-                      com.google.firestore.admin.v1.Field>(this, METHODID_GET_FIELD)))
-          .addMethod(
-              getUpdateFieldMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.UpdateFieldRequest,
-                      com.google.longrunning.Operation>(this, METHODID_UPDATE_FIELD)))
-          .addMethod(
-              getListFieldsMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.ListFieldsRequest,
-                      com.google.firestore.admin.v1.ListFieldsResponse>(
-                      this, METHODID_LIST_FIELDS)))
-          .addMethod(
-              getExportDocumentsMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.ExportDocumentsRequest,
-                      com.google.longrunning.Operation>(this, METHODID_EXPORT_DOCUMENTS)))
-          .addMethod(
-              getImportDocumentsMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.ImportDocumentsRequest,
-                      com.google.longrunning.Operation>(this, METHODID_IMPORT_DOCUMENTS)))
-          .addMethod(
-              getGetDatabaseMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.GetDatabaseRequest,
-                      com.google.firestore.admin.v1.Database>(this, METHODID_GET_DATABASE)))
-          .addMethod(
-              getListDatabasesMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.ListDatabasesRequest,
-                      com.google.firestore.admin.v1.ListDatabasesResponse>(
-                      this, METHODID_LIST_DATABASES)))
-          .addMethod(
-              getUpdateDatabaseMethod(),
-              io.grpc.stub.ServerCalls.asyncUnaryCall(
-                  new MethodHandlers<
-                      com.google.firestore.admin.v1.UpdateDatabaseRequest,
-                      com.google.longrunning.Operation>(this, METHODID_UPDATE_DATABASE)))
-          .build();
+      return FirestoreAdminGrpc.bindService(this);
     }
   }
 
   /**
-   *
+   * A stub to allow clients to do asynchronous rpc calls to service FirestoreAdmin.
    *
    * <pre>
    * The Cloud Firestore Admin API.
@@ -1181,7 +1135,7 @@ public final class FirestoreAdminGrpc {
   }
 
   /**
-   *
+   * A stub to allow clients to do synchronous rpc calls to service FirestoreAdmin.
    *
    * <pre>
    * The Cloud Firestore Admin API.
@@ -1405,7 +1359,7 @@ public final class FirestoreAdminGrpc {
   }
 
   /**
-   *
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service FirestoreAdmin.
    *
    * <pre>
    * The Cloud Firestore Admin API.
@@ -1650,10 +1604,10 @@ public final class FirestoreAdminGrpc {
           io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
           io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
           io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final FirestoreAdminImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(FirestoreAdminImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -1740,6 +1694,86 @@ public final class FirestoreAdminGrpc {
           throw new AssertionError();
       }
     }
+  }
+
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+            getCreateIndexMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.CreateIndexRequest,
+                    com.google.longrunning.Operation>(service, METHODID_CREATE_INDEX)))
+        .addMethod(
+            getListIndexesMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ListIndexesRequest,
+                    com.google.firestore.admin.v1.ListIndexesResponse>(
+                    service, METHODID_LIST_INDEXES)))
+        .addMethod(
+            getGetIndexMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.GetIndexRequest,
+                    com.google.firestore.admin.v1.Index>(service, METHODID_GET_INDEX)))
+        .addMethod(
+            getDeleteIndexMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.DeleteIndexRequest, com.google.protobuf.Empty>(
+                    service, METHODID_DELETE_INDEX)))
+        .addMethod(
+            getGetFieldMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.GetFieldRequest,
+                    com.google.firestore.admin.v1.Field>(service, METHODID_GET_FIELD)))
+        .addMethod(
+            getUpdateFieldMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.UpdateFieldRequest,
+                    com.google.longrunning.Operation>(service, METHODID_UPDATE_FIELD)))
+        .addMethod(
+            getListFieldsMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ListFieldsRequest,
+                    com.google.firestore.admin.v1.ListFieldsResponse>(
+                    service, METHODID_LIST_FIELDS)))
+        .addMethod(
+            getExportDocumentsMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ExportDocumentsRequest,
+                    com.google.longrunning.Operation>(service, METHODID_EXPORT_DOCUMENTS)))
+        .addMethod(
+            getImportDocumentsMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ImportDocumentsRequest,
+                    com.google.longrunning.Operation>(service, METHODID_IMPORT_DOCUMENTS)))
+        .addMethod(
+            getGetDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.GetDatabaseRequest,
+                    com.google.firestore.admin.v1.Database>(service, METHODID_GET_DATABASE)))
+        .addMethod(
+            getListDatabasesMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ListDatabasesRequest,
+                    com.google.firestore.admin.v1.ListDatabasesResponse>(
+                    service, METHODID_LIST_DATABASES)))
+        .addMethod(
+            getUpdateDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.UpdateDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_UPDATE_DATABASE)))
+        .build();
   }
 
   private abstract static class FirestoreAdminBaseDescriptorSupplier
