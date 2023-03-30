@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -235,7 +234,7 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void aggregateQueriesSupportCollectionGroups() throws Exception {
-    String collectionGroupId = "myColGroupId";
+    String collectionGroupId = "myColGroupId" + autoId();
     Map<String, Object> data = map("x", 2);
     // Setting documents at the following paths:
     //   `${collectionGroupId}/cg-doc1`,
@@ -713,9 +712,6 @@ public class ITQueryAggregationsTest {
             "c", map("author", "authorC", "title", "titleC", "rating", 10));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
-    // TODO: isEqualTo(9.2) or isEqualTo(9.2d) fails with:
-    // Expected :9.2
-    // Actual   :9.200000000000001
     assertThat(snapshot.get(average("rating"))).isEqualTo(27.6 / 3);
     assertThat(snapshot.getDouble(average("rating"))).isEqualTo(27.6 / 3);
     assertThat(snapshot.getLong(average("rating"))).isEqualTo(9L);
@@ -758,9 +754,6 @@ public class ITQueryAggregationsTest {
     assertThat(snapshot.getLong(average("rating"))).isEqualTo(0);
   }
 
-  // TODO: This test fails. The average returned is Infinity.
-  // TODO: The reference implementation expects average to be Double.MAX_VALUE.
-  @Ignore
   @Test
   public void performsAverageThatCouldOverflowIEEE754DuringAccumulation() throws Exception {
     Map<String, Map<String, Object>> testDocs =
@@ -771,8 +764,8 @@ public class ITQueryAggregationsTest {
             map("author", "authorB", "title", "titleB", "rating", Double.MAX_VALUE));
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(average("rating")).get().get();
-    assertThat(snapshot.get(average("rating"))).isEqualTo(Double.MAX_VALUE);
-    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(Double.MAX_VALUE);
+    assertThat(snapshot.get(average("rating"))).isEqualTo(Double.POSITIVE_INFINITY);
+    assertThat(snapshot.getDouble(average("rating"))).isEqualTo(Double.POSITIVE_INFINITY);
     assertThat(snapshot.getLong(average("rating"))).isEqualTo(Long.MAX_VALUE);
   }
 
