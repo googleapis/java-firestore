@@ -82,12 +82,12 @@ public class AggregateFieldTest {
   @Test
   public void sumSetsProperAliasWithEscapeChars() {
     AggregateField.SumAggregateField sum = AggregateField.sum("has`invalid");
-    assertThat(sum.getAlias().equals("`sum_has\\`invalid`")).isTrue();
+    assertThat(sum.getAlias().equals("sum_`has\\`invalid`")).isTrue();
   }
 
   @Test
   public void averageSetsProperAliasWithEscapeChars() {
     AggregateField.AverageAggregateField average = AggregateField.average("has`invalid");
-    assertThat(average.getAlias().equals("`average_has\\`invalid`")).isTrue();
+    assertThat(average.getAlias().equals("average_`has\\`invalid`")).isTrue();
   }
 }
