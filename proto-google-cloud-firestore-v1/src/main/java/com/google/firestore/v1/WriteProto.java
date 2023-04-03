@@ -108,12 +108,12 @@ public final class WriteProto {
           + "Remove\022\020\n\010document\030\001 \001(\t\022\032\n\022removed_targ"
           + "et_ids\030\002 \003(\005\022-\n\tread_time\030\004 \001(\0132\032.google"
           + ".protobuf.Timestamp\"3\n\017ExistenceFilter\022\021"
-          + "\n\ttarget_id\030\001 \001(\005\022\r\n\005count\030\002 \001(\005B\303\001\n\027com"
-          + ".google.firestore.v1B\nWriteProtoP\001Z<goog"
-          + "le.golang.org/genproto/googleapis/firest"
-          + "ore/v1;firestore\242\002\004GCFS\252\002\031Google.Cloud.F"
-          + "irestore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352"
-          + "\002\034Google::Cloud::Firestore::V1b\006proto3"
+          + "\n\ttarget_id\030\001 \001(\005\022\r\n\005count\030\002 \001(\005B\302\001\n\027com"
+          + ".google.firestore.v1B\nWriteProtoP\001Z;clou"
+          + "d.google.com/go/firestore/apiv1/firestor"
+          + "epb;firestorepb\242\002\004GCFS\252\002\031Google.Cloud.Fi"
+          + "restore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002"
+          + "\034Google::Cloud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

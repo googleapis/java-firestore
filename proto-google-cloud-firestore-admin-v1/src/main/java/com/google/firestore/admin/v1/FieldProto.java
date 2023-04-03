@@ -66,13 +66,13 @@ public final class FieldProto {
           + "ACTIVE\020\002\022\020\n\014NEEDS_REPAIR\020\003:y\352Av\n\036firesto"
           + "re.googleapis.com/Field\022Tprojects/{proje"
           + "ct}/databases/{database}/collectionGroup"
-          + "s/{collection}/fields/{field}B\336\001\n\035com.go"
-          + "ogle.firestore.admin.v1B\nFieldProtoP\001Z>g"
-          + "oogle.golang.org/genproto/googleapis/fir"
-          + "estore/admin/v1;admin\242\002\004GCFS\252\002\037Google.Cl"
-          + "oud.Firestore.Admin.V1\312\002\037Google\\Cloud\\Fi"
-          + "restore\\Admin\\V1\352\002#Google::Cloud::Firest"
-          + "ore::Admin::V1b\006proto3"
+          + "s/{collection}/fields/{field}B\331\001\n\035com.go"
+          + "ogle.firestore.admin.v1B\nFieldProtoP\001Z9c"
+          + "loud.google.com/go/firestore/apiv1/admin"
+          + "/apiv1pb;apiv1pb\242\002\004GCFS\252\002\037Google.Cloud.F"
+          + "irestore.Admin.V1\312\002\037Google\\Cloud\\Firesto"
+          + "re\\Admin\\V1\352\002#Google::Cloud::Firestore::"
+          + "Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

@@ -42,13 +42,12 @@ public final class LocationProto {
     java.lang.String[] descriptorData = {
       "\n(google/firestore/admin/v1/location.pro"
           + "to\022\031google.firestore.admin.v1\"\022\n\020Locatio"
-          + "nMetadataB\341\001\n\035com.google.firestore.admin"
-          + ".v1B\rLocationProtoP\001Z>google.golang.org/"
-          + "genproto/googleapis/firestore/admin/v1;a"
-          + "dmin\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Adm"
-          + "in.V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352"
-          + "\002#Google::Cloud::Firestore::Admin::V1b\006p"
-          + "roto3"
+          + "nMetadataB\334\001\n\035com.google.firestore.admin"
+          + ".v1B\rLocationProtoP\001Z9cloud.google.com/g"
+          + "o/firestore/apiv1/admin/apiv1pb;apiv1pb\242"
+          + "\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin.V1"
+          + "\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#Goo"
+          + "gle::Cloud::Firestore::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

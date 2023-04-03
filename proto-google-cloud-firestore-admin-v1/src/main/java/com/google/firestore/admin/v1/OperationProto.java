@@ -127,13 +127,13 @@ public final class OperationProto {
           + "erationState\022\037\n\033OPERATION_STATE_UNSPECIF"
           + "IED\020\000\022\020\n\014INITIALIZING\020\001\022\016\n\nPROCESSING\020\002\022"
           + "\016\n\nCANCELLING\020\003\022\016\n\nFINALIZING\020\004\022\016\n\nSUCCE"
-          + "SSFUL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\342\001\n\035c"
+          + "SSFUL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\335\001\n\035c"
           + "om.google.firestore.admin.v1B\016OperationP"
-          + "rotoP\001Z>google.golang.org/genproto/googl"
-          + "eapis/firestore/admin/v1;admin\242\002\004GCFS\252\002\037"
-          + "Google.Cloud.Firestore.Admin.V1\312\002\037Google"
-          + "\\Cloud\\Firestore\\Admin\\V1\352\002#Google::Clou"
-          + "d::Firestore::Admin::V1b\006proto3"
+          + "rotoP\001Z9cloud.google.com/go/firestore/ap"
+          + "iv1/admin/apiv1pb;apiv1pb\242\002\004GCFS\252\002\037Googl"
+          + "e.Cloud.Firestore.Admin.V1\312\002\037Google\\Clou"
+          + "d\\Firestore\\Admin\\V1\352\002#Google::Cloud::Fi"
+          + "restore::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

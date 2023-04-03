@@ -153,12 +153,12 @@ public final class QueryProto {
           + "rotobuf.Int64ValueB\003\340A\001B\n\n\010operatorB\014\n\nq"
           + "uery_type\"D\n\006Cursor\022*\n\006values\030\001 \003(\0132\032.go"
           + "ogle.firestore.v1.Value\022\016\n\006before\030\002 \001(\010B"
-          + "\303\001\n\027com.google.firestore.v1B\nQueryProtoP"
-          + "\001Z<google.golang.org/genproto/googleapis"
-          + "/firestore/v1;firestore\242\002\004GCFS\252\002\031Google."
-          + "Cloud.Firestore.V1\312\002\031Google\\Cloud\\Firest"
-          + "ore\\V1\352\002\034Google::Cloud::Firestore::V1b\006p"
-          + "roto3"
+          + "\302\001\n\027com.google.firestore.v1B\nQueryProtoP"
+          + "\001Z;cloud.google.com/go/firestore/apiv1/f"
+          + "irestorepb;firestorepb\242\002\004GCFS\252\002\031Google.C"
+          + "loud.Firestore.V1\312\002\031Google\\Cloud\\Firesto"
+          + "re\\V1\352\002\034Google::Cloud::Firestore::V1b\006pr"
+          + "oto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

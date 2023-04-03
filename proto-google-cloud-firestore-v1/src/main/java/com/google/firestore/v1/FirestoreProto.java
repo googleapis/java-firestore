@@ -406,12 +406,12 @@ public final class FirestoreProto {
           + "id}:\010document\032v\312A\030firestore.googleapis.c"
           + "om\322AXhttps://www.googleapis.com/auth/clo"
           + "ud-platform,https://www.googleapis.com/a"
-          + "uth/datastoreB\300\001\n\027com.google.firestore.v"
-          + "1B\016FirestoreProtoP\001Z<google.golang.org/g"
-          + "enproto/googleapis/firestore/v1;firestor"
-          + "e\252\002\031Google.Cloud.Firestore.V1\312\002\031Google\\C"
-          + "loud\\Firestore\\V1\352\002\034Google::Cloud::Fires"
-          + "tore::V1b\006proto3"
+          + "uth/datastoreB\277\001\n\027com.google.firestore.v"
+          + "1B\016FirestoreProtoP\001Z;cloud.google.com/go"
+          + "/firestore/apiv1/firestorepb;firestorepb"
+          + "\252\002\031Google.Cloud.Firestore.V1\312\002\031Google\\Cl"
+          + "oud\\Firestore\\V1\352\002\034Google::Cloud::Firest"
+          + "ore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
