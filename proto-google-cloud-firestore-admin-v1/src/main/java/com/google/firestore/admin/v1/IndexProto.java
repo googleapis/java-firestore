@@ -66,13 +66,13 @@ public final class IndexProto {
           + "\014NEEDS_REPAIR\020\003:z\352Aw\n\036firestore.googleap"
           + "is.com/Index\022Uprojects/{project}/databas"
           + "es/{database}/collectionGroups/{collecti"
-          + "on}/indexes/{index}B\336\001\n\035com.google.fires"
-          + "tore.admin.v1B\nIndexProtoP\001Z>google.gola"
-          + "ng.org/genproto/googleapis/firestore/adm"
-          + "in/v1;admin\242\002\004GCFS\252\002\037Google.Cloud.Firest"
-          + "ore.Admin.V1\312\002\037Google\\Cloud\\Firestore\\Ad"
-          + "min\\V1\352\002#Google::Cloud::Firestore::Admin"
-          + "::V1b\006proto3"
+          + "on}/indexes/{index}B\331\001\n\035com.google.fires"
+          + "tore.admin.v1B\nIndexProtoP\001Z9cloud.googl"
+          + "e.com/go/firestore/apiv1/admin/apiv1pb;a"
+          + "piv1pb\242\002\004GCFS\252\002\037Google.Cloud.Firestore.A"
+          + "dmin.V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V"
+          + "1\352\002#Google::Cloud::Firestore::Admin::V1b"
+          + "\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

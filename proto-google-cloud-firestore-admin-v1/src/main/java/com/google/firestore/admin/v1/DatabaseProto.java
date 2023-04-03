@@ -61,13 +61,13 @@ public final class DatabaseProto {
           + "ON_MODE_UNSPECIFIED\020\000\022\013\n\007ENABLED\020\001\022\014\n\010DI"
           + "SABLED\020\002:R\352AO\n!firestore.googleapis.com/"
           + "Database\022\'projects/{project}/databases/{"
-          + "database}R\001\001B\341\001\n\035com.google.firestore.ad"
-          + "min.v1B\rDatabaseProtoP\001Z>google.golang.o"
-          + "rg/genproto/googleapis/firestore/admin/v"
-          + "1;admin\242\002\004GCFS\252\002\037Google.Cloud.Firestore."
-          + "Admin.V1\312\002\037Google\\Cloud\\Firestore\\Admin\\"
-          + "V1\352\002#Google::Cloud::Firestore::Admin::V1"
-          + "b\006proto3"
+          + "database}R\001\001B\334\001\n\035com.google.firestore.ad"
+          + "min.v1B\rDatabaseProtoP\001Z9cloud.google.co"
+          + "m/go/firestore/apiv1/admin/apiv1pb;apiv1"
+          + "pb\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin"
+          + ".V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#"
+          + "Google::Cloud::Firestore::Admin::V1b\006pro"
+          + "to3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
