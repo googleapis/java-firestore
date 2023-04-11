@@ -34,6 +34,12 @@
     </dependency>
     <!-- [END firestore_install_without_bom] -->
 
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-firestore-admin</artifactId>
+      <version>3.9.3</version>
+    </dependency>
+
     <!--  used for beam samples-->
     <dependency>
       <groupId>org.apache.beam</groupId>
