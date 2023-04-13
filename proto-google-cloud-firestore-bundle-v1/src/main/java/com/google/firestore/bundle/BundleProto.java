@@ -82,11 +82,11 @@ public final class BundleProto {
           + "H\000\022M\n\021document_metadata\030\003 \001(\01320.google.f"
           + "irestore.bundle.BundledDocumentMetadataH"
           + "\000\0221\n\010document\030\004 \001(\0132\035.google.firestore.v"
-          + "1.DocumentH\000B\016\n\014element_typeB\221\001\n\033com.goo"
-          + "gle.firestore.bundleB\013BundleProtoP\001Z5goo"
-          + "gle.golang.org/genproto/firestore/bundle"
-          + ";firestore\242\002\005FSTPB\252\002\020Firestore.Bundle\312\002\020"
-          + "Firestore\\Bundleb\006proto3"
+          + "1.DocumentH\000B\016\n\014element_typeB\222\001\n\033com.goo"
+          + "gle.firestore.bundleB\013BundleProtoP\001Z6clo"
+          + "ud.google.com/go/firestore/bundle/bundle"
+          + "pb;bundlepb\242\002\005FSTPB\252\002\020Firestore.Bundle\312\002"
+          + "\020Firestore\\Bundleb\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

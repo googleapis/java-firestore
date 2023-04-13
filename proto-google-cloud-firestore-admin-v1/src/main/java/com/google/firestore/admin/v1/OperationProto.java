@@ -130,7 +130,7 @@ public final class OperationProto {
           + "SSFUL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\335\001\n\035c"
           + "om.google.firestore.admin.v1B\016OperationP"
           + "rotoP\001Z9cloud.google.com/go/firestore/ap"
-          + "iv1/admin/apiv1pb;apiv1pb\242\002\004GCFS\252\002\037Googl"
+          + "iv1/admin/adminpb;adminpb\242\002\004GCFS\252\002\037Googl"
           + "e.Cloud.Firestore.Admin.V1\312\002\037Google\\Clou"
           + "d\\Firestore\\Admin\\V1\352\002#Google::Cloud::Fi"
           + "restore::Admin::V1b\006proto3"

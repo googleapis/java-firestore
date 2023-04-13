@@ -215,7 +215,7 @@ public final class FirestoreAdminProto {
           + ".googleapis.com/auth/datastoreB\245\003\n\035com.g"
           + "oogle.firestore.admin.v1B\023FirestoreAdmin"
           + "ProtoP\001Z9cloud.google.com/go/firestore/a"
-          + "piv1/admin/apiv1pb;apiv1pb\242\002\004GCFS\252\002\037Goog"
+          + "piv1/admin/adminpb;adminpb\242\002\004GCFS\252\002\037Goog"
           + "le.Cloud.Firestore.Admin.V1\312\002\037Google\\Clo"
           + "ud\\Firestore\\Admin\\V1\352\002#Google::Cloud::F"
           + "irestore::Admin::V1\352AL\n!firestore.google"

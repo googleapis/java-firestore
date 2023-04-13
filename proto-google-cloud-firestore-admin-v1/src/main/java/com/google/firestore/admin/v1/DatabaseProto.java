@@ -63,7 +63,7 @@ public final class DatabaseProto {
           + "Database\022\'projects/{project}/databases/{"
           + "database}R\001\001B\334\001\n\035com.google.firestore.ad"
           + "min.v1B\rDatabaseProtoP\001Z9cloud.google.co"
-          + "m/go/firestore/apiv1/admin/apiv1pb;apiv1"
+          + "m/go/firestore/apiv1/admin/adminpb;admin"
           + "pb\242\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin"
           + ".V1\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#"
           + "Google::Cloud::Firestore::Admin::V1b\006pro"

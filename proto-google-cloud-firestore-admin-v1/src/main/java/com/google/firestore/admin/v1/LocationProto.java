@@ -44,7 +44,7 @@ public final class LocationProto {
           + "to\022\031google.firestore.admin.v1\"\022\n\020Locatio"
           + "nMetadataB\334\001\n\035com.google.firestore.admin"
           + ".v1B\rLocationProtoP\001Z9cloud.google.com/g"
-          + "o/firestore/apiv1/admin/apiv1pb;apiv1pb\242"
+          + "o/firestore/apiv1/admin/adminpb;adminpb\242"
           + "\002\004GCFS\252\002\037Google.Cloud.Firestore.Admin.V1"
           + "\312\002\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#Goo"
           + "gle::Cloud::Firestore::Admin::V1b\006proto3"
