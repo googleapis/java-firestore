@@ -16,13 +16,15 @@
 
 package com.example.firestore.snippets;
 
+// [START firestore_regional_endpoint]
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 
 
 /**
- * Snippets to demonstrate how to set a regional endpoint.
+ * Demonstrate how to set a regional endpoint.
  */
 public class RegionalEndpointSnippets {
 
@@ -30,7 +32,6 @@ public class RegionalEndpointSnippets {
    * Create a client with a regional endpoint.
    **/
   public Firestore regionalEndpoint(String projectId, String endpoint) throws Exception {
-    // [START firestore_regional_endpoint]
     FirestoreOptions firestoreOptions =
         FirestoreOptions.newBuilder()
             .setProjectId(projectId)
@@ -39,8 +40,9 @@ public class RegionalEndpointSnippets {
             .setHost(endpoint)
             .build();
     Firestore dbWithEndpoint = firestoreOptions.getService();
-    // [END firestore_regional_endpoint]
+
     return dbWithEndpoint;
   }
 
 }
+// [END firestore_regional_endpoint]
