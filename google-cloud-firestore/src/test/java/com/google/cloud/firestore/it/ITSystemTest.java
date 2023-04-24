@@ -1559,9 +1559,11 @@ public class ITSystemTest {
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
+    // Exception isn't thrown until 5 minutes.
+    final long tenMinutes = System.currentTimeMillis() / 1000 - 600;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
-            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(0))
+            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(tenMinutes).setNanos(0))
             .build();
 
     final ApiFuture<Void> runTransaction =
@@ -1572,15 +1574,12 @@ public class ITSystemTest {
             },
             options);
 
-    try {
-      runTransaction.get(10, TimeUnit.SECONDS);
-    } catch (ExecutionException e) {
-      final Throwable rootCause = ExceptionUtils.getRootCause(e);
-      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
-      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
-      final Status status = invalidArgument.getStatus();
-      assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
-    }
+    ExecutionException e = assertThrows(ExecutionException.class, () -> runTransaction.get(10, TimeUnit.SECONDS));
+    final Throwable rootCause = ExceptionUtils.getRootCause(e);
+    assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+    final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+    final Status status = invalidArgument.getStatus();
+    assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
   }
 
   @Test
