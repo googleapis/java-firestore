@@ -1563,7 +1563,8 @@ public class ITSystemTest {
     final long tenMinutes = System.currentTimeMillis() / 1000 - 600;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
-            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(tenMinutes).setNanos(0))
+            .setReadTime(
+                com.google.protobuf.Timestamp.newBuilder().setSeconds(tenMinutes).setNanos(0))
             .build();
 
     final ApiFuture<Void> runTransaction =
@@ -1574,7 +1575,8 @@ public class ITSystemTest {
             },
             options);
 
-    ExecutionException e = assertThrows(ExecutionException.class, () -> runTransaction.get(10, TimeUnit.SECONDS));
+    ExecutionException e =
+        assertThrows(ExecutionException.class, () -> runTransaction.get(10, TimeUnit.SECONDS));
     final Throwable rootCause = ExceptionUtils.getRootCause(e);
     assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
     final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
