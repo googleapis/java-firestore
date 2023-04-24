@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
+import static com.google.cloud.firestore.it.TestHelper.await;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
@@ -26,26 +27,12 @@ import static org.junit.Assume.assumeTrue;
 import com.google.api.core.ApiFuture;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.AggregateQuery;
-import com.google.cloud.firestore.AggregateQuerySnapshot;
-import com.google.cloud.firestore.CollectionGroup;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.TransactionOptions;
-import com.google.cloud.firestore.WriteBatch;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -157,6 +144,13 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void aggregateQuerySupportsCollectionGroups() throws Exception {
+    CollectionGroup collectionGroup = createCollectionGroupWithDocuments(13);
+    AggregateQuerySnapshot snapshot = collectionGroup.aggregate(AggregateField.count()).get().get();
+    assertThat(snapshot.getCount()).isEqualTo(13);
+  }
+
+  @Test
   public void countShouldReturnNumberOfDocumentsForPartitionQuery() throws Exception {
     CollectionReference collection = createCollectionWithDocuments(3).collection();
     Query query = collection.select("abc");
@@ -174,6 +168,15 @@ public class ITQueryCountTest {
   }
 
   @Test
+  public void inFlightAggregateQueriesShouldCompleteSuccessfullyWhenFirestoreIsClosed()
+      throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(20).collection();
+    ApiFuture<AggregateQuerySnapshot> task = collection.aggregate(AggregateField.count()).get();
+    collection.getFirestore().close();
+    assertThat(task.get().getCount()).isEqualTo(20);
+  }
+
+  @Test
   public void inFlightCountQueriesShouldCompleteSuccessfullyWhenFirestoreIsShutDownGracefully()
       throws Exception {
     CollectionReference collection = createCollectionWithDocuments(20).collection();
@@ -183,10 +186,20 @@ public class ITQueryCountTest {
   }
 
   @Test
-  public void inFlightCountQueriesShouldRunToCompletionWhenFirestoreIsShutDownForcefully()
+  public void
+      inFlightAggregationQueriesShouldCompleteSuccessfullyWhenFirestoreIsShutDownGracefully()
+          throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(20).collection();
+    ApiFuture<AggregateQuerySnapshot> task = collection.aggregate(AggregateField.count()).get();
+    collection.getFirestore().shutdown();
+    assertThat(task.get().getCount()).isEqualTo(20);
+  }
+
+  @Test
+  public void inFlightAggregateQueriesShouldRunToCompletionWhenFirestoreIsShutDownForcefully()
       throws Exception {
     CollectionReference collection = createCollectionWithDocuments(20).collection();
-    ApiFuture<AggregateQuerySnapshot> task = collection.count().get();
+    ApiFuture<AggregateQuerySnapshot> task = collection.aggregate(AggregateField.count()).get();
     collection.getFirestore().shutdownNow();
     await(task);
   }
@@ -195,6 +208,14 @@ public class ITQueryCountTest {
   public void countQueriesShouldFailIfStartedOnAClosedFirestoreInstance() throws Exception {
     CollectionReference collection = createEmptyCollection();
     AggregateQuery aggregateQuery = collection.count();
+    collection.getFirestore().close();
+    assertThrows(IllegalStateException.class, aggregateQuery::get);
+  }
+
+  @Test
+  public void aggregateQueriesShouldFailIfStartedOnAClosedFirestoreInstance() throws Exception {
+    CollectionReference collection = createEmptyCollection();
+    AggregateQuery aggregateQuery = collection.aggregate(AggregateField.count());
     collection.getFirestore().close();
     assertThrows(IllegalStateException.class, aggregateQuery::get);
   }
@@ -392,31 +413,6 @@ public class ITQueryCountTest {
   /** Converts a {@link Timestamp} to the equivalent number of milliseconds. */
   private static long msFromTimestamp(Timestamp timestamp) {
     return (timestamp.getSeconds() * 1_000) + (timestamp.getNanos() / 1_000_000);
-  }
-
-  /**
-   * Blocks the calling thread until the given future completes. Note that this method does not
-   * check the success or failure of the future; it returns regardless of its success or failure.
-   */
-  private static void await(ApiFuture<?> future) throws InterruptedException {
-    AtomicBoolean done = new AtomicBoolean(false);
-    ExecutorService executor = Executors.newSingleThreadExecutor();
-    future.addListener(
-        () -> {
-          synchronized (done) {
-            done.set(true);
-            done.notifyAll();
-          }
-        },
-        executor);
-
-    synchronized (done) {
-      while (!done.get()) {
-        done.wait();
-      }
-    }
-
-    executor.shutdown();
   }
 
   @AutoValue
