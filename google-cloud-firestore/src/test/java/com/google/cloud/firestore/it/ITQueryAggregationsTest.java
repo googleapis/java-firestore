@@ -82,6 +82,25 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
+  public void allowsAliasesLongerThan1500Bytes() throws Exception {
+    // The longest field name allowed is 1500. The alias chosen by the client is <op>_<fieldName>.
+    // If the field name is
+    // 1500 bytes, the alias will be longer than 1500, which is the limit for aliases. This is to
+    // make sure the client
+    // can handle this corner case correctly.
+    String longField = "";
+    for (int i = 0; i < 150; i++) {
+      longField += "0123456789";
+    }
+    Map<String, Map<String, Object>> testDocs = map("a", map(longField, 1), "b", map(longField, 2));
+
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot =
+        collection.aggregate(AggregateField.sum(longField)).get().get();
+    assertThat(snapshot.get(AggregateField.sum(longField))).isEqualTo(3);
+  }
+
+  @Test
   public void canGetDuplicateAggregations() throws Exception {
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateQuerySnapshot snapshot =
