@@ -18,6 +18,7 @@ package com.example.firestore.snippets;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.example.firestore.BaseIntegrationTest;
@@ -269,6 +270,13 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
     Set<String> expected = newHashSet("BJ");
     Set<String> actual = getResultsAsSet(query);
     assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testSnapshotReads() throws Exception {
+    // Verify that this runs without error
+    DocumentSnapshot doc = queryDataSnippets.runStaleReads();
+    assertNotNull("should not be null", doc);
   }
 
   private Set<String> getResultsAsSet(Query query) throws Exception {

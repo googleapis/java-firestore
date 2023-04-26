@@ -20,13 +20,17 @@ import com.example.firestore.snippets.model.City;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteResult;
+import com.google.protobuf.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -591,7 +595,53 @@ class QueryDataSnippets {
     return query;
   }
 
-  /** Closes the gRPC channels associated with this instance and frees up their resources. */
+  /**
+   * Run stale reads. Demonstrate a document lookup and a query.
+   *
+   * @return DocumentSnapshot documentResult
+   */
+  DocumentSnapshot runStaleReads() throws Exception {
+    // [START firestore_stale_read]
+    // Create a read time 15 seconds in the past
+    Instant now = Instant.now();
+    final int fifteenSeconds = 15;
+    final Timestamp readTime = Timestamp.newBuilder()
+        .setSeconds(now.getEpochSecond() - fifteenSeconds)
+        .setNanos(now.getNano()).build();
+
+    // Set transaction options. Use read-only and set read time
+    // Stale reads require a read-only transaction
+    TransactionOptions options = TransactionOptions
+        .createReadOnlyOptionsBuilder()
+        .setReadTime(readTime).build();
+
+    // Create a document reference
+    final DocumentReference documentReference = db
+        .collection("cities")
+        .document("SF");
+
+    // Create a query against the cities collection.
+    Query query = db.collection("cities").whereEqualTo("capital", true);
+
+    // run a transaction with the specified transaction options
+    ApiFuture<DocumentSnapshot> futureTransaction = db
+        .runTransaction(transaction -> {
+          // Execute a stale read document lookup
+          final DocumentSnapshot documentResult = transaction
+              .get(documentReference).get();
+
+          // Execute a stale read query
+          final QuerySnapshot queryResult = transaction.get(query).get();
+
+          return documentResult;
+        }, options);
+    // [END firestore_stale_read]
+    return futureTransaction.get();
+  }
+
+  /**
+   * Closes the gRPC channels associated with this instance and frees up their resources.
+   */
   void close() throws Exception {
     db.close();
   }
