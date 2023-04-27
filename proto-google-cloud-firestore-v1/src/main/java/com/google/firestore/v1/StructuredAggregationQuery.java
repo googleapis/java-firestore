@@ -122,7 +122,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2),
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4)
+     *   COUNT(*)
      * OVER (
      *   ...
      * );
@@ -133,7 +133,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2) AS field_1,
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4) AS field_2
+     *   COUNT(*) AS field_2
      * OVER (
      *   ...
      * );
@@ -162,7 +162,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2),
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4)
+     *   COUNT(*)
      * OVER (
      *   ...
      * );
@@ -173,7 +173,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2) AS field_1,
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4) AS field_2
+     *   COUNT(*) AS field_2
      * OVER (
      *   ...
      * );
@@ -197,7 +197,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
    *
    *
    * <pre>
-   * Defines a aggregation that produces a single result.
+   * Defines an aggregation that produces a single result.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation}
@@ -254,7 +254,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -277,7 +277,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -300,7 +300,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -373,7 +373,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -399,7 +399,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -425,7 +425,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        * Optional. Optional constraint on the maximum number of documents to
        * count.
        * This provides a way to set an upper bound on the number of documents
-       * to scan, limiting latency and cost.
+       * to scan, limiting latency, and cost.
        * Unspecified is interpreted as no bound.
        * High-Level Example:
        * ```
@@ -825,7 +825,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -850,7 +850,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -879,7 +879,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -912,7 +912,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -942,7 +942,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -978,7 +978,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -1008,7 +1008,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -1033,7 +1033,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -1060,7 +1060,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
          * Optional. Optional constraint on the maximum number of documents to
          * count.
          * This provides a way to set an upper bound on the number of documents
-         * to scan, limiting latency and cost.
+         * to scan, limiting latency, and cost.
          * Unspecified is interpreted as no bound.
          * High-Level Example:
          * ```
@@ -1273,7 +1273,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2),
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4)
+     *   COUNT(*)
      * OVER (
      *   ...
      * );
@@ -1284,7 +1284,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2) AS field_1,
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4) AS field_2
+     *   COUNT(*) AS field_2
      * OVER (
      *   ...
      * );
@@ -1324,7 +1324,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2),
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4)
+     *   COUNT(*)
      * OVER (
      *   ...
      * );
@@ -1335,7 +1335,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *   COUNT_UP_TO(1) AS count_up_to_1,
      *   COUNT_UP_TO(2) AS field_1,
      *   COUNT_UP_TO(3) AS count_up_to_3,
-     *   COUNT_UP_TO(4) AS field_2
+     *   COUNT(*) AS field_2
      * OVER (
      *   ...
      * );
@@ -1554,7 +1554,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
      *
      *
      * <pre>
-     * Defines a aggregation that produces a single result.
+     * Defines an aggregation that produces a single result.
      * </pre>
      *
      * Protobuf type {@code google.firestore.v1.StructuredAggregationQuery.Aggregation}
@@ -2022,7 +2022,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2),
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4)
+       *   COUNT(*)
        * OVER (
        *   ...
        * );
@@ -2033,7 +2033,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2) AS field_1,
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4) AS field_2
+       *   COUNT(*) AS field_2
        * OVER (
        *   ...
        * );
@@ -2072,7 +2072,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2),
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4)
+       *   COUNT(*)
        * OVER (
        *   ...
        * );
@@ -2083,7 +2083,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2) AS field_1,
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4) AS field_2
+       *   COUNT(*) AS field_2
        * OVER (
        *   ...
        * );
@@ -2122,7 +2122,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2),
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4)
+       *   COUNT(*)
        * OVER (
        *   ...
        * );
@@ -2133,7 +2133,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2) AS field_1,
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4) AS field_2
+       *   COUNT(*) AS field_2
        * OVER (
        *   ...
        * );
@@ -2171,7 +2171,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2),
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4)
+       *   COUNT(*)
        * OVER (
        *   ...
        * );
@@ -2182,7 +2182,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2) AS field_1,
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4) AS field_2
+       *   COUNT(*) AS field_2
        * OVER (
        *   ...
        * );
@@ -2216,7 +2216,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2),
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4)
+       *   COUNT(*)
        * OVER (
        *   ...
        * );
@@ -2227,7 +2227,7 @@ public final class StructuredAggregationQuery extends com.google.protobuf.Genera
        *   COUNT_UP_TO(1) AS count_up_to_1,
        *   COUNT_UP_TO(2) AS field_1,
        *   COUNT_UP_TO(3) AS count_up_to_3,
-       *   COUNT_UP_TO(4) AS field_2
+       *   COUNT(*) AS field_2
        * OVER (
        *   ...
        * );

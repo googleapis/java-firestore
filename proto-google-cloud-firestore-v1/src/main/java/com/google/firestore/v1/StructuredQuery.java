@@ -4163,8 +4163,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The given `field` is equal to at least one value in the given array.
        * Requires:
-       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+       * * That `value` is a non-empty `ArrayValue`, subject to disjunction
+       *   limits.
+       * * No `NOT_IN` filters in the same query.
        * </pre>
        *
        * <code>IN = 8;</code>
@@ -4177,8 +4178,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * The given `field` is an array that contains any of the values in the
        * given array.
        * Requires:
-       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+       * * That `value` is a non-empty `ArrayValue`, subject to disjunction
+       *   limits.
+       * * No other `ARRAY_CONTAINS_ANY` filters within the same disjunction.
+       * * No `NOT_IN` filters in the same query.
        * </pre>
        *
        * <code>ARRAY_CONTAINS_ANY = 9;</code>
@@ -4191,7 +4194,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * The value of the `field` is not in the given array.
        * Requires:
        * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
+       * * No other `OR`, `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
        *   `IS_NOT_NULL`, or `IS_NOT_NAN`.
        * * That `field` comes first in the `order_by`.
        * </pre>
@@ -4299,8 +4302,9 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * <pre>
        * The given `field` is equal to at least one value in the given array.
        * Requires:
-       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+       * * That `value` is a non-empty `ArrayValue`, subject to disjunction
+       *   limits.
+       * * No `NOT_IN` filters in the same query.
        * </pre>
        *
        * <code>IN = 8;</code>
@@ -4313,8 +4317,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * The given `field` is an array that contains any of the values in the
        * given array.
        * Requires:
-       * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+       * * That `value` is a non-empty `ArrayValue`, subject to disjunction
+       *   limits.
+       * * No other `ARRAY_CONTAINS_ANY` filters within the same disjunction.
+       * * No `NOT_IN` filters in the same query.
        * </pre>
        *
        * <code>ARRAY_CONTAINS_ANY = 9;</code>
@@ -4327,7 +4333,7 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        * The value of the `field` is not in the given array.
        * Requires:
        * * That `value` is a non-empty `ArrayValue` with at most 10 values.
-       * * No other `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
+       * * No other `OR`, `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
        *   `IS_NOT_NULL`, or `IS_NOT_NAN`.
        * * That `field` comes first in the `order_by`.
        * </pre>
@@ -9406,7 +9412,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -9421,7 +9430,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -9438,7 +9450,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10608,7 +10623,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10622,7 +10640,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10642,7 +10663,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10664,7 +10688,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10684,7 +10711,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10709,7 +10739,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10728,7 +10761,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10742,7 +10778,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -10760,7 +10799,10 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The projection to return.
+     * Optional sub-set of the fields to return.
+     * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+     * documents returned from a query. When not set, assumes that the caller
+     * wants all fields returned.
      * </pre>
      *
      * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>

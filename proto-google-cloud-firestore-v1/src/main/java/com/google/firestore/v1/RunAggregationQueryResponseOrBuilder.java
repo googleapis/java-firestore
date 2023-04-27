@@ -80,7 +80,13 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -92,7 +98,13 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -104,7 +116,13 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>

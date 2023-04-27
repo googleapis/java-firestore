@@ -952,7 +952,7 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Streams batches of document updates and deletes, in order. This method is
-     * only available via the gRPC API (not REST).
+     * only available via gRPC or WebChannel (not REST).
      * </pre>
      */
     default io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -965,8 +965,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes. This method is only available via the gRPC API (not
-     * REST).
+     * Listens to changes. This method is only available via gRPC or WebChannel
+     * (not REST).
      * </pre>
      */
     default io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
@@ -1262,7 +1262,7 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Streams batches of document updates and deletes, in order. This method is
-     * only available via the gRPC API (not REST).
+     * only available via gRPC or WebChannel (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -1275,8 +1275,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes. This method is only available via the gRPC API (not
-     * REST).
+     * Listens to changes. This method is only available via gRPC or WebChannel
+     * (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
