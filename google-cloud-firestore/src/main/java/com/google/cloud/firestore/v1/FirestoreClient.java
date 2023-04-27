@@ -1040,7 +1040,7 @@ public class FirestoreClient implements BackgroundResource {
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Streams batches of document updates and deletes, in order. This method is only available via
-   * the gRPC API (not REST).
+   * gRPC or WebChannel (not REST).
    *
    * <p>Sample code:
    *
@@ -1073,7 +1073,7 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Listens to changes. This method is only available via the gRPC API (not REST).
+   * Listens to changes. This method is only available via gRPC or WebChannel (not REST).
    *
    * <p>Sample code:
    *

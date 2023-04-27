@@ -27,7 +27,10 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -39,7 +42,10 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
@@ -51,7 +57,10 @@ public interface StructuredQueryOrBuilder
    *
    *
    * <pre>
-   * The projection to return.
+   * Optional sub-set of the fields to return.
+   * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+   * documents returned from a query. When not set, assumes that the caller
+   * wants all fields returned.
    * </pre>
    *
    * <code>.google.firestore.v1.StructuredQuery.Projection select = 1;</code>
