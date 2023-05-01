@@ -53,6 +53,11 @@ public abstract class UpdateBuilder<T> {
       this.documentReference = documentReference;
       this.write = write;
     }
+
+    @Override
+    public String toString() {
+      return String.format("WriteOperation{write=%s, documentReference=%s}", write, documentReference);
+    }
   }
 
   final FirestoreImpl firestore;
@@ -645,5 +650,10 @@ public abstract class UpdateBuilder<T> {
   /** Get the number of writes. */
   public int getMutationsSize() {
     return writes.size();
+  }
+
+  @Override
+  public String toString() {
+    return String.format("UpdateBuilder{writes=%s, committed=%s}", writes, committed);
   }
 }

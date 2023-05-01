@@ -448,4 +448,10 @@ public class DocumentSnapshot {
   public int hashCode() {
     return Objects.hash(rpcContext, docRef, fields);
   }
+
+  @Override
+  public String toString() {
+    return String.format("DocumentSnapshot{docRef=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}", docRef,
+                         fields, readTime, updateTime, createTime);
+  }
 }
