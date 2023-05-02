@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.10.0](https://github.com/googleapis/java-firestore/compare/v3.9.6...v3.10.0) (2023-04-27)
+
+
+### Features
+
+* Add bloom filter related proto fields (only in the preview API surface) ([#1274](https://github.com/googleapis/java-firestore/issues/1274)) ([41909b7](https://github.com/googleapis/java-firestore/commit/41909b712bd0e373218f03ae7e978df1259cfd0d))
+
 ## [3.9.6](https://github.com/googleapis/java-firestore/compare/v3.9.5...v3.9.6) (2023-04-26)
 
 
