@@ -654,6 +654,6 @@ public abstract class UpdateBuilder<T> {
 
   @Override
   public String toString() {
-    return String.format("UpdateBuilder{writes=%s, committed=%s}", writes, committed);
+    return String.format("%s{writes=%s, committed=%s}", getClass().getSimpleName(), writes, committed);
   }
 }

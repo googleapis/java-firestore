@@ -451,7 +451,7 @@ public class DocumentSnapshot {
 
   @Override
   public String toString() {
-    return String.format("DocumentSnapshot{docRef=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}", docRef,
-                         fields, readTime, updateTime, createTime);
+    return String.format("%s{docRef=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}",
+                         getClass().getSimpleName(), docRef, fields, readTime, updateTime, createTime);
   }
 }
