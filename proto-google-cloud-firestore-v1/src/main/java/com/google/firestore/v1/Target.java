@@ -2309,6 +2309,68 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     return once_;
   }
 
+  public static final int EXPECTED_COUNT_FIELD_NUMBER = 12;
+  private com.google.protobuf.Int32Value expectedCount_;
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return Whether the expectedCount field is set.
+   */
+  @java.lang.Override
+  public boolean hasExpectedCount() {
+    return expectedCount_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return The expectedCount.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Int32Value getExpectedCount() {
+    return expectedCount_ == null
+        ? com.google.protobuf.Int32Value.getDefaultInstance()
+        : expectedCount_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder() {
+    return expectedCount_ == null
+        ? com.google.protobuf.Int32Value.getDefaultInstance()
+        : expectedCount_;
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -2340,6 +2402,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
     if (resumeTypeCase_ == 11) {
       output.writeMessage(11, (com.google.protobuf.Timestamp) resumeType_);
+    }
+    if (expectedCount_ != null) {
+      output.writeMessage(12, getExpectedCount());
     }
     getUnknownFields().writeTo(output);
   }
@@ -2376,6 +2441,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               11, (com.google.protobuf.Timestamp) resumeType_);
     }
+    if (expectedCount_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(12, getExpectedCount());
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -2393,6 +2461,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
     if (getTargetId() != other.getTargetId()) return false;
     if (getOnce() != other.getOnce()) return false;
+    if (hasExpectedCount() != other.hasExpectedCount()) return false;
+    if (hasExpectedCount()) {
+      if (!getExpectedCount().equals(other.getExpectedCount())) return false;
+    }
     if (!getTargetTypeCase().equals(other.getTargetTypeCase())) return false;
     switch (targetTypeCase_) {
       case 2:
@@ -2430,6 +2502,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + getTargetId();
     hash = (37 * hash) + ONCE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getOnce());
+    if (hasExpectedCount()) {
+      hash = (37 * hash) + EXPECTED_COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getExpectedCount().hashCode();
+    }
     switch (targetTypeCase_) {
       case 2:
         hash = (37 * hash) + QUERY_FIELD_NUMBER;
@@ -2602,6 +2678,11 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       targetId_ = 0;
       once_ = false;
+      expectedCount_ = null;
+      if (expectedCountBuilder_ != null) {
+        expectedCountBuilder_.dispose();
+        expectedCountBuilder_ = null;
+      }
       targetTypeCase_ = 0;
       targetType_ = null;
       resumeTypeCase_ = 0;
@@ -2647,6 +2728,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       if (((from_bitField0_ & 0x00000020) != 0)) {
         result.once_ = once_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.expectedCount_ =
+            expectedCountBuilder_ == null ? expectedCount_ : expectedCountBuilder_.build();
       }
     }
 
@@ -2716,6 +2801,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       if (other.getOnce() != false) {
         setOnce(other.getOnce());
+      }
+      if (other.hasExpectedCount()) {
+        mergeExpectedCount(other.getExpectedCount());
       }
       switch (other.getTargetTypeCase()) {
         case QUERY:
@@ -2811,6 +2899,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
                 resumeTypeCase_ = 11;
                 break;
               } // case 90
+            case 98:
+              {
+                input.readMessage(getExpectedCountFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 98
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -3676,6 +3770,225 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       once_ = false;
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.Int32Value expectedCount_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Int32Value,
+            com.google.protobuf.Int32Value.Builder,
+            com.google.protobuf.Int32ValueOrBuilder>
+        expectedCountBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     *
+     * @return Whether the expectedCount field is set.
+     */
+    public boolean hasExpectedCount() {
+      return ((bitField0_ & 0x00000040) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     *
+     * @return The expectedCount.
+     */
+    public com.google.protobuf.Int32Value getExpectedCount() {
+      if (expectedCountBuilder_ == null) {
+        return expectedCount_ == null
+            ? com.google.protobuf.Int32Value.getDefaultInstance()
+            : expectedCount_;
+      } else {
+        return expectedCountBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder setExpectedCount(com.google.protobuf.Int32Value value) {
+      if (expectedCountBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        expectedCount_ = value;
+      } else {
+        expectedCountBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder setExpectedCount(com.google.protobuf.Int32Value.Builder builderForValue) {
+      if (expectedCountBuilder_ == null) {
+        expectedCount_ = builderForValue.build();
+      } else {
+        expectedCountBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder mergeExpectedCount(com.google.protobuf.Int32Value value) {
+      if (expectedCountBuilder_ == null) {
+        if (((bitField0_ & 0x00000040) != 0)
+            && expectedCount_ != null
+            && expectedCount_ != com.google.protobuf.Int32Value.getDefaultInstance()) {
+          getExpectedCountBuilder().mergeFrom(value);
+        } else {
+          expectedCount_ = value;
+        }
+      } else {
+        expectedCountBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder clearExpectedCount() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      expectedCount_ = null;
+      if (expectedCountBuilder_ != null) {
+        expectedCountBuilder_.dispose();
+        expectedCountBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public com.google.protobuf.Int32Value.Builder getExpectedCountBuilder() {
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return getExpectedCountFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder() {
+      if (expectedCountBuilder_ != null) {
+        return expectedCountBuilder_.getMessageOrBuilder();
+      } else {
+        return expectedCount_ == null
+            ? com.google.protobuf.Int32Value.getDefaultInstance()
+            : expectedCount_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Int32Value,
+            com.google.protobuf.Int32Value.Builder,
+            com.google.protobuf.Int32ValueOrBuilder>
+        getExpectedCountFieldBuilder() {
+      if (expectedCountBuilder_ == null) {
+        expectedCountBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Int32Value,
+                com.google.protobuf.Int32Value.Builder,
+                com.google.protobuf.Int32ValueOrBuilder>(
+                getExpectedCount(), getParentForChildren(), isClean());
+        expectedCount_ = null;
+      }
+      return expectedCountBuilder_;
     }
 
     @java.lang.Override

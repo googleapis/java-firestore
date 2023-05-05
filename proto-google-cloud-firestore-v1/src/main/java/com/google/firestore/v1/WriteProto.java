@@ -69,7 +69,8 @@ public final class WriteProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\037google/firestore/v1/write.proto\022\023googl"
-          + "e.firestore.v1\032 google/firestore/v1/comm"
+          + "e.firestore.v1\032&google/firestore/v1/bloo"
+          + "m_filter.proto\032 google/firestore/v1/comm"
           + "on.proto\032\"google/firestore/v1/document.p"
           + "roto\032\037google/protobuf/timestamp.proto\"\333\002"
           + "\n\005Write\022/\n\006update\030\001 \001(\0132\035.google.firesto"
@@ -107,18 +108,21 @@ public final class WriteProto {
           + "2\032.google.protobuf.Timestamp\"m\n\016Document"
           + "Remove\022\020\n\010document\030\001 \001(\t\022\032\n\022removed_targ"
           + "et_ids\030\002 \003(\005\022-\n\tread_time\030\004 \001(\0132\032.google"
-          + ".protobuf.Timestamp\"3\n\017ExistenceFilter\022\021"
-          + "\n\ttarget_id\030\001 \001(\005\022\r\n\005count\030\002 \001(\005B\302\001\n\027com"
-          + ".google.firestore.v1B\nWriteProtoP\001Z;clou"
-          + "d.google.com/go/firestore/apiv1/firestor"
-          + "epb;firestorepb\242\002\004GCFS\252\002\031Google.Cloud.Fi"
-          + "restore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002"
-          + "\034Google::Cloud::Firestore::V1b\006proto3"
+          + ".protobuf.Timestamp\"n\n\017ExistenceFilter\022\021"
+          + "\n\ttarget_id\030\001 \001(\005\022\r\n\005count\030\002 \001(\005\0229\n\017unch"
+          + "anged_names\030\003 \001(\0132 .google.firestore.v1."
+          + "BloomFilterB\302\001\n\027com.google.firestore.v1B"
+          + "\nWriteProtoP\001Z;cloud.google.com/go/fires"
+          + "tore/apiv1/firestorepb;firestorepb\242\002\004GCF"
+          + "S\252\002\031Google.Cloud.Firestore.V1\312\002\031Google\\C"
+          + "loud\\Firestore\\V1\352\002\034Google::Cloud::Fires"
+          + "tore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
             descriptorData,
             new com.google.protobuf.Descriptors.FileDescriptor[] {
+              com.google.firestore.v1.BloomFilterProto.getDescriptor(),
               com.google.firestore.v1.CommonProto.getDescriptor(),
               com.google.firestore.v1.DocumentProto.getDescriptor(),
               com.google.protobuf.TimestampProto.getDescriptor(),
@@ -197,8 +201,9 @@ public final class WriteProto {
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_v1_ExistenceFilter_descriptor,
             new java.lang.String[] {
-              "TargetId", "Count",
+              "TargetId", "Count", "UnchangedNames",
             });
+    com.google.firestore.v1.BloomFilterProto.getDescriptor();
     com.google.firestore.v1.CommonProto.getDescriptor();
     com.google.firestore.v1.DocumentProto.getDescriptor();
     com.google.protobuf.TimestampProto.getDescriptor();
