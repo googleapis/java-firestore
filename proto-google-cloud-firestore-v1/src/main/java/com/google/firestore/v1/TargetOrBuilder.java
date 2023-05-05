@@ -187,6 +187,53 @@ public interface TargetOrBuilder
    */
   boolean getOnce();
 
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return Whether the expectedCount field is set.
+   */
+  boolean hasExpectedCount();
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return The expectedCount.
+   */
+  com.google.protobuf.Int32Value getExpectedCount();
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   */
+  com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder();
+
   public com.google.firestore.v1.Target.TargetTypeCase getTargetTypeCase();
 
   public com.google.firestore.v1.Target.ResumeTypeCase getResumeTypeCase();
