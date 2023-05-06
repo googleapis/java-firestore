@@ -56,7 +56,8 @@ public abstract class UpdateBuilder<T> {
 
     @Override
     public String toString() {
-      return String.format("WriteOperation{write=%s, documentReference=%s}", write, documentReference);
+      return String.format(
+          "WriteOperation{write=%s, documentReference=%s}", write, documentReference);
     }
   }
 
@@ -654,6 +655,7 @@ public abstract class UpdateBuilder<T> {
 
   @Override
   public String toString() {
-    return String.format("%s{writes=%s, committed=%s}", getClass().getSimpleName(), writes, committed);
+    return String.format(
+        "%s{writes=%s, committed=%s}", getClass().getSimpleName(), writes, committed);
   }
 }
