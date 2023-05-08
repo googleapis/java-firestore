@@ -605,43 +605,41 @@ class QueryDataSnippets {
     // Create a read time 15 seconds in the past
     Instant now = Instant.now();
     final int fifteenSeconds = 15;
-    final Timestamp readTime = Timestamp.newBuilder()
-        .setSeconds(now.getEpochSecond() - fifteenSeconds)
-        .setNanos(now.getNano()).build();
+    final Timestamp readTime =
+        Timestamp.newBuilder()
+            .setSeconds(now.getEpochSecond() - fifteenSeconds)
+            .setNanos(now.getNano())
+            .build();
 
     // Set transaction options. Use read-only and set read time
     // Stale reads require a read-only transaction
-    TransactionOptions options = TransactionOptions
-        .createReadOnlyOptionsBuilder()
-        .setReadTime(readTime).build();
+    TransactionOptions options =
+        TransactionOptions.createReadOnlyOptionsBuilder().setReadTime(readTime).build();
 
     // Create a document reference
-    final DocumentReference documentReference = db
-        .collection("cities")
-        .document("SF");
+    final DocumentReference documentReference = db.collection("cities").document("SF");
 
     // Create a query against the cities collection.
     Query query = db.collection("cities").whereEqualTo("capital", true);
 
     // run a transaction with the specified transaction options
-    ApiFuture<DocumentSnapshot> futureTransaction = db
-        .runTransaction(transaction -> {
-          // Execute a stale read document lookup
-          final DocumentSnapshot documentResult = transaction
-              .get(documentReference).get();
+    ApiFuture<DocumentSnapshot> futureTransaction =
+        db.runTransaction(
+            transaction -> {
+              // Execute a stale read document lookup
+              final DocumentSnapshot documentResult = transaction.get(documentReference).get();
 
-          // Execute a stale read query
-          final QuerySnapshot queryResult = transaction.get(query).get();
+              // Execute a stale read query
+              final QuerySnapshot queryResult = transaction.get(query).get();
 
-          return documentResult;
-        }, options);
+              return documentResult;
+            },
+            options);
     // [END firestore_stale_read]
     return futureTransaction.get();
   }
 
-  /**
-   * Closes the gRPC channels associated with this instance and frees up their resources.
-   */
+  /** Closes the gRPC channels associated with this instance and frees up their resources. */
   void close() throws Exception {
     db.close();
   }
