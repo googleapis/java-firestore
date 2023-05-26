@@ -28,6 +28,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.PropertyName;
+import com.google.cloud.firestore.annotation.StrictCollectionTypes;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.ImmutableList;
@@ -513,6 +514,52 @@ public class MapperTest {
     }
   }
 
+  private static class UnboundedTypeVariableMapSubBean
+      extends UnboundedTypeVariableMapBean<String> {}
+
+  @StrictCollectionTypes
+  private static class StrictUnboundedTypeVariableMapBean<T> {
+    private Map<String, T> values;
+
+    public Map<String, T> getValues() {
+      return values;
+    }
+  }
+
+  private static class StrictUnboundedTypeVariableMapHolderBean {
+    private StrictUnboundedTypeVariableMapBean<String> map;
+
+    public StrictUnboundedTypeVariableMapBean<String> getMap() {
+      return map;
+    }
+  }
+
+  private static class StrictUnboundedTypeVariableMapSubBean
+      extends StrictUnboundedTypeVariableMapBean<String> {}
+
+  private static class UnboundedTypeVariableListBean<T> {
+    public List<T> values;
+  }
+
+  private static class UnboundedTypeVariableListHolderBean {
+    public UnboundedTypeVariableListBean<Integer> list;
+  }
+
+  private static class UnboundedTypeVariableListSubBean
+      extends UnboundedTypeVariableListBean<Integer> {}
+
+  @StrictCollectionTypes
+  private static class StrictUnboundedTypeVariableListBean<T> {
+    public List<T> values;
+  }
+
+  private static class StrictUnboundedTypeVariableListHolderBean {
+    public StrictUnboundedTypeVariableListBean<Integer> list;
+  }
+
+  private static class StrictUnboundedTypeVariableListSubBean
+      extends StrictUnboundedTypeVariableListBean<Integer> {}
+
   private static class NestedListBean {
     private List<StringBean> values;
 
@@ -947,6 +994,14 @@ public class MapperTest {
       this.value = "subsetter:" + value;
     }
   }
+
+  private static class GenericSetterSubBean extends GenericSetterBaseBean<String> {}
+
+  private static class GenericNoSetterBaseBean<T> {
+    public T value;
+  }
+
+  private static class GenericNoSetterSubBean extends GenericNoSetterBaseBean<String> {}
 
   private static <T> T deserialize(String jsonString, Class<T> clazz) {
     return deserialize(jsonString, clazz, /*docRef=*/ null);
@@ -1490,6 +1545,78 @@ public class MapperTest {
 
     Map<String, Object> expected = mapAnyType("foo", "bar");
     assertEquals(expected, bean.map.values);
+  }
+
+  @Test
+  public void canDeserializeBeanHolderWithVariableMapsWithWrongType() {
+    Map<String, Object> source = mapAnyType("map", mapAnyType("values", mapAnyType("foo", 2)));
+    UnboundedTypeVariableMapHolderBean bean =
+        convertToCustomClass(source, UnboundedTypeVariableMapHolderBean.class);
+    Map<String, Object> expected = mapAnyType("foo", 2);
+    assertEquals(expected, bean.getMap().getValues());
+  }
+
+  @Test
+  public void cannotDeserializeStrictBeanHolderWithVariableMapsWithWrongType() {
+    Map<String, Object> source = mapAnyType("map", mapAnyType("values", mapAnyType("foo", 2)));
+    assertExceptionContains(
+        "Could not deserialize object. Failed to convert value of type java.lang.Integer to "
+            + "String (found in field 'map.values.foo')",
+        () -> convertToCustomClass(source, StrictUnboundedTypeVariableMapHolderBean.class));
+  }
+
+  @Test
+  public void canDeserializeSubBeanWithVariableMapsWithWrongType() {
+    Map<String, Object> source = mapAnyType("values", mapAnyType("foo", 2));
+    UnboundedTypeVariableMapSubBean bean =
+        convertToCustomClass(source, UnboundedTypeVariableMapSubBean.class);
+    Map<String, Object> expected = mapAnyType("foo", 2);
+    assertEquals(expected, bean.getValues());
+  }
+
+  @Test
+  public void cannotDeserializeStrictSubBeanWithVariableMapsWithWrongType() {
+    Map<String, Object> source = mapAnyType("values", mapAnyType("foo", 2));
+    assertExceptionContains(
+        "Could not deserialize object. Failed to convert value of type java.lang.Integer to "
+            + "String (found in field 'values.foo')",
+        () -> convertToCustomClass(source, StrictUnboundedTypeVariableMapSubBean.class));
+  }
+
+  @Test
+  public void canDeserializeBeanHolderWithVariableListsWithWrongType() {
+    Map<String, Object> source =
+        mapAnyType("list", mapAnyType("values", Collections.singletonList("bar")));
+    UnboundedTypeVariableListHolderBean bean =
+        convertToCustomClass(source, UnboundedTypeVariableListHolderBean.class);
+    List<Object> expected = Collections.singletonList("bar");
+    assertEquals(expected, bean.list.values);
+  }
+
+  @Test
+  public void cannotDeserializeStrictBeanHolderWithVariableListsWithWrongType() {
+    Map<String, Object> source =
+        mapAnyType("list", mapAnyType("values", Collections.singletonList("bar")));
+    assertExceptionContains(
+        "Could not deserialize object. Failed to convert a value of type java.lang.String to int (found in field 'list.values.[0]')",
+        () -> convertToCustomClass(source, StrictUnboundedTypeVariableListHolderBean.class));
+  }
+
+  @Test
+  public void canDeserializeSubBeanWithVariableListsWithWrongType() {
+    Map<String, Object> source = mapAnyType("values", Collections.singletonList("bar"));
+    UnboundedTypeVariableListSubBean bean =
+        convertToCustomClass(source, UnboundedTypeVariableListSubBean.class);
+    List<Object> expected = Collections.singletonList("bar");
+    assertEquals(expected, bean.values);
+  }
+
+  @Test
+  public void cannotDeserializeStrictSubBeanWithVariableListsWithWrongType() {
+    Map<String, Object> source = mapAnyType("values", Collections.singletonList("bar"));
+    assertExceptionContains(
+        "Could not deserialize object. Failed to convert a value of type java.lang.String to int (found in field 'values.[0]')",
+        () -> convertToCustomClass(source, StrictUnboundedTypeVariableListSubBean.class));
   }
 
   @Test
@@ -2349,6 +2476,30 @@ public class MapperTest {
               deserialize("{'value': 'value'}", NonConflictingGenericSetterSubBean.class);
           assertEquals("subsetter:value", bean.value);
         });
+  }
+
+  @Test
+  public void canDeserializeGenericNoSetterSubBean() {
+    deserialize("{'value': 'value'}", GenericNoSetterSubBean.class);
+  }
+
+  @Test
+  public void canSerializeGenericNoSetterSubBean() {
+    GenericNoSetterSubBean genericNoSetterSubBean = new GenericNoSetterSubBean();
+    genericNoSetterSubBean.value = "value";
+    assertJson("{'value': 'value'}", serialize(genericNoSetterSubBean));
+  }
+
+  @Test
+  public void canDeserializeGenericSetterSubBean() {
+    deserialize("{'value': 'value'}", GenericSetterSubBean.class);
+  }
+
+  @Test
+  public void canSerializeGenericSetterSubBean() {
+    GenericSetterSubBean genericSetterSubBean = new GenericSetterSubBean();
+    genericSetterSubBean.setValue("value");
+    assertJson("{'value': 'value'}", serialize(genericSetterSubBean));
   }
 
   @Test

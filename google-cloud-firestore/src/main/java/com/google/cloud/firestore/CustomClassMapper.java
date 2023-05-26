@@ -22,6 +22,7 @@ import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
 import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
+import com.google.cloud.firestore.annotation.StrictCollectionTypes;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
 import com.google.firestore.v1.Value;
 import java.lang.reflect.AccessibleObject;
@@ -29,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -38,7 +40,6 @@ import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -183,11 +184,12 @@ class CustomClassMapper {
   }
 
   @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
-  private static <T> T deserializeToType(Object o, Type type, DeserializeContext context) {
+  private static <T> T deserializeToType(
+      Object o, Type type, TypeMapper typeMapper, DeserializeContext context) {
     if (o == null) {
       return null;
     } else if (type instanceof ParameterizedType) {
-      return deserializeToParameterizedType(o, (ParameterizedType) type, context);
+      return deserializeToParameterizedType(o, (ParameterizedType) type, typeMapper, context);
     } else if (type instanceof Class) {
       return deserializeToClass(o, (Class<T>) type, context);
     } else if (type instanceof WildcardType) {
@@ -203,12 +205,12 @@ class CustomClassMapper {
       // has at least an upper bound of Object.
       Type[] upperBounds = ((WildcardType) type).getUpperBounds();
       hardAssert(upperBounds.length > 0, "Unexpected type bounds on wildcard " + type);
-      return deserializeToType(o, upperBounds[0], context);
+      return deserializeToType(o, upperBounds[0], typeMapper, context);
     } else if (type instanceof TypeVariable) {
       // As above, TypeVariables always have at least one upper bound of Object.
       Type[] upperBounds = ((TypeVariable<?>) type).getBounds();
       hardAssert(upperBounds.length > 0, "Unexpected type bounds on type variable " + type);
-      return deserializeToType(o, upperBounds[0], context);
+      return deserializeToType(o, upperBounds[0], typeMapper, context);
 
     } else if (type instanceof GenericArrayType) {
       throw deserializeError(
@@ -259,11 +261,11 @@ class CustomClassMapper {
 
   @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
   private static <T> T deserializeToParameterizedType(
-      Object o, ParameterizedType type, DeserializeContext context) {
+      Object o, ParameterizedType type, TypeMapper typeMapper, DeserializeContext context) {
     // getRawType should always return a Class<?>
     Class<?> rawType = (Class<?>) type.getRawType();
     if (List.class.isAssignableFrom(rawType)) {
-      Type genericType = type.getActualTypeArguments()[0];
+      Type genericType = typeMapper.resolve(type.getActualTypeArguments()[0], true);
       if (o instanceof List) {
         List<Object> list = (List<Object>) o;
         List<Object> result;
@@ -286,6 +288,7 @@ class CustomClassMapper {
               deserializeToType(
                   list.get(i),
                   genericType,
+                  typeMapper,
                   context.newInstanceWithErrorPath(context.errorPath.child("[" + i + "]"))));
         }
         return (T) result;
@@ -294,7 +297,7 @@ class CustomClassMapper {
       }
     } else if (Map.class.isAssignableFrom(rawType)) {
       Type keyType = type.getActualTypeArguments()[0];
-      Type valueType = type.getActualTypeArguments()[1];
+      Type valueType = typeMapper.resolve(type.getActualTypeArguments()[1], true);
       if (!keyType.equals(String.class)) {
         throw deserializeError(
             context.errorPath,
@@ -322,6 +325,7 @@ class CustomClassMapper {
             deserializeToType(
                 entry.getValue(),
                 valueType,
+                typeMapper,
                 context.newInstanceWithErrorPath(context.errorPath.child(entry.getKey()))));
       }
       return (T) result;
@@ -331,16 +335,8 @@ class CustomClassMapper {
     } else {
       Map<String, Object> map = expectMap(o, context);
       BeanMapper<T> mapper = (BeanMapper<T>) loadOrCreateBeanMapperForClass(rawType);
-      HashMap<TypeVariable<Class<T>>, Type> typeMapping = new HashMap<>();
-      TypeVariable<Class<T>>[] typeVariables = mapper.clazz.getTypeParameters();
-      Type[] types = type.getActualTypeArguments();
-      if (types.length != typeVariables.length) {
-        throw new IllegalStateException("Mismatched lengths for type variables and actual types");
-      }
-      for (int i = 0; i < typeVariables.length; i++) {
-        typeMapping.put(typeVariables[i], types[i]);
-      }
-      return mapper.deserialize(map, typeMapping, context);
+      return mapper.deserialize(
+          map, TypeMapper.of(TypeMapper.of(type, mapper.clazz), typeMapper), context);
     }
   }
 
@@ -635,6 +631,7 @@ class CustomClassMapper {
     private final Map<String, Method> getters;
     private final Map<String, Method> setters;
     private final Map<String, Field> fields;
+    private final Map<Member, TypeMapper> _typeMappers = new HashMap();
 
     // A set of property names that were annotated with @ServerTimestamp.
     private final HashSet<String> serverTimestamps;
@@ -696,7 +693,8 @@ class CustomClassMapper {
       // We can use private setters and fields for known (public) properties/getters. Since
       // getMethods/getFields only returns public methods/fields we need to traverse the
       // class hierarchy to find the appropriate setter or field.
-      Class<? super T> currentClass = clazz;
+      Class<?> currentClass = clazz;
+      TypeMapper typeMapper = TypeMapper.empty();
       do {
         // Add any setters
         for (Method method : currentClass.getDeclaredMethods()) {
@@ -715,6 +713,7 @@ class CustomClassMapper {
                 if (existingSetter == null) {
                   method.setAccessible(true);
                   setters.put(propertyName, method);
+                  _typeMappers.put(method, typeMapper);
                   applySetterAnnotations(method);
                 } else if (!isSetterOverride(method, existingSetter)) {
                   // We require that setters with conflicting property names are
@@ -752,13 +751,21 @@ class CustomClassMapper {
               && !fields.containsKey(propertyName)) {
             field.setAccessible(true);
             fields.put(propertyName, field);
+            _typeMappers.put(field, typeMapper);
             applyFieldAnnotations(field);
           }
         }
 
         // Traverse class hierarchy until we reach java.lang.Object which contains a bunch
         // of fields/getters we don't want to serialize
-        currentClass = currentClass.getSuperclass();
+        Class<?> superclass = currentClass.getSuperclass();
+        Type genericSuperclass = currentClass.getGenericSuperclass();
+        if (genericSuperclass instanceof ParameterizedType) {
+          typeMapper = TypeMapper.of((ParameterizedType) genericSuperclass, superclass);
+        } else {
+          typeMapper = TypeMapper.empty();
+        }
+        currentClass = superclass;
       } while (currentClass != null && !currentClass.equals(Object.class));
 
       if (properties.isEmpty()) {
@@ -789,13 +796,10 @@ class CustomClassMapper {
     }
 
     T deserialize(Map<String, Object> values, DeserializeContext context) {
-      return deserialize(values, Collections.emptyMap(), context);
+      return deserialize(values, TypeMapper.empty(), context);
     }
 
-    T deserialize(
-        Map<String, Object> values,
-        Map<TypeVariable<Class<T>>, Type> types,
-        DeserializeContext context) {
+    T deserialize(Map<String, Object> values, TypeMapper typeMapper, DeserializeContext context) {
       if (constructor == null) {
         throw deserializeError(
             context.errorPath,
@@ -821,10 +825,14 @@ class CustomClassMapper {
           if (params.length != 1) {
             throw deserializeError(childPath, "Setter does not have exactly one parameter");
           }
-          Type resolvedType = resolveType(params[0], types);
+          TypeMapper setterTypeMapper = TypeMapper.of(_typeMappers.get(setter), typeMapper);
+          Type resolvedType = setterTypeMapper.resolve(params[0], false);
           Object value =
               CustomClassMapper.deserializeToType(
-                  entry.getValue(), resolvedType, context.newInstanceWithErrorPath(childPath));
+                  entry.getValue(),
+                  resolvedType,
+                  setterTypeMapper,
+                  context.newInstanceWithErrorPath(childPath));
           try {
             setter.invoke(instance, value);
           } catch (IllegalAccessException | InvocationTargetException e) {
@@ -833,10 +841,14 @@ class CustomClassMapper {
           deserialzedProperties.add(propertyName);
         } else if (fields.containsKey(propertyName)) {
           Field field = fields.get(propertyName);
-          Type resolvedType = resolveType(field.getGenericType(), types);
+          TypeMapper fieldTypeMapper = TypeMapper.of(_typeMappers.get(field), typeMapper);
+          Type resolvedType = fieldTypeMapper.resolve(field.getGenericType(), false);
           Object value =
               CustomClassMapper.deserializeToType(
-                  entry.getValue(), resolvedType, context.newInstanceWithErrorPath(childPath));
+                  entry.getValue(),
+                  resolvedType,
+                  fieldTypeMapper,
+                  context.newInstanceWithErrorPath(childPath));
           try {
             field.set(instance, value);
           } catch (IllegalAccessException e) {
@@ -856,7 +868,7 @@ class CustomClassMapper {
           }
         }
       }
-      populateDocumentIdProperties(types, context, instance, deserialzedProperties);
+      populateDocumentIdProperties(typeMapper, context, instance, deserialzedProperties);
 
       return instance;
     }
@@ -865,7 +877,7 @@ class CustomClassMapper {
     // applied to a property that is already deserialized from the firestore document)
     // a runtime exception will be thrown.
     private void populateDocumentIdProperties(
-        Map<TypeVariable<Class<T>>, Type> types,
+        TypeMapper typeMapper,
         DeserializeContext context,
         T instance,
         HashSet<String> deserialzedProperties) {
@@ -887,7 +899,8 @@ class CustomClassMapper {
           if (params.length != 1) {
             throw deserializeError(childPath, "Setter does not have exactly one parameter");
           }
-          Type resolvedType = resolveType(params[0], types);
+          Type resolvedType =
+              TypeMapper.of(_typeMappers.get(setter), typeMapper).resolve(params[0], false);
           try {
             if (resolvedType == String.class) {
               setter.invoke(instance, context.documentRef.getId());
@@ -899,8 +912,11 @@ class CustomClassMapper {
           }
         } else {
           Field docIdField = fields.get(docIdPropertyName);
+          Type resolvedType =
+              TypeMapper.of(_typeMappers.get(docIdField), typeMapper)
+                  .resolve(docIdField.getType(), false);
           try {
-            if (docIdField.getType() == String.class) {
+            if (resolvedType == String.class) {
               docIdField.set(instance, context.documentRef.getId());
             } else {
               docIdField.set(instance, context.documentRef);
@@ -909,19 +925,6 @@ class CustomClassMapper {
             throw new RuntimeException(e);
           }
         }
-      }
-    }
-
-    private Type resolveType(Type type, Map<TypeVariable<Class<T>>, Type> types) {
-      if (type instanceof TypeVariable) {
-        Type resolvedType = types.get(type);
-        if (resolvedType == null) {
-          throw new IllegalStateException("Could not resolve type " + type);
-        } else {
-          return resolvedType;
-        }
-      } else {
-        return type;
       }
     }
 
@@ -1184,6 +1187,68 @@ class CustomClassMapper {
       }
       return new String(chars);
     }
+  }
+
+  /**
+   * Resolves generic type variables to actual types, based on context. Special-cases collection
+   * types, for backward compatibility: If the containing class is annotated with {@link
+   * StrictCollectionTypes}, then resolution is performed normally. Otherwise, the type is not
+   * resolved, allowing the collection to take values of any type.
+   */
+  private interface TypeMapper {
+    TypeMapper EMPTY = (typeVariable, collection) -> null;
+
+    static TypeMapper of(ParameterizedType type, Class<?> clazz) {
+      TypeVariable<? extends Class<?>>[] typeVariables = clazz.getTypeParameters();
+      Type[] types = type.getActualTypeArguments();
+      if (types.length != typeVariables.length) {
+        throw new IllegalStateException("Mismatched lengths for type variables and actual types");
+      }
+      Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
+      for (int i = 0; i < typeVariables.length; i++) {
+        typeMapping.put(typeVariables[i], types[i]);
+      }
+
+      boolean strictCollectionTypes = clazz.isAnnotationPresent(StrictCollectionTypes.class);
+      return (typeVariable, collection) ->
+          collection && !strictCollectionTypes ? typeVariable : typeMapping.get(typeVariable);
+    }
+
+    static TypeMapper of(TypeMapper innerMapper, TypeMapper outerMapper) {
+      return (typeVariable, collection) -> map(typeVariable, innerMapper, outerMapper, collection);
+    }
+
+    static TypeMapper empty() {
+      return EMPTY;
+    }
+
+    default Type resolve(Type type, boolean collection) {
+      if (type instanceof TypeVariable) {
+        Type resolvedType = get((TypeVariable<?>) type, collection);
+        if (resolvedType == null) {
+          throw new IllegalStateException("Could not resolve type " + type);
+        }
+
+        return resolvedType;
+      }
+
+      return type;
+    }
+
+    static Type map(
+        TypeVariable<?> typeVariable,
+        TypeMapper innerMapper,
+        TypeMapper outerMapper,
+        boolean collection) {
+      Type type = innerMapper.get(typeVariable, collection);
+      if (type != null) {
+        return type;
+      }
+
+      return outerMapper.get(typeVariable, collection);
+    }
+
+    Type get(TypeVariable<?> typeVariable, boolean collection);
   }
 
   /**
