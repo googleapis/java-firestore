@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.12.0](https://github.com/googleapis/java-firestore/compare/v3.11.0...v3.12.0) (2023-05-30)
+
+
+### Features
+
+* Add ApiScope and COLLECTION_RECURSIVE query_scope for Firestore index ([#1300](https://github.com/googleapis/java-firestore/issues/1300)) ([b84a7cd](https://github.com/googleapis/java-firestore/commit/b84a7cd2155484692fc8447c0d27a1cdaa9c8fa1))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.10.1 ([#1305](https://github.com/googleapis/java-firestore/issues/1305)) ([b734212](https://github.com/googleapis/java-firestore/commit/b734212cec11e51b5219b71725df92b7c722791d))
+
 ## [3.11.0](https://github.com/googleapis/java-firestore/compare/v3.10.0...v3.11.0) (2023-05-12)
 
 
