@@ -53,10 +53,10 @@ public class ToStringTest {
   public void testDocumentSnapshot() {
     Map<String, Value> fields =
         Collections.singletonMap(
-            "key",
+            "key123",
             UserDataConverter.encodeValue(
-                FieldPath.of("key"),
-                CustomClassMapper.convertToPlainJavaTypes("value"),
+                FieldPath.of("key456"),
+                CustomClassMapper.convertToPlainJavaTypes("value789"),
                 UserDataConverter.NO_DELETES));
     String toStringResult =
         new DocumentSnapshot(
@@ -69,7 +69,7 @@ public class ToStringTest {
             .toString();
     assertThat(toStringResult).startsWith("DocumentSnapshot{");
     assertThat(toStringResult).containsMatch("doc=DocumentReference\\{path=.*/documents/coll/doc}");
-    assertThat(toStringResult).containsMatch("(?s)fields=\\{key=string_value:.*value.*}");
+    assertThat(toStringResult).containsMatch("(?s)fields=\\{key123=string_value:.*value789.*}");
     assertThat(toStringResult).contains("readTime=1970-01-01T00:00:00.000001000Z");
     assertThat(toStringResult).contains("updateTime=1970-01-01T00:00:00.000002000Z");
     assertThat(toStringResult).contains("createTime=1970-01-01T00:00:00.000003000Z");
