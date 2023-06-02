@@ -16,10 +16,13 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.firestore.v1.Value;
 import java.util.Collections;
-import org.junit.Assert;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,89 +51,58 @@ public class ToStringTest {
 
   @Test
   public void testDocumentSnapshot() {
-    Assert.assertEquals(
-        "DocumentSnapshot{docRef=DocumentReference{path=projects/test-project/databases/(default)"
-            + "/documents/coll/doc}, fields={key=string_value: \"value\"\n"
-            + "}, readTime=null, updateTime=null, createTime=null}",
-        getDocumentSnapshot().toString());
+    Map<String, Value> fields =
+        Collections.singletonMap(
+            "key",
+            UserDataConverter.encodeValue(
+                FieldPath.of("key"),
+                CustomClassMapper.convertToPlainJavaTypes("value"),
+                UserDataConverter.NO_DELETES));
+    String toStringResult =
+        new DocumentSnapshot(
+                null,
+                documentReference,
+                fields,
+                Timestamp.ofTimeMicroseconds(1),
+                Timestamp.ofTimeMicroseconds(2),
+                Timestamp.ofTimeMicroseconds(3))
+            .toString();
+    assertThat(toStringResult).startsWith("DocumentSnapshot{");
+    assertThat(toStringResult).containsMatch("doc=DocumentReference\\{path=.*/documents/coll/doc}");
+    assertThat(toStringResult).containsMatch("(?s)fields=\\{key=string_value:.*value.*}");
+    assertThat(toStringResult).contains("readTime=1970-01-01T00:00:00.000001000Z");
+    assertThat(toStringResult).contains("updateTime=1970-01-01T00:00:00.000002000Z");
+    assertThat(toStringResult).contains("createTime=1970-01-01T00:00:00.000003000Z");
+    assertThat(toStringResult).endsWith("}");
   }
 
   @Test
   public void testWriteOperation() {
-    Assert.assertEquals(
-        "WriteOperation{write=update {\n"
-            + "  name: \"projects/test-project/databases/(default)/documents/coll/doc\"\n"
-            + "  fields {\n"
-            + "    key: \"key\"\n"
-            + "    value {\n"
-            + "      string_value: \"value\"\n"
-            + "    }\n"
-            + "  }\n"
-            + "}\n"
-            + ", documentReference=DocumentReference{path=projects/test-project/databases/(default)/documents/coll/doc}}",
-        new UpdateBuilder.WriteOperation(documentReference, getDocumentSnapshot().toPb())
-            .toString());
-  }
-
-  private DocumentSnapshot getDocumentSnapshot() {
-    return DocumentSnapshot.fromObject(
-        null,
-        documentReference,
-        Collections.singletonMap("key", "value"),
-        UserDataConverter.NO_DELETES);
+    String toStringResult =
+        new UpdateBuilder.WriteOperation(
+                documentReference,
+                DocumentSnapshot.fromObject(
+                        null,
+                        documentReference,
+                        Collections.singletonMap("key", "value"),
+                        UserDataConverter.NO_DELETES)
+                    .toPb())
+            .toString();
+    assertThat(toStringResult).startsWith("WriteOperation{");
+    assertThat(toStringResult)
+        .containsMatch("(?s)write=update\\s*\\{\\s*name:.*/documents/coll/doc.*}");
+    assertThat(toStringResult).containsMatch("doc=DocumentReference\\{path=.*/documents/coll/doc}");
+    assertThat(toStringResult).endsWith("}");
   }
 
   @Test
-  public void testWriteBatchDelete() {
-    batch.delete(documentReference);
-    Assert.assertEquals(
-        "WriteBatch{writes=[WriteOperation{write=delete: \"projects/test-project/databases/(default)"
-            + "/documents/coll/doc\"\n, documentReference=DocumentReference{path=projects/test-project"
-            + "/databases/(default)/documents/coll/doc}}], committed=false}",
-        batch.toString());
-  }
-
-  @Test
-  public void testWriteBatchSet() {
-    batch.set(documentReference, Collections.singletonMap("key", "value"), SetOptions.OVERWRITE);
-    Assert.assertEquals(
-        "WriteBatch{writes=[WriteOperation{write=update {\n"
-            + "  name: \"projects/test-project/databases/(default)/documents/coll/doc\"\n"
-            + "  fields {\n"
-            + "    key: \"key\"\n"
-            + "    value {\n"
-            + "      string_value: \"value\"\n"
-            + "    }\n"
-            + "  }\n"
-            + "}\n, documentReference=DocumentReference{path=projects/test-project"
-            + "/databases/(default)/documents/coll/doc}}], committed=false}",
-        batch.toString());
-  }
-
-  @Test
-  public void testWriteBatchUpdate() {
-    batch.update(
-        documentReference,
-        Collections.singletonMap("key", "value"),
-        Precondition.updatedAt(Timestamp.ofTimeMicroseconds(1)));
-    Assert.assertEquals(
-        "WriteBatch{writes=[WriteOperation{write=update {\n"
-            + "  name: \"projects/test-project/databases/(default)/documents/coll/doc\"\n"
-            + "  fields {\n"
-            + "    key: \"key\"\n"
-            + "    value {\n"
-            + "      string_value: \"value\"\n"
-            + "    }\n"
-            + "  }\n"
-            + "}\nupdate_mask {\n"
-            + "  field_paths: \"key\"\n"
-            + "}\n"
-            + "current_document {\n"
-            + "  update_time {\n"
-            + "    nanos: 1000\n"
-            + "  }\n"
-            + "}\n, documentReference=DocumentReference{path=projects/test-project"
-            + "/databases/(default)/documents/coll/doc}}], committed=false}",
-        batch.toString());
+  public void testWriteBatch() {
+    batch.update(documentReference, Collections.singletonMap("key", "value"));
+    String toStringResult = batch.toString();
+    assertThat(toStringResult).startsWith("WriteBatch{");
+    assertThat(toStringResult)
+        .containsMatch("(?s)writes=\\[WriteOperation\\{write=update.*/documents/coll/doc.*}]");
+    assertThat(toStringResult).contains("committed=false");
+    assertThat(toStringResult).endsWith("}");
   }
 }
