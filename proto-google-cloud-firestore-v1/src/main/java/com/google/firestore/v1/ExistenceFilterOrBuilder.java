@@ -51,4 +51,72 @@ public interface ExistenceFilterOrBuilder
    * @return The count.
    */
   int getCount();
+
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that contains the UTF-8 byte encodings of the resource names
+   * of the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
+   * that have NOT changed since the query results indicated by the resume token
+   * or timestamp given in `Target.resume_type`.
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   *
+   * @return Whether the unchangedNames field is set.
+   */
+  boolean hasUnchangedNames();
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that contains the UTF-8 byte encodings of the resource names
+   * of the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
+   * that have NOT changed since the query results indicated by the resume token
+   * or timestamp given in `Target.resume_type`.
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   *
+   * @return The unchangedNames.
+   */
+  com.google.firestore.v1.BloomFilter getUnchangedNames();
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that contains the UTF-8 byte encodings of the resource names
+   * of the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
+   * that have NOT changed since the query results indicated by the resume token
+   * or timestamp given in `Target.resume_type`.
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   */
+  com.google.firestore.v1.BloomFilterOrBuilder getUnchangedNamesOrBuilder();
 }

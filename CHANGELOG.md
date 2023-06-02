@@ -1,5 +1,39 @@
 # Changelog
 
+## [3.12.0](https://github.com/googleapis/java-firestore/compare/v3.11.0...v3.12.0) (2023-05-30)
+
+
+### Features
+
+* Add ApiScope and COLLECTION_RECURSIVE query_scope for Firestore index ([#1300](https://github.com/googleapis/java-firestore/issues/1300)) ([b84a7cd](https://github.com/googleapis/java-firestore/commit/b84a7cd2155484692fc8447c0d27a1cdaa9c8fa1))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.10.1 ([#1305](https://github.com/googleapis/java-firestore/issues/1305)) ([b734212](https://github.com/googleapis/java-firestore/commit/b734212cec11e51b5219b71725df92b7c722791d))
+
+## [3.11.0](https://github.com/googleapis/java-firestore/compare/v3.10.0...v3.11.0) (2023-05-12)
+
+
+### Features
+
+* Add bloom filter related proto fields ([#1285](https://github.com/googleapis/java-firestore/issues/1285)) ([9b14c1b](https://github.com/googleapis/java-firestore/commit/9b14c1b69ca5a70cd92feaa41a520e732c0b3cee))
+
+
+### Dependencies
+
+* Update beam.version to v2.47.0 ([#1292](https://github.com/googleapis/java-firestore/issues/1292)) ([e9f11e8](https://github.com/googleapis/java-firestore/commit/e9f11e86aafaa4a50cca789c7349ac59c4c63ccb))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.9.0 ([#1291](https://github.com/googleapis/java-firestore/issues/1291)) ([6dd0e8f](https://github.com/googleapis/java-firestore/commit/6dd0e8fe93cd1f18a949ffd98a247d7364d9f475))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.22 ([#1293](https://github.com/googleapis/java-firestore/issues/1293)) ([e8e5f9b](https://github.com/googleapis/java-firestore/commit/e8e5f9b056c94d68c01b90bf49b1d6908b511ab5))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.22 ([#1294](https://github.com/googleapis/java-firestore/issues/1294)) ([f0ceb7f](https://github.com/googleapis/java-firestore/commit/f0ceb7fc076e43eb62c1a75fa620ee3e510739f4))
+
+## [3.10.0](https://github.com/googleapis/java-firestore/compare/v3.9.6...v3.10.0) (2023-04-27)
+
+
+### Features
+
+* Add bloom filter related proto fields (only in the preview API surface) ([#1274](https://github.com/googleapis/java-firestore/issues/1274)) ([41909b7](https://github.com/googleapis/java-firestore/commit/41909b712bd0e373218f03ae7e978df1259cfd0d))
+
 ## [3.9.6](https://github.com/googleapis/java-firestore/compare/v3.9.5...v3.9.6) (2023-04-26)
 
 
