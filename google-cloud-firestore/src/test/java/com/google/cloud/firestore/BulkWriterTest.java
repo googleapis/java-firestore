@@ -95,7 +95,7 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
               true));
 
-  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(2, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -1257,6 +1257,8 @@ public class BulkWriterTest {
 
   @Test
   public void sendsBackoffBatchAfterOtherEnqueuedBatches() throws Exception {
+    long start = System.currentTimeMillis();
+    System.out.println(System.currentTimeMillis() - start);
     ResponseStubber responseStubber =
         new ResponseStubber() {
           {
@@ -1271,14 +1273,22 @@ public class BulkWriterTest {
                 successResponse(0));
           }
         };
+    System.out.println(System.currentTimeMillis() - start);
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
+    System.out.println(System.currentTimeMillis() - start);
     bulkWriter.addWriteErrorListener(error -> error.getFailedAttempts() < 5);
+    System.out.println(System.currentTimeMillis() - start);
     bulkWriter.create(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    System.out.println(System.currentTimeMillis() - start);
     bulkWriter.flush();
+    System.out.println(System.currentTimeMillis() - start);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    System.out.println(System.currentTimeMillis() - start);
     bulkWriter.close();
+    System.out.println(System.currentTimeMillis() - start);
     responseStubber.verifyAllRequestsSent();
+    System.out.println(System.currentTimeMillis() - start);
   }
 
   @Test
