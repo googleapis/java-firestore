@@ -693,7 +693,7 @@ class CustomClassMapper {
       // We can use private setters and fields for known (public) properties/getters. Since
       // getMethods/getFields only returns public methods/fields we need to traverse the
       // class hierarchy to find the appropriate setter or field.
-      Class<?> currentClass = clazz;
+      Class<? super T> currentClass = clazz;
       TypeMapper typeMapper = TypeMapper.empty();
       do {
         // Add any setters
@@ -756,15 +756,16 @@ class CustomClassMapper {
           }
         }
 
-        // Traverse class hierarchy until we reach java.lang.Object which contains a bunch
-        // of fields/getters we don't want to serialize
-        Class<?> superclass = currentClass.getSuperclass();
+        Class<? super T> superclass = currentClass.getSuperclass();
         Type genericSuperclass = currentClass.getGenericSuperclass();
         if (genericSuperclass instanceof ParameterizedType) {
           typeMapper = TypeMapper.of((ParameterizedType) genericSuperclass, superclass);
         } else {
           typeMapper = TypeMapper.empty();
         }
+
+        // Traverse class hierarchy until we reach java.lang.Object which contains a bunch
+        // of fields/getters we don't want to serialize
         currentClass = superclass;
       } while (currentClass != null && !currentClass.equals(Object.class));
 
