@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.13.0](https://github.com/googleapis/java-firestore/compare/v3.12.1...v3.13.0) (2023-06-12)
+
+
+### Features
+
+* Add toString methods to classes comprising WriteBatch ([#1281](https://github.com/googleapis/java-firestore/issues/1281)) ([9df8028](https://github.com/googleapis/java-firestore/commit/9df80286f350ce35c5ed4b2a44df117b7e241a4a))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.11.0 ([#1322](https://github.com/googleapis/java-firestore/issues/1322)) ([c2bca72](https://github.com/googleapis/java-firestore/commit/c2bca72f27206eaed813199be7b4944d085246e2))
+
 ## [3.12.1](https://github.com/googleapis/java-firestore/compare/v3.12.0...v3.12.1) (2023-06-05)
 
 
