@@ -1559,12 +1559,15 @@ public class ITSystemTest {
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
-    // Exception isn't thrown until 5 minutes.
-    final long tenMinutes = System.currentTimeMillis() / 1000 - 600;
+    // Exception isn't thrown until 60 minutes.
+    // To ensure we exceed this, we use 120 minutes.
+    // If this test fails, we should likely be update documentation to reflect new value. See all
+    // usages of "Read Time" on proto, and within SDK.
+    final long twoHours = System.currentTimeMillis() / 1000 - 7200;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
             .setReadTime(
-                com.google.protobuf.Timestamp.newBuilder().setSeconds(tenMinutes).setNanos(0))
+                com.google.protobuf.Timestamp.newBuilder().setSeconds(twoHours).setNanos(0))
             .build();
 
     final ApiFuture<Void> runTransaction =
