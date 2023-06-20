@@ -91,7 +91,7 @@ public final class TransactionOptions {
   /**
    * A {@link Timestamp} specifying the time documents are to be read at. If null, the server will
    * read documents at the most up to date available. If non-null, the specified {@code Timestamp}
-   * may not be more than 270 seconds in the past (evaluated when the request is processed by the
+   * may not be more than 60 minutes in the past (evaluated when the request is processed by the
    * server).
    *
    * @return The specific time to read documents at. A null value means reading the most up to date
@@ -239,10 +239,10 @@ public final class TransactionOptions {
     }
 
     /**
-     * Specify to read documents at the given time. This may not be more than 270 seconds in the
+     * Specify to read documents at the given time. This may not be more than 60 minutes in the
      * past from when the request is processed by the server.
      *
-     * @param readTime The specific time to read documents at. Must not be older than 270 seconds. A
+     * @param readTime The specific time to read documents at. Must not be older than 60 minutes. A
      *     null value means read most up to date data.
      * @return {@code this} builder
      */
