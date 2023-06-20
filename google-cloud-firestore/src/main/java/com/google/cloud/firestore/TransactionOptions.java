@@ -239,8 +239,8 @@ public final class TransactionOptions {
     }
 
     /**
-     * Specify to read documents at the given time. This may not be more than 60 minutes in the
-     * past from when the request is processed by the server.
+     * Specify to read documents at the given time. This may not be more than 60 minutes in the past
+     * from when the request is processed by the server.
      *
      * @param readTime The specific time to read documents at. Must not be older than 60 minutes. A
      *     null value means read most up to date data.
