@@ -43,8 +43,8 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -109,7 +109,8 @@ public class PartitionQuery {
         .when(firestoreMock)
         .sendRequest(
             requestCaptor.capture(),
-            ArgumentMatchers.<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
+            ArgumentMatchers
+                .<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
 
     firestoreMock.collectionGroup("collectionId").getPartitions(desiredPartitionsCount).get();
 
@@ -153,7 +154,8 @@ public class PartitionQuery {
         .when(firestoreMock)
         .sendRequest(
             requestCaptor.capture(),
-            ArgumentMatchers.<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
+            ArgumentMatchers
+                .<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
 
     doAnswer(queryResponse())
         .when(firestoreMock)
@@ -193,7 +195,8 @@ public class PartitionQuery {
         .when(firestoreMock)
         .sendRequest(
             requestCaptor.capture(),
-            ArgumentMatchers.<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
+            ArgumentMatchers
+                .<UnaryCallable<PartitionQueryRequest, PartitionQueryPagedResponse>>any());
 
     List<QueryPartition> partitions =
         firestoreMock.collectionGroup("collectionId").getPartitions(desiredPartitionsCount).get();

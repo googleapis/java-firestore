@@ -1850,7 +1850,8 @@ public class MapperTest {
     final ShortBean bean = new ShortBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Short are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
+        "Numbers of type Short are not supported, please use an int, long, float, double or"
+            + " BigDecimal (found in field 'value')",
         () -> serialize(bean));
   }
 
@@ -1859,7 +1860,8 @@ public class MapperTest {
     final ByteBean bean = new ByteBean();
     bean.value = 1;
     assertExceptionContains(
-        "Numbers of type Byte are not supported, please use an int, long, float, double or BigDecimal (found in field 'value')",
+        "Numbers of type Byte are not supported, please use an int, long, float, double or"
+            + " BigDecimal (found in field 'value')",
         () -> serialize(bean));
   }
 
@@ -2193,14 +2195,16 @@ public class MapperTest {
     bean.pathologicalEnum = PathologicalEnum.One;
     bean.setEnumValue(SimpleEnum.Foo);
     assertJson(
-        "{'enumField': 'Bar', 'enumValue': 'Foo', 'complexEnum': 'One', 'enumUsingPropertyName': 'Three', 'pathologicalEnum': 'Two'}",
+        "{'enumField': 'Bar', 'enumValue': 'Foo', 'complexEnum': 'One', 'enumUsingPropertyName':"
+            + " 'Three', 'pathologicalEnum': 'Two'}",
         serialize(bean));
   }
 
   @Test
   public void enumsAreParsed() {
     String json =
-        "{'enumField': 'Bar', 'enumValue': 'Foo', 'complexEnum': 'One', 'enumUsingPropertyName': 'Three', 'pathologicalEnum': 'Two'}";
+        "{'enumField': 'Bar', 'enumValue': 'Foo', 'complexEnum': 'One', 'enumUsingPropertyName':"
+            + " 'Three', 'pathologicalEnum': 'Two'}";
     EnumBean bean = deserialize(json, EnumBean.class);
     assertEquals(bean.enumField, SimpleEnum.Bar);
     assertEquals(bean.enumValue, SimpleEnum.Foo);

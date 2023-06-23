@@ -1203,7 +1203,8 @@ public final class LocalFirestoreHelper {
       Preconditions.checkNotNull(stubber, "Stubber should not be null");
       stubber
           .when(firestoreMock)
-          .sendRequest(argumentCaptor.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(
+              argumentCaptor.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     }
 
     public void verifyAllRequestsSent() {

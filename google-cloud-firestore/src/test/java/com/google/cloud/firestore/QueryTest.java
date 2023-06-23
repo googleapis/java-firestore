@@ -76,8 +76,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -517,7 +517,8 @@ public class QueryTest {
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals(
-          "Invalid query. You cannot perform 'ARRAY_CONTAINS_ANY' queries on FieldPath.documentId().",
+          "Invalid query. You cannot perform 'ARRAY_CONTAINS_ANY' queries on"
+              + " FieldPath.documentId().",
           e.getMessage());
     }
   }

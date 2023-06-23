@@ -65,8 +65,8 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -1325,7 +1325,8 @@ public class BulkWriterTest {
     } catch (Exception e) {
       assertEquals(
           e.getMessage(),
-          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
+          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to"
+              + " false.");
     }
 
     try {
@@ -1335,7 +1336,8 @@ public class BulkWriterTest {
     } catch (Exception e) {
       assertEquals(
           e.getMessage(),
-          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
+          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to"
+              + " false.");
     }
   }
 

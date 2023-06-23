@@ -47,8 +47,8 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -190,7 +190,8 @@ public class FirestoreTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     DocumentReference doc = firestoreMock.document("coll/doc");
     doc.update("array", FieldValue.arrayUnion(SINGLE_FIELD_OBJECT)).get();
@@ -208,7 +209,8 @@ public class FirestoreTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     DocumentReference doc = firestoreMock.document("coll/doc");
     doc.update("array", FieldValue.arrayRemove(SINGLE_FIELD_OBJECT)).get();
