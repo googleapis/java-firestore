@@ -86,7 +86,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.threeten.bp.Duration;
@@ -1203,7 +1203,7 @@ public final class LocalFirestoreHelper {
       Preconditions.checkNotNull(stubber, "Stubber should not be null");
       stubber
           .when(firestoreMock)
-          .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(argumentCaptor.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     }
 
     public void verifyAllRequestsSent() {

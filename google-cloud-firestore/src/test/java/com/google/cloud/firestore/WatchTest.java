@@ -77,10 +77,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -159,7 +159,7 @@ public class WatchTest {
     doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     doAnswer(newRequestObserver())
         .when(firestoreMock)
-        .streamRequest(streamObserverCapture.capture(), Matchers.<BidiStreamingCallable>any());
+        .streamRequest(streamObserverCapture.capture(), ArgumentMatchers.<BidiStreamingCallable>any());
   }
 
   @After

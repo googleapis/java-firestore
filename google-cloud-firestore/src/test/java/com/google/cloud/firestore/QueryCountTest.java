@@ -49,9 +49,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.threeten.bp.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -83,7 +83,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -97,7 +97,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -111,7 +111,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     CollectionReference collection = firestoreMock.collection(COLLECTION_ID);
     collection.count().get();
@@ -126,7 +126,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     query.orderBy("foo").startAt("foo").endAt("bar").limitToLast(42).count().get().get();
 
@@ -147,7 +147,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -161,7 +161,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -175,7 +175,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -190,7 +190,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
@@ -210,7 +210,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     AggregateQuery aggregateQuery = query.count();
     AggregateQuerySnapshot snapshot = aggregateQuery.get().get();
@@ -226,7 +226,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 
@@ -241,7 +241,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -258,7 +258,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 
@@ -276,7 +276,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -294,7 +294,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -319,7 +319,7 @@ public class QueryCountTest {
         .streamRequest(
             runAggregationQuery.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 

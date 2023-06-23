@@ -48,10 +48,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FirestoreTest {
@@ -85,7 +85,7 @@ public class FirestoreTest {
         .streamRequest(
             getAllCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     DocumentReference doc = firestoreMock.document("coll/doc");
     DocumentSnapshot snapshot = doc.get().get();
@@ -116,7 +116,7 @@ public class FirestoreTest {
         .streamRequest(
             getAllCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     DocumentReference doc1 = firestoreMock.document("coll/doc1");
     DocumentReference doc2 = firestoreMock.document("coll/doc2");
@@ -137,7 +137,7 @@ public class FirestoreTest {
         .streamRequest(
             getAllCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     DocumentReference doc1 = firestoreMock.document("coll/doc1");
     FieldMask fieldMask = FieldMask.of(FieldPath.of("foo", "bar"));
@@ -190,7 +190,7 @@ public class FirestoreTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     DocumentReference doc = firestoreMock.document("coll/doc");
     doc.update("array", FieldValue.arrayUnion(SINGLE_FIELD_OBJECT)).get();
@@ -208,7 +208,7 @@ public class FirestoreTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     DocumentReference doc = firestoreMock.document("coll/doc");
     doc.update("array", FieldValue.arrayRemove(SINGLE_FIELD_OBJECT)).get();
