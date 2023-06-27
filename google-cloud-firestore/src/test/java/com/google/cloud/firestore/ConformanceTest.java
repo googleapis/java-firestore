@@ -258,10 +258,7 @@ public class ConformanceTest {
     public void runTest() throws Throwable {
       doAnswer(getAllResponse(Collections.emptyMap()))
           .when(firestore)
-          .streamRequest(
-              getAllCapture.capture(),
-              streamObserverCapture.capture(),
-              any());
+          .streamRequest(getAllCapture.capture(), streamObserverCapture.capture(), any());
 
       document(testParameters.getDocRefPath()).get().get();
 
@@ -285,8 +282,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(
-              commitCapture.capture(), any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall =
@@ -317,8 +313,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(
-              commitCapture.capture(), any());
+          .sendRequest(commitCapture.capture(), any());
       ApiFuture<WriteResult> apiCall;
 
       try {
@@ -363,8 +358,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(
-              commitCapture.capture(), any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall;
@@ -405,8 +399,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(
-              commitCapture.capture(), any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall;
@@ -462,8 +455,7 @@ public class ConformanceTest {
     public void runTest() throws Throwable {
       doReturn(commitResponse(0, testParameters.getRequest().getWritesCount()))
           .when(firestore)
-          .sendRequest(
-              commitCapture.capture(), any());
+          .sendRequest(commitCapture.capture(), any());
 
       if (!testParameters.hasPrecondition()) {
         document(testParameters.getDocRefPath()).delete().get();
@@ -493,10 +485,7 @@ public class ConformanceTest {
     public void runTest() {
       doAnswer(queryResponse())
           .when(firestore)
-          .streamRequest(
-              runQueryCapture.capture(),
-              streamObserverCapture.capture(),
-              any());
+          .streamRequest(runQueryCapture.capture(), streamObserverCapture.capture(), any());
 
       Query query = collection(testParameters.getCollPath());
 
@@ -648,8 +637,7 @@ public class ConformanceTest {
                 return noOpRequestObserver;
               })
           .when(firestore)
-          .streamRequest(
-              streamObserverCapture.capture(), any());
+          .streamRequest(streamObserverCapture.capture(), any());
 
       final List<Snapshot> expectedSnapshots = new ArrayList<>(testParameters.getSnapshotsList());
 
