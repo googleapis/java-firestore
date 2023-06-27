@@ -39,6 +39,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
@@ -113,7 +114,7 @@ public class RecursiveDeleteTest {
 
   @Before
   public void before() {
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
 
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
