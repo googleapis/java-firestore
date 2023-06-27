@@ -49,7 +49,6 @@ import static org.mockito.Mockito.doReturn;
 import com.google.api.core.ApiClock;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
-import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilterInternal;
 import com.google.cloud.firestore.Query.FilterInternal;
@@ -77,7 +76,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -132,10 +130,7 @@ public class QueryTest {
   public void withLimit() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.limit(42).get().get();
 
@@ -146,10 +141,7 @@ public class QueryTest {
   public void limitToLastReversesOrderingConstraints() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").limitToLast(42).get().get();
 
@@ -161,10 +153,7 @@ public class QueryTest {
   public void limitToLastReversesCursors() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").startAt("foo").endAt("bar").limitToLast(42).get().get();
 
@@ -181,10 +170,7 @@ public class QueryTest {
   public void limitToLastReversesResults() throws Exception {
     doAnswer(queryResponse(DOCUMENT_NAME + "2", DOCUMENT_NAME + "1"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     QuerySnapshot querySnapshot = query.orderBy("foo").limitToLast(2).get().get();
 
@@ -222,10 +208,7 @@ public class QueryTest {
   public void withOffset() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.offset(42).get().get();
 
@@ -236,10 +219,7 @@ public class QueryTest {
   public void withFilter() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.whereEqualTo("foo", "bar").get().get();
     query.whereEqualTo("foo", null).get().get();
@@ -287,10 +267,7 @@ public class QueryTest {
   public void withFieldPathFilter() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.whereEqualTo(FieldPath.of("foo"), "bar").get().get();
     query.whereNotEqualTo(FieldPath.of("foo"), "bar").get().get();
@@ -326,10 +303,7 @@ public class QueryTest {
   public void withCompositeFilter() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     // a == 10 && (b==20 || c==30 || (d==40 && e>50) || f==60)
     query
@@ -362,10 +336,7 @@ public class QueryTest {
   public void inQueriesWithReferenceArray() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query
         .whereIn(FieldPath.documentId(), Arrays.asList("doc", firestoreMock.document("coll/doc")))
@@ -389,10 +360,7 @@ public class QueryTest {
   public void inQueriesFieldsNotUsedInOrderBy() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     // Field "foo" used in `whereIn` should not appear in implicit orderBys in the resulting query.
     query
@@ -443,10 +411,7 @@ public class QueryTest {
   public void notInQueriesWithReferenceArray() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query
         .whereNotIn(
@@ -514,10 +479,7 @@ public class QueryTest {
   public void withDocumentIdFilter() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.whereEqualTo(FieldPath.documentId(), "doc").get().get();
 
@@ -531,10 +493,7 @@ public class QueryTest {
   public void withOrderBy() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").orderBy("foo.bar", Query.Direction.DESCENDING).get().get();
 
@@ -549,10 +508,7 @@ public class QueryTest {
   public void withFieldPathOrderBy() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query
         .orderBy(FieldPath.of("foo"))
@@ -571,10 +527,7 @@ public class QueryTest {
   public void withSelect() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.select(new String[] {}).get().get();
     query.select("foo", "foo.bar").get().get();
@@ -593,10 +546,7 @@ public class QueryTest {
   public void withFieldPathSelect() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.select(new FieldPath[] {}).get().get();
     query.select(FieldPath.of("foo"), FieldPath.of("foo", "bar")).get().get();
@@ -615,10 +565,7 @@ public class QueryTest {
   public void withDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -636,10 +583,7 @@ public class QueryTest {
   public void withDocumentIdAndDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy(FieldPath.documentId()).startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -657,10 +601,7 @@ public class QueryTest {
   public void withDocumentReferenceCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     DocumentReference documentCursor = firestoreMock.document(DOCUMENT_PATH);
     Value documentValue = reference(DOCUMENT_NAME);
@@ -677,10 +618,7 @@ public class QueryTest {
   public void withExtractedDirectionForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo", Query.Direction.DESCENDING).startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -700,10 +638,7 @@ public class QueryTest {
   public void withInequalityFilterForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query
         .whereEqualTo("a", "b")
@@ -731,10 +666,7 @@ public class QueryTest {
   public void withEqualityFilterForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.whereEqualTo("foo", "bar").startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -753,10 +685,7 @@ public class QueryTest {
   public void withStartAt() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").orderBy(FieldPath.documentId()).startAt("bar", "doc").get().get();
 
@@ -807,10 +736,7 @@ public class QueryTest {
   public void withStartAfter() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").startAfter("bar").get().get();
 
@@ -824,10 +750,7 @@ public class QueryTest {
   public void withEndBefore() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").endBefore("bar").get().get();
 
@@ -841,10 +764,7 @@ public class QueryTest {
   public void withEndAt() throws Exception {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").endAt("bar").get().get();
 
@@ -858,10 +778,7 @@ public class QueryTest {
   public void withCollectionGroup() {
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     Query query = firestoreMock.collectionGroup(COLLECTION_ID);
     query = query.whereGreaterThan(FieldPath.documentId(), "coll/doc");
@@ -905,10 +822,7 @@ public class QueryTest {
   public void getResult() throws Exception {
     doAnswer(queryResponse(DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     QuerySnapshot result = query.get().get();
 
@@ -953,10 +867,7 @@ public class QueryTest {
   public void streamResult() throws Exception {
     doAnswer(queryResponse(DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -988,10 +899,7 @@ public class QueryTest {
             queryResponseWithDone(
                 /* callWithoutOnComplete */ true, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -1027,10 +935,7 @@ public class QueryTest {
             queryResponseWithDone(
                 /* callWithoutOnComplete */ false, DOCUMENT_NAME + "1", DOCUMENT_NAME + "2"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -1081,10 +986,7 @@ public class QueryTest {
               }
             })
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     // Verify the responses
     final Semaphore semaphore = new Semaphore(0);
@@ -1135,10 +1037,7 @@ public class QueryTest {
                 DOCUMENT_NAME + "1",
                 DOCUMENT_NAME + "2"))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     // Verify the responses
     final Semaphore semaphore = new Semaphore(0);
@@ -1173,10 +1072,7 @@ public class QueryTest {
                 FirestoreException.forServerRejection(
                     Status.DEADLINE_EXCEEDED, "Simulated test failure")))
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     assertThrows(ExecutionException.class, () -> query.get().get());
 
@@ -1205,10 +1101,7 @@ public class QueryTest {
               }
             })
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     query.get().get();
 
@@ -1233,10 +1126,7 @@ public class QueryTest {
                   .answer(invocation);
             })
         .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            any());
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
 
     assertThrows(ExecutionException.class, () -> query.get().get());
 
