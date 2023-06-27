@@ -26,8 +26,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -153,7 +152,7 @@ public class BulkWriterTest {
 
   @Before
   public void before() {
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     testExecutor = Executors.newSingleThreadScheduledExecutor();
 
     final ScheduledExecutorService timeoutExecutor =

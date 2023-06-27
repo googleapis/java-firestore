@@ -29,8 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.BidiStreamObserver;
@@ -156,7 +155,7 @@ public class WatchTest {
     closes.drainPermits();
     lastSnapshot = null;
 
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     doAnswer(newRequestObserver())
         .when(firestoreMock)
         .streamRequest(
