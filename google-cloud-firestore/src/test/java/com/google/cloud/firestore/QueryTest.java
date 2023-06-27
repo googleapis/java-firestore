@@ -42,6 +42,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
@@ -134,7 +135,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.limit(42).get().get();
 
@@ -148,7 +149,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").limitToLast(42).get().get();
 
@@ -163,7 +164,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").startAt("foo").endAt("bar").limitToLast(42).get().get();
 
@@ -183,7 +184,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     QuerySnapshot querySnapshot = query.orderBy("foo").limitToLast(2).get().get();
 
@@ -194,13 +195,6 @@ public class QueryTest {
 
   @Test
   public void limitToLastRequiresAtLeastOneOrderingConstraint() throws Exception {
-    doAnswer(queryResponse())
-        .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
-
     try {
       query.limitToLast(1).get().get();
       fail("Expected exception");
@@ -213,13 +207,6 @@ public class QueryTest {
 
   @Test
   public void limitToLastRejectsStream() {
-    doAnswer(queryResponse())
-        .when(firestoreMock)
-        .streamRequest(
-            runQuery.capture(),
-            streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
-
     try {
       query.orderBy("foo").limitToLast(1).stream(null);
       fail("Expected exception");
@@ -238,7 +225,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.offset(42).get().get();
 
@@ -252,7 +239,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.whereEqualTo("foo", "bar").get().get();
     query.whereEqualTo("foo", null).get().get();
@@ -303,7 +290,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.whereEqualTo(FieldPath.of("foo"), "bar").get().get();
     query.whereNotEqualTo(FieldPath.of("foo"), "bar").get().get();
@@ -342,7 +329,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     // a == 10 && (b==20 || c==30 || (d==40 && e>50) || f==60)
     query
@@ -378,7 +365,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query
         .whereIn(FieldPath.documentId(), Arrays.asList("doc", firestoreMock.document("coll/doc")))
@@ -405,7 +392,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     // Field "foo" used in `whereIn` should not appear in implicit orderBys in the resulting query.
     query
@@ -459,7 +446,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query
         .whereNotIn(
@@ -530,7 +517,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.whereEqualTo(FieldPath.documentId(), "doc").get().get();
 
@@ -547,7 +534,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").orderBy("foo.bar", Query.Direction.DESCENDING).get().get();
 
@@ -565,7 +552,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query
         .orderBy(FieldPath.of("foo"))
@@ -587,7 +574,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.select(new String[] {}).get().get();
     query.select("foo", "foo.bar").get().get();
@@ -609,7 +596,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.select(new FieldPath[] {}).get().get();
     query.select(FieldPath.of("foo"), FieldPath.of("foo", "bar")).get().get();
@@ -631,7 +618,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -652,7 +639,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy(FieldPath.documentId()).startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -673,7 +660,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     DocumentReference documentCursor = firestoreMock.document(DOCUMENT_PATH);
     Value documentValue = reference(DOCUMENT_NAME);
@@ -693,7 +680,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo", Query.Direction.DESCENDING).startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -716,7 +703,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query
         .whereEqualTo("a", "b")
@@ -747,7 +734,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.whereEqualTo("foo", "bar").startAt(SINGLE_FIELD_SNAPSHOT).get();
 
@@ -769,7 +756,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").orderBy(FieldPath.documentId()).startAt("bar", "doc").get().get();
 
@@ -823,7 +810,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").startAfter("bar").get().get();
 
@@ -840,7 +827,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").endBefore("bar").get().get();
 
@@ -857,7 +844,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.orderBy("foo").endAt("bar").get().get();
 
@@ -874,7 +861,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     Query query = firestoreMock.collectionGroup(COLLECTION_ID);
     query = query.whereGreaterThan(FieldPath.documentId(), "coll/doc");
@@ -921,7 +908,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     QuerySnapshot result = query.get().get();
 
@@ -969,7 +956,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -1004,7 +991,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -1043,7 +1030,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     final Semaphore semaphore = new Semaphore(0);
     final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
@@ -1097,7 +1084,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     // Verify the responses
     final Semaphore semaphore = new Semaphore(0);
@@ -1151,7 +1138,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     // Verify the responses
     final Semaphore semaphore = new Semaphore(0);
@@ -1189,7 +1176,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     assertThrows(ExecutionException.class, () -> query.get().get());
 
@@ -1221,7 +1208,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     query.get().get();
 
@@ -1249,7 +1236,7 @@ public class QueryTest {
         .streamRequest(
             runQuery.capture(),
             streamObserverCapture.capture(),
-            ArgumentMatchers.<ServerStreamingCallable>any());
+            any());
 
     assertThrows(ExecutionException.class, () -> query.get().get());
 
