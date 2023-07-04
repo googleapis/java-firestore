@@ -77,10 +77,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @SuppressWarnings("deprecation")
 @RunWith(MockitoJUnitRunner.class)
@@ -132,7 +132,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -156,7 +157,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
@@ -180,7 +182,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction = firestoreMock.runTransaction(transaction1 -> null, options);
 
@@ -192,7 +195,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(t -> ApiFutures.immediateFuture(null), options);
@@ -205,7 +209,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -233,7 +238,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
@@ -257,7 +263,8 @@ public class TransactionTest {
   public void noRollbackOnBeginFailure() {
     doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -282,7 +289,8 @@ public class TransactionTest {
   public void noRollbackOnBeginFailureAsync() {
     doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
@@ -308,7 +316,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(rollbackResponse())
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
@@ -537,11 +546,13 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+        .streamRequest(
+            requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
 
     ApiFuture<DocumentSnapshot> transaction =
         firestoreMock.runTransaction(t -> t.get(documentReference).get(), options);
@@ -561,11 +572,13 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+        .streamRequest(
+            requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
 
     ApiFuture<DocumentSnapshot> transaction =
         firestoreMock.runAsyncTransaction(t -> t.get(documentReference), options);
@@ -588,11 +601,13 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
-        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+        .streamRequest(
+            requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
 
     ApiFuture<List<DocumentSnapshot>> transaction =
         firestoreMock.runTransaction(t -> t.getAll(doc1, doc2).get(), options);
@@ -615,14 +630,15 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
         .streamRequest(
             requestCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     final DocumentReference doc1 = firestoreMock.document("coll/doc1");
     final FieldMask fieldMask = FieldMask.of(FieldPath.of("foo", "bar"));
@@ -652,11 +668,13 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(queryResponse())
         .when(firestoreMock)
-        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+        .streamRequest(
+            requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
 
     ApiFuture<QuerySnapshot> transaction =
         firestoreMock.runTransaction(t -> t.get(queryReference).get(), options);
@@ -676,11 +694,13 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(0, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     doAnswer(aggregationQueryResponse(42))
         .when(firestoreMock)
-        .streamRequest(requestCapture.capture(), streamObserverCapture.capture(), Matchers.any());
+        .streamRequest(
+            requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
 
     ApiFuture<AggregateQuerySnapshot> transaction =
         firestoreMock.runTransaction(t -> t.get(aggregateQueryReference).get(), options);
@@ -700,7 +720,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(2, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -731,7 +752,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(2, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -762,7 +784,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(2, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -793,7 +816,8 @@ public class TransactionTest {
     doReturn(beginResponse())
         .doReturn(commitResponse(2, 0))
         .when(firestoreMock)
-        .sendRequest(requestCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -899,7 +923,9 @@ public class TransactionTest {
 
   @Test
   public void getShouldThrowWhenInvokedAfterAWriteWithAQuery() throws Exception {
-    doReturn(beginResponse()).when(firestoreMock).sendRequest(Matchers.any(), Matchers.any());
+    doReturn(beginResponse())
+        .when(firestoreMock)
+        .sendRequest(ArgumentMatchers.any(), ArgumentMatchers.any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
@@ -916,7 +942,9 @@ public class TransactionTest {
 
   @Test
   public void getShouldThrowWhenInvokedAfterAWriteWithAnAggregateQuery() throws Exception {
-    doReturn(beginResponse()).when(firestoreMock).sendRequest(Matchers.any(), Matchers.any());
+    doReturn(beginResponse())
+        .when(firestoreMock)
+        .sendRequest(ArgumentMatchers.any(), ArgumentMatchers.any());
 
     ApiFuture<String> transaction =
         firestoreMock.runTransaction(
