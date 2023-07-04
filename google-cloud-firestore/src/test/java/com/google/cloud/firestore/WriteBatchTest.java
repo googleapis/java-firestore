@@ -43,11 +43,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WriteBatchTest {
@@ -75,7 +75,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(4, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     List<com.google.firestore.v1.Precondition> preconditions =
         Arrays.asList(
@@ -118,7 +119,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch.update(documentReference, "foo", UPDATE_SINGLE_FIELD_OBJECT);
     assertEquals(1, batch.getMutationsSize());
@@ -137,7 +139,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(4, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch
         .set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
@@ -167,7 +170,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(4, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch
         .set(documentReference, LocalFirestoreHelper.SINGLE_FIELD_PROTO)
@@ -197,7 +201,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch.set(documentReference, LocalFirestoreHelper.SINGLE_FLOAT_MAP);
 
@@ -220,7 +225,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch.set(documentReference, map("time", FieldValue.serverTimestamp()));
 
@@ -235,7 +241,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(2, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_MAP)
@@ -260,7 +267,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(2, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch
         .create(documentReference, LocalFirestoreHelper.SINGLE_FIELD_PROTO)
@@ -285,7 +293,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     batch.create(documentReference, LocalFirestoreHelper.SINGLE_FLOAT_MAP);
 
@@ -308,7 +317,8 @@ public class WriteBatchTest {
     doReturn(commitResponse(2, 0))
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     List<Write> writes = new ArrayList<>();
     batch.delete(documentReference);

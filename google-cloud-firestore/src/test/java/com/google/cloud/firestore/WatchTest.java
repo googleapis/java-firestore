@@ -29,8 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 import com.google.api.gax.grpc.GrpcStatusCode;
 import com.google.api.gax.rpc.BidiStreamObserver;
@@ -76,11 +75,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -156,10 +155,11 @@ public class WatchTest {
     closes.drainPermits();
     lastSnapshot = null;
 
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     doAnswer(newRequestObserver())
         .when(firestoreMock)
-        .streamRequest(streamObserverCapture.capture(), Matchers.<BidiStreamingCallable>any());
+        .streamRequest(
+            streamObserverCapture.capture(), ArgumentMatchers.<BidiStreamingCallable>any());
   }
 
   @After

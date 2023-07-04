@@ -39,6 +39,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 
 import com.google.api.core.ApiAsyncFunction;
 import com.google.api.core.ApiFuture;
@@ -76,11 +77,11 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -113,7 +114,7 @@ public class RecursiveDeleteTest {
 
   @Before
   public void before() {
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
 
     final ScheduledExecutorService timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
@@ -167,7 +168,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     if (!deleteDocRef.equals("")) {
       childrenDocuments = new ArrayList<>(childrenDocuments);
@@ -202,7 +203,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     RunQueryRequest expectedRequest =
         query(
@@ -231,7 +232,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     RunQueryRequest expectedRequest =
         query(
@@ -261,14 +262,14 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     // Include dummy response for the deleted fullDocumentPath reference.
     doAnswer((Answer<ApiFuture<BatchWriteResponse>>) mock -> successResponse(1))
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     RunQueryRequest expectedRequest =
         query(
@@ -294,13 +295,13 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     doAnswer(mock -> successResponse(1))
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     RunQueryRequest expectedRequest =
         query(
@@ -368,7 +369,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     doAnswer(
             mock -> {
@@ -399,7 +400,7 @@ public class RecursiveDeleteTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     BulkWriter bulkWriter = firestoreMock.bulkWriter();
     bulkWriter.setMaxBatchSize(maxBatchSize);
@@ -564,12 +565,12 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
     doReturn(BulkWriterTest.FAILED_FUTURE)
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     ApiFuture<Void> future = firestoreMock.recursiveDelete(firestoreMock.document("root/doc"));
     try {
@@ -604,7 +605,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ResponseStubber responseStubber =
         new ResponseStubber() {
@@ -646,7 +647,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     ResponseStubber responseStubber =
         new ResponseStubber() {
@@ -671,7 +672,7 @@ public class RecursiveDeleteTest {
         .streamRequest(
             runQueryCapture.capture(),
             streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+            ArgumentMatchers.<ServerStreamingCallable>any());
 
     final int[] callCount = {0};
     final BulkWriter bulkWriter = firestoreMock.bulkWriter();
