@@ -264,35 +264,5 @@
         <sourceFileExclude>com/google/cloud/firestore/v1/package-info.java</sourceFileExclude>
       </properties>
     </profile>
-
-    <profile>
-      <!--
-      Due to old Mockito version, naive Java 17 junit test fails due to
-      'ClassFormatError accessible: module java.base does not "opens java.lang"
-      to unnamed module'
-      -->
-      <id>java17</id>
-      <activation>
-        <jdk>[17,)</jdk>
-        <property>
-          <!--
-          In Java 8 unit tests where we run tests in Java 8 after building
-          bytecode on Java 17, we don't want to add the argLine
-          -->
-          <name>!jvm</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
 </project>
