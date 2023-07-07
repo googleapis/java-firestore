@@ -1,6 +1,5 @@
 # Changelog
 
-
 ## [3.13.2](https://github.com/googleapis/java-firestore/compare/v3.13.1...v3.13.2) (2023-06-22)
 
 

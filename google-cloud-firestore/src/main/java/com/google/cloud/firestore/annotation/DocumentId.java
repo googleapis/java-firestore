@@ -29,7 +29,8 @@ import java.lang.annotation.Target;
  * the POJO is created from a Cloud Firestore document (for example, via {@link
  * DocumentSnapshot#toObject}).
  *
- * Any of the following will throw a runtime exception:
+ * <p>Any of the following will throw a runtime exception:
+ *
  * <ul>
  *   <li>This annotation is applied to a property of a type other than String or {@link
  *       DocumentReference}.
