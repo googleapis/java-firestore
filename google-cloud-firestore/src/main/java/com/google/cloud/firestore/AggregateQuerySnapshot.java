@@ -35,19 +35,19 @@ public class AggregateQuerySnapshot {
     this.count = count;
   }
 
-  /** Returns the query that was executed to produce this result. */
+  /** @return the query that was executed to produce this result. */
   @Nonnull
   public AggregateQuery getQuery() {
     return query;
   }
 
-  /** Returns the time at which this snapshot was read. */
+  /** @return the time at which this snapshot was read. */
   @Nonnull
   public Timestamp getReadTime() {
     return readTime;
   }
 
-  /** Returns the number of documents in the result set of the underlying query. */
+  /** @return the number of documents in the result set of the underlying query. */
   public long getCount() {
     return count;
   }

@@ -53,6 +53,8 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with an {@code INVALID_ARGUMENT} status code and the provided
    * message in a nested exception.
    *
+   * @param message
+   * @param params
    * @return The FirestoreException
    */
   @BetaApi
@@ -64,6 +66,9 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with the provided GRPC Status code and message in a nested
    * exception.
    *
+   * @param status
+   * @param message
+   * @param params
    * @return The FirestoreException
    */
   @BetaApi
@@ -76,6 +81,10 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with the provided GRPC Status code and message in a nested
    * exception.
    *
+   * @param status
+   * @param message
+   * @param cause
+   * @param params
    * @return The FirestoreException
    */
   @BetaApi
@@ -87,6 +96,8 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an IOException.
    *
+   * @param exception
+   * @param retryable
    * @return The FirestoreException
    */
   @BetaApi
@@ -97,6 +108,7 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an ApiException.
    *
+   * @param exception
    * @return The FirestoreException
    */
   @BetaApi
@@ -107,6 +119,8 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an ApiException.
    *
+   * @param exception
+   * @param message
    * @return The FirestoreException
    */
   @BetaApi

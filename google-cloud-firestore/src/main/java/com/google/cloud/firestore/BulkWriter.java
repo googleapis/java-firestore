@@ -529,6 +529,7 @@ public final class BulkWriter implements AutoCloseable {
    * by providing FieldPath objects.
    *
    * @param documentReference A reference to the document to be updated.
+   * @param precondition Precondition to enforce on this update.
    * @param field The first field to set.
    * @param value The first value to set.
    * @param moreFieldsAndValues String and Object pairs with more fields to be set.
