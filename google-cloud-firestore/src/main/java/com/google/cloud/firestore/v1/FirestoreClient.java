@@ -178,6 +178,9 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given settings. The channels are created
    * based on the settings passed in, or defaults for any settings that are not set.
+   *
+   * @param settings The settings to be used for creating the client.
+   * @throws IOException if an I/O error occurs while creating the client.
    */
   public static final FirestoreClient create(FirestoreSettings settings) throws IOException {
     return new FirestoreClient(settings);
@@ -186,6 +189,8 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given stub for making calls. This is for
    * advanced usage - prefer using create(FirestoreSettings).
+   *
+   * @param stub The stub to be used for making calls.
    */
   public static final FirestoreClient create(FirestoreStub stub) {
     return new FirestoreClient(stub);
@@ -194,6 +199,9 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given settings. This is protected so that
    * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   *
+   * @param settings The settings to be used for creating the client.
+   * @throws IOException if an I/O error occurs while creating the client.
    */
   protected FirestoreClient(FirestoreSettings settings) throws IOException {
     this.settings = settings;

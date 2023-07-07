@@ -179,6 +179,7 @@ public class DocumentSnapshot {
   /**
    * Returns the contents of the document converted to a POJO or null if the document doesn't exist.
    *
+   * @param <T> The type parameter specifying the class of the resulting object.
    * @param valueType The Java class to create
    * @return The contents of the document in an object of type T or null if the document doesn't
    *     exist.
@@ -226,6 +227,7 @@ public class DocumentSnapshot {
    * Returns the value at the field, converted to a POJO, or null if the field or document doesn't
    * exist.
    *
+   * @param <T> The type parameter specifying the class of the resulting object.
    * @param field The path to the field
    * @param valueType The Java class to convert the field value to.
    * @return The value at the given field or null.
@@ -256,6 +258,7 @@ public class DocumentSnapshot {
    * Returns the value at the field, converted to a POJO, or null if the field or document doesn't
    * exist.
    *
+   * @param <T> The type parameter specifying the class of the resulting object.
    * @param fieldPath The path to the field
    * @param valueType The Java class to convert the field value to.
    * @return The value at the given field or null.

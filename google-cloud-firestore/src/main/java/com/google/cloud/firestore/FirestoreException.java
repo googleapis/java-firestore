@@ -53,8 +53,8 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with an {@code INVALID_ARGUMENT} status code and the provided
    * message in a nested exception.
    *
-   * @param message
-   * @param params
+   * @param message The message provided in a nested exception.
+   * @param params Other parameters to be displayed.
    * @return The FirestoreException
    */
   @BetaApi
@@ -66,9 +66,9 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with the provided GRPC Status code and message in a nested
    * exception.
    *
-   * @param status
-   * @param message
-   * @param params
+   * @param status The GRPC Status provided.
+   * @param message The message provided in a nested exception.
+   * @param params Other parameters to be displayed.
    * @return The FirestoreException
    */
   @BetaApi
@@ -81,10 +81,10 @@ public class FirestoreException extends BaseGrpcServiceException {
    * Creates a FirestoreException with the provided GRPC Status code and message in a nested
    * exception.
    *
-   * @param status
-   * @param message
-   * @param cause
-   * @param params
+   * @param status The GRPC Status provided.
+   * @param message The message provided in a nested exception.
+   * @param cause The GRPC Error provided.
+   * @param params Other parameters to be displayed.
    * @return The FirestoreException
    */
   @BetaApi
@@ -96,8 +96,8 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an IOException.
    *
-   * @param exception
-   * @param retryable
+   * @param exception An I/O exception.
+   * @param retryable If the exception is considered retryable.
    * @return The FirestoreException
    */
   @BetaApi
@@ -108,7 +108,7 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an ApiException.
    *
-   * @param exception
+   * @param exception An API exception.
    * @return The FirestoreException
    */
   @BetaApi
@@ -119,8 +119,8 @@ public class FirestoreException extends BaseGrpcServiceException {
   /**
    * Creates a FirestoreException from an ApiException.
    *
-   * @param exception
-   * @param message
+   * @param exception An API exception.
+   * @param message The message provided in a nested exception.
    * @return The FirestoreException
    */
   @BetaApi

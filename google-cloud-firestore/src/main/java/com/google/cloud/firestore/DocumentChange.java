@@ -54,6 +54,11 @@ public class DocumentChange {
     this.newIndex = newIndex;
   }
 
+  /**
+   * Returns the type of change for this DocumentChange.
+   *
+   * @return The type of change.
+   */
   @Nonnull
   public Type getType() {
     return type;
@@ -75,6 +80,8 @@ public class DocumentChange {
    * The index of the changed document in the result set immediately prior to this DocumentChange
    * (i.e. supposing that all prior DocumentChange objects have been applied). Returns -1 for
    * 'added' events.
+   *
+   * @return The index of the changed document in the result set prior to this change.
    */
   public int getOldIndex() {
     return oldIndex;
@@ -84,6 +91,8 @@ public class DocumentChange {
    * The index of the changed document in the result set immediately after this DocumentChange (i.e.
    * supposing that all prior DocumentChange objects and the current DocumentChange object have been
    * applied). Returns -1 for 'removed' events.
+   *
+   * @return The index of the changed document in the result set after this change.
    */
   public int getNewIndex() {
     return newIndex;

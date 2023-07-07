@@ -243,13 +243,19 @@ public abstract class FieldValue {
   /**
    * Returns a sentinel used with set() or update() to include a server-generated timestamp in the
    * written data.
+   *
+   * @return A sentinel FieldValue that represents a server-generated timestamp.
    */
   @Nonnull
   public static FieldValue serverTimestamp() {
     return SERVER_TIMESTAMP_SENTINEL;
   }
 
-  /** Returns a sentinel used with update() to mark a field for deletion. */
+  /**
+   * Returns a sentinel used with update() to mark a field for deletion.
+   *
+   * @return A sentinel FieldValue that represents a field deletion.
+   */
   @Nonnull
   public static FieldValue delete() {
     return DELETE_SENTINEL;
@@ -266,6 +272,7 @@ public abstract class FieldValue {
    * <p>If the current field is not an integer or double, or if the field does not yet exist, the
    * transformation will set the field to the given value.
    *
+   * @param l The value to increment the field by.
    * @return The FieldValue sentinel for use in a call to set(), create() or update().
    */
   @Nonnull

@@ -60,7 +60,7 @@ public final class FirestoreBundle {
       this.id = id;
     }
 
-    /** Returns the ID for this bundle. */
+    /** @return the ID for this bundle. */
     public String getId() {
       return this.id;
     }
@@ -70,7 +70,7 @@ public final class FirestoreBundle {
      * read time will be included in the bundle.
      *
      * @param documentSnapshot A document snapshot to add.
-     * @returns This instance.
+     * @return This instance.
      */
     public Builder add(DocumentSnapshot documentSnapshot) {
       return add(documentSnapshot, Optional.empty());
@@ -133,7 +133,7 @@ public final class FirestoreBundle {
      *
      * @param queryName The name of the query to add.
      * @param querySnap The query snapshot to add.
-     * @returns This instance.
+     * @return This instance.
      */
     public Builder add(String queryName, QuerySnapshot querySnap) {
       BundledQuery query = querySnap.getQuery().toBundledQuery();
@@ -156,6 +156,11 @@ public final class FirestoreBundle {
       return this;
     }
 
+    /**
+     * Builds the FirestoreBundle object.
+     *
+     * @return The constructed FirestoreBundle object.
+     */
     public FirestoreBundle build() {
       StringBuilder buffer = new StringBuilder();
 
@@ -209,7 +214,7 @@ public final class FirestoreBundle {
     bundleData = data;
   }
 
-  /** Returns the bundle content as a readonly {@link ByteBuffer}. */
+  /** @return The bundle content as a readonly {@link ByteBuffer}. */
   public ByteBuffer toByteBuffer() {
     return ByteBuffer.wrap(bundleData).asReadOnlyBuffer();
   }

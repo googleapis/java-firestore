@@ -57,7 +57,7 @@ public class DocumentReference {
     this.rpcContext = rpcContext;
   }
 
-  /*
+  /**
    * Gets the Firestore instance associated with this document reference.
    *
    * @return The Firestore instance.

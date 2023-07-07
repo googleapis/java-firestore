@@ -53,7 +53,7 @@ public class AggregateQuery {
     this.query = query;
   }
 
-  /** @return The query whose aggregations will be calculated by this object. */
+  /** @return the query whose aggregations will be calculated by this object. */
   @Nonnull
   public Query getQuery() {
     return query;

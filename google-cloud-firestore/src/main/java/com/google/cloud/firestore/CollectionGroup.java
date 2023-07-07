@@ -102,6 +102,16 @@ public class CollectionGroup extends Query {
     }
   }
 
+  /**
+   * Partitions a query by returning partition cursors that can be used to run the query in
+   * parallel. The returned partition cursors are split points that can be used as starting/end
+   * points for the query results.
+   *
+   * @param desiredPartitionCount The desired maximum number of partition points. The number must be
+   *     strictly positive. The actual number of partitions returned may be fewer.
+   * @return A future that will be resolved with a list of QueryPartition objects representing the
+   *     partitions.
+   */
   public ApiFuture<List<QueryPartition>> getPartitions(long desiredPartitionCount) {
     if (desiredPartitionCount == 1) {
       // Short circuit if the user only requested a single partition.
@@ -135,6 +145,12 @@ public class CollectionGroup extends Query {
     }
   }
 
+  /**
+   * Builds a PartitionQueryRequest based on the desired partition count.
+   *
+   * @param desiredPartitionCount The desired maximum number of partition points.
+   * @return The built PartitionQueryRequest.
+   */
   private PartitionQueryRequest buildRequest(long desiredPartitionCount) {
     Preconditions.checkArgument(
         desiredPartitionCount > 0, "Desired partition count must be one or greater");
@@ -149,6 +165,13 @@ public class CollectionGroup extends Query {
     return request.build();
   }
 
+  /**
+   * Consumes the partitions returned in the PartitionQueryPagedResponse and applies the consumer
+   * function to each partition.
+   *
+   * @param response The PartitionQueryPagedResponse containing the partitions.
+   * @param consumer The function to apply to each QueryPartition.
+   */
   private void consumePartitions(
       PartitionQueryPagedResponse response, Function<QueryPartition, Void> consumer) {
     List<Cursor> cursors = new ArrayList<>();

@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/** Represents a filter that can be used in Firestore queries. */
 public class Filter {
   static class UnaryFilter extends Filter {
     private final FieldPath field;

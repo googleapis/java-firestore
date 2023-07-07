@@ -71,6 +71,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * transaction. If any document read within the transaction has changed, the updateFunction will
    * be retried. If it fails to commit after 5 attempts, the transaction will fail.
    *
+   * @param T The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
@@ -83,7 +84,9 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * be retried. If it fails to commit after the maxmimum number of attemps specified in
    * transactionOptions, the transaction will fail.
    *
+   * @param T The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
+   * @param transactionOptions
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
   @Nonnull
@@ -102,6 +105,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
    * Quotas</a>).
    *
+   * @param T The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
@@ -120,6 +124,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
    * Quotas</a>).
    *
+   * @param T The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
@@ -132,6 +137,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * Retrieves multiple documents from Firestore.
    *
    * @param documentReferences List of Document References to fetch.
+   * @return An ApiFuture that will be resolved with a List of DocumentSnapshots.
    */
   @Nonnull
   ApiFuture<List<DocumentSnapshot>> getAll(@Nonnull DocumentReference... documentReferences);
@@ -142,6 +148,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    *
    * @param documentReferences Array with Document References to fetch.
    * @param fieldMask If set, specifies the subset of fields to return.
+   * @return An ApiFuture that will be resolved with a List of DocumentSnapshots.
    */
   @Nonnull
   ApiFuture<List<DocumentSnapshot>> getAll(
@@ -175,6 +182,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    *
    * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
+   * @return A BulkWriter instance.
    */
   @BetaApi
   @Nonnull
@@ -188,6 +196,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    * @param options An options object to configure BulkWriter.
+   * @return A BulkWriter instance.
    */
   @BetaApi
   @Nonnull
@@ -275,6 +284,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
    * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and
    * the timestamp associated with the built bundle to tell if it has been loaded already.
+   *
+   * @return A FirestoreBundle.Builder instance.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder();
@@ -285,6 +296,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    *
    * @param bundleId The ID of the bundle. When loaded on clients, client SDKs use this id and the
    *     timestamp associated with the built bundle to tell if it has been loaded already.
+   * @return A FirestoreBundle.Builder instance.
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);

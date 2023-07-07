@@ -59,6 +59,7 @@ public abstract class BulkWriterOptions {
   @Nullable
   public abstract ScheduledExecutorService getExecutor();
 
+  /** @return a new Builder instance. */
   public static Builder builder() {
     return new AutoValue_BulkWriterOptions.Builder()
         .setMaxOpsPerSecond(null)
@@ -67,6 +68,7 @@ public abstract class BulkWriterOptions {
         .setExecutor(null);
   }
 
+  /** @return a new Builder instance. */
   public abstract Builder toBuilder();
 
   @AutoValue.Builder
@@ -75,6 +77,7 @@ public abstract class BulkWriterOptions {
      * Sets whether throttling should be enabled. By default, throttling is enabled.
      *
      * @param enabled Whether throttling should be enabled.
+     * @return the Builder instance.
      */
     public abstract Builder setThrottlingEnabled(boolean enabled);
 
@@ -83,6 +86,7 @@ public abstract class BulkWriterOptions {
      *
      * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
      *     throttler.
+     * @return the Builder instance.
      */
     abstract Builder setInitialOpsPerSecond(@Nullable Double initialOpsPerSecond);
 
@@ -91,6 +95,7 @@ public abstract class BulkWriterOptions {
      *
      * @param initialOpsPerSecond The initial maximum number of operations per second allowed by the
      *     throttler.
+     * @return the Builder instance.
      */
     public Builder setInitialOpsPerSecond(int initialOpsPerSecond) {
       return setInitialOpsPerSecond(new Double(initialOpsPerSecond));
@@ -102,6 +107,7 @@ public abstract class BulkWriterOptions {
      * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
      *     The throttler's allowed operations per second does not ramp up past the specified
      *     operations per second.
+     * @return the Builder instance.
      */
     abstract Builder setMaxOpsPerSecond(@Nullable Double maxOpsPerSecond);
 
@@ -111,6 +117,7 @@ public abstract class BulkWriterOptions {
      * @param maxOpsPerSecond The maximum number of operations per second allowed by the throttler.
      *     The throttler's allowed operations per second does not ramp up past the specified
      *     operations per second.
+     * @return the Builder instance.
      */
     public Builder setMaxOpsPerSecond(int maxOpsPerSecond) {
       return setMaxOpsPerSecond(new Double(maxOpsPerSecond));
@@ -120,11 +127,23 @@ public abstract class BulkWriterOptions {
      * Set the executor that the BulkWriter instance schedules operations on.
      *
      * @param executor The executor to schedule BulkWriter operations on.
+     * @return the Builder instance.
      */
     public abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
 
+    /**
+     * Auto-builds the {@link BulkWriterOptions} instance.
+     *
+     * @return the constructed BulkWriterOptions instance.
+     */
     public abstract BulkWriterOptions autoBuild();
 
+    /**
+     * Builds and returns the {@link BulkWriterOptions} instance.
+     *
+     * @return the constructed BulkWriterOptions instance.
+     * @throws FirestoreException if the specified options are invalid.
+     */
     @Nonnull
     public BulkWriterOptions build() {
       BulkWriterOptions options = autoBuild();

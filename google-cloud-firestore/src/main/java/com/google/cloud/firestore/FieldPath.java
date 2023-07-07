@@ -65,6 +65,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   /**
    * A special sentinel to refer to the ID of a document. It can be used in queries to sort or
    * filter by the document ID.
+   *
+   * @return A {@code FieldPath} representing the document ID.
    */
   public static FieldPath documentId() {
     return DOCUMENT_ID;

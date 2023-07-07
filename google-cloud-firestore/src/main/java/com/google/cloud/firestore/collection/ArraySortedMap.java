@@ -37,6 +37,17 @@ import java.util.Map;
 @InternalApi
 public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
 
+  /**
+   * @param <A> The type of keys in the sorted map.
+   * @param <B> The type of keys in the sorted map.
+   * @param <C> The type of keys in the sorted map.
+   * @param keys The list of keys to build the sorted map from.
+   * @param values The map of values corresponding to the keys.
+   * @param translator The key translator to translate keys from values map to keys in the sorted
+   *     map.
+   * @param comparator The comparator to use for defining the order of keys in the sorted map.
+   * @return a new instance of ArraySortedMap containing the sorted mapping of keys and values.
+   */
   @SuppressWarnings("unchecked")
   public static <A, B, C> ArraySortedMap<A, C> buildFrom(
       List<A> keys,
@@ -65,6 +76,7 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
   private final V[] values;
   private final Comparator<K> comparator;
 
+  /** @param comparator The comparator to use for defining the order of keys in the sorted map */
   @SuppressWarnings("unchecked")
   public ArraySortedMap(Comparator<K> comparator) {
     this.keys = (K[]) new Object[0];
@@ -72,6 +84,13 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
     this.comparator = comparator;
   }
 
+  /**
+   * Constructs an ArraySortedMap with the specified comparator, array of keys, and array of values.
+   *
+   * @param comparator the comparator to use for defining the order of keys in the sorted map
+   * @param keys the array of keys
+   * @param values the array of values
+   */
   @SuppressWarnings("unchecked")
   private ArraySortedMap(Comparator<K> comparator, K[] keys, V[] values) {
     this.keys = keys;
