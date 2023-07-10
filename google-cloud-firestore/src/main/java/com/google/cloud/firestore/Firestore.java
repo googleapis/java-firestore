@@ -71,7 +71,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * transaction. If any document read within the transaction has changed, the updateFunction will
    * be retried. If it fails to commit after 5 attempts, the transaction will fail.
    *
-   * @param T The result type of the updateFunction.
+   * @param <T> The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
@@ -84,9 +84,9 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * be retried. If it fails to commit after the maxmimum number of attemps specified in
    * transactionOptions, the transaction will fail.
    *
-   * @param T The result type of the updateFunction.
+   * @param <T> The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
-   * @param transactionOptions
+   * @param transactionOptions The options for the transaction.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
   @Nonnull
@@ -105,7 +105,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
    * Quotas</a>).
    *
-   * @param T The result type of the updateFunction.
+   * @param <T> The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
@@ -124,8 +124,9 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * href="https://firebase.google.com/docs/firestore/quotas#writes_and_transactions">Firestore
    * Quotas</a>).
    *
-   * @param T The result type of the updateFunction.
+   * @param <T> The result type of the updateFunction.
    * @param updateFunction The function to execute within the transaction context.
+   * @param transactionOptions The options for the transaction.
    * @return An ApiFuture that will be resolved with the result from updateFunction.
    */
   @Nonnull

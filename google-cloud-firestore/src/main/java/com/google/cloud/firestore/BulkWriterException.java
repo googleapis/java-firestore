@@ -29,6 +29,15 @@ public final class BulkWriterException extends FirestoreException {
   private final OperationType operationType;
   private final int failedAttempts;
 
+  /**
+   * Constructs a new BulkWriterException with the specified parameters.
+   *
+   * @param status The status code of the error.
+   * @param message The error message.
+   * @param documentReference The reference to the document that caused the error.
+   * @param operationType The type of operation that failed.
+   * @param failedAttempts The number of failed attempts to perform the operation.
+   */
   public BulkWriterException(
       Status status,
       String message,

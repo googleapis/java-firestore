@@ -288,6 +288,7 @@ public abstract class FieldValue {
    * interpreted as doubles and all arithmetic will follow IEEE 754 semantics. Otherwise, the
    * transformation will set the field to the given value.
    *
+   * @param d The value to increment the field by.
    * @return The FieldValue sentinel for use in a call to set(), create() or update().
    */
   @Nonnull

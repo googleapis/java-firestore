@@ -70,7 +70,7 @@ public abstract class BulkWriterOptions {
 
   /** @return a new Builder instance. */
   public abstract Builder toBuilder();
-
+  /** Builder for creating BulkWriterOptions instances. */
   @AutoValue.Builder
   public abstract static class Builder {
     /**

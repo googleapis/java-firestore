@@ -68,6 +68,16 @@ public class ArraySortedMap<K, V> extends ImmutableSortedMap<K, V> {
     return new ArraySortedMap<>(comparator, keyArray, valueArray);
   }
 
+  /**
+   * Creates a new instance of ArraySortedMap from an existing map. The keys in the resulting sorted
+   * map will be sorted based on the provided comparator.
+   *
+   * @param map The map to build the sorted map from.
+   * @param comparator The comparator to use for defining the order of keys in the sorted map.
+   * @param <K> The type of keys in the original map.
+   * @param <V> The type of values in the original map.
+   * @return a new instance of ArraySortedMap containing the sorted mapping of keys and values.
+   */
   public static <K, V> ArraySortedMap<K, V> fromMap(Map<K, V> map, Comparator<K> comparator) {
     return buildFrom(new ArrayList<>(map.keySet()), map, Builder.identityTranslator(), comparator);
   }

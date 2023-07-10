@@ -128,6 +128,7 @@ public class FirestoreException extends BaseGrpcServiceException {
     return new FirestoreException(message, exception);
   }
 
+  /** @return The status of the exception. */
   @BetaApi
   @Nullable
   public Status getStatus() {
