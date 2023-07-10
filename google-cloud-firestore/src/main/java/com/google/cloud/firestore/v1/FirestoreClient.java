@@ -170,12 +170,7 @@ public class FirestoreClient implements BackgroundResource {
   private final FirestoreSettings settings;
   private final FirestoreStub stub;
 
-  /**
-   * Constructs an instance of FirestoreClient with default settings.
-   *
-   * @return A new instance of FirestoreClient.
-   * @throws IOException if an I/O error occurs while creating the client.
-   */
+  /** Constructs an instance of FirestoreClient with default settings. */
   public static final FirestoreClient create() throws IOException {
     return create(FirestoreSettings.newBuilder().build());
   }
@@ -183,10 +178,6 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given settings. The channels are created
    * based on the settings passed in, or defaults for any settings that are not set.
-   *
-   * @param settings The settings to be used for creating the client.
-   * @return A new instance of FirestoreClient.
-   * @throws IOException if an I/O error occurs while creating the client.
    */
   public static final FirestoreClient create(FirestoreSettings settings) throws IOException {
     return new FirestoreClient(settings);
@@ -195,9 +186,6 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given stub for making calls. This is for
    * advanced usage - prefer using create(FirestoreSettings).
-   *
-   * @param stub The stub to be used for making calls.
-   * @return A new instance of FirestoreClient.
    */
   public static final FirestoreClient create(FirestoreStub stub) {
     return new FirestoreClient(stub);
@@ -206,9 +194,6 @@ public class FirestoreClient implements BackgroundResource {
   /**
    * Constructs an instance of FirestoreClient, using the given settings. This is protected so that
    * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
-   *
-   * @param settings The settings to be used for creating the client.
-   * @throws IOException if an I/O error occurs while creating the client.
    */
   protected FirestoreClient(FirestoreSettings settings) throws IOException {
     this.settings = settings;
@@ -251,7 +236,6 @@ public class FirestoreClient implements BackgroundResource {
    * }</pre>
    *
    * @param request The request object containing all of the parameters for the API call.
-   * @return The retrieved document.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Document getDocument(GetDocumentRequest request) {
@@ -281,8 +265,6 @@ public class FirestoreClient implements BackgroundResource {
    *   Document response = future.get();
    * }
    * }</pre>
-   *
-   * @return The callable object for making an API call to get a single document.
    */
   public final UnaryCallable<GetDocumentRequest, Document> getDocumentCallable() {
     return stub.getDocumentCallable();
@@ -318,7 +300,6 @@ public class FirestoreClient implements BackgroundResource {
    * }</pre>
    *
    * @param request The request object containing all of the parameters for the API call.
-   * @return The paged response containing the listed documents.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final ListDocumentsPagedResponse listDocuments(ListDocumentsRequest request) {
@@ -355,8 +336,6 @@ public class FirestoreClient implements BackgroundResource {
    *   }
    * }
    * }</pre>
-   *
-   * @return The callable object for making an API call to list documents.
    */
   public final UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse>
       listDocumentsPagedCallable() {
@@ -400,8 +379,6 @@ public class FirestoreClient implements BackgroundResource {
    *   }
    * }
    * }</pre>
-   *
-   * @return The callable object for making an API call to list documents.
    */
   public final UnaryCallable<ListDocumentsRequest, ListDocumentsResponse> listDocumentsCallable() {
     return stub.listDocumentsCallable();
@@ -433,7 +410,6 @@ public class FirestoreClient implements BackgroundResource {
    *     <p>If the document exists on the server and has fields not referenced in the mask, they are
    *     left unchanged. Fields referenced in the mask, but not present in the input document, are
    *     deleted from the document on the server.
-   * @return The updated document.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Document updateDocument(Document document, DocumentMask updateMask) {
@@ -467,7 +443,6 @@ public class FirestoreClient implements BackgroundResource {
    * }</pre>
    *
    * @param request The request object containing all of the parameters for the API call.
-   * @return The updated document.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final Document updateDocument(UpdateDocumentRequest request) {
@@ -499,8 +474,6 @@ public class FirestoreClient implements BackgroundResource {
    *   Document response = future.get();
    * }
    * }</pre>
-   *
-   * @return The callable object for making an API call to update a document.
    */
   public final UnaryCallable<UpdateDocumentRequest, Document> updateDocumentCallable() {
     return stub.updateDocumentCallable();
@@ -585,8 +558,6 @@ public class FirestoreClient implements BackgroundResource {
    *   future.get();
    * }
    * }</pre>
-   *
-   * @return The callable object for making an API call to delete a document.
    */
   public final UnaryCallable<DeleteDocumentRequest, Empty> deleteDocumentCallable() {
     return stub.deleteDocumentCallable();
@@ -621,8 +592,6 @@ public class FirestoreClient implements BackgroundResource {
    *   }
    * }
    * }</pre>
-   *
-   * @return The server streaming callable object for making an API call to batch get documents.
    */
   public final ServerStreamingCallable<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
       batchGetDocumentsCallable() {
