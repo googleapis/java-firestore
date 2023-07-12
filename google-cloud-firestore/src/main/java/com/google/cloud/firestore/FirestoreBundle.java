@@ -133,7 +133,7 @@ public final class FirestoreBundle {
      *
      * @param queryName The name of the query to add.
      * @param querySnap The query snapshot to add.
-     * @returns This instance.
+     * @return This instance.
      */
     public Builder add(String queryName, QuerySnapshot querySnap) {
       BundledQuery query = querySnap.getQuery().toBundledQuery();
