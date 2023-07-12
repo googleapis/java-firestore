@@ -760,18 +760,21 @@ public final class BulkWriter implements AutoCloseable {
    *
    * <p>The executor cannot be changed once writes have been enqueued onto the BulkWriter.
    *
-   * <p>For example, see the sample code: <code>
-   *   BulkWriter bulkWriter = firestore.bulkWriter();
-   *   bulkWriter.addWriteResultListener(
-   *         (DocumentReference documentReference, WriteResult result) -> {
-   *             System.out.println(
-   *                 "Successfully executed write on document: "
-   *                     + documentReference
-   *                     + " at: "
-   *                     + result.getUpdateTime());
-   *           }
-   *         );
-   * </code>
+   * <p>For example, see the sample code:
+   *
+   * <pre>{@code
+   * BulkWriter bulkWriter = firestore.bulkWriter();
+   * bulkWriter.addWriteResultListener(
+   *       (DocumentReference documentReference, WriteResult result) -> {
+   *           System.out.println(
+   *               "Successfully executed write on document: "
+   *                   + documentReference
+   *                   + " at: "
+   *                   + result.getUpdateTime());
+   *         }
+   *       );
+   *
+   * }</pre>
    *
    * @param executor The executor to run the provided callback on.
    * @param writeResultCallback A callback to be called every time a BulkWriter operation
