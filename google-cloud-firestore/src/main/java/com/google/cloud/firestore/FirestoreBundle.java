@@ -70,7 +70,7 @@ public final class FirestoreBundle {
      * read time will be included in the bundle.
      *
      * @param documentSnapshot A document snapshot to add.
-     * @returns This instance.
+     * @return This instance.
      */
     public Builder add(DocumentSnapshot documentSnapshot) {
       return add(documentSnapshot, Optional.empty());
