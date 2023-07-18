@@ -62,7 +62,10 @@ import com.google.protobuf.Empty;
 import io.grpc.MethodDescriptor;
 import io.grpc.protobuf.ProtoUtils;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.annotation.Generated;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS.
@@ -282,6 +285,10 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this(settings, clientContext, new GrpcFirestoreCallableFactory());
   }
 
+  private Map<String, String> fixFormat(Map<String, String> old) {
+    return Collections.emptyMap();
+  }
+
   /**
    * Constructs an instance of GrpcFirestoreStub, using the given settings. This is protected so
    * that it is easy to make a subclass, but otherwise, the static factory methods should be
@@ -302,7 +309,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("name", String.valueOf(request.getName()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<ListDocumentsRequest, ListDocumentsResponse> listDocumentsTransportSettings =
@@ -313,7 +320,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("collection_id", String.valueOf(request.getCollectionId()));
                   params.put("parent", String.valueOf(request.getParent()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
@@ -323,7 +330,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("document.name", String.valueOf(request.getDocument().getName()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<DeleteDocumentRequest, Empty> deleteDocumentTransportSettings =
@@ -333,7 +340,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("name", String.valueOf(request.getName()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
@@ -344,7 +351,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                       params.put("database", String.valueOf(request.getDatabase()));
-                      return params.build();
+                      return fixFormat(params.build());
                     })
                 .build();
     GrpcCallSettings<BeginTransactionRequest, BeginTransactionResponse>
@@ -355,7 +362,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                       params.put("database", String.valueOf(request.getDatabase()));
-                      return params.build();
+                      return fixFormat(params.build());
                     })
                 .build();
     GrpcCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
@@ -365,7 +372,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("database", String.valueOf(request.getDatabase()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
@@ -375,7 +382,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("database", String.valueOf(request.getDatabase()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<RunQueryRequest, RunQueryResponse> runQueryTransportSettings =
@@ -385,7 +392,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("parent", String.valueOf(request.getParent()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
@@ -396,7 +403,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                       params.put("parent", String.valueOf(request.getParent()));
-                      return params.build();
+                      return fixFormat(params.build());
                     })
                 .build();
     GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
@@ -407,7 +414,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                       params.put("parent", String.valueOf(request.getParent()));
-                      return params.build();
+                      return fixFormat(params.build());
                     })
                 .build();
     GrpcCallSettings<WriteRequest, WriteResponse> writeTransportSettings =
@@ -417,7 +424,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("database", String.valueOf(request.getDatabase()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<ListenRequest, ListenResponse> listenTransportSettings =
@@ -427,7 +434,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("database", String.valueOf(request.getDatabase()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<ListCollectionIdsRequest, ListCollectionIdsResponse>
@@ -438,7 +445,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                       params.put("parent", String.valueOf(request.getParent()));
-                      return params.build();
+                      return fixFormat(params.build());
                     })
                 .build();
     GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
@@ -448,7 +455,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("database", String.valueOf(request.getDatabase()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
     GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
@@ -459,7 +466,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
                   params.put("collection_id", String.valueOf(request.getCollectionId()));
                   params.put("parent", String.valueOf(request.getParent()));
-                  return params.build();
+                  return fixFormat(params.build());
                 })
             .build();
 
