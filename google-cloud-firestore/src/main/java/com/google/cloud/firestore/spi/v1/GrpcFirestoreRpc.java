@@ -133,6 +133,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
           };
       FirestoreStubSettings.Builder firestoreBuilder =
           FirestoreStubSettings.newBuilder(clientContext)
+                  .setTracerFactory(options.getApiTracerFactory())
               .applyToAllUnaryMethods(retrySettingsSetter);
       // Manually apply the retry settings to streaming methods
       firestoreBuilder.runQuerySettings().setRetrySettings(options.getRetrySettings());
