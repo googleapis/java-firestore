@@ -65,6 +65,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.Generated;
 
@@ -285,10 +287,6 @@ public class GrpcFirestoreStub extends FirestoreStub {
     this(settings, clientContext, new GrpcFirestoreCallableFactory());
   }
 
-  private Map<String, String> fixFormat(Map<String, String> old) {
-    return Collections.emptyMap();
-  }
-
   /**
    * Constructs an instance of GrpcFirestoreStub, using the given settings. This is protected so
    * that it is easy to make a subclass, but otherwise, the static factory methods should be
@@ -305,169 +303,71 @@ public class GrpcFirestoreStub extends FirestoreStub {
     GrpcCallSettings<GetDocumentRequest, Document> getDocumentTransportSettings =
         GrpcCallSettings.<GetDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(getDocumentMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("name", String.valueOf(request.getName()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<ListDocumentsRequest, ListDocumentsResponse> listDocumentsTransportSettings =
         GrpcCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
             .setMethodDescriptor(listDocumentsMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("collection_id", String.valueOf(request.getCollectionId()));
-                  params.put("parent", String.valueOf(request.getParent()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
         GrpcCallSettings.<UpdateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(updateDocumentMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("document.name", String.valueOf(request.getDocument().getName()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<DeleteDocumentRequest, Empty> deleteDocumentTransportSettings =
         GrpcCallSettings.<DeleteDocumentRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteDocumentMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("name", String.valueOf(request.getName()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
         batchGetDocumentsTransportSettings =
             GrpcCallSettings.<BatchGetDocumentsRequest, BatchGetDocumentsResponse>newBuilder()
                 .setMethodDescriptor(batchGetDocumentsMethodDescriptor)
-                .setParamsExtractor(
-                    request -> {
-                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                      params.put("database", String.valueOf(request.getDatabase()));
-                      return fixFormat(params.build());
-                    })
                 .build();
     GrpcCallSettings<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionTransportSettings =
             GrpcCallSettings.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
                 .setMethodDescriptor(beginTransactionMethodDescriptor)
-                .setParamsExtractor(
-                    request -> {
-                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                      params.put("database", String.valueOf(request.getDatabase()));
-                      return fixFormat(params.build());
-                    })
                 .build();
     GrpcCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
         GrpcCallSettings.<CommitRequest, CommitResponse>newBuilder()
             .setMethodDescriptor(commitMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("database", String.valueOf(request.getDatabase()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         GrpcCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("database", String.valueOf(request.getDatabase()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<RunQueryRequest, RunQueryResponse> runQueryTransportSettings =
         GrpcCallSettings.<RunQueryRequest, RunQueryResponse>newBuilder()
             .setMethodDescriptor(runQueryMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("parent", String.valueOf(request.getParent()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
         runAggregationQueryTransportSettings =
             GrpcCallSettings.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
                 .setMethodDescriptor(runAggregationQueryMethodDescriptor)
-                .setParamsExtractor(
-                    request -> {
-                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                      params.put("parent", String.valueOf(request.getParent()));
-                      return fixFormat(params.build());
-                    })
                 .build();
     GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
         partitionQueryTransportSettings =
             GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
                 .setMethodDescriptor(partitionQueryMethodDescriptor)
-                .setParamsExtractor(
-                    request -> {
-                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                      params.put("parent", String.valueOf(request.getParent()));
-                      return fixFormat(params.build());
-                    })
                 .build();
     GrpcCallSettings<WriteRequest, WriteResponse> writeTransportSettings =
         GrpcCallSettings.<WriteRequest, WriteResponse>newBuilder()
             .setMethodDescriptor(writeMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("database", String.valueOf(request.getDatabase()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<ListenRequest, ListenResponse> listenTransportSettings =
         GrpcCallSettings.<ListenRequest, ListenResponse>newBuilder()
             .setMethodDescriptor(listenMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("database", String.valueOf(request.getDatabase()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<ListCollectionIdsRequest, ListCollectionIdsResponse>
         listCollectionIdsTransportSettings =
             GrpcCallSettings.<ListCollectionIdsRequest, ListCollectionIdsResponse>newBuilder()
                 .setMethodDescriptor(listCollectionIdsMethodDescriptor)
-                .setParamsExtractor(
-                    request -> {
-                      ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                      params.put("parent", String.valueOf(request.getParent()));
-                      return fixFormat(params.build());
-                    })
                 .build();
     GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
         GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
             .setMethodDescriptor(batchWriteMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("database", String.valueOf(request.getDatabase()));
-                  return fixFormat(params.build());
-                })
             .build();
     GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
         GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(createDocumentMethodDescriptor)
-            .setParamsExtractor(
-                request -> {
-                  ImmutableMap.Builder<String, String> params = ImmutableMap.builder();
-                  params.put("collection_id", String.valueOf(request.getCollectionId()));
-                  params.put("parent", String.valueOf(request.getParent()));
-                  return fixFormat(params.build());
-                })
             .build();
 
     this.getDocumentCallable =
