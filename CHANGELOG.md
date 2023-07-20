@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.13.4](https://github.com/googleapis/java-firestore/compare/v3.13.3...v3.13.4) (2023-07-20)
+
+
+### Bug Fixes
+
+* Remove  'x-goog-request-params' header from GRPC requests due to incorrect format. ([#1358](https://github.com/googleapis/java-firestore/issues/1358)) ([1a1bf5f](https://github.com/googleapis/java-firestore/commit/1a1bf5f101d44b0870b44ddf225ccd66d9c2bbc8))
+
 ## [3.13.3](https://github.com/googleapis/java-firestore/compare/v3.13.2...v3.13.3) (2023-07-13)
 
 
