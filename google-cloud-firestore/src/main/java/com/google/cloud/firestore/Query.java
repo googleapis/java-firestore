@@ -63,8 +63,10 @@ import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -1700,6 +1702,44 @@ public class Query {
   @Nonnull
   public ApiFuture<QuerySnapshot> get() {
     return get(null);
+  }
+
+  /**
+   * Performs the planning stage of this query, without actually executing the query. Returns an
+   * ApiFuture that will be resolved with the result of the query planning information.
+   *
+   * <p>Note: the information included in the output of this function is subject to change.
+   *
+   * @return An ApiFuture that will be resolved with the results of the query planning information.
+   */
+  @Nonnull
+  public ApiFuture<Map<String, Object>> plan() {
+    Map<String, Object> plan = new HashMap<>();
+    plan.put("foo", "bar");
+    final SettableApiFuture<Map<String, Object>> result = SettableApiFuture.create();
+    result.set(plan);
+    return result;
+  }
+
+  /**
+   * Plans and executes this query. Returns an ApiFuture that will be resolved with the planning
+   * information, statistics from the query execution, and the query results.
+   *
+   * <p>Note: the information included in the output of this function is subject to change.
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution, and the query results.
+   */
+  @Nonnull
+  public ApiFuture<QueryProfileInfo> profile() {
+    Map<String, Object> plan = new HashMap<>();
+    plan.put("foo", "bar");
+    Map<String, Object> stats = new HashMap<>();
+    stats.put("cpu", "3ms");
+    final SettableApiFuture<QueryProfileInfo> result = SettableApiFuture.create();
+    QueryProfileInfo mock = new QueryProfileInfo(plan, stats, null);
+    result.set(mock);
+    return result;
   }
 
   /**

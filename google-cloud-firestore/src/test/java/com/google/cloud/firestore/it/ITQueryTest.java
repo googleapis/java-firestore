@@ -22,6 +22,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.client.util.Preconditions;
+import com.google.cloud.firestore.AggregateQuery;
+import com.google.cloud.firestore.AggregateQueryProfileInfo;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Filter;
 import com.google.cloud.firestore.Firestore;
@@ -29,6 +31,7 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
+import com.google.cloud.firestore.QueryProfileInfo;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -414,5 +417,79 @@ public class ITQueryTest {
 
     Query query2 = collection.where(Filter.inArray("a", asList(2, 3))).orderBy("a");
     checkQuerySnapshotContainsDocuments(query2, "doc6", "doc3");
+  }
+
+  @Test
+  public void testQueryPlan() throws ExecutionException, InterruptedException, TimeoutException {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
+    Map<String, Object> plan = query.plan().get();
+    System.out.println(plan);
+  }
+
+  @Test
+  public void testQueryProfile() throws ExecutionException, InterruptedException, TimeoutException {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
+
+    QueryProfileInfo profile = query.profile().get();
+    System.out.println(profile.plan);
+    System.out.println(profile.stats);
+  }
+
+  @Test
+  public void testAggregateQueryPlan()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
+    Map<String, Object> plan = query.plan().get();
+    System.out.println(plan);
+  }
+
+  @Test
+  public void testAggregateQueryProfile()
+      throws ExecutionException, InterruptedException, TimeoutException {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
+
+    AggregateQueryProfileInfo profile = query.profile().get();
+    System.out.println(profile.plan);
+    System.out.println(profile.stats);
   }
 }
