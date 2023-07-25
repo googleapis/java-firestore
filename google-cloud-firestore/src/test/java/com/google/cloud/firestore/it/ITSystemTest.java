@@ -72,7 +72,6 @@ import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -99,7 +98,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -109,7 +107,7 @@ import org.junit.runners.JUnit4;
 import org.threeten.bp.Duration;
 
 @RunWith(JUnit4.class)
-public class ITSystemTest {
+public class ITSystemTest extends ITBaseTest {
 
   private static final double DOUBLE_EPSILON = 0.000001;
 
@@ -124,26 +122,17 @@ public class ITSystemTest {
 
   @Rule public TestName testName = new TestName();
 
-  private Firestore firestore;
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
 
   @Before
   public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+    super.before();
+
     randomColl =
         firestore.collection(
             String.format("java-%s-%s", testName.getMethodName(), LocalFirestoreHelper.autoId()));
     randomDoc = randomColl.document();
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {

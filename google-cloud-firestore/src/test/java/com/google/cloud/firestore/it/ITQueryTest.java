@@ -21,11 +21,8 @@ import static com.google.common.primitives.Ints.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.api.client.util.Preconditions;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Filter;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
@@ -38,8 +35,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -47,27 +42,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class ITQueryTest {
-
-  private static Firestore firestore;
+public class ITQueryTest extends ITBaseTest {
 
   @Rule public TestName testName = new TestName();
-
-  @Before
-  public void setUpFirestore() {
-    firestore = FirestoreOptions.newBuilder().build().getService();
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-  }
-
-  @After
-  public void tearDownFirestore() throws Exception {
-    if (firestore != null) {
-      firestore.close();
-      firestore = null;
-    }
-  }
 
   private CollectionReference createEmptyCollection() {
     String collectionPath =
@@ -83,7 +60,7 @@ public class ITQueryTest {
     return res;
   }
 
-  public static CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
+  public CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
       throws ExecutionException, InterruptedException, TimeoutException {
     CollectionReference collection = firestore.collection(LocalFirestoreHelper.autoId());
     for (Map.Entry<String, Map<String, Object>> doc : docs.entrySet()) {

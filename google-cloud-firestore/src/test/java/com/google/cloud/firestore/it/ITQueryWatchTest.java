@@ -31,9 +31,7 @@ import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreException;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
@@ -42,7 +40,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Joiner.MapJoiner;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
@@ -58,7 +55,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,9 +63,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class ITQueryWatchTest {
-
-  private static Firestore firestore;
+public final class ITQueryWatchTest extends ITBaseTest {
 
   @Rule public TestName testName = new TestName();
 
@@ -77,19 +71,10 @@ public final class ITQueryWatchTest {
 
   @Before
   public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+    super.before();
     String autoId = LocalFirestoreHelper.autoId();
     String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
     randomColl = firestore.collection(collPath);
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   /**
