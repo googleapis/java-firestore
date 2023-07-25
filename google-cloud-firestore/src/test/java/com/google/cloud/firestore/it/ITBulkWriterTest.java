@@ -28,25 +28,20 @@ import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-public class ITBulkWriterTest {
-  private Firestore firestore;
+public class ITBulkWriterTest extends ITBaseTest {
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
 
@@ -54,20 +49,11 @@ public class ITBulkWriterTest {
 
   @Before
   public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+    super.before();
     randomColl =
         firestore.collection(
             String.format("java-%s-%s", testName.getMethodName(), LocalFirestoreHelper.autoId()));
     randomDoc = randomColl.document();
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   @Test
