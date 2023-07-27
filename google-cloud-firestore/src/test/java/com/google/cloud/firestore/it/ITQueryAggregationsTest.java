@@ -82,22 +82,24 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
-  public void allowsAliasesLongerThan1500Bytes() throws Exception {
-    // The longest field name allowed is 1500. The alias chosen by the client is <op>_<fieldName>.
-    // If the field name is
-    // 1500 bytes, the alias will be longer than 1500, which is the limit for aliases. This is to
-    // make sure the client
-    // can handle this corner case correctly.
-    String longField = "";
-    for (int i = 0; i < 150; i++) {
-      longField += "0123456789";
+  public void allowsAliasesForLongestFieldNames() throws Exception {
+    // The longest field name allowed is 1499 characters long.
+    // Ensure that sum(longestField) and average(longestField) work.
+    StringBuilder builder = new StringBuilder(1500);
+    for (int i = 0; i < 1499; i++) {
+      builder.append("k");
     }
-    Map<String, Map<String, Object>> testDocs = map("a", map(longField, 1), "b", map(longField, 2));
+    String longestField = builder.toString();
+    Map<String, Map<String, Object>> testDocs =
+        map("a", map(longestField, 2), "b", map(longestField, 4));
 
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot =
-        collection.aggregate(AggregateField.sum(longField)).get().get();
-    assertThat(snapshot.get(AggregateField.sum(longField))).isEqualTo(3);
+        collection.aggregate(AggregateField.sum(longestField)).get().get();
+    assertThat(snapshot.get(AggregateField.sum(longestField))).isEqualTo(6);
+    AggregateQuerySnapshot snapshot2 =
+        collection.aggregate(AggregateField.average(longestField)).get().get();
+    assertThat(snapshot2.get(AggregateField.average(longestField))).isEqualTo(3.0);
   }
 
   @Test
@@ -293,7 +295,7 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
-  public void performsAggregationsOnDocumentsWithAllaggregatedFields() throws Exception {
+  public void performsAggregationsOnDocumentsWithAllAggregatedFields() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
