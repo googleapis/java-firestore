@@ -199,10 +199,18 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    // We use a Set here to automatically remove duplicates.
-    Set<StructuredAggregationQuery.Aggregation> aggregations = new HashSet<>();
+    // We use this set to remove duplicate aggregates. e.g. `aggregate(sum("foo"), sum("foo"))`
+    HashSet<String> uniqueAggregates = new HashSet<>();
+    List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
     int aggregationNum = 0;
     for (AggregateField aggregateField : aggregateFieldList) {
+      // `getAlias()` provides a unique representation of an AggregateField.
+      boolean isNewAggregateField = uniqueAggregates.add(aggregateField.getAlias());
+      if (!isNewAggregateField) {
+        // This is a duplicate AggregateField. We don't need to include it in the request.
+        continue;
+      }
+
       // If there's a field for this aggregation, build its proto.
       StructuredQuery.FieldReference field = null;
       if (!aggregateField.getFieldPath().isEmpty()) {
