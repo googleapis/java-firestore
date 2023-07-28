@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.13.8](https://github.com/googleapis/java-firestore/compare/v3.13.7...v3.13.8) (2023-07-28)
+
+
+### Dependencies
+
+* Update dependency org.apache.commons:commons-lang3 to v3.13.0 ([#1380](https://github.com/googleapis/java-firestore/issues/1380)) ([f6f07fb](https://github.com/googleapis/java-firestore/commit/f6f07fbccfcb331d318f66d75a7083695dc21bbb))
+
 ## [3.13.7](https://github.com/googleapis/java-firestore/compare/v3.13.6...v3.13.7) (2023-07-27)
 
 
