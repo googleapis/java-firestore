@@ -4,7 +4,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 /** A QueryProfile contains information about planning, execution, and results of a query. */
-public class QueryProfileInfo<T> {
+final public class QueryProfileInfo<T> {
   /** A Map that contains information about the query plan. Contents are subject to change. */
   @Nonnull public final Map<String, Object> plan;
 
