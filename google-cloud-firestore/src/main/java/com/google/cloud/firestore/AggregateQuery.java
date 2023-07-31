@@ -98,13 +98,15 @@ public class AggregateQuery {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<AggregateQueryProfileInfo> profile() {
+  public ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> profile() {
     Map<String, Object> plan = new HashMap<>();
     plan.put("foo", "bar");
     Map<String, Object> stats = new HashMap<>();
     stats.put("cpu", "3ms");
-    final SettableApiFuture<AggregateQueryProfileInfo> result = SettableApiFuture.create();
-    AggregateQueryProfileInfo mock = new AggregateQueryProfileInfo(plan, stats, null);
+    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
+        SettableApiFuture.create();
+    final AggregateQuerySnapshot mockSnapshot = new AggregateQuerySnapshot(this, null, 5);
+    QueryProfileInfo<AggregateQuerySnapshot> mock = new QueryProfileInfo(plan, stats, mockSnapshot);
     result.set(mock);
     return result;
   }

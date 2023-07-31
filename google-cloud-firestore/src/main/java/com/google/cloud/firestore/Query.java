@@ -1731,13 +1731,14 @@ public class Query {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfileInfo> profile() {
+  public ApiFuture<QueryProfileInfo<QuerySnapshot>> profile() {
     Map<String, Object> plan = new HashMap<>();
     plan.put("foo", "bar");
     Map<String, Object> stats = new HashMap<>();
     stats.put("cpu", "3ms");
-    final SettableApiFuture<QueryProfileInfo> result = SettableApiFuture.create();
-    QueryProfileInfo mock = new QueryProfileInfo(plan, stats, null);
+    final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
+    QuerySnapshot mockSnapshot = QuerySnapshot.withDocuments(this, null, new ArrayList<>());
+    QueryProfileInfo mock = new QueryProfileInfo(plan, stats, mockSnapshot);
     result.set(mock);
     return result;
   }

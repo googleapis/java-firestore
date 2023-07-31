@@ -22,17 +22,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.client.util.Preconditions;
-import com.google.cloud.firestore.AggregateQuery;
-import com.google.cloud.firestore.AggregateQueryProfileInfo;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.Filter;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.LocalFirestoreHelper;
-import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
-import com.google.cloud.firestore.QueryProfileInfo;
-import com.google.cloud.firestore.QuerySnapshot;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -450,9 +441,10 @@ public class ITQueryTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    QueryProfileInfo profile = query.profile().get();
+    QueryProfileInfo<QuerySnapshot> profile = query.profile().get();
     System.out.println(profile.plan);
     System.out.println(profile.stats);
+    System.out.println(profile.snapshot.size());
   }
 
   @Test
@@ -488,8 +480,9 @@ public class ITQueryTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    AggregateQueryProfileInfo profile = query.profile().get();
+    QueryProfileInfo<AggregateQuerySnapshot> profile = query.profile().get();
     System.out.println(profile.plan);
     System.out.println(profile.stats);
+    System.out.println(profile.snapshot.getCount());
   }
 }
