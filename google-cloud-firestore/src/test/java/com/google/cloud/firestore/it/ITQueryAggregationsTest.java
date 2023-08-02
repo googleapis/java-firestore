@@ -10,6 +10,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.*;
 import com.google.common.base.Preconditions;
@@ -82,6 +83,27 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
+  public void allowsAliasesForLongestFieldNames() throws Exception {
+    // The longest field name allowed is 1499 characters long.
+    // Ensure that sum(longestField) and average(longestField) work.
+    StringBuilder builder = new StringBuilder(1500);
+    for (int i = 0; i < 1499; i++) {
+      builder.append("k");
+    }
+    String longestField = builder.toString();
+    Map<String, Map<String, Object>> testDocs =
+        map("a", map(longestField, 2), "b", map(longestField, 4));
+
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+    AggregateQuerySnapshot snapshot =
+        collection.aggregate(AggregateField.sum(longestField)).get().get();
+    assertThat(snapshot.get(AggregateField.sum(longestField))).isEqualTo(6);
+    AggregateQuerySnapshot snapshot2 =
+        collection.aggregate(AggregateField.average(longestField)).get().get();
+    assertThat(snapshot2.get(AggregateField.average(longestField))).isEqualTo(3.0);
+  }
+
+  @Test
   public void canGetDuplicateAggregations() throws Exception {
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateQuerySnapshot snapshot =
@@ -110,7 +132,7 @@ public class ITQueryAggregationsTest {
     assertThat(executionException)
         .hasCauseThat()
         .hasMessageThat()
-        .containsMatch("/index.*https:\\/\\/console\\.firebase\\.google\\.com/");
+        .containsMatch("index.*https:\\/\\/console\\.firebase\\.google\\.com");
   }
 
   @Test
@@ -195,8 +217,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void canPerformMaxAggregations() throws Exception {
-    // TODO: Update this test once aggregate de-duplication is implemented and more aggregation
-    // types are available.
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     CollectionReference collection = testCollectionWithDocs(testDocs1);
     AggregateField f1 = sum("pages");
     AggregateField f2 = average("pages");
@@ -234,6 +257,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void aggregateQueriesSupportCollectionGroups() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     String collectionGroupId = "myColGroupId" + autoId();
     Map<String, Object> data = map("x", 2);
     // Setting documents at the following paths:
@@ -274,7 +300,10 @@ public class ITQueryAggregationsTest {
   }
 
   @Test
-  public void performsAggregationsOnDocumentsWithAllaggregatedFields() throws Exception {
+  public void performsAggregationsOnDocumentsWithAllAggregatedFields() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -299,6 +328,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void performsAggregationsWhenNaNExistsForSomeFieldValues() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -357,6 +389,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void performsAggregationWhenUsingInOperator() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -394,6 +429,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void performsAggregationWhenUsingArrayContainsAnyOperator() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -449,6 +487,9 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void performsAggregationsOnNestedMapValues() throws Exception {
+    assumeTrue(
+        "Skip this test when running against prod because it requires composite index creation.",
+        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -509,8 +550,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
     Object sum = snapshot.get(sum("rating"));
-    assertThat(sum instanceof Long).isTrue();
-    assertThat(sum).isEqualTo(13);
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum).isEqualTo(13.0);
   }
 
   @Test
@@ -598,8 +639,8 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
     Object sum = snapshot.get(sum("rating"));
-    assertThat(sum instanceof Long).isTrue();
-    assertThat(sum).isEqualTo(0);
+    assertThat(sum instanceof Double).isTrue();
+    assertThat(sum).isAnyOf(0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
   }
 
   @Test

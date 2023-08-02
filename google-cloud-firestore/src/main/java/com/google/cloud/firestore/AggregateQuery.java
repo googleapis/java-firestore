@@ -36,21 +36,16 @@ import javax.annotation.Nullable;
 /** A query that calculates aggregations over an underlying query. */
 @InternalExtensionOnly
 public class AggregateQuery {
-
-  /**
-   * The "alias" to specify in the {@link RunAggregationQueryRequest} proto when running a count
-   * query. The actual value is not meaningful, but will be used to get the count out of the {@link
-   * RunAggregationQueryResponse}.
-   */
-  private static final String ALIAS_COUNT = "count";
-
   @Nonnull private final Query query;
 
   @Nonnull private List<AggregateField> aggregateFieldList;
 
+  @Nonnull private Map<String, String> aliasMap;
+
   AggregateQuery(@Nonnull Query query, @Nonnull List<AggregateField> aggregateFields) {
     this.query = query;
     this.aggregateFieldList = aggregateFields;
+    this.aliasMap = new HashMap<>();
   }
 
   /** Returns the query whose aggregations will be calculated by this object. */
@@ -114,7 +109,9 @@ public class AggregateQuery {
 
     void deliverResult(@Nonnull Map<String, Value> data, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
-        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, data));
+        Map<String, Value> mappedData = new HashMap<>();
+        data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
+        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, mappedData));
       }
     }
 
@@ -202,9 +199,18 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    // We use a Set here to automatically remove duplicates.
-    Set<StructuredAggregationQuery.Aggregation> aggregations = new HashSet<>();
+    // We use this set to remove duplicate aggregates. e.g. `aggregate(sum("foo"), sum("foo"))`
+    HashSet<String> uniqueAggregates = new HashSet<>();
+    List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
+    int aggregationNum = 0;
     for (AggregateField aggregateField : aggregateFieldList) {
+      // `getAlias()` provides a unique representation of an AggregateField.
+      boolean isNewAggregateField = uniqueAggregates.add(aggregateField.getAlias());
+      if (!isNewAggregateField) {
+        // This is a duplicate AggregateField. We don't need to include it in the request.
+        continue;
+      }
+
       // If there's a field for this aggregation, build its proto.
       StructuredQuery.FieldReference field = null;
       if (!aggregateField.getFieldPath().isEmpty()) {
@@ -224,7 +230,11 @@ public class AggregateQuery {
       } else {
         throw new RuntimeException("Unsupported aggregation");
       }
-      aggregation.setAlias(aggregateField.getAlias());
+      // Map all client-side aliases to a unique short-form alias.
+      // This avoids issues with client-side aliases that exceed the 1500-byte string size limit.
+      String serverAlias = "aggregate_" + aggregationNum++;
+      aliasMap.put(serverAlias, aggregateField.getAlias());
+      aggregation.setAlias(serverAlias);
       aggregations.add(aggregation.build());
     }
     structuredAggregationQuery.addAllAggregations(aggregations);
