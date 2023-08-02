@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new TargetChange();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -115,8 +110,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
+     *
      * This will be sent after or with a `read_time` that is greater than or
      * equal to the time at which the targets were added.
+     *
      * Listeners can wait for this change if read-after-write semantics
      * are desired.
      * </pre>
@@ -130,6 +127,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
+     *
      * After the initial state is complete, `CURRENT` will be returned even
      * if the target was previously indicated to be `CURRENT`.
      * </pre>
@@ -176,8 +174,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
+     *
      * This will be sent after or with a `read_time` that is greater than or
      * equal to the time at which the targets were added.
+     *
      * Listeners can wait for this change if read-after-write semantics
      * are desired.
      * </pre>
@@ -191,6 +191,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
+     *
      * After the initial state is complete, `CURRENT` will be returned even
      * if the target was previously indicated to be `CURRENT`.
      * </pre>
@@ -334,7 +335,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -351,7 +354,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -367,7 +372,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -436,6 +443,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A token that can be used to resume the stream for the given `target_ids`,
    * or all targets if `target_ids` is empty.
+   *
    * Not set on every target change.
    * </pre>
    *
@@ -456,10 +464,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -478,10 +488,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -500,10 +512,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -1107,7 +1121,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1125,7 +1141,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1141,7 +1159,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1158,7 +1178,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1180,7 +1202,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1201,7 +1225,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1221,7 +1247,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1417,6 +1445,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1434,6 +1463,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1457,6 +1487,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1483,10 +1514,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1504,10 +1537,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1529,10 +1564,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1558,10 +1595,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1584,10 +1623,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1616,10 +1657,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1642,10 +1685,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1663,10 +1708,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1686,10 +1733,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>

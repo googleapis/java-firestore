@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     return new RunQueryResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunQueryResponse_descriptor;
@@ -69,6 +64,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
   }
 
   private int continuationSelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object continuationSelector_;
 
   public enum ContinuationSelectorCase
@@ -189,6 +186,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -209,6 +207,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -229,6 +228,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -1046,6 +1046,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1065,6 +1066,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1088,6 +1090,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1115,6 +1118,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1139,6 +1143,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1169,6 +1174,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1193,6 +1199,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1212,6 +1219,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1233,6 +1241,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,16 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A bloom filter (https://en.wikipedia.org/wiki/Bloom_filter).
+ *
  * The bloom filter hashes the entries with MD5 and treats the resulting 128-bit
  * hash as 2 distinct 64-bit hash values, interpreted as unsigned integers
  * using 2's complement encoding.
+ *
  * These two hash values, named `h1` and `h2`, are then used to compute the
  * `hash_count` hash values using the formula, starting at `i=0`:
+ *
  *     h(i) = h1 + (i * h2)
+ *
  * These resulting values are then taken modulo the number of bits in the bloom
  * filter to get the bits of the bloom filter to test for the given entry.
  * </pre>
@@ -51,11 +55,6 @@ public final class BloomFilter extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BloomFilter();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -313,12 +312,16 @@ public final class BloomFilter extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A bloom filter (https://en.wikipedia.org/wiki/Bloom_filter).
+   *
    * The bloom filter hashes the entries with MD5 and treats the resulting 128-bit
    * hash as 2 distinct 64-bit hash values, interpreted as unsigned integers
    * using 2's complement encoding.
+   *
    * These two hash values, named `h1` and `h2`, are then used to compute the
    * `hash_count` hash values using the formula, starting at `i=0`:
+   *
    *     h(i) = h1 + (i * h2)
+   *
    * These resulting values are then taken modulo the number of bits in the bloom
    * filter to get the bits of the bloom filter to test for the given entry.
    * </pre>

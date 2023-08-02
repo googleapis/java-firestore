@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,7 @@ public interface UpdateDocumentRequestOrBuilder
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
+   *
    * If the document exists on the server and has fields not referenced in the
    * mask, they are left unchanged.
    * Fields referenced in the mask, but not present in the input document, are
@@ -87,6 +88,7 @@ public interface UpdateDocumentRequestOrBuilder
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
+   *
    * If the document exists on the server and has fields not referenced in the
    * mask, they are left unchanged.
    * Fields referenced in the mask, but not present in the input document, are
@@ -104,6 +106,7 @@ public interface UpdateDocumentRequestOrBuilder
    * <pre>
    * The fields to update.
    * None of the field paths in the mask may contain a reserved name.
+   *
    * If the document exists on the server and has fields not referenced in the
    * mask, they are left unchanged.
    * Fields referenced in the mask, but not present in the input document, are
@@ -119,6 +122,7 @@ public interface UpdateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -133,6 +137,7 @@ public interface UpdateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -147,6 +152,7 @@ public interface UpdateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>

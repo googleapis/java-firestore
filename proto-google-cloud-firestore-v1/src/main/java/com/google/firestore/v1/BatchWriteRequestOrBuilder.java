@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Method does not apply writes atomically and does not guarantee ordering.
    * Each write succeeds or fails independently. You cannot write to the same
    * document more than once per request.
@@ -68,6 +69,7 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Method does not apply writes atomically and does not guarantee ordering.
    * Each write succeeds or fails independently. You cannot write to the same
    * document more than once per request.
@@ -81,6 +83,7 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Method does not apply writes atomically and does not guarantee ordering.
    * Each write succeeds or fails independently. You cannot write to the same
    * document more than once per request.
@@ -94,6 +97,7 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Method does not apply writes atomically and does not guarantee ordering.
    * Each write succeeds or fails independently. You cannot write to the same
    * document more than once per request.
@@ -107,6 +111,7 @@ public interface BatchWriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Method does not apply writes atomically and does not guarantee ordering.
    * Each write succeeds or fails independently. You cannot write to the same
    * document more than once per request.

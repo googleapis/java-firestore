@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,12 @@ package com.google.firestore.v1;
  *
  * <pre>
  * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
+ *
  * The first request creates a stream, or resumes an existing one from a token.
+ *
  * When creating a new stream, the server replies with a response containing
  * only an ID and a token, to use in the next request.
+ *
  * When resuming a stream, the server first streams any responses later than the
  * given token, then a response containing only an up-to-date token, to use in
  * the next request.
@@ -54,11 +57,6 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new WriteRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -206,6 +204,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -223,6 +222,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -240,6 +240,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -257,6 +258,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -274,6 +276,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -294,14 +297,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A stream token that was previously sent by the server.
+   *
    * The client should set this field to the token from the most recent
    * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
    * acknowledges that the client has received responses up to this token. After
    * sending this token, earlier tokens may not be used anymore.
+   *
    * The server may close the stream if there are too many unacknowledged
    * responses.
+   *
    * Leave this field unset when creating a new stream. To resume a stream at
    * a specific point, set this field and the `stream_id` field.
+   *
    * Leave this field unset when creating a new stream.
    * </pre>
    *
@@ -624,9 +631,12 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
+   *
    * The first request creates a stream, or resumes an existing one from a token.
+   *
    * When creating a new stream, the server replies with a response containing
    * only an ID and a token, to use in the next request.
+   *
    * When resuming a stream, the server first streams any responses later than the
    * given token, then a response containing only an up-to-date token, to use in
    * the next request.
@@ -1185,6 +1195,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1205,6 +1216,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1225,6 +1237,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1245,6 +1258,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1271,6 +1285,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1294,6 +1309,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1320,6 +1336,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1346,6 +1363,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1369,6 +1387,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1392,6 +1411,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1416,6 +1436,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1439,6 +1460,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1462,6 +1484,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1478,6 +1501,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1498,6 +1522,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1519,6 +1544,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1535,6 +1561,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1552,6 +1579,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1587,14 +1615,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
      * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
      * acknowledges that the client has received responses up to this token. After
      * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *
@@ -1611,14 +1643,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
      * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
      * acknowledges that the client has received responses up to this token. After
      * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *
@@ -1641,14 +1677,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
      * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
      * acknowledges that the client has received responses up to this token. After
      * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *

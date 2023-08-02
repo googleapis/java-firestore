@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,18 +40,13 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
 
   private BatchGetDocumentsRequest() {
     database_ = "";
-    documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BatchGetDocumentsRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -70,6 +65,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -175,7 +172,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
   public static final int DOCUMENTS_FIELD_NUMBER = 2;
 
   @SuppressWarnings("serial")
-  private com.google.protobuf.LazyStringList documents_;
+  private com.google.protobuf.LazyStringArrayList documents_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -254,6 +252,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field will
    * not be returned in the response.
    * </pre>
@@ -271,6 +270,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field will
    * not be returned in the response.
    * </pre>
@@ -288,6 +288,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field will
    * not be returned in the response.
    * </pre>
@@ -400,7 +401,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -416,7 +420,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -435,7 +442,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -732,8 +742,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       super.clear();
       bitField0_ = 0;
       database_ = "";
-      documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
       mask_ = null;
       if (maskBuilder_ != null) {
         maskBuilder_.dispose();
@@ -774,7 +783,6 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     public com.google.firestore.v1.BatchGetDocumentsRequest buildPartial() {
       com.google.firestore.v1.BatchGetDocumentsRequest result =
           new com.google.firestore.v1.BatchGetDocumentsRequest(this);
-      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -783,19 +791,14 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       return result;
     }
 
-    private void buildPartialRepeatedFields(
-        com.google.firestore.v1.BatchGetDocumentsRequest result) {
-      if (((bitField0_ & 0x00000002) != 0)) {
-        documents_ = documents_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000002);
-      }
-      result.documents_ = documents_;
-    }
-
     private void buildPartial0(com.google.firestore.v1.BatchGetDocumentsRequest result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        documents_.makeImmutable();
+        result.documents_ = documents_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
@@ -867,7 +870,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       if (!other.documents_.isEmpty()) {
         if (documents_.isEmpty()) {
           documents_ = other.documents_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ |= 0x00000002;
         } else {
           ensureDocumentsIsMutable();
           documents_.addAll(other.documents_);
@@ -1105,14 +1108,14 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       return this;
     }
 
-    private com.google.protobuf.LazyStringList documents_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList documents_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureDocumentsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!documents_.isModifiable()) {
         documents_ = new com.google.protobuf.LazyStringArrayList(documents_);
-        bitField0_ |= 0x00000002;
       }
+      bitField0_ |= 0x00000002;
     }
     /**
      *
@@ -1129,7 +1132,8 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * @return A list containing the documents.
      */
     public com.google.protobuf.ProtocolStringList getDocumentsList() {
-      return documents_.getUnmodifiableView();
+      documents_.makeImmutable();
+      return documents_;
     }
     /**
      *
@@ -1206,6 +1210,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
       ensureDocumentsIsMutable();
       documents_.set(index, value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1230,6 +1235,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       }
       ensureDocumentsIsMutable();
       documents_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1251,6 +1257,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
     public Builder addAllDocuments(java.lang.Iterable<java.lang.String> values) {
       ensureDocumentsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, documents_);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1269,8 +1276,9 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearDocuments() {
-      documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
       bitField0_ = (bitField0_ & ~0x00000002);
+      ;
       onChanged();
       return this;
     }
@@ -1296,6 +1304,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
       checkByteStringIsUtf8(value);
       ensureDocumentsIsMutable();
       documents_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1311,6 +1320,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1327,6 +1337,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1347,6 +1358,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1371,6 +1383,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1392,6 +1405,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1419,6 +1433,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1440,6 +1455,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1456,6 +1472,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1474,6 +1491,7 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If a document has a field that is not present in this mask, that field will
      * not be returned in the response.
      * </pre>
@@ -1816,7 +1834,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1832,7 +1853,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1858,7 +1882,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1881,7 +1908,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1901,7 +1931,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1934,7 +1967,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1960,7 +1996,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1973,7 +2012,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1994,7 +2036,10 @@ public final class BatchGetDocumentsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,6 +99,7 @@ public interface TargetOrBuilder
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -113,6 +114,7 @@ public interface TargetOrBuilder
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -127,6 +129,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -140,6 +143,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -153,6 +157,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -193,6 +198,7 @@ public interface TargetOrBuilder
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -209,6 +215,7 @@ public interface TargetOrBuilder
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -225,6 +232,7 @@ public interface TargetOrBuilder
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -234,7 +242,7 @@ public interface TargetOrBuilder
    */
   com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder();
 
-  public com.google.firestore.v1.Target.TargetTypeCase getTargetTypeCase();
+  com.google.firestore.v1.Target.TargetTypeCase getTargetTypeCase();
 
-  public com.google.firestore.v1.Target.ResumeTypeCase getResumeTypeCase();
+  com.google.firestore.v1.Target.ResumeTypeCase getResumeTypeCase();
 }

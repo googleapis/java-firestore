@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,6 +99,7 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Run the aggregation within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -112,6 +113,7 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Run the aggregation within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -126,6 +128,7 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -140,6 +143,7 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -154,6 +158,7 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -167,8 +172,10 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -181,8 +188,10 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -195,16 +204,18 @@ public interface RunAggregationQueryRequestOrBuilder
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
-  public com.google.firestore.v1.RunAggregationQueryRequest.QueryTypeCase getQueryTypeCase();
+  com.google.firestore.v1.RunAggregationQueryRequest.QueryTypeCase getQueryTypeCase();
 
-  public com.google.firestore.v1.RunAggregationQueryRequest.ConsistencySelectorCase
+  com.google.firestore.v1.RunAggregationQueryRequest.ConsistencySelectorCase
       getConsistencySelectorCase();
 }

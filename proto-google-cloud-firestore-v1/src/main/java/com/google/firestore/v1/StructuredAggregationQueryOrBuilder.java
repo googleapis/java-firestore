@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,9 @@ public interface StructuredAggregationQueryOrBuilder
    * <pre>
    * Optional. Series of aggregations to apply over the results of the
    * `structured_query`.
+   *
    * Requires:
+   *
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
@@ -80,7 +82,9 @@ public interface StructuredAggregationQueryOrBuilder
    * <pre>
    * Optional. Series of aggregations to apply over the results of the
    * `structured_query`.
+   *
    * Requires:
+   *
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
@@ -95,7 +99,9 @@ public interface StructuredAggregationQueryOrBuilder
    * <pre>
    * Optional. Series of aggregations to apply over the results of the
    * `structured_query`.
+   *
    * Requires:
+   *
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
@@ -110,7 +116,9 @@ public interface StructuredAggregationQueryOrBuilder
    * <pre>
    * Optional. Series of aggregations to apply over the results of the
    * `structured_query`.
+   *
    * Requires:
+   *
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
@@ -126,7 +134,9 @@ public interface StructuredAggregationQueryOrBuilder
    * <pre>
    * Optional. Series of aggregations to apply over the results of the
    * `structured_query`.
+   *
    * Requires:
+   *
    * * A minimum of one and maximum of five aggregations per query.
    * </pre>
    *
@@ -137,5 +147,5 @@ public interface StructuredAggregationQueryOrBuilder
   com.google.firestore.v1.StructuredAggregationQuery.AggregationOrBuilder getAggregationsOrBuilder(
       int index);
 
-  public com.google.firestore.v1.StructuredAggregationQuery.QueryTypeCase getQueryTypeCase();
+  com.google.firestore.v1.StructuredAggregationQuery.QueryTypeCase getQueryTypeCase();
 }

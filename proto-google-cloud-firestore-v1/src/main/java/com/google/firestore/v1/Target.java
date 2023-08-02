@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Target();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -152,18 +147,13 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     private DocumentsTarget() {
-      documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new DocumentsTarget();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -184,7 +174,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     public static final int DOCUMENTS_FIELD_NUMBER = 2;
 
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringList documents_;
+    private com.google.protobuf.LazyStringArrayList documents_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
     /**
      *
      *
@@ -463,8 +454,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public Builder clear() {
         super.clear();
         bitField0_ = 0;
-        documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
+        documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -492,7 +482,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.v1.Target.DocumentsTarget buildPartial() {
         com.google.firestore.v1.Target.DocumentsTarget result =
             new com.google.firestore.v1.Target.DocumentsTarget(this);
-        buildPartialRepeatedFields(result);
         if (bitField0_ != 0) {
           buildPartial0(result);
         }
@@ -500,17 +489,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         return result;
       }
 
-      private void buildPartialRepeatedFields(
-          com.google.firestore.v1.Target.DocumentsTarget result) {
-        if (((bitField0_ & 0x00000001) != 0)) {
-          documents_ = documents_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.documents_ = documents_;
-      }
-
       private void buildPartial0(com.google.firestore.v1.Target.DocumentsTarget result) {
         int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          documents_.makeImmutable();
+          result.documents_ = documents_;
+        }
       }
 
       @java.lang.Override
@@ -564,7 +548,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         if (!other.documents_.isEmpty()) {
           if (documents_.isEmpty()) {
             documents_ = other.documents_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ |= 0x00000001;
           } else {
             ensureDocumentsIsMutable();
             documents_.addAll(other.documents_);
@@ -623,14 +607,14 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
       private int bitField0_;
 
-      private com.google.protobuf.LazyStringList documents_ =
-          com.google.protobuf.LazyStringArrayList.EMPTY;
+      private com.google.protobuf.LazyStringArrayList documents_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
 
       private void ensureDocumentsIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!documents_.isModifiable()) {
           documents_ = new com.google.protobuf.LazyStringArrayList(documents_);
-          bitField0_ |= 0x00000001;
         }
+        bitField0_ |= 0x00000001;
       }
       /**
        *
@@ -647,7 +631,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * @return A list containing the documents.
        */
       public com.google.protobuf.ProtocolStringList getDocumentsList() {
-        return documents_.getUnmodifiableView();
+        documents_.makeImmutable();
+        return documents_;
       }
       /**
        *
@@ -724,6 +709,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
         ensureDocumentsIsMutable();
         documents_.set(index, value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -748,6 +734,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
         ensureDocumentsIsMutable();
         documents_.add(value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -769,6 +756,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public Builder addAllDocuments(java.lang.Iterable<java.lang.String> values) {
         ensureDocumentsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(values, documents_);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -787,8 +775,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearDocuments() {
-        documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
+        ;
         onChanged();
         return this;
       }
@@ -814,6 +803,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         checkByteStringIsUtf8(value);
         ensureDocumentsIsMutable();
         documents_.add(value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -957,7 +947,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      */
     com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder();
 
-    public com.google.firestore.v1.Target.QueryTarget.QueryTypeCase getQueryTypeCase();
+    com.google.firestore.v1.Target.QueryTarget.QueryTypeCase getQueryTypeCase();
   }
   /**
    *
@@ -988,11 +978,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       return new QueryTarget();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.FirestoreProto
           .internal_static_google_firestore_v1_Target_QueryTarget_descriptor;
@@ -1009,6 +994,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     private int queryTypeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object queryType_;
 
     public enum QueryTypeCase
@@ -1984,6 +1971,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int targetTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object targetType_;
 
   public enum TargetTypeCase
@@ -2031,6 +2020,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int resumeTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object resumeType_;
 
   public enum ResumeTypeCase
@@ -2186,6 +2177,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2203,6 +2195,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2224,6 +2217,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2240,6 +2234,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2259,6 +2254,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2317,6 +2313,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -2336,6 +2333,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -2357,6 +2355,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The number of documents that last matched the query at the resume token or
    * read time.
+   *
    * This value is only relevant when a `resume_type` is provided. This value
    * being present and greater than zero signals that the client wants
    * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3375,6 +3374,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3391,6 +3391,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3410,6 +3411,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3433,6 +3435,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3459,6 +3462,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3475,6 +3479,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3501,6 +3506,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3524,6 +3530,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3544,6 +3551,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3576,6 +3584,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3602,6 +3611,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3615,6 +3625,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3636,6 +3647,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3784,6 +3796,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3802,6 +3815,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3826,6 +3840,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3852,6 +3867,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3875,6 +3891,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3904,6 +3921,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3927,6 +3945,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3945,6 +3964,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.
@@ -3967,6 +3987,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The number of documents that last matched the query at the resume token or
      * read time.
+     *
      * This value is only relevant when a `resume_type` is provided. This value
      * being present and greater than zero signals that the client wants
      * `ExistenceFilter.unchanged_names` to be included in the response.

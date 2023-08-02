@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,6 +172,7 @@ public interface ListenResponseOrBuilder
    * <pre>
    * A filter to apply to the set of documents previously returned for the
    * given target.
+   *
    * Returned when documents may have been removed from the given target, but
    * the exact documents are unknown.
    * </pre>
@@ -187,6 +188,7 @@ public interface ListenResponseOrBuilder
    * <pre>
    * A filter to apply to the set of documents previously returned for the
    * given target.
+   *
    * Returned when documents may have been removed from the given target, but
    * the exact documents are unknown.
    * </pre>
@@ -202,6 +204,7 @@ public interface ListenResponseOrBuilder
    * <pre>
    * A filter to apply to the set of documents previously returned for the
    * given target.
+   *
    * Returned when documents may have been removed from the given target, but
    * the exact documents are unknown.
    * </pre>
@@ -210,5 +213,5 @@ public interface ListenResponseOrBuilder
    */
   com.google.firestore.v1.ExistenceFilterOrBuilder getFilterOrBuilder();
 
-  public com.google.firestore.v1.ListenResponse.ResponseTypeCase getResponseTypeCase();
+  com.google.firestore.v1.ListenResponse.ResponseTypeCase getResponseTypeCase();
 }

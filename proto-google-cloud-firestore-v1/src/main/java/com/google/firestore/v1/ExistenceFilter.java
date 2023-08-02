@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     return new ExistenceFilter();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_ExistenceFilter_descriptor;
@@ -91,8 +86,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    * <pre>
    * The total count of documents that match
    * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+   *
    * If different from the count of documents in the client that match, the
    * client must manually determine which documents no longer match the target.
+   *
+   * The client can use the `unchanged_names` bloom filter to assist with
+   * this determination by testing ALL the document names against the filter;
+   * if the document name is NOT in the filter, it means the document no
+   * longer matches the target.
    * </pre>
    *
    * <code>int32 count = 2;</code>
@@ -110,12 +111,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A bloom filter that contains the UTF-8 byte encodings of the resource names
-   * of the documents that match
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
    * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-   * that have NOT changed since the query results indicated by the resume token
-   * or timestamp given in `Target.resume_type`.
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
    * This bloom filter may be omitted at the server's discretion, such as if it
    * is deemed that the client will not make use of it or if it is too
    * computationally expensive to calculate or transmit. Clients must gracefully
@@ -136,12 +136,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A bloom filter that contains the UTF-8 byte encodings of the resource names
-   * of the documents that match
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
    * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-   * that have NOT changed since the query results indicated by the resume token
-   * or timestamp given in `Target.resume_type`.
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
    * This bloom filter may be omitted at the server's discretion, such as if it
    * is deemed that the client will not make use of it or if it is too
    * computationally expensive to calculate or transmit. Clients must gracefully
@@ -164,12 +163,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * A bloom filter that contains the UTF-8 byte encodings of the resource names
-   * of the documents that match
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
    * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-   * that have NOT changed since the query results indicated by the resume token
-   * or timestamp given in `Target.resume_type`.
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
    * This bloom filter may be omitted at the server's discretion, such as if it
    * is deemed that the client will not make use of it or if it is too
    * computationally expensive to calculate or transmit. Clients must gracefully
@@ -639,8 +637,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -657,8 +661,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -679,8 +689,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -704,12 +720,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -729,12 +744,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -760,12 +774,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -793,12 +806,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -823,12 +835,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -859,12 +870,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -889,12 +899,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -914,12 +923,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully
@@ -943,12 +951,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * A bloom filter that contains the UTF-8 byte encodings of the resource names
-     * of the documents that match
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
-     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`
-     * that have NOT changed since the query results indicated by the resume token
-     * or timestamp given in `Target.resume_type`.
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
      * This bloom filter may be omitted at the server's discretion, such as if it
      * is deemed that the client will not make use of it or if it is too
      * computationally expensive to calculate or transmit. Clients must gracefully

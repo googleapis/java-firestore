@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPage
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -130,6 +132,15 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
+  }
+
+  public OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: createDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: createDatabaseCallable()");
   }
 
   public UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable() {

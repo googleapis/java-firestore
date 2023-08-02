@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,10 @@ public interface ListCollectionIdsRequestOrBuilder
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -112,7 +115,10 @@ public interface ListCollectionIdsRequestOrBuilder
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -125,13 +131,16 @@ public interface ListCollectionIdsRequestOrBuilder
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
-  public com.google.firestore.v1.ListCollectionIdsRequest.ConsistencySelectorCase
+  com.google.firestore.v1.ListCollectionIdsRequest.ConsistencySelectorCase
       getConsistencySelectorCase();
 }

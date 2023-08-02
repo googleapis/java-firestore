@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ public interface ListDocumentsRequestOrBuilder
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
    * For example:
    * `projects/my-project/databases/my-database/documents` or
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
@@ -47,6 +48,7 @@ public interface ListDocumentsRequestOrBuilder
    * Required. The parent resource name. In the format:
    * `projects/{project_id}/databases/{database_id}/documents` or
    * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
    * For example:
    * `projects/my-project/databases/my-database/documents` or
    * `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
@@ -63,7 +65,9 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The collection ID, relative to `parent`, to list.
+   *
    * For example: `chatrooms` or `messages`.
+   *
    * This is optional, and when not provided, Firestore will list documents
    * from all collections under the provided `parent`.
    * </pre>
@@ -78,7 +82,9 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The collection ID, relative to `parent`, to list.
+   *
    * For example: `chatrooms` or `messages`.
+   *
    * This is optional, and when not provided, Firestore will list documents
    * from all collections under the provided `parent`.
    * </pre>
@@ -94,6 +100,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The maximum number of documents to return in a single response.
+   *
    * Firestore may return fewer than this value.
    * </pre>
    *
@@ -108,6 +115,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. A page token, received from a previous `ListDocuments` response.
+   *
    * Provide this to retrieve the subsequent page. When paginating, all other
    * parameters (with the exception of `page_size`) must match the values set
    * in the request that generated the page token.
@@ -123,6 +131,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. A page token, received from a previous `ListDocuments` response.
+   *
    * Provide this to retrieve the subsequent page. When paginating, all other
    * parameters (with the exception of `page_size`) must match the values set
    * in the request that generated the page token.
@@ -139,7 +148,9 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The optional ordering of the documents to return.
+   *
    * For example: `priority desc, __name__ desc`.
+   *
    * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
    * used in Firestore queries but in a string representation. When absent,
    * documents are ordered based on `__name__ ASC`.
@@ -155,7 +166,9 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The optional ordering of the documents to return.
+   *
    * For example: `priority desc, __name__ desc`.
+   *
    * This mirrors the [`ORDER BY`][google.firestore.v1.StructuredQuery.order_by]
    * used in Firestore queries but in a string representation. When absent,
    * documents are ordered based on `__name__ ASC`.
@@ -172,6 +185,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -187,6 +201,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -202,6 +217,7 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Optional. The fields to return. If not set, returns all fields.
+   *
    * If a document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -241,7 +257,10 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Perform the read at the provided time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -254,7 +273,10 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Perform the read at the provided time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -267,7 +289,10 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * Perform the read at the provided time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 10;</code>
@@ -279,11 +304,13 @@ public interface ListDocumentsRequestOrBuilder
    *
    * <pre>
    * If the list should show missing documents.
+   *
    * A document is missing if it does not exist, but there are sub-documents
    * nested underneath it. When true, such missing documents will be returned
    * with a key but will not have fields,
    * [`create_time`][google.firestore.v1.Document.create_time], or
    * [`update_time`][google.firestore.v1.Document.update_time] set.
+   *
    * Requests with `show_missing` may not specify `where` or `order_by`.
    * </pre>
    *
@@ -293,6 +320,5 @@ public interface ListDocumentsRequestOrBuilder
    */
   boolean getShowMissing();
 
-  public com.google.firestore.v1.ListDocumentsRequest.ConsistencySelectorCase
-      getConsistencySelectorCase();
+  com.google.firestore.v1.ListDocumentsRequest.ConsistencySelectorCase getConsistencySelectorCase();
 }

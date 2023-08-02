@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     return new TransactionOptions();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.CommonProto
         .internal_static_google_firestore_v1_TransactionOptions_descriptor;
@@ -88,6 +83,9 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Options for a transaction that can be used to read and write documents.
+   *
+   * Firestore does not allow 3rd party auth requests to create read-write.
+   * transactions.
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.TransactionOptions.ReadWrite}
@@ -110,11 +108,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new ReadWrite();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -316,6 +309,9 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Options for a transaction that can be used to read and write documents.
+     *
+     * Firestore does not allow 3rd party auth requests to create read-write.
+     * transactions.
      * </pre>
      *
      * Protobuf type {@code google.firestore.v1.TransactionOptions.ReadWrite}
@@ -625,7 +621,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -638,7 +637,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -651,14 +653,17 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
      */
     com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
-    public com.google.firestore.v1.TransactionOptions.ReadOnly.ConsistencySelectorCase
+    com.google.firestore.v1.TransactionOptions.ReadOnly.ConsistencySelectorCase
         getConsistencySelectorCase();
   }
   /**
@@ -688,11 +693,6 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
       return new ReadOnly();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.CommonProto
           .internal_static_google_firestore_v1_TransactionOptions_ReadOnly_descriptor;
@@ -709,6 +709,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
     }
 
     private int consistencySelectorCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object consistencySelector_;
 
     public enum ConsistencySelectorCase
@@ -758,7 +760,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -774,7 +779,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -793,7 +801,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads documents at the given time.
-     * This may not be older than 60 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one
+     * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+     * whole minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1208,7 +1219,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1224,7 +1238,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1250,7 +1267,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1273,7 +1293,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1293,7 +1316,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1326,7 +1352,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1352,7 +1381,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1365,7 +1397,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1386,7 +1421,10 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
        *
        * <pre>
        * Reads documents at the given time.
-       * This may not be older than 60 seconds.
+       *
+       * This must be a microsecond precision timestamp within the past one
+       * hour, or if Point-in-Time Recovery is enabled, can additionally be a
+       * whole minute timestamp within the past 7 days.
        * </pre>
        *
        * <code>.google.protobuf.Timestamp read_time = 2;</code>
@@ -1480,6 +1518,8 @@ public final class TransactionOptions extends com.google.protobuf.GeneratedMessa
   }
 
   private int modeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object mode_;
 
   public enum ModeCase

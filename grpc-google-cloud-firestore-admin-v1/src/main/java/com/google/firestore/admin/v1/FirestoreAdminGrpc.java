@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -443,6 +443,49 @@ public final class FirestoreAdminGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+      getCreateDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CreateDatabase",
+      requestType = com.google.firestore.admin.v1.CreateDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+      getCreateDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+        getCreateDatabaseMethod;
+    if ((getCreateDatabaseMethod = FirestoreAdminGrpc.getCreateDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getCreateDatabaseMethod = FirestoreAdminGrpc.getCreateDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getCreateDatabaseMethod =
+              getCreateDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.CreateDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CreateDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.CreateDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("CreateDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getCreateDatabaseMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetDatabaseRequest, com.google.firestore.admin.v1.Database>
       getGetDatabaseMethod;
 
@@ -649,9 +692,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     default void createIndex(
@@ -722,12 +767,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -745,10 +793,12 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` .
      * </pre>
      */
     default void listFields(
@@ -797,6 +847,20 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
           getImportDocumentsMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Create a database.
+     * </pre>
+     */
+    default void createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getCreateDatabaseMethod(), responseObserver);
     }
 
     /**
@@ -919,9 +983,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public void createIndex(
@@ -1000,12 +1066,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1025,10 +1094,12 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` .
      * </pre>
      */
     public void listFields(
@@ -1080,6 +1151,22 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getImportDocumentsMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public void createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getCreateDatabaseMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -1176,9 +1263,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public com.google.longrunning.Operation createIndex(
@@ -1245,12 +1334,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1267,10 +1359,12 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` .
      * </pre>
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
@@ -1316,6 +1410,19 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.ImportDocumentsRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateDatabaseMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1400,9 +1507,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
@@ -1470,12 +1579,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1492,10 +1604,12 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` .
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<
@@ -1542,6 +1656,19 @@ public final class FirestoreAdminGrpc {
         importDocuments(com.google.firestore.admin.v1.ImportDocumentsRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getImportDocumentsMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        createDatabase(com.google.firestore.admin.v1.CreateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getCreateDatabaseMethod(), getCallOptions()), request);
     }
 
     /**
@@ -1595,9 +1722,10 @@ public final class FirestoreAdminGrpc {
   private static final int METHODID_LIST_FIELDS = 6;
   private static final int METHODID_EXPORT_DOCUMENTS = 7;
   private static final int METHODID_IMPORT_DOCUMENTS = 8;
-  private static final int METHODID_GET_DATABASE = 9;
-  private static final int METHODID_LIST_DATABASES = 10;
-  private static final int METHODID_UPDATE_DATABASE = 11;
+  private static final int METHODID_CREATE_DATABASE = 9;
+  private static final int METHODID_GET_DATABASE = 10;
+  private static final int METHODID_LIST_DATABASES = 11;
+  private static final int METHODID_UPDATE_DATABASE = 12;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1661,6 +1789,11 @@ public final class FirestoreAdminGrpc {
         case METHODID_IMPORT_DOCUMENTS:
           serviceImpl.importDocuments(
               (com.google.firestore.admin.v1.ImportDocumentsRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_CREATE_DATABASE:
+          serviceImpl.createDatabase(
+              (com.google.firestore.admin.v1.CreateDatabaseRequest) request,
               (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
           break;
         case METHODID_GET_DATABASE:
@@ -1755,6 +1888,12 @@ public final class FirestoreAdminGrpc {
                     com.google.firestore.admin.v1.ImportDocumentsRequest,
                     com.google.longrunning.Operation>(service, METHODID_IMPORT_DOCUMENTS)))
         .addMethod(
+            getCreateDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.CreateDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_CREATE_DATABASE)))
+        .addMethod(
             getGetDatabaseMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
                 new MethodHandlers<
@@ -1833,6 +1972,7 @@ public final class FirestoreAdminGrpc {
                       .addMethod(getListFieldsMethod())
                       .addMethod(getExportDocumentsMethod())
                       .addMethod(getImportDocumentsMethod())
+                      .addMethod(getCreateDatabaseMethod())
                       .addMethod(getGetDatabaseMethod())
                       .addMethod(getListDatabasesMethod())
                       .addMethod(getUpdateDatabaseMethod())

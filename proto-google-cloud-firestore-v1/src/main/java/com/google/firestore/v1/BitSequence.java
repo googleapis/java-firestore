@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,18 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A sequence of bits, encoded in a byte array.
+ *
  * Each byte in the `bitmap` byte array stores 8 bits of the sequence. The only
  * exception is the last byte, which may store 8 _or fewer_ bits. The `padding`
  * defines the number of bits of the last byte to be ignored as "padding". The
  * values of these "padding" bits are unspecified and must be ignored.
+ *
  * To retrieve the first bit, bit 0, calculate: `(bitmap[0] &amp; 0x01) != 0`.
  * To retrieve the second bit, bit 1, calculate: `(bitmap[0] &amp; 0x02) != 0`.
  * To retrieve the third bit, bit 2, calculate: `(bitmap[0] &amp; 0x04) != 0`.
  * To retrieve the fourth bit, bit 3, calculate: `(bitmap[0] &amp; 0x08) != 0`.
  * To retrieve bit n, calculate: `(bitmap[n / 8] &amp; (0x01 &lt;&lt; (n % 8))) != 0`.
+ *
  * The "size" of a `BitSequence` (the number of bits it contains) is calculated
  * by this formula: `(bitmap.length * 8) - padding`.
  * </pre>
@@ -56,11 +59,6 @@ public final class BitSequence extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BitSequence();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -288,15 +286,18 @@ public final class BitSequence extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A sequence of bits, encoded in a byte array.
+   *
    * Each byte in the `bitmap` byte array stores 8 bits of the sequence. The only
    * exception is the last byte, which may store 8 _or fewer_ bits. The `padding`
    * defines the number of bits of the last byte to be ignored as "padding". The
    * values of these "padding" bits are unspecified and must be ignored.
+   *
    * To retrieve the first bit, bit 0, calculate: `(bitmap[0] &amp; 0x01) != 0`.
    * To retrieve the second bit, bit 1, calculate: `(bitmap[0] &amp; 0x02) != 0`.
    * To retrieve the third bit, bit 2, calculate: `(bitmap[0] &amp; 0x04) != 0`.
    * To retrieve the fourth bit, bit 3, calculate: `(bitmap[0] &amp; 0x08) != 0`.
    * To retrieve bit n, calculate: `(bitmap[n / 8] &amp; (0x01 &lt;&lt; (n % 8))) != 0`.
+   *
    * The "size" of a `BitSequence` (the number of bits it contains) is calculated
    * by this formula: `(bitmap.length * 8) - padding`.
    * </pre>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * Optional sub-set of the fields to return.
+   *
    * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
    * documents returned from a query. When not set, assumes that the caller
    * wants all fields returned.
@@ -43,6 +44,7 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * Optional sub-set of the fields to return.
+   *
    * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
    * documents returned from a query. When not set, assumes that the caller
    * wants all fields returned.
@@ -58,6 +60,7 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * Optional sub-set of the fields to return.
+   *
    * This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
    * documents returned from a query. When not set, assumes that the caller
    * wants all fields returned.
@@ -159,16 +162,20 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The order to apply to the query results.
+   *
    * Firestore allows callers to provide a full ordering, a partial ordering, or
    * no ordering at all. In all cases, Firestore guarantees a stable ordering
    * through the following rules:
+   *
    *  * The `order_by` is required to reference all fields used with an
    *    inequality filter.
    *  * All fields that are required to be in the `order_by` but are not already
    *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
+   *
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
+   *
    *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
    *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
    *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
@@ -184,16 +191,20 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The order to apply to the query results.
+   *
    * Firestore allows callers to provide a full ordering, a partial ordering, or
    * no ordering at all. In all cases, Firestore guarantees a stable ordering
    * through the following rules:
+   *
    *  * The `order_by` is required to reference all fields used with an
    *    inequality filter.
    *  * All fields that are required to be in the `order_by` but are not already
    *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
+   *
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
+   *
    *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
    *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
    *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
@@ -209,16 +220,20 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The order to apply to the query results.
+   *
    * Firestore allows callers to provide a full ordering, a partial ordering, or
    * no ordering at all. In all cases, Firestore guarantees a stable ordering
    * through the following rules:
+   *
    *  * The `order_by` is required to reference all fields used with an
    *    inequality filter.
    *  * All fields that are required to be in the `order_by` but are not already
    *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
+   *
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
+   *
    *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
    *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
    *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
@@ -234,16 +249,20 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The order to apply to the query results.
+   *
    * Firestore allows callers to provide a full ordering, a partial ordering, or
    * no ordering at all. In all cases, Firestore guarantees a stable ordering
    * through the following rules:
+   *
    *  * The `order_by` is required to reference all fields used with an
    *    inequality filter.
    *  * All fields that are required to be in the `order_by` but are not already
    *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
+   *
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
+   *
    *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
    *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
    *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
@@ -260,16 +279,20 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The order to apply to the query results.
+   *
    * Firestore allows callers to provide a full ordering, a partial ordering, or
    * no ordering at all. In all cases, Firestore guarantees a stable ordering
    * through the following rules:
+   *
    *  * The `order_by` is required to reference all fields used with an
    *    inequality filter.
    *  * All fields that are required to be in the `order_by` but are not already
    *    present are appended in lexicographical ordering of the field name.
    *  * If an order on `__name__` is not specified, it is appended by default.
+   *
    * Fields are appended with the same sort direction as the last order
    * specified, or 'ASCENDING' if no order was specified. For example:
+   *
    *  * `ORDER BY a` becomes `ORDER BY a ASC, __name__ ASC`
    *  * `ORDER BY a DESC` becomes `ORDER BY a DESC, __name__ DESC`
    *  * `WHERE a &gt; 1` becomes `WHERE a &gt; 1 ORDER BY a ASC, __name__ ASC`
@@ -286,25 +309,34 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to start the query at.
+   *
    * The ordering of the result set is based on the `ORDER BY` clause of the
    * original query.
+   *
    * ```
    * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
    * ```
+   *
    * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   *
    * Cursors can reference either the full ordering or a prefix of the location,
    * though it cannot reference more fields than what are in the provided
    * `ORDER BY`.
+   *
    * Continuing off the example above, attaching the following start cursors
    * will have varying impact:
+   *
    * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
    *    b &gt; 2 AND __name__ &gt; /k/123`.
    * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   *
    * Unlike `OFFSET` which requires scanning over the first N results to skip,
    * a start cursor allows the query to begin at a logical position. This
    * position is not required to match an actual result, it will scan forward
    * from this position to find the next document.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -319,25 +351,34 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to start the query at.
+   *
    * The ordering of the result set is based on the `ORDER BY` clause of the
    * original query.
+   *
    * ```
    * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
    * ```
+   *
    * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   *
    * Cursors can reference either the full ordering or a prefix of the location,
    * though it cannot reference more fields than what are in the provided
    * `ORDER BY`.
+   *
    * Continuing off the example above, attaching the following start cursors
    * will have varying impact:
+   *
    * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
    *    b &gt; 2 AND __name__ &gt; /k/123`.
    * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   *
    * Unlike `OFFSET` which requires scanning over the first N results to skip,
    * a start cursor allows the query to begin at a logical position. This
    * position is not required to match an actual result, it will scan forward
    * from this position to find the next document.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -352,25 +393,34 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to start the query at.
+   *
    * The ordering of the result set is based on the `ORDER BY` clause of the
    * original query.
+   *
    * ```
    * SELECT * FROM k WHERE a = 1 AND b &gt; 2 ORDER BY b ASC, __name__ ASC;
    * ```
+   *
    * This query's results are ordered by `(b ASC, __name__ ASC)`.
+   *
    * Cursors can reference either the full ordering or a prefix of the location,
    * though it cannot reference more fields than what are in the provided
    * `ORDER BY`.
+   *
    * Continuing off the example above, attaching the following start cursors
    * will have varying impact:
+   *
    * - `START BEFORE (2, /k/123)`: start the query right before `a = 1 AND
    *    b &gt; 2 AND __name__ &gt; /k/123`.
    * - `START AFTER (10)`: start the query right after `a = 1 AND b &gt; 10`.
+   *
    * Unlike `OFFSET` which requires scanning over the first N results to skip,
    * a start cursor allows the query to begin at a logical position. This
    * position is not required to match an actual result, it will scan forward
    * from this position to find the next document.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -384,9 +434,12 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to end the query at.
+   *
    * This is similar to `START_AT` but with it controlling the end position
    * rather than the start position.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -401,9 +454,12 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to end the query at.
+   *
    * This is similar to `START_AT` but with it controlling the end position
    * rather than the start position.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -418,9 +474,12 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * A potential prefix of a position in the result set to end the query at.
+   *
    * This is similar to `START_AT` but with it controlling the end position
    * rather than the start position.
+   *
    * Requires:
+   *
    * * The number of values cannot be greater than the number of fields
    *   specified in the `ORDER BY` clause.
    * </pre>
@@ -434,9 +493,12 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The number of documents to skip before returning the first result.
+   *
    * This applies after the constraints specified by the `WHERE`, `START AT`, &amp;
    * `END AT` but before the `LIMIT` clause.
+   *
    * Requires:
+   *
    * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
@@ -451,8 +513,11 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The maximum number of results to return.
+   *
    * Applies after all other constraints.
+   *
    * Requires:
+   *
    * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
@@ -466,8 +531,11 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The maximum number of results to return.
+   *
    * Applies after all other constraints.
+   *
    * Requires:
+   *
    * * The value must be greater than or equal to zero if specified.
    * </pre>
    *
@@ -481,8 +549,11 @@ public interface StructuredQueryOrBuilder
    *
    * <pre>
    * The maximum number of results to return.
+   *
    * Applies after all other constraints.
+   *
    * Requires:
+   *
    * * The value must be greater than or equal to zero if specified.
    * </pre>
    *

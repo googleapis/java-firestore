@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -149,6 +151,9 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<ImportDocumentsRequest, Operation> importDocumentsSettings;
   private final OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationSettings;
+  private final UnaryCallSettings<CreateDatabaseRequest, Operation> createDatabaseSettings;
+  private final OperationCallSettings<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationSettings;
   private final UnaryCallSettings<GetDatabaseRequest, Database> getDatabaseSettings;
   private final UnaryCallSettings<ListDatabasesRequest, ListDatabasesResponse>
       listDatabasesSettings;
@@ -334,6 +339,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return importDocumentsOperationSettings;
   }
 
+  /** Returns the object with the settings used for calls to createDatabase. */
+  public UnaryCallSettings<CreateDatabaseRequest, Operation> createDatabaseSettings() {
+    return createDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to createDatabase. */
+  public OperationCallSettings<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationSettings() {
+    return createDatabaseOperationSettings;
+  }
+
   /** Returns the object with the settings used for calls to getDatabase. */
   public UnaryCallSettings<GetDatabaseRequest, Database> getDatabaseSettings() {
     return getDatabaseSettings;
@@ -474,6 +490,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     exportDocumentsOperationSettings = settingsBuilder.exportDocumentsOperationSettings().build();
     importDocumentsSettings = settingsBuilder.importDocumentsSettings().build();
     importDocumentsOperationSettings = settingsBuilder.importDocumentsOperationSettings().build();
+    createDatabaseSettings = settingsBuilder.createDatabaseSettings().build();
+    createDatabaseOperationSettings = settingsBuilder.createDatabaseOperationSettings().build();
     getDatabaseSettings = settingsBuilder.getDatabaseSettings().build();
     listDatabasesSettings = settingsBuilder.listDatabasesSettings().build();
     updateDatabaseSettings = settingsBuilder.updateDatabaseSettings().build();
@@ -508,6 +526,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private final OperationCallSettings.Builder<
             ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings;
+    private final UnaryCallSettings.Builder<CreateDatabaseRequest, Operation>
+        createDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+        createDatabaseOperationSettings;
     private final UnaryCallSettings.Builder<GetDatabaseRequest, Database> getDatabaseSettings;
     private final UnaryCallSettings.Builder<ListDatabasesRequest, ListDatabasesResponse>
         listDatabasesSettings;
@@ -584,6 +607,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       exportDocumentsOperationSettings = OperationCallSettings.newBuilder();
       importDocumentsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       importDocumentsOperationSettings = OperationCallSettings.newBuilder();
+      createDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      createDatabaseOperationSettings = OperationCallSettings.newBuilder();
       getDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       listDatabasesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
@@ -600,6 +625,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings,
+              createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
               updateDatabaseSettings);
@@ -622,6 +648,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       exportDocumentsOperationSettings = settings.exportDocumentsOperationSettings.toBuilder();
       importDocumentsSettings = settings.importDocumentsSettings.toBuilder();
       importDocumentsOperationSettings = settings.importDocumentsOperationSettings.toBuilder();
+      createDatabaseSettings = settings.createDatabaseSettings.toBuilder();
+      createDatabaseOperationSettings = settings.createDatabaseOperationSettings.toBuilder();
       getDatabaseSettings = settings.getDatabaseSettings.toBuilder();
       listDatabasesSettings = settings.listDatabasesSettings.toBuilder();
       updateDatabaseSettings = settings.updateDatabaseSettings.toBuilder();
@@ -638,6 +666,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings,
+              createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
               updateDatabaseSettings);
@@ -714,6 +743,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .importDocumentsSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
+
+      builder
+          .createDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
 
       builder
           .getDatabaseSettings()
@@ -812,6 +846,30 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               ProtoOperationTransformers.ResponseTransformer.create(Empty.class))
           .setMetadataTransformer(
               ProtoOperationTransformers.MetadataTransformer.create(ImportDocumentsMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeout(Duration.ZERO)
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
+          .createDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<CreateDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(CreateDatabaseMetadata.class))
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
@@ -945,6 +1003,19 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return importDocumentsOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to createDatabase. */
+    public UnaryCallSettings.Builder<CreateDatabaseRequest, Operation> createDatabaseSettings() {
+      return createDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to createDatabase. */
+    @BetaApi(
+        "The surface for use by generated code is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+        createDatabaseOperationSettings() {
+      return createDatabaseOperationSettings;
     }
 
     /** Returns the builder for the settings used for calls to getDatabase. */
