@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     return new GetDocumentRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_GetDocumentRequest_descriptor;
@@ -69,6 +64,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -175,6 +172,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -192,6 +190,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -209,6 +208,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -261,7 +261,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -277,7 +280,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -296,7 +302,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -899,6 +908,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -915,6 +925,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -935,6 +946,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -959,6 +971,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -980,6 +993,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1007,6 +1021,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1028,6 +1043,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1044,6 +1060,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1062,6 +1079,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1167,7 +1185,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1183,7 +1204,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1209,7 +1233,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1232,7 +1259,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1252,7 +1282,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1285,7 +1318,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1311,7 +1347,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1324,7 +1363,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1345,7 +1387,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>

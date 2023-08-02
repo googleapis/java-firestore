@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -41,6 +42,7 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -54,6 +56,7 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -66,6 +69,7 @@ public interface RunAggregationQueryResponseOrBuilder
    *
    * <pre>
    * The transaction that was started as part of this request.
+   *
    * Only present on the first response when the request requested to start
    * a new transaction.
    * </pre>
@@ -84,6 +88,7 @@ public interface RunAggregationQueryResponseOrBuilder
    * monotonically increasing; in this case, the previous AggregationResult in
    * the result stream are guaranteed not to have changed between their
    * `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `result` will be sent, and this represents the time at which the query
    * was run.
@@ -102,6 +107,7 @@ public interface RunAggregationQueryResponseOrBuilder
    * monotonically increasing; in this case, the previous AggregationResult in
    * the result stream are guaranteed not to have changed between their
    * `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `result` will be sent, and this represents the time at which the query
    * was run.
@@ -120,6 +126,7 @@ public interface RunAggregationQueryResponseOrBuilder
    * monotonically increasing; in this case, the previous AggregationResult in
    * the result stream are guaranteed not to have changed between their
    * `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `result` will be sent, and this represents the time at which the query
    * was run.

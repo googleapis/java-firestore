@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,11 @@ package com.google.firestore.v1;
  * <pre>
  * A [Document][google.firestore.v1.Document] has been removed from the view of
  * the targets.
+ *
  * Sent if the document is no longer relevant to a target and is out of view.
  * Can be sent instead of a DocumentDelete or a DocumentChange if the server
  * can not send the new value of the document.
+ *
  * Multiple [DocumentRemove][google.firestore.v1.DocumentRemove] messages may be
  * returned for the same logical write or delete, if multiple targets are
  * affected.
@@ -53,11 +55,6 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new DocumentRemove();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -186,6 +183,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *
@@ -202,6 +200,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *
@@ -218,6 +217,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *
@@ -433,9 +433,11 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A [Document][google.firestore.v1.Document] has been removed from the view of
    * the targets.
+   *
    * Sent if the document is no longer relevant to a target and is out of view.
    * Can be sent instead of a DocumentDelete or a DocumentChange if the server
    * can not send the new value of the document.
+   *
    * Multiple [DocumentRemove][google.firestore.v1.DocumentRemove] messages may be
    * returned for the same logical write or delete, if multiple targets are
    * affected.
@@ -921,6 +923,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -936,6 +939,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -955,6 +959,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -978,6 +983,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -998,6 +1004,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -1024,6 +1031,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -1044,6 +1052,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -1059,6 +1068,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *
@@ -1076,6 +1086,7 @@ public final class DocumentRemove extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the remove was observed.
+     *
      * Greater or equal to the `commit_time` of the change/delete/remove.
      * </pre>
      *

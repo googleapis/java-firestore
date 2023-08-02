@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
+ * The request for
+ * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ListIndexesRequest}
@@ -47,11 +48,6 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ListIndexesRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -204,8 +200,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * A page token, returned from a previous call to
-   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-   * page of results.
+   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+   * that may be used to get the next page of results.
    * </pre>
    *
    * <code>string page_token = 4;</code>
@@ -229,8 +225,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * A page token, returned from a previous call to
-   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-   * page of results.
+   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+   * that may be used to get the next page of results.
    * </pre>
    *
    * <code>string page_token = 4;</code>
@@ -440,7 +436,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
+   * The request for
+   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ListIndexesRequest}
@@ -948,8 +945,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * A page token, returned from a previous call to
-     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-     * page of results.
+     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+     * that may be used to get the next page of results.
      * </pre>
      *
      * <code>string page_token = 4;</code>
@@ -972,8 +969,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * A page token, returned from a previous call to
-     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-     * page of results.
+     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+     * that may be used to get the next page of results.
      * </pre>
      *
      * <code>string page_token = 4;</code>
@@ -996,8 +993,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * A page token, returned from a previous call to
-     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-     * page of results.
+     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+     * that may be used to get the next page of results.
      * </pre>
      *
      * <code>string page_token = 4;</code>
@@ -1019,8 +1016,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * A page token, returned from a previous call to
-     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-     * page of results.
+     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+     * that may be used to get the next page of results.
      * </pre>
      *
      * <code>string page_token = 4;</code>
@@ -1038,8 +1035,8 @@ public final class ListIndexesRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * A page token, returned from a previous call to
-     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes], that may be used to get the next
-     * page of results.
+     * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes],
+     * that may be used to get the next page of results.
      * </pre>
      *
      * <code>string page_token = 4;</code>

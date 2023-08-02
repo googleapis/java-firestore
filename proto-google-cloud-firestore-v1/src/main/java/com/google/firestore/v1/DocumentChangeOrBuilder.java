@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface DocumentChangeOrBuilder
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
@@ -41,6 +42,7 @@ public interface DocumentChangeOrBuilder
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
@@ -54,6 +56,7 @@ public interface DocumentChangeOrBuilder
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *

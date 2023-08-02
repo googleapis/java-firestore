@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ public interface WriteResponseOrBuilder
    * <pre>
    * A token that represents the position of this response in the stream.
    * This can be used by a client to resume the stream at this point.
+   *
    * This field is always set.
    * </pre>
    *
@@ -70,6 +71,7 @@ public interface WriteResponseOrBuilder
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -82,6 +84,7 @@ public interface WriteResponseOrBuilder
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -94,6 +97,7 @@ public interface WriteResponseOrBuilder
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -106,6 +110,7 @@ public interface WriteResponseOrBuilder
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -119,6 +124,7 @@ public interface WriteResponseOrBuilder
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>

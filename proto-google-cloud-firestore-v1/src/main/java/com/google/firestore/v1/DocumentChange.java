@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A [Document][google.firestore.v1.Document] has changed.
+ *
  * May be the result of multiple [writes][google.firestore.v1.Write], including
  * deletes, that ultimately resulted in a new value for the
  * [Document][google.firestore.v1.Document].
+ *
  * Multiple [DocumentChange][google.firestore.v1.DocumentChange] messages may be
  * returned for the same logical change, if multiple targets are affected.
  * </pre>
@@ -53,11 +55,6 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
     return new DocumentChange();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_DocumentChange_descriptor;
@@ -80,6 +77,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
@@ -96,6 +94,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
@@ -112,6 +111,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The new state of the [Document][google.firestore.v1.Document].
+   *
    * If `mask` is set, contains only fields that were updated or added.
    * </pre>
    *
@@ -444,9 +444,11 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A [Document][google.firestore.v1.Document] has changed.
+   *
    * May be the result of multiple [writes][google.firestore.v1.Write], including
    * deletes, that ultimately resulted in a new value for the
    * [Document][google.firestore.v1.Document].
+   *
    * Multiple [DocumentChange][google.firestore.v1.DocumentChange] messages may be
    * returned for the same logical change, if multiple targets are affected.
    * </pre>
@@ -711,6 +713,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -726,6 +729,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -747,6 +751,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -770,6 +775,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -790,6 +796,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -816,6 +823,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -836,6 +844,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -851,6 +860,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *
@@ -870,6 +880,7 @@ public final class DocumentChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The new state of the [Document][google.firestore.v1.Document].
+     *
      * If `mask` is set, contains only fields that were updated or added.
      * </pre>
      *

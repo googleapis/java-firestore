@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.common.collect.Lists;
 import com.google.firestore.admin.v1.CollectionGroupName;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
@@ -830,6 +831,116 @@ public class FirestoreAdminClientTest {
     try {
       String name = "name3373707";
       client.importDocumentsAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void createDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setLocationId("locationId1541836720")
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("createDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    ProjectName parent = ProjectName.of("[PROJECT]");
+    Database database = Database.newBuilder().build();
+    String databaseId = "databaseId1688905718";
+
+    Database actualResponse = client.createDatabaseAsync(parent, database, databaseId).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateDatabaseRequest actualRequest = ((CreateDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertEquals(database, actualRequest.getDatabase());
+    Assert.assertEquals(databaseId, actualRequest.getDatabaseId());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      ProjectName parent = ProjectName.of("[PROJECT]");
+      Database database = Database.newBuilder().build();
+      String databaseId = "databaseId1688905718";
+      client.createDatabaseAsync(parent, database, databaseId).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void createDatabaseTest2() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setLocationId("locationId1541836720")
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("createDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    String parent = "parent-995424086";
+    Database database = Database.newBuilder().build();
+    String databaseId = "databaseId1688905718";
+
+    Database actualResponse = client.createDatabaseAsync(parent, database, databaseId).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateDatabaseRequest actualRequest = ((CreateDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertEquals(database, actualRequest.getDatabase());
+    Assert.assertEquals(databaseId, actualRequest.getDatabaseId());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createDatabaseExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      Database database = Database.newBuilder().build();
+      String databaseId = "databaseId1688905718";
+      client.createDatabaseAsync(parent, database, databaseId).get();
       Assert.fail("No exception raised");
     } catch (ExecutionException e) {
       Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());

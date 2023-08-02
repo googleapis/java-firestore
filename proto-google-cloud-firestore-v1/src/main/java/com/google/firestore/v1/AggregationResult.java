@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package com.google.firestore.v1;
  *
  * <pre>
  * The result of a single bucket from a Firestore aggregation query.
+ *
  * The keys of `aggregate_fields` are the same for all results in an aggregation
  * query, unlike document queries which can have different fields present for
  * each result.
@@ -46,11 +47,6 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new AggregationResult();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -115,6 +111,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -141,6 +138,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -158,6 +156,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -183,6 +182,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -377,6 +377,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
    *
    * <pre>
    * The result of a single bucket from a Firestore aggregation query.
+   *
    * The keys of `aggregate_fields` are the same for all results in an aggregation
    * query, unlike document queries which can have different fields present for
    * each result.
@@ -617,6 +618,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -643,6 +645,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -660,6 +663,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -685,6 +689,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -716,6 +721,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -743,6 +749,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map
@@ -767,6 +774,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+     *
      * The key is the
      * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
      * assigned to the aggregation function on input and the size of this map

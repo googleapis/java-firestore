@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,6 +93,7 @@ public interface DocumentRemoveOrBuilder
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *
@@ -106,6 +107,7 @@ public interface DocumentRemoveOrBuilder
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *
@@ -119,6 +121,7 @@ public interface DocumentRemoveOrBuilder
    *
    * <pre>
    * The read timestamp at which the remove was observed.
+   *
    * Greater or equal to the `commit_time` of the change/delete/remove.
    * </pre>
    *

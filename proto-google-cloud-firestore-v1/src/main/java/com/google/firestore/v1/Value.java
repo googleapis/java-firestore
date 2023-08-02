@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     return new Value();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.DocumentProto
         .internal_static_google_firestore_v1_Value_descriptor;
@@ -65,6 +60,8 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int valueTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object valueType_;
 
   public enum ValueTypeCase
@@ -301,6 +298,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -318,6 +316,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -338,6 +337,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -358,6 +358,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -375,6 +376,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -405,6 +407,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -437,6 +440,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A bytes value.
+   *
    * Must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes are considered by queries.
    * </pre>
@@ -454,6 +458,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A bytes value.
+   *
    * Must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes are considered by queries.
    * </pre>
@@ -600,6 +605,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -617,6 +623,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -637,6 +644,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -1701,6 +1709,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1718,6 +1727,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1745,6 +1755,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1769,6 +1780,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1790,6 +1802,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1823,6 +1836,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1850,6 +1864,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1864,6 +1879,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1886,6 +1902,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A timestamp value.
+     *
      * Precise only to microseconds. When stored, any additional precision is
      * rounded down.
      * </pre>
@@ -1919,6 +1936,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -1937,6 +1955,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -1968,6 +1987,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -1999,6 +2019,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -2023,6 +2044,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -2045,6 +2067,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A string value.
+     *
      * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes of the UTF-8 representation are considered by
      * queries.
@@ -2071,6 +2094,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A bytes value.
+     *
      * Must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes are considered by queries.
      * </pre>
@@ -2087,6 +2111,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A bytes value.
+     *
      * Must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes are considered by queries.
      * </pre>
@@ -2106,6 +2131,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A bytes value.
+     *
      * Must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes are considered by queries.
      * </pre>
@@ -2129,6 +2155,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A bytes value.
+     *
      * Must not exceed 1 MiB - 89 bytes.
      * Only the first 1,500 bytes are considered by queries.
      * </pre>
@@ -2496,6 +2523,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2513,6 +2541,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2540,6 +2569,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2564,6 +2594,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2585,6 +2616,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2619,6 +2651,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2646,6 +2679,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2660,6 +2694,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>
@@ -2682,6 +2717,7 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An array value.
+     *
      * Cannot directly contain another array value, though can contain an
      * map which contains another array.
      * </pre>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
+ * The request for
+ * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsRequest}
@@ -39,7 +40,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
 
   private ExportDocumentsRequest() {
     name_ = "";
-    collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     outputUriPrefix_ = "";
   }
 
@@ -47,11 +48,6 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ExportDocumentsRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -129,7 +125,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
   public static final int COLLECTION_IDS_FIELD_NUMBER = 2;
 
   @SuppressWarnings("serial")
-  private com.google.protobuf.LazyStringList collectionIds_;
+  private com.google.protobuf.LazyStringArrayList collectionIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -442,7 +439,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
+   * The request for
+   * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsRequest}
@@ -478,8 +476,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       super.clear();
       bitField0_ = 0;
       name_ = "";
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000002);
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       outputUriPrefix_ = "";
       return this;
     }
@@ -508,7 +505,6 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
     public com.google.firestore.admin.v1.ExportDocumentsRequest buildPartial() {
       com.google.firestore.admin.v1.ExportDocumentsRequest result =
           new com.google.firestore.admin.v1.ExportDocumentsRequest(this);
-      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -516,19 +512,14 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       return result;
     }
 
-    private void buildPartialRepeatedFields(
-        com.google.firestore.admin.v1.ExportDocumentsRequest result) {
-      if (((bitField0_ & 0x00000002) != 0)) {
-        collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000002);
-      }
-      result.collectionIds_ = collectionIds_;
-    }
-
     private void buildPartial0(com.google.firestore.admin.v1.ExportDocumentsRequest result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        collectionIds_.makeImmutable();
+        result.collectionIds_ = collectionIds_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.outputUriPrefix_ = outputUriPrefix_;
@@ -589,7 +580,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ |= 0x00000002;
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -786,14 +777,14 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       return this;
     }
 
-    private com.google.protobuf.LazyStringList collectionIds_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList collectionIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
+      if (!collectionIds_.isModifiable()) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000002;
       }
+      bitField0_ |= 0x00000002;
     }
     /**
      *
@@ -807,7 +798,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
-      return collectionIds_.getUnmodifiableView();
+      collectionIds_.makeImmutable();
+      return collectionIds_;
     }
     /**
      *
@@ -872,6 +864,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.set(index, value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -893,6 +886,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -911,6 +905,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, collectionIds_);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -926,8 +921,9 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       bitField0_ = (bitField0_ & ~0x00000002);
+      ;
       onChanged();
       return this;
     }
@@ -950,6 +946,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
       checkByteStringIsUtf8(value);
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
     return new Write();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto.internal_static_google_firestore_v1_Write_descriptor;
   }
@@ -66,6 +61,8 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int operationCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object operation_;
 
   public enum OperationCase
@@ -297,6 +294,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -320,6 +318,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -345,6 +344,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -374,6 +374,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -392,6 +393,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -410,6 +412,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -427,6 +430,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -444,6 +448,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -465,6 +470,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -481,6 +487,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -499,6 +506,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -1652,6 +1660,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1674,6 +1683,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1702,6 +1712,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1732,6 +1743,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1759,6 +1771,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1792,6 +1805,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1819,6 +1833,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1841,6 +1856,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1867,6 +1883,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields to update in this write.
+     *
      * This field can be set only when the operation is `update`.
      * If the mask is not set for an `update` and the document exists, any
      * existing data will be overwritten.
@@ -1919,6 +1936,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -1940,6 +1958,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -1960,6 +1979,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -1980,6 +2000,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2007,6 +2028,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2032,6 +2054,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2059,6 +2082,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2086,6 +2110,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2110,6 +2135,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2135,6 +2161,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2160,6 +2187,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2183,6 +2211,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2206,6 +2235,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2223,6 +2253,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2244,6 +2275,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2266,6 +2298,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2285,6 +2318,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2304,6 +2338,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The transforms to perform after update.
+     *
      * This field can be set only when the operation is `update`. If present, this
      * write is equivalent to performing `update` and `transform` to the same
      * document atomically and in order.
@@ -2348,6 +2383,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2363,6 +2399,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2384,6 +2421,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2407,6 +2445,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2428,6 +2467,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2454,6 +2494,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2474,6 +2515,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2489,6 +2531,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *
@@ -2508,6 +2551,7 @@ public final class Write extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * An optional precondition on the document.
+     *
      * The write will fail if this is set and not met by the target document.
      * </pre>
      *

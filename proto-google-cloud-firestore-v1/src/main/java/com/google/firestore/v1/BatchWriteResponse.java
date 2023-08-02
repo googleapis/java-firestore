@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,6 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
     return new BatchWriteResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_BatchWriteResponse_descriptor;
@@ -78,6 +73,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -93,6 +89,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -109,6 +106,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -124,6 +122,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -139,6 +138,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The result of applying the writes.
+   *
    * This i-th write result corresponds to the i-th write in the
    * request.
    * </pre>
@@ -159,6 +159,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The status of applying the writes.
+   *
    * This i-th write status corresponds to the i-th write in the
    * request.
    * </pre>
@@ -174,6 +175,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The status of applying the writes.
+   *
    * This i-th write status corresponds to the i-th write in the
    * request.
    * </pre>
@@ -189,6 +191,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The status of applying the writes.
+   *
    * This i-th write status corresponds to the i-th write in the
    * request.
    * </pre>
@@ -204,6 +207,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The status of applying the writes.
+   *
    * This i-th write status corresponds to the i-th write in the
    * request.
    * </pre>
@@ -219,6 +223,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The status of applying the writes.
+   *
    * This i-th write status corresponds to the i-th write in the
    * request.
    * </pre>
@@ -706,6 +711,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -724,6 +730,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -742,6 +749,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -760,6 +768,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -784,6 +793,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -806,6 +816,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -830,6 +841,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -854,6 +866,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -875,6 +888,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -897,6 +911,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -919,6 +934,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -940,6 +956,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -961,6 +978,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -975,6 +993,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -993,6 +1012,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1012,6 +1032,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1027,6 +1048,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1042,6 +1064,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The result of applying the writes.
+     *
      * This i-th write result corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1088,6 +1111,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1106,6 +1130,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1124,6 +1149,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1142,6 +1168,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1166,6 +1193,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1187,6 +1215,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1211,6 +1240,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1235,6 +1265,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1256,6 +1287,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1277,6 +1309,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1298,6 +1331,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1319,6 +1353,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1340,6 +1375,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1354,6 +1390,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1372,6 +1409,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1390,6 +1428,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1404,6 +1443,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>
@@ -1418,6 +1458,7 @@ public final class BatchWriteResponse extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The status of applying the writes.
+     *
      * This i-th write status corresponds to the i-th write in the
      * request.
      * </pre>

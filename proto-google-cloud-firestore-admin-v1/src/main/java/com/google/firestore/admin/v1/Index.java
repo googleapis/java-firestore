@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Index();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -717,7 +712,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig();
 
-    public com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
+    com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
   }
   /**
    *
@@ -748,11 +743,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new IndexField();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -1063,6 +1053,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     private int valueModeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object valueMode_;
 
     public enum ValueModeCase
@@ -2199,6 +2191,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
    * query time, and that has the same collection id.
+   *
    * Indexes with a collection group query scope specified allow queries against
    * all collections descended from a specific document, specified at query
    * time, and that have the same collection id as this index.
@@ -2219,6 +2212,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
    * query time, and that has the same collection id.
+   *
    * Indexes with a collection group query scope specified allow queries against
    * all collections descended from a specific document, specified at query
    * time, and that have the same collection id as this index.
@@ -2279,12 +2273,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
+   *
    * For composite indexes, this requires a minimum of 2 and a maximum of 100
    * fields. The last field entry is always for the field path `__name__`. If,
    * on creation, `__name__` was not specified as the last field, it will be
    * added automatically with the same direction as that of the last field
    * defined. If the final field in a composite index is not directional, the
    * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2300,12 +2296,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
+   *
    * For composite indexes, this requires a minimum of 2 and a maximum of 100
    * fields. The last field entry is always for the field path `__name__`. If,
    * on creation, `__name__` was not specified as the last field, it will be
    * added automatically with the same direction as that of the last field
    * defined. If the final field in a composite index is not directional, the
    * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2322,12 +2320,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
+   *
    * For composite indexes, this requires a minimum of 2 and a maximum of 100
    * fields. The last field entry is always for the field path `__name__`. If,
    * on creation, `__name__` was not specified as the last field, it will be
    * added automatically with the same direction as that of the last field
    * defined. If the final field in a composite index is not directional, the
    * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2343,12 +2343,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
+   *
    * For composite indexes, this requires a minimum of 2 and a maximum of 100
    * fields. The last field entry is always for the field path `__name__`. If,
    * on creation, `__name__` was not specified as the last field, it will be
    * added automatically with the same direction as that of the last field
    * defined. If the final field in a composite index is not directional, the
    * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2364,12 +2366,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
+   *
    * For composite indexes, this requires a minimum of 2 and a maximum of 100
    * fields. The last field entry is always for the field path `__name__`. If,
    * on creation, `__name__` was not specified as the last field, it will be
    * added automatically with the same direction as that of the last field
    * defined. If the final field in a composite index is not directional, the
    * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -3023,6 +3027,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -3043,6 +3048,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -3066,6 +3072,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -3088,6 +3095,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -3114,6 +3122,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -3241,12 +3250,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3265,12 +3276,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3289,12 +3302,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3313,12 +3328,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3343,12 +3360,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3371,12 +3390,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3401,12 +3422,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3431,12 +3454,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3459,12 +3484,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3487,12 +3514,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3515,12 +3544,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3542,12 +3573,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3569,12 +3602,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3589,12 +3624,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3613,12 +3650,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3638,12 +3677,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3659,12 +3700,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3680,12 +3723,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
+     *
      * For composite indexes, this requires a minimum of 2 and a maximum of 100
      * fields. The last field entry is always for the field path `__name__`. If,
      * on creation, `__name__` was not specified as the last field, it will be
      * added automatically with the same direction as that of the last field
      * defined. If the final field in a composite index is not directional, the
      * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
