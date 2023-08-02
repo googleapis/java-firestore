@@ -3,7 +3,7 @@
 <differences>
   <difference>
     <differenceType>7012</differenceType>
-    <className>com/google/firestore/admin/v1/*Grpc</className>
-    <field>METHOD_*</field>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc$AsyncService</className>
+    <method>public void createDatabase(com.google.firestore.admin.v1.CreateDatabaseRequest, io.grpc.stub.StreamObserver)</method>
   </difference>
 </differences>
