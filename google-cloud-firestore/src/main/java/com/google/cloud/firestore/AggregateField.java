@@ -20,32 +20,62 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/** Represents an aggregation that can be performed by Firestore. */
 public abstract class AggregateField {
+  /**
+   * Create a {@link CountAggregateField} object that can be used to compute the count of documents
+   * in the result set of a query.
+   */
   @Nonnull
   public static CountAggregateField count() {
     return new CountAggregateField();
   }
 
+  /**
+   * Create a {@link SumAggregateField} object that can be used to compute the sum of a specified
+   * field over a range of documents in the result set of a query.
+   *
+   * @param field Specifies the field to sum across the result set.
+   */
   @Nonnull
   public static SumAggregateField sum(@Nonnull String field) {
     return new SumAggregateField(FieldPath.fromDotSeparatedString(field));
   }
 
+  /**
+   * Create a {@link SumAggregateField} object that can be used to compute the sum of a specified
+   * field over a range of documents in the result set of a query.
+   *
+   * @param fieldPath Specifies the field to sum across the result set.
+   */
   @Nonnull
   public static SumAggregateField sum(@Nonnull FieldPath fieldPath) {
     return new SumAggregateField(fieldPath);
   }
 
+  /**
+   * Create an {@link AverageAggregateField} object that can be used to compute the average of a
+   * specified field over a range of documents in the result set of a query.
+   *
+   * @param field Specifies the field to average across the result set.
+   */
   @Nonnull
   public static AverageAggregateField average(@Nonnull String field) {
     return new AverageAggregateField(FieldPath.fromDotSeparatedString(field));
   }
 
+  /**
+   * Create an {@link AverageAggregateField} object that can be used to compute the average of a
+   * specified field over a range of documents in the result set of a query.
+   *
+   * @param fieldPath Specifies the field to average across the result set.
+   */
   @Nonnull
   public static AverageAggregateField average(@Nonnull FieldPath fieldPath) {
     return new AverageAggregateField(fieldPath);
   }
 
+  /** The field over which the aggregation is performed. */
   @Nullable FieldPath fieldPath;
 
   /** Returns the alias used internally for this aggregate field. */
@@ -91,6 +121,7 @@ public abstract class AggregateField {
     return Objects.hash(getOperator(), getFieldPath());
   }
 
+  /** Represents a "sum" aggregation that can be performed by Firestore. */
   public static class SumAggregateField extends AggregateField {
     private SumAggregateField(@Nonnull FieldPath field) {
       fieldPath = field;
@@ -103,6 +134,7 @@ public abstract class AggregateField {
     }
   }
 
+  /** Represents an "average" aggregation that can be performed by Firestore. */
   public static class AverageAggregateField extends AggregateField {
     private AverageAggregateField(@Nonnull FieldPath field) {
       fieldPath = field;
@@ -115,6 +147,7 @@ public abstract class AggregateField {
     }
   }
 
+  /** Represents a "count" aggregation that can be performed by Firestore. */
   public static class CountAggregateField extends AggregateField {
     private CountAggregateField() {}
 

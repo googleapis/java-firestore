@@ -13,36 +13,14 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.*;
-import com.google.common.base.Preconditions;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class ITQueryAggregationsTest {
-  private Firestore firestore;
-
-  @Before
-  public void setUpFirestore() {
-    // TODO: stop using emulator for these tests once prod is ready.
-    firestore = FirestoreOptions.newBuilder().setHost("localhost:8080").build().getService();
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-  }
-
-  @After
-  public void tearDownFirestore() throws Exception {
-    if (firestore != null) {
-      firestore.close();
-      firestore = null;
-    }
-  }
-
+public class ITQueryAggregationsTest extends ITBaseTest {
   private CollectionReference testCollection() {
     String collectionPath = "java-" + autoId();
     return firestore.collection(collectionPath);
@@ -487,9 +465,6 @@ public class ITQueryAggregationsTest {
 
   @Test
   public void performsAggregationsOnNestedMapValues() throws Exception {
-    assumeTrue(
-        "Skip this test when running against prod because it requires composite index creation.",
-        isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(
             "a",
@@ -511,18 +486,11 @@ public class ITQueryAggregationsTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
     AggregateQuerySnapshot snapshot =
         collection
-            .aggregate(
-                sum("metadata.pages"),
-                average("metadata.pages"),
-                average("metadata.rating.critic"),
-                sum("metadata.rating.user"),
-                AggregateField.count())
+            .aggregate(sum("metadata.pages"), average("metadata.pages"), AggregateField.count())
             .get()
             .get();
     assertThat(snapshot.get(sum("metadata.pages"))).isEqualTo(150);
     assertThat(snapshot.get(average("metadata.pages"))).isEqualTo(75);
-    assertThat(snapshot.get(average("metadata.rating.critic"))).isEqualTo(3);
-    assertThat(snapshot.get(sum("metadata.rating.user"))).isEqualTo(9);
     assertThat(snapshot.get(AggregateField.count())).isEqualTo(2);
   }
 
