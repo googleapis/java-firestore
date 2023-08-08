@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.14.0](https://github.com/googleapis/java-firestore/compare/v3.13.8...v3.14.0) (2023-08-08)
+
+
+### Features
+
+* Publish proto definitions for SUM/AVG in Firestore ([#1304](https://github.com/googleapis/java-firestore/issues/1304)) ([b025d11](https://github.com/googleapis/java-firestore/commit/b025d118433b3930b5186621ef852b4219c2274d))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.14.0 ([#1385](https://github.com/googleapis/java-firestore/issues/1385)) ([d215982](https://github.com/googleapis/java-firestore/commit/d215982730aae862bb0b113887b3ebfc1413d602))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.24 ([#1388](https://github.com/googleapis/java-firestore/issues/1388)) ([24be02b](https://github.com/googleapis/java-firestore/commit/24be02b562780a76847608ca18e8ab2aa4d4514e))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.24 ([#1389](https://github.com/googleapis/java-firestore/issues/1389)) ([34e30e0](https://github.com/googleapis/java-firestore/commit/34e30e053e891f2dadcb09e4dc918dca2709c23d))
+
 ## [3.13.8](https://github.com/googleapis/java-firestore/compare/v3.13.7...v3.13.8) (2023-07-28)
 
 
