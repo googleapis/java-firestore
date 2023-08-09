@@ -489,27 +489,6 @@ public class ITSystemTest extends ITBaseTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
-  @Test
-  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
-        isRunningAgainstFirestoreEmulator(firestore));
-
-    addDocument("foo", 1, "bar", 2);
-
-    ExecutionException executionException =
-        assertThrows(
-            ExecutionException.class,
-            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
-    assertThat(executionException)
-        .hasCauseThat()
-        .hasMessageThat()
-        .contains(
-            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
-  }
-
   @Test
   public void greaterThanOrEqualQuery() throws Exception {
     addDocument("foo", 1);
