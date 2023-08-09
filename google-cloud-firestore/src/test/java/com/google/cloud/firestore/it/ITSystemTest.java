@@ -25,7 +25,6 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
-import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
@@ -37,7 +36,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -491,23 +489,13 @@ public class ITSystemTest extends ITBaseTest {
 
   /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
-        isRunningAgainstFirestoreEmulator(firestore));
-
+  public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
     addDocument("foo", 1, "bar", 2);
 
-    ExecutionException executionException =
-        assertThrows(
-            ExecutionException.class,
-            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
-    assertThat(executionException)
-        .hasCauseThat()
-        .hasMessageThat()
-        .contains(
-            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
+    QuerySnapshot querySnapshot =
+        randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("bar", 2).get().get();
+    assertEquals(1, querySnapshot.size());
+    assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
   @Test

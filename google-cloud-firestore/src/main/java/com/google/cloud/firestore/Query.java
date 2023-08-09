@@ -63,10 +63,13 @@ import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
@@ -282,7 +285,8 @@ public class Query {
       return operator.equals(GREATER_THAN)
           || operator.equals(GREATER_THAN_OR_EQUAL)
           || operator.equals(LESS_THAN)
-          || operator.equals(LESS_THAN_OR_EQUAL);
+          || operator.equals(LESS_THAN_OR_EQUAL)
+          || operator.equals(NOT_EQUAL);
     }
 
     @Nullable
@@ -459,37 +463,67 @@ public class Query {
     return value == null || value.equals(Double.NaN) || value.equals(Float.NaN);
   }
 
-  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
-  private ImmutableList<FieldOrder> createImplicitOrderBy() {
-    List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
+  /** Returns the sorted set of inequality filter fields used in this query. */
+  private SortedSet<FieldPath> getInequalityFilterFields() {
 
-    // If no explicit ordering is specified, use the first inequality to define an implicit order.
-    if (implicitOrders.isEmpty()) {
-      for (FilterInternal filter : options.getFilters()) {
-        FieldReference fieldReference = filter.getFirstInequalityField();
-        if (fieldReference != null) {
-          implicitOrders.add(new FieldOrder(fieldReference, Direction.ASCENDING));
-          break;
+    SortedSet<FieldPath> result = new TreeSet<FieldPath>();
+    for (FilterInternal filter : options.getFilters()) {
+
+      for (FieldFilterInternal subFilter : filter.getFlattenedFilters()) {
+
+        if (subFilter.isInequalityFilter()) {
+
+          result.add(FieldPath.fromDotSeparatedString(subFilter.fieldReference.getFieldPath()));
         }
       }
     }
 
-    boolean hasDocumentId = false;
-    for (FieldOrder fieldOrder : implicitOrders) {
-      if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
-        hasDocumentId = true;
+    return result;
+  }
+
+  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
+  private ImmutableList<FieldOrder> createImplicitOrderBy() {
+
+    System.out.println("calling createImplicitOrderBy");
+    List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
+
+      HashSet<String> fieldsNormalized = new HashSet<String>();
+      for (FieldOrder order : implicitOrders) {
+        fieldsNormalized.add(order.fieldReference.getFieldPath());
       }
-    }
+      System.out.println("implicitOrders" + implicitOrders.size());
 
-    if (!hasDocumentId) {
-      // Add implicit sorting by name, using the last specified direction.
-      Direction lastDirection =
-          implicitOrders.isEmpty()
-              ? Direction.ASCENDING
-              : implicitOrders.get(implicitOrders.size() - 1).direction;
 
-      implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
-    }
+        /** The order of the implicit ordering always matches the last explicit order by. */
+        Direction lastDirection = implicitOrders.isEmpty()
+            ? Direction.ASCENDING
+            : implicitOrders.get(implicitOrders.size() - 1).direction;
+
+
+        /**
+         * Any inequality fields not explicitly ordered should be implicitly ordered in a
+         * lexicographical order. When there are multiple inequality filters on the same field, the
+         * field should be added only once. Note: `SortedSet<FieldReference>` sorts the key field before
+         * other fields. However, we want the key field to be sorted last.
+         */
+        SortedSet<FieldPath> inequalityFields = getInequalityFilterFields();
+        System.out.println("inequalityFields" + inequalityFields.size());
+
+        for (FieldPath field : inequalityFields) {
+          if (!fieldsNormalized.contains(field.toString())
+              && !FieldPath.isDocumentId(field.toString())) {
+            implicitOrders.add(new FieldOrder(field.toProto(), lastDirection));
+          }
+        }
+      
+    
+    System.out.println("contain?"+fieldsNormalized.contains(FieldPath.documentId().toString()));
+
+      if (!fieldsNormalized.contains(FieldPath.documentId().toString())) {
+        implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
+      }
+    
+    System.out.println("inequalityFields end"+implicitOrders.size());
 
     return ImmutableList.<FieldOrder>builder().addAll(implicitOrders).build();
   }
@@ -1457,6 +1491,7 @@ public class Query {
   public RunQueryRequest toProto() {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+
     return request.build();
   }
 
@@ -1581,6 +1616,7 @@ public class Query {
       @Nullable final Timestamp readTime) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+    System.out.println("========" + request);
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
