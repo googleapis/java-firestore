@@ -25,6 +25,11 @@ public abstract class AggregateField {
   /**
    * Create a {@link CountAggregateField} object that can be used to compute the count of documents
    * in the result set of a query.
+   *
+   * <p>The result of a count operation will always be a 64-bit integer value.
+   *
+   * @return The `CountAggregateField` object that can be used to compute the count of documents in
+   *     the result set of a query.
    */
   @Nonnull
   public static CountAggregateField count() {
@@ -35,7 +40,20 @@ public abstract class AggregateField {
    * Create a {@link SumAggregateField} object that can be used to compute the sum of a specified
    * field over a range of documents in the result set of a query.
    *
+   * <p>The result of a sum operation will always be a 64-bit integer value, a double, or NaN.
+   *
+   * <ul>
+   *   <li>Summing over zero documents or fields will result in 0L.
+   *   <li>Summing over NaN will result in a double value representing NaN.
+   *   <li>A sum that overflows the maximum representable 64-bit integer value will result in a
+   *       double return value. This may result in lost precision of the result.
+   *   <li>A sum that overflows the maximum representable double value will result in a double
+   *       return value representing infinity.
+   * </ul>
+   *
    * @param field Specifies the field to sum across the result set.
+   * @return The `SumAggregateField` object that can be used to compute the sum of a specified field
+   *     over a range of documents in the result set of a query.
    */
   @Nonnull
   public static SumAggregateField sum(@Nonnull String field) {
@@ -46,7 +64,20 @@ public abstract class AggregateField {
    * Create a {@link SumAggregateField} object that can be used to compute the sum of a specified
    * field over a range of documents in the result set of a query.
    *
+   * <p>The result of a sum operation will always be a 64-bit integer value, a double, or NaN.
+   *
+   * <ul>
+   *   <li>Summing over zero documents or fields will result in 0L.
+   *   <li>Summing over NaN will result in a double value representing NaN.
+   *   <li>A sum that overflows the maximum representable 64-bit integer value will result in a
+   *       double return value. This may result in lost precision of the result.
+   *   <li>A sum that overflows the maximum representable double value will result in a double
+   *       return value representing infinity.
+   * </ul>
+   *
    * @param fieldPath Specifies the field to sum across the result set.
+   * @return The `SumAggregateField` object that can be used to compute the sum of a specified field
+   *     over a range of documents in the result set of a query.
    */
   @Nonnull
   public static SumAggregateField sum(@Nonnull FieldPath fieldPath) {
@@ -57,7 +88,16 @@ public abstract class AggregateField {
    * Create an {@link AverageAggregateField} object that can be used to compute the average of a
    * specified field over a range of documents in the result set of a query.
    *
+   * <p>The result of an average operation will always be a 64-bit integer value, a double, or NaN.
+   *
+   * <ul>
+   *   <li>Averaging over zero documents or fields will result in a double value representing NaN.
+   *   <li>Averaging over NaN will result in a double value representing NaN.
+   * </ul>
+   *
    * @param field Specifies the field to average across the result set.
+   * @return The `AverageAggregateField` object that can be used to compute the average of a
+   *     specified field over a range of documents in the result set of a query.
    */
   @Nonnull
   public static AverageAggregateField average(@Nonnull String field) {
@@ -68,7 +108,16 @@ public abstract class AggregateField {
    * Create an {@link AverageAggregateField} object that can be used to compute the average of a
    * specified field over a range of documents in the result set of a query.
    *
+   * <p>The result of an average operation will always be a 64-bit integer value, a double, or NaN.
+   *
+   * <ul>
+   *   <li>Averaging over zero documents or fields will result in a double value representing NaN.
+   *   <li>Averaging over NaN will result in a double value representing NaN.
+   * </ul>
+   *
    * @param fieldPath Specifies the field to average across the result set.
+   * @return The `AverageAggregateField` object that can be used to compute the average of a
+   *     specified field over a range of documents in the result set of a query.
    */
   @Nonnull
   public static AverageAggregateField average(@Nonnull FieldPath fieldPath) {
