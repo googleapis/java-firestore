@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -487,9 +489,14 @@ public class ITSystemTest extends ITBaseTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
   public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
+    // TODO(MIEQ): Enable this test against production when possible.
+    assumeTrue(
+        "Skip this test if running against production because order-by-equality is "
+            + "not supported yet.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     addDocument("foo", 1, "bar", 2);
 
     QuerySnapshot querySnapshot =
