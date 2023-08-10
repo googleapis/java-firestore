@@ -12,7 +12,11 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.AggregateField;
+import com.google.cloud.firestore.AggregateQuery;
+import com.google.cloud.firestore.AggregateQuerySnapshot;
+import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.CollectionReference;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.Test;
