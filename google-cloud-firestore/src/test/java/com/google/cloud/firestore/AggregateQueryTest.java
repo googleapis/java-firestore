@@ -16,7 +16,9 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.AggregateField.*;
+import static com.google.cloud.firestore.AggregateField.average;
+import static com.google.cloud.firestore.AggregateField.count;
+import static com.google.cloud.firestore.AggregateField.sum;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;

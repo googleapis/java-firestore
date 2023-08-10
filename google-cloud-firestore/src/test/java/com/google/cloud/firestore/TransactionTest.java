@@ -16,7 +16,26 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.*;
+import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
+import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
+import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
+import static com.google.cloud.firestore.LocalFirestoreHelper.begin;
+import static com.google.cloud.firestore.LocalFirestoreHelper.beginResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
+import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQuery;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQueryResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.create;
+import static com.google.cloud.firestore.LocalFirestoreHelper.delete;
+import static com.google.cloud.firestore.LocalFirestoreHelper.get;
+import static com.google.cloud.firestore.LocalFirestoreHelper.getAll;
+import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.query;
+import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
+import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.set;
+import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
