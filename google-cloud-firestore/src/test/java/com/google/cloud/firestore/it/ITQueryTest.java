@@ -807,10 +807,9 @@ public class ITQueryTest extends ITBaseTest {
                 "doc5",
                 map("key", "b", "sort", 0, "v", 1)));
 
-    DocumentSnapshot docRef = collection.document("doc4").get().get();
-
+    DocumentSnapshot docSnap = collection.document("doc4").get().get();
     Query query =
-        collection.whereNotEqualTo("key", "a").whereGreaterThan("sort", 1).startAt(docRef);
+        collection.whereNotEqualTo("key", "a").whereGreaterThan("sort", 1).startAt(docSnap);
     // Implicitly ordered by: 'key' asc, 'sort' asc, __name__ asc
     checkQuerySnapshotContainsDocuments(query, "doc4", "doc3");
   }
