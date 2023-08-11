@@ -88,7 +88,7 @@ public abstract class AggregateField {
    * Create an {@link AverageAggregateField} object that can be used to compute the average of a
    * specified field over a range of documents in the result set of a query.
    *
-   * <p>The result of an average operation will always be a 64-bit integer value, a double, or NaN.
+   * <p>The result of an average operation will always be a double or NaN.
    *
    * <ul>
    *   <li>Averaging over zero documents or fields will result in a double value representing NaN.
@@ -108,7 +108,7 @@ public abstract class AggregateField {
    * Create an {@link AverageAggregateField} object that can be used to compute the average of a
    * specified field over a range of documents in the result set of a query.
    *
-   * <p>The result of an average operation will always be a 64-bit integer value, a double, or NaN.
+   * <p>The result of an average operation will always be a double or NaN.
    *
    * <ul>
    *   <li>Averaging over zero documents or fields will result in a double value representing NaN.
