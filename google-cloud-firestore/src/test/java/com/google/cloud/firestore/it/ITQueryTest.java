@@ -412,7 +412,6 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereGreaterThan("v", 2);
-
     checkQuerySnapshotContainsDocuments(query1, "doc3");
 
     // Duplicate inequality fields
@@ -486,7 +485,6 @@ public class ITQueryTest extends ITBaseTest {
                 "doc6", map("key", "f", "sort", 1, "v", 1)));
 
     Query query1 = collection.whereNotEqualTo("key", "a").whereLessThanOrEqualTo("sort", 2);
-
     checkQuerySnapshotContainsDocuments(query1, "doc5", "doc6");
 
     Query query2 =
@@ -494,7 +492,6 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereLessThanOrEqualTo("v", 1);
-
     checkQuerySnapshotContainsDocuments(query2, "doc6");
   }
 
@@ -529,7 +526,6 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereGreaterThanOrEqualTo("sort", 1)
             .whereArrayContains("v", 0);
-
     checkQuerySnapshotContainsDocuments(query1, "doc2");
 
     Query query2 =
@@ -537,7 +533,6 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereGreaterThanOrEqualTo("sort", 1)
             .whereArrayContainsAny("v", asList(0, 1));
-
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc4");
   }
 
@@ -577,7 +572,6 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("metadata.createdAt", 100)
             .whereNotEqualTo("name", "room 200")
             .orderBy("name");
-
     checkQuerySnapshotContainsDocuments(query1, "doc4", "doc1");
 
     Query query2 =
@@ -586,8 +580,18 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo(FieldPath.of("field.dot"), 300)
             .whereLessThan("field\\slash", 400)
             .orderBy("name", Direction.DESCENDING);
-
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc3");
+
+    // Cursor will add implicit order by fields in the same order as server does.
+    DocumentSnapshot docSnap = collection.document("doc2").get().get();
+    Query query3 =
+        collection
+            .whereGreaterThanOrEqualTo("field", "field 100")
+            .whereNotEqualTo(FieldPath.of("field.dot"), 300)
+            .whereLessThan("field\\slash", 400)
+            .orderBy("name", Direction.DESCENDING)
+            .startAfter(docSnap);
+    checkQuerySnapshotContainsDocuments(query3, "doc3");
   }
 
   @Test

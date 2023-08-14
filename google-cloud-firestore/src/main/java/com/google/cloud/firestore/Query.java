@@ -465,15 +465,12 @@ public class Query {
 
   /** Returns the sorted set of inequality filter fields used in this query. */
   private SortedSet<FieldPath> getInequalityFilterFields() {
+    SortedSet<FieldPath> result = new TreeSet<>();
 
-    SortedSet<FieldPath> result = new TreeSet<FieldPath>();
     for (FilterInternal filter : options.getFilters()) {
-
       for (FieldFilterInternal subFilter : filter.getFlattenedFilters()) {
-
         if (subFilter.isInequalityFilter()) {
-
-          result.add(FieldPath.fromDotSeparatedString(subFilter.fieldReference.getFieldPath()));
+          result.add(FieldPath.fromServerFormat(subFilter.fieldReference.getFieldPath()));
         }
       }
     }
@@ -486,7 +483,7 @@ public class Query {
     // Any explicit order by fields should be added as is.
     List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
 
-    HashSet<String> fieldsNormalized = new HashSet<String>();
+    HashSet<String> fieldsNormalized = new HashSet<>();
     for (FieldOrder order : implicitOrders) {
       fieldsNormalized.add(order.fieldReference.getFieldPath());
     }
@@ -500,7 +497,7 @@ public class Query {
     /**
      * Any inequality fields not explicitly ordered should be implicitly ordered in a
      * lexicographical order. When there are multiple inequality filters on the same field, the
-     * field should be added only once. Note: `SortedSet<FieldReference>` sorts the key field before
+     * field should be added only once. Note: `SortedSet<FieldPath>` sorts the key field before
      * other fields. However, we want the key field to be sorted last.
      */
     SortedSet<FieldPath> inequalityFields = getInequalityFilterFields();
@@ -528,11 +525,12 @@ public class Query {
       if (FieldPath.isDocumentId(path)) {
         fieldValues.add(documentSnapshot.getReference());
       } else {
-        FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+        FieldPath fieldPath = FieldPath.fromServerFormat(path);
         Preconditions.checkArgument(
             documentSnapshot.contains(fieldPath),
             "Field '%s' is missing in the provided DocumentSnapshot. Please provide a document "
-                + "that contains values for all specified orderBy() and where() constraints.");
+                + "that contains values for all specified orderBy() and where() constraints.",
+            fieldPath);
         fieldValues.add(documentSnapshot.get(fieldPath));
       }
     }
