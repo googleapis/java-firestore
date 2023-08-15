@@ -1111,10 +1111,7 @@ public class Query {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
@@ -1197,10 +1194,7 @@ public class Query {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();
@@ -1238,10 +1232,7 @@ public class Query {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
@@ -1259,10 +1250,7 @@ public class Query {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();

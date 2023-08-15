@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.Filter.*;
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
-import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_SNAPSHOT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.andFilters;
 import static com.google.cloud.firestore.LocalFirestoreHelper.endAt;
@@ -593,23 +592,6 @@ public class QueryTest {
         query(
             order("__name__", StructuredQuery.Direction.ASCENDING),
             startAt(documentBoundary, true));
-
-    assertEquals(queryRequest, runQuery.getValue());
-  }
-
-  @Test
-  public void withDocumentReferenceCursor() {
-    doAnswer(queryResponse())
-        .when(firestoreMock)
-        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
-
-    DocumentReference documentCursor = firestoreMock.document(DOCUMENT_PATH);
-    Value documentValue = reference(DOCUMENT_NAME);
-
-    query.startAt(documentCursor).get();
-
-    RunQueryRequest queryRequest =
-        query(order("__name__", StructuredQuery.Direction.ASCENDING), startAt(documentValue, true));
 
     assertEquals(queryRequest, runQuery.getValue());
   }

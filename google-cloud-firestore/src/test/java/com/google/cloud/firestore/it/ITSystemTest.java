@@ -586,7 +586,9 @@ public class ITSystemTest extends ITBaseTest {
     doc1.set(map("foo", 1)).get();
     doc2.set(map("foo", 1)).get();
 
-    QuerySnapshot querySnapshot = randomColl.startAfter(doc1).get().get();
+    DocumentSnapshot docSnap = doc1.get().get();
+
+    QuerySnapshot querySnapshot = randomColl.startAfter(docSnap).get().get();
     assertEquals(1, querySnapshot.size());
     Iterator<QueryDocumentSnapshot> documents = querySnapshot.iterator();
     assertEquals(doc2, documents.next().getReference());
