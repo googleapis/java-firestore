@@ -85,7 +85,12 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     return empty().append(field);
   }
 
-  /** Creates a {@code FieldPath} from a server-encoded field path. */
+  /**
+   * Creates a {@code FieldPath} from a server-encoded field path.
+   *
+   * <p>Copied from Firebase Android SDK:
+   * https://github.com/firebase/firebase-android-sdk/blob/2d3b2be7d2d00d693eb74986f20a6265c918848f/firebase-firestore/src/main/java/com/google/firebase/firestore/model/FieldPath.java#L47
+   */
   public static FieldPath fromServerFormat(String path) {
     List<String> res = new ArrayList<>();
     StringBuilder builder = new StringBuilder();

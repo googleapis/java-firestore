@@ -481,18 +481,16 @@ public class Query {
   /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
   private ImmutableList<FieldOrder> createImplicitOrderBy() {
     // Any explicit order by fields should be added as is.
-    List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
+    List<FieldOrder> result = new ArrayList<>(options.getFieldOrders());
 
     HashSet<String> fieldsNormalized = new HashSet<>();
-    for (FieldOrder order : implicitOrders) {
+    for (FieldOrder order : result) {
       fieldsNormalized.add(order.fieldReference.getFieldPath());
     }
 
     /** The order of the implicit ordering always matches the last explicit order by. */
     Direction lastDirection =
-        implicitOrders.isEmpty()
-            ? Direction.ASCENDING
-            : implicitOrders.get(implicitOrders.size() - 1).direction;
+        result.isEmpty() ? Direction.ASCENDING : result.get(result.size() - 1).direction;
 
     /**
      * Any inequality fields not explicitly ordered should be implicitly ordered in a
@@ -504,16 +502,16 @@ public class Query {
     for (FieldPath field : inequalityFields) {
       if (!fieldsNormalized.contains(field.toString())
           && !FieldPath.isDocumentId(field.toString())) {
-        implicitOrders.add(new FieldOrder(field.toProto(), lastDirection));
+        result.add(new FieldOrder(field.toProto(), lastDirection));
       }
     }
 
     // Add the document key field to the last if it is not explicitly ordered.
     if (!fieldsNormalized.contains(FieldPath.documentId().toString())) {
-      implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
+      result.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
     }
 
-    return ImmutableList.<FieldOrder>builder().addAll(implicitOrders).build();
+    return ImmutableList.<FieldOrder>builder().addAll(result).build();
   }
 
   private Cursor createCursor(
