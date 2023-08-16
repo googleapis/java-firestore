@@ -370,7 +370,7 @@ public class ITQueryTest extends ITBaseTest {
   public void testOrderByEquality()
       throws ExecutionException, InterruptedException, TimeoutException {
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because order-by-equality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
