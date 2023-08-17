@@ -69,6 +69,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -82,6 +83,8 @@ public class Query {
 
   final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
+
+  private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
 
   /** The direction of a sort. */
   public enum Direction {
@@ -1111,6 +1114,9 @@ public class Query {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1197,6 +1203,9 @@ public class Query {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1238,6 +1247,9 @@ public class Query {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1259,6 +1271,9 @@ public class Query {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1269,6 +1284,14 @@ public class Query {
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
+  }
+
+  private void warningOnSingleDocumentReference(Object... fieldValues) {
+    if (fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference) {
+      LOGGER.warning(
+          "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
+              + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
+    }
   }
 
   /**
