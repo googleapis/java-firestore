@@ -615,6 +615,23 @@ public class QueryTest {
   }
 
   @Test
+  public void withDocumentIdAndDocumentReferenceCursor() {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
+
+    DocumentReference documentCursor = firestoreMock.document(DOCUMENT_PATH);
+    Value documentValue = reference(DOCUMENT_NAME);
+
+    query.orderBy(FieldPath.documentId()).startAt(documentCursor).get();
+
+    RunQueryRequest queryRequest =
+        query(order("__name__", StructuredQuery.Direction.ASCENDING), startAt(documentValue, true));
+
+    assertEquals(queryRequest, runQuery.getValue());
+  }
+
+  @Test
   public void withExtractedDirectionForDocumentSnapshotCursor() {
     doAnswer(queryResponse())
         .when(firestoreMock)
