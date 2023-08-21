@@ -395,7 +395,7 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityOnDifferentFields() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -470,7 +470,7 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityOnSpecialValues() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -499,7 +499,7 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityWithArrayMembership() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -556,7 +556,7 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityWithNestedField() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -576,9 +576,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("name", "room 200")
             .orderBy("name");
     DocumentSnapshot docSnap = collection.document("doc4").get().get();
-    Query query1_sdk_normalized = query1.startAt(docSnap);
+    Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc4", "doc1");
-    checkQuerySnapshotContainsDocuments(query1_sdk_normalized, "doc4", "doc1");
+    checkQuerySnapshotContainsDocuments(query1WithCursor, "doc4", "doc1");
 
     // ordered by: name desc, field desc, field.dot desc, field\\slash desc, __name__ desc
     Query query2 =
@@ -588,16 +588,16 @@ public class ITQueryTest extends ITBaseTest {
             .whereLessThan("field\\slash", 400)
             .orderBy("name", Direction.DESCENDING);
     docSnap = collection.document("doc2").get().get();
-    Query query2_sdk_normalized = query2.startAt(docSnap);
+    Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc3");
-    checkQuerySnapshotContainsDocuments(query2_sdk_normalized, "doc2", "doc3");
+    checkQuerySnapshotContainsDocuments(query2WithCursor, "doc2", "doc3");
   }
 
   @Test
   public void multipleInequalityWithCompositeFilters() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -624,9 +624,9 @@ public class ITQueryTest extends ITBaseTest {
                 Filter.and(Filter.equalTo("key", "b"), Filter.lessThanOrEqualTo("sort", 2)),
                 Filter.and(Filter.notEqualTo("key", "b"), Filter.greaterThan("v", 4))));
     DocumentSnapshot docSnap = collection.document("doc1").get().get();
-    Query query1_sdk_normalized = query1.startAt(docSnap);
+    Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc1", "doc6", "doc5", "doc4");
-    checkQuerySnapshotContainsDocuments(query1_sdk_normalized, "doc1", "doc6", "doc5", "doc4");
+    checkQuerySnapshotContainsDocuments(query1WithCursor, "doc1", "doc6", "doc5", "doc4");
 
     // Ordered by: 'sort' desc, 'key' asc, 'v' asc, __name__ asc
     Query query2 =
@@ -638,9 +638,9 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("sort", Direction.DESCENDING)
             .orderBy("key");
     docSnap = collection.document("doc5").get().get();
-    Query query2_sdk_normalized = query2.startAt(docSnap);
+    Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc5", "doc4", "doc1", "doc6");
-    checkQuerySnapshotContainsDocuments(query2_sdk_normalized, "doc5", "doc4", "doc1", "doc6");
+    checkQuerySnapshotContainsDocuments(query2WithCursor, "doc5", "doc4", "doc1", "doc6");
 
     // Implicitly ordered by: 'key' asc, 'sort' asc, 'v' asc, __name__ asc
     Query query3 =
@@ -654,9 +654,9 @@ public class ITQueryTest extends ITBaseTest {
                         Filter.greaterThan("key", "b"), Filter.greaterThanOrEqualTo("sort", 1)),
                     Filter.and(Filter.lessThan("key", "b"), Filter.greaterThan("v", 0)))));
     docSnap = collection.document("doc1").get().get();
-    Query query3_sdk_normalized = query3.startAt(docSnap);
+    Query query3WithCursor = query3.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query3, "doc1", "doc2");
-    checkQuerySnapshotContainsDocuments(query3_sdk_normalized, "doc1", "doc2");
+    checkQuerySnapshotContainsDocuments(query3WithCursor, "doc1", "doc2");
   }
 
   @Test
@@ -664,7 +664,7 @@ public class ITQueryTest extends ITBaseTest {
       throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -692,9 +692,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereGreaterThan("sort", 1)
             .whereIn("v", asList(1, 2, 3, 4));
-    Query query1_sdk_normalized = query1.startAt(docSnap);
+    Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc2", "doc4", "doc5", "doc3");
-    checkQuerySnapshotContainsDocuments(query1_sdk_normalized, "doc2", "doc4", "doc5", "doc3");
+    checkQuerySnapshotContainsDocuments(query1WithCursor, "doc2", "doc4", "doc5", "doc3");
 
     // Implicitly ordered by: 'key' asc, 'sort' asc, __name__ asc
     Query query2 =
@@ -702,16 +702,16 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("sort", 1)
             .whereNotEqualTo("key", "a")
             .whereIn("v", asList(1, 2, 3, 4));
-    Query query2_sdk_normalized = query2.startAt(docSnap);
+    Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc4", "doc5", "doc3");
-    checkQuerySnapshotContainsDocuments(query2_sdk_normalized, "doc2", "doc4", "doc5", "doc3");
+    checkQuerySnapshotContainsDocuments(query2WithCursor, "doc2", "doc4", "doc5", "doc3");
   }
 
   @Test
   public void multipleInequalityWithMultipleExplicitOrderBy() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -736,9 +736,9 @@ public class ITQueryTest extends ITBaseTest {
     // Ordered by: 'v' asc, 'key' asc, 'sort' asc, __name__ asc
     Query query1 =
         collection.whereGreaterThan("key", "a").whereGreaterThanOrEqualTo("sort", 1).orderBy("v");
-    Query query1_sdk_normalized = query1.startAt(docSnap);
+    Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc2", "doc4", "doc3", "doc5");
-    checkQuerySnapshotContainsDocuments(query1_sdk_normalized, "doc2", "doc4", "doc3", "doc5");
+    checkQuerySnapshotContainsDocuments(query1WithCursor, "doc2", "doc4", "doc3", "doc5");
 
     // Ordered by: 'v asc, 'sort' asc, 'key' asc,  __name__ asc
     Query query2 =
@@ -747,9 +747,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThanOrEqualTo("sort", 1)
             .orderBy("v")
             .orderBy("sort");
-    Query query2_sdk_normalized = query2.startAt(docSnap);
+    Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc5", "doc4", "doc3");
-    checkQuerySnapshotContainsDocuments(query2_sdk_normalized, "doc2", "doc5", "doc4", "doc3");
+    checkQuerySnapshotContainsDocuments(query2WithCursor, "doc2", "doc5", "doc4", "doc3");
 
     docSnap = collection.document("doc5").get().get();
 
@@ -760,9 +760,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("key", "a")
             .whereGreaterThanOrEqualTo("sort", 1)
             .orderBy("v", Direction.DESCENDING);
-    Query query3_sdk_normalized = query3.startAt(docSnap);
+    Query query3WithCursor = query3.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query3, "doc5", "doc3", "doc4", "doc2");
-    checkQuerySnapshotContainsDocuments(query3_sdk_normalized, "doc5", "doc3", "doc4", "doc2");
+    checkQuerySnapshotContainsDocuments(query3WithCursor, "doc5", "doc3", "doc4", "doc2");
 
     // Ordered by: 'v desc, 'sort' asc, 'key' asc,  __name__ asc
     Query query4 =
@@ -771,16 +771,16 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThanOrEqualTo("sort", 1)
             .orderBy("v", Direction.DESCENDING)
             .orderBy("sort");
-    Query query4_sdk_normalized = query4.startAt(docSnap);
+    Query query4WithCursor = query4.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query4, "doc5", "doc4", "doc3", "doc2");
-    checkQuerySnapshotContainsDocuments(query4_sdk_normalized, "doc5", "doc4", "doc3", "doc2");
+    checkQuerySnapshotContainsDocuments(query4WithCursor, "doc5", "doc4", "doc3", "doc2");
   }
 
   @Test
   public void multipleInequalityFieldsInAggregateQuery() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -812,7 +812,7 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityFieldsWithDocumentKey() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
@@ -839,9 +839,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("sort", 1)
             .whereNotEqualTo("key", "a")
             .whereLessThan(FieldPath.documentId(), "doc5");
-    Query query1_sdk_normalized = query1.startAt(docSnap);
+    Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc2", "doc4", "doc3");
-    checkQuerySnapshotContainsDocuments(query1_sdk_normalized, "doc2", "doc4", "doc3");
+    checkQuerySnapshotContainsDocuments(query1WithCursor, "doc2", "doc4", "doc3");
 
     // Changing filters order will not affect implicit order.
     // Implicitly ordered by: 'key' asc, 'sort' asc, __name__ asc
@@ -850,9 +850,9 @@ public class ITQueryTest extends ITBaseTest {
             .whereLessThan(FieldPath.documentId(), "doc5")
             .whereGreaterThan("sort", 1)
             .whereNotEqualTo("key", "a");
-    Query query2_sdk_normalized = query2.startAt(docSnap);
+    Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc4", "doc3");
-    checkQuerySnapshotContainsDocuments(query2_sdk_normalized, "doc2", "doc4", "doc3");
+    checkQuerySnapshotContainsDocuments(query2WithCursor, "doc2", "doc4", "doc3");
 
     // Ordered by: 'sort' desc, 'key' desc, __name__ desc
     Query query3 =
@@ -861,8 +861,8 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("sort", 1)
             .whereNotEqualTo("key", "a")
             .orderBy("sort", Direction.DESCENDING);
-    Query query3_sdk_normalized = query3.startAt(docSnap);
+    Query query3WithCursor = query3.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query3, "doc2", "doc3", "doc4");
-    checkQuerySnapshotContainsDocuments(query3_sdk_normalized, "doc2", "doc3", "doc4");
+    checkQuerySnapshotContainsDocuments(query3WithCursor, "doc2", "doc3", "doc4");
   }
 }
