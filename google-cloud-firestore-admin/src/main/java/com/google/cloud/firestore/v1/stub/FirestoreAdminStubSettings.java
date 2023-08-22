@@ -394,7 +394,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
   /** Returns the default service endpoint. */
   public static String getDefaultEndpoint() {
-    return "firestore.test-endpoint:443";
+    return "firestore.googleapis.com:443";
   }
 
   /** Returns the default mTLS service endpoint. */
@@ -678,7 +678,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultTransportChannelProvider());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
+      builder.setEndpoint("test-endpoint");
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -691,7 +691,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultHttpJsonTransportProviderBuilder().build());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultHttpJsonApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
+      builder.setEndpoint("test-endpoint");
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
