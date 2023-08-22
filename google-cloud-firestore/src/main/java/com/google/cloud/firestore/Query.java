@@ -1287,7 +1287,9 @@ public class Query {
   }
 
   private void warningOnSingleDocumentReference(Object... fieldValues) {
-    if (fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference) {
+    if (options.getFieldOrders().isEmpty()
+        && fieldValues.length == 1
+        && fieldValues[0] instanceof DocumentReference) {
       LOGGER.warning(
           "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
               + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
