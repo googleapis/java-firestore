@@ -30,6 +30,7 @@ import org.junit.runners.JUnit4;
 public abstract class ITBaseTest {
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
   protected Firestore firestore;
+  // Small change to prompt integration tests.
 
   @Before
   public void before() {
