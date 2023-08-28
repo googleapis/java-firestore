@@ -495,8 +495,10 @@ public class Query {
     /**
      * Any inequality fields not explicitly ordered should be implicitly ordered in a
      * lexicographical order. When there are multiple inequality filters on the same field, the
-     * field should be added only once. Note: `SortedSet<FieldPath>` sorts the key field before
-     * other fields. However, we want the key field to be sorted last.
+     * field should be added only once.
+     *
+     * <p>Note: `SortedSet<FieldPath>` sorts the key field before other fields. However, we want the
+     * key field to be sorted last.
      */
     SortedSet<FieldPath> inequalityFields = getInequalityFilterFields();
     for (FieldPath field : inequalityFields) {
@@ -1478,7 +1480,6 @@ public class Query {
   public RunQueryRequest toProto() {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
-
     return request.build();
   }
 
