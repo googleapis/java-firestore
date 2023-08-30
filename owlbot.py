@@ -91,6 +91,6 @@ java.common_templates(excludes=[
     '.kokoro/release/publish_javadoc11.sh',
     '.kokoro/release/stage.sh',
     '.kokoro/requirements.in',
-    '.kokoro/requirements.txt'
+    '.kokoro/requirements.txt',
     'renovate.json'
 ])
