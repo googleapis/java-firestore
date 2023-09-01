@@ -331,6 +331,11 @@ public class Query {
       this.direction = direction;
     }
 
+    FieldOrder(String field, Direction direction) {
+      this.fieldReference = FieldPath.fromServerFormat(field).toProto();
+      this.direction = direction;
+    }
+
     Order toProto() {
       Order.Builder result = Order.newBuilder();
       result.setField(fieldReference);
@@ -482,7 +487,7 @@ public class Query {
   }
 
   /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
-  private ImmutableList<FieldOrder> createImplicitOrderBy() {
+  ImmutableList<FieldOrder> createImplicitOrderBy() {
     // Any explicit order by fields should be added as is.
     List<FieldOrder> result = new ArrayList<>(options.getFieldOrders());
 
