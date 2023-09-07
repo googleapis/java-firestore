@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.14.2](https://github.com/googleapis/java-firestore/compare/v3.14.1...v3.14.2) (2023-09-07)
+
+
+### Dependencies
+
+* Update beam.version to v2.50.0 ([#1410](https://github.com/googleapis/java-firestore/issues/1410)) ([fa14cad](https://github.com/googleapis/java-firestore/commit/fa14cad1ed9536c97279461af9355eb7674c4a85))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.26 ([#1413](https://github.com/googleapis/java-firestore/issues/1413)) ([501af1a](https://github.com/googleapis/java-firestore/commit/501af1ac6d7b62fd6128a1d30cc234c00fc9c592))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.26 ([#1414](https://github.com/googleapis/java-firestore/issues/1414)) ([afb93d2](https://github.com/googleapis/java-firestore/commit/afb93d2ba5e7a300da64bdc98467481c8d0151b7))
+
 ## [3.14.1](https://github.com/googleapis/java-firestore/compare/v3.14.0...v3.14.1) (2023-08-25)
 
 
