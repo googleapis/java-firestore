@@ -289,7 +289,8 @@ public class Query {
           || operator.equals(GREATER_THAN_OR_EQUAL)
           || operator.equals(LESS_THAN)
           || operator.equals(LESS_THAN_OR_EQUAL)
-          || operator.equals(NOT_EQUAL);
+          || operator.equals(NOT_EQUAL)
+          || operator.equals(NOT_IN);
     }
 
     @Nullable
