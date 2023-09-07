@@ -38,7 +38,6 @@ import io.grpc.Status;
 import io.grpc.Status.Code;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
-import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -397,7 +396,6 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
               current = false;
               nextAttempt = backoff.createNextAttempt(nextAttempt);
 
-              Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
               stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
 
               ListenRequest.Builder request = ListenRequest.newBuilder();

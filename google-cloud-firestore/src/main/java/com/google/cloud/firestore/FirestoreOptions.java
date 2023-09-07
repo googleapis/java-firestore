@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiFunction;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -28,6 +30,7 @@ import com.google.cloud.ServiceOptions;
 import com.google.cloud.TransportOptions;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.common.collect.ImmutableMap;
@@ -35,17 +38,12 @@ import com.google.common.collect.ImmutableSet;
 import io.grpc.ManagedChannelBuilder;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** A Factory class to create new Firestore instances. */
 public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreOptions> {
-
   private static final String API_SHORT_NAME = "Firestore";
   private static final Set<String> SCOPES =
       ImmutableSet.<String>builder()
@@ -60,6 +58,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
+  @Nonnull private final FirestoreOpenTelemetryOptions openTelemetryOptions;
+  @Nonnull private final OpenTelemetryUtil openTelemetryUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -118,12 +118,24 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
+  @Nonnull
+  OpenTelemetryUtil getOpenTelemetryUtil() {
+    return openTelemetryUtil;
+  }
+
+  @BetaApi
+  @Nonnull
+  public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
+    return openTelemetryOptions;
+  }
+
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
     @Nullable private String emulatorHost = null;
+    @Nullable private FirestoreOpenTelemetryOptions openTelemetryOptions = null;
 
     private Builder() {}
 
@@ -133,6 +145,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
       this.emulatorHost = options.emulatorHost;
+      this.openTelemetryOptions = options.openTelemetryOptions;
     }
 
     /**
@@ -201,6 +214,19 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       return this;
     }
 
+    /**
+     * Sets the {@link FirestoreOpenTelemetryOptions} to be used for this Firestore client.
+     *
+     * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
+     */
+    @BetaApi
+    @Nonnull
+    public Builder setOpenTelemetryOptions(
+        @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions) {
+      this.openTelemetryOptions = openTelemetryOptions;
+      return this;
+    }
+
     @Override
     @Nonnull
     public FirestoreOptions build() {
@@ -210,6 +236,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         } catch (IOException e) {
           throw new RuntimeException("Failed to obtain credentials", e);
         }
+      }
+
+      if (this.openTelemetryOptions == null) {
+        this.setOpenTelemetryOptions(FirestoreOpenTelemetryOptions.newBuilder().build());
       }
 
       // Override credentials and channel provider if we are using the emulator.
@@ -277,17 +307,37 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @InternalApi("This class should only be extended within google-cloud-java")
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
+    if (builder.openTelemetryOptions == null) {
+      this.openTelemetryOptions = FirestoreOpenTelemetryOptions.newBuilder().build();
+    } else {
+      this.openTelemetryOptions = builder.openTelemetryOptions;
+    }
+
+    this.openTelemetryUtil = OpenTelemetryUtil.getInstance(this);
 
     this.databaseId =
         builder.databaseId != null
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
-    this.channelProvider =
-        builder.channelProvider != null
-            ? builder.channelProvider
-            : GrpcTransportOptions.setUpChannelProvider(
+    if (builder.channelProvider == null) {
+      ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> channelConfigurator =
+          this.openTelemetryUtil.getChannelConfigurator();
+      if (channelConfigurator == null) {
+        this.channelProvider =
+            GrpcTransportOptions.setUpChannelProvider(
                 FirestoreSettings.defaultGrpcTransportProviderBuilder(), this);
+      } else {
+        // Intercept the grpc channel calls to add telemetry info.
+        this.channelProvider =
+            GrpcTransportOptions.setUpChannelProvider(
+                FirestoreSettings.defaultGrpcTransportProviderBuilder()
+                    .setChannelConfigurator(channelConfigurator),
+                this);
+      }
+    } else {
+      this.channelProvider = builder.channelProvider;
+    }
 
     this.credentialsProvider =
         builder.credentialsProvider != null

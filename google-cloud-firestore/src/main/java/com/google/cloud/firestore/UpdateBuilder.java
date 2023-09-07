@@ -20,22 +20,16 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracing;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -139,7 +133,6 @@ public abstract class UpdateBuilder<T> {
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_CREATEDOCUMENT);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, fields, UserDataConverter.NO_DELETES);
@@ -523,7 +516,6 @@ public abstract class UpdateBuilder<T> {
       @Nonnull Precondition precondition) {
     verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_UPDATEDOCUMENT);
     Map<String, Object> deconstructedMap = expandObject(fields);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
@@ -586,7 +578,6 @@ public abstract class UpdateBuilder<T> {
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
     verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_DELETEDOCUMENT);
     Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
     if (!precondition.isEmpty()) {
@@ -599,12 +590,6 @@ public abstract class UpdateBuilder<T> {
 
   /** Commit the current batch. */
   ApiFuture<List<WriteResult>> commit(@Nullable ByteString transactionId) {
-    Tracing.getTracer()
-        .getCurrentSpan()
-        .addAnnotation(
-            TraceUtil.SPAN_NAME_COMMIT,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
-
     final CommitRequest.Builder request = CommitRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
@@ -618,24 +603,37 @@ public abstract class UpdateBuilder<T> {
 
     committed = true;
 
-    ApiFuture<CommitResponse> response =
-        firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_BATCH_COMMIT
+                    : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
+    span.setAttribute("numDocuments", writes.size());
+    try (Scope ignored = span.makeCurrent()) {
+      ApiFuture<CommitResponse> response =
+          firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
 
-    return ApiFutures.transform(
-        response,
-        commitResponse -> {
-          List<com.google.firestore.v1.WriteResult> writeResults =
-              commitResponse.getWriteResultsList();
-
-          List<WriteResult> result = new ArrayList<>();
-
-          for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-            result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-          }
-
-          return result;
-        },
-        MoreExecutors.directExecutor());
+      ApiFuture<List<WriteResult>> returnValue =
+          ApiFutures.transform(
+              response,
+              commitResponse -> {
+                List<com.google.firestore.v1.WriteResult> writeResults =
+                    commitResponse.getWriteResultsList();
+                List<WriteResult> result = new ArrayList<>();
+                for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+                  result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+                }
+                return result;
+              },
+              MoreExecutors.directExecutor());
+      span.endAtFuture(returnValue);
+      return returnValue;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /** Checks whether any updates have been queued. */

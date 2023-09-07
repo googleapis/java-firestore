@@ -16,21 +16,15 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
-import com.google.api.core.InternalExtensionOnly;
+import com.google.api.core.*;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
-import io.opencensus.common.Scope;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Status;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -134,6 +128,12 @@ public class DocumentReference {
         MoreExecutors.directExecutor());
   }
 
+  /** Gets the TraceUtil object associated with this DocumentReference's Firestore instance. */
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return getFirestore().getTraceUtil();
+  }
+
   /**
    * Creates a new Document at the DocumentReference's Location. It fails the write if the document
    * exists.
@@ -143,8 +143,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.create(this, fields).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_CREATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -156,8 +164,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Object pojo) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.create(this, pojo).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_CREATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, pojo).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -169,8 +185,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, fields).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -185,8 +209,16 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(
       @Nonnull Map<String, Object> fields, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, fields, options).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -198,8 +230,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, pojo).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -213,8 +253,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, pojo, options).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -226,8 +274,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.update(this, fields).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.update(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -240,8 +296,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields, Precondition options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.update(this, fields, options).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result =
+          extractFirst(writeBatch.update(this, fields, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -256,8 +321,17 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull String field, @Nullable Object value, Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.update(this, field, value, moreFieldsAndValues).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result =
+          extractFirst(writeBatch.update(this, field, value, moreFieldsAndValues).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -272,8 +346,17 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(
       @Nonnull FieldPath fieldPath, @Nullable Object value, Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.update(this, fieldPath, value, moreFieldsAndValues).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result =
+          extractFirst(writeBatch.update(this, fieldPath, value, moreFieldsAndValues).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -292,9 +375,18 @@ public class DocumentReference {
       @Nonnull String field,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(
-        writeBatch.update(this, options, field, value, moreFieldsAndValues).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result =
+          extractFirst(
+              writeBatch.update(this, options, field, value, moreFieldsAndValues).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -313,9 +405,18 @@ public class DocumentReference {
       @Nonnull FieldPath fieldPath,
       @Nullable Object value,
       Object... moreFieldsAndValues) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(
-        writeBatch.update(this, options, fieldPath, value, moreFieldsAndValues).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result =
+          extractFirst(
+              writeBatch.update(this, options, fieldPath, value, moreFieldsAndValues).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -326,8 +427,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull Precondition options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.delete(this, options).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_DELETE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -337,20 +446,36 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> delete() {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.delete(this).commit());
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_DELETE);
+    try (Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
    * Reads the document referenced by this DocumentReference. If the document doesn't exist, the
-   * get() will return an an empty DocumentSnapshot.
+   * get() will return an empty DocumentSnapshot.
    *
    * @return An ApiFuture that will be resolved with the contents of the Document at this
    *     DocumentReference, or a failure if the document does not exist.
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
-    return extractFirst(rpcContext.getFirestore().getAll(this));
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_GET);
+    try (Scope ignored = span.makeCurrent()) {
+      ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -363,8 +488,16 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
-    return extractFirst(
-        rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_GET);
+    try (Scope ignored = span.makeCurrent()) {
+      ApiFuture<DocumentSnapshot> result =
+          extractFirst(rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -375,46 +508,45 @@ public class DocumentReference {
    */
   @Nonnull
   public Iterable<CollectionReference> listCollections() {
-    ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
-    request.setParent(path.toString());
-    final ListCollectionIdsPagedResponse response;
-    final TraceUtil traceUtil = TraceUtil.getInstance();
-    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_LISTCOLLECTIONIDS);
-    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_LIST_COLLECTIONS);
+    try (Scope ignored = span.makeCurrent()) {
+      ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
+      request.setParent(path.toString());
+      final ListCollectionIdsPagedResponse response;
       response =
           ApiExceptions.callAndTranslateApiException(
               rpcContext.sendRequest(
                   request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
+      Iterable<CollectionReference> result =
+          new Iterable<CollectionReference>() {
+            @Override
+            @Nonnull
+            public Iterator<CollectionReference> iterator() {
+              final Iterator<String> iterator = response.iterateAll().iterator();
+              return new Iterator<CollectionReference>() {
+                @Override
+                public boolean hasNext() {
+                  return iterator.hasNext();
+                }
+
+                @Override
+                public CollectionReference next() {
+                  return DocumentReference.this.collection(iterator.next());
+                }
+
+                @Override
+                public void remove() {
+                  throw new UnsupportedOperationException("remove");
+                }
+              };
+            }
+          };
+      span.end();
+      return result;
     } catch (ApiException exception) {
-      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
+      span.end(exception);
       throw FirestoreException.forApiException(exception);
-    } finally {
-      span.end(TraceUtil.END_SPAN_OPTIONS);
     }
-
-    return new Iterable<CollectionReference>() {
-      @Override
-      @Nonnull
-      public Iterator<CollectionReference> iterator() {
-        final Iterator<String> iterator = response.iterateAll().iterator();
-        return new Iterator<CollectionReference>() {
-          @Override
-          public boolean hasNext() {
-            return iterator.hasNext();
-          }
-
-          @Override
-          public CollectionReference next() {
-            return DocumentReference.this.collection(iterator.next());
-          }
-
-          @Override
-          public void remove() {
-            throw new UnsupportedOperationException("remove");
-          }
-        };
-      }
-    };
   }
 
   /**

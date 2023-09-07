@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
@@ -24,13 +26,18 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -71,17 +78,32 @@ public class AggregateQuery {
 
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
-    AggregateQueryResponseDeliverer responseDeliverer =
-        new AggregateQueryResponseDeliverer(
-            transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
-    runQuery(responseDeliverer);
-    return responseDeliverer.getFuture();
+    TraceUtil.Span span =
+        query
+            .getFirestore()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+    try (Scope ignored = span.makeCurrent()) {
+      AggregateQueryResponseDeliverer responseDeliverer =
+          new AggregateQueryResponseDeliverer(
+              transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+      runQuery(responseDeliverer, /* attempt= */ 0);
+      ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
-  private void runQuery(AggregateQueryResponseDeliverer responseDeliverer) {
+  private void runQuery(AggregateQueryResponseDeliverer responseDeliverer, int attempt) {
     RunAggregationQueryRequest request = toProto(responseDeliverer.getTransactionId());
     AggregateQueryResponseObserver responseObserver =
-        new AggregateQueryResponseObserver(responseDeliverer);
+        new AggregateQueryResponseObserver(responseDeliverer, attempt, query.rpcContext);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
     query.rpcContext.streamRequest(request, responseObserver, callable);
@@ -130,18 +152,45 @@ public class AggregateQuery {
 
     private final AggregateQueryResponseDeliverer responseDeliverer;
     private StreamController streamController;
+    private int attempt;
+    private FirestoreRpcContext rpcContext;
 
-    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
+    AggregateQueryResponseObserver(
+        AggregateQueryResponseDeliverer responseDeliverer,
+        int attempt,
+        FirestoreRpcContext rpcContext) {
       this.responseDeliverer = responseDeliverer;
+      this.attempt = attempt;
+      this.rpcContext = rpcContext;
+    }
+
+    Map<String, Object> getAttemptAttributes() {
+      ImmutableMap.Builder<String, Object> builder =
+          new ImmutableMap.Builder<String, Object>().put("isRetryAttempt", attempt > 0);
+      if (attempt > 0) {
+        builder.put("attemptNumber", attempt);
+      }
+      return builder.build();
     }
 
     @Override
     public void onStart(StreamController streamController) {
+      rpcContext
+          .getFirestore()
+          .getTraceUtil()
+          .currentSpan()
+          .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
       this.streamController = streamController;
     }
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      rpcContext
+          .getFirestore()
+          .getTraceUtil()
+          .currentSpan()
+          .addEvent(
+              SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();
 
@@ -170,8 +219,23 @@ public class AggregateQuery {
     @Override
     public void onError(Throwable throwable) {
       if (shouldRetry(throwable)) {
-        runQuery(responseDeliverer);
+        rpcContext
+            .getFirestore()
+            .getTraceUtil()
+            .currentSpan()
+            .addEvent(
+                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
+                Collections.singletonMap("error.message", throwable.getMessage()));
+
+        runQuery(responseDeliverer, attempt + 1);
       } else {
+        rpcContext
+            .getFirestore()
+            .getTraceUtil()
+            .currentSpan()
+            .addEvent(
+                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
+                Collections.singletonMap("error.message", throwable.getMessage()));
         responseDeliverer.deliverError(throwable);
       }
     }

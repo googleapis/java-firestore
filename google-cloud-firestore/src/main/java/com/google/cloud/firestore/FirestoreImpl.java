@@ -30,22 +30,16 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracer;
-import io.opencensus.trace.Tracing;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -61,11 +55,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   private static final String AUTO_ID_ALPHABET =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  private static final Tracer tracer = Tracing.getTracer();
-
   private final FirestoreRpc firestoreClient;
   private final FirestoreOptions firestoreOptions;
   private final ResourcePath databasePath;
+  private final OpenTelemetryUtil openTelemetryUtil;
 
   /**
    * A lazy-loaded BulkWriter instance to be used with recursiveDelete() if no BulkWriter instance
@@ -88,6 +81,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
+    this.openTelemetryUtil = options.getOpenTelemetryUtil();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -96,6 +90,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       bulkWriterInstance = bulkWriter();
     }
     return bulkWriterInstance;
+  }
+
+  public OpenTelemetryUtil getOpenTelemetryUtil() {
+    return this.openTelemetryUtil;
+  }
+
+  @Override
+  public TraceUtil getTraceUtil() {
+    return this.openTelemetryUtil.getTraceUtil();
   }
 
   /** Creates a pseudo-random 20-character ID that can be used for Firestore documents. */
@@ -218,13 +221,19 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
-
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
-          int numResponses;
+          int numResponses = 0;
+          boolean hasCompleted = false;
 
           @Override
-          public void onStart(StreamController streamController) {}
+          public void onStart(StreamController streamController) {
+            getTraceUtil()
+                .currentSpan()
+                .addEvent(
+                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    Collections.singletonMap("numDocuments", documentReferences.length));
+          }
 
           @Override
           public void onResponse(BatchGetDocumentsResponse response) {
@@ -233,14 +242,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
             numResponses++;
             if (numResponses == 1) {
-              tracer
-                  .getCurrentSpan()
-                  .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": First response");
+              getTraceUtil()
+                  .currentSpan()
+                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
             } else if (numResponses % 100 == 0) {
-              tracer
-                  .getCurrentSpan()
-                  .addAnnotation(
-                      TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Received 100 responses");
+              getTraceUtil()
+                  .currentSpan()
+                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");
             }
 
             switch (response.getResultCase()) {
@@ -265,22 +273,32 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                 return;
             }
             apiStreamObserver.onNext(documentSnapshot);
+
+            if (numResponses == documentReferences.length) {
+              onComplete();
+            }
           }
 
           @Override
           public void onError(Throwable throwable) {
-            tracer
-                .getCurrentSpan()
-                .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Error");
+            getTraceUtil().currentSpan().end(throwable);
             apiStreamObserver.onError(throwable);
           }
 
           @Override
           public void onComplete() {
-            tracer
-                .getCurrentSpan()
-                .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
-            apiStreamObserver.onCompleted();
+            if (!hasCompleted) {
+              hasCompleted = true;
+              getTraceUtil()
+                  .currentSpan()
+                  .addEvent(
+                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                          + ": Completed with "
+                          + numResponses
+                          + " responses.",
+                      Collections.singletonMap("numResponses", numResponses));
+              apiStreamObserver.onCompleted();
+            }
           }
         };
 
@@ -298,13 +316,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     for (DocumentReference docRef : documentReferences) {
       request.addDocuments(docRef.getName());
     }
-
-    tracer
-        .getCurrentSpan()
-        .addAnnotation(
-            TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Start",
-            ImmutableMap.of(
-                "numDocuments", AttributeValue.longAttributeValue(documentReferences.length)));
 
     streamRequest(request.build(), responseObserver, firestoreClient.batchGetDocumentsCallable());
   }
