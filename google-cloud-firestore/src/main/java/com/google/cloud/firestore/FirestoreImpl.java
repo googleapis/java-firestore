@@ -32,8 +32,6 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
-import com.google.cloud.opentelemetry.trace.TraceConfiguration;
-import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -44,11 +42,6 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,9 +51,20 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
-import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import org.threeten.bp.Duration;
+
+// OTEL-related
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.resources.Resource;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.SpanProcessor;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SpanExporter;
+import com.google.cloud.opentelemetry.trace.TraceExporter;
+import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 
 /**
  * Main implementation of the Firestore client. This is the entry point for all Firestore
@@ -79,7 +83,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   private final FirestoreOptions firestoreOptions;
   private final ResourcePath databasePath;
 
-  private OpenTelemetrySdk otelSdk;
+  @Nullable
+  private OpenTelemetrySdk otelSdk = null;
 
   /**
    * A lazy-loaded BulkWriter instance to be used with recursiveDelete() if no BulkWriter instance
@@ -94,7 +99,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   FirestoreImpl(FirestoreOptions options, FirestoreRpc firestoreRpc) {
-    initOpenTelemetry();
     this.firestoreClient = firestoreRpc;
     this.firestoreOptions = options;
     Preconditions.checkNotNull(
@@ -103,6 +107,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
+    initOpenTelemetry();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -506,22 +511,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
    * @return a ready-to-use {@link OpenTelemetry} instance.
    */
   void initOpenTelemetry() {
+    if (GlobalOpenTelemetry.get() != null) {
+      return;
+    }
+
     // Include required service.name resource attribute on all spans and metrics
-    Resource resource =
-        Resource.getDefault()
-            .merge(Resource.builder().put(SERVICE_NAME, "java-firestore").build());
-
-    SpanExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
-
+    //Resource resource = Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "java-firestore").build());
     // TODO(ehsann): Set proper project_id.
     //TraceExporter traceExporter = TraceExporter.createWithConfiguration(TraceConfiguration.builder().setProjectId("MY_PROJECT").build());
-
-    otelSdk = OpenTelemetrySdk.builder()
-            .setTracerProvider(
-                    SdkTracerProvider.builder()
-                            .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
-                            .build())
-            .buildAndRegisterGlobal();
 
     // TODO(ehsann): use OtlpGrpcSpanExporter
 //    OpenTelemetrySdk openTelemetrySdk =
@@ -535,6 +532,19 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 //                            .build())
 //                    .build())
 //            .buildAndRegisterGlobal();
+
+    SpanExporter gcpTraceExporter = TraceExporter.createWithDefaultConfiguration();
+    SpanProcessor gcpSpanProcessor = SimpleSpanProcessor.create(gcpTraceExporter);
+    SpanProcessor gcpBatchSpanProcessor = BatchSpanProcessor.builder(gcpTraceExporter).build();
+
+    LoggingSpanExporter loggingSpanExporter = LoggingSpanExporter.create();
+    SpanProcessor simpleSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
+
+    otelSdk = OpenTelemetrySdk.builder()
+            .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(gcpSpanProcessor).build())
+            .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(simpleSpanProcessor).build())
+            .buildAndRegisterGlobal();
+
 
     Runtime.getRuntime().addShutdownHook(new Thread(otelSdk::close));
   }
