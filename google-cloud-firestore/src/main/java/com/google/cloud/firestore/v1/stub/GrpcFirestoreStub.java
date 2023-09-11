@@ -26,6 +26,7 @@ import com.google.api.gax.grpc.GrpcCallSettings;
 import com.google.api.gax.grpc.GrpcStubCallableFactory;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
@@ -297,71 +298,169 @@ public class GrpcFirestoreStub extends FirestoreStub {
     GrpcCallSettings<GetDocumentRequest, Document> getDocumentTransportSettings =
         GrpcCallSettings.<GetDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(getDocumentMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<ListDocumentsRequest, ListDocumentsResponse> listDocumentsTransportSettings =
         GrpcCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
             .setMethodDescriptor(listDocumentsMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("collection_id", String.valueOf(request.getCollectionId()));
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
         GrpcCallSettings.<UpdateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(updateDocumentMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("document.name", String.valueOf(request.getDocument().getName()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<DeleteDocumentRequest, Empty> deleteDocumentTransportSettings =
         GrpcCallSettings.<DeleteDocumentRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteDocumentMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
         batchGetDocumentsTransportSettings =
             GrpcCallSettings.<BatchGetDocumentsRequest, BatchGetDocumentsResponse>newBuilder()
                 .setMethodDescriptor(batchGetDocumentsMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("database", String.valueOf(request.getDatabase()));
+                      return builder.build();
+                    })
                 .build();
     GrpcCallSettings<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionTransportSettings =
             GrpcCallSettings.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
                 .setMethodDescriptor(beginTransactionMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("database", String.valueOf(request.getDatabase()));
+                      return builder.build();
+                    })
                 .build();
     GrpcCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
         GrpcCallSettings.<CommitRequest, CommitResponse>newBuilder()
             .setMethodDescriptor(commitMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         GrpcCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<RunQueryRequest, RunQueryResponse> runQueryTransportSettings =
         GrpcCallSettings.<RunQueryRequest, RunQueryResponse>newBuilder()
             .setMethodDescriptor(runQueryMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
         runAggregationQueryTransportSettings =
             GrpcCallSettings.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
                 .setMethodDescriptor(runAggregationQueryMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     GrpcCallSettings<PartitionQueryRequest, PartitionQueryResponse>
         partitionQueryTransportSettings =
             GrpcCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
                 .setMethodDescriptor(partitionQueryMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     GrpcCallSettings<WriteRequest, WriteResponse> writeTransportSettings =
         GrpcCallSettings.<WriteRequest, WriteResponse>newBuilder()
             .setMethodDescriptor(writeMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<ListenRequest, ListenResponse> listenTransportSettings =
         GrpcCallSettings.<ListenRequest, ListenResponse>newBuilder()
             .setMethodDescriptor(listenMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<ListCollectionIdsRequest, ListCollectionIdsResponse>
         listCollectionIdsTransportSettings =
             GrpcCallSettings.<ListCollectionIdsRequest, ListCollectionIdsResponse>newBuilder()
                 .setMethodDescriptor(listCollectionIdsMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     GrpcCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
         GrpcCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
             .setMethodDescriptor(batchWriteMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     GrpcCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
         GrpcCallSettings.<CreateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(createDocumentMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("collection_id", String.valueOf(request.getCollectionId()));
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
 
     this.getDocumentCallable =
