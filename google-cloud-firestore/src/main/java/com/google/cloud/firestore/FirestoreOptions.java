@@ -61,6 +61,7 @@ import javax.annotation.Nullable;
 /** A Factory class to create new Firestore instances. */
 public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreOptions> {
 
+  private static boolean ENABLE_OPEN_TELEMETRY = true;
   private static final String API_SHORT_NAME = "Firestore";
   private static final Set<String> SCOPES =
       ImmutableSet.<String>builder()
@@ -133,7 +134,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
-  public static class GrpcChannelConfigurator
+  public static class OtelGrpcChannelConfigurator
       implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
     @Override
     public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
@@ -238,7 +239,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       }
 
       // TODO(ehsann): hack to intercept the grpc channel calls.
-      this.channelProvider = getGrpcWithTelemetryChannelProviderBuilder().build();
+      // this.channelProvider = getGrpcWithTelemetryChannelProviderBuilder().build();
 
       // Override credentials and channel provider if we are using the emulator.
       if (emulatorHost == null) {
@@ -314,13 +315,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       //                SdkTracerProvider.builder()
       //                    .setResource(resource)
       //                    .addSpanProcessor(
-      //
-      // BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder().setTimeout(2,
-      // TimeUnit.SECONDS).build())
-      //                            .setScheduleDelay(100, TimeUnit.MILLISECONDS)
-      //                            .build())
-      //                    .build())
-      //            .buildAndRegisterGlobal();
 
       System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
       // Include required service.name resource attribute on all spans and metrics
@@ -357,18 +351,23 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
-    // TODO(ehsann): hack to intercept the grpc channel calls.
-    initOpenTelemetry();
-    //    this.channelProvider =
-    //            builder.channelProvider != null
-    //                    ? builder.channelProvider
-    //                    : GrpcTransportOptions.setUpChannelProvider(
-    //                    FirestoreSettings.defaultGrpcTransportProviderBuilder(), this);
-    this.channelProvider =
-        GrpcTransportOptions.setUpChannelProvider(
-            FirestoreSettings.defaultGrpcTransportProviderBuilder()
-                .setChannelConfigurator(new GrpcChannelConfigurator()),
-            this);
+    if (builder.channelProvider == null) {
+      // Intercept the grpc channel calls to add OpenTelemetry info if needed.
+      if (ENABLE_OPEN_TELEMETRY) {
+        initOpenTelemetry();
+        this.channelProvider =
+            GrpcTransportOptions.setUpChannelProvider(
+                FirestoreSettings.defaultGrpcTransportProviderBuilder()
+                    .setChannelConfigurator(new OtelGrpcChannelConfigurator()),
+                this);
+      } else {
+        this.channelProvider =
+            GrpcTransportOptions.setUpChannelProvider(
+                FirestoreSettings.defaultGrpcTransportProviderBuilder(), this);
+      }
+    } else {
+      this.channelProvider = builder.channelProvider;
+    }
 
     this.credentialsProvider =
         builder.credentialsProvider != null
@@ -429,7 +428,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   public static InstantiatingGrpcChannelProvider.Builder
       getGrpcWithTelemetryChannelProviderBuilder() {
     return FirestoreSettings.defaultGrpcTransportProviderBuilder()
-        .setChannelConfigurator(new GrpcChannelConfigurator());
+        .setChannelConfigurator(new OtelGrpcChannelConfigurator());
   }
 
   @Nonnull
