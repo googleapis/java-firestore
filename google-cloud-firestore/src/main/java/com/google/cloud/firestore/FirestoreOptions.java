@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
+
 import com.google.api.core.ApiFunction;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
@@ -42,10 +44,8 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
@@ -57,8 +57,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 
 /** A Factory class to create new Firestore instances. */
 public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreOptions> {
@@ -135,7 +133,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
-  public static class GrpcChannelConfigurator implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
+  public static class GrpcChannelConfigurator
+      implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
     @Override
     public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
       // TODO(ehsann): only add intercept if otel is not null.
@@ -227,13 +226,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       return this;
     }
 
-//    private static ManagedChannelBuilder configureGrpcChannel(ManagedChannelBuilder managedChannelBuilder) {
-//      // TODO(ehsann): only add intercept if otel is not null.
-//      GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
-//      return managedChannelBuilder.usePlaintext().intercept(grpcTelemetry.newClientInterceptor());
-//    }
-
-
     @Override
     @Nonnull
     public FirestoreOptions build() {
@@ -271,8 +263,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         this.setChannelProvider(
             InstantiatingGrpcChannelProvider.newBuilder()
                 .setEndpoint(emulatorHost)
-                //.setChannelConfigurator(ManagedChannelBuilder::usePlaintext)
-                .setChannelConfigurator(new GrpcChannelConfigurator())
+                .setChannelConfigurator(ManagedChannelBuilder::usePlaintext)
                 .build());
         // Use a `CredentialProvider` to match the Firebase Admin SDK, which prevents the Admin SDK
         // from overwriting the Emulator credentials.
@@ -314,38 +305,46 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   void initOpenTelemetry() {
     try {
       // TODO(ehsann): Set proper project_id.
-      //TraceExporter traceExporter = TraceExporter.createWithConfiguration(TraceConfiguration.builder().setProjectId("MY_PROJECT").build());
+      // TraceExporter traceExporter =
+      // TraceExporter.createWithConfiguration(TraceConfiguration.builder().setProjectId("MY_PROJECT").build());
       // TODO(ehsann): use OtlpGrpcSpanExporter
-//    OpenTelemetrySdk openTelemetrySdk =
-//        OpenTelemetrySdk.builder()
-//            .setTracerProvider(
-//                SdkTracerProvider.builder()
-//                    .setResource(resource)
-//                    .addSpanProcessor(
-//                        BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder().setTimeout(2, TimeUnit.SECONDS).build())
-//                            .setScheduleDelay(100, TimeUnit.MILLISECONDS)
-//                            .build())
-//                    .build())
-//            .buildAndRegisterGlobal();
+      //    OpenTelemetrySdk openTelemetrySdk =
+      //        OpenTelemetrySdk.builder()
+      //            .setTracerProvider(
+      //                SdkTracerProvider.builder()
+      //                    .setResource(resource)
+      //                    .addSpanProcessor(
+      //
+      // BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder().setTimeout(2,
+      // TimeUnit.SECONDS).build())
+      //                            .setScheduleDelay(100, TimeUnit.MILLISECONDS)
+      //                            .build())
+      //                    .build())
+      //            .buildAndRegisterGlobal();
 
       System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
       // Include required service.name resource attribute on all spans and metrics
-      Resource resource = Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Firestore").build());
+      Resource resource =
+          Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Firestore").build());
       SpanExporter gcpTraceExporter = TraceExporter.createWithDefaultConfiguration();
       SpanProcessor gcpSpanProcessor = SimpleSpanProcessor.create(gcpTraceExporter);
       LoggingSpanExporter loggingSpanExporter = LoggingSpanExporter.create();
       SpanProcessor loggingSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
 
       OpenTelemetrySdk.builder()
-              .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(gcpSpanProcessor)
-                      .setResource(resource)
-                      .addSpanProcessor(loggingSpanProcessor)
-                      .build())
-              //.setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(loggingSpanProcessor).build())
-              .buildAndRegisterGlobal();
+          .setTracerProvider(
+              SdkTracerProvider.builder()
+                  .addSpanProcessor(gcpSpanProcessor)
+                  .setResource(resource)
+                  .addSpanProcessor(loggingSpanProcessor)
+                  .build())
+          // .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(loggingSpanProcessor).build())
+          .buildAndRegisterGlobal();
     } catch (Exception e) {
-      // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is not allowed.
-      Logger.getLogger("Firestore OpenTelemetry").log(Level.INFO, "GlobalOpenTelemetry has already been configured.");
+      // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
+      // not allowed.
+      Logger.getLogger("Firestore OpenTelemetry")
+          .log(Level.INFO, "GlobalOpenTelemetry has already been configured.");
     }
   }
 
@@ -358,21 +357,18 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
-
-
     // TODO(ehsann): hack to intercept the grpc channel calls.
     initOpenTelemetry();
-//    this.channelProvider =
-//            builder.channelProvider != null
-//                    ? builder.channelProvider
-//                    : GrpcTransportOptions.setUpChannelProvider(
-//                    FirestoreSettings.defaultGrpcTransportProviderBuilder(), this);
+    //    this.channelProvider =
+    //            builder.channelProvider != null
+    //                    ? builder.channelProvider
+    //                    : GrpcTransportOptions.setUpChannelProvider(
+    //                    FirestoreSettings.defaultGrpcTransportProviderBuilder(), this);
     this.channelProvider =
-            GrpcTransportOptions.setUpChannelProvider(
-                    FirestoreSettings
-                            .defaultGrpcTransportProviderBuilder()
-                            .setChannelConfigurator(new GrpcChannelConfigurator()),
-                    this);
+        GrpcTransportOptions.setUpChannelProvider(
+            FirestoreSettings.defaultGrpcTransportProviderBuilder()
+                .setChannelConfigurator(new GrpcChannelConfigurator()),
+            this);
 
     this.credentialsProvider =
         builder.credentialsProvider != null
@@ -431,8 +427,9 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
   @Nonnull
   public static InstantiatingGrpcChannelProvider.Builder
-  getGrpcWithTelemetryChannelProviderBuilder() {
-    return FirestoreSettings.defaultGrpcTransportProviderBuilder().setChannelConfigurator(new GrpcChannelConfigurator());
+      getGrpcWithTelemetryChannelProviderBuilder() {
+    return FirestoreSettings.defaultGrpcTransportProviderBuilder()
+        .setChannelConfigurator(new GrpcChannelConfigurator());
   }
 
   @Nonnull

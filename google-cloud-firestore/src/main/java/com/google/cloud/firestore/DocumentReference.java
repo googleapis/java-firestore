@@ -29,7 +29,6 @@ import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -353,10 +352,10 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
-//    if(this.getId().equals("ehsan")) {
-//      throw FirestoreException.forInvalidArgument(
-//            "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: ehsan");
-//    }
+    //    if(this.getId().equals("ehsan")) {
+    //      throw FirestoreException.forInvalidArgument(
+    //            "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: ehsan");
+    //    }
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
     io.opentelemetry.api.trace.Span span = tracer.spanBuilder("ehsan").startSpan();

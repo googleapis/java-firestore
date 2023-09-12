@@ -66,7 +66,6 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
