@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.14.3](https://github.com/googleapis/java-firestore/compare/v3.14.2...v3.14.3) (2023-09-12)
+
+
+### Bug Fixes
+
+* Add reflections configs for generated firestore classes ([#1419](https://github.com/googleapis/java-firestore/issues/1419)) ([1c5e09f](https://github.com/googleapis/java-firestore/commit/1c5e09f08f3e8d57152fa7f0fae52ef2cea8331b))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.15.0 ([#1417](https://github.com/googleapis/java-firestore/issues/1417)) ([3626776](https://github.com/googleapis/java-firestore/commit/3626776483d005ba5d07046eebe25b9c6b39242e))
+
 ## [3.14.2](https://github.com/googleapis/java-firestore/compare/v3.14.1...v3.14.2) (2023-09-07)
 
 
