@@ -359,7 +359,7 @@ public class DocumentReference {
 //    }
 
     Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
-    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("mySpan").startSpan();
+    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("ehsan").startSpan();
     io.opentelemetry.context.Scope scope = span.makeCurrent();
     span.setAttribute("Attribute 1", "first attribute value");
     span.setAttribute("Attribute 2", "second attribute value");
