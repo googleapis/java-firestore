@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -787,25 +787,20 @@ public class ITSystemTest extends ITBaseTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
+  public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
+    // TODO(MIEQ): Enable this test against production when possible.
+    assumeTrue(
+        "Skip this test if running against production because multiple inequality is "
+            + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     addDocument("foo", 1, "bar", 2);
 
-    ExecutionException executionException =
-        assertThrows(
-            ExecutionException.class,
-            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
-    assertThat(executionException)
-        .hasCauseThat()
-        .hasMessageThat()
-        .contains(
-            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
+    QuerySnapshot querySnapshot =
+        randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("bar", 2).get().get();
+    assertEquals(1, querySnapshot.size());
+    assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
   @Test
