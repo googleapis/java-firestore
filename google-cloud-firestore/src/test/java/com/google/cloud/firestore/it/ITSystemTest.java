@@ -493,7 +493,7 @@ public class ITSystemTest extends ITBaseTest {
   public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-        "Skip this test if running against production because multiple equality is "
+        "Skip this test if running against production because multiple inequality is "
             + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
