@@ -29,6 +29,8 @@ import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -357,12 +359,12 @@ public class DocumentReference {
     //            "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: ehsan");
     //    }
 
-    Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
-    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("ehsan").startSpan();
-    io.opentelemetry.context.Scope scope = span.makeCurrent();
-    span.setAttribute("Attribute 1", "first attribute value");
-    span.setAttribute("Attribute 2", "second attribute value");
-    span.end();
+//    Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
+//    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("ehsan").startSpan();
+//    io.opentelemetry.context.Scope scope = span.makeCurrent();
+//    span.setAttribute("Attribute 1", "first attribute value");
+//    span.setAttribute("Attribute 2", "second attribute value");
+//    span.end();
 
     return extractFirst(rpcContext.getFirestore().getAll(this));
   }

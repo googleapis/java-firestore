@@ -231,7 +231,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     this.getAll(documentReferences, fieldMask, null, apiStreamObserver);
   }
 
-  @WithSpan
   void getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
@@ -329,7 +328,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   /** Internal getAll() method that accepts an optional transaction id. */
-  @WithSpan(value = "getAll()")
   ApiFuture<List<DocumentSnapshot>> getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
