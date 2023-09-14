@@ -17,17 +17,21 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureToListenableFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import io.opencensus.common.Scope;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 
@@ -347,26 +351,44 @@ public class DocumentReference {
 
   /**
    * Reads the document referenced by this DocumentReference. If the document doesn't exist, the
-   * get() will return an an empty DocumentSnapshot.
+   * get() will return an empty DocumentSnapshot.
    *
    * @return An ApiFuture that will be resolved with the contents of the Document at this
    *     DocumentReference, or a failure if the document does not exist.
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
-    //    if(this.getId().equals("ehsan")) {
-    //      throw FirestoreException.forInvalidArgument(
-    //            "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: ehsan");
-    //    }
+    if (this.getId().equals("ehsan")) {
+      Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
+      io.opentelemetry.api.trace.Span span = tracer.spanBuilder("DocumentSnapshot.get().foo").startSpan();
+      span.makeCurrent();
+      try {
+        FirestoreException foo = FirestoreException.forInvalidArgument(
+                "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: -1");
 
-//    Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
-//    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("ehsan").startSpan();
-//    io.opentelemetry.context.Scope scope = span.makeCurrent();
-//    span.setAttribute("Attribute 1", "first attribute value");
-//    span.setAttribute("Attribute 2", "second attribute value");
-//    span.end();
+        span.setStatus(StatusCode.ERROR, foo.getMessage());
+        span.recordException(foo,
+                Attributes.builder()
+                        .put("exception.message", foo.getMessage())
+                        .put("exception.type", foo.getClass().getName())
+                        .put("exception.stacktrace", Throwables.getStackTraceAsString(foo))
+                        .build());
+        System.out.println(Throwables.getStackTraceAsString(foo));
+        throw foo;
+      } finally {
+        span.end();
+      }
+    }
 
-    return extractFirst(rpcContext.getFirestore().getAll(this));
+    Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
+    io.opentelemetry.api.trace.Span span = tracer.spanBuilder("DocumentSnapshot.get()").startSpan();
+    span.makeCurrent();
+    span.setAttribute("Attribute 1", "first attribute value");
+    this.rpcContext.getFirestore().getOptions().getAttributesMap().forEach((k, v) -> span.setAttribute(k,v));
+
+    ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
+    result.addListener(span::end, MoreExecutors.directExecutor());
+    return result;
   }
 
   /**

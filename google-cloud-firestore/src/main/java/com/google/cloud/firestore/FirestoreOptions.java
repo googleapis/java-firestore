@@ -48,11 +48,7 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -443,6 +439,27 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
   FirestoreRpc getFirestoreRpc() {
     return (FirestoreRpc) getRpc();
+  }
+
+  Map<String, String> getAttributesMap() {
+    Map<String, String> result = new HashMap<>();
+    result.put("settings.databaseId", getDatabaseId());
+    result.put("settings.host", getHost());
+    result.put("settings.channel.transportName", channelProvider.getTransportName());
+    result.put("settings.channel.needsCredentials", channelProvider.needsCredentials() ? "true" : "false");
+    result.put("settings.channel.needsEndpoint", channelProvider.needsEndpoint() ? "true" : "false");
+    result.put("settings.channel.needsHeaders", channelProvider.needsHeaders() ? "true" : "false");
+    result.put("settings.channel.shouldAutoClose", channelProvider.shouldAutoClose() ? "true" : "false");
+    result.put("settings.credentials.authenticationType", credentials.getAuthenticationType());
+    result.put("settings.retrySettings.initialRetryDelay", getRetrySettings().getInitialRetryDelay().toString());
+    result.put("settings.retrySettings.maxRetryDelay", getRetrySettings().getMaxRetryDelay().toString());
+    result.put("settings.retrySettings.retryDelayMultiplier", String.valueOf(getRetrySettings().getRetryDelayMultiplier()));
+    result.put("settings.retrySettings.maxAttempts", String.valueOf(getRetrySettings().getMaxAttempts()));
+    result.put("settings.retrySettings.initialRpcTimeout", getRetrySettings().getInitialRpcTimeout().toString());
+    result.put("settings.retrySettings.maxRpcTimeout", getRetrySettings().getMaxRpcTimeout().toString());
+    result.put("settings.retrySettings.rpcTimeoutMultiplier", String.valueOf(getRetrySettings().getRpcTimeoutMultiplier()));
+    result.put("settings.retrySettings.totalTimeout", getRetrySettings().getTotalTimeout().toString());
+    return result;
   }
 
   @Override
