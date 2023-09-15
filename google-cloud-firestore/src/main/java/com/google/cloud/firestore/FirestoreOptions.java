@@ -57,7 +57,7 @@ import javax.annotation.Nullable;
 /** A Factory class to create new Firestore instances. */
 public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreOptions> {
 
-  private static boolean ENABLE_OPEN_TELEMETRY = true;
+  private static String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
   private static final String API_SHORT_NAME = "Firestore";
   private static final Set<String> SCOPES =
       ImmutableSet.<String>builder()
@@ -72,6 +72,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
+
+  private boolean enableOpenTelemetry = false;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -342,6 +344,13 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
 
+    String enableOpenTelemetryEnvVar = System.getenv(OPEN_TELEMETRY_ENV_VAR_NAME);
+    if (enableOpenTelemetryEnvVar != null
+        && (enableOpenTelemetryEnvVar.toLowerCase().equals("true")
+            || enableOpenTelemetryEnvVar.toLowerCase().equals("on"))) {
+      this.enableOpenTelemetry = true;
+    }
+
     this.databaseId =
         builder.databaseId != null
             ? builder.databaseId
@@ -349,7 +358,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
     if (builder.channelProvider == null) {
       // Intercept the grpc channel calls to add OpenTelemetry info if needed.
-      if (ENABLE_OPEN_TELEMETRY) {
+      if (this.enableOpenTelemetry) {
         initOpenTelemetry();
         this.channelProvider =
             GrpcTransportOptions.setUpChannelProvider(
@@ -446,19 +455,34 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     result.put("settings.databaseId", getDatabaseId());
     result.put("settings.host", getHost());
     result.put("settings.channel.transportName", channelProvider.getTransportName());
-    result.put("settings.channel.needsCredentials", channelProvider.needsCredentials() ? "true" : "false");
-    result.put("settings.channel.needsEndpoint", channelProvider.needsEndpoint() ? "true" : "false");
+    result.put(
+        "settings.channel.needsCredentials", channelProvider.needsCredentials() ? "true" : "false");
+    result.put(
+        "settings.channel.needsEndpoint", channelProvider.needsEndpoint() ? "true" : "false");
     result.put("settings.channel.needsHeaders", channelProvider.needsHeaders() ? "true" : "false");
-    result.put("settings.channel.shouldAutoClose", channelProvider.shouldAutoClose() ? "true" : "false");
+    result.put(
+        "settings.channel.shouldAutoClose", channelProvider.shouldAutoClose() ? "true" : "false");
     result.put("settings.credentials.authenticationType", credentials.getAuthenticationType());
-    result.put("settings.retrySettings.initialRetryDelay", getRetrySettings().getInitialRetryDelay().toString());
-    result.put("settings.retrySettings.maxRetryDelay", getRetrySettings().getMaxRetryDelay().toString());
-    result.put("settings.retrySettings.retryDelayMultiplier", String.valueOf(getRetrySettings().getRetryDelayMultiplier()));
-    result.put("settings.retrySettings.maxAttempts", String.valueOf(getRetrySettings().getMaxAttempts()));
-    result.put("settings.retrySettings.initialRpcTimeout", getRetrySettings().getInitialRpcTimeout().toString());
-    result.put("settings.retrySettings.maxRpcTimeout", getRetrySettings().getMaxRpcTimeout().toString());
-    result.put("settings.retrySettings.rpcTimeoutMultiplier", String.valueOf(getRetrySettings().getRpcTimeoutMultiplier()));
-    result.put("settings.retrySettings.totalTimeout", getRetrySettings().getTotalTimeout().toString());
+    result.put(
+        "settings.retrySettings.initialRetryDelay",
+        getRetrySettings().getInitialRetryDelay().toString());
+    result.put(
+        "settings.retrySettings.maxRetryDelay", getRetrySettings().getMaxRetryDelay().toString());
+    result.put(
+        "settings.retrySettings.retryDelayMultiplier",
+        String.valueOf(getRetrySettings().getRetryDelayMultiplier()));
+    result.put(
+        "settings.retrySettings.maxAttempts", String.valueOf(getRetrySettings().getMaxAttempts()));
+    result.put(
+        "settings.retrySettings.initialRpcTimeout",
+        getRetrySettings().getInitialRpcTimeout().toString());
+    result.put(
+        "settings.retrySettings.maxRpcTimeout", getRetrySettings().getMaxRpcTimeout().toString());
+    result.put(
+        "settings.retrySettings.rpcTimeoutMultiplier",
+        String.valueOf(getRetrySettings().getRpcTimeoutMultiplier()));
+    result.put(
+        "settings.retrySettings.totalTimeout", getRetrySettings().getTotalTimeout().toString());
     return result;
   }
 

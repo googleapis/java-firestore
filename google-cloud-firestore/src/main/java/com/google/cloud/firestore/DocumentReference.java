@@ -17,7 +17,6 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureToListenableFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
@@ -33,8 +32,6 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -358,21 +355,26 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
+    System.out.println("in DocumentSnapshot.get()");
+
     if (this.getId().equals("ehsan")) {
       Tracer tracer = GlobalOpenTelemetry.getTracer("com.google.firestore");
-      io.opentelemetry.api.trace.Span span = tracer.spanBuilder("DocumentSnapshot.get().foo").startSpan();
+      io.opentelemetry.api.trace.Span span =
+          tracer.spanBuilder("DocumentSnapshot.get().foo").startSpan();
       span.makeCurrent();
       try {
-        FirestoreException foo = FirestoreException.forInvalidArgument(
+        FirestoreException foo =
+            FirestoreException.forInvalidArgument(
                 "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: -1");
 
         span.setStatus(StatusCode.ERROR, foo.getMessage());
-        span.recordException(foo,
-                Attributes.builder()
-                        .put("exception.message", foo.getMessage())
-                        .put("exception.type", foo.getClass().getName())
-                        .put("exception.stacktrace", Throwables.getStackTraceAsString(foo))
-                        .build());
+        span.recordException(
+            foo,
+            Attributes.builder()
+                .put("exception.message", foo.getMessage())
+                .put("exception.type", foo.getClass().getName())
+                .put("exception.stacktrace", Throwables.getStackTraceAsString(foo))
+                .build());
         System.out.println(Throwables.getStackTraceAsString(foo));
         throw foo;
       } finally {
@@ -384,7 +386,11 @@ public class DocumentReference {
     io.opentelemetry.api.trace.Span span = tracer.spanBuilder("DocumentSnapshot.get()").startSpan();
     span.makeCurrent();
     span.setAttribute("Attribute 1", "first attribute value");
-    this.rpcContext.getFirestore().getOptions().getAttributesMap().forEach((k, v) -> span.setAttribute(k,v));
+    this.rpcContext
+        .getFirestore()
+        .getOptions()
+        .getAttributesMap()
+        .forEach((k, v) -> span.setAttribute(k, v));
 
     ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
     result.addListener(span::end, MoreExecutors.directExecutor());

@@ -44,12 +44,10 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -293,7 +291,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             Span.current().addEvent("Raising snapshot to the stream observer.");
             apiStreamObserver.onNext(documentSnapshot);
 
-            if(numResponses == documentReferences.length) {
+            if (numResponses == documentReferences.length) {
               onComplete();
             }
           }
@@ -306,7 +304,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             Span.current().addEvent("Error occurred.");
             Span.current().setStatus(StatusCode.ERROR, throwable.getMessage());
             Span.current().recordException(throwable);
-            Span.current().setAttribute("exception.stacktrace", Throwables.getStackTraceAsString(throwable));
+            Span.current()
+                .setAttribute("exception.stacktrace", Throwables.getStackTraceAsString(throwable));
             Span.current().end();
             apiStreamObserver.onError(throwable);
           }
