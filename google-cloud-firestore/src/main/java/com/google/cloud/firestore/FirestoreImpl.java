@@ -16,8 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
-
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.NanoClock;
@@ -32,7 +30,6 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
-import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
@@ -44,25 +41,15 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.sdk.trace.export.SpanExporter;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -107,7 +94,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
-    initOpenTelemetry();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -520,62 +506,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     firestoreClient.shutdownNow();
     otelSdk.close();
     closed = true;
-  }
-
-  /**
-   * Initialize OpenTelemetry.
-   *
-   * @return a ready-to-use {@link OpenTelemetry} instance.
-   */
-  void initOpenTelemetry() {
-    try {
-      // TODO(ehsann): Set proper project_id.
-      // TraceExporter traceExporter =
-      // TraceExporter.createWithConfiguration(TraceConfiguration.builder().setProjectId("MY_PROJECT").build());
-      // TODO(ehsann): use OtlpGrpcSpanExporter
-      //    OpenTelemetrySdk openTelemetrySdk =
-      //        OpenTelemetrySdk.builder()
-      //            .setTracerProvider(
-      //                SdkTracerProvider.builder()
-      //                    .setResource(resource)
-      //                    .addSpanProcessor(
-      //
-      // BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder().setTimeout(2,
-      // TimeUnit.SECONDS).build())
-      //                            .setScheduleDelay(100, TimeUnit.MILLISECONDS)
-      //                            .build())
-      //                    .build())
-      //            .buildAndRegisterGlobal();
-
-      System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
-      // Include required service.name resource attribute on all spans and metrics
-      Resource resource =
-          Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Firestore").build());
-      SpanExporter gcpTraceExporter = TraceExporter.createWithDefaultConfiguration();
-      SpanProcessor gcpSpanProcessor = SimpleSpanProcessor.create(gcpTraceExporter);
-      SpanProcessor gcpBatchSpanProcessor = BatchSpanProcessor.builder(gcpTraceExporter).build();
-
-      LoggingSpanExporter loggingSpanExporter = LoggingSpanExporter.create();
-      SpanProcessor loggingSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
-
-      otelSdk =
-          OpenTelemetrySdk.builder()
-              .setTracerProvider(
-                  SdkTracerProvider.builder()
-                      .addSpanProcessor(gcpSpanProcessor)
-                      .setResource(resource)
-                      .addSpanProcessor(loggingSpanProcessor)
-                      .build())
-              // .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(loggingSpanProcessor).build())
-              .buildAndRegisterGlobal();
-
-      Runtime.getRuntime().addShutdownHook(new Thread(otelSdk::close));
-    } catch (Exception e) {
-      // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
-      // not allowed.
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(Level.INFO, "GlobalOpenTelemetry has already been configured.");
-    }
   }
 
   private static class TransactionAsyncAdapter<T> implements Transaction.AsyncFunction<T> {
