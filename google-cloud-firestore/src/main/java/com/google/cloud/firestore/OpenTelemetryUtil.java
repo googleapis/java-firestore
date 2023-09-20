@@ -18,16 +18,9 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
-import com.google.common.base.Throwables;
-import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import java.awt.*;
 import javax.annotation.Nullable;
 
 /**
@@ -40,34 +33,12 @@ import javax.annotation.Nullable;
 public interface OpenTelemetryUtil {
   String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
 
-  class Span {
-    private io.opentelemetry.api.trace.Span span;
+  interface Span {
+    /** Ends this span. */
+    void end();
 
-    public Span() {
-      this(null);
-    }
-
-    public Span(@Nullable io.opentelemetry.api.trace.Span span) {
-      this.span = span;
-    }
-
-    void end() {
-      if (span == null) return;
-      span.end();
-    }
-
-    void end(Throwable error) {
-      if (span == null) return;
-      span.setStatus(StatusCode.ERROR, error.getMessage());
-      span.recordException(
-          error,
-          Attributes.builder()
-              .put("exception.message", error.getMessage())
-              .put("exception.type", error.getClass().getName())
-              .put("exception.stacktrace", Throwables.getStackTraceAsString(error))
-              .build());
-      span.end();
-    }
+    /** Ends this span in an error. */
+    void end(Throwable error);
 
     /**
      * If an operation ends in the future, its relevant span should end _after_ the future has been
@@ -75,19 +46,36 @@ public interface OpenTelemetryUtil {
      * future. In order for telemetry info to be recorded, the future returned by this method should
      * be completed.
      */
-    <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
-      if (span == null) return futureValue;
-
-      return ApiFutures.transform(
-          futureValue,
-          value -> {
-            span.end();
-            return value;
-          },
-          MoreExecutors.directExecutor());
-    }
+    <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue);
   }
 
+  /**
+   * Returns a channel configurator for gRPC, or {@code null} if telemetry collection is disabled.
+   */
+  @Nullable
+  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
+
+  /** Starts a new span with the given name, sets it as the current span, and returns it. */
+  @Nullable
+  Span startSpan(String spanName, boolean addSettingsAttributes);
+
+  /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
+  @Nullable
+  Tracer getTracer();
+
+  /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
+  void close();
+
+  /**
+   * Creates and returns an instance of the OpenTelemetryUtil class.
+   *
+   * @param enabled Whether telemetry should be collected. Can be {@code null} if unspecified.
+   * @param openTelemetrySdk An instance of the OpenTelemetrySdk that should be used. Can be {@code
+   *     null} if unspecified.
+   * @param firestoreOptions The FirestoreOptions object that is requesting an instance of
+   *     OpenTelemetryUtil.
+   * @return An instance of the OpenTelemetryUtil class.
+   */
   static OpenTelemetryUtil getInstance(
       @Nullable Boolean enabled,
       @Nullable OpenTelemetrySdk openTelemetrySdk,
@@ -116,19 +104,4 @@ public interface OpenTelemetryUtil {
       return new DisabledOpenTelemetryUtil();
     }
   }
-
-  /** Returns a channel configurator for gRPC, or null if telemetry collection is disabled. */
-  @Nullable
-  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
-
-  /** Starts a new span with the given name, sets it as the current span, and returns it. */
-  @Nullable
-  Span startSpan(String spanName, boolean addSettingsAttributes);
-
-  /** Returns the OpenTelemetry tracer if enabled, and null otherwise. */
-  @Nullable
-  Tracer getTracer();
-
-  /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
-  void close();
 }

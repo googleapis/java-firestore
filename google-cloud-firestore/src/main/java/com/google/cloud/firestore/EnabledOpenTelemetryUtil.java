@@ -19,9 +19,15 @@ package com.google.cloud.firestore;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 
 import com.google.api.core.ApiFunction;
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
+import com.google.common.base.Throwables;
+import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
@@ -60,10 +66,51 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
   public static class OpenTelemetryGrpcChannelConfigurator
       implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
-    @Override
     public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
       GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
       return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
+    }
+  }
+
+  class Span implements OpenTelemetryUtil.Span {
+    private io.opentelemetry.api.trace.Span span;
+
+    public Span(@Nullable io.opentelemetry.api.trace.Span span) {
+      this.span = span;
+    }
+
+    /** Ends this span. */
+    public void end() {
+      span.end();
+    }
+
+    /** Ends this span in an error. */
+    public void end(Throwable error) {
+      span.setStatus(StatusCode.ERROR, error.getMessage());
+      span.recordException(
+          error,
+          Attributes.builder()
+              .put("exception.message", error.getMessage())
+              .put("exception.type", error.getClass().getName())
+              .put("exception.stacktrace", Throwables.getStackTraceAsString(error))
+              .build());
+      span.end();
+    }
+
+    /**
+     * If an operation ends in the future, its relevant span should end _after_ the future has been
+     * completed. This method "appends" the span completion code at the completion of the given
+     * future. In order for telemetry info to be recorded, the future returned by this method should
+     * be completed.
+     */
+    public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
+      return ApiFutures.transform(
+          futureValue,
+          value -> {
+            span.end();
+            return value;
+          },
+          MoreExecutors.directExecutor());
     }
   }
 
@@ -111,7 +158,6 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
   }
 
-  @Override
   @Nullable
   public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
     return new OpenTelemetryGrpcChannelConfigurator();
@@ -167,7 +213,6 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   }
 
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
-  @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
     io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).startSpan();
@@ -178,13 +223,11 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     return new Span(span);
   }
 
-  @Override
   @Nullable
   public Tracer getTracer() {
     return openTelemetrySdk.getTracer(LIBRARY_NAME);
   }
 
-  @Override
   public void close() {
     openTelemetrySdk.close();
   }

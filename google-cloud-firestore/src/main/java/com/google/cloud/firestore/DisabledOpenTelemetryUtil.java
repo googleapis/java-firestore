@@ -17,17 +17,22 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
+import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
 import javax.annotation.Nullable;
 
 public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
+  class Span implements OpenTelemetryUtil.Span {
+    public void end() {}
 
-  DisabledOpenTelemetryUtil() {
-    super();
+    public void end(Throwable error) {}
+
+    public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
+      return futureValue;
+    }
   }
 
-  @Override
   @Nullable
   public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
     return null;
@@ -38,12 +43,10 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
     return new Span();
   }
 
-  @Override
   @Nullable
   public Tracer getTracer() {
     return null;
   }
 
-  @Override
   public void close() {}
 }

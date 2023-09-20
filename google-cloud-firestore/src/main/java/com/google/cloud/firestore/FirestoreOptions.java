@@ -409,42 +409,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return (FirestoreRpc) getRpc();
   }
 
-  Map<String, String> getAttributesMap() {
-    Map<String, String> result = new HashMap<>();
-    result.put("settings.databaseId", getDatabaseId());
-    result.put("settings.host", getHost());
-    result.put("settings.channel.transportName", channelProvider.getTransportName());
-    result.put(
-        "settings.channel.needsCredentials", channelProvider.needsCredentials() ? "true" : "false");
-    result.put(
-        "settings.channel.needsEndpoint", channelProvider.needsEndpoint() ? "true" : "false");
-    result.put("settings.channel.needsHeaders", channelProvider.needsHeaders() ? "true" : "false");
-    result.put(
-        "settings.channel.shouldAutoClose", channelProvider.shouldAutoClose() ? "true" : "false");
-    result.put("settings.credentials.authenticationType", credentials.getAuthenticationType());
-    result.put(
-        "settings.retrySettings.initialRetryDelay",
-        getRetrySettings().getInitialRetryDelay().toString());
-    result.put(
-        "settings.retrySettings.maxRetryDelay", getRetrySettings().getMaxRetryDelay().toString());
-    result.put(
-        "settings.retrySettings.retryDelayMultiplier",
-        String.valueOf(getRetrySettings().getRetryDelayMultiplier()));
-    result.put(
-        "settings.retrySettings.maxAttempts", String.valueOf(getRetrySettings().getMaxAttempts()));
-    result.put(
-        "settings.retrySettings.initialRpcTimeout",
-        getRetrySettings().getInitialRpcTimeout().toString());
-    result.put(
-        "settings.retrySettings.maxRpcTimeout", getRetrySettings().getMaxRpcTimeout().toString());
-    result.put(
-        "settings.retrySettings.rpcTimeoutMultiplier",
-        String.valueOf(getRetrySettings().getRpcTimeoutMultiplier()));
-    result.put(
-        "settings.retrySettings.totalTimeout", getRetrySettings().getTotalTimeout().toString());
-    return result;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {

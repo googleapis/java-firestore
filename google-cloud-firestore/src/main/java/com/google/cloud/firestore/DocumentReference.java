@@ -358,7 +358,6 @@ public class DocumentReference {
       result = span.endAtFuture(result);
       return result;
     } catch (Exception error) {
-      System.out.println("got error" + error.getMessage() + " in the catch clause.");
       span.end(error);
       throw error;
     }
