@@ -313,7 +313,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     this.enableTelemetryCollection = builder.enableTelemetryCollection;
     this.openTelemetrySdk = builder.openTelemetrySdk;
     this.openTelemetryUtil =
-        new OpenTelemetryUtil(builder.enableTelemetryCollection, builder.openTelemetrySdk, this);
+        OpenTelemetryUtil.getInstance(
+            builder.enableTelemetryCollection, builder.openTelemetrySdk, this);
 
     this.databaseId =
         builder.databaseId != null

@@ -16,30 +16,18 @@
 
 package com.google.cloud.firestore;
 
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
-
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
-import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.sdk.trace.export.SpanExporter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.*;
 import javax.annotation.Nullable;
 
 /**
@@ -49,44 +37,10 @@ import javax.annotation.Nullable;
  * <p>This class currently supports tracing utility functions. Metrics and Logging methods will be
  * added in the future.
  */
-public class OpenTelemetryUtil {
-  private static String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
-  private static final String SERVICE = "Firestore";
-  private static final String LIBRARY_NAME = "com.google.cloud.firestore";
-  static final String SPAN_NAME_GETDOCUMENT = "CloudFirestoreOperation.GetDocument";
-  static final String SPAN_NAME_CREATEDOCUMENT = "CloudFirestoreOperation.CreateDocument";
-  static final String SPAN_NAME_UPDATEDOCUMENT = "CloudFirestoreOperation.UpdateDocument";
-  static final String SPAN_NAME_DELETEDOCUMENT = "CloudFirestoreOperation.DeleteDocument";
-  static final String SPAN_NAME_LISTCOLLECTIONIDS = "CloudFirestoreOperation.ListCollectionIds";
-  static final String SPAN_NAME_LISTDOCUMENTS = "CloudFirestoreOperation.ListDocuments";
-  static final String SPAN_NAME_BEGINTRANSACTION = "CloudFirestoreOperation.BeginTransaction";
-  static final String SPAN_NAME_COMMIT = "CloudFirestoreOperation.Commit";
-  static final String SPAN_NAME_ROLLBACK = "CloudFirestoreOperation.Rollback";
-  static final String SPAN_NAME_RUNQUERY = "CloudFirestoreOperation.RunQuery";
-  static final String SPAN_NAME_PARTITIONQUERY = "CloudFirestoreOperation.partitionQuery";
-  static final String SPAN_NAME_LISTEN = "CloudFirestoreOperation.Listen";
-  static final String SPAN_NAME_BATCHGETDOCUMENTS = "CloudFirestoreOperation.BatchGetDocuments";
-  static final String SPAN_NAME_BATCHWRITE = "CloudFirestoreOperation.BatchWrite";
-  static final String SPAN_NAME_WRITE = "CloudFirestoreOperation.Write";
+public interface OpenTelemetryUtil {
+  String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
 
-  // Indicates whether telemetry collection is enabled in this instance.
-  private boolean enabled;
-
-  @Nullable private OpenTelemetrySdk openTelemetrySdk;
-
-  private FirestoreOptions firestoreOptions;
-
-  // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
-  public static class OpenTelemetryGrpcChannelConfigurator
-      implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
-    @Override
-    public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
-      GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
-      return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
-    }
-  }
-
-  public static class Span {
+  class Span {
     private io.opentelemetry.api.trace.Span span;
 
     public Span() {
@@ -134,13 +88,12 @@ public class OpenTelemetryUtil {
     }
   }
 
-  public OpenTelemetryUtil(
+  static OpenTelemetryUtil getInstance(
       @Nullable Boolean enabled,
       @Nullable OpenTelemetrySdk openTelemetrySdk,
       FirestoreOptions firestoreOptions) {
-    //      @Nullable OpenTelemetrySdk openTelemetrySdk) {
-    this.openTelemetrySdk = openTelemetrySdk;
-    this.firestoreOptions = firestoreOptions;
+
+    boolean createEnabledInstance;
 
     if (enabled == null) {
       // The caller did not specify whether telemetry collection should be enabled via code.
@@ -149,143 +102,33 @@ public class OpenTelemetryUtil {
       if (enableOpenTelemetryEnvVar != null
           && (enableOpenTelemetryEnvVar.toLowerCase().equals("true")
               || enableOpenTelemetryEnvVar.toLowerCase().equals("on"))) {
-        this.enabled = true;
+        createEnabledInstance = true;
       } else {
-        this.enabled = false;
+        createEnabledInstance = false;
       }
     } else {
-      this.enabled = enabled;
+      createEnabledInstance = enabled;
     }
 
-    // Lastly, initialize an OpenTelemetrySdk if needed.
-    if (this.enabled && this.openTelemetrySdk == null) {
-      initializeOpenTelemetry();
-
-      if (this.openTelemetrySdk == null) {
-        throw new RuntimeException("Error: unable to initialize OpenTelemetry.");
-      }
-    }
-  }
-
-  void initializeOpenTelemetry() {
-    // Early exit if telemetry collection is disabled.
-    if (!this.enabled || this.openTelemetrySdk != null) return;
-
-    try {
-      System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
-      // Include required service.name resource attribute on all spans and metrics
-      Resource resource =
-          Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, SERVICE).build());
-      SpanExporter gcpTraceExporter = TraceExporter.createWithDefaultConfiguration();
-      SpanProcessor gcpSpanProcessor = SimpleSpanProcessor.create(gcpTraceExporter);
-      LoggingSpanExporter loggingSpanExporter = LoggingSpanExporter.create();
-      SpanProcessor loggingSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
-
-      this.openTelemetrySdk =
-          OpenTelemetrySdk.builder()
-              .setTracerProvider(
-                  SdkTracerProvider.builder()
-                      .setResource(resource)
-                      .addSpanProcessor(gcpSpanProcessor)
-                      .addSpanProcessor(loggingSpanProcessor)
-                      .build())
-              .buildAndRegisterGlobal();
-    } catch (Exception e) {
-      // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
-      // not allowed.
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
+    if (createEnabledInstance) {
+      return new EnabledOpenTelemetryUtil(openTelemetrySdk, firestoreOptions);
+    } else {
+      return new DisabledOpenTelemetryUtil();
     }
   }
 
   /** Returns a channel configurator for gRPC, or null if telemetry collection is disabled. */
   @Nullable
-  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
-    if (this.enabled) {
-      return new OpenTelemetryGrpcChannelConfigurator();
-    }
-    return null;
-  }
-
-  /** Applies the current Firestore instance settings as attributes to the current Span */
-  void addSettingsAttributesToCurrentSpan() {
-    if (!this.enabled) return;
-
-    io.opentelemetry.api.trace.Span span = io.opentelemetry.api.trace.Span.current();
-    span.setAttribute("settings.databaseId", firestoreOptions.getDatabaseId());
-    span.setAttribute("settings.host", firestoreOptions.getHost());
-    span.setAttribute(
-        "settings.channel.transportName",
-        firestoreOptions.getTransportChannelProvider().getTransportName());
-    span.setAttribute(
-        "settings.channel.needsCredentials",
-        String.valueOf(firestoreOptions.getTransportChannelProvider().needsCredentials()));
-    span.setAttribute(
-        "settings.channel.needsEndpoint",
-        String.valueOf(firestoreOptions.getTransportChannelProvider().needsEndpoint()));
-    span.setAttribute(
-        "settings.channel.needsHeaders",
-        String.valueOf(firestoreOptions.getTransportChannelProvider().needsHeaders()));
-    span.setAttribute(
-        "settings.channel.shouldAutoClose",
-        String.valueOf(firestoreOptions.getTransportChannelProvider().shouldAutoClose()));
-    span.setAttribute(
-        "settings.credentials.authenticationType",
-        firestoreOptions.getCredentials().getAuthenticationType());
-    span.setAttribute(
-        "settings.retrySettings.initialRetryDelay",
-        firestoreOptions.getRetrySettings().getInitialRetryDelay().toString());
-    span.setAttribute(
-        "settings.retrySettings.maxRetryDelay",
-        firestoreOptions.getRetrySettings().getMaxRetryDelay().toString());
-    span.setAttribute(
-        "settings.retrySettings.retryDelayMultiplier",
-        String.valueOf(firestoreOptions.getRetrySettings().getRetryDelayMultiplier()));
-    span.setAttribute(
-        "settings.retrySettings.maxAttempts",
-        String.valueOf(firestoreOptions.getRetrySettings().getMaxAttempts()));
-    span.setAttribute(
-        "settings.retrySettings.initialRpcTimeout",
-        firestoreOptions.getRetrySettings().getInitialRpcTimeout().toString());
-    span.setAttribute(
-        "settings.retrySettings.maxRpcTimeout",
-        firestoreOptions.getRetrySettings().getMaxRpcTimeout().toString());
-    span.setAttribute(
-        "settings.retrySettings.rpcTimeoutMultiplier",
-        String.valueOf(firestoreOptions.getRetrySettings().getRpcTimeoutMultiplier()));
-    span.setAttribute(
-        "settings.retrySettings.totalTimeout",
-        firestoreOptions.getRetrySettings().getTotalTimeout().toString());
-  }
+  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
 
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
   @Nullable
-  protected Span startSpan(String spanName, boolean addSettingsAttributes) {
-    if (!this.enabled) {
-      return new Span();
-    }
+  Span startSpan(String spanName, boolean addSettingsAttributes);
 
-    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).startSpan();
-    span.makeCurrent();
-
-    if (addSettingsAttributes) {
-      this.addSettingsAttributesToCurrentSpan();
-    }
-
-    return new Span(span);
-  }
-
+  /** Returns the OpenTelemetry tracer if enabled, and null otherwise. */
   @Nullable
-  private Tracer getTracer() {
-    if (!this.enabled) return null;
+  Tracer getTracer();
 
-    return openTelemetrySdk.getTracer(LIBRARY_NAME);
-  }
-
-  @Nullable
-  void close() {
-    if (this.enabled) {
-      openTelemetrySdk.close();
-    }
-  }
+  /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
+  void close();
 }
