@@ -85,8 +85,6 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   private boolean closed;
 
   public GrpcFirestoreRpc(final FirestoreOptions options) throws IOException {
-    GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
-
     GrpcTransportOptions transportOptions = (GrpcTransportOptions) options.getTransportOptions();
     executorFactory = transportOptions.getExecutorFactory();
     executor = executorFactory.get();
@@ -97,7 +95,6 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
             ManagedChannelBuilder.forTarget(options.getHost())
                 .usePlaintext()
                 .executor(executor)
-                .intercept(grpcTelemetry.newClientInterceptor())
                 .build();
         TransportChannel transportChannel = GrpcTransportChannel.create(managedChannel);
         clientContext =
