@@ -305,4 +305,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /** Attempts to stop all actively executing work and halts the processing of waiting work. */
   void shutdownNow();
+
+  /** Returns the OpenTelemetry utility class */
+  OpenTelemetryUtil getOpenTelemetryUtil();
 }

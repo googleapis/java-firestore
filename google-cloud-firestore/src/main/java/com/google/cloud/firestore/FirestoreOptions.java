@@ -118,6 +118,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
+  public OpenTelemetryUtil getOpenTelemetryUtil() {
+    return openTelemetryUtil;
+  }
+
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
@@ -306,8 +310,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
 
+    this.enableTelemetryCollection = builder.enableTelemetryCollection;
+    this.openTelemetrySdk = builder.openTelemetrySdk;
     this.openTelemetryUtil =
-        new OpenTelemetryUtil(builder.enableTelemetryCollection, builder.openTelemetrySdk);
+        new OpenTelemetryUtil(builder.enableTelemetryCollection, builder.openTelemetrySdk, this);
 
     this.databaseId =
         builder.databaseId != null

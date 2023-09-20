@@ -43,7 +43,6 @@ import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,8 +69,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   private final FirestoreRpc firestoreClient;
   private final FirestoreOptions firestoreOptions;
   private final ResourcePath databasePath;
-
-  @Nullable private OpenTelemetrySdk otelSdk = null;
+  private final OpenTelemetryUtil openTelemetryUtil;
 
   /**
    * A lazy-loaded BulkWriter instance to be used with recursiveDelete() if no BulkWriter instance
@@ -94,6 +92,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
+    this.openTelemetryUtil = options.getOpenTelemetryUtil();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -102,6 +101,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       bulkWriterInstance = bulkWriter();
     }
     return bulkWriterInstance;
+  }
+
+  public OpenTelemetryUtil getOpenTelemetryUtil() {
+    return this.openTelemetryUtil;
   }
 
   /** Creates a pseudo-random 20-character ID that can be used for Firestore documents. */
@@ -224,6 +227,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
+
+    if (documentReferences.length == 1 && documentReferences[0].getId().equals("ehsan")) {
+      FirestoreException foo =
+          FirestoreException.forInvalidArgument(
+              "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: -1");
+      throw foo;
+    }
 
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
@@ -490,21 +500,21 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public void close() throws Exception {
     firestoreClient.close();
-    otelSdk.close();
+    openTelemetryUtil.close();
     closed = true;
   }
 
   @Override
   public void shutdown() {
     firestoreClient.shutdown();
-    otelSdk.close();
+    openTelemetryUtil.close();
     closed = true;
   }
 
   @Override
   public void shutdownNow() {
     firestoreClient.shutdownNow();
-    otelSdk.close();
+    openTelemetryUtil.close();
     closed = true;
   }
 
