@@ -32,7 +32,6 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
@@ -41,8 +40,6 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.StatusCode;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -241,7 +238,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onStart(StreamController streamController) {
-            Span.current().addEvent("stream started");
+            openTelemetryUtil.currentSpan().addEvent("stream started.");
           }
 
           @Override
@@ -254,13 +251,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
               tracer
                   .getCurrentSpan()
                   .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": First response");
-              Span.current().addEvent("First response received.");
+              openTelemetryUtil.currentSpan().addEvent("First response received!");
             } else if (numResponses % 100 == 0) {
               tracer
                   .getCurrentSpan()
                   .addAnnotation(
                       TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Received 100 responses");
-              Span.current().addEvent("Received 100 responses.");
+              openTelemetryUtil.currentSpan().addEvent("Received 100 responses!");
             }
 
             switch (response.getResultCase()) {
@@ -284,7 +281,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
               default:
                 return;
             }
-            Span.current().addEvent("Raising snapshot to the stream observer.");
+            openTelemetryUtil.currentSpan().addEvent("Raising snapshot to the stream observer!");
             apiStreamObserver.onNext(documentSnapshot);
 
             if (numResponses == documentReferences.length) {
@@ -297,12 +294,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             tracer
                 .getCurrentSpan()
                 .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Error");
-            Span.current().addEvent("Error occurred.");
-            Span.current().setStatus(StatusCode.ERROR, throwable.getMessage());
-            Span.current().recordException(throwable);
-            Span.current()
-                .setAttribute("exception.stacktrace", Throwables.getStackTraceAsString(throwable));
-            Span.current().end();
+            openTelemetryUtil.currentSpan().end(throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -311,8 +303,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             tracer
                 .getCurrentSpan()
                 .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
-            Span.current().addEvent("stream completed.");
-            Span.current().end();
+            openTelemetryUtil.currentSpan().addEvent("stream completed!");
+            openTelemetryUtil.currentSpan().end();
             apiStreamObserver.onCompleted();
           }
         };

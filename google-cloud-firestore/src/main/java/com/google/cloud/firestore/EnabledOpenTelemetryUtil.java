@@ -27,6 +27,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
@@ -66,6 +67,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
   public static class OpenTelemetryGrpcChannelConfigurator
       implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
+    @Override
     public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
       GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
       return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
@@ -80,11 +82,13 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
 
     /** Ends this span. */
+    @Override
     public void end() {
       span.end();
     }
 
     /** Ends this span in an error. */
+    @Override
     public void end(Throwable error) {
       span.setStatus(StatusCode.ERROR, error.getMessage());
       span.recordException(
@@ -103,6 +107,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
      * future. In order for telemetry info to be recorded, the future returned by this method should
      * be completed.
      */
+    @Override
     public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
       return ApiFutures.transform(
           futureValue,
@@ -111,6 +116,13 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
             return value;
           },
           MoreExecutors.directExecutor());
+    }
+
+    /** Adds the given event to this span. */
+    @Override
+    public OpenTelemetryUtil.Span addEvent(String name) {
+      span.addEvent(name);
+      return this;
     }
   }
 
@@ -156,11 +168,6 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
       Logger.getLogger("Firestore OpenTelemetry")
           .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
     }
-  }
-
-  @Nullable
-  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
-    return new OpenTelemetryGrpcChannelConfigurator();
   }
 
   /** Applies the current Firestore instance settings as attributes to the current Span */
@@ -212,7 +219,14 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
         firestoreOptions.getRetrySettings().getTotalTimeout().toString());
   }
 
+  @Override
+  @Nullable
+  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    return new OpenTelemetryGrpcChannelConfigurator();
+  }
+
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
+  @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
     io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).startSpan();
@@ -223,11 +237,21 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     return new Span(span);
   }
 
+  /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
+  @Override
   @Nullable
   public Tracer getTracer() {
     return openTelemetrySdk.getTracer(LIBRARY_NAME);
   }
 
+  /** Returns the current span. */
+  @Override
+  @Nullable
+  public OpenTelemetryUtil.Span currentSpan() {
+    return new Span(io.opentelemetry.api.trace.Span.current());
+  }
+
+  @Override
   public void close() {
     openTelemetrySdk.close();
   }

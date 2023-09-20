@@ -24,29 +24,47 @@ import javax.annotation.Nullable;
 
 public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
   class Span implements OpenTelemetryUtil.Span {
+    @Override
     public void end() {}
 
+    @Override
     public void end(Throwable error) {}
 
+    @Override
     public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
       return futureValue;
     }
+
+    @Override
+    public OpenTelemetryUtil.Span addEvent(String name) {
+      return this;
+    }
   }
 
+  @Override
   @Nullable
   public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
     return null;
   }
 
+  @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
     return new Span();
   }
 
+  @Override
   @Nullable
   public Tracer getTracer() {
     return null;
   }
 
+  @Override
+  @Nullable
+  public OpenTelemetryUtil.Span currentSpan() {
+    return new Span();
+  }
+
+  @Override
   public void close() {}
 }

@@ -47,6 +47,9 @@ public interface OpenTelemetryUtil {
      * be completed.
      */
     <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue);
+
+    /** Adds the given event to this span. */
+    Span addEvent(String name);
   }
 
   /**
@@ -62,6 +65,10 @@ public interface OpenTelemetryUtil {
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
   @Nullable
   Tracer getTracer();
+
+  /** Returns the current span. */
+  @Nullable
+  Span currentSpan();
 
   /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
   void close();
