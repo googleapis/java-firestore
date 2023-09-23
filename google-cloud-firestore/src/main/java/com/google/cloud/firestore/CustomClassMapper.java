@@ -19,10 +19,9 @@ package com.google.cloud.firestore;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.Exclude;
-import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.firestore.v1.Value;
-import java.lang.reflect.AccessibleObject;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -162,7 +161,7 @@ class CustomClassMapper {
       String enumName = ((Enum<?>) o).name();
       try {
         Field enumField = o.getClass().getField(enumName);
-        return PojoBeanMapper.propertyName(enumField);
+        return BeanMapper.propertyName(enumField);
       } catch (NoSuchFieldException ex) {
         return enumName;
       }
@@ -385,7 +384,7 @@ class CustomClassMapper {
       Field[] enumFields = clazz.getFields();
       for (Field field : enumFields) {
         if (field.isEnumConstant()) {
-          String propertyName = PojoBeanMapper.propertyName(field);
+          String propertyName = BeanMapper.propertyName(field);
           if (value.equals(propertyName)) {
             value = field.getName();
             break;
@@ -670,14 +669,6 @@ class CustomClassMapper {
     private final Map<String, Method> setters;
     private final Map<String, Field> fields;
 
-    // A set of property names that were annotated with @ServerTimestamp.
-    private final HashSet<String> serverTimestamps;
-
-    // A set of property names that were annotated with @DocumentId. These properties will be
-    // populated with document ID values during deserialization, and be skipped during
-    // serialization.
-    private final HashSet<String> documentIdPropertyNames;
-
     PojoBeanMapper(Class<T> clazz) {
       super(clazz);
       properties = new HashMap<>();
@@ -685,9 +676,6 @@ class CustomClassMapper {
       setters = new HashMap<>();
       getters = new HashMap<>();
       fields = new HashMap<>();
-
-      serverTimestamps = new HashSet<>();
-      documentIdPropertyNames = new HashSet<>();
 
       Constructor<T> constructor;
       try {
@@ -975,27 +963,6 @@ class CustomClassMapper {
       return result;
     }
 
-    private void applyFieldAnnotations(Field field) {
-      if (field.isAnnotationPresent(ServerTimestamp.class)) {
-        Class<?> fieldType = field.getType();
-        if (fieldType != Date.class && fieldType != Timestamp.class && fieldType != Instant.class) {
-          throw new IllegalArgumentException(
-              "Field "
-                  + field.getName()
-                  + " is annotated with @ServerTimestamp but is "
-                  + fieldType
-                  + " instead of Date, Timestamp, or Instant.");
-        }
-        serverTimestamps.add(propertyName(field));
-      }
-
-      if (field.isAnnotationPresent(DocumentId.class)) {
-        Class<?> fieldType = field.getType();
-        ensureValidDocumentIdType("Field", "is", fieldType);
-        documentIdPropertyNames.add(propertyName(field));
-      }
-    }
-
     private void applyGetterAnnotations(Method method) {
       if (method.isAnnotationPresent(ServerTimestamp.class)) {
         Class<?> returnType = method.getReturnType();
@@ -1135,23 +1102,9 @@ class CustomClassMapper {
           && baseParameterTypes[0].equals(overrideParameterTypes[0]);
     }
 
-    private static String propertyName(Field field) {
-      String annotatedName = annotatedName(field);
-      return annotatedName != null ? annotatedName : field.getName();
-    }
-
     private static String propertyName(Method method) {
       String annotatedName = annotatedName(method);
       return annotatedName != null ? annotatedName : serializedName(method.getName());
-    }
-
-    private static String annotatedName(AccessibleObject obj) {
-      if (obj.isAnnotationPresent(PropertyName.class)) {
-        PropertyName annotation = obj.getAnnotation(PropertyName.class);
-        return annotation.value();
-      }
-
-      return null;
     }
 
     private static String serializedName(String methodName) {

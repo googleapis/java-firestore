@@ -16,12 +16,21 @@
 
 package com.google.cloud.firestore;
 
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
+import com.google.cloud.firestore.annotation.PropertyName;
+import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
+
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 /** Base bean mapper class, providing common functionality for class and record serialization. */
@@ -33,11 +42,19 @@ abstract class BeanMapper<T> {
   // Whether to log a message if there are properties we don't know how to set to
   // custom object fields/setters or record components during deserialization.
   private final boolean warnOnUnknownProperties;
+  // A set of property names that were annotated with @ServerTimestamp.
+  final HashSet<String> serverTimestamps;
+  // A set of property names that were annotated with @DocumentId. These properties will be
+  // populated with document ID values during deserialization, and be skipped during
+  // serialization.
+  final HashSet<String> documentIdPropertyNames;
 
   BeanMapper(Class<T> clazz) {
     this.clazz = clazz;
     throwOnUnknownProperties = clazz.isAnnotationPresent(ThrowOnExtraProperties.class);
     warnOnUnknownProperties = !clazz.isAnnotationPresent(IgnoreExtraProperties.class);
+    serverTimestamps = new HashSet<>();
+    documentIdPropertyNames = new HashSet<>();
   }
 
   Class<T> getClazz() {
@@ -127,5 +144,40 @@ abstract class BeanMapper<T> {
 
   T deserialize(Map<String, Object> values, DeserializeContext context) {
     return deserialize(values, Collections.emptyMap(), context);
+  }
+
+  void applyFieldAnnotations(Field field) {
+    if (field.isAnnotationPresent(ServerTimestamp.class)) {
+      Class<?> fieldType = field.getType();
+      if (fieldType != Date.class && fieldType != Timestamp.class) {
+        throw new IllegalArgumentException(
+            "Field "
+                + field.getName()
+                + " is annotated with @ServerTimestamp but is "
+                + fieldType
+                + " instead of Date or Timestamp.");
+      }
+      serverTimestamps.add(propertyName(field));
+    }
+
+    if (field.isAnnotationPresent(DocumentId.class)) {
+      Class<?> fieldType = field.getType();
+      ensureValidDocumentIdType("Field", "is", fieldType);
+      documentIdPropertyNames.add(propertyName(field));
+    }
+  }
+
+  static String propertyName(Field field) {
+    String annotatedName = annotatedName(field);
+    return annotatedName != null ? annotatedName : field.getName();
+  }
+
+  static String annotatedName(AccessibleObject obj) {
+    if (obj.isAnnotationPresent(PropertyName.class)) {
+      PropertyName annotation = obj.getAnnotation(PropertyName.class);
+      return annotation.value();
+    }
+
+    return null;
   }
 }

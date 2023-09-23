@@ -16,20 +16,17 @@
 
 package com.google.cloud.firestore;
 
-import com.google.cloud.Timestamp;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -54,12 +51,6 @@ class RecordMapper<T> extends BeanMapper<T> {
   private final Map<String, Method> accessors = new HashMap<>();
   private final Constructor<T> constructor;
   private final Map<String, Integer> constructorParamIndexes = new HashMap<>();
-  // A set of property names that were annotated with @ServerTimestamp.
-  private final Set<String> serverTimestamps = new HashSet<>();
-  // A set of property names that were annotated with @DocumentId. These properties will be
-  // populated with document ID values during deserialization, and be skipped during
-  // serialization.
-  private final Set<String> documentIdPropertyNames = new HashSet<>();
 
   RecordMapper(Class<T> clazz) {
     super(clazz);
@@ -71,12 +62,16 @@ class RecordMapper<T> extends BeanMapper<T> {
       throw new RuntimeException("No properties to serialize found on class " + clazz.getName());
     }
 
-    for (int i = 0; i < recordComponents.length; i++) {
-      AnnotatedElement recordComponent = recordComponents[i];
-      String propertyName = propertyName(recordComponent);
-      constructorParamIndexes.put(propertyName, i);
-      accessors.put(propertyName, RECORD_INSPECTOR.getAccessor(recordComponent));
-      applyComponentAnnotations(recordComponent);
+    try {
+      for (int i = 0; i < recordComponents.length; i++) {
+        Field field = clazz.getDeclaredField(RECORD_INSPECTOR.getName(recordComponents[i]));
+        String propertyName = propertyName(field);
+        constructorParamIndexes.put(propertyName, i);
+        accessors.put(propertyName, RECORD_INSPECTOR.getAccessor(recordComponents[i]));
+        applyFieldAnnotations(field);
+      }
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -149,52 +144,6 @@ class RecordMapper<T> extends BeanMapper<T> {
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  private void applyComponentAnnotations(AnnotatedElement component) {
-    if (isAnnotationPresent(component, "ServerTimestamp")) {
-      Class<?> componentType = RECORD_INSPECTOR.getType(component);
-      if (componentType != Date.class && componentType != Timestamp.class) {
-        throw new IllegalArgumentException(
-            "Component "
-                + RECORD_INSPECTOR.getName(component)
-                + " is annotated with @ServerTimestamp but is "
-                + componentType
-                + " instead of Date or Timestamp.");
-      }
-      serverTimestamps.add(propertyName(component));
-    }
-
-    if (isAnnotationPresent(component, "DocumentId")) {
-      Class<?> type = RECORD_INSPECTOR.getType(component);
-      ensureValidDocumentIdType("Component", "is", type);
-      documentIdPropertyNames.add(propertyName(component));
-    }
-  }
-
-  private static String propertyName(AnnotatedElement component) {
-    Optional<Annotation> propertyName = getAnnotation(component, "PropertyName");
-    if (propertyName.isPresent()) {
-      Annotation annotation = propertyName.get();
-      try {
-        return (String) annotation.getClass().getMethod("value").invoke(annotation);
-      } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-        throw new IllegalArgumentException("Failed to get PropertyName annotation value", e);
-      }
-    }
-
-    return RECORD_INSPECTOR.getName(component);
-  }
-
-  private static boolean isAnnotationPresent(AnnotatedElement element, String annotationName) {
-    return getAnnotation(element, annotationName).isPresent();
-  }
-
-  private static Optional<Annotation> getAnnotation(
-      AnnotatedElement element, String annotationName) {
-    return Arrays.stream(element.getAnnotations())
-        .filter(annotation -> annotation.annotationType().getSimpleName().equals(annotationName))
-        .findAny();
   }
 
   // Populate @DocumentId annotated components. If there is a conflict (@DocumentId annotation is
