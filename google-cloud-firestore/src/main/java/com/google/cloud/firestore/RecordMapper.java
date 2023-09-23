@@ -33,11 +33,8 @@ import java.util.logging.Logger;
 /**
  * Serializes java records. Uses automatic record constructors and accessors only. Therefore,
  * exclusion of fields is not supported. Supports DocumentId, PropertyName, and ServerTimestamp
- * annotations on record components. However, those annotations have to
- * include @Target(ElementType.RECORD_COMPONENT), so the ones defined in the
- * google-cloud-firestore-jdk17 module should be used, rather than the ones defined in this module.
- * Since records are not supported in JDK8, reflection is used for inspecting record metadata. This
- * class will fail to load on java versions that don't support records.
+ * annotations on record components.
+ * Since records are not supported in JDK versions < 16, reflection is used for inspecting record metadata.
  *
  * @author Eran Leshem
  */
