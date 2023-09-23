@@ -28,18 +28,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.PropertyName;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
-import com.google.cloud.firestore.jdk17.annotation.DocumentId;
-import com.google.cloud.firestore.jdk17.annotation.PropertyName;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.DatabaseRootName;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.google.cloud.firestore.jdk17.LocalFirestoreHelper.fromSingleQuotedString;
 import static com.google.cloud.firestore.jdk17.LocalFirestoreHelper.mapAnyType;

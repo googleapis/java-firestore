@@ -101,13 +101,13 @@ public final class LocalFirestoreHelper {
 
   public record ServerTimestamp (
 
-    @com.google.cloud.firestore.jdk17.annotation.ServerTimestamp Date foo,
+    @com.google.cloud.firestore.annotation.ServerTimestamp Date foo,
     Inner inner
 
   ){
     record Inner (
 
-      @com.google.cloud.firestore.jdk17.annotation.ServerTimestamp Date bar
+      @com.google.cloud.firestore.annotation.ServerTimestamp Date bar
     ){}
   }
 
