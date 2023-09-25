@@ -56,10 +56,6 @@
       <artifactId>grpc-protobuf</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-context</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
     </dependency>
