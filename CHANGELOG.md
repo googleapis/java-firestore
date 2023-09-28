@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.14.4](https://github.com/googleapis/java-firestore/compare/v3.14.3...v3.14.4) (2023-09-28)
+
+
+### Bug Fixes
+
+* Add tests for multiple inequality support ([#1392](https://github.com/googleapis/java-firestore/issues/1392)) ([e01b3a1](https://github.com/googleapis/java-firestore/commit/e01b3a1c2489b9cde11543584ab32270960c41ce))
+
+
+### Dependencies
+
+* Remove unused dependency that is blocking PR 1428 ([#1429](https://github.com/googleapis/java-firestore/issues/1429)) ([73ff8dc](https://github.com/googleapis/java-firestore/commit/73ff8dca20052715ae88e91bd5c322d06dbeccc0))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.16.1 ([#1431](https://github.com/googleapis/java-firestore/issues/1431)) ([38832f9](https://github.com/googleapis/java-firestore/commit/38832f9853019aedbbf04d34a64d007cbff2752f))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.27 ([#1425](https://github.com/googleapis/java-firestore/issues/1425)) ([dc26bbb](https://github.com/googleapis/java-firestore/commit/dc26bbb91e291d53597221873d3c0995de3d31a2))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.27 ([#1426](https://github.com/googleapis/java-firestore/issues/1426)) ([5e8b299](https://github.com/googleapis/java-firestore/commit/5e8b2998c90829eccef5d18d50541ba5ea3d74f5))
+
 ## [3.14.3](https://github.com/googleapis/java-firestore/compare/v3.14.2...v3.14.3) (2023-09-12)
 
 
