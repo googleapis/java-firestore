@@ -130,7 +130,7 @@ public class ITQueryAggregationsTest extends ITBaseTest {
     assertThat(executionException)
         .hasCauseThat()
         .hasMessageThat()
-        .containsMatch("index.*https:\\/\\/console\\.firebase\\.google\\.com");
+        .containsMatch("FAILED_PRECONDITION:.*index.*");
   }
 
   @Test
