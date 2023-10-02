@@ -216,7 +216,6 @@ public class QueryCountTest {
 
   @Test
   public void shouldNotRetryIfExceptionIsFirestoreExceptionWithNonRetryableStatus() {
-    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
     doAnswer(countQueryResponse(new FirestoreException("reason", Status.INVALID_ARGUMENT)))
         .doAnswer(countQueryResponse())
         .when(firestoreMock)
