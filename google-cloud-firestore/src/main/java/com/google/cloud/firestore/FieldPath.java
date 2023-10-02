@@ -20,6 +20,8 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.StructuredQuery;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
@@ -81,6 +83,62 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
       throw new IllegalArgumentException("Use FieldPath.of() for field names containing '˜*/[]'.");
     }
     return empty().append(field);
+  }
+
+  /**
+   * Creates a {@code FieldPath} from a server-encoded field path.
+   *
+   * <p>Copied from Firebase Android SDK:
+   * https://github.com/firebase/firebase-android-sdk/blob/2d3b2be7d2d00d693eb74986f20a6265c918848f/firebase-firestore/src/main/java/com/google/firebase/firestore/model/FieldPath.java#L47
+   */
+  public static FieldPath fromServerFormat(String path) {
+    List<String> res = new ArrayList<>();
+    StringBuilder builder = new StringBuilder();
+
+    int i = 0;
+
+    // If we're inside '`' backticks, then we should ignore '.' dots.
+    boolean inBackticks = false;
+
+    while (i < path.length()) {
+      char c = path.charAt(i);
+      if (c == '\\') {
+        if (i + 1 == path.length()) {
+          throw new IllegalArgumentException("Trailing escape character is not allowed");
+        }
+        i++;
+        builder.append(path.charAt(i));
+      } else if (c == '.') {
+        if (!inBackticks) {
+          String elem = builder.toString();
+          if (elem.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Invalid field path ("
+                    + path
+                    + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
+          }
+          builder = new StringBuilder();
+          res.add(elem);
+        } else {
+          // escaped, append to current segment
+          builder.append(c);
+        }
+      } else if (c == '`') {
+        inBackticks = !inBackticks;
+      } else {
+        builder.append(c);
+      }
+      i++;
+    }
+    String lastElem = builder.toString();
+    if (lastElem.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Invalid field path ("
+              + path
+              + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
+    }
+    res.add(lastElem);
+    return FieldPath.of(res.toArray(new String[0]));
   }
 
   /** Returns an empty field path. */

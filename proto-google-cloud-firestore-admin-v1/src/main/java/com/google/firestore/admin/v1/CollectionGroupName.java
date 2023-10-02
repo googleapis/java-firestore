@@ -154,7 +154,7 @@ public class CollectionGroupName implements ResourceName {
     if (o == this) {
       return true;
     }
-    if (o != null || getClass() == o.getClass()) {
+    if (o != null && getClass() == o.getClass()) {
       CollectionGroupName that = ((CollectionGroupName) o);
       return Objects.equals(this.project, that.project)
           && Objects.equals(this.database, that.database)

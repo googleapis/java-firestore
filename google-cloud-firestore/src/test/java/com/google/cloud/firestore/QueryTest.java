@@ -51,6 +51,7 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilterInternal;
+import com.google.cloud.firestore.Query.FieldOrder;
 import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.io.BaseEncoding;
@@ -66,6 +67,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.Status;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -607,6 +609,23 @@ public class QueryTest {
     Value documentValue = reference(DOCUMENT_NAME);
 
     query.startAt(documentCursor).get();
+
+    RunQueryRequest queryRequest =
+        query(order("__name__", StructuredQuery.Direction.ASCENDING), startAt(documentValue, true));
+
+    assertEquals(queryRequest, runQuery.getValue());
+  }
+
+  @Test
+  public void withDocumentIdAndDocumentReferenceCursor() {
+    doAnswer(queryResponse())
+        .when(firestoreMock)
+        .streamRequest(runQuery.capture(), streamObserverCapture.capture(), any());
+
+    DocumentReference documentCursor = firestoreMock.document(DOCUMENT_PATH);
+    Value documentValue = reference(DOCUMENT_NAME);
+
+    query.orderBy(FieldPath.documentId()).startAt(documentCursor).get();
 
     RunQueryRequest queryRequest =
         query(order("__name__", StructuredQuery.Direction.ASCENDING), startAt(documentValue, true));
@@ -1335,5 +1354,171 @@ public class QueryTest {
     assertEquals("enabled", comparisonFilter.fieldReference.getFieldPath());
     assertFalse(comparisonFilter.isInequalityFilter());
     assertEquals(Value.newBuilder().setBooleanValue(true).build(), comparisonFilter.value);
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyOnCharacters() {
+    Query query_ =
+        query
+            .whereLessThan("a", "value")
+            .whereGreaterThanOrEqualTo("a", "value")
+            .whereGreaterThan("aa", "value")
+            .whereGreaterThan("b", "value")
+            .whereGreaterThan("A", "value");
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("A", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("aa", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("b", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyOnCharactersAndNumbers() {
+    Query query_ =
+        query
+            .whereLessThan("a", "value")
+            .whereGreaterThan("1", "value")
+            .whereGreaterThan("19", "value")
+            .whereGreaterThan("2", "value");
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("1", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("19", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("2", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyOnNestedFields() {
+    Query query_ =
+        query
+            .whereLessThan("a", "value")
+            .whereGreaterThan("aa", "value")
+            .whereGreaterThan("a.a", "value");
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a.a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("aa", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyOnSpecialCharacters() {
+    Query query_ =
+        query
+            .whereLessThan("a", "value")
+            .whereGreaterThan("_a", "value")
+            .whereGreaterThan("a.a", "value");
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("_a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a.a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyOnFieldNameWithDot() {
+    Query query_ =
+        query
+            .whereLessThan("a", "value")
+            .whereGreaterThan(FieldPath.of("a.a"), "value")
+            .whereGreaterThan("a.z", "value");
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a.z", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("`a.a`", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyInCompositeFilter() {
+    Query query_ =
+        query.where(
+            and(
+                lessThan("a", "value"),
+                and(
+                    or(greaterThanOrEqualTo("b", "value"), lessThanOrEqualTo("c", "value")),
+                    or(greaterThan("d", "value"), equalTo("e", "value")))));
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("b", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("c", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("d", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void inequalityFiltersImplicitlyOrderedLexicographicallyWithExplicitOrderBys() {
+    Query query_ =
+        query
+            .whereLessThan("b", "value")
+            .whereGreaterThan("a", "value")
+            .whereGreaterThan("z", "value")
+            .orderBy("z", Query.Direction.ASCENDING);
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("z", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("b", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void
+      inequalityFiltersImplicitlyOrderedLexicographicallyFollowingExplicitOrderByDirection() {
+    Query query_ =
+        query
+            .whereLessThan("b", "value")
+            .whereGreaterThan("a", "value")
+            .orderBy("z", Query.Direction.DESCENDING);
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("z", Query.Direction.DESCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.DESCENDING));
+    orderFields.add(new FieldOrder("b", Query.Direction.DESCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.DESCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
+  }
+
+  @Test
+  public void
+      inequalityFiltersImplicitlyOrderedLexicographicallyFollowingLastExplicitOrderByDirection() {
+    Query query_ =
+        query
+            .whereLessThan("b", "value")
+            .whereGreaterThan("a", "value")
+            .orderBy("z", Query.Direction.DESCENDING)
+            .orderBy("c", Query.Direction.ASCENDING);
+
+    List<FieldOrder> orderFields = new ArrayList<>();
+    orderFields.add(new FieldOrder("z", Query.Direction.DESCENDING));
+    orderFields.add(new FieldOrder("c", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("a", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder("b", Query.Direction.ASCENDING));
+    orderFields.add(new FieldOrder(FieldPath.documentId().toProto(), Query.Direction.ASCENDING));
+
+    assertEquals(orderFields, query_.createImplicitOrderBy());
   }
 }

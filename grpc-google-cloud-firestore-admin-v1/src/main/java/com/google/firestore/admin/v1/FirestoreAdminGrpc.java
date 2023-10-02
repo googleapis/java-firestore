@@ -51,7 +51,7 @@ public final class FirestoreAdminGrpc {
 
   private FirestoreAdminGrpc() {}
 
-  public static final String SERVICE_NAME = "google.firestore.admin.v1.FirestoreAdmin";
+  public static final java.lang.String SERVICE_NAME = "google.firestore.admin.v1.FirestoreAdmin";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<
@@ -1939,9 +1939,9 @@ public final class FirestoreAdminGrpc {
   private static final class FirestoreAdminMethodDescriptorSupplier
       extends FirestoreAdminBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    FirestoreAdminMethodDescriptorSupplier(String methodName) {
+    FirestoreAdminMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 
