@@ -72,7 +72,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -86,8 +85,6 @@ public class Query {
 
   final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
-
-  private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
 
   /** The direction of a sort. */
   public enum Direction {
@@ -1289,16 +1286,6 @@ public class Query {
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
-  }
-
-  private void warningOnSingleDocumentReference(Object... fieldValues) {
-    if (options.getFieldOrders().isEmpty()
-        && fieldValues.length == 1
-        && fieldValues[0] instanceof DocumentReference) {
-      LOGGER.warning(
-          "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
-              + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
-    }
   }
 
   /**
