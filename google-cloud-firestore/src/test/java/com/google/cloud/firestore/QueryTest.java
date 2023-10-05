@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.Filter.*;
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
 import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
+import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_PATH;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_SNAPSHOT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.andFilters;
 import static com.google.cloud.firestore.LocalFirestoreHelper.endAt;
