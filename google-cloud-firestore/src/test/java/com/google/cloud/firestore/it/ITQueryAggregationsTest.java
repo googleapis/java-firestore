@@ -28,13 +28,10 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.cloud.firestore.AggregateField;
-import com.google.cloud.firestore.AggregateQuery;
-import com.google.cloud.firestore.AggregateQuerySnapshot;
-import com.google.cloud.firestore.CollectionGroup;
-import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.*;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -840,5 +837,248 @@ public class ITQueryAggregationsTest extends ITBaseTest {
         collection.aggregate(average("rating"), AggregateField.count()).get().get();
     assertThat(snapshot.get(average("rating"))).isEqualTo(5);
     assertThat(snapshot.get(AggregateField.count())).isEqualTo(4);
+  }
+
+  // Currently not allowed because it requires __name__, num index.
+  @Ignore
+  @Test
+  public void aggregatesWithDocumentReferenceCursors() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "a", map("num", 1),
+            "b", map("num", 2),
+            "c", map("num", 3),
+            "d", map("num", 4),
+            "e", map("num", 5));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    AggregateQuerySnapshot snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .startAfter(collection.document("c"))
+            .aggregate(sum("num"))
+            .get()
+            .get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(9);
+
+    snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .startAt(collection.document("c"))
+            .aggregate(sum("num"))
+            .get()
+            .get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(12);
+
+    snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .endBefore(collection.document("c"))
+            .aggregate(sum("num"))
+            .get()
+            .get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(3);
+
+    snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .endAt(collection.document("c"))
+            .aggregate(sum("num"))
+            .get()
+            .get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(6);
+  }
+
+  CollectionReference addTwoDocsForCursorTesting() throws InterruptedException {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "a", map("num", 5, "foo", 1),
+            "b", map("num", 7, "foo", 2));
+    return testCollectionWithDocs(testDocs);
+  }
+
+  @Test
+  public void aggregateWithNoFilterNoOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(12);
+  }
+
+  @Test
+  public void aggregateWithEqualityFilterNoOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.whereEqualTo("num", 5).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(5);
+  }
+
+  @Test
+  public void aggregateWithInequalityFilterNoOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.whereGreaterThan("num", 5).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  @Test
+  public void aggregateWithNoFilterExplicitOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.orderBy("num").aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(12);
+  }
+
+  @Test
+  public void aggregateWithEqualityFilterExplicitOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.whereEqualTo("num", 5).orderBy("num").aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(5);
+  }
+
+  @Test
+  public void aggregateWithInequalityFilterExplicitOrderByNoCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection.whereGreaterThan("num", 5).orderBy("num").aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  @Test
+  public void aggregateNoFilterExplicitOrderByFieldValueCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.orderBy("num").startAfter(5).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `__name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateNoFilterExplicitOrderByDocumentReferenceCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection
+            .orderBy(FieldPath.documentId())
+            .startAfter(collection.document("a"))
+            .aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `__name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateNoFilterNoOrderByDocumentReferenceCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query = collection.startAfter(collection.document("a")).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `foo, __name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateNoFilterExplicitOrderByDocumentSnapshotCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    DocumentSnapshot docSnapshot = collection.document("a").get().get();
+    AggregateQuery query = collection.orderBy("foo").startAfter(docSnapshot).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This just happens to work because the orderBy field matches the aggregation field.
+  @Test
+  public void aggregateNoFilterExplicitOrderByDocumentSnapshotCursor2() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    DocumentSnapshot docSnapshot = collection.document("a").get().get();
+    AggregateQuery query = collection.orderBy("num").startAfter(docSnapshot).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  @Test
+  public void aggregateEqualityFilterExplicitOrderByFieldValueCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection.whereEqualTo("num", 5).orderBy("num").startAt(5).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(5);
+  }
+
+  @Test
+  public void aggregateInequalityFilterExplicitOrderByFieldValueCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection.whereGreaterThan("num", 5).orderBy("num").startAt(6).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `__name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateEqualityFilterExplicitOrderByDocumentReferenceCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection
+            .whereEqualTo("num", 7)
+            .orderBy(FieldPath.documentId())
+            .startAfter(collection.document("a"))
+            .aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // Full orderBy is provided.
+  @Test
+  public void aggregateInequalityFilterExplicitOrderByDocumentReferenceCursor() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    AggregateQuery query =
+        collection
+            .whereGreaterThan("num", 0)
+            .orderBy("num")
+            .orderBy(FieldPath.documentId())
+            .startAfter(5, collection.document("a"))
+            .aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `__name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateEqualityFilterNoOrderByDocumentSnapshotReference() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    DocumentSnapshot docSnapshot = collection.document("a").get().get();
+    AggregateQuery query =
+        collection.whereEqualTo("num", 7).startAfter(docSnapshot).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This just happens to work because the orderBy field matches the aggregation field.
+  @Test
+  public void aggregateInequalityFilterNoOrderByDocumentSnapshotReference() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    DocumentSnapshot docSnapshot = collection.document("a").get().get();
+    AggregateQuery query =
+        collection.whereGreaterThan("num", 0).startAfter(docSnapshot).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  // This is expected to fail because it requires the `foo, __name__, num` index.
+  @Ignore
+  @Test
+  public void aggregateInequalityFilterNoOrderByDocumentSnapshotReference2() throws Exception {
+    CollectionReference collection = addTwoDocsForCursorTesting();
+    DocumentSnapshot docSnapshot = collection.document("a").get().get();
+    AggregateQuery query =
+        collection.whereGreaterThan("foo", 0).startAfter(docSnapshot).aggregate(sum("num"));
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.get(sum("num"))).isEqualTo(7);
   }
 }

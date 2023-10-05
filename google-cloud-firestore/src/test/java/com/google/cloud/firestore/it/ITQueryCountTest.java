@@ -33,6 +33,7 @@ import com.google.cloud.firestore.AggregateQuerySnapshot;
 import com.google.cloud.firestore.CollectionGroup;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.TransactionOptions;
@@ -103,7 +104,7 @@ public class ITQueryCountTest extends ITBaseTest {
   }
 
   @Test
-  public void countShouldRespectStartAtAndEndAt() throws Exception {
+  public void countShouldRespectStartAtAndEndAtWithDocumentSnapshotCursor() throws Exception {
     CollectionReference collection = createCollectionWithDocuments(10).collection();
     List<QueryDocumentSnapshot> documentSnapshots = collection.get().get().getDocuments();
     AggregateQuerySnapshot snapshot =
@@ -114,6 +115,52 @@ public class ITQueryCountTest extends ITBaseTest {
             .get()
             .get();
     assertThat(snapshot.getCount()).isEqualTo(6);
+  }
+
+  @Test
+  public void countShouldRespectStartAtAndEndAtWithDocumentReferenceCursor() throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(10).collection();
+    List<QueryDocumentSnapshot> documentSnapshots = collection.get().get().getDocuments();
+    AggregateQuerySnapshot snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .startAt(documentSnapshots.get(2).getReference())
+            .endAt(documentSnapshots.get(7).getReference())
+            .count()
+            .get()
+            .get();
+    assertThat(snapshot.getCount()).isEqualTo(6);
+  }
+
+  @Test
+  public void countShouldRespectStartAfterAndEndBeforeWithDocumentSnapshotCursor()
+      throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(10).collection();
+    List<QueryDocumentSnapshot> documentSnapshots = collection.get().get().getDocuments();
+    AggregateQuerySnapshot snapshot =
+        collection
+            .startAfter(documentSnapshots.get(2))
+            .endBefore(documentSnapshots.get(7))
+            .count()
+            .get()
+            .get();
+    assertThat(snapshot.getCount()).isEqualTo(4);
+  }
+
+  @Test
+  public void countShouldRespectStartAfterAndEndBeforeWithDocumentReferenceCursor()
+      throws Exception {
+    CollectionReference collection = createCollectionWithDocuments(10).collection();
+    List<QueryDocumentSnapshot> documentSnapshots = collection.get().get().getDocuments();
+    AggregateQuerySnapshot snapshot =
+        collection
+            .orderBy(FieldPath.documentId())
+            .startAfter(documentSnapshots.get(2).getReference())
+            .endBefore(documentSnapshots.get(7).getReference())
+            .count()
+            .get()
+            .get();
+    assertThat(snapshot.getCount()).isEqualTo(4);
   }
 
   @Test
