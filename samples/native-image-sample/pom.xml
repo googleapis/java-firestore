@@ -23,7 +23,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!-- Java 8 because the Kokoro Sample test uses that Java version -->
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <beam.version>2.49.0</beam.version>
+    <beam.version>2.50.0</beam.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -32,7 +32,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>26.21.0</version>
+        <version>26.24.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -102,7 +102,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <dependency>
           <groupId>org.graalvm.buildtools</groupId>
           <artifactId>junit-platform-native</artifactId>
-          <version>0.9.24</version>
+          <version>0.9.27</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -123,7 +123,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
           <plugin>
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
-            <version>0.9.24</version>
+            <version>0.9.27</version>
             <extensions>true</extensions>
             <configuration>
               <mainClass>com.example.firestore.NativeImageFirestoreSample</mainClass>
