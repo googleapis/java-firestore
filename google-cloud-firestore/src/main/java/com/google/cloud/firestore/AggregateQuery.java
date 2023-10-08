@@ -32,6 +32,7 @@ import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import java.util.Set;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -244,6 +245,18 @@ public class AggregateQuery {
             .build();
     Query query = Query.fromProto(firestore, runQueryRequest);
     return new AggregateQuery(query);
+  }
+
+  @Nonnull
+  ListenerRegistration addSnapshotListener(
+      @Nonnull EventListener<AggregateQuerySnapshot> listener) {
+    throw new RuntimeException("not implemented");
+  }
+
+  @Nonnull
+  ListenerRegistration addSnapshotListener(
+      @Nonnull Executor executor, @Nonnull EventListener<AggregateQuerySnapshot> listener) {
+    throw new RuntimeException("not implemented");
   }
 
   /**

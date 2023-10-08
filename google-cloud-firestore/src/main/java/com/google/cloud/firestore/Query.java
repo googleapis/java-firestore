@@ -1931,6 +1931,20 @@ public class Query {
     return new AggregateQuery(this);
   }
 
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField field, @Nonnull AggregateField... fields) {
+    throw new RuntimeException("not implemented");
+  }
+
+  public GroupByQuery groupBy(@Nonnull String field1, @Nonnull String... fields) {
+    throw new RuntimeException("not implemented");
+  }
+
+  public GroupByQuery groupBy(@Nonnull FieldPath field1, @Nonnull FieldPath... fields) {
+    throw new RuntimeException("not implemented");
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *

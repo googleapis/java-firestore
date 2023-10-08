@@ -203,4 +203,9 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
     return query.get(transactionId);
   }
+
+  @Nonnull
+  public ApiFuture<GroupByQuerySnapshot> get(@Nonnull GroupByQuery query) {
+    throw new RuntimeException("not implemented");
+  }
 }

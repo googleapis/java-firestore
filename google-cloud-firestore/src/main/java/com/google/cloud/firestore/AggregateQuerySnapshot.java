@@ -23,33 +23,19 @@ import javax.annotation.Nonnull;
 
 /** The results of executing an {@link AggregateQuery}. */
 @InternalExtensionOnly
-public class AggregateQuerySnapshot {
+public class AggregateQuerySnapshot extends AggregateSnapshot {
 
   @Nonnull private final AggregateQuery query;
-  @Nonnull private final Timestamp readTime;
-  private final long count;
 
   AggregateQuerySnapshot(@Nonnull AggregateQuery query, @Nonnull Timestamp readTime, long count) {
+    super(readTime, count);
     this.query = query;
-    this.readTime = readTime;
-    this.count = count;
   }
 
   /** Returns the query that was executed to produce this result. */
   @Nonnull
   public AggregateQuery getQuery() {
     return query;
-  }
-
-  /** Returns the time at which this snapshot was read. */
-  @Nonnull
-  public Timestamp getReadTime() {
-    return readTime;
-  }
-
-  /** Returns the number of documents in the result set of the underlying query. */
-  public long getCount() {
-    return count;
   }
 
   /**
@@ -70,16 +56,13 @@ public class AggregateQuerySnapshot {
    */
   @Override
   public boolean equals(Object object) {
-    if (object == this) {
-      return true;
-    } else if (!(object instanceof AggregateQuerySnapshot)) {
+    if (!super.equals(object)) {
       return false;
     }
-
-    AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
-
-    // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
-    return query.equals(other.query) && count == other.count;
+    if (!(object instanceof AggregateQuerySnapshot)) {
+      return false;
+    }
+    return query.equals(((AggregateQuerySnapshot) object).query);
   }
 
   /**
@@ -89,6 +72,6 @@ public class AggregateQuerySnapshot {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(query, count);
+    return Objects.hash(super.hashCode(), query);
   }
 }
