@@ -61,6 +61,7 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -1929,7 +1930,28 @@ public class Query {
    */
   @Nonnull
   public AggregateQuery count() {
-    return new AggregateQuery(this);
+    return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
+  }
+
+  /**
+   * Calculates the specified aggregations over the documents in the result set of the given query,
+   * without actually downloading the documents.
+   *
+   * <p>Using this function to perform aggregations is efficient because only the final aggregation
+   * values, not the documents' data, is downloaded. This function can even perform aggregations of
+   * the documents if the result set would be prohibitively large to download entirely (e.g.
+   * thousands of documents).
+   *
+   * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
+   *     of this query.
+   */
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {
+    List<AggregateField> aggregateFieldList = new ArrayList<>();
+    aggregateFieldList.add(aggregateField1);
+    aggregateFieldList.addAll(Arrays.asList(aggregateFields));
+    return new AggregateQuery(this, aggregateFieldList);
   }
 
   /**

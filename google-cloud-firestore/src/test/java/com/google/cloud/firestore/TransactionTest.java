@@ -19,12 +19,12 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQuery;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.begin;
 import static com.google.cloud.firestore.LocalFirestoreHelper.beginResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQuery;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.create;
 import static com.google.cloud.firestore.LocalFirestoreHelper.delete;
 import static com.google.cloud.firestore.LocalFirestoreHelper.get;
@@ -697,7 +697,7 @@ public class TransactionTest {
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
-    doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(42))
         .when(firestoreMock)
         .streamRequest(
             requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
@@ -711,7 +711,7 @@ public class TransactionTest {
     assertEquals(3, requests.size());
 
     assertEquals(begin(), requests.get(0));
-    assertEquals(aggregationQuery(TRANSACTION_ID), requests.get(1));
+    assertEquals(countQuery(TRANSACTION_ID), requests.get(1));
     assertEquals(commit(TRANSACTION_ID), requests.get(2));
   }
 
