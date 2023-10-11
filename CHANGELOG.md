@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.15.0](https://github.com/googleapis/java-firestore/compare/v3.14.4...v3.15.0) (2023-10-10)
+
+
+### Features
+
+* Sum and Average aggregations ([#1387](https://github.com/googleapis/java-firestore/issues/1387)) ([afa5c01](https://github.com/googleapis/java-firestore/commit/afa5c0124c98a0a58259e54c9bb054248b4d4104))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.17.0 ([#1437](https://github.com/googleapis/java-firestore/issues/1437)) ([cd006f9](https://github.com/googleapis/java-firestore/commit/cd006f90db7c57742d57be74ba244cb0f24a4620))
+
 ## [3.14.4](https://github.com/googleapis/java-firestore/compare/v3.14.3...v3.14.4) (2023-09-28)
 
 
