@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.1](https://github.com/googleapis/java-firestore/compare/v3.15.0...v3.15.1) (2023-10-11)
+
+
+### Dependencies
+
+* Update dependency org.apache.beam:beam-runners-direct-java to v2.51.0 ([#1443](https://github.com/googleapis/java-firestore/issues/1443)) ([738f93a](https://github.com/googleapis/java-firestore/commit/738f93adca3dc42b835c454bf0fc84d87f4bb6b9))
+
 ## [3.15.0](https://github.com/googleapis/java-firestore/compare/v3.14.4...v3.15.0) (2023-10-10)
 
 
