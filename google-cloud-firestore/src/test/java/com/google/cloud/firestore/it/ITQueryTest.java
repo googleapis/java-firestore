@@ -878,7 +878,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    Map<String, Object> plan = query.plan().get();
+    Map<String, Object> plan = query.explain().get();
     System.out.println(plan);
   }
 
@@ -896,7 +896,7 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    QueryProfileInfo<QuerySnapshot> profile = query.profile().get();
+    QueryProfileInfo<QuerySnapshot> profile = query.explainAnalyze().get();
     System.out.println(profile.plan);
     System.out.println(profile.stats);
     System.out.println(profile.snapshot.size());
@@ -916,7 +916,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    Map<String, Object> plan = query.plan().get();
+    Map<String, Object> plan = query.explain().get();
     System.out.println(plan);
   }
 
@@ -935,7 +935,7 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    QueryProfileInfo<AggregateQuerySnapshot> profile = query.profile().get();
+    QueryProfileInfo<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
     System.out.println(profile.plan);
     System.out.println(profile.stats);
     System.out.println(profile.snapshot.getCount());

@@ -29,6 +29,7 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_E
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -42,21 +43,18 @@ import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.bundle.BundledQuery;
-import com.google.firestore.v1.Cursor;
-import com.google.firestore.v1.Document;
-import com.google.firestore.v1.RunQueryRequest;
-import com.google.firestore.v1.RunQueryResponse;
-import com.google.firestore.v1.StructuredQuery;
+import com.google.firestore.v1.*;
 import com.google.firestore.v1.StructuredQuery.CollectionSelector;
 import com.google.firestore.v1.StructuredQuery.CompositeFilter;
 import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.StructuredQuery.FieldReference;
 import com.google.firestore.v1.StructuredQuery.Filter;
 import com.google.firestore.v1.StructuredQuery.Order;
-import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
+import com.google.protobuf.Struct;
 import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
@@ -65,7 +63,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -391,6 +388,8 @@ public class Query {
 
     abstract ImmutableList<FieldReference> getFieldProjections();
 
+    abstract QueryMode getQueryMode();
+
     // Whether to select all documents under `parentPath`. By default, only
     // collections that match `collectionId` are selected.
     abstract boolean isKindless();
@@ -407,6 +406,7 @@ public class Query {
           .setFieldOrders(ImmutableList.of())
           .setFilters(ImmutableList.of())
           .setFieldProjections(ImmutableList.of())
+          .setQueryMode(QueryMode.NORMAL)
           .setKindless(false)
           .setRequireConsistency(true);
     }
@@ -436,6 +436,8 @@ public class Query {
       abstract Builder setFieldOrders(ImmutableList<FieldOrder> value);
 
       abstract Builder setFieldProjections(ImmutableList<FieldReference> value);
+
+      abstract Builder setQueryMode(QueryMode queryMode);
 
       abstract Builder setKindless(boolean value);
 
@@ -1759,6 +1761,71 @@ public class Query {
     return get(null);
   }
 
+  ApiFuture<QueryProfileInfo<QuerySnapshot>> getQueryProfileInfo() {
+    final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
+
+    RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
+    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+
+    final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+
+    ResponseObserver<RunQueryResponse> observer =
+        new ResponseObserver<RunQueryResponse>() {
+          Timestamp readTime;
+          Struct planStruct = Struct.getDefaultInstance() ;
+          Struct statsStruct = Struct.getDefaultInstance();
+
+          @Override
+          public void onStart(StreamController streamController) {}
+
+          @Override
+          public void onResponse(RunQueryResponse response) {
+            if (response.hasDocument()) {
+              Document document = response.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(response.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+
+            if (readTime == null) {
+              readTime = Timestamp.fromProto(response.getReadTime());
+            }
+
+            if (response.hasStats()) {
+              if (response.getStats().hasQueryPlan()) {
+                planStruct = response.getStats().getQueryPlan().getPlanInfo();
+              }
+              if (response.getStats().hasQueryStats()) {
+                statsStruct = response.getStats().getQueryStats();
+              }
+            }
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            // When regular queries fail, the SDK uses the last received document as cursor and
+            // tries to
+            // resume querying after that cursor if the error is considered retryable.
+            // We should not do this when profiling a query.
+            result.setException(throwable);
+          }
+
+          @Override
+          public void onComplete() {
+            result.set(
+                new QueryProfileInfo<>(
+                    UserDataConverter.decodeStruct(planStruct),
+                    UserDataConverter.decodeStruct(statsStruct),
+                    QuerySnapshot.withDocuments(Query.this, readTime, documentSnapshots)));
+          }
+        };
+
+    rpcContext.streamRequest(request.build(), observer, rpcContext.getClient().runQueryCallable());
+
+    return result;
+  }
+
   /**
    * Performs the planning stage of this query, without actually executing the query. Returns an
    * ApiFuture that will be resolved with the result of the query planning information.
@@ -1768,12 +1835,12 @@ public class Query {
    * @return An ApiFuture that will be resolved with the results of the query planning information.
    */
   @Nonnull
-  public ApiFuture<Map<String, Object>> plan() {
-    Map<String, Object> plan = new HashMap<>();
-    plan.put("foo", "bar");
-    final SettableApiFuture<Map<String, Object>> result = SettableApiFuture.create();
-    result.set(plan);
-    return result;
+  public ApiFuture<Map<String, Object>> explain() {
+    Builder newOptions = options.toBuilder();
+    newOptions.setQueryMode(QueryMode.PLAN);
+    ApiFuture<QueryProfileInfo<QuerySnapshot>> result = getQueryProfileInfo();
+    return ApiFutures.transform(
+        result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
   }
 
   /**
@@ -1786,16 +1853,10 @@ public class Query {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfileInfo<QuerySnapshot>> profile() {
-    Map<String, Object> plan = new HashMap<>();
-    plan.put("foo", "bar");
-    Map<String, Object> stats = new HashMap<>();
-    stats.put("cpu", "3ms");
-    final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
-    QuerySnapshot mockSnapshot = QuerySnapshot.withDocuments(this, null, new ArrayList<>());
-    QueryProfileInfo mock = new QueryProfileInfo(plan, stats, mockSnapshot);
-    result.set(mock);
-    return result;
+  public ApiFuture<QueryProfileInfo<QuerySnapshot>> explainAnalyze() {
+    Builder newOptions = options.toBuilder();
+    newOptions.setQueryMode(QueryMode.PROFILE);
+    return getQueryProfileInfo();
   }
 
   /**

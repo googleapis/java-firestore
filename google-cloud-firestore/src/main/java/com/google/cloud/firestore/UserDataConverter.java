@@ -22,6 +22,7 @@ import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
+import com.google.protobuf.Struct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -226,5 +227,46 @@ class UserDataConverter {
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", typeCase));
     }
+  }
+
+  static Object decodeGoogleProtobufValue(com.google.protobuf.Value v) {
+    switch (v.getKindCase()) {
+      case NULL_VALUE:
+        return null;
+      case BOOL_VALUE:
+        return v.getBoolValue();
+      case NUMBER_VALUE:
+        return v.getNumberValue();
+      case STRING_VALUE:
+        return v.getStringValue();
+      case LIST_VALUE:
+        List<Object> list = new ArrayList<>();
+        List<com.google.protobuf.Value> lv = v.getListValue().getValuesList();
+        for (com.google.protobuf.Value iv : lv) {
+          list.add(decodeGoogleProtobufValue(iv));
+        }
+        return list;
+      case STRUCT_VALUE:
+        Map<String, Object> outputMap = new HashMap<>();
+        Map<String, com.google.protobuf.Value> inputMap = v.getStructValue().getFieldsMap();
+        for (Map.Entry<String, com.google.protobuf.Value> entry : inputMap.entrySet()) {
+          outputMap.put(entry.getKey(), decodeGoogleProtobufValue(entry.getValue()));
+        }
+        return outputMap;
+      default:
+        throw FirestoreException.forInvalidArgument(
+            String.format("Unknown Value Type: %s", v.getKindCase().getNumber()));
+    }
+  }
+
+  static Map<String, Object> decodeStruct(Struct struct) {
+    Map<String, Object> result = new HashMap<>();
+    if (struct.getFieldsCount() == 0) {
+      return result;
+    }
+    for (Map.Entry<String, com.google.protobuf.Value> entry : struct.getFieldsMap().entrySet()) {
+      result.put(entry.getKey(), decodeGoogleProtobufValue(entry.getValue()));
+    }
+    return result;
   }
 }

@@ -79,7 +79,7 @@ public class AggregateQuery {
    * @return An ApiFuture that will be resolved with the results of the query planning information.
    */
   @Nonnull
-  public ApiFuture<Map<String, Object>> plan() {
+  public ApiFuture<Map<String, Object>> explain() {
     Map<String, Object> plan = new HashMap<>();
     plan.put("foo", "bar");
     final SettableApiFuture<Map<String, Object>> result = SettableApiFuture.create();
@@ -97,7 +97,7 @@ public class AggregateQuery {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> profile() {
+  public ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> explainAnalyze() {
     Map<String, Value> aggregationResult = new HashMap<>();
     aggregationResult.put("count", Value.newBuilder().setIntegerValue(5).build());
     Map<String, Object> plan = new HashMap<>();
