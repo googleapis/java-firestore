@@ -33,6 +33,9 @@ import javax.annotation.Nullable;
 public interface OpenTelemetryUtil {
   String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
 
+  /** Sampling rate of 10% is chosen for traces by default. */
+  double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
+
   interface Span {
     /** Ends this span. */
     void end();

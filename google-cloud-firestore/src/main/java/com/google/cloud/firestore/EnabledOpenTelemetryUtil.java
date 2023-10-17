@@ -32,12 +32,15 @@ import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
+import io.opentelemetry.instrumentation.runtimemetrics.java8.*;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -158,6 +161,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
               .setTracerProvider(
                   SdkTracerProvider.builder()
                       .setResource(resource)
+                      .setSampler(Sampler.traceIdRatioBased(DEFAULT_TRACE_SAMPLING_RATE))
                       .addSpanProcessor(gcpSpanProcessor)
                       .addSpanProcessor(loggingSpanProcessor)
                       .build())
