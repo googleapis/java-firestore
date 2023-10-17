@@ -388,8 +388,6 @@ public class Query {
 
     abstract ImmutableList<FieldReference> getFieldProjections();
 
-    abstract QueryMode getQueryMode();
-
     // Whether to select all documents under `parentPath`. By default, only
     // collections that match `collectionId` are selected.
     abstract boolean isKindless();
@@ -406,7 +404,6 @@ public class Query {
           .setFieldOrders(ImmutableList.of())
           .setFilters(ImmutableList.of())
           .setFieldProjections(ImmutableList.of())
-          .setQueryMode(QueryMode.NORMAL)
           .setKindless(false)
           .setRequireConsistency(true);
     }
@@ -436,8 +433,6 @@ public class Query {
       abstract Builder setFieldOrders(ImmutableList<FieldOrder> value);
 
       abstract Builder setFieldProjections(ImmutableList<FieldReference> value);
-
-      abstract Builder setQueryMode(QueryMode queryMode);
 
       abstract Builder setKindless(boolean value);
 
@@ -1761,18 +1756,18 @@ public class Query {
     return get(null);
   }
 
-  ApiFuture<QueryProfileInfo<QuerySnapshot>> getQueryProfileInfo() {
+  ApiFuture<QueryProfileInfo<QuerySnapshot>> getQueryProfileInfo(QueryMode queryMode) {
     final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString()).setMode(queryMode);
 
     final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
-          Struct planStruct = Struct.getDefaultInstance() ;
+          Struct planStruct = Struct.getDefaultInstance();
           Struct statsStruct = Struct.getDefaultInstance();
 
           @Override
@@ -1836,9 +1831,7 @@ public class Query {
    */
   @Nonnull
   public ApiFuture<Map<String, Object>> explain() {
-    Builder newOptions = options.toBuilder();
-    newOptions.setQueryMode(QueryMode.PLAN);
-    ApiFuture<QueryProfileInfo<QuerySnapshot>> result = getQueryProfileInfo();
+    ApiFuture<QueryProfileInfo<QuerySnapshot>> result = getQueryProfileInfo(QueryMode.PLAN);
     return ApiFutures.transform(
         result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
   }
@@ -1854,9 +1847,7 @@ public class Query {
    */
   @Nonnull
   public ApiFuture<QueryProfileInfo<QuerySnapshot>> explainAnalyze() {
-    Builder newOptions = options.toBuilder();
-    newOptions.setQueryMode(QueryMode.PROFILE);
-    return getQueryProfileInfo();
+    return getQueryProfileInfo(QueryMode.PROFILE);
   }
 
   /**

@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -25,9 +26,12 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.v1.FirestoreSettings;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.*;
 import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Struct;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,11 +84,9 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<Map<String, Object>> explain() {
-    Map<String, Object> plan = new HashMap<>();
-    plan.put("foo", "bar");
-    final SettableApiFuture<Map<String, Object>> result = SettableApiFuture.create();
-    result.set(plan);
-    return result;
+    ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result = getAggregateQueryProfileInfo(QueryMode.PLAN);
+    return ApiFutures.transform(
+            result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
   }
 
   /**
@@ -98,18 +100,7 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> explainAnalyze() {
-    Map<String, Value> aggregationResult = new HashMap<>();
-    aggregationResult.put("count", Value.newBuilder().setIntegerValue(5).build());
-    Map<String, Object> plan = new HashMap<>();
-    plan.put("foo", "bar");
-    Map<String, Object> stats = new HashMap<>();
-    stats.put("cpu", "3ms");
-    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
-        SettableApiFuture.create();
-    final AggregateQuerySnapshot mockSnapshot = new AggregateQuerySnapshot(this, null, aggregationResult);
-    QueryProfileInfo<AggregateQuerySnapshot> mock = new QueryProfileInfo(plan, stats, mockSnapshot);
-    result.set(mock);
-    return result;
+    return getAggregateQueryProfileInfo(QueryMode.PROFILE);
   }
 
   @Nonnull
@@ -220,6 +211,63 @@ public class AggregateQuery {
 
     @Override
     public void onComplete() {}
+  }
+
+  ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(QueryMode queryMode) {
+    //RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
+    RunAggregationQueryRequest request = toProto();
+    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result = SettableApiFuture.create();
+
+    ResponseObserver<RunAggregationQueryResponse> observer =
+            new ResponseObserver<RunAggregationQueryResponse>() {
+              Timestamp readTime;
+              Map<String, Value> aggregateFieldsMap = new HashMap<>();
+              Struct planStruct = Struct.getDefaultInstance();
+              Struct statsStruct = Struct.getDefaultInstance();
+
+              @Override
+              public void onStart(StreamController streamController) {
+              }
+
+              @Override
+              public void onResponse(RunAggregationQueryResponse response) {
+                if (readTime == null) {
+                  readTime = Timestamp.fromProto(response.getReadTime());
+                }
+
+                if (aggregateFieldsMap.isEmpty() && response.hasResult()) {
+                  aggregateFieldsMap = response.getResult().getAggregateFieldsMap();
+                }
+
+                if (response.hasStats()) {
+                  if (response.getStats().hasQueryPlan()) {
+                    planStruct = response.getStats().getQueryPlan().getPlanInfo();
+                  }
+                  if (response.getStats().hasQueryStats()) {
+                    statsStruct = response.getStats().getQueryStats();
+                  }
+                }
+              }
+
+              @Override
+              public void onError(Throwable throwable) {
+                // We don't implement retry logic for profiling.
+                result.setException(throwable);
+              }
+
+              @Override
+              public void onComplete() {
+                result.set(
+                        new QueryProfileInfo<>(
+                                UserDataConverter.decodeStruct(planStruct),
+                                UserDataConverter.decodeStruct(statsStruct),
+                                new AggregateQuerySnapshot(AggregateQuery.this, readTime, aggregateFieldsMap)));
+              }
+            };
+
+      query.rpcContext.streamRequest(request, observer, query.rpcContext.getClient().runAggregationQueryCallable());
+
+      return result;
   }
 
   /**
