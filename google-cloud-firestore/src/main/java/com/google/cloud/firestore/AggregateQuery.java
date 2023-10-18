@@ -121,6 +121,13 @@ public class AggregateQuery {
     query.rpcContext.streamRequest(request, responseObserver, callable);
   }
 
+  @Nonnull
+  private Map<String, Value> convertServerAggregateFieldsMapToClientAggregateFieldsMap(@Nonnull Map<String, Value> data) {
+    Map<String, Value> mappedData = new HashMap<>();
+    data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
+    return mappedData;
+  }
+
   private final class AggregateQueryResponseDeliverer {
 
     @Nullable private final ByteString transactionId;
@@ -146,11 +153,9 @@ public class AggregateQuery {
       return startTimeNanos;
     }
 
-    void deliverResult(@Nonnull Map<String, Value> data, Timestamp readTime) {
+    void deliverResult(@Nonnull Map<String, Value> serverData, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
-        Map<String, Value> mappedData = new HashMap<>();
-        data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
-        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, mappedData));
+        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
       }
     }
 
@@ -214,8 +219,7 @@ public class AggregateQuery {
   }
 
   ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(QueryMode queryMode) {
-    //RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    RunAggregationQueryRequest request = toProto();
+    RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
     final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result = SettableApiFuture.create();
 
     ResponseObserver<RunAggregationQueryResponse> observer =
@@ -236,7 +240,7 @@ public class AggregateQuery {
                 }
 
                 if (aggregateFieldsMap.isEmpty() && response.hasResult()) {
-                  aggregateFieldsMap = response.getResult().getAggregateFieldsMap();
+                  aggregateFieldsMap = convertServerAggregateFieldsMapToClientAggregateFieldsMap(response.getResult().getAggregateFieldsMap());
                 }
 
                 if (response.hasStats()) {
