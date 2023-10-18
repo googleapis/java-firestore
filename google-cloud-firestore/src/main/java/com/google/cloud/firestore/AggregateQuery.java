@@ -31,7 +31,6 @@ import com.google.firestore.v1.*;
 import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Struct;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -84,9 +83,10 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<Map<String, Object>> explain() {
-    ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result = getAggregateQueryProfileInfo(QueryMode.PLAN);
+    ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
+        getAggregateQueryProfileInfo(QueryMode.PLAN);
     return ApiFutures.transform(
-            result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
+        result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
   }
 
   /**
@@ -122,7 +122,8 @@ public class AggregateQuery {
   }
 
   @Nonnull
-  private Map<String, Value> convertServerAggregateFieldsMapToClientAggregateFieldsMap(@Nonnull Map<String, Value> data) {
+  private Map<String, Value> convertServerAggregateFieldsMapToClientAggregateFieldsMap(
+      @Nonnull Map<String, Value> data) {
     Map<String, Value> mappedData = new HashMap<>();
     data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
     return mappedData;
@@ -155,7 +156,11 @@ public class AggregateQuery {
 
     void deliverResult(@Nonnull Map<String, Value> serverData, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
-        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
+        future.set(
+            new AggregateQuerySnapshot(
+                AggregateQuery.this,
+                readTime,
+                convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
       }
     }
 
@@ -218,60 +223,64 @@ public class AggregateQuery {
     public void onComplete() {}
   }
 
-  ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(QueryMode queryMode) {
+  ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(
+      QueryMode queryMode) {
     RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result = SettableApiFuture.create();
+    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
+        SettableApiFuture.create();
 
     ResponseObserver<RunAggregationQueryResponse> observer =
-            new ResponseObserver<RunAggregationQueryResponse>() {
-              Timestamp readTime;
-              Map<String, Value> aggregateFieldsMap = new HashMap<>();
-              Struct planStruct = Struct.getDefaultInstance();
-              Struct statsStruct = Struct.getDefaultInstance();
+        new ResponseObserver<RunAggregationQueryResponse>() {
+          Timestamp readTime;
+          Map<String, Value> aggregateFieldsMap = new HashMap<>();
+          Struct planStruct = Struct.getDefaultInstance();
+          Struct statsStruct = Struct.getDefaultInstance();
 
-              @Override
-              public void onStart(StreamController streamController) {
+          @Override
+          public void onStart(StreamController streamController) {}
+
+          @Override
+          public void onResponse(RunAggregationQueryResponse response) {
+            if (readTime == null) {
+              readTime = Timestamp.fromProto(response.getReadTime());
+            }
+
+            if (aggregateFieldsMap.isEmpty() && response.hasResult()) {
+              aggregateFieldsMap =
+                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(
+                      response.getResult().getAggregateFieldsMap());
+            }
+
+            if (response.hasStats()) {
+              if (response.getStats().hasQueryPlan()) {
+                planStruct = response.getStats().getQueryPlan().getPlanInfo();
               }
-
-              @Override
-              public void onResponse(RunAggregationQueryResponse response) {
-                if (readTime == null) {
-                  readTime = Timestamp.fromProto(response.getReadTime());
-                }
-
-                if (aggregateFieldsMap.isEmpty() && response.hasResult()) {
-                  aggregateFieldsMap = convertServerAggregateFieldsMapToClientAggregateFieldsMap(response.getResult().getAggregateFieldsMap());
-                }
-
-                if (response.hasStats()) {
-                  if (response.getStats().hasQueryPlan()) {
-                    planStruct = response.getStats().getQueryPlan().getPlanInfo();
-                  }
-                  if (response.getStats().hasQueryStats()) {
-                    statsStruct = response.getStats().getQueryStats();
-                  }
-                }
+              if (response.getStats().hasQueryStats()) {
+                statsStruct = response.getStats().getQueryStats();
               }
+            }
+          }
 
-              @Override
-              public void onError(Throwable throwable) {
-                // We don't implement retry logic for profiling.
-                result.setException(throwable);
-              }
+          @Override
+          public void onError(Throwable throwable) {
+            // We don't implement retry logic for profiling.
+            result.setException(throwable);
+          }
 
-              @Override
-              public void onComplete() {
-                result.set(
-                        new QueryProfileInfo<>(
-                                UserDataConverter.decodeStruct(planStruct),
-                                UserDataConverter.decodeStruct(statsStruct),
-                                new AggregateQuerySnapshot(AggregateQuery.this, readTime, aggregateFieldsMap)));
-              }
-            };
+          @Override
+          public void onComplete() {
+            result.set(
+                new QueryProfileInfo<>(
+                    UserDataConverter.decodeStruct(planStruct),
+                    UserDataConverter.decodeStruct(statsStruct),
+                    new AggregateQuerySnapshot(AggregateQuery.this, readTime, aggregateFieldsMap)));
+          }
+        };
 
-      query.rpcContext.streamRequest(request, observer, query.rpcContext.getClient().runAggregationQueryCallable());
+    query.rpcContext.streamRequest(
+        request, observer, query.rpcContext.getClient().runAggregationQueryCallable());
 
-      return result;
+    return result;
   }
 
   /**

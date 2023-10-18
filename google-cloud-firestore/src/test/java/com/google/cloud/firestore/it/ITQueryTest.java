@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestore
 import static com.google.common.primitives.Ints.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
+
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
 import java.util.Arrays;
@@ -811,33 +812,33 @@ public class ITQueryTest extends ITBaseTest {
   public void multipleInequalityFieldsWithDocumentKey() throws Exception {
     // TODO(MIEQ): Enable this test against production when possible.
     assumeTrue(
-            "Skip this test if running against production because multiple inequality is "
-                    + "not supported yet.",
-            isRunningAgainstFirestoreEmulator(firestore));
+        "Skip this test if running against production because multiple inequality is "
+            + "not supported yet.",
+        isRunningAgainstFirestoreEmulator(firestore));
 
     CollectionReference collection =
-            testCollectionWithDocs(
-                    map(
-                            "doc1",
-                            map("key", "a", "sort", 5),
-                            "doc2",
-                            map("key", "aa", "sort", 4),
-                            "doc3",
-                            map("key", "b", "sort", 3),
-                            "doc4",
-                            map("key", "b", "sort", 2),
-                            "doc5",
-                            map("key", "bb", "sort", 1)));
+        testCollectionWithDocs(
+            map(
+                "doc1",
+                map("key", "a", "sort", 5),
+                "doc2",
+                map("key", "aa", "sort", 4),
+                "doc3",
+                map("key", "b", "sort", 3),
+                "doc4",
+                map("key", "b", "sort", 2),
+                "doc5",
+                map("key", "bb", "sort", 1)));
 
     DocumentSnapshot docSnap = collection.document("doc2").get().get();
 
     // Document Key in inequality field will implicitly ordered to the last.
     // Implicitly ordered by: 'key' asc, 'sort' asc, __name__ asc
     Query query1 =
-            collection
-                    .whereGreaterThan("sort", 1)
-                    .whereNotEqualTo("key", "a")
-                    .whereLessThan(FieldPath.documentId(), "doc5");
+        collection
+            .whereGreaterThan("sort", 1)
+            .whereNotEqualTo("key", "a")
+            .whereLessThan(FieldPath.documentId(), "doc5");
     Query query1WithCursor = query1.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query1, "doc2", "doc4", "doc3");
     checkQuerySnapshotContainsDocuments(query1WithCursor, "doc2", "doc4", "doc3");
@@ -845,21 +846,21 @@ public class ITQueryTest extends ITBaseTest {
     // Changing filters order will not affect implicit order.
     // Implicitly ordered by: 'key' asc, 'sort' asc, __name__ asc
     Query query2 =
-            collection
-                    .whereLessThan(FieldPath.documentId(), "doc5")
-                    .whereGreaterThan("sort", 1)
-                    .whereNotEqualTo("key", "a");
+        collection
+            .whereLessThan(FieldPath.documentId(), "doc5")
+            .whereGreaterThan("sort", 1)
+            .whereNotEqualTo("key", "a");
     Query query2WithCursor = query2.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query2, "doc2", "doc4", "doc3");
     checkQuerySnapshotContainsDocuments(query2WithCursor, "doc2", "doc4", "doc3");
 
     // Ordered by: 'sort' desc, 'key' desc, __name__ desc
     Query query3 =
-            collection
-                    .whereLessThan(FieldPath.documentId(), "doc5")
-                    .whereGreaterThan("sort", 1)
-                    .whereNotEqualTo("key", "a")
-                    .orderBy("sort", Direction.DESCENDING);
+        collection
+            .whereLessThan(FieldPath.documentId(), "doc5")
+            .whereGreaterThan("sort", 1)
+            .whereNotEqualTo("key", "a")
+            .orderBy("sort", Direction.DESCENDING);
     Query query3WithCursor = query3.startAt(docSnap);
     checkQuerySnapshotContainsDocuments(query3, "doc2", "doc3", "doc4");
     checkQuerySnapshotContainsDocuments(query3WithCursor, "doc2", "doc3", "doc4");

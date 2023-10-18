@@ -1760,7 +1760,10 @@ public class Query {
     final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString()).setMode(queryMode);
+    request
+        .setStructuredQuery(buildQuery())
+        .setParent(options.getParentPath().toString())
+        .setMode(queryMode);
 
     final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
