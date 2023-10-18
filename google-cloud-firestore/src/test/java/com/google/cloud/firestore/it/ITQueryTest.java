@@ -880,7 +880,7 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
     Map<String, Object> plan = query.explain().get();
-    System.out.println(plan);
+    assertThat(plan).isNotEmpty();
   }
 
   @Test
@@ -898,9 +898,9 @@ public class ITQueryTest extends ITBaseTest {
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
     QueryProfileInfo<QuerySnapshot> profile = query.explainAnalyze().get();
-    System.out.println(profile.plan);
-    System.out.println(profile.stats);
-    System.out.println(profile.snapshot.size());
+    assertThat(profile.plan).isNotEmpty();
+    assertThat(profile.stats).isNotEmpty();
+    assertThat(profile.snapshot.size()).isEqualTo(3);
   }
 
   @Test
@@ -918,7 +918,7 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
     Map<String, Object> plan = query.explain().get();
-    System.out.println(plan);
+    assertThat(plan).isNotEmpty();
   }
 
   @Test
@@ -937,8 +937,8 @@ public class ITQueryTest extends ITBaseTest {
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
     QueryProfileInfo<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
-    System.out.println(profile.plan);
-    System.out.println(profile.stats);
-    System.out.println(profile.snapshot.getCount());
+    assertThat(profile.plan).isNotEmpty();
+    assertThat(profile.stats).isNotEmpty();
+    assertThat(profile.snapshot.getCount()).isEqualTo(3);
   }
 }
