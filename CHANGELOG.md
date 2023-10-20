@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.15.2](https://github.com/googleapis/java-firestore/compare/v3.15.1...v3.15.2) (2023-10-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.18.0 ([#1450](https://github.com/googleapis/java-firestore/issues/1450)) ([d32d343](https://github.com/googleapis/java-firestore/commit/d32d343ddd4e72c8b434372657a51fc631ba2887))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.28 ([#1451](https://github.com/googleapis/java-firestore/issues/1451)) ([a008a69](https://github.com/googleapis/java-firestore/commit/a008a6943f278658be914b3b88f196a30e36deb1))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.28 ([#1452](https://github.com/googleapis/java-firestore/issues/1452)) ([59daefe](https://github.com/googleapis/java-firestore/commit/59daefe4c3b760c4f3c0b0cf00655465859be4ef))
+
 ## [3.15.1](https://github.com/googleapis/java-firestore/compare/v3.15.0...v3.15.1) (2023-10-11)
 
 
