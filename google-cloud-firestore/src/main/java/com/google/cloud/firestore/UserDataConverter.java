@@ -259,9 +259,9 @@ class UserDataConverter {
     }
   }
 
-  static Map<String, Object> decodeStruct(Struct struct) {
+  static Map<String, Object> decodeStruct(@Nullable Struct struct) {
     Map<String, Object> result = new HashMap<>();
-    if (struct.getFieldsCount() == 0) {
+    if (struct == null || struct.getFieldsCount() == 0) {
       return result;
     }
     for (Map.Entry<String, com.google.protobuf.Value> entry : struct.getFieldsMap().entrySet()) {
