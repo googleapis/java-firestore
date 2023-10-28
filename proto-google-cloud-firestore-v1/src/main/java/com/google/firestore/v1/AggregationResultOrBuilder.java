@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface AggregationResultOrBuilder
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -42,6 +43,7 @@ public interface AggregationResultOrBuilder
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -59,6 +61,7 @@ public interface AggregationResultOrBuilder
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -73,6 +76,7 @@ public interface AggregationResultOrBuilder
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map
@@ -91,6 +95,7 @@ public interface AggregationResultOrBuilder
    *
    * <pre>
    * The result of the aggregation functions, ex: `COUNT(*) AS total_docs`.
+   *
    * The key is the
    * [alias][google.firestore.v1.StructuredAggregationQuery.Aggregation.alias]
    * assigned to the aggregation function on input and the size of this map

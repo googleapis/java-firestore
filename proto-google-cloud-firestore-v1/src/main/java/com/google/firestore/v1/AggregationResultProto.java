@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,12 +51,12 @@ public final class AggregationResultProto {
           + ".firestore.v1.AggregationResult.Aggregat"
           + "eFieldsEntry\032R\n\024AggregateFieldsEntry\022\013\n\003"
           + "key\030\001 \001(\t\022)\n\005value\030\002 \001(\0132\032.google.firest"
-          + "ore.v1.Value:\0028\001B\317\001\n\027com.google.firestor"
-          + "e.v1B\026AggregationResultProtoP\001Z<google.g"
-          + "olang.org/genproto/googleapis/firestore/"
-          + "v1;firestore\242\002\004GCFS\252\002\031Google.Cloud.Fires"
-          + "tore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002\034Go"
-          + "ogle::Cloud::Firestore::V1b\006proto3"
+          + "ore.v1.Value:\0028\001B\316\001\n\027com.google.firestor"
+          + "e.v1B\026AggregationResultProtoP\001Z;cloud.go"
+          + "ogle.com/go/firestore/apiv1/firestorepb;"
+          + "firestorepb\242\002\004GCFS\252\002\031Google.Cloud.Firest"
+          + "ore.V1\312\002\031Google\\Cloud\\Firestore\\V1\352\002\034Goo"
+          + "gle::Cloud::Firestore::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,10 +59,11 @@ public interface ListFieldsRequestOrBuilder
    *
    * <pre>
    * The filter to apply to list results. Currently,
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-   * that have been explicitly overridden. To issue this query, call
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with a filter that includes
-   * `indexConfig.usesAncestorConfig:false` .
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+   * only supports listing fields that have been explicitly overridden. To issue
+   * this query, call
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+   * with a filter that includes `indexConfig.usesAncestorConfig:false` .
    * </pre>
    *
    * <code>string filter = 2;</code>
@@ -75,10 +76,11 @@ public interface ListFieldsRequestOrBuilder
    *
    * <pre>
    * The filter to apply to list results. Currently,
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-   * that have been explicitly overridden. To issue this query, call
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with a filter that includes
-   * `indexConfig.usesAncestorConfig:false` .
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+   * only supports listing fields that have been explicitly overridden. To issue
+   * this query, call
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+   * with a filter that includes `indexConfig.usesAncestorConfig:false` .
    * </pre>
    *
    * <code>string filter = 2;</code>
@@ -105,8 +107,8 @@ public interface ListFieldsRequestOrBuilder
    *
    * <pre>
    * A page token, returned from a previous call to
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields], that may be used to get the next
-   * page of results.
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields],
+   * that may be used to get the next page of results.
    * </pre>
    *
    * <code>string page_token = 4;</code>
@@ -119,8 +121,8 @@ public interface ListFieldsRequestOrBuilder
    *
    * <pre>
    * A page token, returned from a previous call to
-   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields], that may be used to get the next
-   * page of results.
+   * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields],
+   * that may be used to get the next page of results.
    * </pre>
    *
    * <code>string page_token = 4;</code>

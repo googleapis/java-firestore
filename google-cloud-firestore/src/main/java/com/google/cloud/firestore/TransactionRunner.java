@@ -126,9 +126,7 @@ class TransactionRunner<T> {
       final SettableApiFuture<Void> backoff = SettableApiFuture.create();
       // Add a backoff delay. At first, this is 0.
       firestoreExecutor.schedule(
-          () -> {
-            backoff.set(null);
-          },
+          () -> backoff.set(null),
           nextBackoffAttempt.getRandomizedRetryDelay().toMillis(),
           TimeUnit.MILLISECONDS);
 

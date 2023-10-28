@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import com.google.api.gax.httpjson.ProtoMessageResponseParser;
 import com.google.api.gax.httpjson.ProtoRestSerializer;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
@@ -696,49 +697,104 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
         HttpJsonCallSettings.<GetDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(getDocumentMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListDocumentsRequest, ListDocumentsResponse>
         listDocumentsTransportSettings =
             HttpJsonCallSettings.<ListDocumentsRequest, ListDocumentsResponse>newBuilder()
                 .setMethodDescriptor(listDocumentsMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("collection_id", String.valueOf(request.getCollectionId()));
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<UpdateDocumentRequest, Document> updateDocumentTransportSettings =
         HttpJsonCallSettings.<UpdateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(updateDocumentMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("document.name", String.valueOf(request.getDocument().getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<DeleteDocumentRequest, Empty> deleteDocumentTransportSettings =
         HttpJsonCallSettings.<DeleteDocumentRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteDocumentMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
         batchGetDocumentsTransportSettings =
             HttpJsonCallSettings.<BatchGetDocumentsRequest, BatchGetDocumentsResponse>newBuilder()
                 .setMethodDescriptor(batchGetDocumentsMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("database", String.valueOf(request.getDatabase()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<BeginTransactionRequest, BeginTransactionResponse>
         beginTransactionTransportSettings =
             HttpJsonCallSettings.<BeginTransactionRequest, BeginTransactionResponse>newBuilder()
                 .setMethodDescriptor(beginTransactionMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("database", String.valueOf(request.getDatabase()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<CommitRequest, CommitResponse> commitTransportSettings =
         HttpJsonCallSettings.<CommitRequest, CommitResponse>newBuilder()
             .setMethodDescriptor(commitMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<RollbackRequest, Empty> rollbackTransportSettings =
         HttpJsonCallSettings.<RollbackRequest, Empty>newBuilder()
             .setMethodDescriptor(rollbackMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<RunQueryRequest, RunQueryResponse> runQueryTransportSettings =
         HttpJsonCallSettings.<RunQueryRequest, RunQueryResponse>newBuilder()
             .setMethodDescriptor(runQueryMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
         runAggregationQueryTransportSettings =
@@ -746,28 +802,59 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                 .<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
                 .setMethodDescriptor(runAggregationQueryMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<PartitionQueryRequest, PartitionQueryResponse>
         partitionQueryTransportSettings =
             HttpJsonCallSettings.<PartitionQueryRequest, PartitionQueryResponse>newBuilder()
                 .setMethodDescriptor(partitionQueryMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<ListCollectionIdsRequest, ListCollectionIdsResponse>
         listCollectionIdsTransportSettings =
             HttpJsonCallSettings.<ListCollectionIdsRequest, ListCollectionIdsResponse>newBuilder()
                 .setMethodDescriptor(listCollectionIdsMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<BatchWriteRequest, BatchWriteResponse> batchWriteTransportSettings =
         HttpJsonCallSettings.<BatchWriteRequest, BatchWriteResponse>newBuilder()
             .setMethodDescriptor(batchWriteMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database", String.valueOf(request.getDatabase()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<CreateDocumentRequest, Document> createDocumentTransportSettings =
         HttpJsonCallSettings.<CreateDocumentRequest, Document>newBuilder()
             .setMethodDescriptor(createDocumentMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("collection_id", String.valueOf(request.getCollectionId()));
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
 
     this.getDocumentCallable =

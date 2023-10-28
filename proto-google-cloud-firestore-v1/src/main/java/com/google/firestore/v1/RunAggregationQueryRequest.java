@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
     return new RunAggregationQueryRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunAggregationQueryRequest_descriptor;
@@ -69,6 +64,8 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
   }
 
   private int queryTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object queryType_;
 
   public enum QueryTypeCase
@@ -113,6 +110,8 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -281,6 +280,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Run the aggregation within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -297,6 +297,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Run the aggregation within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -318,6 +319,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -335,6 +337,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -355,6 +358,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Starts a new transaction as part of the query, defaulting to read-only.
+   *
    * The new transaction ID will be returned as the first response in the
    * stream.
    * </pre>
@@ -375,8 +379,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -392,8 +398,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -412,8 +420,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
    *
    * <pre>
    * Executes the query at the given timestamp.
-   * Requires:
-   * * Cannot be more than 270 seconds in the past.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1322,6 +1332,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Run the aggregation within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1337,6 +1348,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Run the aggregation within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1355,6 +1367,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Run the aggregation within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1377,6 +1390,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Run the aggregation within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1403,6 +1417,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1420,6 +1435,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1447,6 +1463,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1471,6 +1488,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1493,6 +1511,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1528,6 +1547,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1555,6 +1575,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1569,6 +1590,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1591,6 +1613,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Starts a new transaction as part of the query, defaulting to read-only.
+     *
      * The new transaction ID will be returned as the first response in the
      * stream.
      * </pre>
@@ -1631,8 +1654,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1648,8 +1673,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1675,8 +1702,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1699,8 +1728,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1720,8 +1751,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1754,8 +1787,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1781,8 +1816,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1795,8 +1832,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1817,8 +1856,10 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
      *
      * <pre>
      * Executes the query at the given timestamp.
-     * Requires:
-     * * Cannot be more than 270 seconds in the past.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>

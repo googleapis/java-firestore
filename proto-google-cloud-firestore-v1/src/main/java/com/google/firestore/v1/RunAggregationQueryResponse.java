@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     return new RunAggregationQueryResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunAggregationQueryResponse_descriptor;
@@ -75,6 +70,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -91,6 +87,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -109,6 +106,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -128,6 +126,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * The transaction that was started as part of this request.
+   *
    * Only present on the first response when the request requested to start
    * a new transaction.
    * </pre>
@@ -147,7 +146,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -162,7 +168,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -177,7 +190,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -601,6 +621,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -616,6 +637,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -637,6 +659,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -660,6 +683,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -680,6 +704,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -706,6 +731,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -726,6 +752,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -741,6 +768,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -760,6 +788,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -788,6 +817,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -805,6 +835,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -828,6 +859,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -853,7 +885,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -867,7 +906,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -885,7 +931,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -907,7 +960,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -926,7 +986,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -951,7 +1018,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -970,7 +1044,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -984,7 +1065,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -1000,7 +1088,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>

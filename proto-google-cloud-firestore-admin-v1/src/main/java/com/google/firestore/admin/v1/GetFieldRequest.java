@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
+ * The request for
+ * [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.GetFieldRequest}
@@ -45,11 +46,6 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new GetFieldRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -287,7 +283,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
+   * The request for
+   * [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.GetFieldRequest}

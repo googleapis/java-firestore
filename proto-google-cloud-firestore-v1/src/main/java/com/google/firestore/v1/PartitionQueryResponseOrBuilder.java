@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +33,17 @@ public interface PartitionQueryResponseOrBuilder
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -56,14 +59,17 @@ public interface PartitionQueryResponseOrBuilder
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -79,14 +85,17 @@ public interface PartitionQueryResponseOrBuilder
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -102,14 +111,17 @@ public interface PartitionQueryResponseOrBuilder
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -125,14 +137,17 @@ public interface PartitionQueryResponseOrBuilder
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>

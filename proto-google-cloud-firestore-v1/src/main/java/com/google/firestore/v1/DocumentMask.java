@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,18 +43,13 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
   }
 
   private DocumentMask() {
-    fieldPaths_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    fieldPaths_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new DocumentMask();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -75,7 +70,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
   public static final int FIELD_PATHS_FIELD_NUMBER = 1;
 
   @SuppressWarnings("serial")
-  private com.google.protobuf.LazyStringList fieldPaths_;
+  private com.google.protobuf.LazyStringArrayList fieldPaths_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -351,8 +347,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      fieldPaths_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      fieldPaths_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -379,7 +374,6 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.DocumentMask buildPartial() {
       com.google.firestore.v1.DocumentMask result = new com.google.firestore.v1.DocumentMask(this);
-      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -387,16 +381,12 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
       return result;
     }
 
-    private void buildPartialRepeatedFields(com.google.firestore.v1.DocumentMask result) {
-      if (((bitField0_ & 0x00000001) != 0)) {
-        fieldPaths_ = fieldPaths_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      }
-      result.fieldPaths_ = fieldPaths_;
-    }
-
     private void buildPartial0(com.google.firestore.v1.DocumentMask result) {
       int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        fieldPaths_.makeImmutable();
+        result.fieldPaths_ = fieldPaths_;
+      }
     }
 
     @java.lang.Override
@@ -447,7 +437,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
       if (!other.fieldPaths_.isEmpty()) {
         if (fieldPaths_.isEmpty()) {
           fieldPaths_ = other.fieldPaths_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ |= 0x00000001;
         } else {
           ensureFieldPathsIsMutable();
           fieldPaths_.addAll(other.fieldPaths_);
@@ -506,14 +496,14 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
 
     private int bitField0_;
 
-    private com.google.protobuf.LazyStringList fieldPaths_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList fieldPaths_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureFieldPathsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!fieldPaths_.isModifiable()) {
         fieldPaths_ = new com.google.protobuf.LazyStringArrayList(fieldPaths_);
-        bitField0_ |= 0x00000001;
       }
+      bitField0_ |= 0x00000001;
     }
     /**
      *
@@ -529,7 +519,8 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * @return A list containing the fieldPaths.
      */
     public com.google.protobuf.ProtocolStringList getFieldPathsList() {
-      return fieldPaths_.getUnmodifiableView();
+      fieldPaths_.makeImmutable();
+      return fieldPaths_;
     }
     /**
      *
@@ -602,6 +593,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
       }
       ensureFieldPathsIsMutable();
       fieldPaths_.set(index, value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -625,6 +617,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
       }
       ensureFieldPathsIsMutable();
       fieldPaths_.add(value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -645,6 +638,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
     public Builder addAllFieldPaths(java.lang.Iterable<java.lang.String> values) {
       ensureFieldPathsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, fieldPaths_);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -662,8 +656,9 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearFieldPaths() {
-      fieldPaths_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      fieldPaths_ = com.google.protobuf.LazyStringArrayList.emptyList();
       bitField0_ = (bitField0_ & ~0x00000001);
+      ;
       onChanged();
       return this;
     }
@@ -688,6 +683,7 @@ public final class DocumentMask extends com.google.protobuf.GeneratedMessageV3
       checkByteStringIsUtf8(value);
       ensureFieldPathsIsMutable();
       fieldPaths_.add(value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }

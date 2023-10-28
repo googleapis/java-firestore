@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.google.cloud.firestore.v1.stub;
 import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListFieldsPagedResponse;
 import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPagedResponse;
 
+import com.google.api.HttpRule;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.BackgroundResource;
@@ -33,7 +34,11 @@ import com.google.api.gax.httpjson.ProtoRestSerializer;
 import com.google.api.gax.httpjson.longrunning.stub.HttpJsonOperationsStub;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.common.collect.ImmutableMap;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -87,6 +92,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
           .add(ImportDocumentsMetadata.getDescriptor())
           .add(Database.getDescriptor())
           .add(Index.getDescriptor())
+          .add(CreateDatabaseMetadata.getDescriptor())
           .add(FieldOperationMetadata.getDescriptor())
           .add(ExportDocumentsMetadata.getDescriptor())
           .add(IndexOperationMetadata.getDescriptor())
@@ -427,6 +433,47 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<CreateDatabaseRequest, Operation>
+      createDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<CreateDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CreateDatabase")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<CreateDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*}/databases",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "databaseId", request.getDatabaseId());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("database", request.getDatabase(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (CreateDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
   private static final ApiMethodDescriptor<GetDatabaseRequest, Database>
       getDatabaseMethodDescriptor =
           ApiMethodDescriptor.<GetDatabaseRequest, Database>newBuilder()
@@ -558,6 +605,9 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable;
   private final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable;
+  private final UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable;
+  private final OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable;
   private final UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable;
   private final UnaryCallable<ListDatabasesRequest, ListDatabasesResponse> listDatabasesCallable;
   private final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable;
@@ -607,68 +657,176 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
       throws IOException {
     this.callableFactory = callableFactory;
     this.httpJsonOperationsStub =
-        HttpJsonOperationsStub.create(clientContext, callableFactory, typeRegistry);
+        HttpJsonOperationsStub.create(
+            clientContext,
+            callableFactory,
+            typeRegistry,
+            ImmutableMap.<String, HttpRule>builder()
+                .put(
+                    "google.longrunning.Operations.CancelOperation",
+                    HttpRule.newBuilder()
+                        .setPost("/v1/{name=projects/*/databases/*/operations/*}:cancel")
+                        .build())
+                .put(
+                    "google.longrunning.Operations.DeleteOperation",
+                    HttpRule.newBuilder()
+                        .setDelete("/v1/{name=projects/*/databases/*/operations/*}")
+                        .build())
+                .put(
+                    "google.longrunning.Operations.GetOperation",
+                    HttpRule.newBuilder()
+                        .setGet("/v1/{name=projects/*/databases/*/operations/*}")
+                        .build())
+                .put(
+                    "google.longrunning.Operations.ListOperations",
+                    HttpRule.newBuilder()
+                        .setGet("/v1/{name=projects/*/databases/*}/operations")
+                        .build())
+                .build());
 
     HttpJsonCallSettings<CreateIndexRequest, Operation> createIndexTransportSettings =
         HttpJsonCallSettings.<CreateIndexRequest, Operation>newBuilder()
             .setMethodDescriptor(createIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListIndexesRequest, ListIndexesResponse> listIndexesTransportSettings =
         HttpJsonCallSettings.<ListIndexesRequest, ListIndexesResponse>newBuilder()
             .setMethodDescriptor(listIndexesMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetIndexRequest, Index> getIndexTransportSettings =
         HttpJsonCallSettings.<GetIndexRequest, Index>newBuilder()
             .setMethodDescriptor(getIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<DeleteIndexRequest, Empty> deleteIndexTransportSettings =
         HttpJsonCallSettings.<DeleteIndexRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetFieldRequest, Field> getFieldTransportSettings =
         HttpJsonCallSettings.<GetFieldRequest, Field>newBuilder()
             .setMethodDescriptor(getFieldMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<UpdateFieldRequest, Operation> updateFieldTransportSettings =
         HttpJsonCallSettings.<UpdateFieldRequest, Operation>newBuilder()
             .setMethodDescriptor(updateFieldMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("field.name", String.valueOf(request.getField().getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListFieldsRequest, ListFieldsResponse> listFieldsTransportSettings =
         HttpJsonCallSettings.<ListFieldsRequest, ListFieldsResponse>newBuilder()
             .setMethodDescriptor(listFieldsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ExportDocumentsRequest, Operation> exportDocumentsTransportSettings =
         HttpJsonCallSettings.<ExportDocumentsRequest, Operation>newBuilder()
             .setMethodDescriptor(exportDocumentsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ImportDocumentsRequest, Operation> importDocumentsTransportSettings =
         HttpJsonCallSettings.<ImportDocumentsRequest, Operation>newBuilder()
             .setMethodDescriptor(importDocumentsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<CreateDatabaseRequest, Operation> createDatabaseTransportSettings =
+        HttpJsonCallSettings.<CreateDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(createDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetDatabaseRequest, Database> getDatabaseTransportSettings =
         HttpJsonCallSettings.<GetDatabaseRequest, Database>newBuilder()
             .setMethodDescriptor(getDatabaseMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListDatabasesRequest, ListDatabasesResponse>
         listDatabasesTransportSettings =
             HttpJsonCallSettings.<ListDatabasesRequest, ListDatabasesResponse>newBuilder()
                 .setMethodDescriptor(listDatabasesMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<UpdateDatabaseRequest, Operation> updateDatabaseTransportSettings =
         HttpJsonCallSettings.<UpdateDatabaseRequest, Operation>newBuilder()
             .setMethodDescriptor(updateDatabaseMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database.name", String.valueOf(request.getDatabase().getName()));
+                  return builder.build();
+                })
             .build();
 
     this.createIndexCallable =
@@ -728,6 +886,15 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.importDocumentsOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.createDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            createDatabaseTransportSettings, settings.createDatabaseSettings(), clientContext);
+    this.createDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            createDatabaseTransportSettings,
+            settings.createDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
     this.getDatabaseCallable =
         callableFactory.createUnaryCallable(
             getDatabaseTransportSettings, settings.getDatabaseSettings(), clientContext);
@@ -760,6 +927,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(listFieldsMethodDescriptor);
     methodDescriptors.add(exportDocumentsMethodDescriptor);
     methodDescriptors.add(importDocumentsMethodDescriptor);
+    methodDescriptors.add(createDatabaseMethodDescriptor);
     methodDescriptors.add(getDatabaseMethodDescriptor);
     methodDescriptors.add(listDatabasesMethodDescriptor);
     methodDescriptors.add(updateDatabaseMethodDescriptor);
@@ -847,6 +1015,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable() {
     return importDocumentsOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable() {
+    return createDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable() {
+    return createDatabaseOperationCallable;
   }
 
   @Override

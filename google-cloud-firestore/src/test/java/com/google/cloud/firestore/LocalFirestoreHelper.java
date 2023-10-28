@@ -86,7 +86,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.threeten.bp.Duration;
@@ -341,24 +341,24 @@ public final class LocalFirestoreHelper {
     }
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse() {
-    return aggregationQueryResponse(42);
+  public static Answer<RunAggregationQueryResponse> countQueryResponse() {
+    return countQueryResponse(42);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(int count) {
-    return aggregationQueryResponse(count, null);
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(int count) {
+    return countQueryResponse(count, null);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(
       int count, @Nullable Timestamp readTime) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count, readTime),
+          createCountQueryResponse(count, readTime),
         },
         /*throwable=*/ null);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(Throwable throwable) {
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(Throwable throwable) {
     return streamingResponse(new RunAggregationQueryResponse[] {}, throwable);
   }
 
@@ -366,8 +366,7 @@ public final class LocalFirestoreHelper {
       int count1, int count2) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count1, null),
-          createRunAggregationQueryResponse(count2, null),
+          createCountQueryResponse(count1, null), createCountQueryResponse(count2, null),
         },
         /*throwable=*/ null);
   }
@@ -376,17 +375,17 @@ public final class LocalFirestoreHelper {
       int count1, Throwable throwable) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count1, null),
+          createCountQueryResponse(count1, null),
         },
         throwable);
   }
 
-  private static RunAggregationQueryResponse createRunAggregationQueryResponse(
+  private static RunAggregationQueryResponse createCountQueryResponse(
       int count, @Nullable Timestamp timestamp) {
     RunAggregationQueryResponse.Builder builder = RunAggregationQueryResponse.newBuilder();
     builder.setResult(
         AggregationResult.newBuilder()
-            .putAggregateFields("count", Value.newBuilder().setIntegerValue(count).build())
+            .putAggregateFields("aggregate_0", Value.newBuilder().setIntegerValue(count).build())
             .build());
     if (timestamp != null) {
       builder.setReadTime(timestamp.toProto());
@@ -651,8 +650,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static StructuredQuery.Filter orFilters(StructuredQuery.Filter... filters) {
-    // TODO(orquery): Replace this with Operator.OR once it's available.
-    return compositeFilter(CompositeFilter.Operator.OPERATOR_UNSPECIFIED, Arrays.asList(filters));
+    return compositeFilter(CompositeFilter.Operator.OR, Arrays.asList(filters));
   }
 
   private static StructuredQuery.Filter compositeFilter(
@@ -751,11 +749,11 @@ public final class LocalFirestoreHelper {
     return request.build();
   }
 
-  public static RunAggregationQueryRequest aggregationQuery() {
-    return aggregationQuery((String) null);
+  public static RunAggregationQueryRequest countQuery() {
+    return countQuery((String) null);
   }
 
-  public static RunAggregationQueryRequest aggregationQuery(@Nullable String transactionId) {
+  public static RunAggregationQueryRequest countQuery(@Nullable String transactionId) {
     RunQueryRequest runQueryRequest = query(TRANSACTION_ID, false);
 
     RunAggregationQueryRequest.Builder request =
@@ -766,7 +764,7 @@ public final class LocalFirestoreHelper {
                     .setStructuredQuery(runQueryRequest.getStructuredQuery())
                     .addAggregations(
                         Aggregation.newBuilder()
-                            .setAlias("count")
+                            .setAlias("aggregate_0")
                             .setCount(Aggregation.Count.getDefaultInstance())));
 
     if (transactionId != null) {
@@ -776,7 +774,7 @@ public final class LocalFirestoreHelper {
     return request.build();
   }
 
-  public static RunAggregationQueryRequest aggregationQuery(RunQueryRequest runQueryRequest) {
+  public static RunAggregationQueryRequest countQuery(RunQueryRequest runQueryRequest) {
     return RunAggregationQueryRequest.newBuilder()
         .setParent(runQueryRequest.getParent())
         .setStructuredAggregationQuery(
@@ -784,7 +782,7 @@ public final class LocalFirestoreHelper {
                 .setStructuredQuery(runQueryRequest.getStructuredQuery())
                 .addAggregations(
                     Aggregation.newBuilder()
-                        .setAlias("count")
+                        .setAlias("aggregate_0")
                         .setCount(Aggregation.Count.getDefaultInstance())))
         .build();
   }
@@ -1204,7 +1202,8 @@ public final class LocalFirestoreHelper {
       Preconditions.checkNotNull(stubber, "Stubber should not be null");
       stubber
           .when(firestoreMock)
-          .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(
+              argumentCaptor.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     }
 
     public void verifyAllRequestsSent() {

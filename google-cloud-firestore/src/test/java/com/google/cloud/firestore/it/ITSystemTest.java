@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -72,7 +72,6 @@ import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -99,7 +98,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -109,7 +107,7 @@ import org.junit.runners.JUnit4;
 import org.threeten.bp.Duration;
 
 @RunWith(JUnit4.class)
-public class ITSystemTest {
+public class ITSystemTest extends ITBaseTest {
 
   private static final double DOUBLE_EPSILON = 0.000001;
 
@@ -124,26 +122,17 @@ public class ITSystemTest {
 
   @Rule public TestName testName = new TestName();
 
-  private Firestore firestore;
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
 
   @Before
   public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+    super.before();
+
     randomColl =
         firestore.collection(
             String.format("java-%s-%s", testName.getMethodName(), LocalFirestoreHelper.autoId()));
     randomDoc = randomColl.document();
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {
@@ -500,25 +489,20 @@ public class ITSystemTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
+  public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
+    // TODO(MIEQ): Enable this test against production when possible.
+    assumeTrue(
+        "Skip this test if running against production because multiple inequality is "
+            + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     addDocument("foo", 1, "bar", 2);
 
-    ExecutionException executionException =
-        assertThrows(
-            ExecutionException.class,
-            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
-    assertThat(executionException)
-        .hasCauseThat()
-        .hasMessageThat()
-        .contains(
-            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
+    QuerySnapshot querySnapshot =
+        randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("bar", 2).get().get();
+    assertEquals(1, querySnapshot.size());
+    assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
   @Test
@@ -1559,9 +1543,15 @@ public class ITSystemTest {
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
+    // Exception isn't thrown until 60 minutes.
+    // To ensure we exceed this, we use 120 minutes.
+    // If this test fails, we should likely be update documentation to reflect new value. See all
+    // usages of "Read Time" on proto, and within SDK.
+    final long twoHours = System.currentTimeMillis() / 1000 - 7200;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
-            .setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(0))
+            .setReadTime(
+                com.google.protobuf.Timestamp.newBuilder().setSeconds(twoHours).setNanos(0))
             .build();
 
     final ApiFuture<Void> runTransaction =
@@ -1572,15 +1562,13 @@ public class ITSystemTest {
             },
             options);
 
-    try {
-      runTransaction.get(10, TimeUnit.SECONDS);
-    } catch (ExecutionException e) {
-      final Throwable rootCause = ExceptionUtils.getRootCause(e);
-      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
-      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
-      final Status status = invalidArgument.getStatus();
-      assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
-    }
+    ExecutionException e =
+        assertThrows(ExecutionException.class, () -> runTransaction.get(10, TimeUnit.SECONDS));
+    final Throwable rootCause = ExceptionUtils.getRootCause(e);
+    assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+    final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+    final Status status = invalidArgument.getStatus();
+    assertThat(status.getCode()).isEqualTo(Code.FAILED_PRECONDITION);
   }
 
   @Test

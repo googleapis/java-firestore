@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     return new WriteResult();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_WriteResult_descriptor;
@@ -75,6 +70,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -93,6 +89,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -111,6 +108,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -630,6 +628,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -647,6 +646,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -670,6 +670,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -695,6 +696,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -717,6 +719,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -745,6 +748,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -767,6 +771,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -784,6 +789,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -805,6 +811,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>

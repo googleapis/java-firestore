@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package com.google.firestore.admin.v1;
  *
  * <pre>
  * Represents a single field in the database.
+ *
  * Fields are grouped by their "Collection Group", which represent all
  * collections in the database with the same id.
  * </pre>
@@ -47,11 +48,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Field();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -217,11 +213,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new IndexConfig();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -1595,11 +1586,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       return new TtlConfig();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.admin.v1.FieldProto
           .internal_static_google_firestore_admin_v1_Field_TtlConfig_descriptor;
@@ -2375,21 +2361,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+   *
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
    * or a special field path. The only valid special field is `*`, which
    * represents any field.
+   *
    * Field paths may be quoted using ` (backtick). The only character that needs
    * to be escaped within a quoted field path is the backtick character itself,
    * escaped using a backslash. Special characters in field paths that
    * must be quoted include: `*`, `.`,
    * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+   *
    * Examples:
    * (Note: Comments here are written in markdown syntax, so there is an
    *  additional layer of backticks to represent a code block)
    * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
    * `city` in the field `address`.
    * `&#92;`*&#92;`` represents a field named `*`, not any field.
+   *
    * A special `Field` contains the default indexing settings for all fields.
    * This field's resource name is:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -2419,21 +2409,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+   *
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
    * or a special field path. The only valid special field is `*`, which
    * represents any field.
+   *
    * Field paths may be quoted using ` (backtick). The only character that needs
    * to be escaped within a quoted field path is the backtick character itself,
    * escaped using a backslash. Special characters in field paths that
    * must be quoted include: `*`, `.`,
    * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+   *
    * Examples:
    * (Note: Comments here are written in markdown syntax, so there is an
    *  additional layer of backticks to represent a code block)
    * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
    * `city` in the field `address`.
    * `&#92;`*&#92;`` represents a field named `*`, not any field.
+   *
    * A special `Field` contains the default indexing settings for all fields.
    * This field's resource name is:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -2763,6 +2757,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Represents a single field in the database.
+   *
    * Fields are grouped by their "Collection Group", which represent all
    * collections in the database with the same id.
    * </pre>
@@ -2983,21 +2978,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3026,21 +3025,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3069,21 +3072,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3111,21 +3118,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3149,21 +3160,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`

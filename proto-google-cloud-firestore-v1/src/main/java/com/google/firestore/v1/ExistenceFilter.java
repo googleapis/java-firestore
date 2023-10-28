@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     return new ExistenceFilter();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_ExistenceFilter_descriptor;
@@ -91,8 +86,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
    * <pre>
    * The total count of documents that match
    * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+   *
    * If different from the count of documents in the client that match, the
    * client must manually determine which documents no longer match the target.
+   *
+   * The client can use the `unchanged_names` bloom filter to assist with
+   * this determination by testing ALL the document names against the filter;
+   * if the document name is NOT in the filter, it means the document no
+   * longer matches the target.
    * </pre>
    *
    * <code>int32 count = 2;</code>
@@ -102,6 +103,86 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
   @java.lang.Override
   public int getCount() {
     return count_;
+  }
+
+  public static final int UNCHANGED_NAMES_FIELD_NUMBER = 3;
+  private com.google.firestore.v1.BloomFilter unchangedNames_;
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   *
+   * @return Whether the unchangedNames field is set.
+   */
+  @java.lang.Override
+  public boolean hasUnchangedNames() {
+    return unchangedNames_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   *
+   * @return The unchangedNames.
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.BloomFilter getUnchangedNames() {
+    return unchangedNames_ == null
+        ? com.google.firestore.v1.BloomFilter.getDefaultInstance()
+        : unchangedNames_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+   * the resource names of ALL the documents that match
+   * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+   * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+   *
+   * This bloom filter may be omitted at the server's discretion, such as if it
+   * is deemed that the client will not make use of it or if it is too
+   * computationally expensive to calculate or transmit. Clients must gracefully
+   * handle this field being absent by falling back to the logic used before
+   * this field existed; that is, re-add the target without a resume token to
+   * figure out which documents in the client's cache are out of sync.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.BloomFilterOrBuilder getUnchangedNamesOrBuilder() {
+    return unchangedNames_ == null
+        ? com.google.firestore.v1.BloomFilter.getDefaultInstance()
+        : unchangedNames_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -124,6 +205,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     if (count_ != 0) {
       output.writeInt32(2, count_);
     }
+    if (unchangedNames_ != null) {
+      output.writeMessage(3, getUnchangedNames());
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -138,6 +222,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     }
     if (count_ != 0) {
       size += com.google.protobuf.CodedOutputStream.computeInt32Size(2, count_);
+    }
+    if (unchangedNames_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(3, getUnchangedNames());
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -156,6 +243,10 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
 
     if (getTargetId() != other.getTargetId()) return false;
     if (getCount() != other.getCount()) return false;
+    if (hasUnchangedNames() != other.hasUnchangedNames()) return false;
+    if (hasUnchangedNames()) {
+      if (!getUnchangedNames().equals(other.getUnchangedNames())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -171,6 +262,10 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
     hash = (53 * hash) + getTargetId();
     hash = (37 * hash) + COUNT_FIELD_NUMBER;
     hash = (53 * hash) + getCount();
+    if (hasUnchangedNames()) {
+      hash = (37 * hash) + UNCHANGED_NAMES_FIELD_NUMBER;
+      hash = (53 * hash) + getUnchangedNames().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -312,6 +407,11 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
       bitField0_ = 0;
       targetId_ = 0;
       count_ = 0;
+      unchangedNames_ = null;
+      if (unchangedNamesBuilder_ != null) {
+        unchangedNamesBuilder_.dispose();
+        unchangedNamesBuilder_ = null;
+      }
       return this;
     }
 
@@ -353,6 +453,10 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.count_ = count_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.unchangedNames_ =
+            unchangedNamesBuilder_ == null ? unchangedNames_ : unchangedNamesBuilder_.build();
       }
     }
 
@@ -407,6 +511,9 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
       if (other.getCount() != 0) {
         setCount(other.getCount());
       }
+      if (other.hasUnchangedNames()) {
+        mergeUnchangedNames(other.getUnchangedNames());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -445,6 +552,12 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
                 bitField0_ |= 0x00000002;
                 break;
               } // case 16
+            case 26:
+              {
+                input.readMessage(getUnchangedNamesFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -524,8 +637,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -542,8 +661,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -564,8 +689,14 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
      * <pre>
      * The total count of documents that match
      * [target_id][google.firestore.v1.ExistenceFilter.target_id].
+     *
      * If different from the count of documents in the client that match, the
      * client must manually determine which documents no longer match the target.
+     *
+     * The client can use the `unchanged_names` bloom filter to assist with
+     * this determination by testing ALL the document names against the filter;
+     * if the document name is NOT in the filter, it means the document no
+     * longer matches the target.
      * </pre>
      *
      * <code>int32 count = 2;</code>
@@ -577,6 +708,279 @@ public final class ExistenceFilter extends com.google.protobuf.GeneratedMessageV
       count_ = 0;
       onChanged();
       return this;
+    }
+
+    private com.google.firestore.v1.BloomFilter unchangedNames_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.BloomFilter,
+            com.google.firestore.v1.BloomFilter.Builder,
+            com.google.firestore.v1.BloomFilterOrBuilder>
+        unchangedNamesBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     *
+     * @return Whether the unchangedNames field is set.
+     */
+    public boolean hasUnchangedNames() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     *
+     * @return The unchangedNames.
+     */
+    public com.google.firestore.v1.BloomFilter getUnchangedNames() {
+      if (unchangedNamesBuilder_ == null) {
+        return unchangedNames_ == null
+            ? com.google.firestore.v1.BloomFilter.getDefaultInstance()
+            : unchangedNames_;
+      } else {
+        return unchangedNamesBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public Builder setUnchangedNames(com.google.firestore.v1.BloomFilter value) {
+      if (unchangedNamesBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        unchangedNames_ = value;
+      } else {
+        unchangedNamesBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public Builder setUnchangedNames(com.google.firestore.v1.BloomFilter.Builder builderForValue) {
+      if (unchangedNamesBuilder_ == null) {
+        unchangedNames_ = builderForValue.build();
+      } else {
+        unchangedNamesBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public Builder mergeUnchangedNames(com.google.firestore.v1.BloomFilter value) {
+      if (unchangedNamesBuilder_ == null) {
+        if (((bitField0_ & 0x00000004) != 0)
+            && unchangedNames_ != null
+            && unchangedNames_ != com.google.firestore.v1.BloomFilter.getDefaultInstance()) {
+          getUnchangedNamesBuilder().mergeFrom(value);
+        } else {
+          unchangedNames_ = value;
+        }
+      } else {
+        unchangedNamesBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public Builder clearUnchangedNames() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      unchangedNames_ = null;
+      if (unchangedNamesBuilder_ != null) {
+        unchangedNamesBuilder_.dispose();
+        unchangedNamesBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public com.google.firestore.v1.BloomFilter.Builder getUnchangedNamesBuilder() {
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return getUnchangedNamesFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    public com.google.firestore.v1.BloomFilterOrBuilder getUnchangedNamesOrBuilder() {
+      if (unchangedNamesBuilder_ != null) {
+        return unchangedNamesBuilder_.getMessageOrBuilder();
+      } else {
+        return unchangedNames_ == null
+            ? com.google.firestore.v1.BloomFilter.getDefaultInstance()
+            : unchangedNames_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A bloom filter that, despite its name, contains the UTF-8 byte encodings of
+     * the resource names of ALL the documents that match
+     * [target_id][google.firestore.v1.ExistenceFilter.target_id], in the form
+     * `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
+     *
+     * This bloom filter may be omitted at the server's discretion, such as if it
+     * is deemed that the client will not make use of it or if it is too
+     * computationally expensive to calculate or transmit. Clients must gracefully
+     * handle this field being absent by falling back to the logic used before
+     * this field existed; that is, re-add the target without a resume token to
+     * figure out which documents in the client's cache are out of sync.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.BloomFilter unchanged_names = 3;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.BloomFilter,
+            com.google.firestore.v1.BloomFilter.Builder,
+            com.google.firestore.v1.BloomFilterOrBuilder>
+        getUnchangedNamesFieldBuilder() {
+      if (unchangedNamesBuilder_ == null) {
+        unchangedNamesBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.BloomFilter,
+                com.google.firestore.v1.BloomFilter.Builder,
+                com.google.firestore.v1.BloomFilterOrBuilder>(
+                getUnchangedNames(), getParentForChildren(), isClean());
+        unchangedNames_ = null;
+      }
+      return unchangedNamesBuilder_;
     }
 
     @java.lang.Override

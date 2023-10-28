@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -173,6 +175,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   public OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsOperationSettings();
+  }
+
+  /** Returns the object with the settings used for calls to createDatabase. */
+  public UnaryCallSettings<CreateDatabaseRequest, Operation> createDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).createDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to createDatabase. */
+  public OperationCallSettings<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).createDatabaseOperationSettings();
   }
 
   /** Returns the object with the settings used for calls to getDatabase. */
@@ -382,6 +395,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return getStubSettingsBuilder().importDocumentsOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to createDatabase. */
+    public UnaryCallSettings.Builder<CreateDatabaseRequest, Operation> createDatabaseSettings() {
+      return getStubSettingsBuilder().createDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to createDatabase. */
+    public OperationCallSettings.Builder<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+        createDatabaseOperationSettings() {
+      return getStubSettingsBuilder().createDatabaseOperationSettings();
     }
 
     /** Returns the builder for the settings used for calls to getDatabase. */

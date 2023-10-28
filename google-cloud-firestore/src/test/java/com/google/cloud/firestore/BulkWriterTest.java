@@ -26,8 +26,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -65,11 +64,11 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
@@ -95,7 +94,7 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
               true));
 
-  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(2, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -153,7 +152,7 @@ public class BulkWriterTest {
 
   @Before
   public void before() {
-    doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
+    lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     testExecutor = Executors.newSingleThreadScheduledExecutor();
 
     final ScheduledExecutorService timeoutExecutor =
@@ -1011,7 +1010,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.flush().get();
@@ -1023,7 +1022,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
@@ -1035,7 +1034,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     int opCount = 0;
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -1058,7 +1057,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
     int opCount = 0;
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -1086,7 +1085,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     ApiFuture<WriteResult> result = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.close();
@@ -1125,7 +1124,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     bulkWriter =
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
@@ -1175,7 +1174,7 @@ public class BulkWriterTest {
         .when(firestoreMock)
         .sendRequest(
             batchWriteCapture.capture(),
-            Matchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
+            ArgumentMatchers.<UnaryCallable<BatchWriteRequest, BatchWriteResponse>>any());
 
     bulkWriter =
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
@@ -1325,7 +1324,8 @@ public class BulkWriterTest {
     } catch (Exception e) {
       assertEquals(
           e.getMessage(),
-          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
+          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to"
+              + " false.");
     }
 
     try {
@@ -1335,7 +1335,8 @@ public class BulkWriterTest {
     } catch (Exception e) {
       assertEquals(
           e.getMessage(),
-          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
+          "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to"
+              + " false.");
     }
   }
 

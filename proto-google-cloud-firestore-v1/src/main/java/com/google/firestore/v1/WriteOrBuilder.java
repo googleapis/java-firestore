@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,6 +138,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -158,6 +159,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -178,6 +180,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The fields to update in this write.
+   *
    * This field can be set only when the operation is `update`.
    * If the mask is not set for an `update` and the document exists, any
    * existing data will be overwritten.
@@ -197,6 +200,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -212,6 +216,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -226,6 +231,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -240,6 +246,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -255,6 +262,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * The transforms to perform after update.
+   *
    * This field can be set only when the operation is `update`. If present, this
    * write is equivalent to performing `update` and `transform` to the same
    * document atomically and in order.
@@ -271,6 +279,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -284,6 +293,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -297,6 +307,7 @@ public interface WriteOrBuilder
    *
    * <pre>
    * An optional precondition on the document.
+   *
    * The write will fail if this is set and not met by the target document.
    * </pre>
    *
@@ -304,5 +315,5 @@ public interface WriteOrBuilder
    */
   com.google.firestore.v1.PreconditionOrBuilder getCurrentDocumentOrBuilder();
 
-  public com.google.firestore.v1.Write.OperationCase getOperationCase();
+  com.google.firestore.v1.Write.OperationCase getOperationCase();
 }

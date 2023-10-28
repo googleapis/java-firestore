@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Target();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -152,18 +147,13 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     private DocumentsTarget() {
-      documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new DocumentsTarget();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -184,7 +174,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     public static final int DOCUMENTS_FIELD_NUMBER = 2;
 
     @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringList documents_;
+    private com.google.protobuf.LazyStringArrayList documents_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
     /**
      *
      *
@@ -463,8 +454,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public Builder clear() {
         super.clear();
         bitField0_ = 0;
-        documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
+        documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
         return this;
       }
 
@@ -492,7 +482,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.v1.Target.DocumentsTarget buildPartial() {
         com.google.firestore.v1.Target.DocumentsTarget result =
             new com.google.firestore.v1.Target.DocumentsTarget(this);
-        buildPartialRepeatedFields(result);
         if (bitField0_ != 0) {
           buildPartial0(result);
         }
@@ -500,17 +489,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         return result;
       }
 
-      private void buildPartialRepeatedFields(
-          com.google.firestore.v1.Target.DocumentsTarget result) {
-        if (((bitField0_ & 0x00000001) != 0)) {
-          documents_ = documents_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.documents_ = documents_;
-      }
-
       private void buildPartial0(com.google.firestore.v1.Target.DocumentsTarget result) {
         int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          documents_.makeImmutable();
+          result.documents_ = documents_;
+        }
       }
 
       @java.lang.Override
@@ -564,7 +548,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         if (!other.documents_.isEmpty()) {
           if (documents_.isEmpty()) {
             documents_ = other.documents_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ |= 0x00000001;
           } else {
             ensureDocumentsIsMutable();
             documents_.addAll(other.documents_);
@@ -623,14 +607,14 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
       private int bitField0_;
 
-      private com.google.protobuf.LazyStringList documents_ =
-          com.google.protobuf.LazyStringArrayList.EMPTY;
+      private com.google.protobuf.LazyStringArrayList documents_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
 
       private void ensureDocumentsIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!documents_.isModifiable()) {
           documents_ = new com.google.protobuf.LazyStringArrayList(documents_);
-          bitField0_ |= 0x00000001;
         }
+        bitField0_ |= 0x00000001;
       }
       /**
        *
@@ -647,7 +631,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * @return A list containing the documents.
        */
       public com.google.protobuf.ProtocolStringList getDocumentsList() {
-        return documents_.getUnmodifiableView();
+        documents_.makeImmutable();
+        return documents_;
       }
       /**
        *
@@ -724,6 +709,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
         ensureDocumentsIsMutable();
         documents_.set(index, value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -748,6 +734,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         }
         ensureDocumentsIsMutable();
         documents_.add(value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -769,6 +756,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       public Builder addAllDocuments(java.lang.Iterable<java.lang.String> values) {
         ensureDocumentsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(values, documents_);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -787,8 +775,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearDocuments() {
-        documents_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        documents_ = com.google.protobuf.LazyStringArrayList.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
+        ;
         onChanged();
         return this;
       }
@@ -814,6 +803,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
         checkByteStringIsUtf8(value);
         ensureDocumentsIsMutable();
         documents_.add(value);
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -957,7 +947,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      */
     com.google.firestore.v1.StructuredQueryOrBuilder getStructuredQueryOrBuilder();
 
-    public com.google.firestore.v1.Target.QueryTarget.QueryTypeCase getQueryTypeCase();
+    com.google.firestore.v1.Target.QueryTarget.QueryTypeCase getQueryTypeCase();
   }
   /**
    *
@@ -988,11 +978,6 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       return new QueryTarget();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.v1.FirestoreProto
           .internal_static_google_firestore_v1_Target_QueryTarget_descriptor;
@@ -1009,6 +994,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
 
     private int queryTypeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object queryType_;
 
     public enum QueryTypeCase
@@ -1984,6 +1971,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int targetTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object targetType_;
 
   public enum TargetTypeCase
@@ -2031,6 +2020,8 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int resumeTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object resumeType_;
 
   public enum ResumeTypeCase
@@ -2186,6 +2177,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2203,6 +2195,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * A resume token from a prior
    * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -2224,6 +2217,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2240,6 +2234,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2259,6 +2254,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -2280,6 +2276,21 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The target ID that identifies the target on the stream. Must be a positive
    * number and non-zero.
+   *
+   * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+   * target and return that in a `TargetChange::ADD` event. Once a target with
+   * `target_id=0` is added, all subsequent targets must also have
+   * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+   * sent to the server after a target with `target_id=0` is added, the server
+   * will immediately send a response with a `TargetChange::Remove` event.
+   *
+   * Note that if the client sends multiple `AddTarget` requests
+   * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+   * undefined. Therefore, clients should provide a target ID instead of relying
+   * on the server to assign one.
+   *
+   * If `target_id` is non-zero, there must not be an existing active target on
+   * this stream with the same ID.
    * </pre>
    *
    * <code>int32 target_id = 5;</code>
@@ -2307,6 +2318,71 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
   @java.lang.Override
   public boolean getOnce() {
     return once_;
+  }
+
+  public static final int EXPECTED_COUNT_FIELD_NUMBER = 12;
+  private com.google.protobuf.Int32Value expectedCount_;
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return Whether the expectedCount field is set.
+   */
+  @java.lang.Override
+  public boolean hasExpectedCount() {
+    return expectedCount_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return The expectedCount.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Int32Value getExpectedCount() {
+    return expectedCount_ == null
+        ? com.google.protobuf.Int32Value.getDefaultInstance()
+        : expectedCount_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder() {
+    return expectedCount_ == null
+        ? com.google.protobuf.Int32Value.getDefaultInstance()
+        : expectedCount_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -2340,6 +2416,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     }
     if (resumeTypeCase_ == 11) {
       output.writeMessage(11, (com.google.protobuf.Timestamp) resumeType_);
+    }
+    if (expectedCount_ != null) {
+      output.writeMessage(12, getExpectedCount());
     }
     getUnknownFields().writeTo(output);
   }
@@ -2376,6 +2455,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               11, (com.google.protobuf.Timestamp) resumeType_);
     }
+    if (expectedCount_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(12, getExpectedCount());
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -2393,6 +2475,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
 
     if (getTargetId() != other.getTargetId()) return false;
     if (getOnce() != other.getOnce()) return false;
+    if (hasExpectedCount() != other.hasExpectedCount()) return false;
+    if (hasExpectedCount()) {
+      if (!getExpectedCount().equals(other.getExpectedCount())) return false;
+    }
     if (!getTargetTypeCase().equals(other.getTargetTypeCase())) return false;
     switch (targetTypeCase_) {
       case 2:
@@ -2430,6 +2516,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + getTargetId();
     hash = (37 * hash) + ONCE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getOnce());
+    if (hasExpectedCount()) {
+      hash = (37 * hash) + EXPECTED_COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getExpectedCount().hashCode();
+    }
     switch (targetTypeCase_) {
       case 2:
         hash = (37 * hash) + QUERY_FIELD_NUMBER;
@@ -2602,6 +2692,11 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       targetId_ = 0;
       once_ = false;
+      expectedCount_ = null;
+      if (expectedCountBuilder_ != null) {
+        expectedCountBuilder_.dispose();
+        expectedCountBuilder_ = null;
+      }
       targetTypeCase_ = 0;
       targetType_ = null;
       resumeTypeCase_ = 0;
@@ -2647,6 +2742,10 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       if (((from_bitField0_ & 0x00000020) != 0)) {
         result.once_ = once_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.expectedCount_ =
+            expectedCountBuilder_ == null ? expectedCount_ : expectedCountBuilder_.build();
       }
     }
 
@@ -2716,6 +2815,9 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       }
       if (other.getOnce() != false) {
         setOnce(other.getOnce());
+      }
+      if (other.hasExpectedCount()) {
+        mergeExpectedCount(other.getExpectedCount());
       }
       switch (other.getTargetTypeCase()) {
         case QUERY:
@@ -2811,6 +2913,12 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
                 resumeTypeCase_ = 11;
                 break;
               } // case 90
+            case 98:
+              {
+                input.readMessage(getExpectedCountFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 98
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -3281,6 +3389,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3297,6 +3406,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3316,6 +3426,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3339,6 +3450,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A resume token from a prior
      * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+     *
      * Using a resume token with a different target is unsupported and may fail.
      * </pre>
      *
@@ -3365,6 +3477,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3381,6 +3494,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3407,6 +3521,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3430,6 +3545,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3450,6 +3566,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3482,6 +3599,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3508,6 +3626,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3521,6 +3640,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3542,6 +3662,7 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Start listening after a specific `read_time`.
+     *
      * The client must know the state of matching documents at this time.
      * </pre>
      *
@@ -3576,6 +3697,21 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The target ID that identifies the target on the stream. Must be a positive
      * number and non-zero.
+     *
+     * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+     * target and return that in a `TargetChange::ADD` event. Once a target with
+     * `target_id=0` is added, all subsequent targets must also have
+     * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+     * sent to the server after a target with `target_id=0` is added, the server
+     * will immediately send a response with a `TargetChange::Remove` event.
+     *
+     * Note that if the client sends multiple `AddTarget` requests
+     * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+     * undefined. Therefore, clients should provide a target ID instead of relying
+     * on the server to assign one.
+     *
+     * If `target_id` is non-zero, there must not be an existing active target on
+     * this stream with the same ID.
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
@@ -3592,6 +3728,21 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The target ID that identifies the target on the stream. Must be a positive
      * number and non-zero.
+     *
+     * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+     * target and return that in a `TargetChange::ADD` event. Once a target with
+     * `target_id=0` is added, all subsequent targets must also have
+     * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+     * sent to the server after a target with `target_id=0` is added, the server
+     * will immediately send a response with a `TargetChange::Remove` event.
+     *
+     * Note that if the client sends multiple `AddTarget` requests
+     * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+     * undefined. Therefore, clients should provide a target ID instead of relying
+     * on the server to assign one.
+     *
+     * If `target_id` is non-zero, there must not be an existing active target on
+     * this stream with the same ID.
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
@@ -3612,6 +3763,21 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The target ID that identifies the target on the stream. Must be a positive
      * number and non-zero.
+     *
+     * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+     * target and return that in a `TargetChange::ADD` event. Once a target with
+     * `target_id=0` is added, all subsequent targets must also have
+     * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+     * sent to the server after a target with `target_id=0` is added, the server
+     * will immediately send a response with a `TargetChange::Remove` event.
+     *
+     * Note that if the client sends multiple `AddTarget` requests
+     * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+     * undefined. Therefore, clients should provide a target ID instead of relying
+     * on the server to assign one.
+     *
+     * If `target_id` is non-zero, there must not be an existing active target on
+     * this stream with the same ID.
      * </pre>
      *
      * <code>int32 target_id = 5;</code>
@@ -3676,6 +3842,234 @@ public final class Target extends com.google.protobuf.GeneratedMessageV3
       once_ = false;
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.Int32Value expectedCount_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Int32Value,
+            com.google.protobuf.Int32Value.Builder,
+            com.google.protobuf.Int32ValueOrBuilder>
+        expectedCountBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     *
+     * @return Whether the expectedCount field is set.
+     */
+    public boolean hasExpectedCount() {
+      return ((bitField0_ & 0x00000040) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     *
+     * @return The expectedCount.
+     */
+    public com.google.protobuf.Int32Value getExpectedCount() {
+      if (expectedCountBuilder_ == null) {
+        return expectedCount_ == null
+            ? com.google.protobuf.Int32Value.getDefaultInstance()
+            : expectedCount_;
+      } else {
+        return expectedCountBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder setExpectedCount(com.google.protobuf.Int32Value value) {
+      if (expectedCountBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        expectedCount_ = value;
+      } else {
+        expectedCountBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder setExpectedCount(com.google.protobuf.Int32Value.Builder builderForValue) {
+      if (expectedCountBuilder_ == null) {
+        expectedCount_ = builderForValue.build();
+      } else {
+        expectedCountBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder mergeExpectedCount(com.google.protobuf.Int32Value value) {
+      if (expectedCountBuilder_ == null) {
+        if (((bitField0_ & 0x00000040) != 0)
+            && expectedCount_ != null
+            && expectedCount_ != com.google.protobuf.Int32Value.getDefaultInstance()) {
+          getExpectedCountBuilder().mergeFrom(value);
+        } else {
+          expectedCount_ = value;
+        }
+      } else {
+        expectedCountBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public Builder clearExpectedCount() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      expectedCount_ = null;
+      if (expectedCountBuilder_ != null) {
+        expectedCountBuilder_.dispose();
+        expectedCountBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public com.google.protobuf.Int32Value.Builder getExpectedCountBuilder() {
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return getExpectedCountFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    public com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder() {
+      if (expectedCountBuilder_ != null) {
+        return expectedCountBuilder_.getMessageOrBuilder();
+      } else {
+        return expectedCount_ == null
+            ? com.google.protobuf.Int32Value.getDefaultInstance()
+            : expectedCount_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The number of documents that last matched the query at the resume token or
+     * read time.
+     *
+     * This value is only relevant when a `resume_type` is provided. This value
+     * being present and greater than zero signals that the client wants
+     * `ExistenceFilter.unchanged_names` to be included in the response.
+     * </pre>
+     *
+     * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Int32Value,
+            com.google.protobuf.Int32Value.Builder,
+            com.google.protobuf.Int32ValueOrBuilder>
+        getExpectedCountFieldBuilder() {
+      if (expectedCountBuilder_ == null) {
+        expectedCountBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Int32Value,
+                com.google.protobuf.Int32Value.Builder,
+                com.google.protobuf.Int32ValueOrBuilder>(
+                getExpectedCount(), getParentForChildren(), isClean());
+        expectedCount_ = null;
+      }
+      return expectedCountBuilder_;
     }
 
     @java.lang.Override

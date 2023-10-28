@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A [Document][google.firestore.v1.Document] has been deleted.
+ *
  * May be the result of multiple [writes][google.firestore.v1.Write], including
  * updates, the last of which deleted the
  * [Document][google.firestore.v1.Document].
+ *
  * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be
  * returned for the same logical delete, if multiple targets are affected.
  * </pre>
@@ -51,11 +53,6 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new DocumentDelete();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -184,6 +181,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *
@@ -200,6 +198,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *
@@ -216,6 +215,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *
@@ -430,9 +430,11 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A [Document][google.firestore.v1.Document] has been deleted.
+   *
    * May be the result of multiple [writes][google.firestore.v1.Write], including
    * updates, the last of which deleted the
    * [Document][google.firestore.v1.Document].
+   *
    * Multiple [DocumentDelete][google.firestore.v1.DocumentDelete] messages may be
    * returned for the same logical delete, if multiple targets are affected.
    * </pre>
@@ -917,6 +919,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -932,6 +935,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -951,6 +955,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -974,6 +979,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -994,6 +1000,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -1020,6 +1027,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -1040,6 +1048,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -1055,6 +1064,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *
@@ -1072,6 +1082,7 @@ public final class DocumentDelete extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The read timestamp at which the delete was observed.
+     *
      * Greater or equal to the `commit_time` of the delete.
      * </pre>
      *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,11 +46,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new DocumentTransform();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -150,6 +145,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -170,6 +166,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -190,6 +187,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -209,6 +207,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -231,6 +230,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -253,6 +253,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -274,6 +275,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -296,6 +298,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -318,6 +321,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -342,11 +346,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -363,11 +369,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -384,11 +392,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -403,10 +413,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -422,10 +434,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -441,10 +455,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -452,7 +468,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      */
     com.google.firestore.v1.ArrayValueOrBuilder getRemoveAllFromArrayOrBuilder();
 
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase
+    com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase
         getTransformTypeCase();
   }
   /**
@@ -482,11 +498,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FieldTransform();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -646,6 +657,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
 
     private int transformTypeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object transformType_;
 
     public enum TransformTypeCase
@@ -828,6 +841,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -851,6 +865,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -877,6 +892,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -903,6 +919,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -928,6 +945,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -956,6 +974,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -984,6 +1003,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1009,6 +1029,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1037,6 +1058,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1068,11 +1090,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1092,11 +1116,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1119,11 +1145,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1145,10 +1173,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1167,10 +1197,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1192,10 +1224,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -2039,6 +2073,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2062,6 +2097,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2095,6 +2131,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2125,6 +2162,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2152,6 +2190,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2192,6 +2231,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2225,6 +2265,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2245,6 +2286,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2273,6 +2315,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2319,6 +2362,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2344,6 +2388,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2379,6 +2424,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2411,6 +2457,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2440,6 +2487,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2482,6 +2530,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2517,6 +2566,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2539,6 +2589,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2569,6 +2620,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2617,6 +2669,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2642,6 +2695,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2677,6 +2731,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2709,6 +2764,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2738,6 +2794,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2780,6 +2837,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2815,6 +2873,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2837,6 +2896,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2867,6 +2927,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2918,11 +2979,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -2942,11 +3005,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -2976,11 +3041,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3007,11 +3074,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3036,11 +3105,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3077,11 +3148,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3111,11 +3184,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3132,11 +3207,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3161,11 +3238,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3207,10 +3286,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3229,10 +3310,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3261,10 +3344,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3290,10 +3375,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3317,10 +3404,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3356,10 +3445,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3388,10 +3479,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3407,10 +3500,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3434,10 +3529,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *

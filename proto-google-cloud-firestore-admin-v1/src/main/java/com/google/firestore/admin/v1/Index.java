@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   private Index() {
     name_ = "";
     queryScope_ = 0;
+    apiScope_ = 0;
     fields_ = java.util.Collections.emptyList();
     state_ = 0;
   }
@@ -49,11 +50,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Index();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -116,6 +112,17 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * <code>COLLECTION_GROUP = 2;</code>
      */
     COLLECTION_GROUP(2),
+    /**
+     *
+     *
+     * <pre>
+     * Include all the collections's ancestor in the index. Only available for
+     * Datastore Mode databases.
+     * </pre>
+     *
+     * <code>COLLECTION_RECURSIVE = 3;</code>
+     */
+    COLLECTION_RECURSIVE(3),
     UNRECOGNIZED(-1),
     ;
 
@@ -153,6 +160,17 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * <code>COLLECTION_GROUP = 2;</code>
      */
     public static final int COLLECTION_GROUP_VALUE = 2;
+    /**
+     *
+     *
+     * <pre>
+     * Include all the collections's ancestor in the index. Only available for
+     * Datastore Mode databases.
+     * </pre>
+     *
+     * <code>COLLECTION_RECURSIVE = 3;</code>
+     */
+    public static final int COLLECTION_RECURSIVE_VALUE = 3;
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
@@ -184,6 +202,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           return COLLECTION;
         case 2:
           return COLLECTION_GROUP;
+        case 3:
+          return COLLECTION_RECURSIVE;
         default:
           return null;
       }
@@ -235,6 +255,144 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Index.QueryScope)
+  }
+
+  /**
+   *
+   *
+   * <pre>
+   * API Scope defines the APIs (Firestore Native, or Firestore in
+   * Datastore Mode) that are supported for queries.
+   * </pre>
+   *
+   * Protobuf enum {@code google.firestore.admin.v1.Index.ApiScope}
+   */
+  public enum ApiScope implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     *
+     *
+     * <pre>
+     * The index can only be used by the Firestore Native query API.
+     * This is the default.
+     * </pre>
+     *
+     * <code>ANY_API = 0;</code>
+     */
+    ANY_API(0),
+    /**
+     *
+     *
+     * <pre>
+     * The index can only be used by the Firestore in Datastore Mode query API.
+     * </pre>
+     *
+     * <code>DATASTORE_MODE_API = 1;</code>
+     */
+    DATASTORE_MODE_API(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     *
+     *
+     * <pre>
+     * The index can only be used by the Firestore Native query API.
+     * This is the default.
+     * </pre>
+     *
+     * <code>ANY_API = 0;</code>
+     */
+    public static final int ANY_API_VALUE = 0;
+    /**
+     *
+     *
+     * <pre>
+     * The index can only be used by the Firestore in Datastore Mode query API.
+     * </pre>
+     *
+     * <code>DATASTORE_MODE_API = 1;</code>
+     */
+    public static final int DATASTORE_MODE_API_VALUE = 1;
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ApiScope valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static ApiScope forNumber(int value) {
+      switch (value) {
+        case 0:
+          return ANY_API;
+        case 1:
+          return DATASTORE_MODE_API;
+        default:
+          return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ApiScope> internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<ApiScope> internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<ApiScope>() {
+          public ApiScope findValueByNumber(int number) {
+            return ApiScope.forNumber(number);
+          }
+        };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+      return com.google.firestore.admin.v1.Index.getDescriptor().getEnumTypes().get(1);
+    }
+
+    private static final ApiScope[] VALUES = values();
+
+    public static ApiScope valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ApiScope(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Index.ApiScope)
   }
 
   /**
@@ -419,7 +577,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-      return com.google.firestore.admin.v1.Index.getDescriptor().getEnumTypes().get(1);
+      return com.google.firestore.admin.v1.Index.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final State[] VALUES = values();
@@ -554,7 +712,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig();
 
-    public com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
+    com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
   }
   /**
    *
@@ -585,11 +743,6 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new IndexField();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -900,6 +1053,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     }
 
     private int valueModeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object valueMode_;
 
     public enum ValueModeCase
@@ -2036,6 +2191,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
    * query time, and that has the same collection id.
+   *
    * Indexes with a collection group query scope specified allow queries against
    * all collections descended from a specific document, specified at query
    * time, and that have the same collection id as this index.
@@ -2056,6 +2212,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    * Indexes with a collection query scope specified allow queries
    * against a collection that is the child of a specific document, specified at
    * query time, and that has the same collection id.
+   *
    * Indexes with a collection group query scope specified allow queries against
    * all collections descended from a specific document, specified at query
    * time, and that have the same collection id as this index.
@@ -2072,6 +2229,41 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     return result == null ? com.google.firestore.admin.v1.Index.QueryScope.UNRECOGNIZED : result;
   }
 
+  public static final int API_SCOPE_FIELD_NUMBER = 5;
+  private int apiScope_ = 0;
+  /**
+   *
+   *
+   * <pre>
+   * The API scope supported by this index.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+   *
+   * @return The enum numeric value on the wire for apiScope.
+   */
+  @java.lang.Override
+  public int getApiScopeValue() {
+    return apiScope_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The API scope supported by this index.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+   *
+   * @return The apiScope.
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Index.ApiScope getApiScope() {
+    com.google.firestore.admin.v1.Index.ApiScope result =
+        com.google.firestore.admin.v1.Index.ApiScope.forNumber(apiScope_);
+    return result == null ? com.google.firestore.admin.v1.Index.ApiScope.UNRECOGNIZED : result;
+  }
+
   public static final int FIELDS_FIELD_NUMBER = 3;
 
   @SuppressWarnings("serial")
@@ -2081,12 +2273,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
-   * For composite indexes, this is always 2 or more fields.
-   * The last field entry is always for the field path `__name__`. If, on
-   * creation, `__name__` was not specified as the last field, it will be added
-   * automatically with the same direction as that of the last field defined. If
-   * the final field in a composite index is not directional, the `__name__`
-   * will be ordered ASCENDING (unless explicitly specified).
+   *
+   * For composite indexes, this requires a minimum of 2 and a maximum of 100
+   * fields. The last field entry is always for the field path `__name__`. If,
+   * on creation, `__name__` was not specified as the last field, it will be
+   * added automatically with the same direction as that of the last field
+   * defined. If the final field in a composite index is not directional, the
+   * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2102,12 +2296,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
-   * For composite indexes, this is always 2 or more fields.
-   * The last field entry is always for the field path `__name__`. If, on
-   * creation, `__name__` was not specified as the last field, it will be added
-   * automatically with the same direction as that of the last field defined. If
-   * the final field in a composite index is not directional, the `__name__`
-   * will be ordered ASCENDING (unless explicitly specified).
+   *
+   * For composite indexes, this requires a minimum of 2 and a maximum of 100
+   * fields. The last field entry is always for the field path `__name__`. If,
+   * on creation, `__name__` was not specified as the last field, it will be
+   * added automatically with the same direction as that of the last field
+   * defined. If the final field in a composite index is not directional, the
+   * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2124,12 +2320,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
-   * For composite indexes, this is always 2 or more fields.
-   * The last field entry is always for the field path `__name__`. If, on
-   * creation, `__name__` was not specified as the last field, it will be added
-   * automatically with the same direction as that of the last field defined. If
-   * the final field in a composite index is not directional, the `__name__`
-   * will be ordered ASCENDING (unless explicitly specified).
+   *
+   * For composite indexes, this requires a minimum of 2 and a maximum of 100
+   * fields. The last field entry is always for the field path `__name__`. If,
+   * on creation, `__name__` was not specified as the last field, it will be
+   * added automatically with the same direction as that of the last field
+   * defined. If the final field in a composite index is not directional, the
+   * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2145,12 +2343,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
-   * For composite indexes, this is always 2 or more fields.
-   * The last field entry is always for the field path `__name__`. If, on
-   * creation, `__name__` was not specified as the last field, it will be added
-   * automatically with the same direction as that of the last field defined. If
-   * the final field in a composite index is not directional, the `__name__`
-   * will be ordered ASCENDING (unless explicitly specified).
+   *
+   * For composite indexes, this requires a minimum of 2 and a maximum of 100
+   * fields. The last field entry is always for the field path `__name__`. If,
+   * on creation, `__name__` was not specified as the last field, it will be
+   * added automatically with the same direction as that of the last field
+   * defined. If the final field in a composite index is not directional, the
+   * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2166,12 +2366,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The fields supported by this index.
-   * For composite indexes, this is always 2 or more fields.
-   * The last field entry is always for the field path `__name__`. If, on
-   * creation, `__name__` was not specified as the last field, it will be added
-   * automatically with the same direction as that of the last field defined. If
-   * the final field in a composite index is not directional, the `__name__`
-   * will be ordered ASCENDING (unless explicitly specified).
+   *
+   * For composite indexes, this requires a minimum of 2 and a maximum of 100
+   * fields. The last field entry is always for the field path `__name__`. If,
+   * on creation, `__name__` was not specified as the last field, it will be
+   * added automatically with the same direction as that of the last field
+   * defined. If the final field in a composite index is not directional, the
+   * `__name__` will be ordered ASCENDING (unless explicitly specified).
+   *
    * For single field indexes, this will always be exactly one entry with a
    * field path equal to the field path of the associated field.
    * </pre>
@@ -2245,6 +2447,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     if (state_ != com.google.firestore.admin.v1.Index.State.STATE_UNSPECIFIED.getNumber()) {
       output.writeEnum(4, state_);
     }
+    if (apiScope_ != com.google.firestore.admin.v1.Index.ApiScope.ANY_API.getNumber()) {
+      output.writeEnum(5, apiScope_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -2267,6 +2472,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     if (state_ != com.google.firestore.admin.v1.Index.State.STATE_UNSPECIFIED.getNumber()) {
       size += com.google.protobuf.CodedOutputStream.computeEnumSize(4, state_);
     }
+    if (apiScope_ != com.google.firestore.admin.v1.Index.ApiScope.ANY_API.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(5, apiScope_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -2284,6 +2492,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
 
     if (!getName().equals(other.getName())) return false;
     if (queryScope_ != other.queryScope_) return false;
+    if (apiScope_ != other.apiScope_) return false;
     if (!getFieldsList().equals(other.getFieldsList())) return false;
     if (state_ != other.state_) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
@@ -2301,6 +2510,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + getName().hashCode();
     hash = (37 * hash) + QUERY_SCOPE_FIELD_NUMBER;
     hash = (53 * hash) + queryScope_;
+    hash = (37 * hash) + API_SCOPE_FIELD_NUMBER;
+    hash = (53 * hash) + apiScope_;
     if (getFieldsCount() > 0) {
       hash = (37 * hash) + FIELDS_FIELD_NUMBER;
       hash = (53 * hash) + getFieldsList().hashCode();
@@ -2448,13 +2659,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       bitField0_ = 0;
       name_ = "";
       queryScope_ = 0;
+      apiScope_ = 0;
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
       } else {
         fields_ = null;
         fieldsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000008);
       state_ = 0;
       return this;
     }
@@ -2492,9 +2704,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
 
     private void buildPartialRepeatedFields(com.google.firestore.admin.v1.Index result) {
       if (fieldsBuilder_ == null) {
-        if (((bitField0_ & 0x00000004) != 0)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           fields_ = java.util.Collections.unmodifiableList(fields_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.fields_ = fields_;
       } else {
@@ -2510,7 +2722,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.queryScope_ = queryScope_;
       }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.apiScope_ = apiScope_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
         result.state_ = state_;
       }
     }
@@ -2568,11 +2783,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (other.queryScope_ != 0) {
         setQueryScopeValue(other.getQueryScopeValue());
       }
+      if (other.apiScope_ != 0) {
+        setApiScopeValue(other.getApiScopeValue());
+      }
       if (fieldsBuilder_ == null) {
         if (!other.fields_.isEmpty()) {
           if (fields_.isEmpty()) {
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureFieldsIsMutable();
             fields_.addAll(other.fields_);
@@ -2585,7 +2803,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             fieldsBuilder_.dispose();
             fieldsBuilder_ = null;
             fields_ = other.fields_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             fieldsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFieldsFieldBuilder()
@@ -2652,9 +2870,15 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             case 32:
               {
                 state_ = input.readEnum();
-                bitField0_ |= 0x00000008;
+                bitField0_ |= 0x00000010;
                 break;
               } // case 32
+            case 40:
+              {
+                apiScope_ = input.readEnum();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 40
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -2803,6 +3027,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -2823,6 +3048,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -2846,6 +3072,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -2868,6 +3095,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -2894,6 +3122,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * Indexes with a collection query scope specified allow queries
      * against a collection that is the child of a specific document, specified at
      * query time, and that has the same collection id.
+     *
      * Indexes with a collection group query scope specified allow queries against
      * all collections descended from a specific document, specified at query
      * time, and that have the same collection id as this index.
@@ -2910,13 +3139,103 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private int apiScope_ = 0;
+    /**
+     *
+     *
+     * <pre>
+     * The API scope supported by this index.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+     *
+     * @return The enum numeric value on the wire for apiScope.
+     */
+    @java.lang.Override
+    public int getApiScopeValue() {
+      return apiScope_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The API scope supported by this index.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+     *
+     * @param value The enum numeric value on the wire for apiScope to set.
+     * @return This builder for chaining.
+     */
+    public Builder setApiScopeValue(int value) {
+      apiScope_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The API scope supported by this index.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+     *
+     * @return The apiScope.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Index.ApiScope getApiScope() {
+      com.google.firestore.admin.v1.Index.ApiScope result =
+          com.google.firestore.admin.v1.Index.ApiScope.forNumber(apiScope_);
+      return result == null ? com.google.firestore.admin.v1.Index.ApiScope.UNRECOGNIZED : result;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The API scope supported by this index.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+     *
+     * @param value The apiScope to set.
+     * @return This builder for chaining.
+     */
+    public Builder setApiScope(com.google.firestore.admin.v1.Index.ApiScope value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      bitField0_ |= 0x00000004;
+      apiScope_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The API scope supported by this index.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.ApiScope api_scope = 5;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearApiScope() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      apiScope_ = 0;
+      onChanged();
+      return this;
+    }
+
     private java.util.List<com.google.firestore.admin.v1.Index.IndexField> fields_ =
         java.util.Collections.emptyList();
 
     private void ensureFieldsIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
+      if (!((bitField0_ & 0x00000008) != 0)) {
         fields_ = new java.util.ArrayList<com.google.firestore.admin.v1.Index.IndexField>(fields_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
       }
     }
 
@@ -2931,12 +3250,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -2955,12 +3276,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -2979,12 +3302,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3003,12 +3328,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3033,12 +3360,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3061,12 +3390,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3091,12 +3422,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3121,12 +3454,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3149,12 +3484,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3177,12 +3514,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3205,12 +3544,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3220,7 +3561,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
     public Builder clearFields() {
       if (fieldsBuilder_ == null) {
         fields_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
       } else {
         fieldsBuilder_.clear();
@@ -3232,12 +3573,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3259,12 +3602,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3279,12 +3624,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3303,12 +3650,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3328,12 +3677,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3349,12 +3700,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3370,12 +3723,14 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The fields supported by this index.
-     * For composite indexes, this is always 2 or more fields.
-     * The last field entry is always for the field path `__name__`. If, on
-     * creation, `__name__` was not specified as the last field, it will be added
-     * automatically with the same direction as that of the last field defined. If
-     * the final field in a composite index is not directional, the `__name__`
-     * will be ordered ASCENDING (unless explicitly specified).
+     *
+     * For composite indexes, this requires a minimum of 2 and a maximum of 100
+     * fields. The last field entry is always for the field path `__name__`. If,
+     * on creation, `__name__` was not specified as the last field, it will be
+     * added automatically with the same direction as that of the last field
+     * defined. If the final field in a composite index is not directional, the
+     * `__name__` will be ordered ASCENDING (unless explicitly specified).
+     *
      * For single field indexes, this will always be exactly one entry with a
      * field path equal to the field path of the associated field.
      * </pre>
@@ -3398,7 +3753,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.admin.v1.Index.IndexField,
                 com.google.firestore.admin.v1.Index.IndexField.Builder,
                 com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>(
-                fields_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
+                fields_, ((bitField0_ & 0x00000008) != 0), getParentForChildren(), isClean());
         fields_ = null;
       }
       return fieldsBuilder_;
@@ -3434,7 +3789,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setStateValue(int value) {
       state_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -3471,7 +3826,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000010;
       state_ = value.getNumber();
       onChanged();
       return this;
@@ -3488,7 +3843,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearState() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000010);
       state_ = 0;
       onChanged();
       return this;

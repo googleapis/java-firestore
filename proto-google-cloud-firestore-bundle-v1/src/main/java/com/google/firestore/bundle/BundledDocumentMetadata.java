@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,18 +39,13 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
 
   private BundledDocumentMetadata() {
     name_ = "";
-    queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    queries_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BundledDocumentMetadata();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -186,7 +181,8 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
   public static final int QUERIES_FIELD_NUMBER = 4;
 
   @SuppressWarnings("serial")
-  private com.google.protobuf.LazyStringList queries_;
+  private com.google.protobuf.LazyStringArrayList queries_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -490,8 +486,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
         readTimeBuilder_ = null;
       }
       exists_ = false;
-      queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000008);
+      queries_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -519,21 +514,11 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     public com.google.firestore.bundle.BundledDocumentMetadata buildPartial() {
       com.google.firestore.bundle.BundledDocumentMetadata result =
           new com.google.firestore.bundle.BundledDocumentMetadata(this);
-      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
       onBuilt();
       return result;
-    }
-
-    private void buildPartialRepeatedFields(
-        com.google.firestore.bundle.BundledDocumentMetadata result) {
-      if (((bitField0_ & 0x00000008) != 0)) {
-        queries_ = queries_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000008);
-      }
-      result.queries_ = queries_;
     }
 
     private void buildPartial0(com.google.firestore.bundle.BundledDocumentMetadata result) {
@@ -546,6 +531,10 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
         result.exists_ = exists_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        queries_.makeImmutable();
+        result.queries_ = queries_;
       }
     }
 
@@ -609,7 +598,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       if (!other.queries_.isEmpty()) {
         if (queries_.isEmpty()) {
           queries_ = other.queries_;
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ |= 0x00000008;
         } else {
           ensureQueriesIsMutable();
           queries_.addAll(other.queries_);
@@ -1024,14 +1013,14 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       return this;
     }
 
-    private com.google.protobuf.LazyStringList queries_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList queries_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureQueriesIsMutable() {
-      if (!((bitField0_ & 0x00000008) != 0)) {
+      if (!queries_.isModifiable()) {
         queries_ = new com.google.protobuf.LazyStringArrayList(queries_);
-        bitField0_ |= 0x00000008;
       }
+      bitField0_ |= 0x00000008;
     }
     /**
      *
@@ -1045,7 +1034,8 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
      * @return A list containing the queries.
      */
     public com.google.protobuf.ProtocolStringList getQueriesList() {
-      return queries_.getUnmodifiableView();
+      queries_.makeImmutable();
+      return queries_;
     }
     /**
      *
@@ -1110,6 +1100,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       }
       ensureQueriesIsMutable();
       queries_.set(index, value);
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1131,6 +1122,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       }
       ensureQueriesIsMutable();
       queries_.add(value);
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1149,6 +1141,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
     public Builder addAllQueries(java.lang.Iterable<java.lang.String> values) {
       ensureQueriesIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, queries_);
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1164,8 +1157,9 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearQueries() {
-      queries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      queries_ = com.google.protobuf.LazyStringArrayList.emptyList();
       bitField0_ = (bitField0_ & ~0x00000008);
+      ;
       onChanged();
       return this;
     }
@@ -1188,6 +1182,7 @@ public final class BundledDocumentMetadata extends com.google.protobuf.Generated
       checkByteStringIsUtf8(value);
       ensureQueriesIsMutable();
       queries_.add(value);
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }

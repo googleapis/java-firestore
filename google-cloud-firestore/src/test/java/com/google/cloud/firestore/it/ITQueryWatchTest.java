@@ -17,23 +17,19 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
-import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assume.assumeFalse;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreException;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
@@ -42,7 +38,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Joiner.MapJoiner;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
@@ -58,7 +53,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,9 +61,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public final class ITQueryWatchTest {
-
-  private static Firestore firestore;
+public final class ITQueryWatchTest extends ITBaseTest {
 
   @Rule public TestName testName = new TestName();
 
@@ -77,19 +69,10 @@ public final class ITQueryWatchTest {
 
   @Before
   public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+    super.before();
     String autoId = LocalFirestoreHelper.autoId();
     String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
     randomColl = firestore.collection(collPath);
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   /**
@@ -152,64 +135,6 @@ public final class ITQueryWatchTest {
     listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
     listenerAssertions.modifiedIdsIsAnyOf(emptyList());
     listenerAssertions.removedIdsIsAnyOf(emptyList());
-  }
-
-  /**
-   * Testing multiple inequality filters on same and different properties, and validate the error
-   * message returned for invalid filter.
-   */
-  @Test
-  public void inequalityFilterOnSamePropertiesShouldBeSupported() throws Exception {
-    setDocument("doc", map("foo", 1, "bar", 2));
-
-    final Query query = randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("foo", 2);
-    QuerySnapshotEventListener listener =
-        QuerySnapshotEventListener.builder().setInitialEventCount(1).build();
-    ListenerRegistration registration = query.addSnapshotListener(listener);
-
-    try {
-      listener.eventsCountDownLatch.awaitInitialEvents();
-    } finally {
-      registration.remove();
-    }
-    ListenerAssertions listenerAssertions = listener.assertions();
-    listenerAssertions.noError();
-    listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
-    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
-  }
-
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
-  @Test
-  public void inequalityFilterOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
-        isRunningAgainstFirestoreEmulator(firestore));
-
-    setDocument("doc1", map("foo", "1", "bar", 1));
-
-    final Query query = randomColl.whereGreaterThan("foo", "0").whereLessThan("bar", 2);
-    QuerySnapshotEventListener listener =
-        QuerySnapshotEventListener.builder().setExpectError().build();
-    ListenerRegistration registration = query.addSnapshotListener(listener);
-
-    try {
-      listener.eventsCountDownLatch.awaitError();
-    } finally {
-      registration.remove();
-    }
-
-    ListenerAssertions listenerAssertions = listener.assertions();
-    listenerAssertions.hasError();
-    FirestoreException error = listener.receivedEvents.get(0).error;
-    assertThat(error)
-        .hasMessageThat()
-        .isIn(
-            asList(
-                "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [foo, bar]",
-                "Backend ended Listen stream: Cannot have inequality filters on multiple properties: [bar, foo]"));
   }
 
   /**

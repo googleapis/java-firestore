@@ -17,9 +17,8 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQuery;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQueryResponses;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.endAt;
 import static com.google.cloud.firestore.LocalFirestoreHelper.limit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.order;
@@ -28,6 +27,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.startAt;
 import static com.google.cloud.firestore.LocalFirestoreHelper.string;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -35,7 +35,6 @@ import static org.mockito.Mockito.mock;
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
-import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.RunAggregationQueryRequest;
@@ -49,9 +48,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.threeten.bp.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -78,12 +76,9 @@ public class QueryCountTest {
 
   @Test
   public void countShouldBeZeroForEmptyCollection() throws Exception {
-    doAnswer(aggregationQueryResponse(0))
+    doAnswer(countQueryResponse(0))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -92,12 +87,9 @@ public class QueryCountTest {
 
   @Test
   public void countShouldBe99ForCollectionWith99Documents() throws Exception {
-    doAnswer(aggregationQueryResponse(99))
+    doAnswer(countQueryResponse(99))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -106,33 +98,27 @@ public class QueryCountTest {
 
   @Test
   public void countShouldMakeCorrectRequestForACollection() throws Exception {
-    doAnswer(aggregationQueryResponse(0))
+    doAnswer(countQueryResponse(0))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     CollectionReference collection = firestoreMock.collection(COLLECTION_ID);
     collection.count().get();
 
-    assertThat(runAggregationQuery.getValue()).isEqualTo(aggregationQuery());
+    assertThat(runAggregationQuery.getValue()).isEqualTo(LocalFirestoreHelper.countQuery());
   }
 
   @Test
   public void countShouldMakeCorrectRequestForAComplexQuery() throws Exception {
-    doAnswer(aggregationQueryResponse(0))
+    doAnswer(countQueryResponse(0))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     query.orderBy("foo").startAt("foo").endAt("bar").limitToLast(42).count().get().get();
 
     assertThat(runAggregationQuery.getValue())
         .isEqualTo(
-            aggregationQuery(
+            LocalFirestoreHelper.countQuery(
                 query(
                     limit(42),
                     order("foo", StructuredQuery.Direction.DESCENDING),
@@ -142,12 +128,9 @@ public class QueryCountTest {
 
   @Test
   public void shouldReturnReadTimeFromResponse() throws Exception {
-    doAnswer(aggregationQueryResponse(99, Timestamp.ofTimeSecondsAndNanos(123, 456)))
+    doAnswer(countQueryResponse(99, Timestamp.ofTimeSecondsAndNanos(123, 456)))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -158,10 +141,7 @@ public class QueryCountTest {
   public void shouldIgnoreExtraRunAggregationQueryResponses() throws Exception {
     doAnswer(aggregationQueryResponses(123, 456))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -172,10 +152,7 @@ public class QueryCountTest {
   public void shouldIgnoreExtraErrors() throws Exception {
     doAnswer(aggregationQueryResponses(123, new Exception()))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuerySnapshot snapshot = query.count().get().get();
 
@@ -185,12 +162,9 @@ public class QueryCountTest {
   @Test
   public void shouldPropagateErrors() throws Exception {
     Exception exception = new Exception();
-    doAnswer(aggregationQueryResponse(exception))
+    doAnswer(countQueryResponse(exception))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
@@ -205,12 +179,9 @@ public class QueryCountTest {
 
   @Test
   public void aggregateQuerySnapshotGetQueryShouldReturnCorrectValue() throws Exception {
-    doAnswer(aggregationQueryResponse())
+    doAnswer(countQueryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     AggregateQuery aggregateQuery = query.count();
     AggregateQuerySnapshot snapshot = aggregateQuery.get().get();
@@ -220,13 +191,10 @@ public class QueryCountTest {
 
   @Test
   public void shouldNotRetryIfExceptionIsNotFirestoreException() {
-    doAnswer(aggregationQueryResponse(new NotFirestoreException()))
-        .doAnswer(aggregationQueryResponse())
+    doAnswer(countQueryResponse(new NotFirestoreException()))
+        .doAnswer(countQueryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 
@@ -235,13 +203,10 @@ public class QueryCountTest {
 
   @Test
   public void shouldRetryIfExceptionIsFirestoreExceptionWithRetryableStatus() throws Exception {
-    doAnswer(aggregationQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
-        .doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
+        .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -251,14 +216,10 @@ public class QueryCountTest {
 
   @Test
   public void shouldNotRetryIfExceptionIsFirestoreExceptionWithNonRetryableStatus() {
-    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
-    doAnswer(aggregationQueryResponse(new FirestoreException("reason", Status.INVALID_ARGUMENT)))
-        .doAnswer(aggregationQueryResponse())
+    doAnswer(countQueryResponse(new FirestoreException("reason", Status.INVALID_ARGUMENT)))
+        .doAnswer(countQueryResponse())
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 
@@ -270,13 +231,10 @@ public class QueryCountTest {
       shouldRetryIfExceptionIsFirestoreExceptionWithRetryableStatusWithInfiniteTimeoutWindow()
           throws Exception {
     doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
-    doAnswer(aggregationQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
-        .doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
+        .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -288,13 +246,10 @@ public class QueryCountTest {
   public void shouldRetryIfExceptionIsFirestoreExceptionWithRetryableStatusWithinTimeoutWindow()
       throws Exception {
     doReturn(Duration.ofDays(999)).when(firestoreMock).getTotalRequestTimeout();
-    doAnswer(aggregationQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
-        .doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
+        .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
     AggregateQuerySnapshot snapshot = future.get();
@@ -313,13 +268,10 @@ public class QueryCountTest {
         .when(clockMock)
         .nanoTime();
     doReturn(Duration.ofSeconds(5)).when(firestoreMock).getTotalRequestTimeout();
-    doAnswer(aggregationQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
-        .doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
+        .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
-        .streamRequest(
-            runAggregationQuery.capture(),
-            streamObserverCapture.capture(),
-            Matchers.<ServerStreamingCallable>any());
+        .streamRequest(runAggregationQuery.capture(), streamObserverCapture.capture(), any());
 
     ApiFuture<AggregateQuerySnapshot> future = query.count().get();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,12 +86,12 @@ public final class DocumentProto {
           + "\001 \003(\0132).google.firestore.v1.MapValue.Fie"
           + "ldsEntry\032I\n\013FieldsEntry\022\013\n\003key\030\001 \001(\t\022)\n\005"
           + "value\030\002 \001(\0132\032.google.firestore.v1.Value:"
-          + "\0028\001B\306\001\n\027com.google.firestore.v1B\rDocumen"
-          + "tProtoP\001Z<google.golang.org/genproto/goo"
-          + "gleapis/firestore/v1;firestore\242\002\004GCFS\252\002\031"
-          + "Google.Cloud.Firestore.V1\312\002\031Google\\Cloud"
-          + "\\Firestore\\V1\352\002\034Google::Cloud::Firestore"
-          + "::V1b\006proto3"
+          + "\0028\001B\305\001\n\027com.google.firestore.v1B\rDocumen"
+          + "tProtoP\001Z;cloud.google.com/go/firestore/"
+          + "apiv1/firestorepb;firestorepb\242\002\004GCFS\252\002\031G"
+          + "oogle.Cloud.Firestore.V1\312\002\031Google\\Cloud\\"
+          + "Firestore\\V1\352\002\034Google::Cloud::Firestore:"
+          + ":V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

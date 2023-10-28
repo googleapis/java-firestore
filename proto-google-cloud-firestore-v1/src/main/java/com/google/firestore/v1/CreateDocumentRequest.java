@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new CreateDocumentRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -187,6 +182,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -211,6 +207,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -287,6 +284,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -304,6 +302,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -321,6 +320,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -1017,6 +1017,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1040,6 +1041,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1063,6 +1065,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1085,6 +1088,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1103,6 +1107,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1325,6 +1330,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1341,6 +1347,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1361,6 +1368,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1385,6 +1393,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1406,6 +1415,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1433,6 +1443,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1454,6 +1465,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1470,6 +1482,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1488,6 +1501,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>

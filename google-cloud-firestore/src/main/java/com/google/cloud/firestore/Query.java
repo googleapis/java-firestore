@@ -61,14 +61,19 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -82,6 +87,8 @@ public class Query {
 
   final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
+
+  private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
 
   /** The direction of a sort. */
   public enum Direction {
@@ -282,7 +289,9 @@ public class Query {
       return operator.equals(GREATER_THAN)
           || operator.equals(GREATER_THAN_OR_EQUAL)
           || operator.equals(LESS_THAN)
-          || operator.equals(LESS_THAN_OR_EQUAL);
+          || operator.equals(LESS_THAN_OR_EQUAL)
+          || operator.equals(NOT_EQUAL)
+          || operator.equals(NOT_IN);
     }
 
     @Nullable
@@ -321,6 +330,11 @@ public class Query {
 
     FieldOrder(FieldReference fieldReference, Direction direction) {
       this.fieldReference = fieldReference;
+      this.direction = direction;
+    }
+
+    FieldOrder(String field, Direction direction) {
+      this.fieldReference = FieldPath.fromServerFormat(field).toProto();
       this.direction = direction;
     }
 
@@ -459,39 +473,57 @@ public class Query {
     return value == null || value.equals(Double.NaN) || value.equals(Float.NaN);
   }
 
-  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
-  private ImmutableList<FieldOrder> createImplicitOrderBy() {
-    List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
+  /** Returns the sorted set of inequality filter fields used in this query. */
+  private SortedSet<FieldPath> getInequalityFilterFields() {
+    SortedSet<FieldPath> result = new TreeSet<>();
 
-    // If no explicit ordering is specified, use the first inequality to define an implicit order.
-    if (implicitOrders.isEmpty()) {
-      for (FilterInternal filter : options.getFilters()) {
-        FieldReference fieldReference = filter.getFirstInequalityField();
-        if (fieldReference != null) {
-          implicitOrders.add(new FieldOrder(fieldReference, Direction.ASCENDING));
-          break;
+    for (FilterInternal filter : options.getFilters()) {
+      for (FieldFilterInternal subFilter : filter.getFlattenedFilters()) {
+        if (subFilter.isInequalityFilter()) {
+          result.add(FieldPath.fromServerFormat(subFilter.fieldReference.getFieldPath()));
         }
       }
     }
 
-    boolean hasDocumentId = false;
-    for (FieldOrder fieldOrder : implicitOrders) {
-      if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
-        hasDocumentId = true;
+    return result;
+  }
+
+  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
+  ImmutableList<FieldOrder> createImplicitOrderBy() {
+    // Any explicit order by fields should be added as is.
+    List<FieldOrder> result = new ArrayList<>(options.getFieldOrders());
+
+    HashSet<String> fieldsNormalized = new HashSet<>();
+    for (FieldOrder order : result) {
+      fieldsNormalized.add(order.fieldReference.getFieldPath());
+    }
+
+    /** The order of the implicit ordering always matches the last explicit order by. */
+    Direction lastDirection =
+        result.isEmpty() ? Direction.ASCENDING : result.get(result.size() - 1).direction;
+
+    /**
+     * Any inequality fields not explicitly ordered should be implicitly ordered in a
+     * lexicographical order. When there are multiple inequality filters on the same field, the
+     * field should be added only once.
+     *
+     * <p>Note: `SortedSet<FieldPath>` sorts the key field before other fields. However, we want the
+     * key field to be sorted last.
+     */
+    SortedSet<FieldPath> inequalityFields = getInequalityFilterFields();
+    for (FieldPath field : inequalityFields) {
+      if (!fieldsNormalized.contains(field.toString())
+          && !FieldPath.isDocumentId(field.toString())) {
+        result.add(new FieldOrder(field.toProto(), lastDirection));
       }
     }
 
-    if (!hasDocumentId) {
-      // Add implicit sorting by name, using the last specified direction.
-      Direction lastDirection =
-          implicitOrders.isEmpty()
-              ? Direction.ASCENDING
-              : implicitOrders.get(implicitOrders.size() - 1).direction;
-
-      implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
+    // Add the document key field to the last if it is not explicitly ordered.
+    if (!fieldsNormalized.contains(FieldPath.documentId().toString())) {
+      result.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
     }
 
-    return ImmutableList.<FieldOrder>builder().addAll(implicitOrders).build();
+    return ImmutableList.<FieldOrder>builder().addAll(result).build();
   }
 
   private Cursor createCursor(
@@ -503,11 +535,12 @@ public class Query {
       if (FieldPath.isDocumentId(path)) {
         fieldValues.add(documentSnapshot.getReference());
       } else {
-        FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+        FieldPath fieldPath = FieldPath.fromServerFormat(path);
         Preconditions.checkArgument(
             documentSnapshot.contains(fieldPath),
             "Field '%s' is missing in the provided DocumentSnapshot. Please provide a document "
-                + "that contains values for all specified orderBy() and where() constraints.");
+                + "that contains values for all specified orderBy() and where() constraints.",
+            fieldPath);
         fieldValues.add(documentSnapshot.get(fieldPath));
       }
     }
@@ -888,8 +921,13 @@ public class Query {
     return where(new com.google.cloud.firestore.Filter.UnaryFilter(fieldPath, NOT_IN, values));
   }
 
-  // TODO(orquery): This method will become public API. Change visibility and add documentation.
-  Query where(com.google.cloud.firestore.Filter filter) {
+  /**
+   * Creates and returns a new Query with the additional filter.
+   *
+   * @param filter The new filter to apply to the existing query.
+   * @return The newly created Query.
+   */
+  public Query where(com.google.cloud.firestore.Filter filter) {
     Preconditions.checkState(
         options.getStartCursor() == null && options.getEndCursor() == null,
         "Cannot call a where() clause after defining a boundary with startAt(), "
@@ -1106,6 +1144,9 @@ public class Query {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1192,6 +1233,9 @@ public class Query {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1233,6 +1277,9 @@ public class Query {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1254,6 +1301,9 @@ public class Query {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1264,6 +1314,16 @@ public class Query {
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
+  }
+
+  private void warningOnSingleDocumentReference(Object... fieldValues) {
+    if (options.getFieldOrders().isEmpty()
+        && fieldValues.length == 1
+        && fieldValues[0] instanceof DocumentReference) {
+      LOGGER.warning(
+          "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
+              + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
+    }
   }
 
   /**
@@ -1869,7 +1929,28 @@ public class Query {
    */
   @Nonnull
   public AggregateQuery count() {
-    return new AggregateQuery(this);
+    return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
+  }
+
+  /**
+   * Calculates the specified aggregations over the documents in the result set of the given query,
+   * without actually downloading the documents.
+   *
+   * <p>Using this function to perform aggregations is efficient because only the final aggregation
+   * values, not the documents' data, is downloaded. This function can even perform aggregations of
+   * the documents if the result set would be prohibitively large to download entirely (e.g.
+   * thousands of documents).
+   *
+   * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
+   *     of this query.
+   */
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {
+    List<AggregateField> aggregateFieldList = new ArrayList<>();
+    aggregateFieldList.add(aggregateField1);
+    aggregateFieldList.addAll(Arrays.asList(aggregateFields));
+    return new AggregateQuery(this, aggregateFieldList);
   }
 
   /**
