@@ -33,8 +33,8 @@ import java.util.logging.Logger;
 /**
  * Serializes java records. Uses automatic record constructors and accessors only. Therefore,
  * exclusion of fields is not supported. Supports DocumentId, PropertyName, and ServerTimestamp
- * annotations on record components.
- * Since records are not supported in JDK versions < 16, reflection is used for inspecting record metadata.
+ * annotations on record components. Since records are not supported in JDK versions < 16,
+ * reflection is used for inspecting record metadata.
  *
  * @author Eran Leshem
  */
