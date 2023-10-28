@@ -22,7 +22,6 @@ import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
 import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
-
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
