@@ -20,7 +20,7 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -31,7 +31,8 @@ import javax.annotation.Nullable;
  * added in the future.
  */
 public interface OpenTelemetryUtil {
-  String OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
+  String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
+  String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
 
   /** Sampling rate of 10% is chosen for traces by default. */
   double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
@@ -79,24 +80,24 @@ public interface OpenTelemetryUtil {
   /**
    * Creates and returns an instance of the OpenTelemetryUtil class.
    *
-   * @param enabled Whether telemetry should be collected. Can be {@code null} if unspecified.
-   * @param openTelemetrySdk An instance of the OpenTelemetrySdk that should be used. Can be {@code
-   *     null} if unspecified.
    * @param firestoreOptions The FirestoreOptions object that is requesting an instance of
    *     OpenTelemetryUtil.
    * @return An instance of the OpenTelemetryUtil class.
    */
-  static OpenTelemetryUtil getInstance(
-      @Nullable Boolean enabled,
-      @Nullable OpenTelemetrySdk openTelemetrySdk,
-      FirestoreOptions firestoreOptions) {
-
+  static OpenTelemetryUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
     boolean createEnabledInstance;
 
+    FirestoreOpenTelemetryOptions openTelemetryOptions = firestoreOptions.getOpenTelemetryOptions();
+
+    if (openTelemetryOptions == null) {
+      return new DisabledOpenTelemetryUtil();
+    }
+
+    Boolean enabled = openTelemetryOptions.getEnabled();
     if (enabled == null) {
       // The caller did not specify whether telemetry collection should be enabled via code.
       // In such cases, we allow enabling/disabling the feature via an environment variable.
-      String enableOpenTelemetryEnvVar = System.getenv(OPEN_TELEMETRY_ENV_VAR_NAME);
+      String enableOpenTelemetryEnvVar = System.getenv(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME);
       if (enableOpenTelemetryEnvVar != null
           && (enableOpenTelemetryEnvVar.toLowerCase().equals("true")
               || enableOpenTelemetryEnvVar.toLowerCase().equals("on"))) {
@@ -109,7 +110,7 @@ public interface OpenTelemetryUtil {
     }
 
     if (createEnabledInstance) {
-      return new EnabledOpenTelemetryUtil(openTelemetrySdk, firestoreOptions);
+      return new EnabledOpenTelemetryUtil(firestoreOptions);
     } else {
       return new DisabledOpenTelemetryUtil();
     }

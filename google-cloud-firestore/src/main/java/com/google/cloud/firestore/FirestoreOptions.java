@@ -34,7 +34,6 @@ import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -57,8 +56,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
-  @Nullable private OpenTelemetrySdk openTelemetrySdk = null;
-  @Nullable private Boolean enableTelemetryCollection = null;
+  @Nonnull private FirestoreOpenTelemetryOptions openTelemetryOptions;
   @Nonnull private OpenTelemetryUtil openTelemetryUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
@@ -122,14 +120,17 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return openTelemetryUtil;
   }
 
+  public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
+    return openTelemetryOptions;
+  }
+
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
     @Nullable private String emulatorHost = null;
-    @Nullable private OpenTelemetrySdk openTelemetrySdk = null;
-    @Nullable private Boolean enableTelemetryCollection = null;
+    @Nullable private FirestoreOpenTelemetryOptions openTelemetryOptions = null;
 
     private Builder() {}
 
@@ -139,8 +140,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
       this.emulatorHost = options.emulatorHost;
-      this.openTelemetrySdk = options.openTelemetrySdk;
-      this.enableTelemetryCollection = options.enableTelemetryCollection;
+      this.openTelemetryOptions = options.openTelemetryOptions;
     }
 
     /**
@@ -210,26 +210,13 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     }
 
     /**
-     * Sets the {@link OpenTelemetrySdk} to use with this Firestore client. In the absence of an
-     * OpenTelemetrySdk, the Firestore SDK will create and globally register an OpenTelemetrySdk
-     * instance which transmits telemetry information to Google Cloud.
+     * Sets the {@link FirestoreOpenTelemetryOptions} to be used for this Firestore client.
      *
-     * @param sdk The OpenTelemetrySdk that can be used by this client.
+     * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
      */
     @Nonnull
-    public Builder setOpenTelemetrySdk(@Nonnull OpenTelemetrySdk sdk) {
-      this.openTelemetrySdk = sdk;
-      return this;
-    }
-
-    /**
-     * Sets whether the Firestore SDK should collect telemetry information.
-     *
-     * @param enable Whether telemetry collection should be enabled.
-     */
-    @Nonnull
-    public Builder setTelemetryCollectionEnabled(boolean enable) {
-      this.enableTelemetryCollection = enable;
+    public Builder setOpenTelemetryOptions(FirestoreOpenTelemetryOptions openTelemetryOptions) {
+      this.openTelemetryOptions = openTelemetryOptions;
       return this;
     }
 
@@ -309,12 +296,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @InternalApi("This class should only be extended within google-cloud-java")
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
-
-    this.enableTelemetryCollection = builder.enableTelemetryCollection;
-    this.openTelemetrySdk = builder.openTelemetrySdk;
-    this.openTelemetryUtil =
-        OpenTelemetryUtil.getInstance(
-            builder.enableTelemetryCollection, builder.openTelemetrySdk, this);
+    this.openTelemetryOptions = builder.openTelemetryOptions;
+    this.openTelemetryUtil = OpenTelemetryUtil.getInstance(this);
 
     this.databaseId =
         builder.databaseId != null

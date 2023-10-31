@@ -27,12 +27,10 @@ import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
-import io.opentelemetry.instrumentation.runtimemetrics.java8.*;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -40,7 +38,6 @@ import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -129,10 +126,9 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
   }
 
-  public EnabledOpenTelemetryUtil(
-      @Nullable OpenTelemetrySdk openTelemetrySdk, FirestoreOptions firestoreOptions) {
-    this.openTelemetrySdk = openTelemetrySdk;
+  public EnabledOpenTelemetryUtil(FirestoreOptions firestoreOptions) {
     this.firestoreOptions = firestoreOptions;
+    this.openTelemetrySdk = firestoreOptions.getOpenTelemetryOptions().getSdk();
 
     // It is possible that the user of the SDK does not provide an OpenTelemetrySdk instance to be
     // used.
@@ -143,6 +139,32 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
         throw new RuntimeException("Error: unable to initialize OpenTelemetry.");
       }
     }
+  }
+
+  public double getTraceSamplingRate() {
+    Double rate = firestoreOptions.getOpenTelemetryOptions().getTraceSamplingRate();
+    if (rate != null) {
+      return rate;
+    }
+
+    // If the public API for setting the trace sampling rate was not called,
+    // use the default sampling rate. The default sampling rate can be modified
+    // by an environment variable.
+    String traceSamplingEnvVar = System.getenv(OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME);
+    if (traceSamplingEnvVar != null) {
+      try {
+        return Double.parseDouble(traceSamplingEnvVar);
+      } catch (NumberFormatException error) {
+        Logger.getLogger(OpenTelemetryUtil.class.getName())
+            .log(
+                Level.WARNING,
+                String.format(
+                    "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
+                    OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
+      }
+    }
+
+    return DEFAULT_TRACE_SAMPLING_RATE;
   }
 
   private void initializeOpenTelemetry() {
@@ -161,7 +183,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
               .setTracerProvider(
                   SdkTracerProvider.builder()
                       .setResource(resource)
-                      .setSampler(Sampler.traceIdRatioBased(DEFAULT_TRACE_SAMPLING_RATE))
+                      .setSampler(Sampler.traceIdRatioBased(getTraceSamplingRate()))
                       .addSpanProcessor(gcpSpanProcessor)
                       .addSpanProcessor(loggingSpanProcessor)
                       .build())
