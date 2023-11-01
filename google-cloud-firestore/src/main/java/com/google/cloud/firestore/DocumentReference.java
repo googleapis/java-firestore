@@ -351,14 +351,14 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get()", true);
+    //OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get()", true);
 
     try {
       ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
-      result = span.endAtFuture(result);
+      //result = span.endAtFuture(result);
       return result;
     } catch (Exception error) {
-      span.end(error);
+      //span.end(error);
       throw error;
     }
     // return extractFirst(rpcContext.getFirestore().getAll(this));

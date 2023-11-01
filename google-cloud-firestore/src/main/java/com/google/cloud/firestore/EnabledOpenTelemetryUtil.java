@@ -170,6 +170,8 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   private void initializeOpenTelemetry() {
     try {
       System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
+      System.out.println(String.format("Trace sampling rate = %f", getTraceSamplingRate()));
+
       // Include required service.name resource attribute on all spans and metrics
       Resource resource =
           Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, SERVICE).build());
