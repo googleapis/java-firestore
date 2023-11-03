@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureCallback;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
 import javax.annotation.Nonnull;

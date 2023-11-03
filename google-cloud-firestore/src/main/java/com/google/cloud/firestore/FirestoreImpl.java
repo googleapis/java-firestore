@@ -48,6 +48,8 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import io.opentelemetry.api.trace.Span;
 import org.threeten.bp.Duration;
 
 /**
@@ -235,6 +237,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
+          boolean hasCompleted = false;
 
           @Override
           public void onStart(StreamController streamController) {
@@ -300,12 +303,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onComplete() {
-            tracer
-                .getCurrentSpan()
-                .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
-            openTelemetryUtil.currentSpan().addEvent("stream completed!");
-            openTelemetryUtil.currentSpan().end();
-            apiStreamObserver.onCompleted();
+            if(!hasCompleted) {
+              hasCompleted = true;
+              tracer
+                      .getCurrentSpan()
+                      .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
+              openTelemetryUtil.currentSpan().addEvent("stream completed! Future is completed with " + String.valueOf(numResponses) + " responses.");
+              //openTelemetryUtil.currentSpan().end();
+              apiStreamObserver.onCompleted();
+            }
           }
         };
 
@@ -358,10 +364,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onCompleted() {
+            Span.current().addEvent("StreamObserver onCompleted()");
             List<DocumentSnapshot> documentSnapshotsList = new ArrayList<>();
             for (DocumentReference documentReference : documentReferences) {
               documentSnapshotsList.add(documentSnapshotMap.get(documentReference));
             }
+            Span.current().addEvent("StreamObserver prepared the DocumentSnapshot.");
             futureList.set(documentSnapshotsList);
           }
         });

@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
@@ -27,6 +28,9 @@ import com.google.firestore.v1.ListCollectionIdsRequest;
 import io.opencensus.common.Scope;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.context.Context;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +134,10 @@ public class DocumentReference {
   private <T> ApiFuture<T> extractFirst(ApiFuture<List<T>> results) {
     return ApiFutures.transform(
         results,
-        results1 -> results1.isEmpty() ? null : results1.get(0),
+        (results1) -> {
+          io.opentelemetry.api.trace.Span.current().addEvent("Started to extract first doc");
+          return results1.isEmpty() ? null : results1.get(0);
+        },
         MoreExecutors.directExecutor());
   }
 
@@ -352,16 +359,51 @@ public class DocumentReference {
   public ApiFuture<DocumentSnapshot> get() {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
     //OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get()", true);
+    if(openTelemetryUtil.getTracer() != null) {
+      io.opentelemetry.api.trace.Span span = openTelemetryUtil.getTracer().spanBuilder("cry1").startSpan();
+      Context ctx = Context.current().with(span);
 
-    try {
-      ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
-      //result = span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      //span.end(error);
-      throw error;
+      ApiFuture<DocumentSnapshot> result;
+      //try(io.opentelemetry.context.Scope scope = span.makeCurrent()) {
+      try(io.opentelemetry.context.Scope scope = ctx.makeCurrent()) {
+        span.addEvent("Calling getAll()");
+        result = extractFirst(rpcContext.getFirestore().getAll(this));
+        //span.end();
+        //result = span.endAtFuture(result);
+        ApiFutures.addCallback(
+                result,
+                new ApiFutureCallback<DocumentSnapshot>() {
+                  @Override
+                  public void onFailure(Throwable t) {
+                    // todo
+                  }
+
+                  @Override
+                  public void onSuccess(DocumentSnapshot result) {
+                    span.addEvent("in addCallback onSuccess.");
+                    span.end();
+                  }
+                });
+
+        return result;
+
+//        return ApiFutures.transform(
+//                result,
+//                value -> {
+//                  span.addEvent("returning first doc");
+//                  span.end();
+//                  return value;
+//                },
+//                MoreExecutors.directExecutor());
+      } catch (Exception error) {
+        //span.end(error);
+        throw error;
+      } finally {
+        //span.end();
+      }
+    } else {
+      return extractFirst(rpcContext.getFirestore().getAll(this));
     }
-    // return extractFirst(rpcContext.getFirestore().getAll(this));
   }
 
   /**

@@ -26,9 +26,12 @@ import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.StatusCode;
-import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.*;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -257,12 +260,26 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
-    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).startSpan();
-    span.makeCurrent();
+    io.opentelemetry.api.trace.Span span;
+    //if (io.opentelemetry.api.trace.Span.current() == io.opentelemetry.api.trace.Span.getInvalid()) {
+    //  // There's no active span. Start a root span.
+    //  span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).setNoParent().startSpan();
+    //} else {
+    //  span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
+    //}
+
+    //System.out.println();
+    //span = getTracer().spanBuilder("foooo").startSpan();
+    //Context newCtx = span.storeInContext(Context.current());
+    //newCtx.makeCurrent();
+
+    span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
+    Scope scope = span.makeCurrent();
     if (addSettingsAttributes) {
       this.addSettingsAttributesToCurrentSpan();
     }
     return new Span(span);
+    //return scope;
   }
 
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
