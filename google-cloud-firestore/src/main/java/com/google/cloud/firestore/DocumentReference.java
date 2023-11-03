@@ -361,27 +361,37 @@ public class DocumentReference {
     //OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get()", true);
     if(openTelemetryUtil.getTracer() != null) {
       io.opentelemetry.api.trace.Span span = openTelemetryUtil.getTracer().spanBuilder("cry1").startSpan();
-      Context ctx = Context.current().with(span);
+      //Context ctx = Context.current().with(span);
 
       ApiFuture<DocumentSnapshot> result;
-      //try(io.opentelemetry.context.Scope scope = span.makeCurrent()) {
-      try(io.opentelemetry.context.Scope scope = ctx.makeCurrent()) {
+      try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      //try(io.opentelemetry.context.Scope scope = ctx.makeCurrent()) {
         span.addEvent("Calling getAll()");
         result = extractFirst(rpcContext.getFirestore().getAll(this));
         //span.end();
         //result = span.endAtFuture(result);
+
+
+        // Now for every transform or manipulation, I need to *update the context* before running any custom code.
+        Context asyncContext = Context.current();
         ApiFutures.addCallback(
                 result,
                 new ApiFutureCallback<DocumentSnapshot>() {
                   @Override
                   public void onFailure(Throwable t) {
+                    try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                      span.addEvent("failed.");
+                      span.end();
+                    }
                     // todo
                   }
 
                   @Override
                   public void onSuccess(DocumentSnapshot result) {
-                    span.addEvent("in addCallback onSuccess.");
-                    span.end();
+                    try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                      span.addEvent("in addCallback onSuccess.");
+                      span.end();
+                    }
                   }
                 });
 
@@ -390,11 +400,14 @@ public class DocumentReference {
 //        return ApiFutures.transform(
 //                result,
 //                value -> {
-//                  span.addEvent("returning first doc");
-//                  span.end();
-//                  return value;
+//                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+//                    span.addEvent("returning first doc");
+//                    span.end();
+//                    return value;
+//                  }
 //                },
 //                MoreExecutors.directExecutor());
+
       } catch (Exception error) {
         //span.end(error);
         throw error;
