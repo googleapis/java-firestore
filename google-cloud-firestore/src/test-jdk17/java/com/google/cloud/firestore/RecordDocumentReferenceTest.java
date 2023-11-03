@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.jdk17.LocalFirestoreHelper.*;
+import static com.google.cloud.firestore.record.LocalFirestoreHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
@@ -25,12 +25,21 @@ import static org.mockito.Mockito.doReturn;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
-import com.google.cloud.firestore.jdk17.LocalFirestoreHelper;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Value;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,15 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecordDocumentReferenceTest {
@@ -75,7 +76,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(ALL_SUPPORTED_TYPES_OBJECT).get();
 
@@ -127,7 +128,7 @@ public class RecordDocumentReferenceTest {
           .streamRequest(
               getAllCapture.capture(),
               streamObserverCapture.capture(),
-              Matchers.<ServerStreamingCallable>any());
+              ArgumentMatchers.<ServerStreamingCallable>any());
 
       var snapshot = documentReference.get().get();
       try {
@@ -148,7 +149,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.create(SINGLE_COMPONENT_OBJECT).get();
 
@@ -163,9 +164,9 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
-    documentReference.create(LocalFirestoreHelper.SERVER_TIMESTAMP_OBJECT).get();
+    documentReference.create(SERVER_TIMESTAMP_OBJECT).get();
 
     var create =
         commit(
@@ -181,9 +182,9 @@ public class RecordDocumentReferenceTest {
     doReturn(FIELD_TRANSFORM_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
-    documentReference.set(LocalFirestoreHelper.SERVER_TIMESTAMP_OBJECT).get();
+    documentReference.set(SERVER_TIMESTAMP_OBJECT).get();
 
     var set =
         commit(
@@ -199,10 +200,10 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference
-        .set(LocalFirestoreHelper.SERVER_TIMESTAMP_OBJECT, SetOptions.mergeFields("inner.bar"))
+        .set(SERVER_TIMESTAMP_OBJECT, SetOptions.mergeFields("inner.bar"))
         .get();
 
     var set =
@@ -219,7 +220,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(SINGLE_COMPONENT_OBJECT, SetOptions.merge()).get();
     documentReference.set(ALL_SUPPORTED_TYPES_OBJECT, SetOptions.mergeFields("foo")).get();
@@ -244,7 +245,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(NESTED_RECORD_OBJECT, SetOptions.mergeFields("first.foo")).get();
     documentReference
@@ -273,7 +274,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference
         .set(
@@ -301,7 +302,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(NESTED_RECORD_OBJECT, SetOptions.mergeFields("first", "second")).get();
 
@@ -321,7 +322,7 @@ public class RecordDocumentReferenceTest {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            commitCapture.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(NESTED_RECORD_OBJECT, SetOptions.merge()).get();
 
