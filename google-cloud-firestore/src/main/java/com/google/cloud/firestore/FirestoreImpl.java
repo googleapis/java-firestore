@@ -20,16 +20,12 @@ import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.NanoClock;
 import com.google.api.core.SettableApiFuture;
-import com.google.api.gax.rpc.ApiStreamObserver;
-import com.google.api.gax.rpc.BidiStreamObserver;
-import com.google.api.gax.rpc.BidiStreamingCallable;
-import com.google.api.gax.rpc.ClientStream;
-import com.google.api.gax.rpc.ResponseObserver;
-import com.google.api.gax.rpc.ServerStreamingCallable;
-import com.google.api.gax.rpc.StreamController;
-import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.gax.grpc.GrpcCallContext;
+import com.google.api.gax.rpc.*;
+import com.google.api.gax.tracing.*;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -38,6 +34,7 @@ import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
+import io.opencensus.trace.SpanBuilder;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
 import java.security.SecureRandom;
@@ -337,7 +334,18 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             ImmutableMap.of(
                 "numDocuments", AttributeValue.longAttributeValue(documentReferences.length)));
 
-    streamRequest(request.build(), responseObserver, firestoreClient.batchGetDocumentsCallable());
+    if(firestoreClient!=null && firestoreClient.batchGetDocumentsCallable()!=null) {
+      assert(firestoreClient.batchGetDocumentsCallable() != null);
+      TracedServerStreamingCallable serverStreamingCallable =
+              new TracedServerStreamingCallable(
+                      firestoreClient.batchGetDocumentsCallable(),
+                      new OpenTelemetryTracerFactory(),
+                      SpanName.of("java-firestore", "EhsanBatchGetDocuments"));
+
+      streamRequest(request.build(), responseObserver, serverStreamingCallable, GrpcCallContext.createDefault());
+    } else {
+      streamRequest(request.build(), responseObserver, firestoreClient.batchGetDocumentsCallable());
+    }
   }
 
   /** Internal getAll() method that accepts an optional transaction id. */
@@ -476,6 +484,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       ServerStreamingCallable<RequestT, ResponseT> callable) {
     Preconditions.checkState(!closed, "Firestore client has already been closed");
     callable.call(requestT, responseObserverT);
+  }
+
+  // FOO
+  public <RequestT, ResponseT> void streamRequest(
+          RequestT requestT,
+          ResponseObserver<ResponseT> responseObserverT,
+          ServerStreamingCallable<RequestT, ResponseT> callable, ApiCallContext callContext) {
+    Preconditions.checkState(!closed, "Firestore client has already been closed");
+    callable.call(requestT, responseObserverT, callContext);
   }
 
   /** Request funnel for all bidirectional streaming requests. */
