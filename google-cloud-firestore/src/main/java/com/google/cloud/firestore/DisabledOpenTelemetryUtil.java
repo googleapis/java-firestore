@@ -20,6 +20,8 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+
 import javax.annotation.Nullable;
 
 public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
@@ -31,13 +33,16 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
     public void end(Throwable error) {}
 
     @Override
-    public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
-      return futureValue;
-    }
+    public <T> void endAtFuture(ApiFuture<T> futureValue) {}
 
     @Override
     public OpenTelemetryUtil.Span addEvent(String name) {
       return this;
+    }
+
+    @Override
+    public Scope makeCurrent() {
+      return null;
     }
   }
 

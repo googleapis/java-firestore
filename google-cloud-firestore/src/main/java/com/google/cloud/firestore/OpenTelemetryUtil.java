@@ -21,6 +21,8 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -51,10 +53,12 @@ public interface OpenTelemetryUtil {
      * future. In order for telemetry info to be recorded, the future returned by this method should
      * be completed.
      */
-    <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue);
+    <T> void endAtFuture(ApiFuture<T> futureValue);
 
     /** Adds the given event to this span. */
     Span addEvent(String name);
+
+    Scope makeCurrent();
   }
 
   /**

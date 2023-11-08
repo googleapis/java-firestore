@@ -16,10 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
-import com.google.api.core.ApiFutures;
-import com.google.api.core.InternalExtensionOnly;
+import com.google.api.core.*;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
@@ -28,7 +25,6 @@ import com.google.firestore.v1.ListCollectionIdsRequest;
 import io.opencensus.common.Scope;
 import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
-import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.context.Context;
 
 import java.util.Iterator;
@@ -135,10 +131,18 @@ public class DocumentReference {
     return ApiFutures.transform(
         results,
         (results1) -> {
-          io.opentelemetry.api.trace.Span.current().addEvent("Started to extract first doc");
           return results1.isEmpty() ? null : results1.get(0);
         },
         MoreExecutors.directExecutor());
+  }
+
+  <T, U> ApiFuture<U> foo(ApiFuture<T> future, ApiFunction<T, U> fn, Executor executor) {
+    Context context = Context.current();
+    return ApiFutures.transform(future, (result) -> {
+      try (io.opentelemetry.context.Scope ignored = context.makeCurrent()) {
+        return fn.apply(result);
+      }
+    }, executor);
   }
 
   /**
@@ -150,8 +154,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.create(this, fields).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.create", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -163,8 +176,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Object pojo) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.create(this, pojo).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.create", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, pojo).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -176,8 +198,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, fields).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.set", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -192,8 +223,17 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(
       @Nonnull Map<String, Object> fields, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, fields, options).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.set", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -205,8 +245,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, pojo).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.set", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -220,8 +269,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo, @Nonnull SetOptions options) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.set(this, pojo, options).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.set", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo, options).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -233,8 +291,17 @@ public class DocumentReference {
    */
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields) {
-    WriteBatch writeBatch = rpcContext.getFirestore().batch();
-    return extractFirst(writeBatch.update(this, fields).commit());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.update", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      ApiFuture<WriteResult> result = extractFirst(writeBatch.update(this, fields).commit());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -358,65 +425,16 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
-    //OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get()", true);
-    if(openTelemetryUtil.getTracer() != null) {
-      io.opentelemetry.api.trace.Span span = openTelemetryUtil.getTracer().spanBuilder("cry1").startSpan();
-      //Context ctx = Context.current().with(span);
-
-      ApiFuture<DocumentSnapshot> result;
-      try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-      //try(io.opentelemetry.context.Scope scope = ctx.makeCurrent()) {
-        span.addEvent("Calling getAll()");
-        result = extractFirst(rpcContext.getFirestore().getAll(this));
-        //span.end();
-        //result = span.endAtFuture(result);
-
-
-        // Now for every transform or manipulation, I need to *update the context* before running any custom code.
-        Context asyncContext = Context.current();
-        ApiFutures.addCallback(
-                result,
-                new ApiFutureCallback<DocumentSnapshot>() {
-                  @Override
-                  public void onFailure(Throwable t) {
-                    try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-                      span.addEvent("failed.");
-                      span.end();
-                    }
-                    // todo
-                  }
-
-                  @Override
-                  public void onSuccess(DocumentSnapshot result) {
-                    try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-                      span.addEvent("in addCallback onSuccess.");
-                      span.end();
-                    }
-                  }
-                });
-
-        return result;
-
-//        return ApiFutures.transform(
-//                result,
-//                value -> {
-//                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-//                    span.addEvent("returning first doc");
-//                    span.end();
-//                    return value;
-//                  }
-//                },
-//                MoreExecutors.directExecutor());
-
-      } catch (Exception error) {
-        //span.end(error);
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentSnapshot.get", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+        span.end(error);
         throw error;
-      } finally {
-        //span.end();
-      }
-    } else {
-      return extractFirst(rpcContext.getFirestore().getAll(this));
     }
+    //return extractFirst(rpcContext.getFirestore().getAll(this));
   }
 
   /**

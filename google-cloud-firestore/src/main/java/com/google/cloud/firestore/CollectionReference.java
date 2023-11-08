@@ -190,11 +190,19 @@ public class CollectionReference extends Query {
    */
   @Nonnull
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
-    final DocumentReference documentReference = document();
-    ApiFuture<WriteResult> createFuture = documentReference.create(fields);
-
-    return ApiFutures.transform(
-        createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("CollectionReference.add", true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      final DocumentReference documentReference = document();
+      ApiFuture<WriteResult> createFuture = documentReference.create(fields);
+      ApiFuture<DocumentReference> result = ApiFutures.transform(
+              createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**

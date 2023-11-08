@@ -20,6 +20,7 @@ import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SE
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.base.Throwables;
@@ -79,9 +80,11 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
   class Span implements OpenTelemetryUtil.Span {
     private io.opentelemetry.api.trace.Span span;
+    private String spanName;
 
-    public Span(@Nullable io.opentelemetry.api.trace.Span span) {
+    public Span(io.opentelemetry.api.trace.Span span, String spanName) {
       this.span = span;
+      this.spanName = spanName;
     }
 
     /** Ends this span. */
@@ -111,14 +114,27 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
      * be completed.
      */
     @Override
-    public <T> ApiFuture<T> endAtFuture(ApiFuture<T> futureValue) {
-      return ApiFutures.transform(
-          futureValue,
-          value -> {
-            span.end();
-            return value;
-          },
-          MoreExecutors.directExecutor());
+    public <T> void endAtFuture(ApiFuture<T> futureValue) {
+      Context asyncContext = Context.current();
+      ApiFutures.addCallback(
+              futureValue,
+              new ApiFutureCallback<T>() {
+                @Override
+                public void onFailure(Throwable t) {
+                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                    span.addEvent(spanName + " failed.");
+                    end(t);
+                  }
+                }
+
+                @Override
+                public void onSuccess(T result) {
+                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                    span.addEvent(spanName + " succeeded.");
+                    end();
+                  }
+                }
+              });
     }
 
     /** Adds the given event to this span. */
@@ -126,6 +142,11 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     public OpenTelemetryUtil.Span addEvent(String name) {
       span.addEvent(name);
       return this;
+    }
+
+    @Override
+    public Scope makeCurrent() {
+      return span.makeCurrent();
     }
   }
 
@@ -260,26 +281,12 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
-    io.opentelemetry.api.trace.Span span;
-    //if (io.opentelemetry.api.trace.Span.current() == io.opentelemetry.api.trace.Span.getInvalid()) {
-    //  // There's no active span. Start a root span.
-    //  span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).setNoParent().startSpan();
-    //} else {
-    //  span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
-    //}
-
-    //System.out.println();
-    //span = getTracer().spanBuilder("foooo").startSpan();
-    //Context newCtx = span.storeInContext(Context.current());
-    //newCtx.makeCurrent();
-
-    span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
-    Scope scope = span.makeCurrent();
+    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
+    //Scope scope = span.makeCurrent();
     if (addSettingsAttributes) {
       this.addSettingsAttributesToCurrentSpan();
     }
-    return new Span(span);
-    //return scope;
+    return new Span(span, spanName);
   }
 
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
@@ -293,7 +300,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Override
   @Nullable
   public OpenTelemetryUtil.Span currentSpan() {
-    return new Span(io.opentelemetry.api.trace.Span.current());
+    return new Span(io.opentelemetry.api.trace.Span.current(), "");
   }
 
   @Override
