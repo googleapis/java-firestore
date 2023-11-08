@@ -23,7 +23,7 @@ import com.google.firestore.v1.ListenRequest;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-public class SuppressibleBidiStream<RequestT, ResponseT>
+final class SuppressibleBidiStream<RequestT, ResponseT>
     implements BidiStreamObserver<RequestT, ResponseT> {
 
   private final ClientStream<ListenRequest> stream;

@@ -60,7 +60,7 @@ import javax.annotation.Nullable;
  * It synchronizes on its own instance so it is advisable not to use this class for external
  * synchronization.
  */
-class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
+final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /**
    * Target ID used by watch. Watch uses a fixed target id since we only support one target per
    * stream. The actual target ID we use is arbitrary.
