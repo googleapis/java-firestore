@@ -33,7 +33,8 @@ public final class FirestoreSpy {
       streamRequestBidiStreamObserverCaptor;
 
   public FirestoreSpy(Firestore firestore) {
-    spy = Mockito.spy((FirestoreImpl) firestore);
+    final FirestoreImpl firestoreImpl = (FirestoreImpl) firestore;
+    spy = Mockito.spy(firestoreImpl);
     streamRequestBidiStreamObserverCaptor = ArgumentCaptor.forClass(BidiStreamObserver.class);
     doCallRealMethod()
         .when(spy)

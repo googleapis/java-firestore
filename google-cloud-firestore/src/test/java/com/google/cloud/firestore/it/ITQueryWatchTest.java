@@ -382,10 +382,12 @@ public final class ITQueryWatchTest extends ITBaseTest {
           .modifiedIdsIsEmpty()
           .removedIdsIsEmpty();
       listener.lastDocumentIdsIsAnyOf("doc1", "doc2");
-      BidiStreamObserver<ListenRequest, ListenResponse> watch =
-          firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
 
       // Trigger existence filter mismatch, thereby invoking retry behavior.
+      // Prompting Firestore to send filter mismatch is difficult, so we hack
+      // in the response. All we are concerned about is invoking retry.
+      BidiStreamObserver<ListenRequest, ListenResponse> watch =
+          firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
       watch.onResponse(filter(0));
 
       setDocument("doc3", map("foo", "bar"));
