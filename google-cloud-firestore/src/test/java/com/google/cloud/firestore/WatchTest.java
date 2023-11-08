@@ -87,8 +87,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 public class WatchTest {
 
-  @Rule
-  public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
 
   /** The Target ID used by the Java Firestore SDK. */
   private static final int TARGET_ID = 0x1;

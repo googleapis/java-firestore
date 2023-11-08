@@ -22,7 +22,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.list;
 import static java.util.Collections.singletonList;
 
 import com.google.api.gax.rpc.BidiStreamObserver;
@@ -366,29 +365,33 @@ public final class ITQueryWatchTest extends ITBaseTest {
     DocumentReference testDoc2 = setDocument("doc2", map("foo", "bar"));
 
     final Query query = randomColl.whereEqualTo("foo", "bar");
-    QuerySnapshotEventListener listener = QuerySnapshotEventListener.builder()
-        .setInitialEventCount(1)
-        .setAddedEventCount(3)
-        .setRemovedEventCount(1)
-        .build();
+    QuerySnapshotEventListener listener =
+        QuerySnapshotEventListener.builder()
+            .setInitialEventCount(1)
+            .setAddedEventCount(3)
+            .setRemovedEventCount(1)
+            .build();
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
       listener.eventsCountDownLatch.awaitInitialEvents();
-      listener.assertionsForLastEvent()
+      listener
+          .assertionsForLastEvent()
           .noError()
           .addedIdsIsAnyOf("doc1", "doc2")
           .modifiedIdsIsEmpty()
           .removedIdsIsEmpty();
       listener.lastDocumentIdsIsAnyOf("doc1", "doc2");
-      BidiStreamObserver<ListenRequest, ListenResponse> watch = firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
+      BidiStreamObserver<ListenRequest, ListenResponse> watch =
+          firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
 
       // Trigger existence filter mismatch, thereby invoking retry behavior.
       watch.onResponse(filter(0));
 
       setDocument("doc3", map("foo", "bar"));
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
-      listener.assertionsForLastEvent()
+      listener
+          .assertionsForLastEvent()
           .noError()
           .addedIdsIsAnyOf("doc3")
           .modifiedIdsIsEmpty()
@@ -397,7 +400,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
 
       testDoc1.set(map("bar", "foo")).get(5, TimeUnit.SECONDS);
       listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
-      listener.assertionsForLastEvent()
+      listener
+          .assertionsForLastEvent()
           .noError()
           .addedIdsIsEmpty()
           .modifiedIdsIsEmpty()
@@ -680,17 +684,13 @@ public final class ITQueryWatchTest extends ITBaseTest {
       return new ListenerAssertions(singletonList(lastListenerEvent()));
     }
 
-    //current
-
     ListenerEvent lastListenerEvent() {
       return receivedEvents.get(receivedEvents.size() - 1);
     }
 
     void lastDocumentIdsIsAnyOf(String... s) {
-      List<String> ids = Lists.transform(
-          lastListenerEvent().value.getDocuments(),
-          DocumentSnapshot::getId
-      );
+      List<String> ids =
+          Lists.transform(lastListenerEvent().value.getDocuments(), DocumentSnapshot::getId);
       Truth.assertThat(ids).containsExactlyElementsIn(s);
     }
 

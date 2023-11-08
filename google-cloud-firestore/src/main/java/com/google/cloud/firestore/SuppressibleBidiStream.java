@@ -7,7 +7,8 @@ import com.google.firestore.v1.ListenRequest;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamObserver<RequestT, ResponseT> {
+public class SuppressibleBidiStream<RequestT, ResponseT>
+    implements BidiStreamObserver<RequestT, ResponseT> {
 
   private final ClientStream<ListenRequest> stream;
   private final BidiStreamObserver<RequestT, ResponseT> delegate;
@@ -16,8 +17,8 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
 
   SuppressibleBidiStream(
       BidiStreamObserver<RequestT, ResponseT> responseObserverT,
-      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<ListenRequest>> streamSupplier
-  ) {
+      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<ListenRequest>>
+          streamSupplier) {
     this.delegate = responseObserverT;
     stream = streamSupplier.apply(this);
   }
@@ -28,12 +29,12 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   }
 
   public void close() {
-    LOGGER.info(stream.toString());
+    LOGGER.info(stream::toString);
     stream.closeSend();
   }
 
   public void closeAndSilence() {
-    LOGGER.info(stream.toString());
+    LOGGER.info(stream::toString);
     silence = true;
     stream.closeSend();
   }
@@ -41,7 +42,7 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   @Override
   public void onReady(ClientStream<RequestT> stream) {
     if (silence) {
-      LOGGER.info(String.format("Silenced: %s", stream));
+      LOGGER.info(() -> String.format("Silenced: %s", stream));
     } else {
       delegate.onReady(stream);
     }
@@ -50,7 +51,7 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   @Override
   public void onStart(StreamController controller) {
     if (silence) {
-      LOGGER.info(String.format("Silenced: %s", stream));
+      LOGGER.info(() -> String.format("Silenced: %s", stream));
     } else {
       delegate.onStart(controller);
     }
@@ -59,7 +60,7 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   @Override
   public void onResponse(ResponseT response) {
     if (silence) {
-      LOGGER.info(String.format("Silenced: %s", stream));
+      LOGGER.info(() -> String.format("Silenced: %s", stream));
     } else {
       delegate.onResponse(response);
     }
@@ -68,7 +69,7 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   @Override
   public void onError(Throwable t) {
     if (silence) {
-      LOGGER.info(String.format("Silenced: %s", stream));
+      LOGGER.info(() -> String.format("Silenced: %s", stream));
     } else {
       delegate.onError(t);
     }
@@ -77,7 +78,7 @@ public class SuppressibleBidiStream<RequestT, ResponseT> implements BidiStreamOb
   @Override
   public void onComplete() {
     if (silence) {
-      LOGGER.info(String.format("Silenced: %s", stream));
+      LOGGER.info(() -> String.format("Silenced: %s", stream));
     } else {
       delegate.onComplete();
     }

@@ -252,7 +252,11 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
         int filterCount = listenResponse.getFilter().getCount();
         int currentSize = currentSize();
         if (filterCount != currentSize) {
-          LOGGER.info(() -> String.format("filter: count mismatch filter count %d != current size %d", filterCount, currentSize));
+          LOGGER.info(
+              () ->
+                  String.format(
+                      "filter: count mismatch filter count %d != current size %d",
+                      filterCount, currentSize));
           // We need to remove all the current results.
           resetDocs();
           // The filter didn't match, so re-issue the query.
@@ -404,10 +408,12 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
               nextAttempt = backoff.createNextAttempt(nextAttempt);
 
               Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-              stream = new SuppressibleBidiStream<>(
-                  Watch.this,
-                  observer -> firestore.streamRequest(observer, firestore.getClient().listenCallable())
-              );
+              stream =
+                  new SuppressibleBidiStream<>(
+                      Watch.this,
+                      observer ->
+                          firestore.streamRequest(
+                              observer, firestore.getClient().listenCallable()));
 
               ListenRequest.Builder request = ListenRequest.newBuilder();
               request.setDatabase(firestore.getDatabaseName());

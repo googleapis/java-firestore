@@ -13,7 +13,8 @@ import org.mockito.Mockito;
 public final class FirestoreSpy {
 
   public final FirestoreImpl spy;
-  public final ArgumentCaptor<BidiStreamObserver<ListenRequest, ListenResponse>> streamRequestBidiStreamObserverCaptor;
+  public final ArgumentCaptor<BidiStreamObserver<ListenRequest, ListenResponse>>
+      streamRequestBidiStreamObserverCaptor;
 
   public FirestoreSpy(Firestore firestore) {
     spy = Mockito.spy((FirestoreImpl) firestore);
@@ -21,9 +22,7 @@ public final class FirestoreSpy {
     doCallRealMethod()
         .when(spy)
         .streamRequest(
-          streamRequestBidiStreamObserverCaptor.capture(),
-          ArgumentMatchers.<BidiStreamingCallable>any()
-        );
+            streamRequestBidiStreamObserverCaptor.capture(),
+            ArgumentMatchers.<BidiStreamingCallable>any());
   }
-
 }
