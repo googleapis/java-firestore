@@ -24,7 +24,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
@@ -44,7 +43,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
 import com.google.firestore.v1.ExistenceFilter;
-import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -386,9 +384,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
       // Trigger existence filter mismatch, thereby invoking retry behavior.
       // Prompting Firestore to send filter mismatch is difficult, so we hack
       // in the response. All we are concerned about is invoking retry.
-      BidiStreamObserver<ListenRequest, ListenResponse> watch =
-          firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
-      watch.onResponse(filter(0));
+      firestoreSpy.streamRequestBidiStreamObserver.onResponse(filter(0));
 
       setDocument("doc3", map("foo", "bar"));
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);

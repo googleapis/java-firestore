@@ -16,30 +16,25 @@
 
 package com.google.cloud.firestore;
 
-import static org.mockito.Mockito.doCallRealMethod;
-
 import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
-import com.google.firestore.v1.ListenRequest;
-import com.google.firestore.v1.ListenResponse;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
+import com.google.api.gax.rpc.ClientStream;
 
 public final class FirestoreSpy {
 
   public final FirestoreImpl spy;
-  public final ArgumentCaptor<BidiStreamObserver<ListenRequest, ListenResponse>>
-      streamRequestBidiStreamObserverCaptor;
+  public BidiStreamObserver streamRequestBidiStreamObserver;
 
-  public FirestoreSpy(Firestore firestore) {
-    final FirestoreImpl firestoreImpl = (FirestoreImpl) firestore;
-    spy = Mockito.spy(firestoreImpl);
-    streamRequestBidiStreamObserverCaptor = ArgumentCaptor.forClass(BidiStreamObserver.class);
-    doCallRealMethod()
-        .when(spy)
-        .streamRequest(
-            streamRequestBidiStreamObserverCaptor.capture(),
-            ArgumentMatchers.<BidiStreamingCallable>any());
+  public FirestoreSpy(FirestoreOptions firestoreOptions) {
+    spy =
+        new FirestoreImpl(firestoreOptions) {
+          @Override
+          public <RequestT, ResponseT> ClientStream<RequestT> streamRequest(
+              BidiStreamObserver<RequestT, ResponseT> responseObserverT,
+              BidiStreamingCallable<RequestT, ResponseT> callable) {
+            streamRequestBidiStreamObserver = responseObserverT;
+            return super.streamRequest(responseObserverT, callable);
+          }
+        };
   }
 }
