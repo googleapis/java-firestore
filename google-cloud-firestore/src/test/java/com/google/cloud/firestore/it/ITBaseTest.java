@@ -18,6 +18,7 @@ package com.google.cloud.firestore.it;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.FirestoreSpy;
 import com.google.common.base.Preconditions;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import org.junit.runners.JUnit4;
 public abstract class ITBaseTest {
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
   protected Firestore firestore;
+  protected FirestoreSpy firestoreSpy;
 
   @Before
   public void before() {
@@ -53,5 +55,14 @@ public abstract class ITBaseTest {
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
     firestore.close();
     firestore = null;
+    firestoreSpy = null;
+  }
+
+  public FirestoreSpy useFirestoreSpy() {
+    if (firestoreSpy == null) {
+      firestoreSpy = new FirestoreSpy(firestore);
+      firestore = firestoreSpy.spy;
+    }
+    return firestoreSpy;
   }
 }

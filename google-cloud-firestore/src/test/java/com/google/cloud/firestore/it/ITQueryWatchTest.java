@@ -22,8 +22,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.list;
 import static java.util.Collections.singletonList;
 
+import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
@@ -39,8 +41,12 @@ import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener
 import com.google.common.base.Joiner;
 import com.google.common.base.Joiner.MapJoiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.truth.Truth;
+import com.google.firestore.v1.ExistenceFilter;
+import com.google.firestore.v1.ListenRequest;
+import com.google.firestore.v1.ListenResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -70,6 +76,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
   @Before
   public void before() {
     super.before();
+    useFirestoreSpy();
     String autoId = LocalFirestoreHelper.autoId();
     String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
     randomColl = firestore.collection(collPath);
@@ -100,9 +107,9 @@ public final class ITQueryWatchTest extends ITBaseTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
-    listenerAssertions.addedIdsIsAnyOf(emptyList());
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
+    listenerAssertions.addedIdsIsEmpty();
+    listenerAssertions.modifiedIdsIsEmpty();
+    listenerAssertions.removedIdsIsEmpty();
   }
 
   /**
@@ -132,9 +139,9 @@ public final class ITQueryWatchTest extends ITBaseTest {
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(1, 1));
-    listenerAssertions.addedIdsIsAnyOf(singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
+    listenerAssertions.addedIdsIsAnyOf("doc");
+    listenerAssertions.modifiedIdsIsEmpty();
+    listenerAssertions.removedIdsIsEmpty();
   }
 
   /**
@@ -167,8 +174,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
     listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
+    listenerAssertions.modifiedIdsIsEmpty();
+    listenerAssertions.removedIdsIsEmpty();
   }
 
   /**
@@ -188,7 +195,6 @@ public final class ITQueryWatchTest extends ITBaseTest {
     final Query query = randomColl.whereEqualTo("foo", "bar");
     QuerySnapshotEventListener listener =
         QuerySnapshotEventListener.builder().setInitialEventCount(1).setAddedEventCount(1).build();
-    List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -203,10 +209,10 @@ public final class ITQueryWatchTest extends ITBaseTest {
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
     listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
+    listenerAssertions.modifiedIdsIsEmpty();
+    listenerAssertions.removedIdsIsEmpty();
 
-    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = listener.lastListenerEvent();
     //noinspection ConstantConditions guarded by "assertNoError" above
     QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
@@ -233,7 +239,6 @@ public final class ITQueryWatchTest extends ITBaseTest {
             .setInitialEventCount(1)
             .setModifiedEventCount(1)
             .build();
-    List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -249,9 +254,9 @@ public final class ITQueryWatchTest extends ITBaseTest {
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
     listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
     listenerAssertions.modifiedIdsIsAnyOf(emptyList(), singletonList("doc"));
-    listenerAssertions.removedIdsIsAnyOf(emptyList());
+    listenerAssertions.removedIdsIsEmpty();
 
-    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = listener.lastListenerEvent();
     //noinspection ConstantConditions guarded by "assertNoError" above
     QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
@@ -278,7 +283,6 @@ public final class ITQueryWatchTest extends ITBaseTest {
             .setInitialEventCount(1)
             .setRemovedEventCount(1)
             .build();
-    List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -293,10 +297,10 @@ public final class ITQueryWatchTest extends ITBaseTest {
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
     listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.modifiedIdsIsEmpty();
     listenerAssertions.removedIdsIsAnyOf(emptyList(), singletonList("doc"));
 
-    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = listener.lastListenerEvent();
     //noinspection ConstantConditions guarded by "assertNoError" above
     QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
@@ -322,7 +326,6 @@ public final class ITQueryWatchTest extends ITBaseTest {
             .setInitialEventCount(1)
             .setRemovedEventCount(1)
             .build();
-    List<ListenerEvent> receivedEvents = listener.receivedEvents;
     ListenerRegistration registration = query.addSnapshotListener(listener);
 
     try {
@@ -337,13 +340,77 @@ public final class ITQueryWatchTest extends ITBaseTest {
     listenerAssertions.noError();
     listenerAssertions.eventCountIsAnyOf(Range.closed(2, 2));
     listenerAssertions.addedIdsIsAnyOf(emptyList(), singletonList("doc"));
-    listenerAssertions.modifiedIdsIsAnyOf(emptyList());
+    listenerAssertions.modifiedIdsIsEmpty();
     listenerAssertions.removedIdsIsAnyOf(emptyList(), singletonList("doc"));
 
-    ListenerEvent event = receivedEvents.get(receivedEvents.size() - 1);
+    ListenerEvent event = listener.lastListenerEvent();
     //noinspection ConstantConditions guarded by "assertNoError" above
     QueryDocumentSnapshot doc = event.value.getDocumentChanges().get(0).getDocument();
     assertThat(doc.get("foo")).isEqualTo("bar");
+  }
+
+  /**
+   *
+   *
+   * <ol>
+   *   <li>Attach a listener to a query with non-empty results.
+   *   <li>Trigger existence filter mismatch, thereby invoking retry behavior.
+   *   <li>Add and remove documents.
+   *   <li>Verify expected snapshots are raised.
+   * </ol>
+   */
+  @Test
+  public void restartAfterFailedFilter() throws Exception {
+    // create a document in our collection that will match the query
+    DocumentReference testDoc1 = setDocument("doc1", map("foo", "bar"));
+    DocumentReference testDoc2 = setDocument("doc2", map("foo", "bar"));
+
+    final Query query = randomColl.whereEqualTo("foo", "bar");
+    QuerySnapshotEventListener listener = QuerySnapshotEventListener.builder()
+        .setInitialEventCount(1)
+        .setAddedEventCount(3)
+        .setRemovedEventCount(1)
+        .build();
+    ListenerRegistration registration = query.addSnapshotListener(listener);
+
+    try {
+      listener.eventsCountDownLatch.awaitInitialEvents();
+      listener.assertionsForLastEvent()
+          .noError()
+          .addedIdsIsAnyOf("doc1", "doc2")
+          .modifiedIdsIsEmpty()
+          .removedIdsIsEmpty();
+      listener.lastDocumentIdsIsAnyOf("doc1", "doc2");
+      BidiStreamObserver<ListenRequest, ListenResponse> watch = firestoreSpy.streamRequestBidiStreamObserverCaptor.getValue();
+
+      // Trigger existence filter mismatch, thereby invoking retry behavior.
+      watch.onResponse(filter(0));
+
+      setDocument("doc3", map("foo", "bar"));
+      listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
+      listener.assertionsForLastEvent()
+          .noError()
+          .addedIdsIsAnyOf("doc3")
+          .modifiedIdsIsEmpty()
+          .removedIdsIsEmpty();
+      listener.lastDocumentIdsIsAnyOf("doc1", "doc2", "doc3");
+
+      testDoc1.set(map("bar", "foo")).get(5, TimeUnit.SECONDS);
+      listener.eventsCountDownLatch.await(DocumentChange.Type.REMOVED);
+      listener.assertionsForLastEvent()
+          .noError()
+          .addedIdsIsEmpty()
+          .modifiedIdsIsEmpty()
+          .removedIdsIsAnyOf("doc1");
+      listener.lastDocumentIdsIsAnyOf("doc2", "doc3");
+
+    } finally {
+      registration.remove();
+    }
+
+    ListenerAssertions listenerAssertions = listener.assertions();
+    listenerAssertions.noError();
+    listenerAssertions.eventCountIsAnyOf(Range.singleton(3));
   }
 
   /** Verifies that QuerySnapshot for limitToLast() queries are ordered correctly. */
@@ -609,6 +676,24 @@ public final class ITQueryWatchTest extends ITBaseTest {
       return new ListenerAssertions(receivedEvents);
     }
 
+    ListenerAssertions assertionsForLastEvent() {
+      return new ListenerAssertions(singletonList(lastListenerEvent()));
+    }
+
+    //current
+
+    ListenerEvent lastListenerEvent() {
+      return receivedEvents.get(receivedEvents.size() - 1);
+    }
+
+    void lastDocumentIdsIsAnyOf(String... s) {
+      List<String> ids = Lists.transform(
+          lastListenerEvent().value.getDocuments(),
+          DocumentSnapshot::getId
+      );
+      Truth.assertThat(ids).containsExactlyElementsIn(s);
+    }
+
     static Builder builder() {
       return new Builder();
     }
@@ -669,20 +754,22 @@ public final class ITQueryWatchTest extends ITBaseTest {
         removedIds = getIds(querySnapshots, DocumentChange.Type.REMOVED);
       }
 
-      private void noError() {
+      private ListenerAssertions noError() {
         final Optional<ListenerEvent> anyError =
             receivedEvents.stream().filter(input -> input.error != null).findFirst();
         assertWithMessage("snapshotListener received an error")
             .that(anyError.isPresent())
             .isFalse();
+        return this;
       }
 
-      private void hasError() {
+      private ListenerAssertions hasError() {
         final Optional<ListenerEvent> anyError =
             receivedEvents.stream().filter(input -> input.error != null).findFirst();
         assertWithMessage("snapshotListener did not receive an expected error")
             .that(anyError.isPresent())
             .isTrue();
+        return this;
       }
 
       private static List<QuerySnapshot> getQuerySnapshots(List<ListenerEvent> events) {
@@ -706,32 +793,54 @@ public final class ITQueryWatchTest extends ITBaseTest {
         return documentIds;
       }
 
-      void addedIdsIsAnyOf(List<?> s) {
-        Truth.assertWithMessage(debugMessage()).that(addedIds).isEqualTo(s);
+      ListenerAssertions addedIdsIsEmpty() {
+        Truth.assertWithMessage(debugMessage()).that(addedIds).isEmpty();
+        return this;
       }
 
-      void addedIdsIsAnyOf(List<?> s1, List<?> s2) {
+      ListenerAssertions addedIdsIsAnyOf(String... s) {
+        Truth.assertWithMessage(debugMessage()).that(addedIds).containsExactlyElementsIn(s);
+        return this;
+      }
+
+      ListenerAssertions addedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(addedIds).isAnyOf(s1, s2);
+        return this;
       }
 
-      void modifiedIdsIsAnyOf(List<?> s) {
-        Truth.assertWithMessage(debugMessage()).that(modifiedIds).isEqualTo(s);
+      ListenerAssertions modifiedIdsIsEmpty() {
+        Truth.assertWithMessage(debugMessage()).that(modifiedIds).isEmpty();
+        return this;
       }
 
-      void modifiedIdsIsAnyOf(List<?> s1, List<?> s2) {
+      ListenerAssertions modifiedIdsIsAnyOf(String... s) {
+        Truth.assertWithMessage(debugMessage()).that(modifiedIds).containsExactlyElementsIn(s);
+        return this;
+      }
+
+      ListenerAssertions modifiedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(modifiedIds).isAnyOf(s1, s2);
+        return this;
       }
 
-      void removedIdsIsAnyOf(List<?> s) {
-        Truth.assertWithMessage(debugMessage()).that(removedIds).isEqualTo(s);
+      ListenerAssertions removedIdsIsEmpty() {
+        Truth.assertWithMessage(debugMessage()).that(removedIds).isEmpty();
+        return this;
       }
 
-      void removedIdsIsAnyOf(List<?> s1, List<?> s2) {
+      ListenerAssertions removedIdsIsAnyOf(String... s) {
+        Truth.assertWithMessage(debugMessage()).that(removedIds).containsExactlyElementsIn(s);
+        return this;
+      }
+
+      ListenerAssertions removedIdsIsAnyOf(List<?> s1, List<?> s2) {
         Truth.assertWithMessage(debugMessage()).that(removedIds).isAnyOf(s1, s2);
+        return this;
       }
 
-      void eventCountIsAnyOf(Range<Integer> range) {
+      ListenerAssertions eventCountIsAnyOf(Range<Integer> range) {
         Truth.assertWithMessage(debugMessage()).that((int) receivedEvents.size()).isIn(range);
+        return this;
       }
 
       private String debugMessage() {
@@ -796,5 +905,11 @@ public final class ITQueryWatchTest extends ITBaseTest {
     DocumentReference documentReference = randomColl.document(documentId);
     documentReference.set(fields).get();
     return documentReference;
+  }
+
+  private ListenResponse filter(int documentCount) {
+    ListenResponse.Builder response = ListenResponse.newBuilder();
+    response.setFilter(ExistenceFilter.newBuilder().setCount(documentCount).build());
+    return response.build();
   }
 }

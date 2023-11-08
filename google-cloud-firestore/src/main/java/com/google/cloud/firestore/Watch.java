@@ -49,6 +49,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 /**
@@ -73,7 +74,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   private final ExponentialRetryAlgorithm backoff;
   private final Target target;
   private TimedAttemptSettings nextAttempt;
-  private ClientStream<ListenRequest> stream;
+  private SuppressibleBidiStream<ListenRequest, ListenResponse> stream;
 
   /** The sorted tree of DocumentSnapshots as sent in the last snapshot. */
   private DocumentSet documentSet;
@@ -114,6 +115,8 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     List<QueryDocumentSnapshot> adds = new ArrayList<>();
     List<QueryDocumentSnapshot> updates = new ArrayList<>();
   }
+
+  private static final Logger LOGGER = Logger.getLogger(Watch.class.getName());
 
   /**
    * @param firestore The Firestore Database client.
@@ -246,7 +249,10 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
         changeMap.put(ResourcePath.create(listenResponse.getDocumentRemove().getDocument()), null);
         break;
       case FILTER:
-        if (listenResponse.getFilter().getCount() != currentSize()) {
+        int filterCount = listenResponse.getFilter().getCount();
+        int currentSize = currentSize();
+        if (filterCount != currentSize) {
+          LOGGER.info(() -> String.format("filter: count mismatch filter count %d != current size %d", filterCount, currentSize));
           // We need to remove all the current results.
           resetDocs();
           // The filter didn't match, so re-issue the query.
@@ -297,7 +303,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
           .execute(
               () -> {
                 synchronized (Watch.this) {
-                  stream.closeSend();
+                  stream.close();
                   stream = null;
                 }
               });
@@ -318,7 +324,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     resumeToken = null;
 
     for (DocumentSnapshot snapshot : documentSet) {
-      // Mark each document as deleted. If documents are not deleted, they  will be send again by
+      // Mark each document as deleted. If documents are not deleted, they  will be sent again by
       // the server.
       changeMap.put(snapshot.getReference().getResourcePath(), null);
     }
@@ -329,7 +335,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Closes the stream and calls onError() if the stream is still active. */
   private void closeStream(final Throwable throwable) {
     if (stream != null) {
-      stream.closeSend();
+      stream.closeAndSilence();
       stream = null;
     }
 
@@ -371,7 +377,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Helper to restart the outgoing stream to the backend. */
   private void resetStream() {
     if (stream != null) {
-      stream.closeSend();
+      stream.closeAndSilence();
       stream = null;
     }
 
@@ -398,7 +404,10 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
               nextAttempt = backoff.createNextAttempt(nextAttempt);
 
               Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-              stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+              stream = new SuppressibleBidiStream<>(
+                  Watch.this,
+                  observer -> firestore.streamRequest(observer, firestore.getClient().listenCallable())
+              );
 
               ListenRequest.Builder request = ListenRequest.newBuilder();
               request.setDatabase(firestore.getDatabaseName());
@@ -459,6 +468,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     if (!hasPushed || !changes.isEmpty()) {
       final QuerySnapshot querySnapshot =
           QuerySnapshot.withChanges(query, readTime, documentSet, changes);
+      LOGGER.info(querySnapshot.toString());
       userCallbackExecutor.execute(() -> listener.onEvent(querySnapshot, null));
       hasPushed = true;
     }
