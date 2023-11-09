@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import com.google.api.gax.rpc.BidiStreamObserver;
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.StreamController;
-import com.google.firestore.v1.ListenRequest;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -33,8 +32,7 @@ final class SilenceableBidiStream<RequestT, ResponseT>
 
   SilenceableBidiStream(
       BidiStreamObserver<RequestT, ResponseT> responseObserverT,
-      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<RequestT>>
-          streamSupplier) {
+      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<RequestT>> streamSupplier) {
     this.delegate = responseObserverT;
     stream = streamSupplier.apply(this);
   }

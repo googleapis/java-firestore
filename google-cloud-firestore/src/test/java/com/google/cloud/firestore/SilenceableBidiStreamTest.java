@@ -16,21 +16,22 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SilenceableBidiStreamTest {
 
-  @Mock
-  BidiStreamObserver<Integer, String> mockObserver;
+  @Mock BidiStreamObserver<Integer, String> mockObserver;
 
-  @Mock
-  ClientStream<Integer> mockClientStream;
+  @Mock ClientStream<Integer> mockClientStream;
 
   SilenceableBidiStream<Integer, String> sut;
 
   @Before
   public void before() {
     Consumer captureCall = Mockito.mock(Consumer.class);
-    sut = new SilenceableBidiStream<>(mockObserver, o -> {
-      captureCall.accept(o);
-      return mockClientStream;
-    });
+    sut =
+        new SilenceableBidiStream<>(
+            mockObserver,
+            o -> {
+              captureCall.accept(o);
+              return mockClientStream;
+            });
     // The lambda should pass itself as parameter
     Mockito.verify(captureCall).accept(sut);
   }
