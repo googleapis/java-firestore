@@ -386,6 +386,10 @@ public final class ITQueryWatchTest extends ITBaseTest {
       // in the response. All we are concerned about is invoking retry.
       firestoreSpy.streamRequestBidiStreamObserver.onResponse(filter(0));
 
+      // A race condition will sometimes throw an error if the SuppressibleBidiStream does not
+      // silence the old stream. This can be caused by `Preconditions.checkState(stream == null)`
+      // in Watch class.
+
       setDocument("doc3", map("foo", "bar"));
       listener.eventsCountDownLatch.await(DocumentChange.Type.ADDED);
       listener
@@ -755,9 +759,9 @@ public final class ITQueryWatchTest extends ITBaseTest {
       private ListenerAssertions noError() {
         final Optional<ListenerEvent> anyError =
             receivedEvents.stream().filter(input -> input.error != null).findFirst();
-        assertWithMessage("snapshotListener received an error")
-            .that(anyError.isPresent())
-            .isFalse();
+        if (anyError.isPresent()) {
+          throw new Error("snapshotListener received an error", anyError.get().error);
+        }
         return this;
       }
 

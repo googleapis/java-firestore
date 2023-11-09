@@ -23,23 +23,27 @@ import com.google.firestore.v1.ListenRequest;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-final class SuppressibleBidiStream<RequestT, ResponseT>
+final class SilenceableBidiStream<RequestT, ResponseT>
     implements BidiStreamObserver<RequestT, ResponseT> {
 
-  private final ClientStream<ListenRequest> stream;
+  private final ClientStream<RequestT> stream;
   private final BidiStreamObserver<RequestT, ResponseT> delegate;
   private boolean silence = false;
   private static final Logger LOGGER = Logger.getLogger(Watch.class.getName());
 
-  SuppressibleBidiStream(
+  SilenceableBidiStream(
       BidiStreamObserver<RequestT, ResponseT> responseObserverT,
-      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<ListenRequest>>
+      Function<BidiStreamObserver<RequestT, ResponseT>, ClientStream<RequestT>>
           streamSupplier) {
     this.delegate = responseObserverT;
     stream = streamSupplier.apply(this);
   }
 
-  public void send(ListenRequest request) {
+  public boolean isSilenced() {
+    return silence;
+  }
+
+  public void send(RequestT request) {
     LOGGER.info(stream.toString());
     stream.send(request);
   }

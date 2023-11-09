@@ -74,7 +74,7 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   private final ExponentialRetryAlgorithm backoff;
   private final Target target;
   private TimedAttemptSettings nextAttempt;
-  private SuppressibleBidiStream<ListenRequest, ListenResponse> stream;
+  private SilenceableBidiStream<ListenRequest, ListenResponse> stream;
 
   /** The sorted tree of DocumentSnapshots as sent in the last snapshot. */
   private DocumentSet documentSet;
@@ -409,7 +409,7 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
 
               Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
               stream =
-                  new SuppressibleBidiStream<>(
+                  new SilenceableBidiStream<>(
                       Watch.this,
                       observer ->
                           firestore.streamRequest(
