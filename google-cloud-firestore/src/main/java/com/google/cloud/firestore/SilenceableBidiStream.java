@@ -22,6 +22,30 @@ import com.google.api.gax.rpc.StreamController;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
+/**
+ * Conditionally pass through callbacks to wrapped `BidiStreamObserver`.
+ *
+ * Due to the asynchronous nature of a stream, there can be a delay between closing a stream and
+ * the upstream no longer sending responses. Receiving callbacks after closing upstream can have
+ * undesirable consequences.
+ *
+ * The underlying `ClientStream` can be called through the `SilenceableBidiStream`. Methods such as
+ * `send()` and `closeSend()` are exposed.
+ *
+ * The `SilenceableBidiStream` wraps a `BidiStreamObserver`. This is helpful for situations where
+ * the observer should be detached from a stream. Instead of calling the `closeSend()` method, the
+ * `closeSendAndSilence()` method will silence the stream by preventing further callbacks including
+ * `onError` and `onComplete`.
+ *
+ * If silenced, the observer could be safely attached to a new stream. This is useful for error
+ * handling where upstream must be stopped, but a new stream can continue to service the observer.
+ * In these cases, the old stream cannot be allowed to send more responses, and especially
+ * cannot be allowed to send `onError` or `onComplete` since that would signal the downstream that
+ * the stream is finished.
+ *
+ * @param <RequestT>
+ * @param <ResponseT>
+ */
 final class SilenceableBidiStream<RequestT, ResponseT>
     implements BidiStreamObserver<RequestT, ResponseT> {
 
@@ -46,12 +70,12 @@ final class SilenceableBidiStream<RequestT, ResponseT>
     stream.send(request);
   }
 
-  public void close() {
+  public void closeSend() {
     LOGGER.info(stream::toString);
     stream.closeSend();
   }
 
-  public void closeAndSilence() {
+  public void closeSendAndSilence() {
     LOGGER.info(stream::toString);
     silence = true;
     stream.closeSend();

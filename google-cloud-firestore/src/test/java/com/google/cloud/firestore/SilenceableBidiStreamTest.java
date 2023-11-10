@@ -102,7 +102,7 @@ public class SilenceableBidiStreamTest {
     assertWithMessage("Expect isSilenced() to be false by default")
         .that(sut.isSilenced())
         .isFalse();
-    sut.close();
+    sut.closeSend();
     assertWithMessage("Expect isSilenced() to be unaffected after close()")
         .that(sut.isSilenced())
         .isFalse();
@@ -115,7 +115,7 @@ public class SilenceableBidiStreamTest {
     assertWithMessage("Expect isSilenced() to be false by default")
         .that(sut.isSilenced())
         .isFalse();
-    sut.closeAndSilence();
+    sut.closeSendAndSilence();
     assertWithMessage("Expect isSilenced() to be true after closeAndSilence()")
         .that(sut.isSilenced())
         .isTrue();
@@ -125,7 +125,7 @@ public class SilenceableBidiStreamTest {
 
   @Test
   public void afterClose_theStreamWillPassThroughData_onComplete() {
-    sut.close();
+    sut.closeSend();
     sut.onComplete();
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verify(mockObserver, Mockito.times(1)).onComplete();
@@ -135,7 +135,7 @@ public class SilenceableBidiStreamTest {
   @Test
   public void afterClose_theStreamWillPassThroughData_onError() {
     Exception e = new Exception("Something bad");
-    sut.close();
+    sut.closeSend();
     sut.onError(e);
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verify(mockObserver, Mockito.times(1)).onError(e);
@@ -144,7 +144,7 @@ public class SilenceableBidiStreamTest {
 
   @Test
   public void afterClose_theStreamWillPassThroughData_onResponse() {
-    sut.close();
+    sut.closeSend();
     sut.onResponse("ABC");
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verify(mockObserver, Mockito.times(1)).onResponse("ABC");
@@ -153,7 +153,7 @@ public class SilenceableBidiStreamTest {
 
   @Test
   public void afterCloseAndSilence_theStreamWillPassThroughData_onComplete() {
-    sut.closeAndSilence();
+    sut.closeSendAndSilence();
     sut.onComplete();
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verifyNoMoreInteractions(mockClientStream, mockObserver);
@@ -162,7 +162,7 @@ public class SilenceableBidiStreamTest {
   @Test
   public void afterCloseAndSilence_theStreamWillPassThroughData_onError() {
     Exception e = new Exception("Something bad");
-    sut.closeAndSilence();
+    sut.closeSendAndSilence();
     sut.onError(e);
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verifyNoMoreInteractions(mockClientStream, mockObserver);
@@ -170,7 +170,7 @@ public class SilenceableBidiStreamTest {
 
   @Test
   public void afterCloseAndSilence_theStreamWillPassThroughData_onResponse() {
-    sut.closeAndSilence();
+    sut.closeSendAndSilence();
     sut.onResponse("ABC");
     Mockito.verify(mockClientStream, Mockito.times(1)).closeSend();
     Mockito.verifyNoMoreInteractions(mockClientStream, mockObserver);

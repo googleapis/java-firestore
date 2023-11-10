@@ -307,7 +307,7 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
           .execute(
               () -> {
                 synchronized (Watch.this) {
-                  stream.close();
+                  stream.closeSend();
                   stream = null;
                 }
               });
@@ -339,7 +339,7 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Closes the stream and calls onError() if the stream is still active. */
   private void closeStream(final Throwable throwable) {
     if (stream != null) {
-      stream.closeAndSilence();
+      stream.closeSendAndSilence();
       stream = null;
     }
 
@@ -381,7 +381,7 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Helper to restart the outgoing stream to the backend. */
   private void resetStream() {
     if (stream != null) {
-      stream.closeAndSilence();
+      stream.closeSendAndSilence();
       stream = null;
     }
 
