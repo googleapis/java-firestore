@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.15.5](https://github.com/googleapis/java-firestore/compare/v3.15.4...v3.15.5) (2023-11-14)
+
+
+### Bug Fixes
+
+* Prevent watch stream from emitting events after close. ([#1471](https://github.com/googleapis/java-firestore/issues/1471)) ([ee3f8c0](https://github.com/googleapis/java-firestore/commit/ee3f8c0c6e2c8aff64f429e8eea649cc6614c74f))
+
+
+### Dependencies
+
+* Update actions/github-script action to v7 ([#1473](https://github.com/googleapis/java-firestore/issues/1473)) ([1097a0b](https://github.com/googleapis/java-firestore/commit/1097a0b97c1dff40c07b657417db4ac431822619))
+* Update actions/github-script action to v7 ([#1475](https://github.com/googleapis/java-firestore/issues/1475)) ([d848d87](https://github.com/googleapis/java-firestore/commit/d848d875738260cde620f5cedfc15bf4dae31aac))
+
 ## [3.15.4](https://github.com/googleapis/java-firestore/compare/v3.15.3...v3.15.4) (2023-11-07)
 
 
