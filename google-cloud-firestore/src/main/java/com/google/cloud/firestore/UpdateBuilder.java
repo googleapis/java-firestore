@@ -34,13 +34,8 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.annotation.Nonnull;
@@ -627,51 +622,124 @@ public abstract class UpdateBuilder<T> {
 
     String operation = transactionId == null ? "Batch.commit" : "Transaction.commit";
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(operation, true);
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(operation, false);
     try(Scope ignored = span.makeCurrent()) {
-      ApiFuture<CommitResponse> response =
-              firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+      OpenTelemetryUtil.Span sendRequestSpan = openTelemetryUtil.startSpan("sendRequest", false);
+      ApiFuture<CommitResponse> response;
+      try (Scope ignored2 = sendRequestSpan.makeCurrent()) {
+        System.out.println("Before sendRequest. Time=" + (System.currentTimeMillis()));
+        response = firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+      }
+      sendRequestSpan.endAtFuture(response);
+
+
 
       Context asyncContext = Context.current();
 
-      ApiFutures.addCallback(
-              response,
-              new ApiFutureCallback<CommitResponse>() {
-                @Override
-                public void onFailure(Throwable t) {
-                  try (Scope scope = asyncContext.makeCurrent()) {
-                    Span.current().addEvent("commit failed.");
+//      ApiFutures.addCallback(
+//              response,
+//              new ApiFutureCallback<CommitResponse>() {
+//                @Override
+//                public void onFailure(Throwable t) {
+//                  try (Scope scope = asyncContext.makeCurrent()) {
+//                    Span.current().addEvent("commit failed.");
+//                  }
+//                }
+//                @Override
+//                public void onSuccess(CommitResponse result) {
+//                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+//                    Span.current().addEvent("commit succeeded.");
+//                  }
+//                }
+//              }, MoreExecutors.directExecutor()
+//              );
+
+      ApiFuture<List<WriteResult>> returnValue;
+      OpenTelemetryUtil.Span transformSpan = openTelemetryUtil.startSpan("transform span", false);
+      try (Scope ignored3 = transformSpan.makeCurrent()) {
+        returnValue = ApiFutures.transform(
+                response,
+                commitResponse -> {
+                  System.out.println("ApiFutures.transform started. Time=" + (System.currentTimeMillis()));
+                  try(Scope innerScope = asyncContext.makeCurrent()) {
+                    OpenTelemetryUtil.Span postOpSpan = openTelemetryUtil.startSpan("post-op", false);
+                    List<com.google.firestore.v1.WriteResult> writeResults =
+                            commitResponse.getWriteResultsList();
+
+                    List<WriteResult> result = new ArrayList<>();
+
+                    for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+                      result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+                    }
+                    postOpSpan.end();
+                    System.out.println("ApiFutures.transform ended. Time=" + (System.currentTimeMillis()));
+                    return result;
                   }
-                }
-                @Override
-                public void onSuccess(CommitResponse result) {
-                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-                    Span.current().addEvent("commit succeeded.");
+                },
+                MoreExecutors.directExecutor());
+      }
+      transformSpan.endAtFuture(returnValue);
+      span.endAtFuture(returnValue);
+      return returnValue;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
+  }
+
+  ApiFuture<WriteResult> ehsanscommit(@Nullable ByteString transactionId) {
+    final CommitRequest.Builder request = CommitRequest.newBuilder();
+    request.setDatabase(firestore.getDatabaseName());
+
+    for (WriteOperation writeOperation : writes) {
+      request.addWrites(writeOperation.write);
+    }
+
+    if (transactionId != null) {
+      request.setTransaction(transactionId);
+    }
+
+    committed = true;
+
+    String operation = transactionId == null ? "Batch.commit" : "Transaction.commit";
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(operation, false);
+    try(Scope ignored = span.makeCurrent()) {
+      OpenTelemetryUtil.Span sendRequestSpan = openTelemetryUtil.startSpan("sendRequest", false);
+      ApiFuture<CommitResponse> response;
+      try (Scope ignored2 = sendRequestSpan.makeCurrent()) {
+        System.out.println("Before sendRequest. Time=" + (System.currentTimeMillis()));
+        response = firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+      }
+      sendRequestSpan.endAtFuture(response);
+
+      Context asyncContext = Context.current();
+      ApiFuture<WriteResult> returnValue;
+      OpenTelemetryUtil.Span transformSpan = openTelemetryUtil.startSpan("transform span", false);
+      try (Scope ignored3 = transformSpan.makeCurrent()) {
+        returnValue = ApiFutures.transform(
+                response,
+                commitResponse -> {
+                  System.out.println("ApiFutures.transform started. Time=" + (System.currentTimeMillis()));
+                  try(Scope innerScope = asyncContext.makeCurrent()) {
+                    OpenTelemetryUtil.Span postOpSpan = openTelemetryUtil.startSpan("post-op", false);
+                    List<com.google.firestore.v1.WriteResult> writeResults =
+                            commitResponse.getWriteResultsList();
+
+                    List<WriteResult> result = new ArrayList<>();
+
+                    for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+                      result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+                    }
+                    postOpSpan.end();
+                    System.out.println("ApiFutures.transform ended. Time=" + (System.currentTimeMillis()));
+                    return result.isEmpty() ? null : result.get(0);
                   }
-                }
-              }, MoreExecutors.directExecutor()
-              );
-
-
-      ApiFuture<List<WriteResult>> returnValue = ApiFutures.transform(
-              response,
-              commitResponse -> {
-                try(Scope innerScope = asyncContext.makeCurrent()) {
-                  OpenTelemetryUtil.Span postOpSpan = openTelemetryUtil.startSpan("post-op", false);
-                  List<com.google.firestore.v1.WriteResult> writeResults =
-                          commitResponse.getWriteResultsList();
-
-                  List<WriteResult> result = new ArrayList<>();
-
-                  for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-                    result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-                  }
-                  postOpSpan.end();
-                  return result;
-                }
-              },
-              MoreExecutors.directExecutor());
-      span.endAtFuture(response);
+                },
+                MoreExecutors.directExecutor());
+      }
+      transformSpan.endAtFuture(returnValue);
+      span.endAtFuture(returnValue);
       return returnValue;
     } catch (Exception error) {
       span.end(error);

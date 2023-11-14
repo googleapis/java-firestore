@@ -27,10 +27,7 @@ import io.opencensus.trace.Span;
 import io.opencensus.trace.Status;
 import io.opentelemetry.context.Context;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -128,12 +125,15 @@ public class DocumentReference {
    * @return An ApiFuture with the first WriteResult.
    */
   private <T> ApiFuture<T> extractFirst(ApiFuture<List<T>> results) {
+    System.out.println("ExtractFirst started. Time=" + System.currentTimeMillis());
     return ApiFutures.transform(
         results,
         (results1) -> {
+          System.out.println("ApiFutures.transform inside ExtractFirst started. Time=" + (System.currentTimeMillis()));
           return results1.isEmpty() ? null : results1.get(0);
         },
-        MoreExecutors.directExecutor());
+        rpcContext.getClient().getExecutor() == null ? MoreExecutors.directExecutor() : rpcContext.getClient().getExecutor());
+        //MoreExecutors.directExecutor());
   }
 
   <T, U> ApiFuture<U> foo(ApiFuture<T> future, ApiFunction<T, U> fn, Executor executor) {
@@ -158,7 +158,9 @@ public class DocumentReference {
     OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("DocumentReference.create", true);
     try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
+      //ApiFuture<WriteResult> result = writeBatch.create(this, fields).ehsanscommit(null);
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
+      System.out.println("ExtractFirst ended. Time=" + (System.currentTimeMillis()));
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
