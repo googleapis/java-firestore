@@ -49,6 +49,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 /**
@@ -59,7 +60,7 @@ import javax.annotation.Nullable;
  * It synchronizes on its own instance so it is advisable not to use this class for external
  * synchronization.
  */
-class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
+final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /**
    * Target ID used by watch. Watch uses a fixed target id since we only support one target per
    * stream. The actual target ID we use is arbitrary.
@@ -73,7 +74,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   private final ExponentialRetryAlgorithm backoff;
   private final Target target;
   private TimedAttemptSettings nextAttempt;
-  private ClientStream<ListenRequest> stream;
+  private SilenceableBidiStream<ListenRequest, ListenResponse> stream;
 
   /** The sorted tree of DocumentSnapshots as sent in the last snapshot. */
   private DocumentSet documentSet;
@@ -114,6 +115,8 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     List<QueryDocumentSnapshot> adds = new ArrayList<>();
     List<QueryDocumentSnapshot> updates = new ArrayList<>();
   }
+
+  private static final Logger LOGGER = Logger.getLogger(Watch.class.getName());
 
   /**
    * @param firestore The Firestore Database client.
@@ -246,7 +249,16 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
         changeMap.put(ResourcePath.create(listenResponse.getDocumentRemove().getDocument()), null);
         break;
       case FILTER:
-        if (listenResponse.getFilter().getCount() != currentSize()) {
+        // Keep copy of counts for producing log message.
+        // The method currentSize() is computationally expensive, and should only be run once.
+        int filterCount = listenResponse.getFilter().getCount();
+        int currentSize = currentSize();
+        if (filterCount != currentSize) {
+          LOGGER.info(
+              () ->
+                  String.format(
+                      "filter: count mismatch filter count %d != current size %d",
+                      filterCount, currentSize));
           // We need to remove all the current results.
           resetDocs();
           // The filter didn't match, so re-issue the query.
@@ -318,7 +330,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     resumeToken = null;
 
     for (DocumentSnapshot snapshot : documentSet) {
-      // Mark each document as deleted. If documents are not deleted, they  will be send again by
+      // Mark each document as deleted. If documents are not deleted, they  will be sent again by
       // the server.
       changeMap.put(snapshot.getReference().getResourcePath(), null);
     }
@@ -329,7 +341,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Closes the stream and calls onError() if the stream is still active. */
   private void closeStream(final Throwable throwable) {
     if (stream != null) {
-      stream.closeSend();
+      stream.closeSendAndSilence();
       stream = null;
     }
 
@@ -371,7 +383,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
   /** Helper to restart the outgoing stream to the backend. */
   private void resetStream() {
     if (stream != null) {
-      stream.closeSend();
+      stream.closeSendAndSilence();
       stream = null;
     }
 
@@ -398,7 +410,12 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
               nextAttempt = backoff.createNextAttempt(nextAttempt);
 
               Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_LISTEN);
-              stream = firestore.streamRequest(Watch.this, firestore.getClient().listenCallable());
+              stream =
+                  new SilenceableBidiStream<>(
+                      Watch.this,
+                      observer ->
+                          firestore.streamRequest(
+                              observer, firestore.getClient().listenCallable()));
 
               ListenRequest.Builder request = ListenRequest.newBuilder();
               request.setDatabase(firestore.getDatabaseName());
@@ -459,6 +476,7 @@ class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
     if (!hasPushed || !changes.isEmpty()) {
       final QuerySnapshot querySnapshot =
           QuerySnapshot.withChanges(query, readTime, documentSet, changes);
+      LOGGER.info(querySnapshot.toString());
       userCallbackExecutor.execute(() -> listener.onEvent(querySnapshot, null));
       hasPushed = true;
     }
