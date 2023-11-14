@@ -249,6 +249,8 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
         changeMap.put(ResourcePath.create(listenResponse.getDocumentRemove().getDocument()), null);
         break;
       case FILTER:
+        // Keep copy of counts for producing log message.
+        // The method currentSize() is computationally expensive, and should only be run once.
         int filterCount = listenResponse.getFilter().getCount();
         int currentSize = currentSize();
         if (filterCount != currentSize) {

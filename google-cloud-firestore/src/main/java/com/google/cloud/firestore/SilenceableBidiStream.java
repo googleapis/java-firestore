@@ -42,9 +42,6 @@ import java.util.logging.Logger;
  * In these cases, the old stream cannot be allowed to send more responses, and especially cannot be
  * allowed to send `onError` or `onComplete` since that would signal the downstream that the stream
  * is finished.
- *
- * @param <RequestT>
- * @param <ResponseT>
  */
 final class SilenceableBidiStream<RequestT, ResponseT>
     implements BidiStreamObserver<RequestT, ResponseT> {
