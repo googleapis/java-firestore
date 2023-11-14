@@ -130,53 +130,51 @@ public class CollectionReference extends Query {
    */
   @Nonnull
   public Iterable<DocumentReference> listDocuments() {
-    ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
-    request.setParent(options.getParentPath().toString());
-    request.setCollectionId(options.getCollectionId());
-    request.setMask(DocumentMask.getDefaultInstance());
-    request.setShowMissing(true);
-
-    final ListDocumentsPagedResponse response;
-    final TraceUtil traceUtil = TraceUtil.getInstance();
-    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_LISTDOCUMENTS);
-    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS, true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
+      request.setParent(options.getParentPath().toString());
+      request.setCollectionId(options.getCollectionId());
+      request.setMask(DocumentMask.getDefaultInstance());
+      request.setShowMissing(true);
+      final ListDocumentsPagedResponse response;
       FirestoreRpc client = rpcContext.getClient();
       UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse> callable =
-          client.listDocumentsPagedCallable();
+              client.listDocumentsPagedCallable();
       ListDocumentsRequest build = request.build();
       ApiFuture<ListDocumentsPagedResponse> future = rpcContext.sendRequest(build, callable);
       response = ApiExceptions.callAndTranslateApiException(future);
+      Iterable<DocumentReference> result = new Iterable<DocumentReference>() {
+        @Override
+        @Nonnull
+        public Iterator<DocumentReference> iterator() {
+          final Iterator<Document> iterator = response.iterateAll().iterator();
+          return new Iterator<DocumentReference>() {
+            @Override
+            public boolean hasNext() {
+              return iterator.hasNext();
+            }
+
+            @Override
+            public DocumentReference next() {
+              ResourcePath path = ResourcePath.create(iterator.next().getName());
+              return document(path.getId());
+            }
+
+            @Override
+            public void remove() {
+              throw new UnsupportedOperationException("remove");
+            }
+          };
+        }
+      };
+      span.end();
+      return result;
     } catch (ApiException exception) {
-      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
+      span.end(exception);
       throw FirestoreException.forApiException(exception);
-    } finally {
-      span.end(TraceUtil.END_SPAN_OPTIONS);
     }
-
-    return new Iterable<DocumentReference>() {
-      @Override
-      @Nonnull
-      public Iterator<DocumentReference> iterator() {
-        final Iterator<Document> iterator = response.iterateAll().iterator();
-        return new Iterator<DocumentReference>() {
-          @Override
-          public boolean hasNext() {
-            return iterator.hasNext();
-          }
-
-          @Override
-          public DocumentReference next() {
-            ResourcePath path = ResourcePath.create(iterator.next().getName());
-            return document(path.getId());
-          }
-
-          @Override
-          public void remove() {
-            throw new UnsupportedOperationException("remove");
-          }
-        };
-      }
-    };
   }
 
   /**
@@ -191,7 +189,7 @@ public class CollectionReference extends Query {
   @Nonnull
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan("CollectionReference.add", true);
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_ADD, true);
     try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();
       ApiFuture<WriteResult> createFuture = documentReference.create(fields);

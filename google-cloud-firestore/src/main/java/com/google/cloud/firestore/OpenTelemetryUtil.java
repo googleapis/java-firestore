@@ -44,11 +44,12 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_DOC_REF_DELETE = "DocumentReference.Delete";
   static final String SPAN_NAME_DOC_REF_GET = "DocumentReference.Get";
   static final String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
+  static final String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
+  static final String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
   static final String SPAN_NAME_GETDOCUMENT = "GetDocument";
   static final String SPAN_NAME_CREATEDOCUMENT = "CreateDocument";
   static final String SPAN_NAME_UPDATEDOCUMENT = "UpdateDocument";
   static final String SPAN_NAME_DELETEDOCUMENT = "DeleteDocument";
-  static final String SPAN_NAME_LISTDOCUMENTS = "ListDocuments";
   static final String SPAN_NAME_BEGINTRANSACTION = "BeginTransaction";
   static final String SPAN_NAME_COMMIT = "Commit";
   static final String SPAN_NAME_ROLLBACK = "Rollback";

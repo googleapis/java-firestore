@@ -524,14 +524,14 @@ public class DocumentReference {
   public Iterable<CollectionReference> listCollections() {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_DOC_REF_LIST_COLLECTIONS, true);
-    ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
-    request.setParent(path.toString());
-    final ListCollectionIdsPagedResponse response;
     try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-      response =
-              ApiExceptions.callAndTranslateApiException(
-                      rpcContext.sendRequest(
-                              request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
+      ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
+      request.setParent(path.toString());
+      final ListCollectionIdsPagedResponse response;
+        response =
+                ApiExceptions.callAndTranslateApiException(
+                        rpcContext.sendRequest(
+                                request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
       Iterable<CollectionReference> result = new Iterable<CollectionReference>() {
         @Override
         @Nonnull
