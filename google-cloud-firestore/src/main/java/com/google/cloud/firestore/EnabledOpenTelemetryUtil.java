@@ -47,24 +47,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
-  private static final String SERVICE = "Firestore";
-  private static final String LIBRARY_NAME = "com.google.cloud.firestore";
-  static final String SPAN_NAME_GETDOCUMENT = "CloudFirestoreOperation.GetDocument";
-  static final String SPAN_NAME_CREATEDOCUMENT = "CloudFirestoreOperation.CreateDocument";
-  static final String SPAN_NAME_UPDATEDOCUMENT = "CloudFirestoreOperation.UpdateDocument";
-  static final String SPAN_NAME_DELETEDOCUMENT = "CloudFirestoreOperation.DeleteDocument";
-  static final String SPAN_NAME_LISTCOLLECTIONIDS = "CloudFirestoreOperation.ListCollectionIds";
-  static final String SPAN_NAME_LISTDOCUMENTS = "CloudFirestoreOperation.ListDocuments";
-  static final String SPAN_NAME_BEGINTRANSACTION = "CloudFirestoreOperation.BeginTransaction";
-  static final String SPAN_NAME_COMMIT = "CloudFirestoreOperation.Commit";
-  static final String SPAN_NAME_ROLLBACK = "CloudFirestoreOperation.Rollback";
-  static final String SPAN_NAME_RUNQUERY = "CloudFirestoreOperation.RunQuery";
-  static final String SPAN_NAME_PARTITIONQUERY = "CloudFirestoreOperation.partitionQuery";
-  static final String SPAN_NAME_LISTEN = "CloudFirestoreOperation.Listen";
-  static final String SPAN_NAME_BATCHGETDOCUMENTS = "CloudFirestoreOperation.BatchGetDocuments";
-  static final String SPAN_NAME_BATCHWRITE = "CloudFirestoreOperation.BatchWrite";
-  static final String SPAN_NAME_WRITE = "CloudFirestoreOperation.Write";
-
   @Nullable private OpenTelemetrySdk openTelemetrySdk;
   private FirestoreOptions firestoreOptions;
 

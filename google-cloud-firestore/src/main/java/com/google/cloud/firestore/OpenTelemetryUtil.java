@@ -36,6 +36,29 @@ import javax.annotation.Nullable;
 public interface OpenTelemetryUtil {
   String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
   String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
+  static final String SERVICE = "Firestore";
+  static final String LIBRARY_NAME = "com.google.cloud.firestore";
+  static final String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
+  static final String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
+  static final String SPAN_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
+  static final String SPAN_NAME_DOC_REF_DELETE = "DocumentReference.Delete";
+  static final String SPAN_NAME_DOC_REF_GET = "DocumentReference.Get";
+  static final String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
+  static final String SPAN_NAME_GETDOCUMENT = "GetDocument";
+  static final String SPAN_NAME_CREATEDOCUMENT = "CreateDocument";
+  static final String SPAN_NAME_UPDATEDOCUMENT = "UpdateDocument";
+  static final String SPAN_NAME_DELETEDOCUMENT = "DeleteDocument";
+  static final String SPAN_NAME_LISTDOCUMENTS = "ListDocuments";
+  static final String SPAN_NAME_BEGINTRANSACTION = "BeginTransaction";
+  static final String SPAN_NAME_COMMIT = "Commit";
+  static final String SPAN_NAME_ROLLBACK = "Rollback";
+  static final String SPAN_NAME_RUNQUERY = "RunQuery";
+  static final String SPAN_NAME_PARTITIONQUERY = "partitionQuery";
+  static final String SPAN_NAME_LISTEN = "Listen";
+  static final String SPAN_NAME_BATCHGETDOCUMENTS = "BatchGetDocuments";
+  static final String SPAN_NAME_BATCHWRITE = "BatchWrite";
+  static final String SPAN_NAME_WRITE = "Write";
+
 
   /** Sampling rate of 10% is chosen for traces by default. */
   double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
