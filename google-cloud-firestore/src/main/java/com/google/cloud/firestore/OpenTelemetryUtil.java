@@ -18,13 +18,14 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
+import io.opentelemetry.api.common.Attributes;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Helper class that facilitates integration of the Firestore SDK with OpenTelemetry Trace, Metrics,
@@ -46,6 +47,8 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
   static final String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
   static final String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
+  static final String SPAN_NAME_QUERY_GET = "Query.Get";
+  static final String SPAN_NAME_RUNQUERY = "RunQuery";
   static final String SPAN_NAME_GETDOCUMENT = "GetDocument";
   static final String SPAN_NAME_CREATEDOCUMENT = "CreateDocument";
   static final String SPAN_NAME_UPDATEDOCUMENT = "UpdateDocument";
@@ -53,7 +56,6 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_BEGINTRANSACTION = "BeginTransaction";
   static final String SPAN_NAME_COMMIT = "Commit";
   static final String SPAN_NAME_ROLLBACK = "Rollback";
-  static final String SPAN_NAME_RUNQUERY = "RunQuery";
   static final String SPAN_NAME_PARTITIONQUERY = "partitionQuery";
   static final String SPAN_NAME_LISTEN = "Listen";
   static final String SPAN_NAME_BATCHGETDOCUMENTS = "BatchGetDocuments";
@@ -81,6 +83,9 @@ public interface OpenTelemetryUtil {
 
     /** Adds the given event to this span. */
     Span addEvent(String name);
+
+    /** Adds the given event with the given attributes to this span. */
+    Span addEvent(String name, Attributes attributes);
 
     Scope makeCurrent();
   }

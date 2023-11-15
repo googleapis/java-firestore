@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 
@@ -37,6 +38,11 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
     @Override
     public OpenTelemetryUtil.Span addEvent(String name) {
+      return this;
+    }
+
+    @Override
+    public OpenTelemetryUtil.Span addEvent(String name, Attributes attributes) {
       return this;
     }
 

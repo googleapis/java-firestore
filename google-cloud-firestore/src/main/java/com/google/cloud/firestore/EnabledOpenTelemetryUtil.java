@@ -28,7 +28,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
@@ -42,6 +44,8 @@ import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -123,6 +127,12 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     @Override
     public OpenTelemetryUtil.Span addEvent(String name) {
       span.addEvent(name);
+      return this;
+    }
+
+    @Override
+    public OpenTelemetryUtil.Span addEvent(String name, Attributes attributes) {
+      span.addEvent(name, attributes);
       return this;
     }
 
@@ -264,7 +274,6 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
     io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
-    //Scope scope = span.makeCurrent();
     if (addSettingsAttributes) {
       this.addSettingsAttributesToCurrentSpan();
     }
