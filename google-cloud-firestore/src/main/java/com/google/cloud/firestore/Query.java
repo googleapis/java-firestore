@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUNQUERY;
+import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_QUERY;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -42,7 +42,6 @@ import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
@@ -59,8 +58,7 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
 import io.grpc.Status;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracing;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1619,7 +1617,7 @@ public class Query {
     }
 
     openTelemetryUtil.currentSpan().addEvent(
-            SPAN_NAME_RUNQUERY, Attributes
+            SPAN_NAME_RUN_QUERY, Attributes
                     .builder()
                     .put("transactional", transactionId != null)
                     .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
@@ -1644,12 +1642,12 @@ public class Query {
           public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": First Response");
+              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": First Response");
             }
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
-                openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": Received 100 documents");
+                openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Received 100 documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -1664,7 +1662,7 @@ public class Query {
             }
 
             if (response.getDone()) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": Received RunQueryResponse.Done");
+              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -1673,7 +1671,7 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": Retryable Error",
+              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Retryable Error",
                       Attributes.builder().put("error.message", throwable.getMessage()).build());
 
               Query.this
@@ -1686,7 +1684,8 @@ public class Query {
                       /* isRetryRequestWithCursor= */ true);
 
             } else {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": Error");
+              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Error",
+                      Attributes.builder().put("error.message", throwable.getMessage()).build());
               documentObserver.onError(throwable);
             }
           }
@@ -1695,7 +1694,7 @@ public class Query {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
-            openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUNQUERY + ": Completed", Attributes.builder().put("Number of Documents", numDocuments).build());
+            openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Completed", Attributes.builder().put("Number of Documents", numDocuments).build());
             documentObserver.onCompleted(readTime);
           }
 
@@ -1750,7 +1749,7 @@ public class Query {
   }
 
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
-    OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
+    OpenTelemetryUtil openTelemetryUtil = getFirestore().getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_QUERY_GET, true);
     try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();

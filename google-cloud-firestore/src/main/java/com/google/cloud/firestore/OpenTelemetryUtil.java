@@ -25,7 +25,6 @@ import io.opentelemetry.context.Scope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Map;
 
 /**
  * Helper class that facilitates integration of the Firestore SDK with OpenTelemetry Trace, Metrics,
@@ -48,7 +47,9 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
   static final String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
   static final String SPAN_NAME_QUERY_GET = "Query.Get";
-  static final String SPAN_NAME_RUNQUERY = "RunQuery";
+  static final String SPAN_NAME_AGGREGATION_QUERY_GET = "AggregationQuery.Get";
+  static final String SPAN_NAME_RUN_QUERY = "RunQuery";
+  static final String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
   static final String SPAN_NAME_GETDOCUMENT = "GetDocument";
   static final String SPAN_NAME_CREATEDOCUMENT = "CreateDocument";
   static final String SPAN_NAME_UPDATEDOCUMENT = "UpdateDocument";
