@@ -1750,7 +1750,11 @@ public class Query {
 
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
     OpenTelemetryUtil openTelemetryUtil = getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_QUERY_GET, true);
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(
+            transactionId == null ?
+                    OpenTelemetryUtil.SPAN_NAME_QUERY_GET :
+                    OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY,
+            true);
     try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(

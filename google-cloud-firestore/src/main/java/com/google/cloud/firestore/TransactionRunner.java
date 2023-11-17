@@ -26,13 +26,10 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Tracer;
-import io.opencensus.trace.Tracing;
+import io.opentelemetry.api.common.Attributes;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,15 +47,8 @@ import java.util.concurrent.TimeUnit;
  * customize the backoff settings, you can specify custom settings via {@link FirestoreOptions}.
  */
 class TransactionRunner<T> {
-
-  private static final Tracer tracer = Tracing.getTracer();
-  private static final io.opencensus.trace.Status TOO_MANY_RETRIES_STATUS =
-      io.opencensus.trace.Status.ABORTED.withDescription("too many retries");
-  private static final io.opencensus.trace.Status USER_CALLBACK_FAILED =
-      io.opencensus.trace.Status.ABORTED.withDescription("user callback failed");
-
   private final Transaction.AsyncFunction<T> userCallback;
-  private final Span span;
+  private final OpenTelemetryUtil.Span span;
   private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
   private final Executor userCallbackExecutor;
@@ -79,7 +69,6 @@ class TransactionRunner<T> {
       Transaction.AsyncFunction<T> userCallback,
       TransactionOptions transactionOptions) {
     this.transactionOptions = transactionOptions;
-    this.span = tracer.spanBuilder("CloudFirestore.Transaction").startSpan();
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
     this.userCallback = userCallback;
@@ -94,6 +83,8 @@ class TransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
+    this.span = firestore.getOpenTelemetryUtil().startSpan("Firestore.Transaction", true);
+    span.makeCurrent();
   }
 
   ApiFuture<T> run() {
@@ -101,9 +92,7 @@ class TransactionRunner<T> {
 
     --attemptsRemaining;
 
-    span.addAnnotation(
-        "Start runTransaction",
-        ImmutableMap.of("attemptsRemaining", AttributeValue.longAttributeValue(attemptsRemaining)));
+    span.addEvent("Start runTransaction", Attributes.builder().put("attemptsRemaining", attemptsRemaining).build());
 
     return ApiFutures.catchingAsync(
         ApiFutures.transformAsync(
@@ -212,7 +201,6 @@ class TransactionRunner<T> {
 
     @Override
     public T apply(List<WriteResult> input) {
-      span.setStatus(io.opencensus.trace.Status.OK);
       span.end();
       return userFunctionResult;
     }
@@ -223,27 +211,27 @@ class TransactionRunner<T> {
     public ApiFuture<T> apply(Throwable throwable) {
       if (!(throwable instanceof ApiException)) {
         // This is likely a failure in the user callback.
-        span.setStatus(USER_CALLBACK_FAILED);
+        span.end(throwable);
         return rollbackAndReject(throwable);
       }
 
       ApiException apiException = (ApiException) throwable;
       if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
         if (attemptsRemaining > 0) {
-          span.addAnnotation("retrying");
+          span.addEvent("retrying");
           return run();
         } else {
-          span.setStatus(TOO_MANY_RETRIES_STATUS);
           final FirestoreException firestoreException =
               FirestoreException.forApiException(
                   apiException, "Transaction was cancelled because of too many retries.");
+          span.end(firestoreException);
           return rollbackAndReject(firestoreException);
         }
       } else {
-        span.setStatus(TraceUtil.statusFromApiException(apiException));
         final FirestoreException firestoreException =
             FirestoreException.forApiException(
                 apiException, "Transaction failed with non-retryable error");
+        span.end(firestoreException);
         return rollbackAndReject(firestoreException);
       }
     }

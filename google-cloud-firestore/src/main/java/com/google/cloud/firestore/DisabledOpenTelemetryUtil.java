@@ -47,6 +47,11 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
 
     @Override
+    public OpenTelemetryUtil.Span setAttribute(String key, int value) {
+      return this;
+    }
+
+    @Override
     public Scope makeCurrent() {
       return null;
     }

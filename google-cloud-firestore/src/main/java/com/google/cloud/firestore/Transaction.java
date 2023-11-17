@@ -27,7 +27,8 @@ import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import io.opencensus.trace.Tracing;
+import io.opentelemetry.context.Context;
+
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,6 +66,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   private final TransactionOptions transactionOptions;
   private ByteString transactionId;
+  @Nullable
+  private Context txnTraceContext;
 
   Transaction(
       FirestoreImpl firestore,
@@ -73,6 +76,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     super(firestore);
     this.transactionOptions = transactionOptions;
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
+    this.txnTraceContext = Context.current();
   }
 
   public boolean hasTransactionId() {
@@ -85,51 +89,68 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_BEGINTRANSACTION);
-    BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
-    beginTransaction.setDatabase(firestore.getDatabaseName());
+    txnTraceContext.makeCurrent();
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_BEGIN, true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
+      beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
-        && transactionId != null) {
-      beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
-    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
-      final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
-      if (transactionOptions.getReadTime() != null) {
-        readOnlyBuilder.setReadTime(transactionOptions.getReadTime());
+      if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType()) && transactionId != null) {
+        beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
+      } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
+        final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
+        if (transactionOptions.getReadTime() != null) {
+          readOnlyBuilder.setReadTime(transactionOptions.getReadTime());
+        }
+        beginTransaction.getOptionsBuilder().setReadOnly(readOnlyBuilder);
       }
-      beginTransaction.getOptionsBuilder().setReadOnly(readOnlyBuilder);
+
+      ApiFuture<BeginTransactionResponse> transactionBeginFuture =
+              firestore.sendRequest(
+                      beginTransaction.build(), firestore.getClient().beginTransactionCallable());
+
+      ApiFuture<Void> result = ApiFutures.transform(
+              transactionBeginFuture,
+              beginTransactionResponse -> {
+                transactionId = beginTransactionResponse.getTransaction();
+                return null;
+              },
+              MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
     }
-
-    ApiFuture<BeginTransactionResponse> transactionBeginFuture =
-        firestore.sendRequest(
-            beginTransaction.build(), firestore.getClient().beginTransactionCallable());
-
-    return ApiFutures.transform(
-        transactionBeginFuture,
-        beginTransactionResponse -> {
-          transactionId = beginTransactionResponse.getTransaction();
-          return null;
-        },
-        MoreExecutors.directExecutor());
   }
 
   /** Commits a transaction. */
   ApiFuture<List<WriteResult>> commit() {
+    txnTraceContext.makeCurrent();
     return super.commit(transactionId);
   }
 
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_ROLLBACK);
-    RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
-    reqBuilder.setTransaction(transactionId);
-    reqBuilder.setDatabase(firestore.getDatabaseName());
+    txnTraceContext.makeCurrent();
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_ROLLBACK, true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
+      reqBuilder.setTransaction(transactionId);
+      reqBuilder.setDatabase(firestore.getDatabaseName());
 
-    ApiFuture<Empty> rollbackFuture =
-        firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
+      ApiFuture<Empty> rollbackFuture =
+              firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
 
-    return ApiFutures.transform(
-        rollbackFuture, beginTransactionResponse -> null, MoreExecutors.directExecutor());
+      ApiFuture<Void> result = ApiFutures.transform(rollbackFuture, rollbackResponse -> null, MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -141,11 +162,22 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
-    return ApiFutures.transform(
-        firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
-        snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
-        MoreExecutors.directExecutor());
+
+    txnTraceContext.makeCurrent();
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, true);
+      try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+        ApiFuture<DocumentSnapshot> result =
+        ApiFutures.transform(
+                firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
+                snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
+                MoreExecutors.directExecutor());
+        span.endAtFuture(result);
+        return result;
+      } catch (Exception error) {
+        span.end();
+        throw error;
+      }
   }
 
   /**
@@ -159,6 +191,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       @Nonnull DocumentReference... documentReferences) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
+    txnTraceContext.makeCurrent();
     return firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
   }
 
@@ -175,6 +208,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
+    txnTraceContext.makeCurrent();
     return firestore.getAll(documentReferences, fieldMask, transactionId);
   }
 
@@ -188,6 +222,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
+    txnTraceContext.makeCurrent();
     return query.get(transactionId);
   }
 
@@ -201,6 +236,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
+    txnTraceContext.makeCurrent();
     return query.get(transactionId);
   }
 }

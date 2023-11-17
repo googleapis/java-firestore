@@ -51,13 +51,17 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_RUN_QUERY = "RunQuery";
   static final String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
   static final String SPAN_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
-  static final String SPAN_NAME_BEGINTRANSACTION = "BeginTransaction";
-  static final String SPAN_NAME_COMMIT = "Commit";
-  static final String SPAN_NAME_ROLLBACK = "Rollback";
+  static final String SPAN_NAME_TRANSACTION_BEGIN = "BeginTransaction";
+  static final String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
+  static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
+  static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
+
+  // TODO. WriteBatch.commit.
+  static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
+  static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   static final String SPAN_NAME_PARTITIONQUERY = "partitionQuery";
-  static final String SPAN_NAME_LISTEN = "Listen";
+  // For BulkWriter.
   static final String SPAN_NAME_BATCHWRITE = "BatchWrite";
-  static final String SPAN_NAME_WRITE = "Write";
 
 
   /** Sampling rate of 10% is chosen for traces by default. */
@@ -82,7 +86,11 @@ public interface OpenTelemetryUtil {
     Span addEvent(String name);
 
     /** Adds the given event with the given attributes to this span. */
+    // TODO: Can we avoid using the Attributes object (is there any overhead)?
     Span addEvent(String name, Attributes attributes);
+
+    /** Adds the given attribute to this span */
+    Span setAttribute(String key, int value);
 
     Scope makeCurrent();
   }
