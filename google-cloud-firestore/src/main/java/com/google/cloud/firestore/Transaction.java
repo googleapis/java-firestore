@@ -175,7 +175,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         span.endAtFuture(result);
         return result;
       } catch (Exception error) {
-        span.end();
+        span.end(error);
         throw error;
       }
   }
@@ -192,7 +192,16 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     txnTraceContext.makeCurrent();
-    return firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<List<DocumentSnapshot>> result = firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -209,7 +218,16 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     txnTraceContext.makeCurrent();
-    return firestore.getAll(documentReferences, fieldMask, transactionId);
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, true);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<List<DocumentSnapshot>> result = firestore.getAll(documentReferences, fieldMask, transactionId);
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
