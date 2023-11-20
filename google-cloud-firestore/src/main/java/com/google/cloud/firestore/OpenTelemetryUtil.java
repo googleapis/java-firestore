@@ -56,8 +56,6 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
   static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
-
-  // TODO. WriteBatch.commit.
   static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
   static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   static final String SPAN_NAME_PARTITIONQUERY = "partitionQuery";
