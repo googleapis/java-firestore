@@ -58,7 +58,7 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
   static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
   static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
-  static final String SPAN_NAME_PARTITIONQUERY = "partitionQuery";
+  static final String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   // For BulkWriter.
   static final String SPAN_NAME_BATCHWRITE = "BatchWrite";
 
