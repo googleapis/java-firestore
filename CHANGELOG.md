@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.15.6](https://github.com/googleapis/java-firestore/compare/v3.15.5...v3.15.6) (2023-11-22)
+
+
+### Dependencies
+
+* Update beam.version to v2.52.0 ([#1480](https://github.com/googleapis/java-firestore/issues/1480)) ([45e33f7](https://github.com/googleapis/java-firestore/commit/45e33f771e012c2ad889466191de03375b7a1e83))
+* Update dependency org.apache.commons:commons-lang3 to v3.14.0 ([#1482](https://github.com/googleapis/java-firestore/issues/1482)) ([3ef71f8](https://github.com/googleapis/java-firestore/commit/3ef71f8da4c07a5e9ef3a44e3f30290d20382c10))
+
 ## [3.15.5](https://github.com/googleapis/java-firestore/compare/v3.15.4...v3.15.5) (2023-11-14)
 
 
