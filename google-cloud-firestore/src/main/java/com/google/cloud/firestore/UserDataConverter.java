@@ -244,14 +244,10 @@ class UserDataConverter {
         return v.getStringValue();
       case LIST_VALUE:
         return Lists.transform(
-                v.getListValue().getValuesList(),
-                UserDataConverter::decodeGoogleProtobufValue
-        );
+            v.getListValue().getValuesList(), UserDataConverter::decodeGoogleProtobufValue);
       case STRUCT_VALUE:
         return Maps.transformValues(
-                v.getStructValue().getFieldsMap(),
-                UserDataConverter::decodeGoogleProtobufValue
-        );
+            v.getStructValue().getFieldsMap(), UserDataConverter::decodeGoogleProtobufValue);
       default:
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", v.getKindCase().getNumber()));
@@ -263,8 +259,6 @@ class UserDataConverter {
       return Collections.emptyMap();
     }
     return Maps.transformValues(
-            struct.getFieldsMap(),
-            UserDataConverter::decodeGoogleProtobufValue
-    );
+        struct.getFieldsMap(), UserDataConverter::decodeGoogleProtobufValue);
   }
 }
