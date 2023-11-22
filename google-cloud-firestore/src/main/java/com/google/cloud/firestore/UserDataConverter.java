@@ -18,12 +18,15 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -240,19 +243,15 @@ class UserDataConverter {
       case STRING_VALUE:
         return v.getStringValue();
       case LIST_VALUE:
-        List<Object> list = new ArrayList<>();
-        List<com.google.protobuf.Value> lv = v.getListValue().getValuesList();
-        for (com.google.protobuf.Value iv : lv) {
-          list.add(decodeGoogleProtobufValue(iv));
-        }
-        return list;
+        return Lists.transform(
+                v.getListValue().getValuesList(),
+                UserDataConverter::decodeGoogleProtobufValue
+        );
       case STRUCT_VALUE:
-        Map<String, Object> outputMap = new HashMap<>();
-        Map<String, com.google.protobuf.Value> inputMap = v.getStructValue().getFieldsMap();
-        for (Map.Entry<String, com.google.protobuf.Value> entry : inputMap.entrySet()) {
-          outputMap.put(entry.getKey(), decodeGoogleProtobufValue(entry.getValue()));
-        }
-        return outputMap;
+        return Maps.transformValues(
+                v.getStructValue().getFieldsMap(),
+                UserDataConverter::decodeGoogleProtobufValue
+        );
       default:
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", v.getKindCase().getNumber()));
@@ -260,13 +259,12 @@ class UserDataConverter {
   }
 
   static Map<String, Object> decodeStruct(@Nullable Struct struct) {
-    Map<String, Object> result = new HashMap<>();
     if (struct == null || struct.getFieldsCount() == 0) {
-      return result;
+      return Collections.emptyMap();
     }
-    for (Map.Entry<String, com.google.protobuf.Value> entry : struct.getFieldsMap().entrySet()) {
-      result.put(entry.getKey(), decodeGoogleProtobufValue(entry.getValue()));
-    }
-    return result;
+    return Maps.transformValues(
+            struct.getFieldsMap(),
+            UserDataConverter::decodeGoogleProtobufValue
+    );
   }
 }

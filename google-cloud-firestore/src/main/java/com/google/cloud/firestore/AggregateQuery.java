@@ -26,8 +26,10 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.v1.FirestoreSettings;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.QueryMode;
+import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
@@ -40,6 +42,7 @@ import com.google.protobuf.Struct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -81,11 +84,11 @@ public class AggregateQuery {
 
   /**
    * Performs the planning stage of this query, without actually executing the query. Returns an
-   * ApiFuture that will be resolved with the result of the query planning information.
+   * ApiFuture that will be resolved with the query plan.
    *
    * <p>Note: the information included in the output of this function is subject to change.
    *
-   * @return An ApiFuture that will be resolved with the results of the query planning information.
+   * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
   public ApiFuture<Map<String, Object>> explain() {
@@ -130,9 +133,9 @@ public class AggregateQuery {
   @Nonnull
   private Map<String, Value> convertServerAggregateFieldsMapToClientAggregateFieldsMap(
       @Nonnull Map<String, Value> data) {
-    Map<String, Value> mappedData = new HashMap<>();
-    data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
-    return mappedData;
+    ImmutableMap.Builder<String, Value> builder = ImmutableMap.builder();
+    data.forEach((serverAlias, value) -> builder.put(aliasMap.get(serverAlias), value));
+    return builder.build();
   }
 
   private final class AggregateQueryResponseDeliverer {
@@ -238,7 +241,7 @@ public class AggregateQuery {
     ResponseObserver<RunAggregationQueryResponse> observer =
         new ResponseObserver<RunAggregationQueryResponse>() {
           Timestamp readTime;
-          Map<String, Value> aggregateFieldsMap = new HashMap<>();
+          Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
           Struct planStruct = Struct.getDefaultInstance();
           Struct statsStruct = Struct.getDefaultInstance();
 
@@ -258,10 +261,11 @@ public class AggregateQuery {
             }
 
             if (response.hasStats()) {
-              if (response.getStats().hasQueryPlan()) {
+              ResultSetStats stats = response.getStats();
+              if (stats.hasQueryPlan()) {
                 planStruct = response.getStats().getQueryPlan().getPlanInfo();
               }
-              if (response.getStats().hasQueryStats()) {
+              if (stats.hasQueryStats()) {
                 statsStruct = response.getStats().getQueryStats();
               }
             }

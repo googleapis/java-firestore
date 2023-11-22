@@ -867,7 +867,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testQueryPlan() throws ExecutionException, InterruptedException, TimeoutException {
+  public void testQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", asList(0)),
@@ -884,7 +884,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testQueryProfile() throws ExecutionException, InterruptedException, TimeoutException {
+  public void testQueryProfile() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", asList(0)),
@@ -904,8 +904,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testAggregateQueryPlan()
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public void testAggregateQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", asList(0)),
@@ -922,8 +921,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testAggregateQueryProfile()
-      throws ExecutionException, InterruptedException, TimeoutException {
+  public void testAggregateQueryProfile() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", asList(0)),

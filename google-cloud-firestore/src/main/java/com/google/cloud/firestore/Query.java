@@ -48,6 +48,7 @@ import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.QueryMode;
+import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
@@ -1797,10 +1798,11 @@ public class Query {
             }
 
             if (response.hasStats()) {
-              if (response.getStats().hasQueryPlan()) {
+              ResultSetStats stats = response.getStats();
+              if (stats.hasQueryPlan()) {
                 planStruct = response.getStats().getQueryPlan().getPlanInfo();
               }
-              if (response.getStats().hasQueryStats()) {
+              if (stats.hasQueryStats()) {
                 statsStruct = response.getStats().getQueryStats();
               }
             }
@@ -1809,8 +1811,7 @@ public class Query {
           @Override
           public void onError(Throwable throwable) {
             // When regular queries fail, the SDK uses the last received document as cursor and
-            // tries to
-            // resume querying after that cursor if the error is considered retryable.
+            // tries to resume querying after that cursor if the error is considered retryable.
             // We should not do this when profiling a query.
             result.setException(throwable);
           }
@@ -1832,11 +1833,11 @@ public class Query {
 
   /**
    * Performs the planning stage of this query, without actually executing the query. Returns an
-   * ApiFuture that will be resolved with the result of the query planning information.
+   * ApiFuture that will be resolved with the query plan.
    *
    * <p>Note: the information included in the output of this function is subject to change.
    *
-   * @return An ApiFuture that will be resolved with the results of the query planning information.
+   * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
   public ApiFuture<Map<String, Object>> explain() {
