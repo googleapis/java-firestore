@@ -17,27 +17,20 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

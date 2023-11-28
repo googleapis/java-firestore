@@ -21,6 +21,7 @@ import com.google.api.core.ApiFuture;
 import io.opentelemetry.api.common.Attributes;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 
 import javax.annotation.Nonnull;
@@ -59,8 +60,7 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
   static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   static final String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
-  // For BulkWriter.
-  static final String SPAN_NAME_BATCHWRITE = "BatchWrite";
+  static final String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
 
 
   /** Sampling rate of 10% is chosen for traces by default. */
@@ -103,6 +103,9 @@ public interface OpenTelemetryUtil {
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
   @Nullable
   Span startSpan(String spanName, boolean addSettingsAttributes);
+
+  @Nullable
+  Span startSpan(String spanName, Context parent);
 
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
   @Nullable

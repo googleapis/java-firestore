@@ -21,6 +21,7 @@ import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 
 import javax.annotation.Nullable;
@@ -66,6 +67,12 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
+    return new Span();
+  }
+
+  @Nullable
+  @Override
+  public OpenTelemetryUtil.Span startSpan(String spanName, Context parent) {
     return new Span();
   }
 

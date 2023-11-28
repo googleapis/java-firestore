@@ -286,6 +286,13 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     return new Span(span, spanName);
   }
 
+  @Nullable
+  @Override
+  public OpenTelemetryUtil.Span startSpan(String spanName, Context parent) {
+    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).setParent(parent).startSpan();
+    return new Span(span, spanName);
+  }
+
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
   @Override
   @Nullable

@@ -66,6 +66,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   private final TransactionOptions transactionOptions;
   private ByteString transactionId;
+
+  // TODO(ehsan): storing Context could have overhead? Can we store the OpenTelemetryUtilContext instead?
   @Nullable
   private Context txnTraceContext;
 
