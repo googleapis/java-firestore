@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_GET_DOCUMENTS;
+
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.NanoClock;
@@ -36,6 +38,7 @@ import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
+import io.opentelemetry.api.common.Attributes;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +47,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import io.opentelemetry.api.common.Attributes;
 import org.threeten.bp.Duration;
-
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_GET_DOCUMENTS;
 
 /**
  * Main implementation of the Firestore client. This is the entry point for all Firestore
@@ -237,8 +236,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onStart(StreamController streamController) {
-            openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
-                    Attributes.builder().put("Number of documents", documentReferences.length).build());
+            openTelemetryUtil
+                .currentSpan()
+                .addEvent(
+                    SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    Attributes.builder()
+                        .put("Number of documents", documentReferences.length)
+                        .build());
           }
 
           @Override
@@ -248,9 +252,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
             numResponses++;
             if (numResponses == 1) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
             } else if (numResponses % 100 == 0) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS  + ": Received 100 responses");
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");
             }
 
             switch (response.getResultCase()) {
@@ -289,9 +297,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onComplete() {
-            if(!hasCompleted) {
+            if (!hasCompleted) {
               hasCompleted = true;
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": Completed with " + String.valueOf(numResponses) + " responses.",
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(
+                      SPAN_NAME_BATCH_GET_DOCUMENTS
+                          + ": Completed with "
+                          + String.valueOf(numResponses)
+                          + " responses.",
                       Attributes.builder().put("Number of responses", numResponses).build());
               apiStreamObserver.onCompleted();
             }

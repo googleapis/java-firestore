@@ -24,17 +24,12 @@ import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.base.Throwables;
-import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
-import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -44,8 +39,6 @@ import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -103,24 +96,24 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     public <T> void endAtFuture(ApiFuture<T> futureValue) {
       Context asyncContext = Context.current();
       ApiFutures.addCallback(
-              futureValue,
-              new ApiFutureCallback<T>() {
-                @Override
-                public void onFailure(Throwable t) {
-                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-                    span.addEvent(spanName + " failed.");
-                    end(t);
-                  }
-                }
+          futureValue,
+          new ApiFutureCallback<T>() {
+            @Override
+            public void onFailure(Throwable t) {
+              try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                span.addEvent(spanName + " failed.");
+                end(t);
+              }
+            }
 
-                @Override
-                public void onSuccess(T result) {
-                  try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
-                    span.addEvent(spanName + " succeeded.");
-                    end();
-                  }
-                }
-              });
+            @Override
+            public void onSuccess(T result) {
+              try (io.opentelemetry.context.Scope scope = asyncContext.makeCurrent()) {
+                span.addEvent(spanName + " succeeded.");
+                end();
+              }
+            }
+          });
     }
 
     /** Adds the given event to this span. */
@@ -171,11 +164,11 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
         return Double.parseDouble(traceSamplingEnvVar);
       } catch (NumberFormatException error) {
         Logger.getLogger(OpenTelemetryUtil.class.getName())
-                .log(
-                        Level.WARNING,
-                        String.format(
-                                "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
-                                OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
+            .log(
+                Level.WARNING,
+                String.format(
+                    "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
+                    OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
       }
     }
 
@@ -202,12 +195,16 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
                       .addSpanProcessor(loggingSpanProcessor)
                       .build())
               .build();
-      Logger.getLogger("Firestore OpenTelemetry").log(Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");
-      Logger.getLogger("Firestore OpenTelemetry").log(Level.INFO, String.format("Trace sampling rate = %f", getTraceSamplingRate()));
+      Logger.getLogger("Firestore OpenTelemetry")
+          .log(
+              Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");
+      Logger.getLogger("Firestore OpenTelemetry")
+          .log(Level.INFO, String.format("Trace sampling rate = %f", getTraceSamplingRate()));
     } catch (Exception e) {
       // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
       // not allowed.
-      Logger.getLogger("Firestore OpenTelemetry").log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
+      Logger.getLogger("Firestore OpenTelemetry")
+          .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
     }
   }
 
@@ -270,7 +267,8 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Override
   @Nullable
   public Span startSpan(String spanName, boolean addSettingsAttributes) {
-    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
+    io.opentelemetry.api.trace.Span span =
+        getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).startSpan();
     if (addSettingsAttributes) {
       this.addSettingsAttributesToCurrentSpan();
     }
@@ -280,7 +278,12 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Nullable
   @Override
   public OpenTelemetryUtil.Span startSpan(String spanName, Context parent) {
-    io.opentelemetry.api.trace.Span span = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER).setParent(parent).startSpan();
+    io.opentelemetry.api.trace.Span span =
+        getTracer()
+            .spanBuilder(spanName)
+            .setSpanKind(SpanKind.PRODUCER)
+            .setParent(parent)
+            .startSpan();
     return new Span(span, spanName);
   }
 

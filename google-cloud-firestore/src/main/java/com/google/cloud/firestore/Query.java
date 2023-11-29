@@ -58,7 +58,7 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
 import io.grpc.Status;
-
+import io.opentelemetry.api.common.Attributes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,8 +71,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import io.opentelemetry.api.common.Attributes;
 import org.threeten.bp.Duration;
 
 /**
@@ -1465,8 +1463,7 @@ public class Query {
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
-        /* isRetryRequestWithCursor= */ false
-    );
+        /* isRetryRequestWithCursor= */ false);
   }
 
   /**
@@ -1616,12 +1613,14 @@ public class Query {
       request.setReadTime(readTime.toProto());
     }
 
-    openTelemetryUtil.currentSpan().addEvent(
-            SPAN_NAME_RUN_QUERY, Attributes
-                    .builder()
-                    .put("transactional", transactionId != null)
-                    .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
-                    .build());
+    openTelemetryUtil
+        .currentSpan()
+        .addEvent(
+            SPAN_NAME_RUN_QUERY,
+            Attributes.builder()
+                .put("transactional", transactionId != null)
+                .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
+                .build());
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
@@ -1647,7 +1646,9 @@ public class Query {
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
-                openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Received 100 documents");
+                openTelemetryUtil
+                    .currentSpan()
+                    .addEvent(SPAN_NAME_RUN_QUERY + ": Received 100 documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -1662,7 +1663,9 @@ public class Query {
             }
 
             if (response.getDone()) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -1671,7 +1674,10 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Retryable Error",
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(
+                      SPAN_NAME_RUN_QUERY + ": Retryable Error",
                       Attributes.builder().put("error.message", throwable.getMessage()).build());
 
               Query.this
@@ -1684,7 +1690,10 @@ public class Query {
                       /* isRetryRequestWithCursor= */ true);
 
             } else {
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Error",
+              openTelemetryUtil
+                  .currentSpan()
+                  .addEvent(
+                      SPAN_NAME_RUN_QUERY + ": Error",
                       Attributes.builder().put("error.message", throwable.getMessage()).build());
               documentObserver.onError(throwable);
             }
@@ -1694,7 +1703,11 @@ public class Query {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
-            openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": Completed", Attributes.builder().put("Number of Documents", numDocuments).build());
+            openTelemetryUtil
+                .currentSpan()
+                .addEvent(
+                    SPAN_NAME_RUN_QUERY + ": Completed",
+                    Attributes.builder().put("Number of Documents", numDocuments).build());
             documentObserver.onCompleted(readTime);
           }
 
@@ -1750,45 +1763,45 @@ public class Query {
 
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
     OpenTelemetryUtil openTelemetryUtil = getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(
-            transactionId == null ?
-                    OpenTelemetryUtil.SPAN_NAME_QUERY_GET :
-                    OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY,
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            transactionId == null
+                ? OpenTelemetryUtil.SPAN_NAME_QUERY_GET
+                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY,
             true);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(
-              new QuerySnapshotObserver() {
-                final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          new QuerySnapshotObserver() {
+            final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
-                @Override
-                public void onNext(QueryDocumentSnapshot documentSnapshot) {
-                  documentSnapshots.add(documentSnapshot);
-                }
+            @Override
+            public void onNext(QueryDocumentSnapshot documentSnapshot) {
+              documentSnapshots.add(documentSnapshot);
+            }
 
-                @Override
-                public void onError(Throwable throwable) {
-                  result.setException(throwable);
-                }
+            @Override
+            public void onError(Throwable throwable) {
+              result.setException(throwable);
+            }
 
-                @Override
-                public void onCompleted() {
-                  // The results for limitToLast queries need to be flipped since we reversed the
-                  // ordering constraints before sending the query to the backend.
-                  List<QueryDocumentSnapshot> resultView =
-                          LimitType.Last.equals(Query.this.options.getLimitType())
-                                  ? reverse(documentSnapshots)
-                                  : documentSnapshots;
-                  QuerySnapshot querySnapshot =
-                          QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
-                  result.set(querySnapshot);
-                }
-              },
-              /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
-              transactionId,
-              /* readTime= */ null,
-              /* isRetryRequestWithCursor= */ false
-              );
+            @Override
+            public void onCompleted() {
+              // The results for limitToLast queries need to be flipped since we reversed the
+              // ordering constraints before sending the query to the backend.
+              List<QueryDocumentSnapshot> resultView =
+                  LimitType.Last.equals(Query.this.options.getLimitType())
+                      ? reverse(documentSnapshots)
+                      : documentSnapshots;
+              QuerySnapshot querySnapshot =
+                  QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
+              result.set(querySnapshot);
+            }
+          },
+          /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+          transactionId,
+          /* readTime= */ null,
+          /* isRetryRequestWithCursor= */ false);
 
       span.endAtFuture(result);
       return result;

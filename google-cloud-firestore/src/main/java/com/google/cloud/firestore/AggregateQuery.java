@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
@@ -33,14 +35,10 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
-
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_QUERY;
 
 /** A query that calculates aggregations over an underlying query. */
 @InternalExtensionOnly
@@ -78,15 +76,16 @@ public class AggregateQuery {
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
     OpenTelemetryUtil openTelemetryUtil = query.getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(
-            transactionId == null ?
-                    OpenTelemetryUtil.SPAN_NAME_AGGREGATION_QUERY_GET:
-                    OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            transactionId == null
+                ? OpenTelemetryUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
             true);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
-              new AggregateQueryResponseDeliverer(
-                      transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+          new AggregateQueryResponseDeliverer(
+              transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
@@ -152,7 +151,10 @@ public class AggregateQuery {
     private int attempt;
     private FirestoreRpcContext rpcContext;
 
-    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer, int attempt, FirestoreRpcContext rpcContext) {
+    AggregateQueryResponseObserver(
+        AggregateQueryResponseDeliverer responseDeliverer,
+        int attempt,
+        FirestoreRpcContext rpcContext) {
       this.responseDeliverer = responseDeliverer;
       this.attempt = attempt;
       this.rpcContext = rpcContext;
@@ -161,7 +163,7 @@ public class AggregateQuery {
     Attributes getAttemptAttributes() {
       AttributesBuilder builder = Attributes.builder();
       builder.put("Retry Attempt", attempt > 0);
-      if(attempt > 0) {
+      if (attempt > 0) {
         builder.put("Attempt Number", attempt);
       }
       return builder.build();
@@ -169,13 +171,22 @@ public class AggregateQuery {
 
     @Override
     public void onStart(StreamController streamController) {
-      rpcContext.getFirestore().getOpenTelemetryUtil().currentSpan().addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.",getAttemptAttributes());
+      rpcContext
+          .getFirestore()
+          .getOpenTelemetryUtil()
+          .currentSpan()
+          .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
       this.streamController = streamController;
     }
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      rpcContext.getFirestore().getOpenTelemetryUtil().currentSpan().addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.",getAttemptAttributes());
+      rpcContext
+          .getFirestore()
+          .getOpenTelemetryUtil()
+          .currentSpan()
+          .addEvent(
+              SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();
 
@@ -204,17 +215,23 @@ public class AggregateQuery {
     @Override
     public void onError(Throwable throwable) {
       if (shouldRetry(throwable)) {
-        rpcContext.getFirestore().getOpenTelemetryUtil().currentSpan()
-                .addEvent(
-                        SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
-                        Attributes.builder().put("error.message", throwable.getMessage()).build());
+        rpcContext
+            .getFirestore()
+            .getOpenTelemetryUtil()
+            .currentSpan()
+            .addEvent(
+                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
+                Attributes.builder().put("error.message", throwable.getMessage()).build());
 
         runQuery(responseDeliverer, attempt + 1);
       } else {
-        rpcContext.getFirestore().getOpenTelemetryUtil().currentSpan()
-                .addEvent(
-                        SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
-                        Attributes.builder().put("error.message", throwable.getMessage()).build());
+        rpcContext
+            .getFirestore()
+            .getOpenTelemetryUtil()
+            .currentSpan()
+            .addEvent(
+                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
+                Attributes.builder().put("error.message", throwable.getMessage()).build());
         responseDeliverer.deliverError(throwable);
       }
     }

@@ -25,7 +25,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import io.grpc.Status;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

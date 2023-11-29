@@ -29,7 +29,6 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
-
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,9 +67,9 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   private final TransactionOptions transactionOptions;
   private ByteString transactionId;
 
-  // TODO(ehsan): storing Context could have overhead? Can we store the OpenTelemetryUtilContext instead?
-  @Nullable
-  private Context txnTraceContext;
+  // TODO(ehsan): storing Context could have overhead? Can we store the OpenTelemetryUtilContext
+  // instead?
+  @Nullable private Context txnTraceContext;
 
   Transaction(
       FirestoreImpl firestore,
@@ -93,13 +92,18 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
       beginTransaction.setDatabase(firestore.getDatabaseName());
 
-      if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType()) && transactionId != null) {
-        beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
+      if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
+          && transactionId != null) {
+        beginTransaction
+            .getOptionsBuilder()
+            .getReadWriteBuilder()
+            .setRetryTransaction(transactionId);
       } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
         final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
         if (transactionOptions.getReadTime() != null) {
@@ -109,10 +113,11 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       }
 
       ApiFuture<BeginTransactionResponse> transactionBeginFuture =
-              firestore.sendRequest(
-                      beginTransaction.build(), firestore.getClient().beginTransactionCallable());
+          firestore.sendRequest(
+              beginTransaction.build(), firestore.getClient().beginTransactionCallable());
 
-      ApiFuture<Void> result = ApiFutures.transform(
+      ApiFuture<Void> result =
+          ApiFutures.transform(
               transactionBeginFuture,
               beginTransactionResponse -> {
                 transactionId = beginTransactionResponse.getTransaction();
@@ -137,16 +142,20 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
       reqBuilder.setTransaction(transactionId);
       reqBuilder.setDatabase(firestore.getDatabaseName());
 
       ApiFuture<Empty> rollbackFuture =
-              firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
+          firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
 
-      ApiFuture<Void> result = ApiFutures.transform(rollbackFuture, rollbackResponse -> null, MoreExecutors.directExecutor());
+      ApiFuture<Void> result =
+          ApiFutures.transform(
+              rollbackFuture, rollbackResponse -> null, MoreExecutors.directExecutor());
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -166,19 +175,22 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
-      try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-        ApiFuture<DocumentSnapshot> result =
-        ApiFutures.transform(
-                firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
-                snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
-                MoreExecutors.directExecutor());
-        span.endAtFuture(result);
-        return result;
-      } catch (Exception error) {
-        span.end(error);
-        throw error;
-      }
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<DocumentSnapshot> result =
+          ApiFutures.transform(
+              firestore.getAll(
+                  new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
+              snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
+              MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**
@@ -193,9 +205,12 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-      ApiFuture<List<DocumentSnapshot>> result = firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<List<DocumentSnapshot>> result =
+          firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -218,9 +233,12 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-      ApiFuture<List<DocumentSnapshot>> result = firestore.getAll(documentReferences, fieldMask, transactionId);
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      ApiFuture<List<DocumentSnapshot>> result =
+          firestore.getAll(documentReferences, fieldMask, transactionId);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {

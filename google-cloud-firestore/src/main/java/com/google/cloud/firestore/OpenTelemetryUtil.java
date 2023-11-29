@@ -18,12 +18,11 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
-import io.opentelemetry.api.common.Attributes;
 import io.grpc.ManagedChannelBuilder;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -55,7 +54,8 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_TRANSACTION_RUN = "Transaction.Run";
   static final String SPAN_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
   static final String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
-  static final String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
+  static final String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY =
+      "Transaction.Get.AggregationQuery";
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
   static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
@@ -131,8 +131,8 @@ public interface OpenTelemetryUtil {
       createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().getEnabled();
     } else {
       createEnabledInstance =
-              enableOpenTelemetryEnvVar.toLowerCase().equals("true") ||
-              enableOpenTelemetryEnvVar.toLowerCase().equals("on");
+          enableOpenTelemetryEnvVar.toLowerCase().equals("true")
+              || enableOpenTelemetryEnvVar.toLowerCase().equals("on");
     }
 
     if (createEnabledInstance) {

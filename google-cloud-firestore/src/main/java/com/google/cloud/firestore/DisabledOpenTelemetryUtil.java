@@ -23,7 +23,6 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
-
 import javax.annotation.Nullable;
 
 public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {

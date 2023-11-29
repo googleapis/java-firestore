@@ -28,8 +28,6 @@ import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
-import io.opentelemetry.api.common.Attributes;
-
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -87,19 +85,21 @@ class TransactionRunner<T> {
   ApiFuture<T> run() {
     // TODO(ehsan): Add transaction options to trace attributes.
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN, true);
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN, true);
     span.setAttribute("attemptsRemaining", attemptsRemaining);
-    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
       --attemptsRemaining;
 
-      ApiFuture<T> result = ApiFutures.catchingAsync(
-          ApiFutures.transformAsync(
-              maybeRollback(), new RollbackCallback(), MoreExecutors.directExecutor()),
-          Throwable.class,
-          new RestartTransactionCallback(),
-          MoreExecutors.directExecutor());
+      ApiFuture<T> result =
+          ApiFutures.catchingAsync(
+              ApiFutures.transformAsync(
+                  maybeRollback(), new RollbackCallback(), MoreExecutors.directExecutor()),
+              Throwable.class,
+              new RestartTransactionCallback(),
+              MoreExecutors.directExecutor());
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {

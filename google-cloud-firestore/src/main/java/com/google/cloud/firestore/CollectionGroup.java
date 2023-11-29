@@ -27,9 +27,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
-import io.opencensus.common.Scope;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,21 +103,24 @@ public class CollectionGroup extends Query {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
-      OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_PARTITION_QUERY, true);
-      try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
-        ApiFuture<List<QueryPartition>> result = ApiFutures.transform(
-            rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
-            response -> {
-              final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
-              consumePartitions(
-                  response,
-                  queryPartition -> {
-                    partitions.add(queryPartition);
-                    return null;
-                  });
-              return partitions.build();
-            },
-            MoreExecutors.directExecutor());
+      OpenTelemetryUtil.Span span =
+          openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_PARTITION_QUERY, true);
+      try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+        ApiFuture<List<QueryPartition>> result =
+            ApiFutures.transform(
+                rpcContext.sendRequest(
+                    request, rpcContext.getClient().partitionQueryPagedCallable()),
+                response -> {
+                  final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
+                  consumePartitions(
+                      response,
+                      queryPartition -> {
+                        partitions.add(queryPartition);
+                        return null;
+                      });
+                  return partitions.build();
+                },
+                MoreExecutors.directExecutor());
         span.endAtFuture(result);
         return result;
       } catch (ApiException exception) {

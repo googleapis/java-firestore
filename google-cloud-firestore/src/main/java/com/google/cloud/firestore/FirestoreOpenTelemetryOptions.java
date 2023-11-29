@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
   /** Sampling rate of 10% is chosen for traces by default. */
-  //static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
+  // static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
   // TODO(ehsan): hack while i develop.
   static double DEFAULT_TRACE_SAMPLING_RATE = 1.0;
 
@@ -34,7 +34,7 @@ public class FirestoreOpenTelemetryOptions {
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.enabled = builder.enabled;
     this.sdk = builder.sdk;
-    if (builder.traceSamplingRate == null ) {
+    if (builder.traceSamplingRate == null) {
       this.traceSamplingRate = DEFAULT_TRACE_SAMPLING_RATE;
     } else {
       this.traceSamplingRate = builder.traceSamplingRate;
@@ -98,8 +98,8 @@ public class FirestoreOpenTelemetryOptions {
 
     /**
      * Sets the {@link OpenTelemetrySdk} to use with this Firestore client. In the absence of an
-     * OpenTelemetrySdk, the Firestore SDK will create an OpenTelemetrySdk instance which
-     * transmits telemetry information to Google Cloud.
+     * OpenTelemetrySdk, the Firestore SDK will create an OpenTelemetrySdk instance which transmits
+     * telemetry information to Google Cloud.
      *
      * @param sdk The OpenTelemetrySdk that can be used by this client.
      */

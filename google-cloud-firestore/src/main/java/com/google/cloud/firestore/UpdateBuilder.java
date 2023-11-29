@@ -16,6 +16,9 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_COMMIT;
+import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_TRANSACTION_COMMIT;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
@@ -28,14 +31,10 @@ import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
 import io.opencensus.trace.Tracing;
 import io.opentelemetry.context.Scope;
-
 import java.util.*;
 import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_COMMIT;
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_TRANSACTION_COMMIT;
 
 /**
  * Abstract class that collects and bundles all write operations for {@link Transaction} and {@link
@@ -611,20 +610,27 @@ public abstract class UpdateBuilder<T> {
     committed = true;
 
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT, false);
+    OpenTelemetryUtil.Span span =
+        openTelemetryUtil.startSpan(
+            transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT, false);
     span.setAttribute("Number of documents", writes.size());
-    try(Scope ignored = span.makeCurrent()) {
-      ApiFuture<CommitResponse> response = firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+    try (Scope ignored = span.makeCurrent()) {
+      ApiFuture<CommitResponse> response =
+          firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
 
-      ApiFuture<List<WriteResult>> returnValue = ApiFutures.transform(
-              response, commitResponse -> {
-                    List<com.google.firestore.v1.WriteResult> writeResults = commitResponse.getWriteResultsList();
-                    List<WriteResult> result = new ArrayList<>();
-                    for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-                      result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-                    }
-                    return result;
-                }, MoreExecutors.directExecutor());
+      ApiFuture<List<WriteResult>> returnValue =
+          ApiFutures.transform(
+              response,
+              commitResponse -> {
+                List<com.google.firestore.v1.WriteResult> writeResults =
+                    commitResponse.getWriteResultsList();
+                List<WriteResult> result = new ArrayList<>();
+                for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+                  result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+                }
+                return result;
+              },
+              MoreExecutors.directExecutor());
       span.endAtFuture(returnValue);
       return returnValue;
     } catch (Exception error) {

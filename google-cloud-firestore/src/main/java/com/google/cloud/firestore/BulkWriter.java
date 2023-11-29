@@ -243,7 +243,6 @@ public final class BulkWriter implements AutoCloseable {
     this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
     this.traceContext = Context.current();
 
-
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
           new RateLimiter(
@@ -909,20 +908,22 @@ public final class BulkWriter implements AutoCloseable {
     // appropriate timeout.
     boolean underRateLimit = rateLimiter.tryMakeRequest(batch.getMutationsSize());
     if (underRateLimit) {
-      OpenTelemetryUtil.Span span = firestore.getOpenTelemetryUtil()
+      OpenTelemetryUtil.Span span =
+          firestore
+              .getOpenTelemetryUtil()
               .startSpan(OpenTelemetryUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
               .setAttribute("Number of documents", batch.getWrites().size());
       try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
         result.addListener(
-                        () -> {
-                          if (flush) {
-                            synchronized (lock) {
-                              scheduleCurrentBatchLocked(/* flush= */ true);
-                            }
-                          }
-                        },
-                        bulkWriterExecutor);
+            () -> {
+              if (flush) {
+                synchronized (lock) {
+                  scheduleCurrentBatchLocked(/* flush= */ true);
+                }
+              }
+            },
+            bulkWriterExecutor);
         span.endAtFuture(result);
       } catch (Exception error) {
         span.end(error);
