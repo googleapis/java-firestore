@@ -21,18 +21,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
-  private final Boolean enabled;
+  /** Sampling rate of 10% is chosen for traces by default. */
+  //static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
+  // TODO(ehsan): hack while i develop.
+  static double DEFAULT_TRACE_SAMPLING_RATE = 1.0;
+
+  private final boolean enabled;
   @Nullable private final OpenTelemetrySdk sdk;
 
-  private final Double traceSamplingRate;
+  private final double traceSamplingRate;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.enabled = builder.enabled;
     this.sdk = builder.sdk;
-    this.traceSamplingRate = builder.traceSamplingRate;
+    if (builder.traceSamplingRate == null ) {
+      this.traceSamplingRate = DEFAULT_TRACE_SAMPLING_RATE;
+    } else {
+      this.traceSamplingRate = builder.traceSamplingRate;
+    }
   }
 
-  public Boolean getEnabled() {
+  public boolean getEnabled() {
     return enabled;
   }
 
@@ -40,7 +49,7 @@ public class FirestoreOpenTelemetryOptions {
     return sdk;
   }
 
-  public Double getTraceSamplingRate() {
+  public double getTraceSamplingRate() {
     return traceSamplingRate;
   }
 
@@ -55,7 +64,7 @@ public class FirestoreOpenTelemetryOptions {
   }
 
   public static class Builder {
-    private Boolean enabled;
+    private boolean enabled;
     @Nullable private OpenTelemetrySdk sdk;
     private Double traceSamplingRate;
 
@@ -89,8 +98,8 @@ public class FirestoreOpenTelemetryOptions {
 
     /**
      * Sets the {@link OpenTelemetrySdk} to use with this Firestore client. In the absence of an
-     * OpenTelemetrySdk, the Firestore SDK will create and globally register an OpenTelemetrySdk
-     * instance which transmits telemetry information to Google Cloud.
+     * OpenTelemetrySdk, the Firestore SDK will create an OpenTelemetrySdk instance which
+     * transmits telemetry information to Google Cloud.
      *
      * @param sdk The OpenTelemetrySdk that can be used by this client.
      */

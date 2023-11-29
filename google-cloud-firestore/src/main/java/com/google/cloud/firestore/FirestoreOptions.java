@@ -120,6 +120,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return openTelemetryUtil;
   }
 
+  @Nonnull
   public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
     return openTelemetryOptions;
   }
@@ -229,6 +230,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         } catch (IOException e) {
           throw new RuntimeException("Failed to obtain credentials", e);
         }
+      }
+
+      if (this.openTelemetryOptions == null) {
+        this.setOpenTelemetryOptions(FirestoreOpenTelemetryOptions.newBuilder().build());
       }
 
       // Override credentials and channel provider if we are using the emulator.

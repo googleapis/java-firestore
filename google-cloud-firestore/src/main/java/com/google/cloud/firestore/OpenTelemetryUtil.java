@@ -64,10 +64,6 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   static final String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
 
-
-  /** Sampling rate of 10% is chosen for traces by default. */
-  double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
-
   interface Span {
     /** Ends this span. */
     void end();
@@ -128,28 +124,15 @@ public interface OpenTelemetryUtil {
    * @return An instance of the OpenTelemetryUtil class.
    */
   static OpenTelemetryUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    // The environment variable can override options to enable/disable telemetry collection.
     boolean createEnabledInstance;
-
-    FirestoreOpenTelemetryOptions openTelemetryOptions = firestoreOptions.getOpenTelemetryOptions();
-
-    if (openTelemetryOptions == null) {
-      return new DisabledOpenTelemetryUtil();
-    }
-
-    Boolean enabled = openTelemetryOptions.getEnabled();
-    if (enabled == null) {
-      // The caller did not specify whether telemetry collection should be enabled via code.
-      // In such cases, we allow enabling/disabling the feature via an environment variable.
-      String enableOpenTelemetryEnvVar = System.getenv(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME);
-      if (enableOpenTelemetryEnvVar != null
-          && (enableOpenTelemetryEnvVar.toLowerCase().equals("true")
-              || enableOpenTelemetryEnvVar.toLowerCase().equals("on"))) {
-        createEnabledInstance = true;
-      } else {
-        createEnabledInstance = false;
-      }
+    String enableOpenTelemetryEnvVar = System.getenv(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME);
+    if (enableOpenTelemetryEnvVar == null) {
+      createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().getEnabled();
     } else {
-      createEnabledInstance = enabled;
+      createEnabledInstance =
+              enableOpenTelemetryEnvVar.toLowerCase().equals("true") ||
+              enableOpenTelemetryEnvVar.toLowerCase().equals("on");
     }
 
     if (createEnabledInstance) {

@@ -164,36 +164,26 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   }
 
   public double getTraceSamplingRate() {
-    Double rate = firestoreOptions.getOpenTelemetryOptions().getTraceSamplingRate();
-    if (rate != null) {
-      return rate;
-    }
-
-    // If the public API for setting the trace sampling rate was not called,
-    // use the default sampling rate. The default sampling rate can be modified
-    // by an environment variable.
+    // The trace sampling rate environment variable can override the sampling rate in options.
     String traceSamplingEnvVar = System.getenv(OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME);
     if (traceSamplingEnvVar != null) {
       try {
         return Double.parseDouble(traceSamplingEnvVar);
       } catch (NumberFormatException error) {
         Logger.getLogger(OpenTelemetryUtil.class.getName())
-            .log(
-                Level.WARNING,
-                String.format(
-                    "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
-                    OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
+                .log(
+                        Level.WARNING,
+                        String.format(
+                                "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
+                                OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
       }
     }
 
-    return DEFAULT_TRACE_SAMPLING_RATE;
+    return firestoreOptions.getOpenTelemetryOptions().getTraceSamplingRate();
   }
 
   private void initializeOpenTelemetry() {
     try {
-      System.out.println("Initializing GlobalOpenTelemetry inside the SDK...");
-      System.out.println(String.format("Trace sampling rate = %f", getTraceSamplingRate()));
-
       // Include required service.name resource attribute on all spans and metrics
       Resource resource =
           Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, SERVICE).build());
@@ -211,12 +201,13 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
                       .addSpanProcessor(gcpSpanProcessor)
                       .addSpanProcessor(loggingSpanProcessor)
                       .build())
-              .buildAndRegisterGlobal();
+              .build();
+      Logger.getLogger("Firestore OpenTelemetry").log(Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");
+      Logger.getLogger("Firestore OpenTelemetry").log(Level.INFO, String.format("Trace sampling rate = %f", getTraceSamplingRate()));
     } catch (Exception e) {
       // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
       // not allowed.
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
+      Logger.getLogger("Firestore OpenTelemetry").log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
     }
   }
 
