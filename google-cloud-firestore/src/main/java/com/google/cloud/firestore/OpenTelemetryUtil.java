@@ -52,8 +52,10 @@ public interface OpenTelemetryUtil {
   static final String SPAN_NAME_RUN_QUERY = "RunQuery";
   static final String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
   static final String SPAN_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
-  static final String SPAN_NAME_TRANSACTION_BEGIN = "BeginTransaction";
+  static final String SPAN_NAME_TRANSACTION_RUN = "Transaction.Run";
+  static final String SPAN_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
   static final String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
+  static final String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
   static final String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
   static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";

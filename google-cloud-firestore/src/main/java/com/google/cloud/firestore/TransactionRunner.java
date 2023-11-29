@@ -48,7 +48,6 @@ import java.util.concurrent.TimeUnit;
  */
 class TransactionRunner<T> {
   private final Transaction.AsyncFunction<T> userCallback;
-  private final OpenTelemetryUtil.Span span;
   private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
   private final Executor userCallbackExecutor;
@@ -83,23 +82,30 @@ class TransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
-    this.span = firestore.getOpenTelemetryUtil().startSpan("Firestore.Transaction", true);
-    span.makeCurrent();
   }
 
   ApiFuture<T> run() {
-    this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
+    // TODO(ehsan): Add transaction options to trace attributes.
+    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
+    OpenTelemetryUtil.Span span = openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN, true);
+    span.setAttribute("attemptsRemaining", attemptsRemaining);
+    try(io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
-    --attemptsRemaining;
+      --attemptsRemaining;
 
-    span.addEvent("Start runTransaction", Attributes.builder().put("attemptsRemaining", attemptsRemaining).build());
-
-    return ApiFutures.catchingAsync(
-        ApiFutures.transformAsync(
-            maybeRollback(), new RollbackCallback(), MoreExecutors.directExecutor()),
-        Throwable.class,
-        new RestartTransactionCallback(),
-        MoreExecutors.directExecutor());
+      ApiFuture<T> result = ApiFutures.catchingAsync(
+          ApiFutures.transformAsync(
+              maybeRollback(), new RollbackCallback(), MoreExecutors.directExecutor()),
+          Throwable.class,
+          new RestartTransactionCallback(),
+          MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   private ApiFuture<Void> maybeRollback() {
@@ -201,7 +207,6 @@ class TransactionRunner<T> {
 
     @Override
     public T apply(List<WriteResult> input) {
-      span.end();
       return userFunctionResult;
     }
   }
@@ -211,27 +216,24 @@ class TransactionRunner<T> {
     public ApiFuture<T> apply(Throwable throwable) {
       if (!(throwable instanceof ApiException)) {
         // This is likely a failure in the user callback.
-        span.end(throwable);
         return rollbackAndReject(throwable);
       }
 
       ApiException apiException = (ApiException) throwable;
       if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
         if (attemptsRemaining > 0) {
-          span.addEvent("retrying");
+          firestore.getOpenTelemetryUtil().currentSpan().addEvent("Initiate transaction retry");
           return run();
         } else {
           final FirestoreException firestoreException =
               FirestoreException.forApiException(
                   apiException, "Transaction was cancelled because of too many retries.");
-          span.end(firestoreException);
           return rollbackAndReject(firestoreException);
         }
       } else {
         final FirestoreException firestoreException =
             FirestoreException.forApiException(
                 apiException, "Transaction failed with non-retryable error");
-        span.end(firestoreException);
         return rollbackAndReject(firestoreException);
       }
     }
@@ -274,7 +276,6 @@ class TransactionRunner<T> {
         failedTransaction.setException(throwable);
       }
 
-      span.end();
       return failedTransaction;
     }
   }
