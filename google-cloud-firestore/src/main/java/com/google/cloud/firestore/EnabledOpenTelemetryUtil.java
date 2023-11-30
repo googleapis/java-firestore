@@ -136,6 +136,12 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
 
     @Override
+    public OpenTelemetryUtil.Span setAttribute(String key, String value) {
+      span.setAttribute(key, value);
+      return this;
+    }
+
+    @Override
     public Scope makeCurrent() {
       return span.makeCurrent();
     }

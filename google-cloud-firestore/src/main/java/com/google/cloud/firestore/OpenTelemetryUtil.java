@@ -89,6 +89,9 @@ public interface OpenTelemetryUtil {
     /** Adds the given attribute to this span */
     Span setAttribute(String key, int value);
 
+    /** Adds the given attribute to this span */
+    Span setAttribute(String key, String value);
+
     Scope makeCurrent();
   }
 
