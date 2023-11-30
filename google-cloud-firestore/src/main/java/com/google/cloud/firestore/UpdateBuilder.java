@@ -29,7 +29,6 @@ import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.Tracing;
 import io.opentelemetry.context.Scope;
 import java.util.*;
 import java.util.Map.Entry;
@@ -136,7 +135,6 @@ public abstract class UpdateBuilder<T> {
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_CREATEDOCUMENT);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, fields, UserDataConverter.NO_DELETES);
@@ -582,7 +580,6 @@ public abstract class UpdateBuilder<T> {
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
     verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_DELETEDOCUMENT);
     Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
     if (!precondition.isEmpty()) {
