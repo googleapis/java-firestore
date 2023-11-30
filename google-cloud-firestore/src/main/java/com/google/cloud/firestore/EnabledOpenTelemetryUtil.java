@@ -27,6 +27,7 @@ import com.google.common.base.Throwables;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
@@ -39,6 +40,7 @@ import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -124,8 +126,27 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
 
     @Override
-    public OpenTelemetryUtil.Span addEvent(String name, Attributes attributes) {
-      span.addEvent(name, attributes);
+    public OpenTelemetryUtil.Span addEvent(String name, Map<String, Object> attributes) {
+      AttributesBuilder attributesBuilder = Attributes.builder();
+      attributes.forEach(
+          (key, value) -> {
+            if (value instanceof Integer) {
+              attributesBuilder.put(key, (int) value);
+            } else if (value instanceof Long) {
+              attributesBuilder.put(key, (long) value);
+            } else if (value instanceof Double) {
+              attributesBuilder.put(key, (double) value);
+            } else if (value instanceof Float) {
+              attributesBuilder.put(key, (float) value);
+            } else if (value instanceof Boolean) {
+              attributesBuilder.put(key, (boolean) value);
+            } else if (value instanceof String) {
+              attributesBuilder.put(key, (String) value);
+            } else {
+              // OpenTelemetry APIs do not support any other type. Ignore this attribute.
+            }
+          });
+      span.addEvent(name, attributesBuilder.build());
       return this;
     }
 

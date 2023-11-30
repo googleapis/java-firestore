@@ -27,14 +27,15 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.v1.FirestoreSettings;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.common.AttributesBuilder;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -159,11 +160,11 @@ public class AggregateQuery {
       this.rpcContext = rpcContext;
     }
 
-    Attributes getAttemptAttributes() {
-      AttributesBuilder builder = Attributes.builder();
-      builder.put("Retry Attempt", attempt > 0);
+    Map<String, Object> getAttemptAttributes() {
+      ImmutableMap.Builder<String, Object> builder =
+          new ImmutableMap.Builder<String, Object>().put("isRetryAttempt", attempt > 0);
       if (attempt > 0) {
-        builder.put("Attempt Number", attempt);
+        builder.put("attemptNumber", attempt);
       }
       return builder.build();
     }
@@ -220,7 +221,7 @@ public class AggregateQuery {
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
-                Attributes.builder().put("error.message", throwable.getMessage()).build());
+                Collections.singletonMap("error.message", throwable.getMessage()));
 
         runQuery(responseDeliverer, attempt + 1);
       } else {
@@ -230,7 +231,7 @@ public class AggregateQuery {
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
-                Attributes.builder().put("error.message", throwable.getMessage()).build());
+                Collections.singletonMap("error.message", throwable.getMessage()));
         responseDeliverer.deliverError(throwable);
       }
     }

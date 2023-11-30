@@ -22,9 +22,7 @@ import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
   /** Sampling rate of 10% is chosen for traces by default. */
-  // static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
-  // TODO(ehsan): hack while i develop.
-  static double DEFAULT_TRACE_SAMPLING_RATE = 1.0;
+  static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
 
   private final boolean enabled;
   @Nullable private final OpenTelemetrySdk sdk;

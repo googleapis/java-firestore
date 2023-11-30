@@ -19,10 +19,10 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -83,8 +83,7 @@ public interface OpenTelemetryUtil {
     Span addEvent(String name);
 
     /** Adds the given event with the given attributes to this span. */
-    // TODO: Can we avoid using the Attributes object (is there any overhead)?
-    Span addEvent(String name, Attributes attributes);
+    Span addEvent(String name, Map<String, Object> attributes);
 
     /** Adds the given attribute to this span */
     Span setAttribute(String key, int value);

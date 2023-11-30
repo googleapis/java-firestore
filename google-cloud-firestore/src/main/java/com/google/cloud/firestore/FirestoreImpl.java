@@ -38,13 +38,8 @@ import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
-import io.opentelemetry.api.common.Attributes;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -240,9 +235,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                 .currentSpan()
                 .addEvent(
                     SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
-                    Attributes.builder()
-                        .put("Number of documents", documentReferences.length)
-                        .build());
+                    Collections.singletonMap("numDocuments", documentReferences.length));
           }
 
           @Override
@@ -304,9 +297,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                   .addEvent(
                       SPAN_NAME_BATCH_GET_DOCUMENTS
                           + ": Completed with "
-                          + String.valueOf(numResponses)
+                          + numResponses
                           + " responses.",
-                      Attributes.builder().put("Number of responses", numResponses).build());
+                      Collections.singletonMap("numResponses", numResponses));
               apiStreamObserver.onCompleted();
             }
           }

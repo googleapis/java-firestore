@@ -42,6 +42,7 @@ import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
@@ -58,14 +59,7 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
 import io.grpc.Status;
-import io.opentelemetry.api.common.Attributes;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
@@ -1617,7 +1611,7 @@ public class Query {
         .currentSpan()
         .addEvent(
             SPAN_NAME_RUN_QUERY,
-            Attributes.builder()
+            new ImmutableMap.Builder<String, Object>()
                 .put("transactional", transactionId != null)
                 .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
                 .build());
@@ -1678,7 +1672,7 @@ public class Query {
                   .currentSpan()
                   .addEvent(
                       SPAN_NAME_RUN_QUERY + ": Retryable Error",
-                      Attributes.builder().put("error.message", throwable.getMessage()).build());
+                      Collections.singletonMap("error.message", throwable.getMessage()));
 
               Query.this
                   .startAfter(cursor)
@@ -1694,7 +1688,7 @@ public class Query {
                   .currentSpan()
                   .addEvent(
                       SPAN_NAME_RUN_QUERY + ": Error",
-                      Attributes.builder().put("error.message", throwable.getMessage()).build());
+                      Collections.singletonMap("error.message", throwable.getMessage()));
               documentObserver.onError(throwable);
             }
           }
@@ -1707,7 +1701,7 @@ public class Query {
                 .currentSpan()
                 .addEvent(
                     SPAN_NAME_RUN_QUERY + ": Completed",
-                    Attributes.builder().put("Number of Documents", numDocuments).build());
+                    Collections.singletonMap("numDocuments", numDocuments));
             documentObserver.onCompleted(readTime);
           }
 
