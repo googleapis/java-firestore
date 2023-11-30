@@ -520,7 +520,6 @@ public abstract class UpdateBuilder<T> {
       @Nonnull Precondition precondition) {
     verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_UPDATEDOCUMENT);
     Map<String, Object> deconstructedMap = expandObject(fields);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(

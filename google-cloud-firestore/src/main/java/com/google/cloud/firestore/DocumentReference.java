@@ -120,19 +120,10 @@ public class DocumentReference {
    * @return An ApiFuture with the first WriteResult.
    */
   private <T> ApiFuture<T> extractFirst(ApiFuture<List<T>> results) {
-    System.out.println("ExtractFirst started. Time=" + System.currentTimeMillis());
     return ApiFutures.transform(
-        results,
-        (results1) -> {
-          System.out.println(
-              "ApiFutures.transform inside ExtractFirst started. Time="
-                  + (System.currentTimeMillis()));
-          return results1.isEmpty() ? null : results1.get(0);
-        },
-        rpcContext.getClient().getExecutor() == null
-            ? MoreExecutors.directExecutor()
-            : rpcContext.getClient().getExecutor());
-    // MoreExecutors.directExecutor());
+            results,
+            results1 -> results1.isEmpty() ? null : results1.get(0),
+            MoreExecutors.directExecutor());
   }
 
   /**
@@ -150,7 +141,6 @@ public class DocumentReference {
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
-      System.out.println("ExtractFirst ended. Time=" + (System.currentTimeMillis()));
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
