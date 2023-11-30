@@ -318,7 +318,6 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   }
 
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
-  @Override
   @Nullable
   public Tracer getTracer() {
     return openTelemetrySdk.getTracer(LIBRARY_NAME);

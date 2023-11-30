@@ -107,10 +107,6 @@ public interface OpenTelemetryUtil {
   @Nullable
   Span startSpan(String spanName, Context parent);
 
-  /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
-  @Nullable
-  Tracer getTracer();
-
   /** Returns the current span. */
   @Nullable
   Span currentSpan();

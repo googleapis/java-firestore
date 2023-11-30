@@ -82,12 +82,6 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
   @Override
   @Nullable
-  public Tracer getTracer() {
-    return null;
-  }
-
-  @Override
-  @Nullable
   public OpenTelemetryUtil.Span currentSpan() {
     return new Span();
   }
