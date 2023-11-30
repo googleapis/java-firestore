@@ -65,7 +65,7 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
   @Override
   @Nullable
-  public Span startSpan(String spanName, boolean addSettingsAttributes) {
+  public Span startSpan(String spanName) {
     return new Span();
   }
 

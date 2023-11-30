@@ -36,33 +36,33 @@ import javax.annotation.Nullable;
 public interface OpenTelemetryUtil {
   String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
   String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
-  static final String SERVICE = "Firestore";
-  static final String LIBRARY_NAME = "com.google.cloud.firestore";
-  static final String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
-  static final String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
-  static final String SPAN_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
-  static final String SPAN_NAME_DOC_REF_DELETE = "DocumentReference.Delete";
-  static final String SPAN_NAME_DOC_REF_GET = "DocumentReference.Get";
-  static final String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
-  static final String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
-  static final String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
-  static final String SPAN_NAME_QUERY_GET = "Query.Get";
-  static final String SPAN_NAME_AGGREGATION_QUERY_GET = "AggregationQuery.Get";
-  static final String SPAN_NAME_RUN_QUERY = "RunQuery";
-  static final String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
-  static final String SPAN_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
-  static final String SPAN_NAME_TRANSACTION_RUN = "Transaction.Run";
-  static final String SPAN_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
-  static final String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
-  static final String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY =
-      "Transaction.Get.AggregationQuery";
-  static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
-  static final String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
-  static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
-  static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
-  static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
-  static final String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
-  static final String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
+  String SERVICE = "Firestore";
+  String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore";
+  String LIBRARY_NAME = "com.google.cloud.firestore";
+  String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
+  String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
+  String SPAN_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
+  String SPAN_NAME_DOC_REF_DELETE = "DocumentReference.Delete";
+  String SPAN_NAME_DOC_REF_GET = "DocumentReference.Get";
+  String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
+  String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
+  String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
+  String SPAN_NAME_QUERY_GET = "Query.Get";
+  String SPAN_NAME_AGGREGATION_QUERY_GET = "AggregationQuery.Get";
+  String SPAN_NAME_RUN_QUERY = "RunQuery";
+  String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
+  String SPAN_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
+  String SPAN_NAME_TRANSACTION_RUN = "Transaction.Run";
+  String SPAN_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
+  String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
+  String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
+  String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
+  String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
+  String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
+  String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
+  String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
+  String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
+  String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
 
   interface Span {
     /** Ends this span. */
@@ -100,7 +100,7 @@ public interface OpenTelemetryUtil {
 
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
   @Nullable
-  Span startSpan(String spanName, boolean addSettingsAttributes);
+  Span startSpan(String spanName);
 
   @Nullable
   Span startSpan(String spanName, Context parent);

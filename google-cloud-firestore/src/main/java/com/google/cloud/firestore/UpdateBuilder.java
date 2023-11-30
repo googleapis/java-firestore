@@ -608,7 +608,7 @@ public abstract class UpdateBuilder<T> {
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
         openTelemetryUtil.startSpan(
-            transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT, false);
+            transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT);
     span.setAttribute("Number of documents", writes.size());
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<CommitResponse> response =

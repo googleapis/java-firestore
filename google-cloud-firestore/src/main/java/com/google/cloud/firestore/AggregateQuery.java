@@ -80,8 +80,7 @@ public class AggregateQuery {
         openTelemetryUtil.startSpan(
             transactionId == null
                 ? OpenTelemetryUtil.SPAN_NAME_AGGREGATION_QUERY_GET
-                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
-            true);
+                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(

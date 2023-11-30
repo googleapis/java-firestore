@@ -104,7 +104,7 @@ public class CollectionGroup extends Query {
 
       OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
       OpenTelemetryUtil.Span span =
-          openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_PARTITION_QUERY, true);
+          openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_PARTITION_QUERY);
       try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
         ApiFuture<List<QueryPartition>> result =
             ApiFutures.transform(

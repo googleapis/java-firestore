@@ -129,7 +129,7 @@ public class CollectionReference extends Query {
   public Iterable<DocumentReference> listDocuments() {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS, true);
+        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
       request.setParent(options.getParentPath().toString());
@@ -189,7 +189,7 @@ public class CollectionReference extends Query {
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_ADD, true);
+        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_COL_REF_ADD);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();
       ApiFuture<WriteResult> createFuture = documentReference.create(fields);

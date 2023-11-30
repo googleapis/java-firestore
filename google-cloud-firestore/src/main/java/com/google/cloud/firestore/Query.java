@@ -1767,8 +1767,7 @@ public class Query {
         openTelemetryUtil.startSpan(
             transactionId == null
                 ? OpenTelemetryUtil.SPAN_NAME_QUERY_GET
-                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY,
-            true);
+                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(

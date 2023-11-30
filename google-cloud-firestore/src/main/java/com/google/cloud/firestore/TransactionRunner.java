@@ -86,7 +86,7 @@ class TransactionRunner<T> {
     // TODO(ehsan): Add transaction options to trace attributes.
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN, true);
+        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN);
     span.setAttribute("attemptsRemaining", attemptsRemaining);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
