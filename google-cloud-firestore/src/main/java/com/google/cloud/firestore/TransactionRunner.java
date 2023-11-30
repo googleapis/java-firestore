@@ -86,9 +86,9 @@ class TransactionRunner<T> {
     OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
         openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN);
-    span.setAttribute("Transaction type", transactionOptions.getType().name());
-    span.setAttribute("Number of attempts", transactionOptions.getNumberOfAttempts());
-    span.setAttribute("Attempts remaining", attemptsRemaining);
+    span.setAttribute("transactionType", transactionOptions.getType().name());
+    span.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
+    span.setAttribute("attemptsRemaining", attemptsRemaining);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 

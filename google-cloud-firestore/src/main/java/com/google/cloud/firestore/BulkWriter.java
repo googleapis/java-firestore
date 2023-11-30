@@ -912,7 +912,7 @@ public final class BulkWriter implements AutoCloseable {
           firestore
               .getOpenTelemetryUtil()
               .startSpan(OpenTelemetryUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
-              .setAttribute("Number of documents", batch.getWrites().size());
+              .setAttribute("numDocuments", batch.getWrites().size());
       try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
         result.addListener(

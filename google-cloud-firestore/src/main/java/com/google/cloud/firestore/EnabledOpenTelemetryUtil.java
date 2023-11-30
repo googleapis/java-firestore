@@ -131,13 +131,13 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
     @Override
     public OpenTelemetryUtil.Span setAttribute(String key, int value) {
-      span.setAttribute(key, value);
+      span.setAttribute(ATTRIBUTE_SERVICE_PREFIX + key, value);
       return this;
     }
 
     @Override
     public OpenTelemetryUtil.Span setAttribute(String key, String value) {
-      span.setAttribute(key, value);
+      span.setAttribute(ATTRIBUTE_SERVICE_PREFIX + key, value);
       return this;
     }
 

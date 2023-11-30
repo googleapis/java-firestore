@@ -609,7 +609,7 @@ public abstract class UpdateBuilder<T> {
     OpenTelemetryUtil.Span span =
         openTelemetryUtil.startSpan(
             transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT);
-    span.setAttribute("Number of documents", writes.size());
+    span.setAttribute("numDocuments", writes.size());
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<CommitResponse> response =
           firestore.sendRequest(request.build(), firestore.getClient().commitCallable());

@@ -37,7 +37,7 @@ public interface OpenTelemetryUtil {
   String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
   String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
   String SERVICE = "Firestore";
-  String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore";
+  String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
   String LIBRARY_NAME = "com.google.cloud.firestore";
   String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
