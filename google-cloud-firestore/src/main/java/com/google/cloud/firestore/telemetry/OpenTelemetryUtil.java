@@ -16,8 +16,11 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.ApiFunction;
 import com.google.cloud.firestore.FirestoreOptions;
+import io.grpc.ManagedChannelBuilder;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Helper class that facilitates integration of the Firestore SDK with OpenTelemetry Trace, Metrics,
@@ -36,6 +39,12 @@ public interface OpenTelemetryUtil {
 
   /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
   void close();
+
+  /**
+   * Returns a channel configurator for gRPC, or {@code null} if telemetry collection is disabled.
+   */
+  @Nullable
+  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
 
   /**
    * Creates and returns an instance of the OpenTelemetryUtil class.

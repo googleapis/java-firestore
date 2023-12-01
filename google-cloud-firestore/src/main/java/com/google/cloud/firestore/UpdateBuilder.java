@@ -16,14 +16,11 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_BATCH_COMMIT;
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_TRANSACTION_COMMIT;
-
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;
@@ -606,10 +603,13 @@ public abstract class UpdateBuilder<T> {
 
     committed = true;
 
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            transactionId == null ? SPAN_NAME_BATCH_COMMIT : SPAN_NAME_TRANSACTION_COMMIT);
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_BATCH_COMMIT
+                    : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
     span.setAttribute("numDocuments", writes.size());
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<CommitResponse> response =

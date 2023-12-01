@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
@@ -26,7 +26,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
@@ -77,12 +77,14 @@ public class AggregateQuery {
 
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
-    OpenTelemetryUtil openTelemetryUtil = query.getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            transactionId == null
-                ? OpenTelemetryUtil.SPAN_NAME_AGGREGATION_QUERY_GET
-                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+    TraceUtil.Span span =
+        query
+            .getFirestore()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
@@ -174,7 +176,7 @@ public class AggregateQuery {
     public void onStart(StreamController streamController) {
       rpcContext
           .getFirestore()
-          .getOpenTelemetryUtil()
+          .getTraceUtil()
           .currentSpan()
           .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
       this.streamController = streamController;
@@ -184,7 +186,7 @@ public class AggregateQuery {
     public void onResponse(RunAggregationQueryResponse response) {
       rpcContext
           .getFirestore()
-          .getOpenTelemetryUtil()
+          .getTraceUtil()
           .currentSpan()
           .addEvent(
               SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
@@ -218,7 +220,7 @@ public class AggregateQuery {
       if (shouldRetry(throwable)) {
         rpcContext
             .getFirestore()
-            .getOpenTelemetryUtil()
+            .getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
@@ -228,7 +230,7 @@ public class AggregateQuery {
       } else {
         rpcContext
             .getFirestore()
-            .getOpenTelemetryUtil()
+            .getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",

@@ -16,8 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_BATCH_GET_DOCUMENTS;
-
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.NanoClock;
@@ -33,6 +31,7 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
@@ -95,6 +94,11 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   public OpenTelemetryUtil getOpenTelemetryUtil() {
     return this.openTelemetryUtil;
+  }
+
+  @Override
+  public TraceUtil getTraceUtil() {
+    return this.openTelemetryUtil.getTraceUtil();
   }
 
   /** Creates a pseudo-random 20-character ID that can be used for Firestore documents. */
@@ -217,14 +221,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
-
-    if (documentReferences.length == 1 && documentReferences[0].getId().equals("ehsan")) {
-      FirestoreException foo =
-          FirestoreException.forInvalidArgument(
-              "Value for argument 'maxOpsPerSecond' must be greater than 1, but was: -1");
-      throw foo;
-    }
-
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
@@ -232,10 +228,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onStart(StreamController streamController) {
-            openTelemetryUtil
+            getTraceUtil()
                 .currentSpan()
                 .addEvent(
-                    SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
                     Collections.singletonMap("numDocuments", documentReferences.length));
           }
 
@@ -246,13 +242,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
             numResponses++;
             if (numResponses == 1) {
-              openTelemetryUtil
+              getTraceUtil()
                   .currentSpan()
-                  .addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
             } else if (numResponses % 100 == 0) {
-              openTelemetryUtil
+              getTraceUtil()
                   .currentSpan()
-                  .addEvent(SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");
+                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");
             }
 
             switch (response.getResultCase()) {
@@ -285,7 +281,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onError(Throwable throwable) {
-            openTelemetryUtil.currentSpan().end(throwable);
+            getTraceUtil().currentSpan().end(throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -293,10 +289,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           public void onComplete() {
             if (!hasCompleted) {
               hasCompleted = true;
-              openTelemetryUtil
+              getTraceUtil()
                   .currentSpan()
                   .addEvent(
-                      SPAN_NAME_BATCH_GET_DOCUMENTS
+                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
                           + ": Completed with "
                           + numResponses
                           + " responses.",

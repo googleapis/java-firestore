@@ -293,4 +293,9 @@
     <className>com/google/cloud/firestore/Firestore</className>
     <method>com.google.cloud.firestore.telemetry.OpenTelemetryUtil getOpenTelemetryUtil()</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
+    <method>com.google.cloud.firestore.telemetry.TraceUtil getTraceUtil()</method>
+  </difference>
 </differences>

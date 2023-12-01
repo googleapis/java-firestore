@@ -16,6 +16,10 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.ApiFunction;
+import io.grpc.ManagedChannelBuilder;
+import javax.annotation.Nullable;
+
 public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
   private DisabledTraceUtil traceUtil;
 
@@ -30,4 +34,10 @@ public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
   @Override
   public void close() {}
+
+  @Override
+  @Nullable
+  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    return null;
+  }
 }

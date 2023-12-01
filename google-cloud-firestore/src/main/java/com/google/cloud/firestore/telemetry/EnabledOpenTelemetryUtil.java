@@ -38,8 +38,8 @@ import javax.annotation.Nullable;
 
 public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
   @Nullable private OpenTelemetrySdk openTelemetrySdk;
-  private FirestoreOptions firestoreOptions;
-  private EnabledTraceUtil traceUtil;
+  private final FirestoreOptions firestoreOptions;
+  private final EnabledTraceUtil traceUtil;
 
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
   public static class OpenTelemetryGrpcChannelConfigurator
@@ -49,6 +49,12 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
       GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
       return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
     }
+  }
+
+  @Override
+  @Nullable
+  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    return new OpenTelemetryGrpcChannelConfigurator();
   }
 
   public EnabledOpenTelemetryUtil(FirestoreOptions firestoreOptions) {

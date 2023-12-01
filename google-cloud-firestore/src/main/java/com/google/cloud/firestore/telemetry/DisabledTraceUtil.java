@@ -16,73 +16,61 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
-import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 public class DisabledTraceUtil implements TraceUtil {
 
-    class Span implements TraceUtil.Span {
-        @Override
-        public void end() {}
+  class Span implements TraceUtil.Span {
+    @Override
+    public void end() {}
 
-        @Override
-        public void end(Throwable error) {}
+    @Override
+    public void end(Throwable error) {}
 
-        @Override
-        public <T> void endAtFuture(ApiFuture<T> futureValue) {}
+    @Override
+    public <T> void endAtFuture(ApiFuture<T> futureValue) {}
 
-        @Override
-        public TraceUtil.Span addEvent(String name) {
-            return this;
-        }
-
-        @Override
-        public TraceUtil.Span addEvent(String name, Map<String, Object> attributes) {
-            return this;
-        }
-
-        @Override
-        public TraceUtil.Span setAttribute(String key, int value) {
-            return this;
-        }
-
-        @Override
-        public TraceUtil.Span setAttribute(String key, String value) {
-            return this;
-        }
-
-        @Override
-        public Scope makeCurrent() {
-            return null;
-        }
+    @Override
+    public TraceUtil.Span addEvent(String name) {
+      return this;
     }
 
     @Override
-    @Nullable
-    public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
-        return null;
+    public TraceUtil.Span addEvent(String name, Map<String, Object> attributes) {
+      return this;
     }
 
     @Override
-    @Nullable
-    public Span startSpan(String spanName) {
-        return new Span();
-    }
-
-    @Nullable
-    @Override
-    public TraceUtil.Span startSpan(String spanName, Context parent) {
-        return new Span();
+    public TraceUtil.Span setAttribute(String key, int value) {
+      return this;
     }
 
     @Override
-    @Nullable
-    public TraceUtil.Span currentSpan() {
-        return new Span();
+    public TraceUtil.Span setAttribute(String key, String value) {
+      return this;
     }
+
+    @Override
+    public Scope makeCurrent() {
+      return null;
+    }
+  }
+
+  @Override
+  public Span startSpan(String spanName) {
+    return new Span();
+  }
+
+  @Override
+  public TraceUtil.Span startSpan(String spanName, Context parent) {
+    return new Span();
+  }
+
+  @Override
+  public TraceUtil.Span currentSpan() {
+    return new Span();
+  }
 }

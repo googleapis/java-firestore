@@ -26,7 +26,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
 import java.util.List;
@@ -84,9 +84,7 @@ class TransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_RUN);
+    TraceUtil.Span span = firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
     span.setAttribute("transactionType", transactionOptions.getType().name());
     span.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     span.setAttribute("attemptsRemaining", attemptsRemaining);
@@ -224,7 +222,7 @@ class TransactionRunner<T> {
       ApiException apiException = (ApiException) throwable;
       if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
         if (attemptsRemaining > 0) {
-          firestore.getOpenTelemetryUtil().currentSpan().addEvent("Initiate transaction retry");
+          firestore.getTraceUtil().currentSpan().addEvent("Initiate transaction retry");
           return run();
         } else {
           final FirestoreException firestoreException =

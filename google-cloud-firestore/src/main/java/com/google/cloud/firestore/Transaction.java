@@ -19,7 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
@@ -92,9 +92,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
+    TraceUtil.Span span =
+        firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
       beginTransaction.setDatabase(firestore.getDatabaseName());
@@ -142,10 +141,10 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
       reqBuilder.setTransaction(transactionId);
@@ -175,10 +174,10 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
@@ -205,10 +204,10 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       @Nonnull DocumentReference... documentReferences) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
@@ -233,10 +232,10 @@ public final class Transaction extends UpdateBuilder<Transaction> {
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
-    OpenTelemetryUtil openTelemetryUtil = firestore.getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+    TraceUtil.Span span =
+        firestore
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId);

@@ -21,7 +21,7 @@ import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -103,9 +103,8 @@ public class CollectionGroup extends Query {
     } else {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
-      OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
-      OpenTelemetryUtil.Span span =
-          openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_PARTITION_QUERY);
+      TraceUtil.Span span =
+          rpcContext.getFirestore().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_PARTITION_QUERY);
       try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
         ApiFuture<List<QueryPartition>> result =
             ApiFutures.transform(

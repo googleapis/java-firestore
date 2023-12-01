@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_RUN_QUERY;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -39,7 +38,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -1596,7 +1595,7 @@ public class Query {
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime,
       final boolean isRetryRequestWithCursor) {
-    OpenTelemetryUtil openTelemetryUtil = getFirestore().getOpenTelemetryUtil();
+    TraceUtil traceUtil = getFirestore().getTraceUtil();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
@@ -1608,10 +1607,10 @@ public class Query {
       request.setReadTime(readTime.toProto());
     }
 
-    openTelemetryUtil
+    traceUtil
         .currentSpan()
         .addEvent(
-            SPAN_NAME_RUN_QUERY,
+            TraceUtil.SPAN_NAME_RUN_QUERY,
             new ImmutableMap.Builder<String, Object>()
                 .put("transactional", transactionId != null)
                 .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
@@ -1636,14 +1635,14 @@ public class Query {
           public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
-              openTelemetryUtil.currentSpan().addEvent(SPAN_NAME_RUN_QUERY + ": First Response");
+              traceUtil.currentSpan().addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
             }
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
-                openTelemetryUtil
+                traceUtil
                     .currentSpan()
-                    .addEvent(SPAN_NAME_RUN_QUERY + ": Received 100 documents");
+                    .addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received 100 documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -1658,9 +1657,9 @@ public class Query {
             }
 
             if (response.getDone()) {
-              openTelemetryUtil
+              traceUtil
                   .currentSpan()
-                  .addEvent(SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+                  .addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -1669,10 +1668,10 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
-              openTelemetryUtil
+              traceUtil
                   .currentSpan()
                   .addEvent(
-                      SPAN_NAME_RUN_QUERY + ": Retryable Error",
+                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
                       Collections.singletonMap("error.message", throwable.getMessage()));
 
               Query.this
@@ -1685,10 +1684,10 @@ public class Query {
                       /* isRetryRequestWithCursor= */ true);
 
             } else {
-              openTelemetryUtil
+              traceUtil
                   .currentSpan()
                   .addEvent(
-                      SPAN_NAME_RUN_QUERY + ": Error",
+                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
                       Collections.singletonMap("error.message", throwable.getMessage()));
               documentObserver.onError(throwable);
             }
@@ -1698,10 +1697,10 @@ public class Query {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
-            openTelemetryUtil
+            traceUtil
                 .currentSpan()
                 .addEvent(
-                    SPAN_NAME_RUN_QUERY + ": Completed",
+                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
                     Collections.singletonMap("numDocuments", numDocuments));
             documentObserver.onCompleted(readTime);
           }
@@ -1757,12 +1756,13 @@ public class Query {
   }
 
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
-    OpenTelemetryUtil openTelemetryUtil = getFirestore().getOpenTelemetryUtil();
-    OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(
-            transactionId == null
-                ? OpenTelemetryUtil.SPAN_NAME_QUERY_GET
-                : OpenTelemetryUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
+    TraceUtil.Span span =
+        getFirestore()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(
