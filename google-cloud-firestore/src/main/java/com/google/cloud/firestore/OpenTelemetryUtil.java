@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import java.util.Map;
