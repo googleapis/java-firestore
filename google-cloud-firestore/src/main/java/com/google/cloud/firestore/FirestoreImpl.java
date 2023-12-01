@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_GET_DOCUMENTS;
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_BATCH_GET_DOCUMENTS;
 
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
@@ -32,6 +32,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.BatchGetDocumentsRequest;

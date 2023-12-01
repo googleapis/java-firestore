@@ -16,13 +16,14 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_BATCH_COMMIT;
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_TRANSACTION_COMMIT;
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_BATCH_COMMIT;
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_TRANSACTION_COMMIT;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;

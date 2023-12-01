@@ -19,6 +19,8 @@ package com.google.cloud.firestore;
 import com.google.api.core.*;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
@@ -137,7 +139,7 @@ public class DocumentReference {
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
     OpenTelemetryUtil openTelemetryUtil = rpcContext.getFirestore().getOpenTelemetryUtil();
     OpenTelemetryUtil.Span span =
-        openTelemetryUtil.startSpan(OpenTelemetryUtil.SPAN_NAME_DOC_REF_CREATE);
+        openTelemetryUtil.startSpan(TraceUtil.SPAN_NAME_DOC_REF_CREATE);
     try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());

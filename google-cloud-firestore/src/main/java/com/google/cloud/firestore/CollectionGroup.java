@@ -21,6 +21,7 @@ import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

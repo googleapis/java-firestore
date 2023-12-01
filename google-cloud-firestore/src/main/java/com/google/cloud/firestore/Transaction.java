@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;

@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_QUERY;
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_RUN_QUERY;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -39,6 +39,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

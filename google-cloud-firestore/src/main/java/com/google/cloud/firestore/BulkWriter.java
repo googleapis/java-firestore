@@ -26,6 +26,7 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;

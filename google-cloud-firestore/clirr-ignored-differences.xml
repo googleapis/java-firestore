@@ -291,6 +291,6 @@
   <difference>
     <differenceType>7012</differenceType>
     <className>com/google/cloud/firestore/Firestore</className>
-    <method>com.google.cloud.firestore.OpenTelemetryUtil getOpenTelemetryUtil()</method>
+    <method>com.google.cloud.firestore.telemetry.OpenTelemetryUtil getOpenTelemetryUtil()</method>
   </difference>
 </differences>

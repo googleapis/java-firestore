@@ -21,6 +21,8 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

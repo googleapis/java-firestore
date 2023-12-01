@@ -23,6 +23,7 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;

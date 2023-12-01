@@ -26,6 +26,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
 import java.util.List;

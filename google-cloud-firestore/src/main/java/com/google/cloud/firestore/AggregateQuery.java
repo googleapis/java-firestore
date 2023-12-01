@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.OpenTelemetryUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
@@ -26,6 +26,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
