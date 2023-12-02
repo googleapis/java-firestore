@@ -117,6 +117,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
+  @Nonnull
   public OpenTelemetryUtil getOpenTelemetryUtil() {
     return openTelemetryUtil;
   }
