@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFunction;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -118,10 +119,11 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   }
 
   @Nonnull
-  public OpenTelemetryUtil getOpenTelemetryUtil() {
+  OpenTelemetryUtil getOpenTelemetryUtil() {
     return openTelemetryUtil;
   }
 
+  @BetaApi
   @Nonnull
   public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
     return openTelemetryOptions;
@@ -217,6 +219,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
      *
      * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
      */
+    @BetaApi
     @Nonnull
     public Builder setOpenTelemetryOptions(FirestoreOpenTelemetryOptions openTelemetryOptions) {
       this.openTelemetryOptions = openTelemetryOptions;

@@ -20,7 +20,7 @@ import com.google.api.core.ApiFunction;
 import io.grpc.ManagedChannelBuilder;
 import javax.annotation.Nullable;
 
-public class DisabledOpenTelemetryUtil implements OpenTelemetryUtil {
+public class DisabledOpenTelemetryUtil extends OpenTelemetryUtil {
   private DisabledTraceUtil traceUtil;
 
   public DisabledOpenTelemetryUtil() {

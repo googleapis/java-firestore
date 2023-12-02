@@ -21,6 +21,7 @@ import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SE
 import com.google.api.core.ApiFunction;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
+import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
@@ -36,10 +37,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
-public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
+public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   @Nullable private OpenTelemetrySdk openTelemetrySdk;
   private final FirestoreOptions firestoreOptions;
   private final EnabledTraceUtil traceUtil;
+
+  @Override
+  public TraceUtil getTraceUtil() {
+    return traceUtil;
+  }
+
+  @VisibleForTesting
+  OpenTelemetrySdk getOpenTelemetrySdk() {
+    return openTelemetrySdk;
+  }
+
+  @Override
+  public void close() {
+    openTelemetrySdk.close();
+  }
+
+  @VisibleForTesting
+  @Nullable
+  static String getOpenTelemetryTraceSamplingRateEnvVar() {
+    return System.getenv(OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME);
+  }
 
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
   public static class OpenTelemetryGrpcChannelConfigurator
@@ -76,7 +98,7 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
 
   public double getTraceSamplingRate() {
     // The trace sampling rate environment variable can override the sampling rate in options.
-    String traceSamplingEnvVar = System.getenv(OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME);
+    String traceSamplingEnvVar = getOpenTelemetryTraceSamplingRateEnvVar();
     if (traceSamplingEnvVar != null) {
       try {
         return Double.parseDouble(traceSamplingEnvVar);
@@ -126,13 +148,4 @@ public class EnabledOpenTelemetryUtil implements OpenTelemetryUtil {
     }
   }
 
-  @Override
-  public TraceUtil getTraceUtil() {
-    return traceUtil;
-  }
-
-  @Override
-  public void close() {
-    openTelemetrySdk.close();
-  }
 }

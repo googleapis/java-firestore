@@ -118,11 +118,14 @@ public class FirestoreOpenTelemetryOptions {
      * @param samplingRate The trace sampling rate between 0.0 and 1.0.
      */
     @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setOpenTelemetryTraceSamplingRate(
+    public FirestoreOpenTelemetryOptions.Builder setTraceSamplingRate(
         double samplingRate) {
       if (this.sdk != null) {
         throw new IllegalArgumentException(
             "Cannot set OpenTelemetry trace sampling rate because you have already provided an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
+      }
+      if (samplingRate < 0.0 || samplingRate > 1.0) {
+        throw new IllegalArgumentException("Trace sampling rate must be a number between 0.0 and 1.0.");
       }
       this.traceSamplingRate = samplingRate;
       return this;

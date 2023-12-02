@@ -20,6 +20,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.DisabledOpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.DisabledTraceUtil;
+import com.google.cloud.firestore.telemetry.EnabledOpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.EnabledTraceUtil;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
 import org.junit.Test;
 
 public class FirestoreOptionsTest {
