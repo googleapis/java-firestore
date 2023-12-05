@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The metadata message for [google.cloud.location.Location.metadata][google.cloud.location.Location.metadata].
+ * The metadata message for
+ * [google.cloud.location.Location.metadata][google.cloud.location.Location.metadata].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.LocationMetadata}
@@ -214,7 +215,8 @@ public final class LocationMetadata extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * The metadata message for [google.cloud.location.Location.metadata][google.cloud.location.Location.metadata].
+   * The metadata message for
+   * [google.cloud.location.Location.metadata][google.cloud.location.Location.metadata].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.LocationMetadata}

@@ -246,7 +246,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -258,7 +258,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -266,4 +266,96 @@ public interface ExportDocumentsMetadataOrBuilder
    * @return The bytes for outputUriPrefix.
    */
   com.google.protobuf.ByteString getOutputUriPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  java.util.List<java.lang.String> getNamespaceIdsList();
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  int getNamespaceIdsCount();
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  java.lang.String getNamespaceIds(int index);
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  com.google.protobuf.ByteString getNamespaceIdsBytes(int index);
+
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return Whether the snapshotTime field is set.
+   */
+  boolean hasSnapshotTime();
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return The snapshotTime.
+   */
+  com.google.protobuf.Timestamp getSnapshotTime();
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   */
+  com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder();
 }

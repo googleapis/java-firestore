@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Returned in the [google.longrunning.Operation][google.longrunning.Operation] response field.
+ * Returned in the [google.longrunning.Operation][google.longrunning.Operation]
+ * response field.
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsResponse}
@@ -281,7 +282,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Returned in the [google.longrunning.Operation][google.longrunning.Operation] response field.
+   * Returned in the [google.longrunning.Operation][google.longrunning.Operation]
+   * response field.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsResponse}

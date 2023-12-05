@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+ * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+ * results from
  * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
  * </pre>
  *
@@ -42,6 +43,7 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     operationState_ = 0;
     collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     inputUriPrefix_ = "";
+    namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
@@ -410,6 +412,70 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     }
   }
 
+  public static final int NAMESPACE_IDS_FIELD_NUMBER = 8;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being imported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+    return namespaceIds_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being imported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  public int getNamespaceIdsCount() {
+    return namespaceIds_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being imported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  public java.lang.String getNamespaceIds(int index) {
+    return namespaceIds_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being imported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+    return namespaceIds_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -445,6 +511,9 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, inputUriPrefix_);
+    }
+    for (int i = 0; i < namespaceIds_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, namespaceIds_.getRaw(i));
     }
     getUnknownFields().writeTo(output);
   }
@@ -482,6 +551,14 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, inputUriPrefix_);
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < namespaceIds_.size(); i++) {
+        dataSize += computeStringSizeNoTag(namespaceIds_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getNamespaceIdsList().size();
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -517,6 +594,7 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     }
     if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
     if (!getInputUriPrefix().equals(other.getInputUriPrefix())) return false;
+    if (!getNamespaceIdsList().equals(other.getNamespaceIdsList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -552,6 +630,10 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
     }
     hash = (37 * hash) + INPUT_URI_PREFIX_FIELD_NUMBER;
     hash = (53 * hash) + getInputUriPrefix().hashCode();
+    if (getNamespaceIdsCount() > 0) {
+      hash = (37 * hash) + NAMESPACE_IDS_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaceIdsList().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -657,7 +739,8 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+   * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+   * results from
    * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
    * </pre>
    *
@@ -716,6 +799,7 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
       }
       collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       inputUriPrefix_ = "";
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -777,6 +861,10 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.inputUriPrefix_ = inputUriPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        namespaceIds_.makeImmutable();
+        result.namespaceIds_ = namespaceIds_;
       }
     }
 
@@ -856,6 +944,16 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
         bitField0_ |= 0x00000040;
         onChanged();
       }
+      if (!other.namespaceIds_.isEmpty()) {
+        if (namespaceIds_.isEmpty()) {
+          namespaceIds_ = other.namespaceIds_;
+          bitField0_ |= 0x00000080;
+        } else {
+          ensureNamespaceIdsIsMutable();
+          namespaceIds_.addAll(other.namespaceIds_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -926,6 +1024,13 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
                 bitField0_ |= 0x00000040;
                 break;
               } // case 58
+            case 66:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureNamespaceIdsIsMutable();
+                namespaceIds_.add(s);
+                break;
+              } // case 66
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -2046,6 +2151,180 @@ public final class ImportDocumentsMetadata extends com.google.protobuf.Generated
       checkByteStringIsUtf8(value);
       inputUriPrefix_ = value;
       bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+
+    private void ensureNamespaceIdsIsMutable() {
+      if (!namespaceIds_.isModifiable()) {
+        namespaceIds_ = new com.google.protobuf.LazyStringArrayList(namespaceIds_);
+      }
+      bitField0_ |= 0x00000080;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return A list containing the namespaceIds.
+     */
+    public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+      namespaceIds_.makeImmutable();
+      return namespaceIds_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return The count of namespaceIds.
+     */
+    public int getNamespaceIdsCount() {
+      return namespaceIds_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The namespaceIds at the given index.
+     */
+    public java.lang.String getNamespaceIds(int index) {
+      return namespaceIds_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the namespaceIds at the given index.
+     */
+    public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+      return namespaceIds_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The namespaceIds to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNamespaceIds(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.set(index, value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIds(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param values The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllNamespaceIds(java.lang.Iterable<java.lang.String> values) {
+      ensureNamespaceIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, namespaceIds_);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearNamespaceIds() {
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000080);
+      ;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being imported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The bytes of the namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIdsBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }

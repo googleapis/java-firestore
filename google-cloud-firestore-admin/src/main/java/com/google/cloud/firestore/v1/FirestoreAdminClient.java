@@ -1390,6 +1390,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(request).get();
    * }
@@ -1429,6 +1431,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata> future =
    *       firestoreAdminClient.exportDocumentsOperationCallable().futureCall(request);
@@ -1469,6 +1473,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.exportDocumentsCallable().futureCall(request);
@@ -1564,6 +1570,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   firestoreAdminClient.importDocumentsAsync(request).get();
    * }
@@ -1598,6 +1605,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   OperationFuture<Empty, ImportDocumentsMetadata> future =
    *       firestoreAdminClient.importDocumentsOperationCallable().futureCall(request);
@@ -1632,6 +1640,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.importDocumentsCallable().futureCall(request);

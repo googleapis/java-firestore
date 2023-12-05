@@ -23,8 +23,8 @@ package com.google.firestore.admin.v1;
  *
  * <pre>
  * Describes the progress of the operation.
- * Unit of work is generic and must be interpreted based on where [Progress][google.firestore.admin.v1.Progress]
- * is used.
+ * Unit of work is generic and must be interpreted based on where
+ * [Progress][google.firestore.admin.v1.Progress] is used.
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.Progress}
@@ -270,8 +270,8 @@ public final class Progress extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Describes the progress of the operation.
-   * Unit of work is generic and must be interpreted based on where [Progress][google.firestore.admin.v1.Progress]
-   * is used.
+   * Unit of work is generic and must be interpreted based on where
+   * [Progress][google.firestore.admin.v1.Progress] is used.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.Progress}
