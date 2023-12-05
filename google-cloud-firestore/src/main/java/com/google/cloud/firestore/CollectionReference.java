@@ -59,8 +59,8 @@ public class CollectionReference extends Query {
   }
 
   /**
-   * The id of a collection refers to the last component of path pointing to a collection, e.g.
-   * "collection-id" in "projects/project-id/databases/database-id/documents/collection-id".
+   * The id of a collection refers to the last component of path pointing to a collection, for
+   * example "collection-id" in "projects/project-id/databases/database-id/documents/collection-id".
    *
    * @return The ID of the collection.
    */
@@ -121,10 +121,10 @@ public class CollectionReference extends Query {
   /**
    * Retrieves the list of documents in this collection.
    *
-   * <p>The document references returned may include references to "missing documents", i.e.
+   * <p>The document references returned may include references to "missing documents", specifically
    * document locations that have no document present but which contain subcollections with
-   * documents. Attempting to read such a document reference (e.g. via `get()` or `onSnapshot()`)
-   * will return a `DocumentSnapshot` whose `exists()` method returns false.
+   * documents. Attempting to read such a document reference (for example via `get()` or
+   * `onSnapshot()`) will return a `DocumentSnapshot` whose `exists()` method returns false.
    *
    * @return The list of documents in this collection.
    */

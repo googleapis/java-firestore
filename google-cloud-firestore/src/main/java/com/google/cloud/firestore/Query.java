@@ -934,7 +934,8 @@ public class Query {
             + "startAfter(), endBefore() or endAt().");
     FilterInternal parsedFilter = parseFilter(filter);
     if (parsedFilter.getFilters().isEmpty()) {
-      // Return the existing query if not adding any more filters (e.g. an empty composite filter).
+      // Return the existing query if not adding any more filters (for example an empty composite
+      // filter).
       return this;
     }
     Builder newOptions = options.toBuilder();
@@ -1923,7 +1924,8 @@ public class Query {
    *
    * <p>Using the returned query to count the documents is efficient because only the final count,
    * not the documents' data, is downloaded. The returned query can even count the documents if the
-   * result set would be prohibitively large to download entirely (e.g. thousands of documents).
+   * result set would be prohibitively large to download entirely (for example thousands of
+   * documents).
    *
    * @return a query that counts the documents in the result set of this query.
    */
@@ -1938,7 +1940,7 @@ public class Query {
    *
    * <p>Using this function to perform aggregations is efficient because only the final aggregation
    * values, not the documents' data, is downloaded. This function can even perform aggregations of
-   * the documents if the result set would be prohibitively large to download entirely (e.g.
+   * the documents if the result set would be prohibitively large to download entirely (for example
    * thousands of documents).
    *
    * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
