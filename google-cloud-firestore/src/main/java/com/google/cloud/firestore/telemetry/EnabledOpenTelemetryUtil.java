@@ -24,6 +24,7 @@ import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -42,6 +43,8 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   private final FirestoreOptions firestoreOptions;
   private final EnabledTraceUtil traceUtil;
 
+  private boolean openTelemetrySdkRegisteredByFirestoreSdk = false;
+
   @Override
   public TraceUtil getTraceUtil() {
     return traceUtil;
@@ -50,6 +53,10 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   @Override
   public void shutdown() {
     traceUtil.shutdown();
+    if(openTelemetrySdkRegisteredByFirestoreSdk) {
+      openTelemetrySdk.close();
+      GlobalOpenTelemetry.set(OpenTelemetry.noop());
+    }
   }
 
   @VisibleForTesting
@@ -126,15 +133,19 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
       SpanProcessor loggingSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
 
       this.openTelemetrySdk =
-          OpenTelemetrySdk.builder()
-              .setTracerProvider(
-                  SdkTracerProvider.builder()
-                      .setResource(resource)
-                      .setSampler(Sampler.traceIdRatioBased(getTraceSamplingRate()))
-                      .addSpanProcessor(gcpSpanProcessor)
-                      .addSpanProcessor(loggingSpanProcessor)
-                      .build())
-              .build();
+              OpenTelemetrySdk.builder()
+                      .setTracerProvider(
+                              SdkTracerProvider.builder()
+                                      .setResource(resource)
+                                      .setSampler(Sampler.traceIdRatioBased(getTraceSamplingRate()))
+                                      .addSpanProcessor(gcpSpanProcessor)
+                                      .addSpanProcessor(loggingSpanProcessor)
+                                      .build())
+                      .build();
+      if (GlobalOpenTelemetry.get().equals(OpenTelemetry.noop())) {
+        GlobalOpenTelemetry.set(this.openTelemetrySdk);
+        this.openTelemetrySdkRegisteredByFirestoreSdk = true;
+      }
       Logger.getLogger("Firestore OpenTelemetry")
           .log(
               Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");

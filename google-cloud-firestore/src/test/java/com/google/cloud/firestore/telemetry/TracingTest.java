@@ -66,6 +66,8 @@ public class TracingTest {
     HashMap<String, String> spanIdToParentSpanId;
     HashMap<String, SpanData> spanNameToSpanData;
 
+    static OpenTelemetrySdk openTelemetrySdkWithInMemorySpanExporter = getOpenTelemetrySdkWithInMemorySpanExporter();
+
     @Rule
     public TestName testName = new TestName();
 
@@ -77,7 +79,7 @@ public class TracingTest {
                         .setResource(resource)
                         .addSpanProcessor(inMemorySpanProcessor)
                         .build())
-                .build();
+                .buildAndRegisterGlobal();
     }
 
     @Before
@@ -92,7 +94,7 @@ public class TracingTest {
                 FirestoreOpenTelemetryOptions
                         .newBuilder()
                         .setTelemetryCollectionEnabled(true)
-                        .setOpenTelemetrySdk(getOpenTelemetrySdkWithInMemorySpanExporter())
+                        .setOpenTelemetrySdk(openTelemetrySdkWithInMemorySpanExporter)
                         .build()
         );
         String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
@@ -130,6 +132,7 @@ public class TracingTest {
             spanNameToSpanId.put(spanData.getName(), spanData.getSpanId());
             spanIdToParentSpanId.put(spanData.getSpanId(), spanData.getParentSpanId());
         }
+        printSpans();
     }
 
     // Returns the SpanData object for the span with the given name.
@@ -170,20 +173,19 @@ public class TracingTest {
 
   @Test
   public void testDocRefGetSpans() throws Exception {
-//      firestore.collection("col").document("doc0").get().get();
-//      waitForTracesToComplete();
-//      List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-//      buildSpanMaps(spans);
-//      assertEquals(2, spans.size());
-//      SpanData getSpan = getSpanByName(SPAN_NAME_DOC_REF_GET);
-//      SpanData grpcSpan = getGrpcSpanByName(BATCH_GET_DOCUMENTS_RPC_NAME);
-//      assertNotNull(getSpan);
-//      assertNotNull(grpcSpan);
-//      assertEquals(grpcSpan.getParentSpanId(), getSpan.getSpanId());
-//      assertSameTrace(getSpan, grpcSpan);
+      firestore.collection("col").document("doc0").get().get();
+      waitForTracesToComplete();
+      List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
+      buildSpanMaps(spans);
+      assertEquals(2, spans.size());
+      SpanData getSpan = getSpanByName(SPAN_NAME_DOC_REF_GET);
+      SpanData grpcSpan = getGrpcSpanByName(BATCH_GET_DOCUMENTS_RPC_NAME);
+      assertNotNull(getSpan);
+      assertNotNull(grpcSpan);
+      assertEquals(grpcSpan.getParentSpanId(), getSpan.getSpanId());
+      assertSameTrace(getSpan, grpcSpan);
   }
 
-    /*
     @Test
     public void testDocRefCreateSpans() throws Exception {
         firestore.collection("col").document().create(Collections.singletonMap("foo", "bar")).get();
@@ -240,11 +242,10 @@ public class TracingTest {
 
     @Test
     public void testDocRefDeleteSpans() throws Exception {
-        firestore.collection("col").document("foo").delete().get();
+        firestore.collection("col").document("doc0").delete().get();
         waitForTracesToComplete();
         List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
         buildSpanMaps(spans);
-        printSpans();
         assertEquals(3, spans.size());
         SpanData deleteSpan = getSpanByName(SPAN_NAME_DOC_REF_DELETE);
         SpanData commitSpan = getSpanByName(SPAN_NAME_BATCH_COMMIT);
@@ -256,5 +257,4 @@ public class TracingTest {
         assertEquals(commitSpan.getParentSpanId(), deleteSpan.getSpanId());
         assertSameTrace(deleteSpan, commitSpan, grpcSpan);
     }
-     */
 }
