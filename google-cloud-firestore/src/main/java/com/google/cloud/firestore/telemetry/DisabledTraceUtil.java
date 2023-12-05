@@ -60,6 +60,9 @@ public class DisabledTraceUtil implements TraceUtil {
   }
 
   @Override
+  public void shutdown() {}
+
+  @Override
   public Span startSpan(String spanName) {
     return new Span();
   }

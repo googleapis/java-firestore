@@ -33,7 +33,7 @@ public class DisabledOpenTelemetryUtil extends OpenTelemetryUtil {
   }
 
   @Override
-  public void close() {}
+  public void shutdown() {}
 
   @Override
   @Nullable

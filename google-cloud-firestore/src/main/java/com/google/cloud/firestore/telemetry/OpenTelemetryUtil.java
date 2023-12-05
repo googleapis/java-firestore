@@ -38,8 +38,8 @@ public abstract class OpenTelemetryUtil {
   /** Returns the Tracing utility object. */
   public abstract TraceUtil getTraceUtil();
 
-  /** Shuts down the underlying OpenTelemetry SDK instance, if any. */
-  public abstract void close();
+  /** Initiates an orderly shutdown in which remaining operations are finished, but no new work will be accepted. */
+  public abstract void shutdown();
 
   /**
    * Returns a channel configurator for gRPC, or {@code null} if telemetry collection is disabled.

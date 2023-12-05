@@ -47,14 +47,14 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
     return traceUtil;
   }
 
+  @Override
+  public void shutdown() {
+    traceUtil.shutdown();
+  }
+
   @VisibleForTesting
   OpenTelemetrySdk getOpenTelemetrySdk() {
     return openTelemetrySdk;
-  }
-
-  @Override
-  public void close() {
-    openTelemetrySdk.close();
   }
 
   @VisibleForTesting

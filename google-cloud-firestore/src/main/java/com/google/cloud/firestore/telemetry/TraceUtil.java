@@ -49,6 +49,9 @@ public interface TraceUtil {
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
 
+  /** Flushes remaining spans, if any. */
+  public void shutdown();
+
   interface Span {
     /** Ends this span. */
     void end();

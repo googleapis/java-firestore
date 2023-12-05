@@ -27,16 +27,28 @@ import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 public class EnabledTraceUtil implements TraceUtil {
   @Nullable private OpenTelemetrySdk openTelemetrySdk;
   private FirestoreOptions firestoreOptions;
+  private static long SHUTDOWN_TIMEOUT_MS = 3000;
 
   EnabledTraceUtil(FirestoreOptions firestoreOptions, OpenTelemetrySdk openTelemetrySdk) {
     this.firestoreOptions = firestoreOptions;
     this.openTelemetrySdk = openTelemetrySdk;
+  }
+
+  @Override
+  public void shutdown() {
+    SdkTracerProvider sdkTracerProvider = openTelemetrySdk.getSdkTracerProvider();
+    if (sdkTracerProvider != null) {
+      openTelemetrySdk.getSdkTracerProvider().forceFlush();
+    }
   }
 
   class Span implements TraceUtil.Span {

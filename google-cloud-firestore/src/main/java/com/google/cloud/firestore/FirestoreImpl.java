@@ -40,6 +40,7 @@ import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -477,22 +478,22 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Override
   public void close() throws Exception {
+    openTelemetryUtil.shutdown();
     firestoreClient.close();
-    openTelemetryUtil.close();
     closed = true;
   }
 
   @Override
   public void shutdown() {
+    openTelemetryUtil.shutdown();
     firestoreClient.shutdown();
-    openTelemetryUtil.close();
     closed = true;
   }
 
   @Override
   public void shutdownNow() {
+    openTelemetryUtil.shutdown();
     firestoreClient.shutdownNow();
-    openTelemetryUtil.close();
     closed = true;
   }
 
