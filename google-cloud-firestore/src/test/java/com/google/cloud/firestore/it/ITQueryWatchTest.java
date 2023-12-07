@@ -23,6 +23,7 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.Assert.assertNull;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
@@ -50,6 +51,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -68,15 +70,62 @@ public final class ITQueryWatchTest extends ITBaseTest {
 
   @Rule public TestName testName = new TestName();
 
+  /**
+   * Firestore databases can be subject to a ~30s "cold start" delay if they have not been used
+   * recently, so before any tests run we "prime" the backend.
+   */
+  private static final long PRIMING_TIMEOUT_MS = 45000;
+
   private CollectionReference randomColl;
 
+  private boolean backendPrimed = false;
+
   @Before
-  public void before() {
+  public void before() throws Exception {
     super.before();
     useFirestoreSpy();
     String autoId = LocalFirestoreHelper.autoId();
     String collPath = String.format("java-%s-%s", testName.getMethodName(), autoId);
     randomColl = firestore.collection(collPath);
+    primeBackend();
+  }
+
+  public void primeBackend() throws Exception {
+    if (!backendPrimed) {
+      backendPrimed = true;
+      CompletableFuture<Void> watchInitialized = new CompletableFuture<>();
+      CompletableFuture<Void> watchUpdateReceived = new CompletableFuture<>();
+      DocumentReference docRef = randomColl.document();
+      ListenerRegistration listenerRegistration =
+          docRef.addSnapshotListener(
+              (snapshot, error) -> {
+                assertNull(error);
+                if (snapshot != null) {
+                  if ("done".equals(snapshot.get("value"))) {
+                    watchUpdateReceived.complete(null);
+                  } else {
+                    watchInitialized.complete(null);
+                  }
+                }
+              });
+
+      // Wait for watch to initialize and deliver first event.
+      watchInitialized.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+
+      // Use a transaction to perform a write without triggering any local events.
+      docRef
+          .getFirestore()
+          .runTransaction(
+              transaction -> {
+                transaction.set(docRef, map("value", "done"));
+                return null;
+              });
+
+      // Wait to see the write on the watch stream.
+      watchUpdateReceived.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+
+      listenerRegistration.remove();
+    }
   }
 
   /**

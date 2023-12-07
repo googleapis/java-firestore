@@ -126,7 +126,7 @@ public class ITSystemTest extends ITBaseTest {
   private DocumentReference randomDoc;
 
   @Before
-  public void before() {
+  public void before() throws Exception {
     super.before();
 
     randomColl =

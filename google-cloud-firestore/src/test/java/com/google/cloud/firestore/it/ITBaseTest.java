@@ -35,7 +35,7 @@ public abstract class ITBaseTest {
   private FirestoreOptions firestoreOptions;
 
   @Before
-  public void before() {
+  public void before() throws Exception {
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
