@@ -94,7 +94,7 @@ public class BulkWriterTest {
               GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
               true));
 
-  @Rule public Timeout timeout = new Timeout(10, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(2, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
