@@ -27,8 +27,12 @@ import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Span;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -55,6 +59,7 @@ class TransactionRunner<T> {
   private TimedAttemptSettings nextBackoffAttempt;
   private Transaction transaction;
   private int attemptsRemaining;
+  private Span runTransactionSpan;
 
   /**
    * @param firestore The active Firestore instance
@@ -84,11 +89,11 @@ class TransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    TraceUtil.Span span = firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
-    span.setAttribute("transactionType", transactionOptions.getType().name());
-    span.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
-    span.setAttribute("attemptsRemaining", attemptsRemaining);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    runTransactionSpan = firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+    runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
+    runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
+    runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
+    try (io.opentelemetry.context.Scope ignored = runTransactionSpan.makeCurrent()) {
       this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
       --attemptsRemaining;
@@ -100,10 +105,10 @@ class TransactionRunner<T> {
               Throwable.class,
               new RestartTransactionCallback(),
               MoreExecutors.directExecutor());
-      span.endAtFuture(result);
+      runTransactionSpan.endAtFuture(result);
       return result;
     } catch (Exception error) {
-      span.end(error);
+      runTransactionSpan.end(error);
       throw error;
     }
   }
@@ -271,8 +276,14 @@ class TransactionRunner<T> {
         transaction
             .rollback()
             .addListener(
-                () -> failedTransaction.setException(throwable), MoreExecutors.directExecutor());
+                () -> {
+                    runTransactionSpan.end(throwable);
+                    failedTransaction.setException(throwable);
+                  },
+                MoreExecutors.directExecutor()
+            );
       } else {
+        runTransactionSpan.end(throwable);
         failedTransaction.setException(throwable);
       }
 

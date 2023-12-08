@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
  * added in the future.
  */
 public abstract class OpenTelemetryUtil {
-  static final String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "ENABLE_OPEN_TELEMETRY";
-  static final String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
+  static final String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "FIRESTORE_ENABLE_OPEN_TELEMETRY";
+  static final String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "FIRESTORE_OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
   static final String SERVICE = "Firestore";
 
   /** Returns the Tracing utility object. */

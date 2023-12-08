@@ -21,6 +21,7 @@ import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Throwables;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.*;
@@ -29,6 +30,8 @@ import io.opentelemetry.context.Scope;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
@@ -162,10 +165,26 @@ public class EnabledTraceUtil implements TraceUtil {
 
   /** Applies the current Firestore instance settings as attributes to the current Span */
   private SpanBuilder addSettingsAttributesToCurrentSpan(SpanBuilder spanBuilder) {
-    return spanBuilder.setAllAttributes(
+    // System.out.println("Available processors (cores): " +
+    //     Runtime.getRuntime().availableProcessors());
+    //
+    // /* Total amount of free memory available to the JVM */
+    // System.out.println("Free memory (bytes): " +
+    //     Runtime.getRuntime().freeMemory());
+    //
+    // /* This will return Long.MAX_VALUE if there is no preset limit */
+    // long maxMemory = Runtime.getRuntime().maxMemory();
+    // /* Maximum amount of memory the JVM will attempt to use */
+    // System.out.println("Maximum memory (bytes): " +
+    //     (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
+    //
+    // /* Total memory currently available to the JVM */
+    // System.out.println("Total memory available to JVM (bytes): " +
+    //     Runtime.getRuntime().totalMemory());
+
+    spanBuilder = spanBuilder.setAllAttributes(
         Attributes.builder()
-            .put(ATTRIBUTE_SERVICE_PREFIX + "settings.databaseId", firestoreOptions.getDatabaseId())
-            .put(ATTRIBUTE_SERVICE_PREFIX + "settings.hos5", firestoreOptions.getHost())
+            .put(ATTRIBUTE_SERVICE_PREFIX + "availableProcessors", Runtime.getRuntime().availableProcessors())
             .put(ATTRIBUTE_SERVICE_PREFIX + "settings.databaseId", firestoreOptions.getDatabaseId())
             .put(ATTRIBUTE_SERVICE_PREFIX + "settings.host", firestoreOptions.getHost())
             .put(
@@ -211,6 +230,17 @@ public class EnabledTraceUtil implements TraceUtil {
                 ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.totalTimeout",
                 firestoreOptions.getRetrySettings().getTotalTimeout().toString())
             .build());
+
+    long totalMemory = Runtime.getRuntime().totalMemory();
+    long freeMemory = Runtime.getRuntime().freeMemory();
+    double memoryUtilization = ((double)(totalMemory - freeMemory)) / totalMemory;
+    spanBuilder.setAttribute(ATTRIBUTE_SERVICE_PREFIX + "memoryUtilization", memoryUtilization);
+    // OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+    // double systemLoadAverage = osBean.getSystemLoadAverage();
+    // if(osBean.getSystemLoadAverage() > 0) {
+    //   spanBuilder.setAttribute(ATTRIBUTE_SERVICE_PREFIX + "systemLoadAverage", systemLoadAverage);
+    // }
+    return spanBuilder;
   }
 
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
@@ -235,7 +265,8 @@ public class EnabledTraceUtil implements TraceUtil {
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
   @Nullable
   public Tracer getTracer() {
-    return openTelemetrySdk.getTracer(LIBRARY_NAME);
+    //return openTelemetrySdk.getTracer(LIBRARY_NAME);
+    return GlobalOpenTelemetry.getTracer(LIBRARY_NAME);
   }
 
   /** Returns the current span. */

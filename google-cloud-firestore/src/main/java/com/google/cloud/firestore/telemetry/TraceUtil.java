@@ -43,7 +43,7 @@ public interface TraceUtil {
   String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
   String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
   String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
-  String SPAN_NAME_TRANSACTION_ROLLBACK = "Rollback";
+  String SPAN_NAME_TRANSACTION_ROLLBACK = "Transaction.Rollback";
   String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
   String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";

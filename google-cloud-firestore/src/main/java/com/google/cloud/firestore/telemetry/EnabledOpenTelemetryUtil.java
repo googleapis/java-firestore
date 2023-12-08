@@ -43,6 +43,7 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   private final EnabledTraceUtil traceUtil;
 
   private boolean openTelemetrySdkRegisteredByFirestoreSdk = false;
+  private boolean isClosed = false;
 
   @Override
   public TraceUtil getTraceUtil() {
@@ -51,9 +52,12 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
 
   @Override
   public void shutdown() {
-    traceUtil.shutdown();
-    if(openTelemetrySdkRegisteredByFirestoreSdk) {
-      openTelemetrySdk.close();
+    if (!isClosed) {
+      isClosed = true;
+      //traceUtil.shutdown();
+      if(openTelemetrySdkRegisteredByFirestoreSdk) {
+        openTelemetrySdk.close();
+      }
     }
   }
 
@@ -91,12 +95,10 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
     // It is possible that the user of the SDK does not provide an OpenTelemetrySdk instance to be
     // used.
     // In such cases, we'll create an instance, configure it, and use it.
-    if (this.openTelemetrySdk == null) {
-      initializeOpenTelemetry();
-      if (this.openTelemetrySdk == null) {
-        throw new RuntimeException("Error: unable to initialize OpenTelemetry.");
-      }
-    }
+    // if (this.openTelemetrySdk == null) {
+    //   initializeOpenTelemetry();
+    // }
+    initializeOpenTelemetry();
 
     this.traceUtil = new EnabledTraceUtil(firestoreOptions, openTelemetrySdk);
   }
