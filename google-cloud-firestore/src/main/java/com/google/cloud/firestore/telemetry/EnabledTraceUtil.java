@@ -161,9 +161,8 @@ public class EnabledTraceUtil implements TraceUtil {
   }
 
   /** Applies the current Firestore instance settings as attributes to the current Span */
-  private void addSettingsAttributesToCurrentSpan() {
-    io.opentelemetry.api.trace.Span span = io.opentelemetry.api.trace.Span.current();
-    span.setAllAttributes(
+  private SpanBuilder addSettingsAttributesToCurrentSpan(SpanBuilder spanBuilder) {
+    return spanBuilder.setAllAttributes(
         Attributes.builder()
             .put(ATTRIBUTE_SERVICE_PREFIX + "settings.databaseId", firestoreOptions.getDatabaseId())
             .put(ATTRIBUTE_SERVICE_PREFIX + "settings.hos5", firestoreOptions.getHost())
@@ -217,20 +216,19 @@ public class EnabledTraceUtil implements TraceUtil {
   /** Starts a new span with the given name, sets it as the current span, and returns it. */
   @Override
   public Span startSpan(String spanName) {
-    io.opentelemetry.api.trace.Span span =
-        getTracer().spanBuilder(spanName).setSpanKind(SpanKind.CLIENT).startSpan();
-    this.addSettingsAttributesToCurrentSpan();
+    SpanBuilder spanBuilder = getTracer().spanBuilder(spanName).setSpanKind(SpanKind.PRODUCER);
+    io.opentelemetry.api.trace.Span span = addSettingsAttributesToCurrentSpan(spanBuilder).startSpan();
     return new Span(span, spanName);
   }
 
   @Override
   public TraceUtil.Span startSpan(String spanName, Context parent) {
-    io.opentelemetry.api.trace.Span span =
+    SpanBuilder spanBuilder =
         getTracer()
             .spanBuilder(spanName)
-            .setSpanKind(SpanKind.CLIENT)
-            .setParent(parent)
-            .startSpan();
+            .setSpanKind(SpanKind.PRODUCER)
+            .setParent(parent);
+    io.opentelemetry.api.trace.Span span = addSettingsAttributesToCurrentSpan(spanBuilder).startSpan();
     return new Span(span, spanName);
   }
 

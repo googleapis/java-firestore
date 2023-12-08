@@ -24,7 +24,6 @@ import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -55,7 +54,6 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
     traceUtil.shutdown();
     if(openTelemetrySdkRegisteredByFirestoreSdk) {
       openTelemetrySdk.close();
-      GlobalOpenTelemetry.set(OpenTelemetry.noop());
     }
   }
 
@@ -141,11 +139,8 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
                                       .addSpanProcessor(gcpSpanProcessor)
                                       .addSpanProcessor(loggingSpanProcessor)
                                       .build())
-                      .build();
-      if (GlobalOpenTelemetry.get().equals(OpenTelemetry.noop())) {
-        GlobalOpenTelemetry.set(this.openTelemetrySdk);
-        this.openTelemetrySdkRegisteredByFirestoreSdk = true;
-      }
+                      .buildAndRegisterGlobal();
+      this.openTelemetrySdkRegisteredByFirestoreSdk = true;
       Logger.getLogger("Firestore OpenTelemetry")
           .log(
               Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");
@@ -158,5 +153,4 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
           .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
     }
   }
-
 }
