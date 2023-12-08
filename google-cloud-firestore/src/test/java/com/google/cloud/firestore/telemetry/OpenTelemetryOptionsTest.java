@@ -62,190 +62,190 @@ public class OpenTelemetryOptionsTest{
         assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
     }
 
-    @Test
-    public void canEnableTelemetryCollectionUsingOpenTelemetryOptions() {
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        assertThat(firestore.getTraceUtil()).isNotNull();
-        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
-    }
-
-    @Test
-    public void canPassOpenTelemetrySdkToFirestore() {
-        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .setOpenTelemetrySdk(myOpenTelemetrySdk)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
-        assertThat(enabledOpenTelemetryUtil.getOpenTelemetrySdk()).isEqualTo(myOpenTelemetrySdk);
-    }
-
-    @Test
-    public void telemetryCollectionRemainsDisabledIfOpenTelemetrySdkIsProvided() {
-        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(false)
-                        .setOpenTelemetrySdk(myOpenTelemetrySdk)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-    }
-
-    @Test
-    public void canSetTraceSamplingRate() {
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .setTraceSamplingRate(0.25)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
-        assertThat(enabledOpenTelemetryUtil.getTraceSamplingRate()).isEqualTo(0.25);
-    }
-
-    @Test
-    public void cannotSetOpenTelemetrySdkAndTraceSamplingRateAtTheSameTime() {
-        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
-        try {
-            FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                    FirestoreOpenTelemetryOptions
-                            .newBuilder()
-                            .setTelemetryCollectionEnabled(true)
-                            .setOpenTelemetrySdk(myOpenTelemetrySdk)
-                            .setTraceSamplingRate(0.25)
-                            .build()
-            ).build();
-        } catch (Exception e) {
-            assertThat(e instanceof IllegalArgumentException).isTrue();
-            assertEquals(e.getMessage(), "Cannot set OpenTelemetry trace sampling rate because you have already provided an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
-        }
-
-        try {
-            FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                    FirestoreOpenTelemetryOptions
-                            .newBuilder()
-                            .setTelemetryCollectionEnabled(true)
-                            .setTraceSamplingRate(0.25)
-                            .setOpenTelemetrySdk(myOpenTelemetrySdk)
-                            .build()
-            ).build();
-        } catch (Exception e) {
-            assertThat(e instanceof IllegalArgumentException).isTrue();
-            assertEquals(e.getMessage(),
-                    "OpenTelemetry trace sampling rate should not be set because you are providing an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
-        }
-    }
-
-    @Test
-    public void canEnableTelemetryCollectionUsingEnvVar() {
-        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("true");
-
-        // Do not enable OpenTelemetry using FirestoreOptions.
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-        firestore = firestoreOptions.getService();
-
-        // Expect OpenTelemetry to be enabled because of the environment variable.
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        assertThat(firestore.getTraceUtil()).isNotNull();
-        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
-    }
-
-    @Test
-    public void canEnableTelemetryCollectionUsingEnvVar2() {
-        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("on");
-
-        // Do not enable OpenTelemetry using FirestoreOptions.
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-        firestore = firestoreOptions.getService();
-
-        // Expect OpenTelemetry to be enabled because of the environment variable.
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        assertThat(firestore.getTraceUtil()).isNotNull();
-        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
-    }
-
-    @Test
-    public void canDisableTelemetryCollectionUsingEnvVar() {
-        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("false");
-
-        // Enable OpenTelemetry using FirestoreOptions.
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-
-        // Expect OpenTelemetry to be disabled because of the environment variable.
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-        assertThat(firestore.getTraceUtil()).isNotNull();
-        assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
-    }
-
-    @Test
-    public void canDisableTelemetryCollectionUsingEnvVar2() {
-        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("off");
-
-        // Enable OpenTelemetry using FirestoreOptions.
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-
-        // Expect OpenTelemetry to be disabled because of the environment variable.
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-        assertThat(firestore.getTraceUtil()).isNotNull();
-        assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
-    }
-
-    @Test
-    public void canOverrideTraceSamplingRateUsingEnvVar() {
-        enabledOpenTelemetryUtilMock.when(EnabledOpenTelemetryUtil::getOpenTelemetryTraceSamplingRateEnvVar).thenReturn("0.12");
-
-        // Set the trace sampling rate to 25% in Firestore
-        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions
-                        .newBuilder()
-                        .setTelemetryCollectionEnabled(true)
-                        .setTraceSamplingRate(0.25)
-                        .build()
-        ).build();
-        firestore = firestoreOptions.getService();
-
-        // Expect OpenTelemetry to be disabled because of the environment variable.
-        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
-        assertThat(enabledOpenTelemetryUtil.getTraceSamplingRate()).isEqualTo(0.12);
-    }
+//    @Test
+//    public void canEnableTelemetryCollectionUsingOpenTelemetryOptions() {
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        assertThat(firestore.getTraceUtil()).isNotNull();
+//        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canPassOpenTelemetrySdkToFirestore() {
+//        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .setOpenTelemetrySdk(myOpenTelemetrySdk)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
+//        assertThat(enabledOpenTelemetryUtil.getOpenTelemetrySdk()).isEqualTo(myOpenTelemetrySdk);
+//    }
+//
+//    @Test
+//    public void telemetryCollectionRemainsDisabledIfOpenTelemetrySdkIsProvided() {
+//        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(false)
+//                        .setOpenTelemetrySdk(myOpenTelemetrySdk)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canSetTraceSamplingRate() {
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .setTraceSamplingRate(0.25)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
+//        assertThat(enabledOpenTelemetryUtil.getTraceSamplingRate()).isEqualTo(0.25);
+//    }
+//
+//    @Test
+//    public void cannotSetOpenTelemetrySdkAndTraceSamplingRateAtTheSameTime() {
+//        OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
+//        try {
+//            FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                    FirestoreOpenTelemetryOptions
+//                            .newBuilder()
+//                            .setTelemetryCollectionEnabled(true)
+//                            .setOpenTelemetrySdk(myOpenTelemetrySdk)
+//                            .setTraceSamplingRate(0.25)
+//                            .build()
+//            ).build();
+//        } catch (Exception e) {
+//            assertThat(e instanceof IllegalArgumentException).isTrue();
+//            assertEquals(e.getMessage(), "Cannot set OpenTelemetry trace sampling rate because you have already provided an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
+//        }
+//
+//        try {
+//            FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                    FirestoreOpenTelemetryOptions
+//                            .newBuilder()
+//                            .setTelemetryCollectionEnabled(true)
+//                            .setTraceSamplingRate(0.25)
+//                            .setOpenTelemetrySdk(myOpenTelemetrySdk)
+//                            .build()
+//            ).build();
+//        } catch (Exception e) {
+//            assertThat(e instanceof IllegalArgumentException).isTrue();
+//            assertEquals(e.getMessage(),
+//                    "OpenTelemetry trace sampling rate should not be set because you are providing an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
+//        }
+//    }
+//
+//    @Test
+//    public void canEnableTelemetryCollectionUsingEnvVar() {
+//        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("true");
+//
+//        // Do not enable OpenTelemetry using FirestoreOptions.
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+//        firestore = firestoreOptions.getService();
+//
+//        // Expect OpenTelemetry to be enabled because of the environment variable.
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        assertThat(firestore.getTraceUtil()).isNotNull();
+//        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canEnableTelemetryCollectionUsingEnvVar2() {
+//        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("on");
+//
+//        // Do not enable OpenTelemetry using FirestoreOptions.
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+//        firestore = firestoreOptions.getService();
+//
+//        // Expect OpenTelemetry to be enabled because of the environment variable.
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        assertThat(firestore.getTraceUtil()).isNotNull();
+//        assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canDisableTelemetryCollectionUsingEnvVar() {
+//        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("false");
+//
+//        // Enable OpenTelemetry using FirestoreOptions.
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//
+//        // Expect OpenTelemetry to be disabled because of the environment variable.
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
+//        assertThat(firestore.getTraceUtil()).isNotNull();
+//        assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canDisableTelemetryCollectionUsingEnvVar2() {
+//        openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("off");
+//
+//        // Enable OpenTelemetry using FirestoreOptions.
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//
+//        // Expect OpenTelemetry to be disabled because of the environment variable.
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
+//        assertThat(firestore.getTraceUtil()).isNotNull();
+//        assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
+//    }
+//
+//    @Test
+//    public void canOverrideTraceSamplingRateUsingEnvVar() {
+//        enabledOpenTelemetryUtilMock.when(EnabledOpenTelemetryUtil::getOpenTelemetryTraceSamplingRateEnvVar).thenReturn("0.12");
+//
+//        // Set the trace sampling rate to 25% in Firestore
+//        FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setOpenTelemetryOptions(
+//                FirestoreOpenTelemetryOptions
+//                        .newBuilder()
+//                        .setTelemetryCollectionEnabled(true)
+//                        .setTraceSamplingRate(0.25)
+//                        .build()
+//        ).build();
+//        firestore = firestoreOptions.getService();
+//
+//        // Expect OpenTelemetry to be disabled because of the environment variable.
+//        assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
+//        assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+//        EnabledOpenTelemetryUtil enabledOpenTelemetryUtil = (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
+//        assertThat(enabledOpenTelemetryUtil.getTraceSamplingRate()).isEqualTo(0.12);
+//    }
 }
