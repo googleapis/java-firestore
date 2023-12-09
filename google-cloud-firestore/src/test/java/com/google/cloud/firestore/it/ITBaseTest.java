@@ -18,7 +18,6 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
-import static org.junit.Assert.assertNull;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
@@ -69,41 +68,49 @@ public abstract class ITBaseTest {
   }
 
   public void primeBackend() throws Exception {
-    if (!backendPrimed) {
-      backendPrimed = true;
-      CompletableFuture<Void> watchInitialized = new CompletableFuture<>();
-      CompletableFuture<Void> watchUpdateReceived = new CompletableFuture<>();
-      DocumentReference docRef = firestore.collection(autoId()).document();
-      ListenerRegistration listenerRegistration =
-          docRef.addSnapshotListener(
-              (snapshot, error) -> {
-                assertNull(error);
-                if (snapshot != null) {
-                  if ("done".equals(snapshot.get("value"))) {
-                    watchUpdateReceived.complete(null);
-                  } else {
-                    watchInitialized.complete(null);
-                  }
+    if (backendPrimed) return;
+
+    backendPrimed = true;
+    CompletableFuture<Void> watchInitialized = new CompletableFuture<>();
+    CompletableFuture<Void> watchUpdateReceived = new CompletableFuture<>();
+    DocumentReference docRef = firestore.collection(autoId()).document();
+    ListenerRegistration listenerRegistration =
+        docRef.addSnapshotListener(
+            (snapshot, error) -> {
+              if (error != null) {
+                logger.log(
+                    Level.SEVERE, "Prime backend received error in snapshot listener.", error);
+                if (!watchInitialized.isDone()) {
+                  watchInitialized.completeExceptionally(error);
+                } else if (!watchUpdateReceived.isDone()) {
+                  watchUpdateReceived.completeExceptionally(error);
                 }
-              });
+              }
+              if (snapshot != null) {
+                if ("done".equals(snapshot.get("value"))) {
+                  watchUpdateReceived.complete(null);
+                } else {
+                  watchInitialized.complete(null);
+                }
+              }
+            });
 
-      // Wait for watch to initialize and deliver first event.
-      watchInitialized.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+    // Wait for watch to initialize and deliver first event.
+    watchInitialized.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
-      // Use a transaction to perform a write without triggering any local events.
-      docRef
-          .getFirestore()
-          .runTransaction(
-              transaction -> {
-                transaction.set(docRef, map("value", "done"));
-                return null;
-              });
+    // Use a transaction to perform a write without triggering any local events.
+    docRef
+        .getFirestore()
+        .runTransaction(
+            transaction -> {
+              transaction.set(docRef, map("value", "done"));
+              return null;
+            });
 
-      // Wait to see the write on the watch stream.
-      watchUpdateReceived.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+    // Wait to see the write on the watch stream.
+    watchUpdateReceived.get(PRIMING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
-      listenerRegistration.remove();
-    }
+    listenerRegistration.remove();
   }
 
   @After
