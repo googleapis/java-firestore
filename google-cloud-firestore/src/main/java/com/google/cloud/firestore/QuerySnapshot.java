@@ -206,9 +206,10 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
    */
   @Nonnull
   public <T> List<T> toObjects(@Nonnull Class<T> clazz) {
-    List<T> results = new ArrayList<>();
+    List<QueryDocumentSnapshot> documents = getDocuments();
+    List<T> results = new ArrayList<>(documents.size());
 
-    for (DocumentSnapshot documentSnapshot : getDocuments()) {
+    for (DocumentSnapshot documentSnapshot : documents) {
       results.add(
           CustomClassMapper.convertToCustomClass(
               documentSnapshot.getData(), clazz, documentSnapshot.getReference()));
