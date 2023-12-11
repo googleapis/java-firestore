@@ -375,7 +375,7 @@ public class ITQueryCountTest extends ITBaseTest {
     assumeFalse(
         "Skip this test when running against the Firestore emulator because the Firestore emulator "
             + "does not use indexes and never fails with a 'missing index' error",
-        isRunningAgainstFirestoreEmulator());
+        isRunningAgainstFirestoreEmulator(firestore));
 
     CollectionReference collection = createEmptyCollection();
     Query compositeIndexQuery = collection.whereEqualTo("field1", 42).whereLessThan("field2", 99);
