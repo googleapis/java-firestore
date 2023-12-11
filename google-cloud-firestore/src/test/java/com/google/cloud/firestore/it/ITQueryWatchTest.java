@@ -65,13 +65,12 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class ITQueryWatchTest extends ITBaseTest {
-
   @Rule public TestName testName = new TestName();
 
   private CollectionReference randomColl;
 
   @Before
-  public void before() {
+  public void before() throws Exception {
     super.before();
     useFirestoreSpy();
     String autoId = LocalFirestoreHelper.autoId();
