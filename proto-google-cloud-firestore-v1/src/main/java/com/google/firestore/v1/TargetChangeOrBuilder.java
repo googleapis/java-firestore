@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,9 @@ public interface TargetChangeOrBuilder
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -67,7 +69,9 @@ public interface TargetChangeOrBuilder
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -81,7 +85,9 @@ public interface TargetChangeOrBuilder
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -133,6 +139,7 @@ public interface TargetChangeOrBuilder
    * <pre>
    * A token that can be used to resume the stream for the given `target_ids`,
    * or all targets if `target_ids` is empty.
+   *
    * Not set on every target change.
    * </pre>
    *
@@ -148,10 +155,12 @@ public interface TargetChangeOrBuilder
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -167,10 +176,12 @@ public interface TargetChangeOrBuilder
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -186,10 +197,12 @@ public interface TargetChangeOrBuilder
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>

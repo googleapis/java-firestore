@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package com.google.firestore.admin.v1;
  *
  * <pre>
  * Represents a single field in the database.
+ *
  * Fields are grouped by their "Collection Group", which represent all
  * collections in the database with the same id.
  * </pre>
@@ -47,11 +48,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Field();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -219,11 +215,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       return new IndexConfig();
     }
 
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
-    }
-
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.admin.v1.FieldProto
           .internal_static_google_firestore_admin_v1_Field_IndexConfig_descriptor;
@@ -240,6 +231,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int INDEXES_FIELD_NUMBER = 1;
+
+    @SuppressWarnings("serial")
     private java.util.List<com.google.firestore.admin.v1.Index> indexes_;
     /**
      *
@@ -309,7 +302,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int USES_ANCESTOR_CONFIG_FIELD_NUMBER = 2;
-    private boolean usesAncestorConfig_;
+    private boolean usesAncestorConfig_ = false;
     /**
      *
      *
@@ -329,7 +322,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int ANCESTOR_FIELD_FIELD_NUMBER = 3;
-    private volatile java.lang.Object ancestorField_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object ancestorField_ = "";
     /**
      *
      *
@@ -384,7 +379,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int REVERTING_FIELD_NUMBER = 4;
-    private boolean reverting_;
+    private boolean reverting_ = false;
     /**
      *
      *
@@ -633,6 +628,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (indexesBuilder_ == null) {
           indexes_ = java.util.Collections.emptyList();
         } else {
@@ -641,11 +637,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         usesAncestorConfig_ = false;
-
         ancestorField_ = "";
-
         reverting_ = false;
-
         return this;
       }
 
@@ -673,7 +666,16 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.admin.v1.Field.IndexConfig buildPartial() {
         com.google.firestore.admin.v1.Field.IndexConfig result =
             new com.google.firestore.admin.v1.Field.IndexConfig(this);
-        int from_bitField0_ = bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(
+          com.google.firestore.admin.v1.Field.IndexConfig result) {
         if (indexesBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             indexes_ = java.util.Collections.unmodifiableList(indexes_);
@@ -683,11 +685,19 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         } else {
           result.indexes_ = indexesBuilder_.build();
         }
-        result.usesAncestorConfig_ = usesAncestorConfig_;
-        result.ancestorField_ = ancestorField_;
-        result.reverting_ = reverting_;
-        onBuilt();
-        return result;
+      }
+
+      private void buildPartial0(com.google.firestore.admin.v1.Field.IndexConfig result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.usesAncestorConfig_ = usesAncestorConfig_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.ancestorField_ = ancestorField_;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.reverting_ = reverting_;
+        }
       }
 
       @java.lang.Override
@@ -770,6 +780,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         }
         if (!other.getAncestorField().isEmpty()) {
           ancestorField_ = other.ancestorField_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
         if (other.getReverting() != false) {
@@ -817,19 +828,19 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
               case 16:
                 {
                   usesAncestorConfig_ = input.readBool();
-
+                  bitField0_ |= 0x00000002;
                   break;
                 } // case 16
               case 26:
                 {
                   ancestorField_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000004;
                   break;
                 } // case 26
               case 32:
                 {
                   reverting_ = input.readBool();
-
+                  bitField0_ |= 0x00000008;
                   break;
                 } // case 32
               default:
@@ -1234,6 +1245,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       public Builder setUsesAncestorConfig(boolean value) {
 
         usesAncestorConfig_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1251,7 +1263,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearUsesAncestorConfig() {
-
+        bitField0_ = (bitField0_ & ~0x00000002);
         usesAncestorConfig_ = false;
         onChanged();
         return this;
@@ -1327,8 +1339,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         if (value == null) {
           throw new NullPointerException();
         }
-
         ancestorField_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -1347,8 +1359,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearAncestorField() {
-
         ancestorField_ = getDefaultInstance().getAncestorField();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -1372,8 +1384,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         ancestorField_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -1417,6 +1429,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       public Builder setReverting(boolean value) {
 
         reverting_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1436,7 +1449,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearReverting() {
-
+        bitField0_ = (bitField0_ & ~0x00000008);
         reverting_ = false;
         onChanged();
         return this;
@@ -1571,11 +1584,6 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new TtlConfig();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -1787,7 +1795,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final int STATE_FIELD_NUMBER = 1;
-    private int state_;
+    private int state_ = 0;
     /**
      *
      *
@@ -1820,9 +1828,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.Field.TtlConfig.State getState() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.Field.TtlConfig.State result =
-          com.google.firestore.admin.v1.Field.TtlConfig.State.valueOf(state_);
+          com.google.firestore.admin.v1.Field.TtlConfig.State.forNumber(state_);
       return result == null
           ? com.google.firestore.admin.v1.Field.TtlConfig.State.UNRECOGNIZED
           : result;
@@ -2033,8 +2040,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         state_ = 0;
-
         return this;
       }
 
@@ -2062,9 +2069,18 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       public com.google.firestore.admin.v1.Field.TtlConfig buildPartial() {
         com.google.firestore.admin.v1.Field.TtlConfig result =
             new com.google.firestore.admin.v1.Field.TtlConfig(this);
-        result.state_ = state_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.admin.v1.Field.TtlConfig result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.state_ = state_;
+        }
       }
 
       @java.lang.Override
@@ -2147,7 +2163,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
               case 8:
                 {
                   state_ = input.readEnum();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 8
               default:
@@ -2166,6 +2182,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         } // finally
         return this;
       }
+
+      private int bitField0_;
 
       private int state_ = 0;
       /**
@@ -2200,8 +2218,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder setStateValue(int value) {
-
         state_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2220,9 +2238,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        */
       @java.lang.Override
       public com.google.firestore.admin.v1.Field.TtlConfig.State getState() {
-        @SuppressWarnings("deprecation")
         com.google.firestore.admin.v1.Field.TtlConfig.State result =
-            com.google.firestore.admin.v1.Field.TtlConfig.State.valueOf(state_);
+            com.google.firestore.admin.v1.Field.TtlConfig.State.forNumber(state_);
         return result == null
             ? com.google.firestore.admin.v1.Field.TtlConfig.State.UNRECOGNIZED
             : result;
@@ -2245,7 +2262,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         if (value == null) {
           throw new NullPointerException();
         }
-
+        bitField0_ |= 0x00000001;
         state_ = value.getNumber();
         onChanged();
         return this;
@@ -2264,7 +2281,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
        * @return This builder for chaining.
        */
       public Builder clearState() {
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         state_ = 0;
         onChanged();
         return this;
@@ -2335,28 +2352,34 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
    * <pre>
    * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+   *
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
    * or a special field path. The only valid special field is `*`, which
    * represents any field.
+   *
    * Field paths may be quoted using ` (backtick). The only character that needs
    * to be escaped within a quoted field path is the backtick character itself,
    * escaped using a backslash. Special characters in field paths that
    * must be quoted include: `*`, `.`,
    * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+   *
    * Examples:
    * (Note: Comments here are written in markdown syntax, so there is an
    *  additional layer of backticks to represent a code block)
    * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
    * `city` in the field `address`.
    * `&#92;`*&#92;`` represents a field named `*`, not any field.
+   *
    * A special `Field` contains the default indexing settings for all fields.
    * This field's resource name is:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -2386,21 +2409,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * Required. A field name of the form
    * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+   *
    * A field path may be a simple field name, e.g. `address` or a path to fields
    * within map_value , e.g. `address.city`,
    * or a special field path. The only valid special field is `*`, which
    * represents any field.
+   *
    * Field paths may be quoted using ` (backtick). The only character that needs
    * to be escaped within a quoted field path is the backtick character itself,
    * escaped using a backslash. Special characters in field paths that
    * must be quoted include: `*`, `.`,
    * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+   *
    * Examples:
    * (Note: Comments here are written in markdown syntax, so there is an
    *  additional layer of backticks to represent a code block)
    * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
    * `city` in the field `address`.
    * `&#92;`*&#92;`` represents a field named `*`, not any field.
+   *
    * A special `Field` contains the default indexing settings for all fields.
    * This field's resource name is:
    * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -2479,7 +2506,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Field.IndexConfigOrBuilder getIndexConfigOrBuilder() {
-    return getIndexConfig();
+    return indexConfig_ == null
+        ? com.google.firestore.admin.v1.Field.IndexConfig.getDefaultInstance()
+        : indexConfig_;
   }
 
   public static final int TTL_CONFIG_FIELD_NUMBER = 3;
@@ -2533,7 +2562,9 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.Field.TtlConfigOrBuilder getTtlConfigOrBuilder() {
-    return getTtlConfig();
+    return ttlConfig_ == null
+        ? com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance()
+        : ttlConfig_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -2726,6 +2757,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Represents a single field in the database.
+   *
    * Fields are grouped by their "Collection Group", which represent all
    * collections in the database with the same id.
    * </pre>
@@ -2761,18 +2793,16 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
-      if (indexConfigBuilder_ == null) {
-        indexConfig_ = null;
-      } else {
-        indexConfig_ = null;
+      indexConfig_ = null;
+      if (indexConfigBuilder_ != null) {
+        indexConfigBuilder_.dispose();
         indexConfigBuilder_ = null;
       }
-      if (ttlConfigBuilder_ == null) {
-        ttlConfig_ = null;
-      } else {
-        ttlConfig_ = null;
+      ttlConfig_ = null;
+      if (ttlConfigBuilder_ != null) {
+        ttlConfigBuilder_.dispose();
         ttlConfigBuilder_ = null;
       }
       return this;
@@ -2801,19 +2831,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.admin.v1.Field buildPartial() {
       com.google.firestore.admin.v1.Field result = new com.google.firestore.admin.v1.Field(this);
-      result.name_ = name_;
-      if (indexConfigBuilder_ == null) {
-        result.indexConfig_ = indexConfig_;
-      } else {
-        result.indexConfig_ = indexConfigBuilder_.build();
-      }
-      if (ttlConfigBuilder_ == null) {
-        result.ttlConfig_ = ttlConfig_;
-      } else {
-        result.ttlConfig_ = ttlConfigBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.Field result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.indexConfig_ =
+            indexConfigBuilder_ == null ? indexConfig_ : indexConfigBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.ttlConfig_ = ttlConfigBuilder_ == null ? ttlConfig_ : ttlConfigBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -2863,6 +2899,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.admin.v1.Field.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasIndexConfig()) {
@@ -2900,19 +2937,19 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getIndexConfigFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getTtlConfigFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             default:
@@ -2932,6 +2969,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private int bitField0_;
+
     private java.lang.Object name_ = "";
     /**
      *
@@ -2939,21 +2978,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -2982,21 +3025,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3025,21 +3072,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3056,8 +3107,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -3067,21 +3118,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3094,8 +3149,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -3105,21 +3160,25 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * Required. A field name of the form
      * `projects/{project_id}/databases/{database_id}/collectionGroups/{collection_id}/fields/{field_path}`
+     *
      * A field path may be a simple field name, e.g. `address` or a path to fields
      * within map_value , e.g. `address.city`,
      * or a special field path. The only valid special field is `*`, which
      * represents any field.
+     *
      * Field paths may be quoted using ` (backtick). The only character that needs
      * to be escaped within a quoted field path is the backtick character itself,
      * escaped using a backslash. Special characters in field paths that
      * must be quoted include: `*`, `.`,
      * ``` (backtick), `[`, `]`, as well as any ascii symbolic characters.
+     *
      * Examples:
      * (Note: Comments here are written in markdown syntax, so there is an
      *  additional layer of backticks to represent a code block)
      * `&#92;`address.city&#92;`` represents a field named `address.city`, not the map key
      * `city` in the field `address`.
      * `&#92;`*&#92;`` represents a field named `*`, not any field.
+     *
      * A special `Field` contains the default indexing settings for all fields.
      * This field's resource name is:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`
@@ -3137,8 +3196,8 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -3164,7 +3223,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the indexConfig field is set.
      */
     public boolean hasIndexConfig() {
-      return indexConfigBuilder_ != null || indexConfig_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -3207,11 +3266,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         indexConfig_ = value;
-        onChanged();
       } else {
         indexConfigBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -3230,11 +3289,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         com.google.firestore.admin.v1.Field.IndexConfig.Builder builderForValue) {
       if (indexConfigBuilder_ == null) {
         indexConfig_ = builderForValue.build();
-        onChanged();
       } else {
         indexConfigBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -3251,19 +3310,19 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeIndexConfig(com.google.firestore.admin.v1.Field.IndexConfig value) {
       if (indexConfigBuilder_ == null) {
-        if (indexConfig_ != null) {
-          indexConfig_ =
-              com.google.firestore.admin.v1.Field.IndexConfig.newBuilder(indexConfig_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && indexConfig_ != null
+            && indexConfig_
+                != com.google.firestore.admin.v1.Field.IndexConfig.getDefaultInstance()) {
+          getIndexConfigBuilder().mergeFrom(value);
         } else {
           indexConfig_ = value;
         }
-        onChanged();
       } else {
         indexConfigBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -3279,14 +3338,13 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
      */
     public Builder clearIndexConfig() {
-      if (indexConfigBuilder_ == null) {
-        indexConfig_ = null;
-        onChanged();
-      } else {
-        indexConfig_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      indexConfig_ = null;
+      if (indexConfigBuilder_ != null) {
+        indexConfigBuilder_.dispose();
         indexConfigBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -3302,7 +3360,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.admin.v1.Field.IndexConfig index_config = 2;</code>
      */
     public com.google.firestore.admin.v1.Field.IndexConfig.Builder getIndexConfigBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getIndexConfigFieldBuilder().getBuilder();
     }
@@ -3376,7 +3434,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the ttlConfig field is set.
      */
     public boolean hasTtlConfig() {
-      return ttlConfigBuilder_ != null || ttlConfig_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -3417,11 +3475,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         ttlConfig_ = value;
-        onChanged();
       } else {
         ttlConfigBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -3439,11 +3497,11 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
         com.google.firestore.admin.v1.Field.TtlConfig.Builder builderForValue) {
       if (ttlConfigBuilder_ == null) {
         ttlConfig_ = builderForValue.build();
-        onChanged();
       } else {
         ttlConfigBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -3459,19 +3517,18 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeTtlConfig(com.google.firestore.admin.v1.Field.TtlConfig value) {
       if (ttlConfigBuilder_ == null) {
-        if (ttlConfig_ != null) {
-          ttlConfig_ =
-              com.google.firestore.admin.v1.Field.TtlConfig.newBuilder(ttlConfig_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && ttlConfig_ != null
+            && ttlConfig_ != com.google.firestore.admin.v1.Field.TtlConfig.getDefaultInstance()) {
+          getTtlConfigBuilder().mergeFrom(value);
         } else {
           ttlConfig_ = value;
         }
-        onChanged();
       } else {
         ttlConfigBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -3486,14 +3543,13 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
      */
     public Builder clearTtlConfig() {
-      if (ttlConfigBuilder_ == null) {
-        ttlConfig_ = null;
-        onChanged();
-      } else {
-        ttlConfig_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      ttlConfig_ = null;
+      if (ttlConfigBuilder_ != null) {
+        ttlConfigBuilder_.dispose();
         ttlConfigBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -3508,7 +3564,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.admin.v1.Field.TtlConfig ttl_config = 3;</code>
      */
     public com.google.firestore.admin.v1.Field.TtlConfig.Builder getTtlConfigBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getTtlConfigFieldBuilder().getBuilder();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     return new ListDatabasesRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
         .internal_static_google_firestore_admin_v1_ListDatabasesRequest_descriptor;
@@ -68,7 +63,9 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -319,8 +316,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       return this;
     }
 
@@ -348,9 +345,18 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     public com.google.firestore.admin.v1.ListDatabasesRequest buildPartial() {
       com.google.firestore.admin.v1.ListDatabasesRequest result =
           new com.google.firestore.admin.v1.ListDatabasesRequest(this);
-      result.parent_ = parent_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ListDatabasesRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
     }
 
     @java.lang.Override
@@ -401,6 +407,7 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
         return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -432,7 +439,7 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             default:
@@ -451,6 +458,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -522,8 +531,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -542,8 +551,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -567,8 +576,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }

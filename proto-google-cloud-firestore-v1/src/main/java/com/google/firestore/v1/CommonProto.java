@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,12 +69,12 @@ public final class CommonProto {
           + "eadWrite\022\031\n\021retry_transaction\030\001 \001(\014\032S\n\010R"
           + "eadOnly\022/\n\tread_time\030\002 \001(\0132\032.google.prot"
           + "obuf.TimestampH\000B\026\n\024consistency_selector"
-          + "B\006\n\004modeB\304\001\n\027com.google.firestore.v1B\013Co"
-          + "mmonProtoP\001Z<google.golang.org/genproto/"
-          + "googleapis/firestore/v1;firestore\242\002\004GCFS"
-          + "\252\002\031Google.Cloud.Firestore.V1\312\002\031Google\\Cl"
-          + "oud\\Firestore\\V1\352\002\034Google::Cloud::Firest"
-          + "ore::V1b\006proto3"
+          + "B\006\n\004modeB\303\001\n\027com.google.firestore.v1B\013Co"
+          + "mmonProtoP\001Z;cloud.google.com/go/firesto"
+          + "re/apiv1/firestorepb;firestorepb\242\002\004GCFS\252"
+          + "\002\031Google.Cloud.Firestore.V1\312\002\031Google\\Clo"
+          + "ud\\Firestore\\V1\352\002\034Google::Cloud::Firesto"
+          + "re::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

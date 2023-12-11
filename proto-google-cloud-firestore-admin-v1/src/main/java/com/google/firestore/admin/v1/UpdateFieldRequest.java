@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
+ * The request for
+ * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.UpdateFieldRequest}
@@ -43,11 +44,6 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new UpdateFieldRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -111,7 +107,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.FieldOrBuilder getFieldOrBuilder() {
-    return getField();
+    return field_ == null ? com.google.firestore.admin.v1.Field.getDefaultInstance() : field_;
   }
 
   public static final int UPDATE_MASK_FIELD_NUMBER = 2;
@@ -160,7 +156,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    */
   @java.lang.Override
   public com.google.protobuf.FieldMaskOrBuilder getUpdateMaskOrBuilder() {
-    return getUpdateMask();
+    return updateMask_ == null ? com.google.protobuf.FieldMask.getDefaultInstance() : updateMask_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -345,7 +341,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
+   * The request for
+   * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.UpdateFieldRequest}
@@ -379,16 +376,15 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (fieldBuilder_ == null) {
-        field_ = null;
-      } else {
-        field_ = null;
+      bitField0_ = 0;
+      field_ = null;
+      if (fieldBuilder_ != null) {
+        fieldBuilder_.dispose();
         fieldBuilder_ = null;
       }
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-      } else {
-        updateMask_ = null;
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
       return this;
@@ -418,18 +414,21 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
     public com.google.firestore.admin.v1.UpdateFieldRequest buildPartial() {
       com.google.firestore.admin.v1.UpdateFieldRequest result =
           new com.google.firestore.admin.v1.UpdateFieldRequest(this);
-      if (fieldBuilder_ == null) {
-        result.field_ = field_;
-      } else {
-        result.field_ = fieldBuilder_.build();
-      }
-      if (updateMaskBuilder_ == null) {
-        result.updateMask_ = updateMask_;
-      } else {
-        result.updateMask_ = updateMaskBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.UpdateFieldRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.field_ = fieldBuilder_ == null ? field_ : fieldBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.updateMask_ = updateMaskBuilder_ == null ? updateMask_ : updateMaskBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -513,13 +512,13 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
             case 10:
               {
                 input.readMessage(getFieldFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getUpdateMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -538,6 +537,8 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private com.google.firestore.admin.v1.Field field_;
     private com.google.protobuf.SingleFieldBuilderV3<
@@ -558,7 +559,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * @return Whether the field field is set.
      */
     public boolean hasField() {
-      return fieldBuilder_ != null || field_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
@@ -595,11 +596,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
           throw new NullPointerException();
         }
         field_ = value;
-        onChanged();
       } else {
         fieldBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -615,11 +616,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
     public Builder setField(com.google.firestore.admin.v1.Field.Builder builderForValue) {
       if (fieldBuilder_ == null) {
         field_ = builderForValue.build();
-        onChanged();
       } else {
         fieldBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -634,19 +635,18 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      */
     public Builder mergeField(com.google.firestore.admin.v1.Field value) {
       if (fieldBuilder_ == null) {
-        if (field_ != null) {
-          field_ =
-              com.google.firestore.admin.v1.Field.newBuilder(field_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && field_ != null
+            && field_ != com.google.firestore.admin.v1.Field.getDefaultInstance()) {
+          getFieldBuilder().mergeFrom(value);
         } else {
           field_ = value;
         }
-        onChanged();
       } else {
         fieldBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -660,14 +660,13 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * </code>
      */
     public Builder clearField() {
-      if (fieldBuilder_ == null) {
-        field_ = null;
-        onChanged();
-      } else {
-        field_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      field_ = null;
+      if (fieldBuilder_ != null) {
+        fieldBuilder_.dispose();
         fieldBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -681,7 +680,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * </code>
      */
     public com.google.firestore.admin.v1.Field.Builder getFieldBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getFieldFieldBuilder().getBuilder();
     }
@@ -748,7 +747,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * @return Whether the updateMask field is set.
      */
     public boolean hasUpdateMask() {
-      return updateMaskBuilder_ != null || updateMask_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -787,11 +786,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
           throw new NullPointerException();
         }
         updateMask_ = value;
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -807,11 +806,11 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
     public Builder setUpdateMask(com.google.protobuf.FieldMask.Builder builderForValue) {
       if (updateMaskBuilder_ == null) {
         updateMask_ = builderForValue.build();
-        onChanged();
       } else {
         updateMaskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -826,17 +825,18 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      */
     public Builder mergeUpdateMask(com.google.protobuf.FieldMask value) {
       if (updateMaskBuilder_ == null) {
-        if (updateMask_ != null) {
-          updateMask_ =
-              com.google.protobuf.FieldMask.newBuilder(updateMask_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && updateMask_ != null
+            && updateMask_ != com.google.protobuf.FieldMask.getDefaultInstance()) {
+          getUpdateMaskBuilder().mergeFrom(value);
         } else {
           updateMask_ = value;
         }
-        onChanged();
       } else {
         updateMaskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -850,14 +850,13 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * <code>.google.protobuf.FieldMask update_mask = 2;</code>
      */
     public Builder clearUpdateMask() {
-      if (updateMaskBuilder_ == null) {
-        updateMask_ = null;
-        onChanged();
-      } else {
-        updateMask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      updateMask_ = null;
+      if (updateMaskBuilder_ != null) {
+        updateMaskBuilder_.dispose();
         updateMaskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -871,7 +870,7 @@ public final class UpdateFieldRequest extends com.google.protobuf.GeneratedMessa
      * <code>.google.protobuf.FieldMask update_mask = 2;</code>
      */
     public com.google.protobuf.FieldMask.Builder getUpdateMaskBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getUpdateMaskFieldBuilder().getBuilder();
     }

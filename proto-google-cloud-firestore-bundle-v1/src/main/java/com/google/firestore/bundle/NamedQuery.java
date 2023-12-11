@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
     return new NamedQuery();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.bundle.BundleProto
         .internal_static_google_firestore_bundle_NamedQuery_descriptor;
@@ -69,7 +64,9 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -166,7 +163,9 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.bundle.BundledQueryOrBuilder getBundledQueryOrBuilder() {
-    return getBundledQuery();
+    return bundledQuery_ == null
+        ? com.google.firestore.bundle.BundledQuery.getDefaultInstance()
+        : bundledQuery_;
   }
 
   public static final int READ_TIME_FIELD_NUMBER = 3;
@@ -215,7 +214,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -443,18 +442,16 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
-      if (bundledQueryBuilder_ == null) {
-        bundledQuery_ = null;
-      } else {
-        bundledQuery_ = null;
+      bundledQuery_ = null;
+      if (bundledQueryBuilder_ != null) {
+        bundledQueryBuilder_.dispose();
         bundledQueryBuilder_ = null;
       }
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       return this;
@@ -484,19 +481,25 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.bundle.NamedQuery buildPartial() {
       com.google.firestore.bundle.NamedQuery result =
           new com.google.firestore.bundle.NamedQuery(this);
-      result.name_ = name_;
-      if (bundledQueryBuilder_ == null) {
-        result.bundledQuery_ = bundledQuery_;
-      } else {
-        result.bundledQuery_ = bundledQueryBuilder_.build();
-      }
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.bundle.NamedQuery result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.bundledQuery_ =
+            bundledQueryBuilder_ == null ? bundledQuery_ : bundledQueryBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -546,6 +549,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.bundle.NamedQuery.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasBundledQuery()) {
@@ -583,19 +587,19 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getBundledQueryFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             default:
@@ -614,6 +618,8 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -682,8 +688,8 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -701,8 +707,8 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -725,8 +731,8 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -749,7 +755,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the bundledQuery field is set.
      */
     public boolean hasBundledQuery() {
-      return bundledQueryBuilder_ != null || bundledQuery_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -786,11 +792,11 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         bundledQuery_ = value;
-        onChanged();
       } else {
         bundledQueryBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -806,11 +812,11 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
         com.google.firestore.bundle.BundledQuery.Builder builderForValue) {
       if (bundledQueryBuilder_ == null) {
         bundledQuery_ = builderForValue.build();
-        onChanged();
       } else {
         bundledQueryBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -824,19 +830,18 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeBundledQuery(com.google.firestore.bundle.BundledQuery value) {
       if (bundledQueryBuilder_ == null) {
-        if (bundledQuery_ != null) {
-          bundledQuery_ =
-              com.google.firestore.bundle.BundledQuery.newBuilder(bundledQuery_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && bundledQuery_ != null
+            && bundledQuery_ != com.google.firestore.bundle.BundledQuery.getDefaultInstance()) {
+          getBundledQueryBuilder().mergeFrom(value);
         } else {
           bundledQuery_ = value;
         }
-        onChanged();
       } else {
         bundledQueryBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -849,14 +854,13 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.bundle.BundledQuery bundled_query = 2;</code>
      */
     public Builder clearBundledQuery() {
-      if (bundledQueryBuilder_ == null) {
-        bundledQuery_ = null;
-        onChanged();
-      } else {
-        bundledQuery_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      bundledQuery_ = null;
+      if (bundledQueryBuilder_ != null) {
+        bundledQueryBuilder_.dispose();
         bundledQueryBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -869,7 +873,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.firestore.bundle.BundledQuery bundled_query = 2;</code>
      */
     public com.google.firestore.bundle.BundledQuery.Builder getBundledQueryBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getBundledQueryFieldBuilder().getBuilder();
     }
@@ -936,7 +940,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -973,11 +977,11 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -993,11 +997,11 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1012,17 +1016,18 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1036,14 +1041,13 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1057,7 +1061,7 @@ public final class NamedQuery extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -140,6 +140,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -154,6 +155,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -168,6 +170,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A timestamp value.
+   *
    * Precise only to microseconds. When stored, any additional precision is
    * rounded down.
    * </pre>
@@ -181,6 +184,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -196,6 +200,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -211,6 +216,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A string value.
+   *
    * The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes of the UTF-8 representation are considered by
    * queries.
@@ -227,6 +233,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A bytes value.
+   *
    * Must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes are considered by queries.
    * </pre>
@@ -241,6 +248,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * A bytes value.
+   *
    * Must not exceed 1 MiB - 89 bytes.
    * Only the first 1,500 bytes are considered by queries.
    * </pre>
@@ -331,6 +339,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -345,6 +354,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -359,6 +369,7 @@ public interface ValueOrBuilder
    *
    * <pre>
    * An array value.
+   *
    * Cannot directly contain another array value, though can contain an
    * map which contains another array.
    * </pre>
@@ -402,5 +413,5 @@ public interface ValueOrBuilder
    */
   com.google.firestore.v1.MapValueOrBuilder getMapValueOrBuilder();
 
-  public com.google.firestore.v1.Value.ValueTypeCase getValueTypeCase();
+  com.google.firestore.v1.Value.ValueTypeCase getValueTypeCase();
 }

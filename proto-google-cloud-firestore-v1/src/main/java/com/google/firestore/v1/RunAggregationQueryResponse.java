@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
+ * The response for
+ * [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.RunAggregationQueryResponse}
@@ -47,11 +48,6 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     return new RunAggregationQueryResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunAggregationQueryResponse_descriptor;
@@ -74,6 +70,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -90,6 +87,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -108,6 +106,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    * <pre>
    * A single aggregation result.
+   *
    * Not present when reporting partial progress.
    * </pre>
    *
@@ -115,16 +114,19 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    */
   @java.lang.Override
   public com.google.firestore.v1.AggregationResultOrBuilder getResultOrBuilder() {
-    return getResult();
+    return result_ == null
+        ? com.google.firestore.v1.AggregationResult.getDefaultInstance()
+        : result_;
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 2;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
    * <pre>
    * The transaction that was started as part of this request.
+   *
    * Only present on the first response when the request requested to start
    * a new transaction.
    * </pre>
@@ -144,7 +146,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -159,7 +168,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -174,14 +190,21 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The time at which the aggregate value is valid for.
+   * The time at which the aggregate result was computed. This is always
+   * monotonically increasing; in this case, the previous AggregationResult in
+   * the result stream are guaranteed not to have changed between their
+   * `read_time` and this one.
+   *
+   * If the query returns no results, a response with `read_time` and no
+   * `result` will be sent, and this represents the time at which the query
+   * was run.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -375,7 +398,8 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
    *
    *
    * <pre>
-   * The response for [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
+   * The response for
+   * [Firestore.RunAggregationQuery][google.firestore.v1.Firestore.RunAggregationQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.RunAggregationQueryResponse}
@@ -409,18 +433,16 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (resultBuilder_ == null) {
-        result_ = null;
-      } else {
-        result_ = null;
+      bitField0_ = 0;
+      result_ = null;
+      if (resultBuilder_ != null) {
+        resultBuilder_.dispose();
         resultBuilder_ = null;
       }
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       return this;
@@ -450,19 +472,24 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     public com.google.firestore.v1.RunAggregationQueryResponse buildPartial() {
       com.google.firestore.v1.RunAggregationQueryResponse result =
           new com.google.firestore.v1.RunAggregationQueryResponse(this);
-      if (resultBuilder_ == null) {
-        result.result_ = result_;
-      } else {
-        result.result_ = resultBuilder_.build();
-      }
-      result.transaction_ = transaction_;
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.RunAggregationQueryResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.result_ = resultBuilder_ == null ? result_ : resultBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.transaction_ = transaction_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -549,19 +576,19 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
             case 10:
               {
                 input.readMessage(getResultFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             default:
@@ -581,6 +608,8 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
       return this;
     }
 
+    private int bitField0_;
+
     private com.google.firestore.v1.AggregationResult result_;
     private com.google.protobuf.SingleFieldBuilderV3<
             com.google.firestore.v1.AggregationResult,
@@ -592,6 +621,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -600,13 +630,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      * @return Whether the result field is set.
      */
     public boolean hasResult() {
-      return resultBuilder_ != null || result_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -628,6 +659,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -639,11 +671,11 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
           throw new NullPointerException();
         }
         result_ = value;
-        onChanged();
       } else {
         resultBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -651,6 +683,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -659,11 +692,11 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     public Builder setResult(com.google.firestore.v1.AggregationResult.Builder builderForValue) {
       if (resultBuilder_ == null) {
         result_ = builderForValue.build();
-        onChanged();
       } else {
         resultBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -671,6 +704,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -678,19 +712,18 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      */
     public Builder mergeResult(com.google.firestore.v1.AggregationResult value) {
       if (resultBuilder_ == null) {
-        if (result_ != null) {
-          result_ =
-              com.google.firestore.v1.AggregationResult.newBuilder(result_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && result_ != null
+            && result_ != com.google.firestore.v1.AggregationResult.getDefaultInstance()) {
+          getResultBuilder().mergeFrom(value);
         } else {
           result_ = value;
         }
-        onChanged();
       } else {
         resultBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -698,20 +731,20 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
      */
     public Builder clearResult() {
-      if (resultBuilder_ == null) {
-        result_ = null;
-        onChanged();
-      } else {
-        result_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      result_ = null;
+      if (resultBuilder_ != null) {
+        resultBuilder_.dispose();
         resultBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -719,13 +752,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
      * <code>.google.firestore.v1.AggregationResult result = 1;</code>
      */
     public com.google.firestore.v1.AggregationResult.Builder getResultBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getResultFieldBuilder().getBuilder();
     }
@@ -734,6 +768,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -753,6 +788,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * A single aggregation result.
+     *
      * Not present when reporting partial progress.
      * </pre>
      *
@@ -781,6 +817,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -798,6 +835,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -811,8 +849,8 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -821,6 +859,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      * <pre>
      * The transaction that was started as part of this request.
+     *
      * Only present on the first response when the request requested to start
      * a new transaction.
      * </pre>
@@ -830,7 +869,7 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;
@@ -846,7 +885,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -854,13 +900,20 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -878,7 +931,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -889,18 +949,25 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -908,68 +975,89 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }
@@ -977,7 +1065,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
@@ -993,7 +1088,14 @@ public final class RunAggregationQueryResponse extends com.google.protobuf.Gener
      *
      *
      * <pre>
-     * The time at which the aggregate value is valid for.
+     * The time at which the aggregate result was computed. This is always
+     * monotonically increasing; in this case, the previous AggregationResult in
+     * the result stream are guaranteed not to have changed between their
+     * `read_time` and this one.
+     *
+     * If the query returns no results, a response with `read_time` and no
+     * `result` will be sent, and this represents the time at which the query
+     * was run.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 3;</code>

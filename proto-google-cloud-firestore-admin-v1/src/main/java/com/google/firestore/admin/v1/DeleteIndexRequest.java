@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.DeleteIndex][google.firestore.admin.v1.FirestoreAdmin.DeleteIndex].
+ * The request for
+ * [FirestoreAdmin.DeleteIndex][google.firestore.admin.v1.FirestoreAdmin.DeleteIndex].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.DeleteIndexRequest}
@@ -47,11 +48,6 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
     return new DeleteIndexRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
         .internal_static_google_firestore_admin_v1_DeleteIndexRequest_descriptor;
@@ -68,7 +64,9 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -285,7 +283,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.DeleteIndex][google.firestore.admin.v1.FirestoreAdmin.DeleteIndex].
+   * The request for
+   * [FirestoreAdmin.DeleteIndex][google.firestore.admin.v1.FirestoreAdmin.DeleteIndex].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.DeleteIndexRequest}
@@ -319,8 +318,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       return this;
     }
 
@@ -348,9 +347,18 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
     public com.google.firestore.admin.v1.DeleteIndexRequest buildPartial() {
       com.google.firestore.admin.v1.DeleteIndexRequest result =
           new com.google.firestore.admin.v1.DeleteIndexRequest(this);
-      result.name_ = name_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.DeleteIndexRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
     }
 
     @java.lang.Override
@@ -401,6 +409,7 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
         return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -432,7 +441,7 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             default:
@@ -451,6 +460,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -522,8 +533,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -542,8 +553,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -567,8 +578,8 @@ public final class DeleteIndexRequest extends com.google.protobuf.GeneratedMessa
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }

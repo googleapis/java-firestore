@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,12 @@ package com.google.firestore.v1;
  *
  * <pre>
  * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
+ *
  * The first request creates a stream, or resumes an existing one from a token.
+ *
  * When creating a new stream, the server replies with a response containing
  * only an ID and a token, to use in the next request.
+ *
  * When resuming a stream, the server first streams any responses later than the
  * given token, then a response containing only an up-to-date token, to use in
  * the next request.
@@ -56,11 +59,6 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     return new WriteRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_WriteRequest_descriptor;
@@ -88,7 +86,9 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -141,7 +141,9 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int STREAM_ID_FIELD_NUMBER = 2;
-  private volatile java.lang.Object streamId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object streamId_ = "";
   /**
    *
    *
@@ -194,12 +196,15 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int WRITES_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Write> writes_;
   /**
    *
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -217,6 +222,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -234,6 +240,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -251,6 +258,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -268,6 +276,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -282,20 +291,24 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int STREAM_TOKEN_FIELD_NUMBER = 4;
-  private com.google.protobuf.ByteString streamToken_;
+  private com.google.protobuf.ByteString streamToken_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
    * <pre>
    * A stream token that was previously sent by the server.
+   *
    * The client should set this field to the token from the most recent
-   * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This acknowledges that the client has
-   * received responses up to this token. After sending this token, earlier
-   * tokens may not be used anymore.
+   * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
+   * acknowledges that the client has received responses up to this token. After
+   * sending this token, earlier tokens may not be used anymore.
+   *
    * The server may close the stream if there are too many unacknowledged
    * responses.
+   *
    * Leave this field unset when creating a new stream. To resume a stream at
    * a specific point, set this field and the `stream_id` field.
+   *
    * Leave this field unset when creating a new stream.
    * </pre>
    *
@@ -321,6 +334,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
             "");
   }
 
+  @SuppressWarnings("serial")
   private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
 
   private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
@@ -378,7 +392,10 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
   @java.lang.Override
-  public java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+  public /* nullable */ java.lang.String getLabelsOrDefault(
+      java.lang.String key,
+      /* nullable */
+      java.lang.String defaultValue) {
     if (key == null) {
       throw new NullPointerException("map key");
     }
@@ -614,9 +631,12 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The request for [Firestore.Write][google.firestore.v1.Firestore.Write].
+   *
    * The first request creates a stream, or resumes an existing one from a token.
+   *
    * When creating a new stream, the server replies with a response containing
    * only an ID and a token, to use in the next request.
+   *
    * When resuming a stream, the server first streams any responses later than the
    * given token, then a response containing only an up-to-date token, to use in
    * the next request.
@@ -673,19 +693,17 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
       streamId_ = "";
-
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
       } else {
         writes_ = null;
         writesBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000004);
       streamToken_ = com.google.protobuf.ByteString.EMPTY;
-
       internalGetMutableLabels().clear();
       return this;
     }
@@ -713,23 +731,41 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.WriteRequest buildPartial() {
       com.google.firestore.v1.WriteRequest result = new com.google.firestore.v1.WriteRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.database_ = database_;
-      result.streamId_ = streamId_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.WriteRequest result) {
       if (writesBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           writes_ = java.util.Collections.unmodifiableList(writes_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.writes_ = writes_;
       } else {
         result.writes_ = writesBuilder_.build();
       }
-      result.streamToken_ = streamToken_;
-      result.labels_ = internalGetLabels();
-      result.labels_.makeImmutable();
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.WriteRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.streamId_ = streamId_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.streamToken_ = streamToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.labels_ = internalGetLabels();
+        result.labels_.makeImmutable();
+      }
     }
 
     @java.lang.Override
@@ -779,17 +815,19 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.WriteRequest.getDefaultInstance()) return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getStreamId().isEmpty()) {
         streamId_ = other.streamId_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       if (writesBuilder_ == null) {
         if (!other.writes_.isEmpty()) {
           if (writes_.isEmpty()) {
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensureWritesIsMutable();
             writes_.addAll(other.writes_);
@@ -802,7 +840,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
             writesBuilder_.dispose();
             writesBuilder_ = null;
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000004);
             writesBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getWritesFieldBuilder()
@@ -816,6 +854,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
         setStreamToken(other.getStreamToken());
       }
       internalGetMutableLabels().mergeFrom(other.internalGetLabels());
+      bitField0_ |= 0x00000010;
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -845,13 +884,13 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 streamId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
@@ -869,7 +908,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
             case 34:
               {
                 streamToken_ = input.readBytes();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 42:
@@ -881,6 +920,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
                 internalGetMutableLabels()
                     .getMutableMap()
                     .put(labels__.getKey(), labels__.getValue());
+                bitField0_ |= 0x00000010;
                 break;
               } // case 42
             default:
@@ -969,8 +1009,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -988,8 +1028,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1012,8 +1052,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1085,8 +1125,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       streamId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1104,8 +1144,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearStreamId() {
-
       streamId_ = getDefaultInstance().getStreamId();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1128,8 +1168,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       streamId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1138,9 +1178,9 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureWritesIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000004) != 0)) {
         writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>(writes_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000004;
       }
     }
 
@@ -1155,6 +1195,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1175,6 +1216,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1195,6 +1237,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1215,6 +1258,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1241,6 +1285,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1264,6 +1309,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1290,6 +1336,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1316,6 +1363,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1339,6 +1387,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1362,6 +1411,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1386,6 +1436,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1397,7 +1448,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     public Builder clearWrites() {
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
       } else {
         writesBuilder_.clear();
@@ -1409,6 +1460,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1432,6 +1484,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1448,6 +1501,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1468,6 +1522,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1489,6 +1544,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1505,6 +1561,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1522,6 +1579,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * This must be empty on the first request.
      * This may be empty on the last request.
@@ -1545,7 +1603,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.Write,
                 com.google.firestore.v1.Write.Builder,
                 com.google.firestore.v1.WriteOrBuilder>(
-                writes_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                writes_, ((bitField0_ & 0x00000004) != 0), getParentForChildren(), isClean());
         writes_ = null;
       }
       return writesBuilder_;
@@ -1557,14 +1615,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
-     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This acknowledges that the client has
-     * received responses up to this token. After sending this token, earlier
-     * tokens may not be used anymore.
+     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
+     * acknowledges that the client has received responses up to this token. After
+     * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *
@@ -1581,14 +1643,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
-     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This acknowledges that the client has
-     * received responses up to this token. After sending this token, earlier
-     * tokens may not be used anymore.
+     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
+     * acknowledges that the client has received responses up to this token. After
+     * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *
@@ -1601,8 +1667,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       streamToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1611,14 +1677,18 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * A stream token that was previously sent by the server.
+     *
      * The client should set this field to the token from the most recent
-     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This acknowledges that the client has
-     * received responses up to this token. After sending this token, earlier
-     * tokens may not be used anymore.
+     * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
+     * acknowledges that the client has received responses up to this token. After
+     * sending this token, earlier tokens may not be used anymore.
+     *
      * The server may close the stream if there are too many unacknowledged
      * responses.
+     *
      * Leave this field unset when creating a new stream. To resume a stream at
      * a specific point, set this field and the `stream_id` field.
+     *
      * Leave this field unset when creating a new stream.
      * </pre>
      *
@@ -1627,7 +1697,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearStreamToken() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       streamToken_ = getDefaultInstance().getStreamToken();
       onChanged();
       return this;
@@ -1644,14 +1714,14 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
 
     private com.google.protobuf.MapField<java.lang.String, java.lang.String>
         internalGetMutableLabels() {
-      onChanged();
-      ;
       if (labels_ == null) {
         labels_ = com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
       }
       if (!labels_.isMutable()) {
         labels_ = labels_.copy();
       }
+      bitField0_ |= 0x00000010;
+      onChanged();
       return labels_;
     }
 
@@ -1703,8 +1773,10 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      * <code>map&lt;string, string&gt; labels = 5;</code>
      */
     @java.lang.Override
-    public java.lang.String getLabelsOrDefault(
-        java.lang.String key, java.lang.String defaultValue) {
+    public /* nullable */ java.lang.String getLabelsOrDefault(
+        java.lang.String key,
+        /* nullable */
+        java.lang.String defaultValue) {
       if (key == null) {
         throw new NullPointerException("map key");
       }
@@ -1733,6 +1805,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     }
 
     public Builder clearLabels() {
+      bitField0_ = (bitField0_ & ~0x00000010);
       internalGetMutableLabels().getMutableMap().clear();
       return this;
     }
@@ -1755,6 +1828,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getMutableLabels() {
+      bitField0_ |= 0x00000010;
       return internalGetMutableLabels().getMutableMap();
     }
     /**
@@ -1773,8 +1847,8 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException("map value");
       }
-
       internalGetMutableLabels().getMutableMap().put(key, value);
+      bitField0_ |= 0x00000010;
       return this;
     }
     /**
@@ -1788,6 +1862,7 @@ public final class WriteRequest extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder putAllLabels(java.util.Map<java.lang.String, java.lang.String> values) {
       internalGetMutableLabels().getMutableMap().putAll(values);
+      bitField0_ |= 0x00000010;
       return this;
     }
 

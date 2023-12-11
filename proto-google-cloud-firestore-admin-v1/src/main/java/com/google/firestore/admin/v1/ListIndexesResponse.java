@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The response for [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
+ * The response for
+ * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ListIndexesResponse}
@@ -48,11 +49,6 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
     return new ListIndexesResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
         .internal_static_google_firestore_admin_v1_ListIndexesResponse_descriptor;
@@ -69,6 +65,8 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
   }
 
   public static final int INDEXES_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.admin.v1.Index> indexes_;
   /**
    *
@@ -138,7 +136,9 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
   }
 
   public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 2;
-  private volatile java.lang.Object nextPageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object nextPageToken_ = "";
   /**
    *
    *
@@ -362,7 +362,8 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
    *
    *
    * <pre>
-   * The response for [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
+   * The response for
+   * [FirestoreAdmin.ListIndexes][google.firestore.admin.v1.FirestoreAdmin.ListIndexes].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ListIndexesResponse}
@@ -396,6 +397,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (indexesBuilder_ == null) {
         indexes_ = java.util.Collections.emptyList();
       } else {
@@ -404,7 +406,6 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
       }
       bitField0_ = (bitField0_ & ~0x00000001);
       nextPageToken_ = "";
-
       return this;
     }
 
@@ -432,7 +433,16 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
     public com.google.firestore.admin.v1.ListIndexesResponse buildPartial() {
       com.google.firestore.admin.v1.ListIndexesResponse result =
           new com.google.firestore.admin.v1.ListIndexesResponse(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(
+        com.google.firestore.admin.v1.ListIndexesResponse result) {
       if (indexesBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           indexes_ = java.util.Collections.unmodifiableList(indexes_);
@@ -442,9 +452,13 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
       } else {
         result.indexes_ = indexesBuilder_.build();
       }
-      result.nextPageToken_ = nextPageToken_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ListIndexesResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.nextPageToken_ = nextPageToken_;
+      }
     }
 
     @java.lang.Override
@@ -522,6 +536,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
       }
       if (!other.getNextPageToken().isEmpty()) {
         nextPageToken_ = other.nextPageToken_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -566,7 +581,7 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
             case 18:
               {
                 nextPageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -1000,8 +1015,8 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
       if (value == null) {
         throw new NullPointerException();
       }
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1018,8 +1033,8 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
      * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
-
       nextPageToken_ = getDefaultInstance().getNextPageToken();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1041,8 +1056,8 @@ public final class ListIndexesResponse extends com.google.protobuf.GeneratedMess
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }

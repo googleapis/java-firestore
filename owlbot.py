@@ -80,9 +80,17 @@ java.common_templates(excludes=[
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg',
     '.kokoro/presubmit/graalvm-native.cfg',
+    '.kokoro/presubmit/graalvm-native-17.cfg',
     '.kokoro/presubmit/samples.cfg',
     '.kokoro/nightly/integration.cfg',
     '.kokoro/nightly/java11-integration.cfg',
     '.kokoro/nightly/samples.cfg',
-    '.kokoro/build.sh'
+    '.kokoro/build.sh',
+    'samples/snapshot/pom.xml',
+    '.kokoro/release/publish_javadoc.sh',
+    '.kokoro/release/publish_javadoc11.sh',
+    '.kokoro/release/stage.sh',
+    '.kokoro/requirements.in',
+    '.kokoro/requirements.txt',
+    'renovate.json'
 ])

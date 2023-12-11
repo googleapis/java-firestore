@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,11 +46,6 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new BundledQuery();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -173,6 +168,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int queryTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object queryType_;
 
   public enum QueryTypeCase
@@ -217,7 +214,9 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -317,7 +316,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int LIMIT_TYPE_FIELD_NUMBER = 3;
-  private int limitType_;
+  private int limitType_ = 0;
   /**
    * <code>.google.firestore.bundle.BundledQuery.LimitType limit_type = 3;</code>
    *
@@ -334,9 +333,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.bundle.BundledQuery.LimitType getLimitType() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.bundle.BundledQuery.LimitType result =
-        com.google.firestore.bundle.BundledQuery.LimitType.valueOf(limitType_);
+        com.google.firestore.bundle.BundledQuery.LimitType.forNumber(limitType_);
     return result == null
         ? com.google.firestore.bundle.BundledQuery.LimitType.UNRECOGNIZED
         : result;
@@ -571,13 +569,12 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       if (structuredQueryBuilder_ != null) {
         structuredQueryBuilder_.clear();
       }
       limitType_ = 0;
-
       queryTypeCase_ = 0;
       queryType_ = null;
       return this;
@@ -607,18 +604,30 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.bundle.BundledQuery buildPartial() {
       com.google.firestore.bundle.BundledQuery result =
           new com.google.firestore.bundle.BundledQuery(this);
-      result.parent_ = parent_;
-      if (queryTypeCase_ == 2) {
-        if (structuredQueryBuilder_ == null) {
-          result.queryType_ = queryType_;
-        } else {
-          result.queryType_ = structuredQueryBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.limitType_ = limitType_;
-      result.queryTypeCase_ = queryTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.bundle.BundledQuery result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.limitType_ = limitType_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.bundle.BundledQuery result) {
+      result.queryTypeCase_ = queryTypeCase_;
+      result.queryType_ = this.queryType_;
+      if (queryTypeCase_ == 2 && structuredQueryBuilder_ != null) {
+        result.queryType_ = structuredQueryBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -668,6 +677,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.bundle.BundledQuery.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.limitType_ != 0) {
@@ -713,7 +723,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -725,7 +735,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
             case 24:
               {
                 limitType_ = input.readEnum();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             default:
@@ -758,6 +768,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -820,8 +832,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -837,8 +849,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -859,8 +871,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1071,7 +1083,6 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       }
       queryTypeCase_ = 2;
       onChanged();
-      ;
       return structuredQueryBuilder_;
     }
 
@@ -1092,8 +1103,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setLimitTypeValue(int value) {
-
       limitType_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1104,9 +1115,8 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.bundle.BundledQuery.LimitType getLimitType() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.bundle.BundledQuery.LimitType result =
-          com.google.firestore.bundle.BundledQuery.LimitType.valueOf(limitType_);
+          com.google.firestore.bundle.BundledQuery.LimitType.forNumber(limitType_);
       return result == null
           ? com.google.firestore.bundle.BundledQuery.LimitType.UNRECOGNIZED
           : result;
@@ -1121,7 +1131,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000004;
       limitType_ = value.getNumber();
       onChanged();
       return this;
@@ -1132,7 +1142,7 @@ public final class BundledQuery extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearLimitType() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       limitType_ = 0;
       onChanged();
       return this;

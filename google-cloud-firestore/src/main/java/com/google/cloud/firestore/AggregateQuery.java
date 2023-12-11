@@ -29,8 +29,16 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredAggregationQuery;
+import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
+import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -39,18 +47,16 @@ import javax.annotation.Nullable;
 /** A query that calculates aggregations over an underlying query. */
 @InternalExtensionOnly
 public class AggregateQuery {
-
-  /**
-   * The "alias" to specify in the {@link RunAggregationQueryRequest} proto when running a count
-   * query. The actual value is not meaningful, but will be used to get the count out of the {@link
-   * RunAggregationQueryResponse}.
-   */
-  private static final String ALIAS_COUNT = "count";
-
   @Nonnull private final Query query;
 
-  AggregateQuery(@Nonnull Query query) {
+  @Nonnull private List<AggregateField> aggregateFieldList;
+
+  @Nonnull private Map<String, String> aliasMap;
+
+  AggregateQuery(@Nonnull Query query, @Nonnull List<AggregateField> aggregateFields) {
     this.query = query;
+    this.aggregateFieldList = aggregateFields;
+    this.aliasMap = new HashMap<>();
   }
 
   /** Returns the query whose aggregations will be calculated by this object. */
@@ -112,9 +118,11 @@ public class AggregateQuery {
       return startTimeNanos;
     }
 
-    void deliverResult(long count, Timestamp readTime) {
+    void deliverResult(@Nonnull Map<String, Value> data, Timestamp readTime) {
       if (isFutureCompleted.compareAndSet(false, true)) {
-        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, count));
+        Map<String, Value> mappedData = new HashMap<>();
+        data.forEach((serverAlias, value) -> mappedData.put(aliasMap.get(serverAlias), value));
+        future.set(new AggregateQuerySnapshot(AggregateQuery.this, readTime, mappedData));
       }
     }
 
@@ -145,26 +153,13 @@ public class AggregateQuery {
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();
 
-      // Extract the count and read time from the RunAggregationQueryResponse.
+      // Extract the aggregations and read time from the RunAggregationQueryResponse.
       Timestamp readTime = Timestamp.fromProto(response.getReadTime());
-      Value value = response.getResult().getAggregateFieldsMap().get(ALIAS_COUNT);
-      if (value == null) {
-        throw new IllegalArgumentException(
-            "RunAggregationQueryResponse is missing required alias: " + ALIAS_COUNT);
-      } else if (value.getValueTypeCase() != Value.ValueTypeCase.INTEGER_VALUE) {
-        throw new IllegalArgumentException(
-            "RunAggregationQueryResponse alias "
-                + ALIAS_COUNT
-                + " has incorrect type: "
-                + value.getValueTypeCase());
-      }
-      long count = value.getIntegerValue();
 
       // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC, meaning
-      // that `onResponse()` can be called multiple times, it _should_ only be called once for count
-      // queries. But even if it is called more than once, `responseDeliverer` will drop superfluous
-      // results.
-      responseDeliverer.deliverResult(count, readTime);
+      // that `onResponse()` can be called multiple times, it _should_ only be called once. But even
+      // if it is called more than once, `responseDeliverer` will drop superfluous results.
+      responseDeliverer.deliverResult(response.getResult().getAggregateFieldsMap(), readTime);
     }
 
     @Override
@@ -215,12 +210,46 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    StructuredAggregationQuery.Aggregation.Builder aggregation =
-        StructuredAggregationQuery.Aggregation.newBuilder();
-    aggregation.setCount(StructuredAggregationQuery.Aggregation.Count.getDefaultInstance());
-    aggregation.setAlias(ALIAS_COUNT);
-    structuredAggregationQuery.addAggregations(aggregation);
+    // We use this set to remove duplicate aggregates.
+    // For example, `aggregate(sum("foo"), sum("foo"))`
+    HashSet<String> uniqueAggregates = new HashSet<>();
+    List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
+    int aggregationNum = 0;
+    for (AggregateField aggregateField : aggregateFieldList) {
+      // `getAlias()` provides a unique representation of an AggregateField.
+      boolean isNewAggregateField = uniqueAggregates.add(aggregateField.getAlias());
+      if (!isNewAggregateField) {
+        // This is a duplicate AggregateField. We don't need to include it in the request.
+        continue;
+      }
 
+      // If there's a field for this aggregation, build its proto.
+      StructuredQuery.FieldReference field = null;
+      if (!aggregateField.getFieldPath().isEmpty()) {
+        field =
+            StructuredQuery.FieldReference.newBuilder()
+                .setFieldPath(aggregateField.getFieldPath())
+                .build();
+      }
+      // Build the aggregation proto.
+      Aggregation.Builder aggregation = Aggregation.newBuilder();
+      if (aggregateField instanceof AggregateField.CountAggregateField) {
+        aggregation.setCount(Aggregation.Count.getDefaultInstance());
+      } else if (aggregateField instanceof AggregateField.SumAggregateField) {
+        aggregation.setSum(Aggregation.Sum.newBuilder().setField(field).build());
+      } else if (aggregateField instanceof AggregateField.AverageAggregateField) {
+        aggregation.setAvg(Aggregation.Avg.newBuilder().setField(field).build());
+      } else {
+        throw new RuntimeException("Unsupported aggregation");
+      }
+      // Map all client-side aliases to a unique short-form alias.
+      // This avoids issues with client-side aliases that exceed the 1500-byte string size limit.
+      String serverAlias = "aggregate_" + aggregationNum++;
+      aliasMap.put(serverAlias, aggregateField.getAlias());
+      aggregation.setAlias(serverAlias);
+      aggregations.add(aggregation.build());
+    }
+    structuredAggregationQuery.addAllAggregations(aggregations);
     return request.build();
   }
 
@@ -243,7 +272,23 @@ public class AggregateQuery {
             .setStructuredQuery(proto.getStructuredAggregationQuery().getStructuredQuery())
             .build();
     Query query = Query.fromProto(firestore, runQueryRequest);
-    return new AggregateQuery(query);
+
+    List<AggregateField> aggregateFields = new ArrayList<>();
+    List<Aggregation> aggregations = proto.getStructuredAggregationQuery().getAggregationsList();
+    aggregations.forEach(
+        aggregation -> {
+          if (aggregation.hasCount()) {
+            aggregateFields.add(AggregateField.count());
+          } else if (aggregation.hasAvg()) {
+            aggregateFields.add(
+                AggregateField.average(aggregation.getAvg().getField().getFieldPath()));
+          } else if (aggregation.hasSum()) {
+            aggregateFields.add(AggregateField.sum(aggregation.getSum().getField().getFieldPath()));
+          } else {
+            throw new RuntimeException("Unsupported aggregation.");
+          }
+        });
+    return new AggregateQuery(query, aggregateFields);
   }
 
   /**
@@ -253,7 +298,7 @@ public class AggregateQuery {
    */
   @Override
   public int hashCode() {
-    return query.hashCode();
+    return Objects.hash(query, aggregateFieldList);
   }
 
   /**
@@ -280,6 +325,6 @@ public class AggregateQuery {
       return false;
     }
     AggregateQuery other = (AggregateQuery) object;
-    return query.equals(other.query);
+    return query.equals(other.query) && aggregateFieldList.equals(other.aggregateFieldList);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.GetDocument][google.firestore.v1.Firestore.GetDocument].
+ * The request for
+ * [Firestore.GetDocument][google.firestore.v1.Firestore.GetDocument].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.GetDocumentRequest}
@@ -47,11 +48,6 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     return new GetDocumentRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_GetDocumentRequest_descriptor;
@@ -68,6 +64,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -115,7 +113,9 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -172,6 +172,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -189,6 +190,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -206,6 +208,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -214,7 +217,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 3;
@@ -258,7 +261,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -274,7 +280,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -293,7 +302,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    * <pre>
    * Reads the version of the document at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -522,7 +534,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
    *
    *
    * <pre>
-   * The request for [Firestore.GetDocument][google.firestore.v1.Firestore.GetDocument].
+   * The request for
+   * [Firestore.GetDocument][google.firestore.v1.Firestore.GetDocument].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.GetDocumentRequest}
@@ -556,12 +569,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
       if (readTimeBuilder_ != null) {
@@ -596,25 +608,30 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     public com.google.firestore.v1.GetDocumentRequest buildPartial() {
       com.google.firestore.v1.GetDocumentRequest result =
           new com.google.firestore.v1.GetDocumentRequest(this);
-      result.name_ = name_;
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (consistencySelectorCase_ == 3) {
-        result.consistencySelector_ = consistencySelector_;
-      }
-      if (consistencySelectorCase_ == 5) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.GetDocumentRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.GetDocumentRequest result) {
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 5 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -664,6 +681,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       if (other == com.google.firestore.v1.GetDocumentRequest.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasMask()) {
@@ -714,13 +732,13 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
@@ -765,6 +783,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -830,8 +850,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -848,8 +868,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -871,8 +891,8 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -888,6 +908,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -897,13 +918,14 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -924,6 +946,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -936,11 +959,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -948,6 +971,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -957,11 +981,11 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -969,6 +993,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -977,19 +1002,18 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -997,6 +1021,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1004,14 +1029,13 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1019,6 +1043,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1026,7 +1051,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      * <code>.google.firestore.v1.DocumentMask mask = 2;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -1035,6 +1060,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1053,6 +1079,7 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1158,7 +1185,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1174,7 +1204,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1200,7 +1233,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1223,7 +1259,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1243,7 +1282,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1276,7 +1318,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1302,7 +1347,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1315,7 +1363,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1336,7 +1387,10 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
      *
      * <pre>
      * Reads the version of the document at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 5;</code>
@@ -1362,7 +1416,6 @@ public final class GetDocumentRequest extends com.google.protobuf.GeneratedMessa
       }
       consistencySelectorCase_ = 5;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

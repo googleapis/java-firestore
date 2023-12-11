@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ public interface DocumentDeleteOrBuilder
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+   * The resource name of the [Document][google.firestore.v1.Document] that was
+   * deleted.
    * </pre>
    *
    * <code>string document = 1;</code>
@@ -39,7 +40,8 @@ public interface DocumentDeleteOrBuilder
    *
    *
    * <pre>
-   * The resource name of the [Document][google.firestore.v1.Document] that was deleted.
+   * The resource name of the [Document][google.firestore.v1.Document] that was
+   * deleted.
    * </pre>
    *
    * <code>string document = 1;</code>
@@ -91,6 +93,7 @@ public interface DocumentDeleteOrBuilder
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *
@@ -104,6 +107,7 @@ public interface DocumentDeleteOrBuilder
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *
@@ -117,6 +121,7 @@ public interface DocumentDeleteOrBuilder
    *
    * <pre>
    * The read timestamp at which the delete was observed.
+   *
    * Greater or equal to the `commit_time` of the delete.
    * </pre>
    *

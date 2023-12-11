@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
     return new RollbackRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RollbackRequest_descriptor;
@@ -69,7 +64,9 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -120,7 +117,7 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 2;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
@@ -342,10 +339,9 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
       return this;
     }
 
@@ -373,10 +369,21 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
     public com.google.firestore.v1.RollbackRequest buildPartial() {
       com.google.firestore.v1.RollbackRequest result =
           new com.google.firestore.v1.RollbackRequest(this);
-      result.database_ = database_;
-      result.transaction_ = transaction_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.RollbackRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.transaction_ = transaction_;
+      }
     }
 
     @java.lang.Override
@@ -426,6 +433,7 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
       if (other == com.google.firestore.v1.RollbackRequest.getDefaultInstance()) return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.getTransaction() != com.google.protobuf.ByteString.EMPTY) {
@@ -460,13 +468,13 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -485,6 +493,8 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object database_ = "";
     /**
@@ -550,8 +560,8 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -568,8 +578,8 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -591,8 +601,8 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -629,8 +639,8 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -646,7 +656,7 @@ public final class RollbackRequest extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;

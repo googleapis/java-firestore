@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
     return new Cursor();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.QueryProto.internal_static_google_firestore_v1_Cursor_descriptor;
   }
@@ -66,6 +61,8 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int VALUES_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Value> values_;
   /**
    *
@@ -73,6 +70,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The values that represent a position, in the order they appear in
    * the order by clause of a query.
+   *
    * Can contain fewer values than specified in the order by clause.
    * </pre>
    *
@@ -88,6 +86,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The values that represent a position, in the order they appear in
    * the order by clause of a query.
+   *
    * Can contain fewer values than specified in the order by clause.
    * </pre>
    *
@@ -103,6 +102,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The values that represent a position, in the order they appear in
    * the order by clause of a query.
+   *
    * Can contain fewer values than specified in the order by clause.
    * </pre>
    *
@@ -118,6 +118,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The values that represent a position, in the order they appear in
    * the order by clause of a query.
+   *
    * Can contain fewer values than specified in the order by clause.
    * </pre>
    *
@@ -133,6 +134,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The values that represent a position, in the order they appear in
    * the order by clause of a query.
+   *
    * Can contain fewer values than specified in the order by clause.
    * </pre>
    *
@@ -144,7 +146,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int BEFORE_FIELD_NUMBER = 2;
-  private boolean before_;
+  private boolean before_ = false;
   /**
    *
    *
@@ -367,6 +369,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (valuesBuilder_ == null) {
         values_ = java.util.Collections.emptyList();
       } else {
@@ -375,7 +378,6 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
       }
       bitField0_ = (bitField0_ & ~0x00000001);
       before_ = false;
-
       return this;
     }
 
@@ -402,7 +404,15 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Cursor buildPartial() {
       com.google.firestore.v1.Cursor result = new com.google.firestore.v1.Cursor(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.Cursor result) {
       if (valuesBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           values_ = java.util.Collections.unmodifiableList(values_);
@@ -412,9 +422,13 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
       } else {
         result.values_ = valuesBuilder_.build();
       }
-      result.before_ = before_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Cursor result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.before_ = before_;
+      }
     }
 
     @java.lang.Override
@@ -533,7 +547,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
             case 16:
               {
                 before_ = input.readBool();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 16
             default:
@@ -577,6 +591,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -595,6 +610,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -613,6 +629,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -631,6 +648,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -655,6 +673,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -676,6 +695,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -700,6 +720,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -724,6 +745,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -745,6 +767,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -766,6 +789,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -788,6 +812,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -809,6 +834,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -830,6 +856,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -844,6 +871,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -862,6 +890,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -881,6 +910,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -895,6 +925,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -910,6 +941,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The values that represent a position, in the order they appear in
      * the order by clause of a query.
+     *
      * Can contain fewer values than specified in the order by clause.
      * </pre>
      *
@@ -969,6 +1001,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
     public Builder setBefore(boolean value) {
 
       before_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -985,7 +1018,7 @@ public final class Cursor extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearBefore() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       before_ = false;
       onChanged();
       return this;

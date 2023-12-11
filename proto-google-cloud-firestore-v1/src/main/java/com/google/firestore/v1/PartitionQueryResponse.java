@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+ * The response for
+ * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.PartitionQueryResponse}
@@ -48,11 +49,6 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
     return new PartitionQueryResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_PartitionQueryResponse_descriptor;
@@ -69,6 +65,8 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
   }
 
   public static final int PARTITIONS_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Cursor> partitions_;
   /**
    *
@@ -80,14 +78,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -106,14 +107,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -133,14 +137,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -159,14 +166,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -185,14 +195,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    * the same query supplied to this PartitionQuery request. The partition
    * cursors will be ordered according to same ordering as the results of the
    * query supplied to PartitionQuery.
+   *
    * For example, if a PartitionQuery request returns partition cursors A and B,
    * running the following three queries will return the entire result set of
    * the original query:
+   *
    *  * query, end_at A
    *  * query, start_at A, end_at B
    *  * query, start_at B
+   *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -203,7 +216,9 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
   }
 
   public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 2;
-  private volatile java.lang.Object nextPageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object nextPageToken_ = "";
   /**
    *
    *
@@ -429,7 +444,8 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * The response for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+   * The response for
+   * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.PartitionQueryResponse}
@@ -463,6 +479,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (partitionsBuilder_ == null) {
         partitions_ = java.util.Collections.emptyList();
       } else {
@@ -471,7 +488,6 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
       }
       bitField0_ = (bitField0_ & ~0x00000001);
       nextPageToken_ = "";
-
       return this;
     }
 
@@ -499,7 +515,15 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
     public com.google.firestore.v1.PartitionQueryResponse buildPartial() {
       com.google.firestore.v1.PartitionQueryResponse result =
           new com.google.firestore.v1.PartitionQueryResponse(this);
-      int from_bitField0_ = bitField0_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.PartitionQueryResponse result) {
       if (partitionsBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           partitions_ = java.util.Collections.unmodifiableList(partitions_);
@@ -509,9 +533,13 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
       } else {
         result.partitions_ = partitionsBuilder_.build();
       }
-      result.nextPageToken_ = nextPageToken_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.PartitionQueryResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.nextPageToken_ = nextPageToken_;
+      }
     }
 
     @java.lang.Override
@@ -588,6 +616,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
       }
       if (!other.getNextPageToken().isEmpty()) {
         nextPageToken_ = other.nextPageToken_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -631,7 +660,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
             case 18:
               {
                 nextPageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -679,14 +708,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -708,14 +740,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -737,14 +772,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -766,14 +804,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -801,14 +842,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -834,14 +878,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -869,14 +916,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -904,14 +954,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -936,14 +989,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -969,14 +1025,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1002,14 +1061,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1034,14 +1096,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1066,14 +1131,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1091,14 +1159,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1120,14 +1191,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1150,14 +1224,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1176,14 +1253,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1202,14 +1282,17 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * the same query supplied to this PartitionQuery request. The partition
      * cursors will be ordered according to same ordering as the results of the
      * query supplied to PartitionQuery.
+     *
      * For example, if a PartitionQuery request returns partition cursors A and B,
      * running the following three queries will return the entire result set of
      * the original query:
+     *
      *  * query, end_at A
      *  * query, start_at A, end_at B
      *  * query, start_at B
+     *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1302,8 +1385,8 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
       if (value == null) {
         throw new NullPointerException();
       }
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1321,8 +1404,8 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
-
       nextPageToken_ = getDefaultInstance().getNextPageToken();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1345,8 +1428,8 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }

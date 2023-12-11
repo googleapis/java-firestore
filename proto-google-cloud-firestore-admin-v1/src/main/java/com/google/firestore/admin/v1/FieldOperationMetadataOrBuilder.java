@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,8 +127,9 @@ public interface FieldOperationMetadataOrBuilder
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -141,8 +142,9 @@ public interface FieldOperationMetadataOrBuilder
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -155,8 +157,9 @@ public interface FieldOperationMetadataOrBuilder
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -168,8 +171,9 @@ public interface FieldOperationMetadataOrBuilder
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -183,8 +187,9 @@ public interface FieldOperationMetadataOrBuilder
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>

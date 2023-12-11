@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     return new RunQueryRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunQueryRequest_descriptor;
@@ -68,6 +63,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   private int queryTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object queryType_;
 
   public enum QueryTypeCase
@@ -112,6 +109,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -162,7 +161,9 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -277,6 +278,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * Run the query within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -293,6 +295,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * Run the query within an already active transaction.
+   *
    * The value here is the opaque transaction ID to execute the query in.
    * </pre>
    *
@@ -374,7 +377,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -390,7 +396,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -409,7 +418,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -696,8 +708,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       if (structuredQueryBuilder_ != null) {
         structuredQueryBuilder_.clear();
       }
@@ -738,35 +750,35 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
     public com.google.firestore.v1.RunQueryRequest buildPartial() {
       com.google.firestore.v1.RunQueryRequest result =
           new com.google.firestore.v1.RunQueryRequest(this);
-      result.parent_ = parent_;
-      if (queryTypeCase_ == 2) {
-        if (structuredQueryBuilder_ == null) {
-          result.queryType_ = queryType_;
-        } else {
-          result.queryType_ = structuredQueryBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (consistencySelectorCase_ == 5) {
-        result.consistencySelector_ = consistencySelector_;
-      }
-      if (consistencySelectorCase_ == 6) {
-        if (newTransactionBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = newTransactionBuilder_.build();
-        }
-      }
-      if (consistencySelectorCase_ == 7) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.queryTypeCase_ = queryTypeCase_;
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.RunQueryRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.RunQueryRequest result) {
+      result.queryTypeCase_ = queryTypeCase_;
+      result.queryType_ = this.queryType_;
+      if (queryTypeCase_ == 2 && structuredQueryBuilder_ != null) {
+        result.queryType_ = structuredQueryBuilder_.build();
+      }
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 6 && newTransactionBuilder_ != null) {
+        result.consistencySelector_ = newTransactionBuilder_.build();
+      }
+      if (consistencySelectorCase_ == 7 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -816,6 +828,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       if (other == com.google.firestore.v1.RunQueryRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       switch (other.getQueryTypeCase()) {
@@ -879,7 +892,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -950,6 +963,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -1027,8 +1042,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1049,8 +1064,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1076,8 +1091,8 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1288,7 +1303,6 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       }
       queryTypeCase_ = 2;
       onChanged();
-      ;
       return structuredQueryBuilder_;
     }
 
@@ -1297,6 +1311,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Run the query within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1312,6 +1327,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Run the query within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1330,6 +1346,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Run the query within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1352,6 +1369,7 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Run the query within an already active transaction.
+     *
      * The value here is the opaque transaction ID to execute the query in.
      * </pre>
      *
@@ -1602,7 +1620,6 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       }
       consistencySelectorCase_ = 6;
       onChanged();
-      ;
       return newTransactionBuilder_;
     }
 
@@ -1616,7 +1633,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1632,7 +1652,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1658,7 +1681,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1681,7 +1707,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1701,7 +1730,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1734,7 +1766,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1760,7 +1795,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1773,7 +1811,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1794,7 +1835,10 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 7;</code>
@@ -1820,7 +1864,6 @@ public final class RunQueryRequest extends com.google.protobuf.GeneratedMessageV
       }
       consistencySelectorCase_ = 7;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

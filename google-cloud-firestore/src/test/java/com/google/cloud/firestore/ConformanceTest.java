@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
 import static com.google.cloud.firestore.UserDataConverter.NO_DELETES;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -32,11 +33,8 @@ import static org.mockito.Mockito.when;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.BidiStreamObserver;
-import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.ResponseObserver;
-import com.google.api.gax.rpc.ServerStreamingCallable;
-import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.conformance.ConformanceTestLocator;
 import com.google.cloud.conformance.ConformanceTestLocator.MatchPattern;
@@ -87,7 +85,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.AllTests;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -123,9 +120,7 @@ public class ConformanceTest {
           || excludedTests.contains(testDefinition.getDescription())) {
         continue;
       }
-      final Test test = buildTest(testDefinition);
-      MockitoAnnotations.initMocks(test);
-      tests.add(test);
+      tests.add(buildTest(testDefinition));
     }
 
     return tests;
@@ -223,7 +218,9 @@ public class ConformanceTest {
             if (DEBUG_MODE) {
               System.out.printf(DEBUG_MESSAGE_FORMAT, description, testParameters);
             }
-            runTest();
+            try (AutoCloseable mocks = MockitoAnnotations.openMocks(this)) {
+              runTest();
+            }
           });
       testResult.endTest(this);
     }
@@ -261,10 +258,7 @@ public class ConformanceTest {
     public void runTest() throws Throwable {
       doAnswer(getAllResponse(Collections.emptyMap()))
           .when(firestore)
-          .streamRequest(
-              getAllCapture.capture(),
-              streamObserverCapture.capture(),
-              Matchers.<ServerStreamingCallable>any());
+          .streamRequest(getAllCapture.capture(), streamObserverCapture.capture(), any());
 
       document(testParameters.getDocRefPath()).get().get();
 
@@ -288,7 +282,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(commitCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall =
@@ -319,7 +313,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(commitCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(commitCapture.capture(), any());
       ApiFuture<WriteResult> apiCall;
 
       try {
@@ -364,7 +358,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(commitCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall;
@@ -405,7 +399,7 @@ public class ConformanceTest {
     public void runTest() {
       doReturn(commitResponse(testParameters.getRequest().getWritesCount(), 0))
           .when(firestore)
-          .sendRequest(commitCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(commitCapture.capture(), any());
 
       try {
         ApiFuture<WriteResult> apiCall;
@@ -461,7 +455,7 @@ public class ConformanceTest {
     public void runTest() throws Throwable {
       doReturn(commitResponse(0, testParameters.getRequest().getWritesCount()))
           .when(firestore)
-          .sendRequest(commitCapture.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(commitCapture.capture(), any());
 
       if (!testParameters.hasPrecondition()) {
         document(testParameters.getDocRefPath()).delete().get();
@@ -491,10 +485,7 @@ public class ConformanceTest {
     public void runTest() {
       doAnswer(queryResponse())
           .when(firestore)
-          .streamRequest(
-              runQueryCapture.capture(),
-              streamObserverCapture.capture(),
-              Matchers.<ServerStreamingCallable>any());
+          .streamRequest(runQueryCapture.capture(), streamObserverCapture.capture(), any());
 
       Query query = collection(testParameters.getCollPath());
 
@@ -646,8 +637,7 @@ public class ConformanceTest {
                 return noOpRequestObserver;
               })
           .when(firestore)
-          .streamRequest(
-              streamObserverCapture.capture(), Matchers.any(BidiStreamingCallable.class));
+          .streamRequest(streamObserverCapture.capture(), any());
 
       final List<Snapshot> expectedSnapshots = new ArrayList<>(testParameters.getSnapshotsList());
 

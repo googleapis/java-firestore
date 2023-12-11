@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+ * The request for
+ * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.PartitionQueryRequest}
@@ -48,11 +49,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     return new PartitionQueryRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_PartitionQueryRequest_descriptor;
@@ -69,6 +65,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   private int queryTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object queryType_;
 
   public enum QueryTypeCase
@@ -113,6 +111,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -157,7 +157,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -272,7 +274,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PARTITION_COUNT_FIELD_NUMBER = 3;
-  private long partitionCount_;
+  private long partitionCount_ = 0L;
   /**
    *
    *
@@ -281,6 +283,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    * The partitions may be returned across multiple pages of results.
    * The number must be positive. The actual number of partitions
    * returned may be fewer.
+   *
    * For example, this may be set to one fewer than the number of parallel
    * queries to be run, or in running a data pipeline job, one fewer than the
    * number of workers or compute instances available.
@@ -296,7 +299,9 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PAGE_TOKEN_FIELD_NUMBER = 4;
-  private volatile java.lang.Object pageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pageToken_ = "";
   /**
    *
    *
@@ -305,9 +310,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    * PartitionQuery that may be used to get an additional set of results.
    * There are no ordering guarantees between sets of results. Thus, using
    * multiple sets of results will require merging the different result sets.
+   *
    * For example, two subsequent calls using a page_token may return:
+   *
    *  * cursor B, cursor M, cursor Q
    *  * cursor A, cursor U, cursor W
+   *
    * To obtain a complete result set ordered with respect to the results of the
    * query supplied to PartitionQuery, the results sets should be merged:
    * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -337,9 +345,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    * PartitionQuery that may be used to get an additional set of results.
    * There are no ordering guarantees between sets of results. Thus, using
    * multiple sets of results will require merging the different result sets.
+   *
    * For example, two subsequent calls using a page_token may return:
+   *
    *  * cursor B, cursor M, cursor Q
    *  * cursor A, cursor U, cursor W
+   *
    * To obtain a complete result set ordered with respect to the results of the
    * query supplied to PartitionQuery, the results sets should be merged:
    * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -363,13 +374,14 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PAGE_SIZE_FIELD_NUMBER = 5;
-  private int pageSize_;
+  private int pageSize_ = 0;
   /**
    *
    *
    * <pre>
    * The maximum number of partitions to return in this call, subject to
    * `partition_count`.
+   *
    * For example, if `partition_count` = 10 and `page_size` = 8, the first call
    * to PartitionQuery will return up to 8 partitions and a `next_page_token`
    * if more results exist. A second call to PartitionQuery will return up to
@@ -391,7 +403,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -407,7 +422,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -426,7 +444,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -677,7 +698,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The request for [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
+   * The request for
+   * [Firestore.PartitionQuery][google.firestore.v1.Firestore.PartitionQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.PartitionQueryRequest}
@@ -711,17 +733,14 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       if (structuredQueryBuilder_ != null) {
         structuredQueryBuilder_.clear();
       }
       partitionCount_ = 0L;
-
       pageToken_ = "";
-
       pageSize_ = 0;
-
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
@@ -756,28 +775,41 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public com.google.firestore.v1.PartitionQueryRequest buildPartial() {
       com.google.firestore.v1.PartitionQueryRequest result =
           new com.google.firestore.v1.PartitionQueryRequest(this);
-      result.parent_ = parent_;
-      if (queryTypeCase_ == 2) {
-        if (structuredQueryBuilder_ == null) {
-          result.queryType_ = queryType_;
-        } else {
-          result.queryType_ = structuredQueryBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.partitionCount_ = partitionCount_;
-      result.pageToken_ = pageToken_;
-      result.pageSize_ = pageSize_;
-      if (consistencySelectorCase_ == 6) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
-      }
-      result.queryTypeCase_ = queryTypeCase_;
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.PartitionQueryRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.partitionCount_ = partitionCount_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.pageToken_ = pageToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.pageSize_ = pageSize_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.PartitionQueryRequest result) {
+      result.queryTypeCase_ = queryTypeCase_;
+      result.queryType_ = this.queryType_;
+      if (queryTypeCase_ == 2 && structuredQueryBuilder_ != null) {
+        result.queryType_ = structuredQueryBuilder_.build();
+      }
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 6 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -827,6 +859,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (other == com.google.firestore.v1.PartitionQueryRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.getPartitionCount() != 0L) {
@@ -834,6 +867,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       if (!other.getPageToken().isEmpty()) {
         pageToken_ = other.pageToken_;
+        bitField0_ |= 0x00000008;
         onChanged();
       }
       if (other.getPageSize() != 0) {
@@ -890,7 +924,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -902,19 +936,19 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
             case 24:
               {
                 partitionCount_ = input.readInt64();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 34:
               {
                 pageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 40:
               {
                 pageSize_ = input.readInt32();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 40
             case 50:
@@ -967,6 +1001,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -1038,8 +1074,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1058,8 +1094,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -1083,8 +1119,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1322,7 +1358,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       queryTypeCase_ = 2;
       onChanged();
-      ;
       return structuredQueryBuilder_;
     }
 
@@ -1335,6 +1370,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * The partitions may be returned across multiple pages of results.
      * The number must be positive. The actual number of partitions
      * returned may be fewer.
+     *
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the
      * number of workers or compute instances available.
@@ -1356,6 +1392,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * The partitions may be returned across multiple pages of results.
      * The number must be positive. The actual number of partitions
      * returned may be fewer.
+     *
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the
      * number of workers or compute instances available.
@@ -1369,6 +1406,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public Builder setPartitionCount(long value) {
 
       partitionCount_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1380,6 +1418,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * The partitions may be returned across multiple pages of results.
      * The number must be positive. The actual number of partitions
      * returned may be fewer.
+     *
      * For example, this may be set to one fewer than the number of parallel
      * queries to be run, or in running a data pipeline job, one fewer than the
      * number of workers or compute instances available.
@@ -1390,7 +1429,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPartitionCount() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       partitionCount_ = 0L;
       onChanged();
       return this;
@@ -1405,9 +1444,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * PartitionQuery that may be used to get an additional set of results.
      * There are no ordering guarantees between sets of results. Thus, using
      * multiple sets of results will require merging the different result sets.
+     *
      * For example, two subsequent calls using a page_token may return:
+     *
      *  * cursor B, cursor M, cursor Q
      *  * cursor A, cursor U, cursor W
+     *
      * To obtain a complete result set ordered with respect to the results of the
      * query supplied to PartitionQuery, the results sets should be merged:
      * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -1436,9 +1478,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * PartitionQuery that may be used to get an additional set of results.
      * There are no ordering guarantees between sets of results. Thus, using
      * multiple sets of results will require merging the different result sets.
+     *
      * For example, two subsequent calls using a page_token may return:
+     *
      *  * cursor B, cursor M, cursor Q
      *  * cursor A, cursor U, cursor W
+     *
      * To obtain a complete result set ordered with respect to the results of the
      * query supplied to PartitionQuery, the results sets should be merged:
      * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -1467,9 +1512,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * PartitionQuery that may be used to get an additional set of results.
      * There are no ordering guarantees between sets of results. Thus, using
      * multiple sets of results will require merging the different result sets.
+     *
      * For example, two subsequent calls using a page_token may return:
+     *
      *  * cursor B, cursor M, cursor Q
      *  * cursor A, cursor U, cursor W
+     *
      * To obtain a complete result set ordered with respect to the results of the
      * query supplied to PartitionQuery, the results sets should be merged:
      * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -1484,8 +1532,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1497,9 +1545,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * PartitionQuery that may be used to get an additional set of results.
      * There are no ordering guarantees between sets of results. Thus, using
      * multiple sets of results will require merging the different result sets.
+     *
      * For example, two subsequent calls using a page_token may return:
+     *
      *  * cursor B, cursor M, cursor Q
      *  * cursor A, cursor U, cursor W
+     *
      * To obtain a complete result set ordered with respect to the results of the
      * query supplied to PartitionQuery, the results sets should be merged:
      * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -1510,8 +1561,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPageToken() {
-
       pageToken_ = getDefaultInstance().getPageToken();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }
@@ -1523,9 +1574,12 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * PartitionQuery that may be used to get an additional set of results.
      * There are no ordering guarantees between sets of results. Thus, using
      * multiple sets of results will require merging the different result sets.
+     *
      * For example, two subsequent calls using a page_token may return:
+     *
      *  * cursor B, cursor M, cursor Q
      *  * cursor A, cursor U, cursor W
+     *
      * To obtain a complete result set ordered with respect to the results of the
      * query supplied to PartitionQuery, the results sets should be merged:
      * cursor A, cursor B, cursor M, cursor Q, cursor U, cursor W
@@ -1541,8 +1595,8 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       pageToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1554,6 +1608,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The maximum number of partitions to return in this call, subject to
      * `partition_count`.
+     *
      * For example, if `partition_count` = 10 and `page_size` = 8, the first call
      * to PartitionQuery will return up to 8 partitions and a `next_page_token`
      * if more results exist. A second call to PartitionQuery will return up to
@@ -1574,6 +1629,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The maximum number of partitions to return in this call, subject to
      * `partition_count`.
+     *
      * For example, if `partition_count` = 10 and `page_size` = 8, the first call
      * to PartitionQuery will return up to 8 partitions and a `next_page_token`
      * if more results exist. A second call to PartitionQuery will return up to
@@ -1588,6 +1644,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
     public Builder setPageSize(int value) {
 
       pageSize_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1597,6 +1654,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * <pre>
      * The maximum number of partitions to return in this call, subject to
      * `partition_count`.
+     *
      * For example, if `partition_count` = 10 and `page_size` = 8, the first call
      * to PartitionQuery will return up to 8 partitions and a `next_page_token`
      * if more results exist. A second call to PartitionQuery will return up to
@@ -1608,7 +1666,7 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearPageSize() {
-
+      bitField0_ = (bitField0_ & ~0x00000010);
       pageSize_ = 0;
       onChanged();
       return this;
@@ -1624,7 +1682,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1640,7 +1701,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1666,7 +1730,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1689,7 +1756,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1709,7 +1779,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1742,7 +1815,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1768,7 +1844,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1781,7 +1860,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1802,7 +1884,10 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
@@ -1828,7 +1913,6 @@ public final class PartitionQueryRequest extends com.google.protobuf.GeneratedMe
       }
       consistencySelectorCase_ = 6;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

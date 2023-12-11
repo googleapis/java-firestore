@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
+ * The request for
+ * [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.ListCollectionIdsRequest}
@@ -48,11 +49,6 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     return new ListCollectionIdsRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_ListCollectionIdsRequest_descriptor;
@@ -69,6 +65,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
   }
 
   private int consistencySelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object consistencySelector_;
 
   public enum ConsistencySelectorCase
@@ -113,7 +111,9 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -168,7 +168,7 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
   }
 
   public static final int PAGE_SIZE_FIELD_NUMBER = 2;
-  private int pageSize_;
+  private int pageSize_ = 0;
   /**
    *
    *
@@ -186,7 +186,9 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
   }
 
   public static final int PAGE_TOKEN_FIELD_NUMBER = 3;
-  private volatile java.lang.Object pageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object pageToken_ = "";
   /**
    *
    *
@@ -242,7 +244,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -258,7 +263,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -277,7 +285,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
    *
    * <pre>
    * Reads documents as they were at the given time.
-   * This may not be older than 270 seconds.
+   *
+   * This must be a microsecond precision timestamp within the past one hour,
+   * or if Point-in-Time Recovery is enabled, can additionally be a whole
+   * minute timestamp within the past 7 days.
    * </pre>
    *
    * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -495,7 +506,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
    *
    *
    * <pre>
-   * The request for [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
+   * The request for
+   * [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.ListCollectionIdsRequest}
@@ -529,12 +541,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       pageSize_ = 0;
-
       pageToken_ = "";
-
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
@@ -567,19 +577,33 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     public com.google.firestore.v1.ListCollectionIdsRequest buildPartial() {
       com.google.firestore.v1.ListCollectionIdsRequest result =
           new com.google.firestore.v1.ListCollectionIdsRequest(this);
-      result.parent_ = parent_;
-      result.pageSize_ = pageSize_;
-      result.pageToken_ = pageToken_;
-      if (consistencySelectorCase_ == 4) {
-        if (readTimeBuilder_ == null) {
-          result.consistencySelector_ = consistencySelector_;
-        } else {
-          result.consistencySelector_ = readTimeBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.consistencySelectorCase_ = consistencySelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListCollectionIdsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.pageSize_ = pageSize_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.pageToken_ = pageToken_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.ListCollectionIdsRequest result) {
+      result.consistencySelectorCase_ = consistencySelectorCase_;
+      result.consistencySelector_ = this.consistencySelector_;
+      if (consistencySelectorCase_ == 4 && readTimeBuilder_ != null) {
+        result.consistencySelector_ = readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -630,6 +654,7 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.getPageSize() != 0) {
@@ -637,6 +662,7 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       }
       if (!other.getPageToken().isEmpty()) {
         pageToken_ = other.pageToken_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       switch (other.getConsistencySelectorCase()) {
@@ -679,19 +705,19 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 16:
               {
                 pageSize_ = input.readInt32();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 16
             case 26:
               {
                 pageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
@@ -730,6 +756,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       onChanged();
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -801,8 +829,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -821,8 +849,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -846,8 +874,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -883,6 +911,7 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
     public Builder setPageSize(int value) {
 
       pageSize_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -898,7 +927,7 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearPageSize() {
-
+      bitField0_ = (bitField0_ & ~0x00000002);
       pageSize_ = 0;
       onChanged();
       return this;
@@ -968,8 +997,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       if (value == null) {
         throw new NullPointerException();
       }
-
       pageToken_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -986,8 +1015,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      * @return This builder for chaining.
      */
     public Builder clearPageToken() {
-
       pageToken_ = getDefaultInstance().getPageToken();
+      bitField0_ = (bitField0_ & ~0x00000004);
       onChanged();
       return this;
     }
@@ -1009,8 +1038,8 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       pageToken_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1025,7 +1054,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1041,7 +1073,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1067,7 +1102,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1090,7 +1128,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1110,7 +1151,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1143,7 +1187,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1169,7 +1216,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1182,7 +1232,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1203,7 +1256,10 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
      *
      * <pre>
      * Reads documents as they were at the given time.
-     * This may not be older than 270 seconds.
+     *
+     * This must be a microsecond precision timestamp within the past one hour,
+     * or if Point-in-Time Recovery is enabled, can additionally be a whole
+     * minute timestamp within the past 7 days.
      * </pre>
      *
      * <code>.google.protobuf.Timestamp read_time = 4;</code>
@@ -1229,7 +1285,6 @@ public final class ListCollectionIdsRequest extends com.google.protobuf.Generate
       }
       consistencySelectorCase_ = 4;
       onChanged();
-      ;
       return readTimeBuilder_;
     }
 

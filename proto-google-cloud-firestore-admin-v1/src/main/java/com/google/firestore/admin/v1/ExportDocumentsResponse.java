@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Returned in the [google.longrunning.Operation][google.longrunning.Operation] response field.
+ * Returned in the [google.longrunning.Operation][google.longrunning.Operation]
+ * response field.
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsResponse}
@@ -47,11 +48,6 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
     return new ExportDocumentsResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.OperationProto
         .internal_static_google_firestore_admin_v1_ExportDocumentsResponse_descriptor;
@@ -68,7 +64,9 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
   }
 
   public static final int OUTPUT_URI_PREFIX_FIELD_NUMBER = 1;
-  private volatile java.lang.Object outputUriPrefix_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object outputUriPrefix_ = "";
   /**
    *
    *
@@ -284,7 +282,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Returned in the [google.longrunning.Operation][google.longrunning.Operation] response field.
+   * Returned in the [google.longrunning.Operation][google.longrunning.Operation]
+   * response field.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ExportDocumentsResponse}
@@ -318,8 +317,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       outputUriPrefix_ = "";
-
       return this;
     }
 
@@ -347,9 +346,18 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
     public com.google.firestore.admin.v1.ExportDocumentsResponse buildPartial() {
       com.google.firestore.admin.v1.ExportDocumentsResponse result =
           new com.google.firestore.admin.v1.ExportDocumentsResponse(this);
-      result.outputUriPrefix_ = outputUriPrefix_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ExportDocumentsResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.outputUriPrefix_ = outputUriPrefix_;
+      }
     }
 
     @java.lang.Override
@@ -400,6 +408,7 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
         return this;
       if (!other.getOutputUriPrefix().isEmpty()) {
         outputUriPrefix_ = other.outputUriPrefix_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -431,7 +440,7 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
             case 10:
               {
                 outputUriPrefix_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             default:
@@ -450,6 +459,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object outputUriPrefix_ = "";
     /**
@@ -518,8 +529,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
       if (value == null) {
         throw new NullPointerException();
       }
-
       outputUriPrefix_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -537,8 +548,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearOutputUriPrefix() {
-
       outputUriPrefix_ = getDefaultInstance().getOutputUriPrefix();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -561,8 +572,8 @@ public final class ExportDocumentsResponse extends com.google.protobuf.Generated
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       outputUriPrefix_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }

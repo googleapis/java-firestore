@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,33 +46,36 @@ public final class IndexProto {
     java.lang.String[] descriptorData = {
       "\n%google/firestore/admin/v1/index.proto\022"
           + "\031google.firestore.admin.v1\032\031google/api/r"
-          + "esource.proto\"\243\006\n\005Index\022\014\n\004name\030\001 \001(\t\022@\n"
+          + "esource.proto\"\254\007\n\005Index\022\014\n\004name\030\001 \001(\t\022@\n"
           + "\013query_scope\030\002 \001(\0162+.google.firestore.ad"
-          + "min.v1.Index.QueryScope\022;\n\006fields\030\003 \003(\0132"
-          + "+.google.firestore.admin.v1.Index.IndexF"
-          + "ield\0225\n\005state\030\004 \001(\0162&.google.firestore.a"
-          + "dmin.v1.Index.State\032\275\002\n\nIndexField\022\022\n\nfi"
-          + "eld_path\030\001 \001(\t\022B\n\005order\030\002 \001(\01621.google.f"
-          + "irestore.admin.v1.Index.IndexField.Order"
-          + "H\000\022O\n\014array_config\030\003 \001(\01627.google.firest"
-          + "ore.admin.v1.Index.IndexField.ArrayConfi"
-          + "gH\000\"=\n\005Order\022\025\n\021ORDER_UNSPECIFIED\020\000\022\r\n\tA"
-          + "SCENDING\020\001\022\016\n\nDESCENDING\020\002\"9\n\013ArrayConfi"
-          + "g\022\034\n\030ARRAY_CONFIG_UNSPECIFIED\020\000\022\014\n\010CONTA"
-          + "INS\020\001B\014\n\nvalue_mode\"O\n\nQueryScope\022\033\n\027QUE"
-          + "RY_SCOPE_UNSPECIFIED\020\000\022\016\n\nCOLLECTION\020\001\022\024"
-          + "\n\020COLLECTION_GROUP\020\002\"I\n\005State\022\025\n\021STATE_U"
-          + "NSPECIFIED\020\000\022\014\n\010CREATING\020\001\022\t\n\005READY\020\002\022\020\n"
-          + "\014NEEDS_REPAIR\020\003:z\352Aw\n\036firestore.googleap"
-          + "is.com/Index\022Uprojects/{project}/databas"
-          + "es/{database}/collectionGroups/{collecti"
-          + "on}/indexes/{index}B\336\001\n\035com.google.fires"
-          + "tore.admin.v1B\nIndexProtoP\001Z>google.gola"
-          + "ng.org/genproto/googleapis/firestore/adm"
-          + "in/v1;admin\242\002\004GCFS\252\002\037Google.Cloud.Firest"
-          + "ore.Admin.V1\312\002\037Google\\Cloud\\Firestore\\Ad"
-          + "min\\V1\352\002#Google::Cloud::Firestore::Admin"
-          + "::V1b\006proto3"
+          + "min.v1.Index.QueryScope\022<\n\tapi_scope\030\005 \001"
+          + "(\0162).google.firestore.admin.v1.Index.Api"
+          + "Scope\022;\n\006fields\030\003 \003(\0132+.google.firestore"
+          + ".admin.v1.Index.IndexField\0225\n\005state\030\004 \001("
+          + "\0162&.google.firestore.admin.v1.Index.Stat"
+          + "e\032\275\002\n\nIndexField\022\022\n\nfield_path\030\001 \001(\t\022B\n\005"
+          + "order\030\002 \001(\01621.google.firestore.admin.v1."
+          + "Index.IndexField.OrderH\000\022O\n\014array_config"
+          + "\030\003 \001(\01627.google.firestore.admin.v1.Index"
+          + ".IndexField.ArrayConfigH\000\"=\n\005Order\022\025\n\021OR"
+          + "DER_UNSPECIFIED\020\000\022\r\n\tASCENDING\020\001\022\016\n\nDESC"
+          + "ENDING\020\002\"9\n\013ArrayConfig\022\034\n\030ARRAY_CONFIG_"
+          + "UNSPECIFIED\020\000\022\014\n\010CONTAINS\020\001B\014\n\nvalue_mod"
+          + "e\"i\n\nQueryScope\022\033\n\027QUERY_SCOPE_UNSPECIFI"
+          + "ED\020\000\022\016\n\nCOLLECTION\020\001\022\024\n\020COLLECTION_GROUP"
+          + "\020\002\022\030\n\024COLLECTION_RECURSIVE\020\003\"/\n\010ApiScope"
+          + "\022\013\n\007ANY_API\020\000\022\026\n\022DATASTORE_MODE_API\020\001\"I\n"
+          + "\005State\022\025\n\021STATE_UNSPECIFIED\020\000\022\014\n\010CREATIN"
+          + "G\020\001\022\t\n\005READY\020\002\022\020\n\014NEEDS_REPAIR\020\003:z\352Aw\n\036f"
+          + "irestore.googleapis.com/Index\022Uprojects/"
+          + "{project}/databases/{database}/collectio"
+          + "nGroups/{collection}/indexes/{index}B\331\001\n"
+          + "\035com.google.firestore.admin.v1B\nIndexPro"
+          + "toP\001Z9cloud.google.com/go/firestore/apiv"
+          + "1/admin/adminpb;adminpb\242\002\004GCFS\252\002\037Google."
+          + "Cloud.Firestore.Admin.V1\312\002\037Google\\Cloud\\"
+          + "Firestore\\Admin\\V1\352\002#Google::Cloud::Fire"
+          + "store::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -86,7 +89,7 @@ public final class IndexProto {
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_Index_descriptor,
             new java.lang.String[] {
-              "Name", "QueryScope", "Fields", "State",
+              "Name", "QueryScope", "ApiScope", "Fields", "State",
             });
     internal_static_google_firestore_admin_v1_Index_IndexField_descriptor =
         internal_static_google_firestore_admin_v1_Index_descriptor.getNestedTypes().get(0);

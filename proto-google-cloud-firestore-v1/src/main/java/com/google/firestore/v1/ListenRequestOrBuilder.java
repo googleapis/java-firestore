@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,7 +152,6 @@ public interface ListenRequestOrBuilder
    *
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
-
   /* nullable */
   java.lang.String getLabelsOrDefault(
       java.lang.String key,
@@ -169,5 +168,5 @@ public interface ListenRequestOrBuilder
    */
   java.lang.String getLabelsOrThrow(java.lang.String key);
 
-  public com.google.firestore.v1.ListenRequest.TargetChangeCase getTargetChangeCase();
+  com.google.firestore.v1.ListenRequest.TargetChangeCase getTargetChangeCase();
 }

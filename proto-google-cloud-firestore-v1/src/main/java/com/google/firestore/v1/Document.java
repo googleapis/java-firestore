@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A Firestore document.
+ *
  * Must not exceed 1 MiB - 4 bytes.
  * </pre>
  *
@@ -46,11 +47,6 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new Document();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -79,7 +75,9 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -144,6 +142,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
                     com.google.firestore.v1.Value.getDefaultInstance());
   }
 
+  @SuppressWarnings("serial")
   private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value> fields_;
 
   private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
@@ -162,20 +161,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The document's fields.
+   *
    * The map keys represent field names.
+   *
    * A simple field name contains only characters `a` to `z`, `A` to `Z`,
    * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
    * `foo_bar_17`.
+   *
    * Field names matching the regular expression `__.*__` are reserved. Reserved
    * field names are forbidden except in certain documented contexts. The map
    * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
    * empty.
+   *
    * Field paths may be used in other contexts to refer to structured fields
    * defined here. For `map_value`, the field path is represented by the simple
    * or quoted field names of the containing fields, delimited by `.`. For
    * example, the structured field
    * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
    * represented by the field path `foo.x&amp;y`.
+   *
    * Within a field path, a quoted field name starts and ends with `` ` `` and
    * may contain any character. Some characters, including `` ` ``, must be
    * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -202,20 +206,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The document's fields.
+   *
    * The map keys represent field names.
+   *
    * A simple field name contains only characters `a` to `z`, `A` to `Z`,
    * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
    * `foo_bar_17`.
+   *
    * Field names matching the regular expression `__.*__` are reserved. Reserved
    * field names are forbidden except in certain documented contexts. The map
    * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
    * empty.
+   *
    * Field paths may be used in other contexts to refer to structured fields
    * defined here. For `map_value`, the field path is represented by the simple
    * or quoted field names of the containing fields, delimited by `.`. For
    * example, the structured field
    * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
    * represented by the field path `foo.x&amp;y`.
+   *
    * Within a field path, a quoted field name starts and ends with `` ` `` and
    * may contain any character. Some characters, including `` ` ``, must be
    * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -233,20 +242,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The document's fields.
+   *
    * The map keys represent field names.
+   *
    * A simple field name contains only characters `a` to `z`, `A` to `Z`,
    * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
    * `foo_bar_17`.
+   *
    * Field names matching the regular expression `__.*__` are reserved. Reserved
    * field names are forbidden except in certain documented contexts. The map
    * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
    * empty.
+   *
    * Field paths may be used in other contexts to refer to structured fields
    * defined here. For `map_value`, the field path is represented by the simple
    * or quoted field names of the containing fields, delimited by `.`. For
    * example, the structured field
    * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
    * represented by the field path `foo.x&amp;y`.
+   *
    * Within a field path, a quoted field name starts and ends with `` ` `` and
    * may contain any character. Some characters, including `` ` ``, must be
    * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -256,8 +270,10 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
    */
   @java.lang.Override
-  public com.google.firestore.v1.Value getFieldsOrDefault(
-      java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+  public /* nullable */ com.google.firestore.v1.Value getFieldsOrDefault(
+      java.lang.String key,
+      /* nullable */
+      com.google.firestore.v1.Value defaultValue) {
     if (key == null) {
       throw new NullPointerException("map key");
     }
@@ -270,20 +286,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The document's fields.
+   *
    * The map keys represent field names.
+   *
    * A simple field name contains only characters `a` to `z`, `A` to `Z`,
    * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
    * `foo_bar_17`.
+   *
    * Field names matching the regular expression `__.*__` are reserved. Reserved
    * field names are forbidden except in certain documented contexts. The map
    * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
    * empty.
+   *
    * Field paths may be used in other contexts to refer to structured fields
    * defined here. For `map_value`, the field path is represented by the simple
    * or quoted field names of the containing fields, delimited by `.`. For
    * example, the structured field
    * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
    * represented by the field path `foo.x&amp;y`.
+   *
    * Within a field path, a quoted field name starts and ends with `` ` `` and
    * may contain any character. Some characters, including `` ` ``, must be
    * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -312,6 +333,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was created.
+   *
    * This value increases monotonically when a document is deleted then
    * recreated. It can also be compared to values from other documents and
    * the `read_time` of a query.
@@ -330,6 +352,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was created.
+   *
    * This value increases monotonically when a document is deleted then
    * recreated. It can also be compared to values from other documents and
    * the `read_time` of a query.
@@ -348,6 +371,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was created.
+   *
    * This value increases monotonically when a document is deleted then
    * recreated. It can also be compared to values from other documents and
    * the `read_time` of a query.
@@ -357,7 +381,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
-    return getCreateTime();
+    return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
   }
 
   public static final int UPDATE_TIME_FIELD_NUMBER = 4;
@@ -367,6 +391,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was last changed.
+   *
    * This value is initially set to the `create_time` then increases
    * monotonically with each change to the document. It can also be
    * compared to values from other documents and the `read_time` of a query.
@@ -385,6 +410,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was last changed.
+   *
    * This value is initially set to the `create_time` then increases
    * monotonically with each change to the document. It can also be
    * compared to values from other documents and the `read_time` of a query.
@@ -403,6 +429,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * Output only. The time at which the document was last changed.
+   *
    * This value is initially set to the `create_time` then increases
    * monotonically with each change to the document. It can also be
    * compared to values from other documents and the `read_time` of a query.
@@ -412,7 +439,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
-    return getUpdateTime();
+    return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -622,6 +649,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A Firestore document.
+   *
    * Must not exceed 1 MiB - 4 bytes.
    * </pre>
    *
@@ -676,19 +704,17 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       internalGetMutableFields().clear();
-      if (createTimeBuilder_ == null) {
-        createTime_ = null;
-      } else {
-        createTime_ = null;
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
         createTimeBuilder_ = null;
       }
-      if (updateTimeBuilder_ == null) {
-        updateTime_ = null;
-      } else {
-        updateTime_ = null;
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
         updateTimeBuilder_ = null;
       }
       return this;
@@ -717,22 +743,28 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Document buildPartial() {
       com.google.firestore.v1.Document result = new com.google.firestore.v1.Document(this);
-      int from_bitField0_ = bitField0_;
-      result.name_ = name_;
-      result.fields_ = internalGetFields();
-      result.fields_.makeImmutable();
-      if (createTimeBuilder_ == null) {
-        result.createTime_ = createTime_;
-      } else {
-        result.createTime_ = createTimeBuilder_.build();
-      }
-      if (updateTimeBuilder_ == null) {
-        result.updateTime_ = updateTime_;
-      } else {
-        result.updateTime_ = updateTimeBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Document result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.fields_ = internalGetFields();
+        result.fields_.makeImmutable();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.createTime_ = createTimeBuilder_ == null ? createTime_ : createTimeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.updateTime_ = updateTimeBuilder_ == null ? updateTime_ : updateTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -782,9 +814,11 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.Document.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       internalGetMutableFields().mergeFrom(other.internalGetFields());
+      bitField0_ |= 0x00000002;
       if (other.hasCreateTime()) {
         mergeCreateTime(other.getCreateTime());
       }
@@ -820,7 +854,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -833,18 +867,19 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
                 internalGetMutableFields()
                     .getMutableMap()
                     .put(fields__.getKey(), fields__.getValue());
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getCreateTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
               {
                 input.readMessage(getUpdateTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             default:
@@ -930,8 +965,8 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -948,8 +983,8 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -971,8 +1006,8 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -989,14 +1024,14 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
 
     private com.google.protobuf.MapField<java.lang.String, com.google.firestore.v1.Value>
         internalGetMutableFields() {
-      onChanged();
-      ;
       if (fields_ == null) {
         fields_ = com.google.protobuf.MapField.newMapField(FieldsDefaultEntryHolder.defaultEntry);
       }
       if (!fields_.isMutable()) {
         fields_ = fields_.copy();
       }
+      bitField0_ |= 0x00000002;
+      onChanged();
       return fields_;
     }
 
@@ -1008,20 +1043,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1048,20 +1088,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1079,20 +1124,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1102,8 +1152,10 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 2;</code>
      */
     @java.lang.Override
-    public com.google.firestore.v1.Value getFieldsOrDefault(
-        java.lang.String key, com.google.firestore.v1.Value defaultValue) {
+    public /* nullable */ com.google.firestore.v1.Value getFieldsOrDefault(
+        java.lang.String key,
+        /* nullable */
+        com.google.firestore.v1.Value defaultValue) {
       if (key == null) {
         throw new NullPointerException("map key");
       }
@@ -1116,20 +1168,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1152,6 +1209,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     }
 
     public Builder clearFields() {
+      bitField0_ = (bitField0_ & ~0x00000002);
       internalGetMutableFields().getMutableMap().clear();
       return this;
     }
@@ -1160,20 +1218,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1192,6 +1255,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getMutableFields() {
+      bitField0_ |= 0x00000002;
       return internalGetMutableFields().getMutableMap();
     }
     /**
@@ -1199,20 +1263,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1228,8 +1297,8 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException("map value");
       }
-
       internalGetMutableFields().getMutableMap().put(key, value);
+      bitField0_ |= 0x00000002;
       return this;
     }
     /**
@@ -1237,20 +1306,25 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The document's fields.
+     *
      * The map keys represent field names.
+     *
      * A simple field name contains only characters `a` to `z`, `A` to `Z`,
      * `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
      * `foo_bar_17`.
+     *
      * Field names matching the regular expression `__.*__` are reserved. Reserved
      * field names are forbidden except in certain documented contexts. The map
      * keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
      * empty.
+     *
      * Field paths may be used in other contexts to refer to structured fields
      * defined here. For `map_value`, the field path is represented by the simple
      * or quoted field names of the containing fields, delimited by `.`. For
      * example, the structured field
      * `"foo" : { map_value: { "x&amp;y" : { string_value: "hello" }}}` would be
      * represented by the field path `foo.x&amp;y`.
+     *
      * Within a field path, a quoted field name starts and ends with `` ` `` and
      * may contain any character. Some characters, including `` ` ``, must be
      * escaped using a `&#92;`. For example, `` `x&amp;y` `` represents `x&amp;y` and
@@ -1262,6 +1336,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     public Builder putAllFields(
         java.util.Map<java.lang.String, com.google.firestore.v1.Value> values) {
       internalGetMutableFields().getMutableMap().putAll(values);
+      bitField0_ |= 0x00000002;
       return this;
     }
 
@@ -1276,6 +1351,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1286,13 +1362,14 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the createTime field is set.
      */
     public boolean hasCreateTime() {
-      return createTimeBuilder_ != null || createTime_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1316,6 +1393,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1329,11 +1407,11 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         createTime_ = value;
-        onChanged();
       } else {
         createTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1341,6 +1419,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1351,11 +1430,11 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     public Builder setCreateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (createTimeBuilder_ == null) {
         createTime_ = builderForValue.build();
-        onChanged();
       } else {
         createTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1363,6 +1442,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1372,17 +1452,18 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeCreateTime(com.google.protobuf.Timestamp value) {
       if (createTimeBuilder_ == null) {
-        if (createTime_ != null) {
-          createTime_ =
-              com.google.protobuf.Timestamp.newBuilder(createTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && createTime_ != null
+            && createTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getCreateTimeBuilder().mergeFrom(value);
         } else {
           createTime_ = value;
         }
-        onChanged();
       } else {
         createTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1390,6 +1471,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1398,14 +1480,13 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp create_time = 3;</code>
      */
     public Builder clearCreateTime() {
-      if (createTimeBuilder_ == null) {
-        createTime_ = null;
-        onChanged();
-      } else {
-        createTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
         createTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1413,6 +1494,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1421,7 +1503,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp create_time = 3;</code>
      */
     public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getCreateTimeFieldBuilder().getBuilder();
     }
@@ -1430,6 +1512,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1451,6 +1534,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was created.
+     *
      * This value increases monotonically when a document is deleted then
      * recreated. It can also be compared to values from other documents and
      * the `read_time` of a query.
@@ -1486,6 +1570,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1496,13 +1581,14 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the updateTime field is set.
      */
     public boolean hasUpdateTime() {
-      return updateTimeBuilder_ != null || updateTime_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1526,6 +1612,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1539,11 +1626,11 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         updateTime_ = value;
-        onChanged();
       } else {
         updateTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1551,6 +1638,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1561,11 +1649,11 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
     public Builder setUpdateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (updateTimeBuilder_ == null) {
         updateTime_ = builderForValue.build();
-        onChanged();
       } else {
         updateTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1573,6 +1661,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1582,17 +1671,18 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeUpdateTime(com.google.protobuf.Timestamp value) {
       if (updateTimeBuilder_ == null) {
-        if (updateTime_ != null) {
-          updateTime_ =
-              com.google.protobuf.Timestamp.newBuilder(updateTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && updateTime_ != null
+            && updateTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getUpdateTimeBuilder().mergeFrom(value);
         } else {
           updateTime_ = value;
         }
-        onChanged();
       } else {
         updateTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1600,6 +1690,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1608,14 +1699,13 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp update_time = 4;</code>
      */
     public Builder clearUpdateTime() {
-      if (updateTimeBuilder_ == null) {
-        updateTime_ = null;
-        onChanged();
-      } else {
-        updateTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
         updateTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1623,6 +1713,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1631,7 +1722,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp update_time = 4;</code>
      */
     public com.google.protobuf.Timestamp.Builder getUpdateTimeBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getUpdateTimeFieldBuilder().getBuilder();
     }
@@ -1640,6 +1731,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.
@@ -1661,6 +1753,7 @@ public final class Document extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * Output only. The time at which the document was last changed.
+     *
      * This value is initially set to the `create_time` then increases
      * monotonically with each change to the document. It can also be
      * compared to values from other documents and the `read_time` of a query.

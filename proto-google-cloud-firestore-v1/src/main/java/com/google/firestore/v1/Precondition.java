@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
     return new Precondition();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.CommonProto
         .internal_static_google_firestore_v1_Precondition_descriptor;
@@ -66,6 +61,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int conditionTypeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object conditionType_;
 
   public enum ConditionTypeCase
@@ -428,6 +425,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       if (updateTimeBuilder_ != null) {
         updateTimeBuilder_.clear();
       }
@@ -459,19 +457,24 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.Precondition buildPartial() {
       com.google.firestore.v1.Precondition result = new com.google.firestore.v1.Precondition(this);
-      if (conditionTypeCase_ == 1) {
-        result.conditionType_ = conditionType_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (conditionTypeCase_ == 2) {
-        if (updateTimeBuilder_ == null) {
-          result.conditionType_ = conditionType_;
-        } else {
-          result.conditionType_ = updateTimeBuilder_.build();
-        }
-      }
-      result.conditionTypeCase_ = conditionTypeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.Precondition result) {
+      int from_bitField0_ = bitField0_;
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.Precondition result) {
+      result.conditionTypeCase_ = conditionTypeCase_;
+      result.conditionType_ = this.conditionType_;
+      if (conditionTypeCase_ == 2 && updateTimeBuilder_ != null) {
+        result.conditionType_ = updateTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -604,6 +607,8 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private int bitField0_;
+
     /**
      *
      *
@@ -651,6 +656,7 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setExists(boolean value) {
+
       conditionTypeCase_ = 1;
       conditionType_ = value;
       onChanged();
@@ -889,7 +895,6 @@ public final class Precondition extends com.google.protobuf.GeneratedMessageV3
       }
       conditionTypeCase_ = 2;
       onChanged();
-      ;
       return updateTimeBuilder_;
     }
 

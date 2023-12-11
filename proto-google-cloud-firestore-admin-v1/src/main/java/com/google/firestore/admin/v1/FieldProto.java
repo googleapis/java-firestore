@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,27 +52,27 @@ public final class FieldProto {
           + "\031google.firestore.admin.v1\032\037google/api/f"
           + "ield_behavior.proto\032\031google/api/resource"
           + ".proto\032%google/firestore/admin/v1/index."
-          + "proto\"\305\004\n\005Field\022\021\n\004name\030\001 \001(\tB\003\340A\002\022B\n\014in"
-          + "dex_config\030\002 \001(\0132,.google.firestore.admi"
-          + "n.v1.Field.IndexConfig\022>\n\nttl_config\030\003 \001"
-          + "(\0132*.google.firestore.admin.v1.Field.Ttl"
-          + "Config\032\211\001\n\013IndexConfig\0221\n\007indexes\030\001 \003(\0132"
-          + " .google.firestore.admin.v1.Index\022\034\n\024use"
-          + "s_ancestor_config\030\002 \001(\010\022\026\n\016ancestor_fiel"
-          + "d\030\003 \001(\t\022\021\n\treverting\030\004 \001(\010\032\235\001\n\tTtlConfig"
-          + "\022D\n\005state\030\001 \001(\01620.google.firestore.admin"
-          + ".v1.Field.TtlConfig.StateB\003\340A\003\"J\n\005State\022"
-          + "\025\n\021STATE_UNSPECIFIED\020\000\022\014\n\010CREATING\020\001\022\n\n\006"
-          + "ACTIVE\020\002\022\020\n\014NEEDS_REPAIR\020\003:y\352Av\n\036firesto"
-          + "re.googleapis.com/Field\022Tprojects/{proje"
-          + "ct}/databases/{database}/collectionGroup"
-          + "s/{collection}/fields/{field}B\336\001\n\035com.go"
-          + "ogle.firestore.admin.v1B\nFieldProtoP\001Z>g"
-          + "oogle.golang.org/genproto/googleapis/fir"
-          + "estore/admin/v1;admin\242\002\004GCFS\252\002\037Google.Cl"
-          + "oud.Firestore.Admin.V1\312\002\037Google\\Cloud\\Fi"
-          + "restore\\Admin\\V1\352\002#Google::Cloud::Firest"
-          + "ore::Admin::V1b\006proto3"
+          + "proto\"\307\004\n\005Field\022\022\n\004name\030\001 \001(\tB\004\342A\001\002\022B\n\014i"
+          + "ndex_config\030\002 \001(\0132,.google.firestore.adm"
+          + "in.v1.Field.IndexConfig\022>\n\nttl_config\030\003 "
+          + "\001(\0132*.google.firestore.admin.v1.Field.Tt"
+          + "lConfig\032\211\001\n\013IndexConfig\0221\n\007indexes\030\001 \003(\013"
+          + "2 .google.firestore.admin.v1.Index\022\034\n\024us"
+          + "es_ancestor_config\030\002 \001(\010\022\026\n\016ancestor_fie"
+          + "ld\030\003 \001(\t\022\021\n\treverting\030\004 \001(\010\032\236\001\n\tTtlConfi"
+          + "g\022E\n\005state\030\001 \001(\01620.google.firestore.admi"
+          + "n.v1.Field.TtlConfig.StateB\004\342A\001\003\"J\n\005Stat"
+          + "e\022\025\n\021STATE_UNSPECIFIED\020\000\022\014\n\010CREATING\020\001\022\n"
+          + "\n\006ACTIVE\020\002\022\020\n\014NEEDS_REPAIR\020\003:y\352Av\n\036fires"
+          + "tore.googleapis.com/Field\022Tprojects/{pro"
+          + "ject}/databases/{database}/collectionGro"
+          + "ups/{collection}/fields/{field}B\331\001\n\035com."
+          + "google.firestore.admin.v1B\nFieldProtoP\001Z"
+          + "9cloud.google.com/go/firestore/apiv1/adm"
+          + "in/adminpb;adminpb\242\002\004GCFS\252\002\037Google.Cloud"
+          + ".Firestore.Admin.V1\312\002\037Google\\Cloud\\Fires"
+          + "tore\\Admin\\V1\352\002#Google::Cloud::Firestore"
+          + "::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(

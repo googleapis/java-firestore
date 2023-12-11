@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import com.google.cloud.firestore.v1.stub.FirestoreAdminStub;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.admin.v1.CollectionGroupName;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
@@ -176,10 +178,7 @@ import javax.annotation.Generated;
  * // - It may require specifying regional endpoints when creating the service client as shown in
  * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
  * FirestoreAdminSettings firestoreAdminSettings =
- *     FirestoreAdminSettings.newBuilder()
- *         .setTransportChannelProvider(
- *             FirestoreAdminSettings.defaultHttpJsonTransportProviderBuilder().build())
- *         .build();
+ *     FirestoreAdminSettings.newHttpJsonBuilder().build();
  * FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create(firestoreAdminSettings);
  * }</pre>
  *
@@ -1391,6 +1390,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(request).get();
    * }
@@ -1430,6 +1431,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata> future =
    *       firestoreAdminClient.exportDocumentsOperationCallable().futureCall(request);
@@ -1470,6 +1473,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.exportDocumentsCallable().futureCall(request);
@@ -1565,6 +1570,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   firestoreAdminClient.importDocumentsAsync(request).get();
    * }
@@ -1599,6 +1605,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   OperationFuture<Empty, ImportDocumentsMetadata> future =
    *       firestoreAdminClient.importDocumentsOperationCallable().futureCall(request);
@@ -1633,6 +1640,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.importDocumentsCallable().futureCall(request);
@@ -1643,6 +1651,176 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     return stub.importDocumentsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ProjectName parent = ProjectName.of("[PROJECT]");
+   *   Database database = Database.newBuilder().build();
+   *   String databaseId = "databaseId1688905718";
+   *   Database response =
+   *       firestoreAdminClient.createDatabaseAsync(parent, database, databaseId).get();
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @param database Required. The Database to create.
+   * @param databaseId Required. The ID to use for the database, which will become the final
+   *     component of the database's resource name.
+   *     <p>The value must be set to "(default)".
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
+      ProjectName parent, Database database, String databaseId) {
+    CreateDatabaseRequest request =
+        CreateDatabaseRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .setDatabase(database)
+            .setDatabaseId(databaseId)
+            .build();
+    return createDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = ProjectName.of("[PROJECT]").toString();
+   *   Database database = Database.newBuilder().build();
+   *   String databaseId = "databaseId1688905718";
+   *   Database response =
+   *       firestoreAdminClient.createDatabaseAsync(parent, database, databaseId).get();
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form `projects/{project_id}`
+   * @param database Required. The Database to create.
+   * @param databaseId Required. The ID to use for the database, which will become the final
+   *     component of the database's resource name.
+   *     <p>The value must be set to "(default)".
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
+      String parent, Database database, String databaseId) {
+    CreateDatabaseRequest request =
+        CreateDatabaseRequest.newBuilder()
+            .setParent(parent)
+            .setDatabase(database)
+            .setDatabaseId(databaseId)
+            .build();
+    return createDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateDatabaseRequest request =
+   *       CreateDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .build();
+   *   Database response = firestoreAdminClient.createDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
+      CreateDatabaseRequest request) {
+    return createDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateDatabaseRequest request =
+   *       CreateDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .build();
+   *   OperationFuture<Database, CreateDatabaseMetadata> future =
+   *       firestoreAdminClient.createDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable() {
+    return stub.createDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateDatabaseRequest request =
+   *       CreateDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabase(Database.newBuilder().build())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.createDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable() {
+    return stub.createDatabaseCallable();
   }
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.

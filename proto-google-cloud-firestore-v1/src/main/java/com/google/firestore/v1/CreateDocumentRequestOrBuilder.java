@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,8 @@ public interface CreateDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -68,7 +69,8 @@ public interface CreateDocumentRequestOrBuilder
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -82,6 +84,7 @@ public interface CreateDocumentRequestOrBuilder
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -95,6 +98,7 @@ public interface CreateDocumentRequestOrBuilder
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -147,6 +151,7 @@ public interface CreateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -161,6 +166,7 @@ public interface CreateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -175,6 +181,7 @@ public interface CreateDocumentRequestOrBuilder
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>

@@ -1,4 +1,4 @@
-// Copyright 2022 Google LLC
+// Copyright 2023 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import "google/firestore/v1/document.proto";
 import "google/protobuf/wrappers.proto";
 
 option csharp_namespace = "Google.Cloud.Firestore.V1";
-option go_package = "google.golang.org/genproto/googleapis/firestore/v1;firestore";
+option go_package = "cloud.google.com/go/firestore/apiv1/firestorepb;firestorepb";
 option java_multiple_files = true;
 option java_outer_classname = "QueryProto";
 option java_package = "com.google.firestore.v1";
@@ -67,6 +67,9 @@ message StructuredQuery {
 
       // Documents are required to satisfy all of the combined filters.
       AND = 1;
+
+      // Documents are required to satisfy at least one of the combined filters.
+      OR = 2;
     }
 
     // The operator for combining multiple filters.
@@ -133,8 +136,9 @@ message StructuredQuery {
       //
       // Requires:
       //
-      // * That `value` is a non-empty `ArrayValue` with at most 10 values.
-      // * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+      // * That `value` is a non-empty `ArrayValue`, subject to disjunction
+      //   limits.
+      // * No `NOT_IN` filters in the same query.
       IN = 8;
 
       // The given `field` is an array that contains any of the values in the
@@ -142,8 +146,10 @@ message StructuredQuery {
       //
       // Requires:
       //
-      // * That `value` is a non-empty `ArrayValue` with at most 10 values.
-      // * No other `IN` or `ARRAY_CONTAINS_ANY` or `NOT_IN`.
+      // * That `value` is a non-empty `ArrayValue`, subject to disjunction
+      //   limits.
+      // * No other `ARRAY_CONTAINS_ANY` filters within the same disjunction.
+      // * No `NOT_IN` filters in the same query.
       ARRAY_CONTAINS_ANY = 9;
 
       // The value of the `field` is not in the given array.
@@ -151,7 +157,7 @@ message StructuredQuery {
       // Requires:
       //
       // * That `value` is a non-empty `ArrayValue` with at most 10 values.
-      // * No other `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
+      // * No other `OR`, `IN`, `ARRAY_CONTAINS_ANY`, `NOT_IN`, `NOT_EQUAL`,
       //   `IS_NOT_NULL`, or `IS_NOT_NAN`.
       // * That `field` comes first in the `order_by`.
       NOT_IN = 10;
@@ -230,11 +236,13 @@ message StructuredQuery {
 
   // A reference to a field in a document, ex: `stats.operations`.
   message FieldReference {
-    // The relative path of the document being referenced.
+    // A reference to a field in a document.
     //
     // Requires:
     //
-    // * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+    // * MUST be a dot-delimited (`.`) string of segments, where each segment
+    // conforms to [document field name][google.firestore.v1.Document.fields]
+    // limitations.
     string field_path = 2;
   }
 
@@ -247,7 +255,11 @@ message StructuredQuery {
     repeated FieldReference fields = 2;
   }
 
-  // The projection to return.
+  // Optional sub-set of the fields to return.
+  //
+  // This acts as a [DocumentMask][google.firestore.v1.DocumentMask] over the
+  // documents returned from a query. When not set, assumes that the caller
+  // wants all fields returned.
   Projection select = 1;
 
   // The collections to query.
@@ -342,19 +354,21 @@ message StructuredQuery {
   google.protobuf.Int32Value limit = 5;
 }
 
-// Firestore query for running an aggregation over a [StructuredQuery][google.firestore.v1.StructuredQuery].
+// Firestore query for running an aggregation over a
+// [StructuredQuery][google.firestore.v1.StructuredQuery].
 message StructuredAggregationQuery {
-  // Defines a aggregation that produces a single result.
+  // Defines an aggregation that produces a single result.
   message Aggregation {
     // Count of documents that match the query.
     //
     // The `COUNT(*)` aggregation function operates on the entire document
     // so it does not require a field reference.
     message Count {
-      // Optional. Optional constraint on the maximum number of documents to count.
+      // Optional. Optional constraint on the maximum number of documents to
+      // count.
       //
       // This provides a way to set an upper bound on the number of documents
-      // to scan, limiting latency and cost.
+      // to scan, limiting latency, and cost.
       //
       // Unspecified is interpreted as no bound.
       //
@@ -367,16 +381,66 @@ message StructuredAggregationQuery {
       // Requires:
       //
       // * Must be greater than zero when present.
-      google.protobuf.Int64Value up_to = 1 [(google.api.field_behavior) = OPTIONAL];
+      google.protobuf.Int64Value up_to = 1
+          [(google.api.field_behavior) = OPTIONAL];
+    }
+
+    // Sum of the values of the requested field.
+    //
+    // * Only numeric values will be aggregated. All non-numeric values
+    // including `NULL` are skipped.
+    //
+    // * If the aggregated values contain `NaN`, returns `NaN`. Infinity math
+    // follows IEEE-754 standards.
+    //
+    // * If the aggregated value set is empty, returns 0.
+    //
+    // * Returns a 64-bit integer if all aggregated numbers are integers and the
+    // sum result does not overflow. Otherwise, the result is returned as a
+    // double. Note that even if all the aggregated values are integers, the
+    // result is returned as a double if it cannot fit within a 64-bit signed
+    // integer. When this occurs, the returned value will lose precision.
+    //
+    // * When underflow occurs, floating-point aggregation is non-deterministic.
+    // This means that running the same query repeatedly without any changes to
+    // the underlying values could produce slightly different results each
+    // time. In those cases, values should be stored as integers over
+    // floating-point numbers.
+    message Sum {
+      // The field to aggregate on.
+      StructuredQuery.FieldReference field = 1;
+    }
+
+    // Average of the values of the requested field.
+    //
+    // * Only numeric values will be aggregated. All non-numeric values
+    // including `NULL` are skipped.
+    //
+    // * If the aggregated values contain `NaN`, returns `NaN`. Infinity math
+    // follows IEEE-754 standards.
+    //
+    // * If the aggregated value set is empty, returns `NULL`.
+    //
+    // * Always returns the result as a double.
+    message Avg {
+      // The field to aggregate on.
+      StructuredQuery.FieldReference field = 1;
     }
 
     // The type of aggregation to perform, required.
     oneof operator {
       // Count aggregator.
       Count count = 1;
+
+      // Sum aggregator.
+      Sum sum = 2;
+
+      // Average aggregator.
+      Avg avg = 3;
     }
 
-    // Optional. Optional name of the field to store the result of the aggregation into.
+    // Optional. Optional name of the field to store the result of the
+    // aggregation into.
     //
     // If not provided, Firestore will pick a default name following the format
     // `field_<incremental_id++>`. For example:
@@ -386,7 +450,7 @@ message StructuredAggregationQuery {
     //   COUNT_UP_TO(1) AS count_up_to_1,
     //   COUNT_UP_TO(2),
     //   COUNT_UP_TO(3) AS count_up_to_3,
-    //   COUNT_UP_TO(4)
+    //   COUNT(*)
     // OVER (
     //   ...
     // );
@@ -399,7 +463,7 @@ message StructuredAggregationQuery {
     //   COUNT_UP_TO(1) AS count_up_to_1,
     //   COUNT_UP_TO(2) AS field_1,
     //   COUNT_UP_TO(3) AS count_up_to_3,
-    //   COUNT_UP_TO(4) AS field_2
+    //   COUNT(*) AS field_2
     // OVER (
     //   ...
     // );
@@ -408,7 +472,8 @@ message StructuredAggregationQuery {
     // Requires:
     //
     // * Must be unique across all aggregation aliases.
-    // * Conform to [document field name][google.firestore.v1.Document.fields] limitations.
+    // * Conform to [document field name][google.firestore.v1.Document.fields]
+    // limitations.
     string alias = 7 [(google.api.field_behavior) = OPTIONAL];
   }
 
@@ -418,12 +483,14 @@ message StructuredAggregationQuery {
     StructuredQuery structured_query = 1;
   }
 
-  // Optional. Series of aggregations to apply over the results of the `structured_query`.
+  // Optional. Series of aggregations to apply over the results of the
+  // `structured_query`.
   //
   // Requires:
   //
   // * A minimum of one and maximum of five aggregations per query.
-  repeated Aggregation aggregations = 3 [(google.api.field_behavior) = OPTIONAL];
+  repeated Aggregation aggregations = 3
+      [(google.api.field_behavior) = OPTIONAL];
 }
 
 // A position in a query result set.

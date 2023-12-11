@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.CreateDocument][google.firestore.v1.Firestore.CreateDocument].
+ * The request for
+ * [Firestore.CreateDocument][google.firestore.v1.Firestore.CreateDocument].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.CreateDocumentRequest}
@@ -49,11 +50,6 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     return new CreateDocumentRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_CreateDocumentRequest_descriptor;
@@ -70,7 +66,9 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int PARENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object parent_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object parent_ = "";
   /**
    *
    *
@@ -123,12 +121,15 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int COLLECTION_ID_FIELD_NUMBER = 2;
-  private volatile java.lang.Object collectionId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object collectionId_ = "";
   /**
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -151,7 +152,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+   * Required. The collection ID, relative to `parent`, to list. For example:
+   * `chatrooms`.
    * </pre>
    *
    * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -172,12 +174,15 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
   }
 
   public static final int DOCUMENT_ID_FIELD_NUMBER = 3;
-  private volatile java.lang.Object documentId_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object documentId_ = "";
   /**
    *
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -202,6 +207,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The client-assigned document ID to use for this document.
+   *
    * Optional. If not specified, an ID will be assigned by the service.
    * </pre>
    *
@@ -268,7 +274,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
-    return getDocument();
+    return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
 
   public static final int MASK_FIELD_NUMBER = 5;
@@ -278,6 +284,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -295,6 +302,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -312,6 +320,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    * <pre>
    * The fields to return. If not set, returns all fields.
+   *
    * If the document has a field that is not present in this mask, that field
    * will not be returned in the response.
    * </pre>
@@ -320,7 +329,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentMaskOrBuilder getMaskOrBuilder() {
-    return getMask();
+    return mask_ == null ? com.google.firestore.v1.DocumentMask.getDefaultInstance() : mask_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -532,7 +541,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
    *
    *
    * <pre>
-   * The request for [Firestore.CreateDocument][google.firestore.v1.Firestore.CreateDocument].
+   * The request for
+   * [Firestore.CreateDocument][google.firestore.v1.Firestore.CreateDocument].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.CreateDocumentRequest}
@@ -566,22 +576,18 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       parent_ = "";
-
       collectionId_ = "";
-
       documentId_ = "";
-
-      if (documentBuilder_ == null) {
-        document_ = null;
-      } else {
-        document_ = null;
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-      if (maskBuilder_ == null) {
-        mask_ = null;
-      } else {
-        mask_ = null;
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
       return this;
@@ -611,21 +617,30 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     public com.google.firestore.v1.CreateDocumentRequest buildPartial() {
       com.google.firestore.v1.CreateDocumentRequest result =
           new com.google.firestore.v1.CreateDocumentRequest(this);
-      result.parent_ = parent_;
-      result.collectionId_ = collectionId_;
-      result.documentId_ = documentId_;
-      if (documentBuilder_ == null) {
-        result.document_ = document_;
-      } else {
-        result.document_ = documentBuilder_.build();
-      }
-      if (maskBuilder_ == null) {
-        result.mask_ = mask_;
-      } else {
-        result.mask_ = maskBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.CreateDocumentRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.collectionId_ = collectionId_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.documentId_ = documentId_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.document_ = documentBuilder_ == null ? document_ : documentBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.mask_ = maskBuilder_ == null ? mask_ : maskBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -675,14 +690,17 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
       if (other == com.google.firestore.v1.CreateDocumentRequest.getDefaultInstance()) return this;
       if (!other.getParent().isEmpty()) {
         parent_ = other.parent_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getCollectionId().isEmpty()) {
         collectionId_ = other.collectionId_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       if (!other.getDocumentId().isEmpty()) {
         documentId_ = other.documentId_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       if (other.hasDocument()) {
@@ -720,31 +738,31 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
             case 10:
               {
                 parent_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 collectionId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 26:
               {
                 documentId_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
               {
                 input.readMessage(getDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 42:
               {
                 input.readMessage(getMaskFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 42
             default:
@@ -763,6 +781,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object parent_ = "";
     /**
@@ -831,8 +851,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -850,8 +870,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearParent() {
-
       parent_ = getDefaultInstance().getParent();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -874,8 +894,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       parent_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -885,7 +905,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example:
+     * `chatrooms`.
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -907,7 +928,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example:
+     * `chatrooms`.
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -929,7 +951,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example:
+     * `chatrooms`.
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -941,8 +964,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -950,7 +973,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example:
+     * `chatrooms`.
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -958,8 +982,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearCollectionId() {
-
       collectionId_ = getDefaultInstance().getCollectionId();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -967,7 +991,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      *
      * <pre>
-     * Required. The collection ID, relative to `parent`, to list. For example: `chatrooms`.
+     * Required. The collection ID, relative to `parent`, to list. For example:
+     * `chatrooms`.
      * </pre>
      *
      * <code>string collection_id = 2 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -980,8 +1005,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       collectionId_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -992,6 +1017,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1015,6 +1041,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1038,6 +1065,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1050,8 +1078,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
       if (value == null) {
         throw new NullPointerException();
       }
-
       documentId_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1060,6 +1088,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1068,8 +1097,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return This builder for chaining.
      */
     public Builder clearDocumentId() {
-
       documentId_ = getDefaultInstance().getDocumentId();
+      bitField0_ = (bitField0_ & ~0x00000004);
       onChanged();
       return this;
     }
@@ -1078,6 +1107,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The client-assigned document ID to use for this document.
+     *
      * Optional. If not specified, an ID will be assigned by the service.
      * </pre>
      *
@@ -1091,8 +1121,8 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       documentId_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1116,7 +1146,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the document field is set.
      */
     public boolean hasDocument() {
-      return documentBuilder_ != null || document_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1155,11 +1185,11 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         document_ = value;
-        onChanged();
       } else {
         documentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1175,11 +1205,11 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
         document_ = builderForValue.build();
-        onChanged();
       } else {
         documentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1194,19 +1224,18 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
-        if (document_ != null) {
-          document_ =
-              com.google.firestore.v1.Document.newBuilder(document_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && document_ != null
+            && document_ != com.google.firestore.v1.Document.getDefaultInstance()) {
+          getDocumentBuilder().mergeFrom(value);
         } else {
           document_ = value;
         }
-        onChanged();
       } else {
         documentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1220,14 +1249,13 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </code>
      */
     public Builder clearDocument() {
-      if (documentBuilder_ == null) {
-        document_ = null;
-        onChanged();
-      } else {
-        document_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1241,7 +1269,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * </code>
      */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getDocumentFieldBuilder().getBuilder();
     }
@@ -1302,6 +1330,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1311,13 +1340,14 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * @return Whether the mask field is set.
      */
     public boolean hasMask() {
-      return maskBuilder_ != null || mask_ != null;
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      *
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1338,6 +1368,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1350,11 +1381,11 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
           throw new NullPointerException();
         }
         mask_ = value;
-        onChanged();
       } else {
         maskBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1362,6 +1393,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1371,11 +1403,11 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
     public Builder setMask(com.google.firestore.v1.DocumentMask.Builder builderForValue) {
       if (maskBuilder_ == null) {
         mask_ = builderForValue.build();
-        onChanged();
       } else {
         maskBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1383,6 +1415,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1391,19 +1424,18 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      */
     public Builder mergeMask(com.google.firestore.v1.DocumentMask value) {
       if (maskBuilder_ == null) {
-        if (mask_ != null) {
-          mask_ =
-              com.google.firestore.v1.DocumentMask.newBuilder(mask_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000010) != 0)
+            && mask_ != null
+            && mask_ != com.google.firestore.v1.DocumentMask.getDefaultInstance()) {
+          getMaskBuilder().mergeFrom(value);
         } else {
           mask_ = value;
         }
-        onChanged();
       } else {
         maskBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1411,6 +1443,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1418,14 +1451,13 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask mask = 5;</code>
      */
     public Builder clearMask() {
-      if (maskBuilder_ == null) {
-        mask_ = null;
-        onChanged();
-      } else {
-        mask_ = null;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      mask_ = null;
+      if (maskBuilder_ != null) {
+        maskBuilder_.dispose();
         maskBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1433,6 +1465,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1440,7 +1473,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      * <code>.google.firestore.v1.DocumentMask mask = 5;</code>
      */
     public com.google.firestore.v1.DocumentMask.Builder getMaskBuilder() {
-
+      bitField0_ |= 0x00000010;
       onChanged();
       return getMaskFieldBuilder().getBuilder();
     }
@@ -1449,6 +1482,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>
@@ -1467,6 +1501,7 @@ public final class CreateDocumentRequest extends com.google.protobuf.GeneratedMe
      *
      * <pre>
      * The fields to return. If not set, returns all fields.
+     *
      * If the document has a field that is not present in this mask, that field
      * will not be returned in the response.
      * </pre>

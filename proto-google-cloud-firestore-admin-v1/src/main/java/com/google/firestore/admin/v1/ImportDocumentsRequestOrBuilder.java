@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,4 +141,75 @@ public interface ImportDocumentsRequestOrBuilder
    * @return The bytes for inputUriPrefix.
    */
   com.google.protobuf.ByteString getInputUriPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  java.util.List<java.lang.String> getNamespaceIdsList();
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  int getNamespaceIdsCount();
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  java.lang.String getNamespaceIds(int index);
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  com.google.protobuf.ByteString getNamespaceIdsBytes(int index);
 }

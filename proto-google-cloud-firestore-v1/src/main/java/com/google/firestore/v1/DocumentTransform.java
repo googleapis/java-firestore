@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     return new DocumentTransform();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_DocumentTransform_descriptor;
@@ -77,8 +72,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-     * reference.
+     * The path of the field. See
+     * [Document.fields][google.firestore.v1.Document.fields] for the field path
+     * syntax reference.
      * </pre>
      *
      * <code>string field_path = 1;</code>
@@ -90,8 +86,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-     * reference.
+     * The path of the field. See
+     * [Document.fields][google.firestore.v1.Document.fields] for the field path
+     * syntax reference.
      * </pre>
      *
      * <code>string field_path = 1;</code>
@@ -148,6 +145,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -168,6 +166,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -188,6 +187,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -207,6 +207,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -229,6 +230,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -251,6 +253,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -272,6 +275,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -294,6 +298,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -316,6 +321,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -340,11 +346,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -361,11 +369,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -382,11 +392,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -401,10 +413,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -420,10 +434,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -439,10 +455,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -450,7 +468,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      */
     com.google.firestore.v1.ArrayValueOrBuilder getRemoveAllFromArrayOrBuilder();
 
-    public com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase
+    com.google.firestore.v1.DocumentTransform.FieldTransform.TransformTypeCase
         getTransformTypeCase();
   }
   /**
@@ -480,11 +498,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FieldTransform();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-      return this.unknownFields;
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -644,6 +657,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
 
     private int transformTypeCase_ = 0;
+
+    @SuppressWarnings("serial")
     private java.lang.Object transformType_;
 
     public enum TransformTypeCase
@@ -703,13 +718,16 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     }
 
     public static final int FIELD_PATH_FIELD_NUMBER = 1;
-    private volatile java.lang.Object fieldPath_;
+
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object fieldPath_ = "";
     /**
      *
      *
      * <pre>
-     * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-     * reference.
+     * The path of the field. See
+     * [Document.fields][google.firestore.v1.Document.fields] for the field path
+     * syntax reference.
      * </pre>
      *
      * <code>string field_path = 1;</code>
@@ -732,8 +750,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      *
      * <pre>
-     * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-     * reference.
+     * The path of the field. See
+     * [Document.fields][google.firestore.v1.Document.fields] for the field path
+     * syntax reference.
      * </pre>
      *
      * <code>string field_path = 1;</code>
@@ -805,9 +824,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
         getSetToServerValue() {
       if (transformTypeCase_ == 2) {
-        @SuppressWarnings("deprecation")
         com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result =
-            com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
+            com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.forNumber(
                 (java.lang.Integer) transformType_);
         return result == null
             ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED
@@ -823,6 +841,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -846,6 +865,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -872,6 +892,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Adds the given value to the field's current value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -898,6 +919,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -923,6 +945,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -951,6 +974,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the maximum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the given value.
@@ -979,6 +1003,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1004,6 +1029,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1032,6 +1058,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      *
      * <pre>
      * Sets the field to the minimum of its current value and the given value.
+     *
      * This must be an integer or a double value.
      * If the field is not an integer or double, or if the field does not yet
      * exist, the transformation will set the field to the input value.
@@ -1063,11 +1090,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1087,11 +1116,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1114,11 +1145,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * the current field value.
      * If the field is not an array, or if the field does not yet exist, it is
      * first set to the empty array.
+     *
      * Equivalent numbers of different types (e.g. 3L and 3.0) are
      * considered equal when checking if a value is missing.
      * NaN is equal to NaN, and Null is equal to Null.
      * If the input contains multiple equivalent values, only the first will
      * be considered.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1140,10 +1173,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1162,10 +1197,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1187,10 +1224,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * Remove all of the given elements from the array in the field.
      * If the field is not an array, or if the field does not yet exist, it is
      * set to the empty array.
+     *
      * Equivalent numbers of the different types (e.g. 3L and 3.0) are
      * considered equal when deciding whether an element should be removed.
      * NaN is equal to NaN, and Null is equal to Null.
      * This will remove all equivalent values if there are duplicates.
+     *
      * The corresponding transform_result will be the null value.
      * </pre>
      *
@@ -1503,8 +1542,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         fieldPath_ = "";
-
         if (incrementBuilder_ != null) {
           incrementBuilder_.clear();
         }
@@ -1549,48 +1588,40 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       public com.google.firestore.v1.DocumentTransform.FieldTransform buildPartial() {
         com.google.firestore.v1.DocumentTransform.FieldTransform result =
             new com.google.firestore.v1.DocumentTransform.FieldTransform(this);
-        result.fieldPath_ = fieldPath_;
-        if (transformTypeCase_ == 2) {
-          result.transformType_ = transformType_;
+        if (bitField0_ != 0) {
+          buildPartial0(result);
         }
-        if (transformTypeCase_ == 3) {
-          if (incrementBuilder_ == null) {
-            result.transformType_ = transformType_;
-          } else {
-            result.transformType_ = incrementBuilder_.build();
-          }
-        }
-        if (transformTypeCase_ == 4) {
-          if (maximumBuilder_ == null) {
-            result.transformType_ = transformType_;
-          } else {
-            result.transformType_ = maximumBuilder_.build();
-          }
-        }
-        if (transformTypeCase_ == 5) {
-          if (minimumBuilder_ == null) {
-            result.transformType_ = transformType_;
-          } else {
-            result.transformType_ = minimumBuilder_.build();
-          }
-        }
-        if (transformTypeCase_ == 6) {
-          if (appendMissingElementsBuilder_ == null) {
-            result.transformType_ = transformType_;
-          } else {
-            result.transformType_ = appendMissingElementsBuilder_.build();
-          }
-        }
-        if (transformTypeCase_ == 7) {
-          if (removeAllFromArrayBuilder_ == null) {
-            result.transformType_ = transformType_;
-          } else {
-            result.transformType_ = removeAllFromArrayBuilder_.build();
-          }
-        }
-        result.transformTypeCase_ = transformTypeCase_;
+        buildPartialOneofs(result);
         onBuilt();
         return result;
+      }
+
+      private void buildPartial0(com.google.firestore.v1.DocumentTransform.FieldTransform result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.fieldPath_ = fieldPath_;
+        }
+      }
+
+      private void buildPartialOneofs(
+          com.google.firestore.v1.DocumentTransform.FieldTransform result) {
+        result.transformTypeCase_ = transformTypeCase_;
+        result.transformType_ = this.transformType_;
+        if (transformTypeCase_ == 3 && incrementBuilder_ != null) {
+          result.transformType_ = incrementBuilder_.build();
+        }
+        if (transformTypeCase_ == 4 && maximumBuilder_ != null) {
+          result.transformType_ = maximumBuilder_.build();
+        }
+        if (transformTypeCase_ == 5 && minimumBuilder_ != null) {
+          result.transformType_ = minimumBuilder_.build();
+        }
+        if (transformTypeCase_ == 6 && appendMissingElementsBuilder_ != null) {
+          result.transformType_ = appendMissingElementsBuilder_.build();
+        }
+        if (transformTypeCase_ == 7 && removeAllFromArrayBuilder_ != null) {
+          result.transformType_ = removeAllFromArrayBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -1643,6 +1674,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
           return this;
         if (!other.getFieldPath().isEmpty()) {
           fieldPath_ = other.fieldPath_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         switch (other.getTransformTypeCase()) {
@@ -1710,7 +1742,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
               case 10:
                 {
                   fieldPath_ = input.readStringRequireUtf8();
-
+                  bitField0_ |= 0x00000001;
                   break;
                 } // case 10
               case 16:
@@ -1783,13 +1815,16 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         return this;
       }
 
+      private int bitField0_;
+
       private java.lang.Object fieldPath_ = "";
       /**
        *
        *
        * <pre>
-       * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-       * reference.
+       * The path of the field. See
+       * [Document.fields][google.firestore.v1.Document.fields] for the field path
+       * syntax reference.
        * </pre>
        *
        * <code>string field_path = 1;</code>
@@ -1811,8 +1846,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        *
        * <pre>
-       * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-       * reference.
+       * The path of the field. See
+       * [Document.fields][google.firestore.v1.Document.fields] for the field path
+       * syntax reference.
        * </pre>
        *
        * <code>string field_path = 1;</code>
@@ -1834,8 +1870,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        *
        * <pre>
-       * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-       * reference.
+       * The path of the field. See
+       * [Document.fields][google.firestore.v1.Document.fields] for the field path
+       * syntax reference.
        * </pre>
        *
        * <code>string field_path = 1;</code>
@@ -1847,8 +1884,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         if (value == null) {
           throw new NullPointerException();
         }
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1856,8 +1893,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        *
        * <pre>
-       * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-       * reference.
+       * The path of the field. See
+       * [Document.fields][google.firestore.v1.Document.fields] for the field path
+       * syntax reference.
        * </pre>
        *
        * <code>string field_path = 1;</code>
@@ -1865,8 +1903,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * @return This builder for chaining.
        */
       public Builder clearFieldPath() {
-
         fieldPath_ = getDefaultInstance().getFieldPath();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1874,8 +1912,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        *
        * <pre>
-       * The path of the field. See [Document.fields][google.firestore.v1.Document.fields] for the field path syntax
-       * reference.
+       * The path of the field. See
+       * [Document.fields][google.firestore.v1.Document.fields] for the field path
+       * syntax reference.
        * </pre>
        *
        * <code>string field_path = 1;</code>
@@ -1888,8 +1927,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
         fieldPath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1968,9 +2007,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       public com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue
           getSetToServerValue() {
         if (transformTypeCase_ == 2) {
-          @SuppressWarnings("deprecation")
           com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue result =
-              com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.valueOf(
+              com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.forNumber(
                   (java.lang.Integer) transformType_);
           return result == null
               ? com.google.firestore.v1.DocumentTransform.FieldTransform.ServerValue.UNRECOGNIZED
@@ -2035,6 +2073,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2058,6 +2097,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2091,6 +2131,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2121,6 +2162,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2148,6 +2190,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2188,6 +2231,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2221,6 +2265,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2241,6 +2286,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2269,6 +2315,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Adds the given value to the field's current value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2302,7 +2349,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
         transformTypeCase_ = 3;
         onChanged();
-        ;
         return incrementBuilder_;
       }
 
@@ -2316,6 +2362,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2341,6 +2388,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2376,6 +2424,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2408,6 +2457,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2437,6 +2487,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2479,6 +2530,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2514,6 +2566,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2536,6 +2589,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2566,6 +2620,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the maximum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the given value.
@@ -2601,7 +2656,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
         transformTypeCase_ = 4;
         onChanged();
-        ;
         return maximumBuilder_;
       }
 
@@ -2615,6 +2669,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2640,6 +2695,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2675,6 +2731,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2707,6 +2764,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2736,6 +2794,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2778,6 +2837,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2813,6 +2873,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2835,6 +2896,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2865,6 +2927,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        *
        * <pre>
        * Sets the field to the minimum of its current value and the given value.
+       *
        * This must be an integer or a double value.
        * If the field is not an integer or double, or if the field does not yet
        * exist, the transformation will set the field to the input value.
@@ -2900,7 +2963,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
         transformTypeCase_ = 5;
         onChanged();
-        ;
         return minimumBuilder_;
       }
 
@@ -2917,11 +2979,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -2941,11 +3005,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -2975,11 +3041,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3006,11 +3074,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3035,11 +3105,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3076,11 +3148,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3110,11 +3184,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3131,11 +3207,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3160,11 +3238,13 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * the current field value.
        * If the field is not an array, or if the field does not yet exist, it is
        * first set to the empty array.
+       *
        * Equivalent numbers of different types (e.g. 3L and 3.0) are
        * considered equal when checking if a value is missing.
        * NaN is equal to NaN, and Null is equal to Null.
        * If the input contains multiple equivalent values, only the first will
        * be considered.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3191,7 +3271,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
         transformTypeCase_ = 6;
         onChanged();
-        ;
         return appendMissingElementsBuilder_;
       }
 
@@ -3207,10 +3286,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3229,10 +3310,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3261,10 +3344,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3290,10 +3375,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3317,10 +3404,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3356,10 +3445,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3388,10 +3479,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3407,10 +3500,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3434,10 +3529,12 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
        * Remove all of the given elements from the array in the field.
        * If the field is not an array, or if the field does not yet exist, it is
        * set to the empty array.
+       *
        * Equivalent numbers of the different types (e.g. 3L and 3.0) are
        * considered equal when deciding whether an element should be removed.
        * NaN is equal to NaN, and Null is equal to Null.
        * This will remove all equivalent values if there are duplicates.
+       *
        * The corresponding transform_result will be the null value.
        * </pre>
        *
@@ -3464,7 +3561,6 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         }
         transformTypeCase_ = 7;
         onChanged();
-        ;
         return removeAllFromArrayBuilder_;
       }
 
@@ -3533,7 +3629,9 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
   }
 
   public static final int DOCUMENT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object document_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object document_ = "";
   /**
    *
    *
@@ -3582,6 +3680,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
   }
 
   public static final int FIELD_TRANSFORMS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.DocumentTransform.FieldTransform> fieldTransforms_;
   /**
    *
@@ -3875,15 +3975,15 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       document_ = "";
-
       if (fieldTransformsBuilder_ == null) {
         fieldTransforms_ = java.util.Collections.emptyList();
       } else {
         fieldTransforms_ = null;
         fieldTransformsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -3911,19 +4011,31 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     public com.google.firestore.v1.DocumentTransform buildPartial() {
       com.google.firestore.v1.DocumentTransform result =
           new com.google.firestore.v1.DocumentTransform(this);
-      int from_bitField0_ = bitField0_;
-      result.document_ = document_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.DocumentTransform result) {
       if (fieldTransformsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           fieldTransforms_ = java.util.Collections.unmodifiableList(fieldTransforms_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.fieldTransforms_ = fieldTransforms_;
       } else {
         result.fieldTransforms_ = fieldTransformsBuilder_.build();
       }
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.DocumentTransform result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.document_ = document_;
+      }
     }
 
     @java.lang.Override
@@ -3973,13 +4085,14 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       if (other == com.google.firestore.v1.DocumentTransform.getDefaultInstance()) return this;
       if (!other.getDocument().isEmpty()) {
         document_ = other.document_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (fieldTransformsBuilder_ == null) {
         if (!other.fieldTransforms_.isEmpty()) {
           if (fieldTransforms_.isEmpty()) {
             fieldTransforms_ = other.fieldTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureFieldTransformsIsMutable();
             fieldTransforms_.addAll(other.fieldTransforms_);
@@ -3992,7 +4105,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
             fieldTransformsBuilder_.dispose();
             fieldTransformsBuilder_ = null;
             fieldTransforms_ = other.fieldTransforms_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             fieldTransformsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getFieldTransformsFieldBuilder()
@@ -4031,7 +4144,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
             case 10:
               {
                 document_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -4128,8 +4241,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
       if (value == null) {
         throw new NullPointerException();
       }
-
       document_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -4145,8 +4258,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
      * @return This builder for chaining.
      */
     public Builder clearDocument() {
-
       document_ = getDefaultInstance().getDocument();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -4167,8 +4280,8 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       document_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -4177,11 +4290,11 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
         fieldTransforms_ = java.util.Collections.emptyList();
 
     private void ensureFieldTransformsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         fieldTransforms_ =
             new java.util.ArrayList<com.google.firestore.v1.DocumentTransform.FieldTransform>(
                 fieldTransforms_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
 
@@ -4437,7 +4550,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
     public Builder clearFieldTransforms() {
       if (fieldTransformsBuilder_ == null) {
         fieldTransforms_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
       } else {
         fieldTransformsBuilder_.clear();
@@ -4588,7 +4701,7 @@ public final class DocumentTransform extends com.google.protobuf.GeneratedMessag
                 com.google.firestore.v1.DocumentTransform.FieldTransform.Builder,
                 com.google.firestore.v1.DocumentTransform.FieldTransformOrBuilder>(
                 fieldTransforms_,
-                ((bitField0_ & 0x00000001) != 0),
+                ((bitField0_ & 0x00000002) != 0),
                 getParentForChildren(),
                 isClean());
         fieldTransforms_ = null;

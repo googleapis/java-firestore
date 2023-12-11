@@ -31,11 +31,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollectionReferenceTest {
@@ -94,7 +94,8 @@ public class CollectionReferenceTest {
     doReturn(LocalFirestoreHelper.SINGLE_WRITE_COMMIT_RESPONSE)
         .when(firestoreMock)
         .sendRequest(
-            argCaptor.capture(), Matchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+            argCaptor.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     ApiFuture<DocumentReference> future =
         collectionReference.add(LocalFirestoreHelper.SINGLE_FIELD_MAP);

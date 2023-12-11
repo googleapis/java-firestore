@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response from [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
+ * The response from
+ * [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.ListCollectionIdsResponse}
@@ -38,7 +39,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
   }
 
   private ListCollectionIdsResponse() {
-    collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     nextPageToken_ = "";
   }
 
@@ -46,11 +47,6 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ListCollectionIdsResponse();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -69,7 +65,10 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
   }
 
   public static final int COLLECTION_IDS_FIELD_NUMBER = 1;
-  private com.google.protobuf.LazyStringList collectionIds_;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList collectionIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -130,7 +129,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
   }
 
   public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 2;
-  private volatile java.lang.Object nextPageToken_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object nextPageToken_ = "";
   /**
    *
    *
@@ -357,7 +358,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
    *
    *
    * <pre>
-   * The response from [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
+   * The response from
+   * [Firestore.ListCollectionIds][google.firestore.v1.Firestore.ListCollectionIds].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.ListCollectionIdsResponse}
@@ -391,10 +393,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = 0;
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       nextPageToken_ = "";
-
       return this;
     }
 
@@ -422,15 +423,22 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
     public com.google.firestore.v1.ListCollectionIdsResponse buildPartial() {
       com.google.firestore.v1.ListCollectionIdsResponse result =
           new com.google.firestore.v1.ListCollectionIdsResponse(this);
-      int from_bitField0_ = bitField0_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.collectionIds_ = collectionIds_;
-      result.nextPageToken_ = nextPageToken_;
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListCollectionIdsResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        collectionIds_.makeImmutable();
+        result.collectionIds_ = collectionIds_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.nextPageToken_ = nextPageToken_;
+      }
     }
 
     @java.lang.Override
@@ -482,7 +490,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ |= 0x00000001;
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -491,6 +499,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       }
       if (!other.getNextPageToken().isEmpty()) {
         nextPageToken_ = other.nextPageToken_;
+        bitField0_ |= 0x00000002;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -529,7 +538,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
             case 18:
               {
                 nextPageToken_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -551,14 +560,14 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
 
     private int bitField0_;
 
-    private com.google.protobuf.LazyStringList collectionIds_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList collectionIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!collectionIds_.isModifiable()) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000001;
       }
+      bitField0_ |= 0x00000001;
     }
     /**
      *
@@ -572,7 +581,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
-      return collectionIds_.getUnmodifiableView();
+      collectionIds_.makeImmutable();
+      return collectionIds_;
     }
     /**
      *
@@ -637,6 +647,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.set(index, value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -658,6 +669,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -676,6 +688,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, collectionIds_);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -691,8 +704,9 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       bitField0_ = (bitField0_ & ~0x00000001);
+      ;
       onChanged();
       return this;
     }
@@ -715,6 +729,7 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       checkByteStringIsUtf8(value);
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -780,8 +795,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
       if (value == null) {
         throw new NullPointerException();
       }
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -797,8 +812,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
      * @return This builder for chaining.
      */
     public Builder clearNextPageToken() {
-
       nextPageToken_ = getDefaultInstance().getNextPageToken();
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -819,8 +834,8 @@ public final class ListCollectionIdsResponse extends com.google.protobuf.Generat
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       nextPageToken_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }

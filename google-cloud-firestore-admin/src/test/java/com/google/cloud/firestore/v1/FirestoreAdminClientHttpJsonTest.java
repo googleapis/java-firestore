@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +44,10 @@ import com.google.firestore.admin.v1.ListIndexesResponse;
 import com.google.firestore.admin.v1.ProjectName;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Any;
+import com.google.protobuf.Duration;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -922,11 +924,129 @@ public class FirestoreAdminClientHttpJsonTest {
   }
 
   @Test
+  public void createDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("createDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockService.addResponse(resultOperation);
+
+    ProjectName parent = ProjectName.of("[PROJECT]");
+    Database database = Database.newBuilder().build();
+    String databaseId = "databaseId1688905718";
+
+    Database actualResponse = client.createDatabaseAsync(parent, database, databaseId).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<String> actualRequests = mockService.getRequestPaths();
+    Assert.assertEquals(1, actualRequests.size());
+
+    String apiClientHeaderKey =
+        mockService
+            .getRequestHeaders()
+            .get(ApiClientHeaderProvider.getDefaultApiClientHeaderKey())
+            .iterator()
+            .next();
+    Assert.assertTrue(
+        GaxHttpJsonProperties.getDefaultApiClientHeaderPattern()
+            .matcher(apiClientHeaderKey)
+            .matches());
+  }
+
+  @Test
+  public void createDatabaseExceptionTest() throws Exception {
+    ApiException exception =
+        ApiExceptionFactory.createException(
+            new Exception(), FakeStatusCode.of(StatusCode.Code.INVALID_ARGUMENT), false);
+    mockService.addException(exception);
+
+    try {
+      ProjectName parent = ProjectName.of("[PROJECT]");
+      Database database = Database.newBuilder().build();
+      String databaseId = "databaseId1688905718";
+      client.createDatabaseAsync(parent, database, databaseId).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+    }
+  }
+
+  @Test
+  public void createDatabaseTest2() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("createDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockService.addResponse(resultOperation);
+
+    String parent = "projects/project-2353";
+    Database database = Database.newBuilder().build();
+    String databaseId = "databaseId1688905718";
+
+    Database actualResponse = client.createDatabaseAsync(parent, database, databaseId).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<String> actualRequests = mockService.getRequestPaths();
+    Assert.assertEquals(1, actualRequests.size());
+
+    String apiClientHeaderKey =
+        mockService
+            .getRequestHeaders()
+            .get(ApiClientHeaderProvider.getDefaultApiClientHeaderKey())
+            .iterator()
+            .next();
+    Assert.assertTrue(
+        GaxHttpJsonProperties.getDefaultApiClientHeaderPattern()
+            .matcher(apiClientHeaderKey)
+            .matches());
+  }
+
+  @Test
+  public void createDatabaseExceptionTest2() throws Exception {
+    ApiException exception =
+        ApiExceptionFactory.createException(
+            new Exception(), FakeStatusCode.of(StatusCode.Code.INVALID_ARGUMENT), false);
+    mockService.addException(exception);
+
+    try {
+      String parent = "projects/project-2353";
+      Database database = Database.newBuilder().build();
+      String databaseId = "databaseId1688905718";
+      client.createDatabaseAsync(parent, database, databaseId).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+    }
+  }
+
+  @Test
   public void getDatabaseTest() throws Exception {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -974,6 +1094,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1105,6 +1227,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1120,6 +1244,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1155,6 +1281,8 @@ public class FirestoreAdminClientHttpJsonTest {
           Database.newBuilder()
               .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
               .setLocationId("locationId1541836720")
+              .setVersionRetentionPeriod(Duration.newBuilder().build())
+              .setEarliestVersionTime(Timestamp.newBuilder().build())
               .setKeyPrefix("keyPrefix-2076395055")
               .setEtag("etag3123477")
               .build();

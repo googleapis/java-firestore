@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,5 +83,5 @@ public interface BundleElementOrBuilder
   /** <code>.google.firestore.v1.Document document = 4;</code> */
   com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder();
 
-  public com.google.firestore.bundle.BundleElement.ElementTypeCase getElementTypeCase();
+  com.google.firestore.bundle.BundleElement.ElementTypeCase getElementTypeCase();
 }

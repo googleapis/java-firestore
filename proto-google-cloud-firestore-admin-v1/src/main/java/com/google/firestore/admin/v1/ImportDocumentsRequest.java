@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
+ * The request for
+ * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
@@ -39,19 +40,15 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
 
   private ImportDocumentsRequest() {
     name_ = "";
-    collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     inputUriPrefix_ = "";
+    namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ImportDocumentsRequest();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -70,7 +67,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -125,7 +124,10 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int COLLECTION_IDS_FIELD_NUMBER = 2;
-  private com.google.protobuf.LazyStringList collectionIds_;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList collectionIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -190,7 +192,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int INPUT_URI_PREFIX_FIELD_NUMBER = 3;
-  private volatile java.lang.Object inputUriPrefix_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object inputUriPrefix_ = "";
   /**
    *
    *
@@ -246,6 +250,90 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     }
   }
 
+  public static final int NAMESPACE_IDS_FIELD_NUMBER = 4;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+    return namespaceIds_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  public int getNamespaceIdsCount() {
+    return namespaceIds_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  public java.lang.String getNamespaceIds(int index) {
+    return namespaceIds_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Unspecified means all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+    return namespaceIds_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -268,6 +356,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, inputUriPrefix_);
+    }
+    for (int i = 0; i < namespaceIds_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, namespaceIds_.getRaw(i));
     }
     getUnknownFields().writeTo(output);
   }
@@ -292,6 +383,14 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, inputUriPrefix_);
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < namespaceIds_.size(); i++) {
+        dataSize += computeStringSizeNoTag(namespaceIds_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getNamespaceIdsList().size();
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -311,6 +410,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     if (!getName().equals(other.getName())) return false;
     if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
     if (!getInputUriPrefix().equals(other.getInputUriPrefix())) return false;
+    if (!getNamespaceIdsList().equals(other.getNamespaceIdsList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -330,6 +430,10 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     }
     hash = (37 * hash) + INPUT_URI_PREFIX_FIELD_NUMBER;
     hash = (53 * hash) + getInputUriPrefix().hashCode();
+    if (getNamespaceIdsCount() > 0) {
+      hash = (37 * hash) + NAMESPACE_IDS_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaceIdsList().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -434,7 +538,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
+   * The request for
+   * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
@@ -468,12 +573,11 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       inputUriPrefix_ = "";
-
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -501,16 +605,29 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     public com.google.firestore.admin.v1.ImportDocumentsRequest buildPartial() {
       com.google.firestore.admin.v1.ImportDocumentsRequest result =
           new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.name_ = name_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.collectionIds_ = collectionIds_;
-      result.inputUriPrefix_ = inputUriPrefix_;
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ImportDocumentsRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        collectionIds_.makeImmutable();
+        result.collectionIds_ = collectionIds_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.inputUriPrefix_ = inputUriPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        namespaceIds_.makeImmutable();
+        result.namespaceIds_ = namespaceIds_;
+      }
     }
 
     @java.lang.Override
@@ -561,12 +678,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ |= 0x00000002;
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -575,6 +693,17 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       if (!other.getInputUriPrefix().isEmpty()) {
         inputUriPrefix_ = other.inputUriPrefix_;
+        bitField0_ |= 0x00000004;
+        onChanged();
+      }
+      if (!other.namespaceIds_.isEmpty()) {
+        if (namespaceIds_.isEmpty()) {
+          namespaceIds_ = other.namespaceIds_;
+          bitField0_ |= 0x00000008;
+        } else {
+          ensureNamespaceIdsIsMutable();
+          namespaceIds_.addAll(other.namespaceIds_);
+        }
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -606,7 +735,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -619,9 +748,16 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
             case 26:
               {
                 inputUriPrefix_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
+            case 34:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureNamespaceIdsIsMutable();
+                namespaceIds_.add(s);
+                break;
+              } // case 34
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -711,8 +847,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -731,8 +867,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -756,20 +892,20 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
 
-    private com.google.protobuf.LazyStringList collectionIds_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList collectionIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!collectionIds_.isModifiable()) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000001;
       }
+      bitField0_ |= 0x00000002;
     }
     /**
      *
@@ -784,7 +920,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
-      return collectionIds_.getUnmodifiableView();
+      collectionIds_.makeImmutable();
+      return collectionIds_;
     }
     /**
      *
@@ -853,6 +990,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.set(index, value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -875,6 +1013,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -894,6 +1033,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, collectionIds_);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -910,8 +1050,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000002);
+      ;
       onChanged();
       return this;
     }
@@ -935,6 +1076,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       checkByteStringIsUtf8(value);
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
@@ -1012,8 +1154,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (value == null) {
         throw new NullPointerException();
       }
-
       inputUriPrefix_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1033,8 +1175,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      * @return This builder for chaining.
      */
     public Builder clearInputUriPrefix() {
-
       inputUriPrefix_ = getDefaultInstance().getInputUriPrefix();
+      bitField0_ = (bitField0_ & ~0x00000004);
       onChanged();
       return this;
     }
@@ -1059,8 +1201,227 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       inputUriPrefix_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+
+    private void ensureNamespaceIdsIsMutable() {
+      if (!namespaceIds_.isModifiable()) {
+        namespaceIds_ = new com.google.protobuf.LazyStringArrayList(namespaceIds_);
+      }
+      bitField0_ |= 0x00000008;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @return A list containing the namespaceIds.
+     */
+    public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+      namespaceIds_.makeImmutable();
+      return namespaceIds_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @return The count of namespaceIds.
+     */
+    public int getNamespaceIdsCount() {
+      return namespaceIds_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The namespaceIds at the given index.
+     */
+    public java.lang.String getNamespaceIds(int index) {
+      return namespaceIds_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the namespaceIds at the given index.
+     */
+    public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+      return namespaceIds_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The namespaceIds to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNamespaceIds(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.set(index, value);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param value The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIds(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param values The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllNamespaceIds(java.lang.Iterable<java.lang.String> values) {
+      ensureNamespaceIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, namespaceIds_);
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearNamespaceIds() {
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000008);
+      ;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Unspecified means all namespaces. This is the preferred
+     * usage for databases that don't use namespaces.
+     *
+     * An empty string element represents the default namespace. This should be
+     * used if the database has data in non-default namespaces, but doesn't want
+     * to include them. Each namespace in this list must be unique.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 4;</code>
+     *
+     * @param value The bytes of the namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIdsBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }

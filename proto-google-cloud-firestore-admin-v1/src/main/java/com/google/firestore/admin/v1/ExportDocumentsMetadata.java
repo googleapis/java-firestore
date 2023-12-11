@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+ * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+ * results from
  * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
  * </pre>
  *
@@ -40,19 +41,15 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
 
   private ExportDocumentsMetadata() {
     operationState_ = 0;
-    collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     outputUriPrefix_ = "";
+    namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new ExportDocumentsMetadata();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -113,7 +110,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getStartTimeOrBuilder() {
-    return getStartTime();
+    return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
   }
 
   public static final int END_TIME_FIELD_NUMBER = 2;
@@ -162,11 +159,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getEndTimeOrBuilder() {
-    return getEndTime();
+    return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
   }
 
   public static final int OPERATION_STATE_FIELD_NUMBER = 3;
-  private int operationState_;
+  private int operationState_ = 0;
   /**
    *
    *
@@ -195,9 +192,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.OperationState getOperationState() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.admin.v1.OperationState result =
-        com.google.firestore.admin.v1.OperationState.valueOf(operationState_);
+        com.google.firestore.admin.v1.OperationState.forNumber(operationState_);
     return result == null ? com.google.firestore.admin.v1.OperationState.UNRECOGNIZED : result;
   }
 
@@ -246,7 +242,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressDocumentsOrBuilder() {
-    return getProgressDocuments();
+    return progressDocuments_ == null
+        ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
+        : progressDocuments_;
   }
 
   public static final int PROGRESS_BYTES_FIELD_NUMBER = 5;
@@ -294,11 +292,16 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.firestore.admin.v1.ProgressOrBuilder getProgressBytesOrBuilder() {
-    return getProgressBytes();
+    return progressBytes_ == null
+        ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
+        : progressBytes_;
   }
 
   public static final int COLLECTION_IDS_FIELD_NUMBER = 6;
-  private com.google.protobuf.LazyStringList collectionIds_;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList collectionIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
   /**
    *
    *
@@ -359,12 +362,14 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
   }
 
   public static final int OUTPUT_URI_PREFIX_FIELD_NUMBER = 7;
-  private volatile java.lang.Object outputUriPrefix_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object outputUriPrefix_ = "";
   /**
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -387,7 +392,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -405,6 +410,126 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
+  }
+
+  public static final int NAMESPACE_IDS_FIELD_NUMBER = 8;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+    return namespaceIds_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  public int getNamespaceIdsCount() {
+    return namespaceIds_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  public java.lang.String getNamespaceIds(int index) {
+    return namespaceIds_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+    return namespaceIds_.getByteString(index);
+  }
+
+  public static final int SNAPSHOT_TIME_FIELD_NUMBER = 9;
+  private com.google.protobuf.Timestamp snapshotTime_;
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return Whether the snapshotTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasSnapshotTime() {
+    return snapshotTime_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return The snapshotTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getSnapshotTime() {
+    return snapshotTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : snapshotTime_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder() {
+    return snapshotTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : snapshotTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -443,6 +568,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(outputUriPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, outputUriPrefix_);
     }
+    for (int i = 0; i < namespaceIds_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, namespaceIds_.getRaw(i));
+    }
+    if (snapshotTime_ != null) {
+      output.writeMessage(9, getSnapshotTime());
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -479,6 +610,17 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(outputUriPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, outputUriPrefix_);
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < namespaceIds_.size(); i++) {
+        dataSize += computeStringSizeNoTag(namespaceIds_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getNamespaceIdsList().size();
+    }
+    if (snapshotTime_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(9, getSnapshotTime());
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -514,6 +656,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     }
     if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
     if (!getOutputUriPrefix().equals(other.getOutputUriPrefix())) return false;
+    if (!getNamespaceIdsList().equals(other.getNamespaceIdsList())) return false;
+    if (hasSnapshotTime() != other.hasSnapshotTime()) return false;
+    if (hasSnapshotTime()) {
+      if (!getSnapshotTime().equals(other.getSnapshotTime())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -549,6 +696,14 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     }
     hash = (37 * hash) + OUTPUT_URI_PREFIX_FIELD_NUMBER;
     hash = (53 * hash) + getOutputUriPrefix().hashCode();
+    if (getNamespaceIdsCount() > 0) {
+      hash = (37 * hash) + NAMESPACE_IDS_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaceIdsList().hashCode();
+    }
+    if (hasSnapshotTime()) {
+      hash = (37 * hash) + SNAPSHOT_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + getSnapshotTime().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -654,7 +809,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+   * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+   * results from
    * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
    * </pre>
    *
@@ -689,36 +845,36 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (startTimeBuilder_ == null) {
-        startTime_ = null;
-      } else {
-        startTime_ = null;
+      bitField0_ = 0;
+      startTime_ = null;
+      if (startTimeBuilder_ != null) {
+        startTimeBuilder_.dispose();
         startTimeBuilder_ = null;
       }
-      if (endTimeBuilder_ == null) {
-        endTime_ = null;
-      } else {
-        endTime_ = null;
+      endTime_ = null;
+      if (endTimeBuilder_ != null) {
+        endTimeBuilder_.dispose();
         endTimeBuilder_ = null;
       }
       operationState_ = 0;
-
-      if (progressDocumentsBuilder_ == null) {
-        progressDocuments_ = null;
-      } else {
-        progressDocuments_ = null;
+      progressDocuments_ = null;
+      if (progressDocumentsBuilder_ != null) {
+        progressDocumentsBuilder_.dispose();
         progressDocumentsBuilder_ = null;
       }
-      if (progressBytesBuilder_ == null) {
-        progressBytes_ = null;
-      } else {
-        progressBytes_ = null;
+      progressBytes_ = null;
+      if (progressBytesBuilder_ != null) {
+        progressBytesBuilder_.dispose();
         progressBytesBuilder_ = null;
       }
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       outputUriPrefix_ = "";
-
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      snapshotTime_ = null;
+      if (snapshotTimeBuilder_ != null) {
+        snapshotTimeBuilder_.dispose();
+        snapshotTimeBuilder_ = null;
+      }
       return this;
     }
 
@@ -746,36 +902,49 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     public com.google.firestore.admin.v1.ExportDocumentsMetadata buildPartial() {
       com.google.firestore.admin.v1.ExportDocumentsMetadata result =
           new com.google.firestore.admin.v1.ExportDocumentsMetadata(this);
-      int from_bitField0_ = bitField0_;
-      if (startTimeBuilder_ == null) {
-        result.startTime_ = startTime_;
-      } else {
-        result.startTime_ = startTimeBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (endTimeBuilder_ == null) {
-        result.endTime_ = endTime_;
-      } else {
-        result.endTime_ = endTimeBuilder_.build();
-      }
-      result.operationState_ = operationState_;
-      if (progressDocumentsBuilder_ == null) {
-        result.progressDocuments_ = progressDocuments_;
-      } else {
-        result.progressDocuments_ = progressDocumentsBuilder_.build();
-      }
-      if (progressBytesBuilder_ == null) {
-        result.progressBytes_ = progressBytes_;
-      } else {
-        result.progressBytes_ = progressBytesBuilder_.build();
-      }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        collectionIds_ = collectionIds_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      }
-      result.collectionIds_ = collectionIds_;
-      result.outputUriPrefix_ = outputUriPrefix_;
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.ExportDocumentsMetadata result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.startTime_ = startTimeBuilder_ == null ? startTime_ : startTimeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.endTime_ = endTimeBuilder_ == null ? endTime_ : endTimeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.operationState_ = operationState_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.progressDocuments_ =
+            progressDocumentsBuilder_ == null
+                ? progressDocuments_
+                : progressDocumentsBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.progressBytes_ =
+            progressBytesBuilder_ == null ? progressBytes_ : progressBytesBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        collectionIds_.makeImmutable();
+        result.collectionIds_ = collectionIds_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.outputUriPrefix_ = outputUriPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        namespaceIds_.makeImmutable();
+        result.namespaceIds_ = namespaceIds_;
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.snapshotTime_ =
+            snapshotTimeBuilder_ == null ? snapshotTime_ : snapshotTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -842,7 +1011,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       if (!other.collectionIds_.isEmpty()) {
         if (collectionIds_.isEmpty()) {
           collectionIds_ = other.collectionIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ |= 0x00000020;
         } else {
           ensureCollectionIdsIsMutable();
           collectionIds_.addAll(other.collectionIds_);
@@ -851,7 +1020,21 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       }
       if (!other.getOutputUriPrefix().isEmpty()) {
         outputUriPrefix_ = other.outputUriPrefix_;
+        bitField0_ |= 0x00000040;
         onChanged();
+      }
+      if (!other.namespaceIds_.isEmpty()) {
+        if (namespaceIds_.isEmpty()) {
+          namespaceIds_ = other.namespaceIds_;
+          bitField0_ |= 0x00000080;
+        } else {
+          ensureNamespaceIdsIsMutable();
+          namespaceIds_.addAll(other.namespaceIds_);
+        }
+        onChanged();
+      }
+      if (other.hasSnapshotTime()) {
+        mergeSnapshotTime(other.getSnapshotTime());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -882,32 +1065,32 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
             case 10:
               {
                 input.readMessage(getStartTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getEndTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 24:
               {
                 operationState_ = input.readEnum();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 34:
               {
                 input.readMessage(
                     getProgressDocumentsFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 42:
               {
                 input.readMessage(getProgressBytesFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 42
             case 50:
@@ -920,9 +1103,22 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
             case 58:
               {
                 outputUriPrefix_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000040;
                 break;
               } // case 58
+            case 66:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureNamespaceIdsIsMutable();
+                namespaceIds_.add(s);
+                break;
+              } // case 66
+            case 74:
+              {
+                input.readMessage(getSnapshotTimeFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -960,7 +1156,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return Whether the startTime field is set.
      */
     public boolean hasStartTime() {
-      return startTimeBuilder_ != null || startTime_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
@@ -995,11 +1191,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
           throw new NullPointerException();
         }
         startTime_ = value;
-        onChanged();
       } else {
         startTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -1014,11 +1210,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     public Builder setStartTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (startTimeBuilder_ == null) {
         startTime_ = builderForValue.build();
-        onChanged();
       } else {
         startTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -1032,17 +1228,18 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      */
     public Builder mergeStartTime(com.google.protobuf.Timestamp value) {
       if (startTimeBuilder_ == null) {
-        if (startTime_ != null) {
-          startTime_ =
-              com.google.protobuf.Timestamp.newBuilder(startTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && startTime_ != null
+            && startTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getStartTimeBuilder().mergeFrom(value);
         } else {
           startTime_ = value;
         }
-        onChanged();
       } else {
         startTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -1055,14 +1252,13 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
      */
     public Builder clearStartTime() {
-      if (startTimeBuilder_ == null) {
-        startTime_ = null;
-        onChanged();
-      } else {
-        startTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      startTime_ = null;
+      if (startTimeBuilder_ != null) {
+        startTimeBuilder_.dispose();
         startTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1075,7 +1271,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.protobuf.Timestamp start_time = 1;</code>
      */
     public com.google.protobuf.Timestamp.Builder getStartTimeBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getStartTimeFieldBuilder().getBuilder();
     }
@@ -1140,7 +1336,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return Whether the endTime field is set.
      */
     public boolean hasEndTime() {
-      return endTimeBuilder_ != null || endTime_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -1177,11 +1373,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
           throw new NullPointerException();
         }
         endTime_ = value;
-        onChanged();
       } else {
         endTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1197,11 +1393,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     public Builder setEndTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (endTimeBuilder_ == null) {
         endTime_ = builderForValue.build();
-        onChanged();
       } else {
         endTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1216,17 +1412,18 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      */
     public Builder mergeEndTime(com.google.protobuf.Timestamp value) {
       if (endTimeBuilder_ == null) {
-        if (endTime_ != null) {
-          endTime_ =
-              com.google.protobuf.Timestamp.newBuilder(endTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && endTime_ != null
+            && endTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getEndTimeBuilder().mergeFrom(value);
         } else {
           endTime_ = value;
         }
-        onChanged();
       } else {
         endTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -1240,14 +1437,13 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
      */
     public Builder clearEndTime() {
-      if (endTimeBuilder_ == null) {
-        endTime_ = null;
-        onChanged();
-      } else {
-        endTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      endTime_ = null;
+      if (endTimeBuilder_ != null) {
+        endTimeBuilder_.dispose();
         endTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1261,7 +1457,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.protobuf.Timestamp end_time = 2;</code>
      */
     public com.google.protobuf.Timestamp.Builder getEndTimeBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getEndTimeFieldBuilder().getBuilder();
     }
@@ -1338,8 +1534,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder setOperationStateValue(int value) {
-
       operationState_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1356,9 +1552,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      */
     @java.lang.Override
     public com.google.firestore.admin.v1.OperationState getOperationState() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.admin.v1.OperationState result =
-          com.google.firestore.admin.v1.OperationState.valueOf(operationState_);
+          com.google.firestore.admin.v1.OperationState.forNumber(operationState_);
       return result == null ? com.google.firestore.admin.v1.OperationState.UNRECOGNIZED : result;
     }
     /**
@@ -1377,7 +1572,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000004;
       operationState_ = value.getNumber();
       onChanged();
       return this;
@@ -1394,7 +1589,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearOperationState() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       operationState_ = 0;
       onChanged();
       return this;
@@ -1418,7 +1613,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return Whether the progressDocuments field is set.
      */
     public boolean hasProgressDocuments() {
-      return progressDocumentsBuilder_ != null || progressDocuments_ != null;
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      *
@@ -1455,11 +1650,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
           throw new NullPointerException();
         }
         progressDocuments_ = value;
-        onChanged();
       } else {
         progressDocumentsBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1475,11 +1670,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         com.google.firestore.admin.v1.Progress.Builder builderForValue) {
       if (progressDocumentsBuilder_ == null) {
         progressDocuments_ = builderForValue.build();
-        onChanged();
       } else {
         progressDocumentsBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1493,19 +1688,18 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      */
     public Builder mergeProgressDocuments(com.google.firestore.admin.v1.Progress value) {
       if (progressDocumentsBuilder_ == null) {
-        if (progressDocuments_ != null) {
-          progressDocuments_ =
-              com.google.firestore.admin.v1.Progress.newBuilder(progressDocuments_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000008) != 0)
+            && progressDocuments_ != null
+            && progressDocuments_ != com.google.firestore.admin.v1.Progress.getDefaultInstance()) {
+          getProgressDocumentsBuilder().mergeFrom(value);
         } else {
           progressDocuments_ = value;
         }
-        onChanged();
       } else {
         progressDocumentsBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000008;
+      onChanged();
       return this;
     }
     /**
@@ -1518,14 +1712,13 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
      */
     public Builder clearProgressDocuments() {
-      if (progressDocumentsBuilder_ == null) {
-        progressDocuments_ = null;
-        onChanged();
-      } else {
-        progressDocuments_ = null;
+      bitField0_ = (bitField0_ & ~0x00000008);
+      progressDocuments_ = null;
+      if (progressDocumentsBuilder_ != null) {
+        progressDocumentsBuilder_.dispose();
         progressDocumentsBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1538,7 +1731,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.firestore.admin.v1.Progress progress_documents = 4;</code>
      */
     public com.google.firestore.admin.v1.Progress.Builder getProgressDocumentsBuilder() {
-
+      bitField0_ |= 0x00000008;
       onChanged();
       return getProgressDocumentsFieldBuilder().getBuilder();
     }
@@ -1604,7 +1797,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return Whether the progressBytes field is set.
      */
     public boolean hasProgressBytes() {
-      return progressBytesBuilder_ != null || progressBytes_ != null;
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      *
@@ -1641,11 +1834,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
           throw new NullPointerException();
         }
         progressBytes_ = value;
-        onChanged();
       } else {
         progressBytesBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1661,11 +1854,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         com.google.firestore.admin.v1.Progress.Builder builderForValue) {
       if (progressBytesBuilder_ == null) {
         progressBytes_ = builderForValue.build();
-        onChanged();
       } else {
         progressBytesBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1679,19 +1872,18 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      */
     public Builder mergeProgressBytes(com.google.firestore.admin.v1.Progress value) {
       if (progressBytesBuilder_ == null) {
-        if (progressBytes_ != null) {
-          progressBytes_ =
-              com.google.firestore.admin.v1.Progress.newBuilder(progressBytes_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000010) != 0)
+            && progressBytes_ != null
+            && progressBytes_ != com.google.firestore.admin.v1.Progress.getDefaultInstance()) {
+          getProgressBytesBuilder().mergeFrom(value);
         } else {
           progressBytes_ = value;
         }
-        onChanged();
       } else {
         progressBytesBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1704,14 +1896,13 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
      */
     public Builder clearProgressBytes() {
-      if (progressBytesBuilder_ == null) {
-        progressBytes_ = null;
-        onChanged();
-      } else {
-        progressBytes_ = null;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      progressBytes_ = null;
+      if (progressBytesBuilder_ != null) {
+        progressBytesBuilder_.dispose();
         progressBytesBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1724,7 +1915,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * <code>.google.firestore.admin.v1.Progress progress_bytes = 5;</code>
      */
     public com.google.firestore.admin.v1.Progress.Builder getProgressBytesBuilder() {
-
+      bitField0_ |= 0x00000010;
       onChanged();
       return getProgressBytesFieldBuilder().getBuilder();
     }
@@ -1772,14 +1963,14 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       return progressBytesBuilder_;
     }
 
-    private com.google.protobuf.LazyStringList collectionIds_ =
-        com.google.protobuf.LazyStringArrayList.EMPTY;
+    private com.google.protobuf.LazyStringArrayList collectionIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
 
     private void ensureCollectionIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!collectionIds_.isModifiable()) {
         collectionIds_ = new com.google.protobuf.LazyStringArrayList(collectionIds_);
-        bitField0_ |= 0x00000001;
       }
+      bitField0_ |= 0x00000020;
     }
     /**
      *
@@ -1793,7 +1984,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return A list containing the collectionIds.
      */
     public com.google.protobuf.ProtocolStringList getCollectionIdsList() {
-      return collectionIds_.getUnmodifiableView();
+      collectionIds_.makeImmutable();
+      return collectionIds_;
     }
     /**
      *
@@ -1858,6 +2050,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.set(index, value);
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1879,6 +2072,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       }
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1897,6 +2091,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     public Builder addAllCollectionIds(java.lang.Iterable<java.lang.String> values) {
       ensureCollectionIdsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, collectionIds_);
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1912,8 +2107,9 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearCollectionIds() {
-      collectionIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000020);
+      ;
       onChanged();
       return this;
     }
@@ -1936,6 +2132,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       checkByteStringIsUtf8(value);
       ensureCollectionIdsIsMutable();
       collectionIds_.add(value);
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -1945,7 +2142,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -1967,7 +2164,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -1989,7 +2186,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2001,8 +2198,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       if (value == null) {
         throw new NullPointerException();
       }
-
       outputUriPrefix_ = value;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -2010,7 +2207,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2018,8 +2215,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearOutputUriPrefix() {
-
       outputUriPrefix_ = getDefaultInstance().getOutputUriPrefix();
+      bitField0_ = (bitField0_ & ~0x00000040);
       onChanged();
       return this;
     }
@@ -2027,7 +2224,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2040,10 +2237,385 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       outputUriPrefix_ = value;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+
+    private void ensureNamespaceIdsIsMutable() {
+      if (!namespaceIds_.isModifiable()) {
+        namespaceIds_ = new com.google.protobuf.LazyStringArrayList(namespaceIds_);
+      }
+      bitField0_ |= 0x00000080;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return A list containing the namespaceIds.
+     */
+    public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+      namespaceIds_.makeImmutable();
+      return namespaceIds_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return The count of namespaceIds.
+     */
+    public int getNamespaceIdsCount() {
+      return namespaceIds_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The namespaceIds at the given index.
+     */
+    public java.lang.String getNamespaceIds(int index) {
+      return namespaceIds_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the namespaceIds at the given index.
+     */
+    public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+      return namespaceIds_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The namespaceIds to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNamespaceIds(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.set(index, value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIds(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param values The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllNamespaceIds(java.lang.Iterable<java.lang.String> values) {
+      ensureNamespaceIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, namespaceIds_);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearNamespaceIds() {
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000080);
+      ;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The bytes of the namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIdsBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Timestamp snapshotTime_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        snapshotTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     *
+     * @return Whether the snapshotTime field is set.
+     */
+    public boolean hasSnapshotTime() {
+      return ((bitField0_ & 0x00000100) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     *
+     * @return The snapshotTime.
+     */
+    public com.google.protobuf.Timestamp getSnapshotTime() {
+      if (snapshotTimeBuilder_ == null) {
+        return snapshotTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : snapshotTime_;
+      } else {
+        return snapshotTimeBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder setSnapshotTime(com.google.protobuf.Timestamp value) {
+      if (snapshotTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        snapshotTime_ = value;
+      } else {
+        snapshotTimeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder setSnapshotTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (snapshotTimeBuilder_ == null) {
+        snapshotTime_ = builderForValue.build();
+      } else {
+        snapshotTimeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder mergeSnapshotTime(com.google.protobuf.Timestamp value) {
+      if (snapshotTimeBuilder_ == null) {
+        if (((bitField0_ & 0x00000100) != 0)
+            && snapshotTime_ != null
+            && snapshotTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getSnapshotTimeBuilder().mergeFrom(value);
+        } else {
+          snapshotTime_ = value;
+        }
+      } else {
+        snapshotTimeBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder clearSnapshotTime() {
+      bitField0_ = (bitField0_ & ~0x00000100);
+      snapshotTime_ = null;
+      if (snapshotTimeBuilder_ != null) {
+        snapshotTimeBuilder_.dispose();
+        snapshotTimeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public com.google.protobuf.Timestamp.Builder getSnapshotTimeBuilder() {
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return getSnapshotTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder() {
+      if (snapshotTimeBuilder_ != null) {
+        return snapshotTimeBuilder_.getMessageOrBuilder();
+      } else {
+        return snapshotTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : snapshotTime_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getSnapshotTimeFieldBuilder() {
+      if (snapshotTimeBuilder_ == null) {
+        snapshotTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getSnapshotTime(), getParentForChildren(), isClean());
+        snapshotTime_ = null;
+      }
+      return snapshotTimeBuilder_;
     }
 
     @java.lang.Override

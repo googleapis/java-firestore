@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The response for [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
+ * The response for
+ * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.RunQueryResponse}
@@ -47,11 +48,6 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     return new RunQueryResponse();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_RunQueryResponse_descriptor;
@@ -68,6 +64,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
   }
 
   private int continuationSelectorCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object continuationSelector_;
 
   public enum ContinuationSelectorCase
@@ -112,15 +110,16 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 2;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
    * <pre>
    * The transaction that was started as part of this request.
    * Can only be set in the first response, and only if
-   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-   * If set, no other fields will be set in this response.
+   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+   * was set in the request. If set, no other fields will be set in this
+   * response.
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
@@ -175,7 +174,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    */
   @java.lang.Override
   public com.google.firestore.v1.DocumentOrBuilder getDocumentOrBuilder() {
-    return getDocument();
+    return document_ == null ? com.google.firestore.v1.Document.getDefaultInstance() : document_;
   }
 
   public static final int READ_TIME_FIELD_NUMBER = 3;
@@ -187,6 +186,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -207,6 +207,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -227,6 +228,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -236,11 +238,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   public static final int SKIPPED_RESULTS_FIELD_NUMBER = 4;
-  private int skippedResults_;
+  private int skippedResults_ = 0;
   /**
    *
    *
@@ -518,7 +520,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
    *
    *
    * <pre>
-   * The response for [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
+   * The response for
+   * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.RunQueryResponse}
@@ -552,22 +555,19 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
-      if (documentBuilder_ == null) {
-        document_ = null;
-      } else {
-        document_ = null;
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       skippedResults_ = 0;
-
       continuationSelectorCase_ = 0;
       continuationSelector_ = null;
       return this;
@@ -597,24 +597,33 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     public com.google.firestore.v1.RunQueryResponse buildPartial() {
       com.google.firestore.v1.RunQueryResponse result =
           new com.google.firestore.v1.RunQueryResponse(this);
-      result.transaction_ = transaction_;
-      if (documentBuilder_ == null) {
-        result.document_ = document_;
-      } else {
-        result.document_ = documentBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
-      }
-      result.skippedResults_ = skippedResults_;
-      if (continuationSelectorCase_ == 6) {
-        result.continuationSelector_ = continuationSelector_;
-      }
-      result.continuationSelectorCase_ = continuationSelectorCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.RunQueryResponse result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.transaction_ = transaction_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.document_ = documentBuilder_ == null ? document_ : documentBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.skippedResults_ = skippedResults_;
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.RunQueryResponse result) {
+      result.continuationSelectorCase_ = continuationSelectorCase_;
+      result.continuationSelector_ = this.continuationSelector_;
     }
 
     @java.lang.Override
@@ -714,25 +723,25 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
             case 10:
               {
                 input.readMessage(getDocumentFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 10
             case 18:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 18
             case 26:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 32:
               {
                 skippedResults_ = input.readInt32();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 32
             case 48:
@@ -772,6 +781,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       return this;
     }
 
+    private int bitField0_;
+
     private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
     /**
      *
@@ -779,8 +790,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
@@ -797,8 +809,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
@@ -810,8 +823,8 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -821,8 +834,9 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <pre>
      * The transaction that was started as part of this request.
      * Can only be set in the first response, and only if
-     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-     * If set, no other fields will be set in this response.
+     * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+     * was set in the request. If set, no other fields will be set in this
+     * response.
      * </pre>
      *
      * <code>bytes transaction = 2;</code>
@@ -830,7 +844,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000001);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;
@@ -854,7 +868,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * @return Whether the document field is set.
      */
     public boolean hasDocument() {
-      return documentBuilder_ != null || document_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -891,11 +905,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
           throw new NullPointerException();
         }
         document_ = value;
-        onChanged();
       } else {
         documentBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -910,11 +924,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     public Builder setDocument(com.google.firestore.v1.Document.Builder builderForValue) {
       if (documentBuilder_ == null) {
         document_ = builderForValue.build();
-        onChanged();
       } else {
         documentBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -928,19 +942,18 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      */
     public Builder mergeDocument(com.google.firestore.v1.Document value) {
       if (documentBuilder_ == null) {
-        if (document_ != null) {
-          document_ =
-              com.google.firestore.v1.Document.newBuilder(document_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && document_ != null
+            && document_ != com.google.firestore.v1.Document.getDefaultInstance()) {
+          getDocumentBuilder().mergeFrom(value);
         } else {
           document_ = value;
         }
-        onChanged();
       } else {
         documentBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -953,14 +966,13 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <code>.google.firestore.v1.Document document = 1;</code>
      */
     public Builder clearDocument() {
-      if (documentBuilder_ == null) {
-        document_ = null;
-        onChanged();
-      } else {
-        document_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      document_ = null;
+      if (documentBuilder_ != null) {
+        documentBuilder_.dispose();
         documentBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -973,7 +985,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <code>.google.firestore.v1.Document document = 1;</code>
      */
     public com.google.firestore.v1.Document.Builder getDocumentBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getDocumentFieldBuilder().getBuilder();
     }
@@ -1034,6 +1046,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1044,7 +1057,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -1053,6 +1066,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1076,6 +1090,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1089,11 +1104,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1103,6 +1118,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1113,11 +1129,11 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1127,6 +1143,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1136,17 +1153,18 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1156,6 +1174,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1164,14 +1183,13 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1181,6 +1199,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1189,7 +1208,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * <code>.google.protobuf.Timestamp read_time = 3;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }
@@ -1200,6 +1219,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1221,6 +1241,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * The time at which the document was read. This may be monotonically
      * increasing; in this case, the previous documents in the result stream are
      * guaranteed not to have changed between their `read_time` and this one.
+     *
      * If the query returns no results, a response with `read_time` and no
      * `document` will be sent, and this represents the time at which the query
      * was run.
@@ -1278,6 +1299,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
     public Builder setSkippedResults(int value) {
 
       skippedResults_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1294,7 +1316,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * @return This builder for chaining.
      */
     public Builder clearSkippedResults() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       skippedResults_ = 0;
       onChanged();
       return this;
@@ -1347,6 +1369,7 @@ public final class RunQueryResponse extends com.google.protobuf.GeneratedMessage
      * @return This builder for chaining.
      */
     public Builder setDone(boolean value) {
+
       continuationSelectorCase_ = 6;
       continuationSelector_ = value;
       onChanged();

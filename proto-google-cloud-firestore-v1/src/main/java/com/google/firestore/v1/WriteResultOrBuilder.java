@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ public interface WriteResultOrBuilder
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -44,6 +45,7 @@ public interface WriteResultOrBuilder
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -59,6 +61,7 @@ public interface WriteResultOrBuilder
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -71,8 +74,9 @@ public interface WriteResultOrBuilder
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -82,8 +86,9 @@ public interface WriteResultOrBuilder
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -93,8 +98,9 @@ public interface WriteResultOrBuilder
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -104,8 +110,9 @@ public interface WriteResultOrBuilder
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -116,8 +123,9 @@ public interface WriteResultOrBuilder
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>

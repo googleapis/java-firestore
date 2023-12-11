@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface MapValueOrBuilder
    *
    * <pre>
    * The map's fields.
+   *
    * The map keys represent field names. Field names matching the regular
    * expression `__.*__` are reserved. Reserved field names are forbidden except
    * in certain documented contexts. The map keys, represented as UTF-8, must
@@ -42,6 +43,7 @@ public interface MapValueOrBuilder
    *
    * <pre>
    * The map's fields.
+   *
    * The map keys represent field names. Field names matching the regular
    * expression `__.*__` are reserved. Reserved field names are forbidden except
    * in certain documented contexts. The map keys, represented as UTF-8, must
@@ -59,6 +61,7 @@ public interface MapValueOrBuilder
    *
    * <pre>
    * The map's fields.
+   *
    * The map keys represent field names. Field names matching the regular
    * expression `__.*__` are reserved. Reserved field names are forbidden except
    * in certain documented contexts. The map keys, represented as UTF-8, must
@@ -73,6 +76,7 @@ public interface MapValueOrBuilder
    *
    * <pre>
    * The map's fields.
+   *
    * The map keys represent field names. Field names matching the regular
    * expression `__.*__` are reserved. Reserved field names are forbidden except
    * in certain documented contexts. The map keys, represented as UTF-8, must
@@ -81,7 +85,6 @@ public interface MapValueOrBuilder
    *
    * <code>map&lt;string, .google.firestore.v1.Value&gt; fields = 1;</code>
    */
-
   /* nullable */
   com.google.firestore.v1.Value getFieldsOrDefault(
       java.lang.String key,
@@ -92,6 +95,7 @@ public interface MapValueOrBuilder
    *
    * <pre>
    * The map's fields.
+   *
    * The map keys represent field names. Field names matching the regular
    * expression `__.*__` are reserved. Reserved field names are forbidden except
    * in certain documented contexts. The map keys, represented as UTF-8, must

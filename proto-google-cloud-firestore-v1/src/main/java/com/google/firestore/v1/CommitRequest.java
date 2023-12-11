@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,6 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     return new CommitRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_CommitRequest_descriptor;
@@ -70,7 +65,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -121,12 +118,15 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int WRITES_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Write> writes_;
   /**
    *
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * </pre>
    *
@@ -141,6 +141,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * </pre>
    *
@@ -155,6 +156,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * </pre>
    *
@@ -169,6 +171,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * </pre>
    *
@@ -183,6 +186,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * </pre>
    *
@@ -194,7 +198,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 3;
-  private com.google.protobuf.ByteString transaction_;
+  private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
@@ -426,17 +430,16 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
       } else {
         writes_ = null;
         writesBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       transaction_ = com.google.protobuf.ByteString.EMPTY;
-
       return this;
     }
 
@@ -464,20 +467,34 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.CommitRequest buildPartial() {
       com.google.firestore.v1.CommitRequest result =
           new com.google.firestore.v1.CommitRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.database_ = database_;
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.CommitRequest result) {
       if (writesBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           writes_ = java.util.Collections.unmodifiableList(writes_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.writes_ = writes_;
       } else {
         result.writes_ = writesBuilder_.build();
       }
-      result.transaction_ = transaction_;
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.CommitRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.transaction_ = transaction_;
+      }
     }
 
     @java.lang.Override
@@ -527,13 +544,14 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.CommitRequest.getDefaultInstance()) return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (writesBuilder_ == null) {
         if (!other.writes_.isEmpty()) {
           if (writes_.isEmpty()) {
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureWritesIsMutable();
             writes_.addAll(other.writes_);
@@ -546,7 +564,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             writesBuilder_.dispose();
             writesBuilder_ = null;
             writes_ = other.writes_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             writesBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getWritesFieldBuilder()
@@ -588,7 +606,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -606,7 +624,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
             case 26:
               {
                 transaction_ = input.readBytes();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             default:
@@ -692,8 +710,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -710,8 +728,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -733,8 +751,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -743,9 +761,9 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureWritesIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         writes_ = new java.util.ArrayList<com.google.firestore.v1.Write>(writes_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
 
@@ -760,6 +778,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -777,6 +796,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -794,6 +814,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -811,6 +832,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -834,6 +856,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -854,6 +877,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -877,6 +901,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -900,6 +925,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -920,6 +946,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -940,6 +967,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -961,6 +989,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -969,7 +998,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
     public Builder clearWrites() {
       if (writesBuilder_ == null) {
         writes_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
       } else {
         writesBuilder_.clear();
@@ -981,6 +1010,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1001,6 +1031,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1014,6 +1045,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1031,6 +1063,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1049,6 +1082,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1062,6 +1096,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1076,6 +1111,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The writes to apply.
+     *
      * Always executed atomically and in order.
      * </pre>
      *
@@ -1096,7 +1132,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.Write,
                 com.google.firestore.v1.Write.Builder,
                 com.google.firestore.v1.WriteOrBuilder>(
-                writes_, ((bitField0_ & 0x00000001) != 0), getParentForChildren(), isClean());
+                writes_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
         writes_ = null;
       }
       return writesBuilder_;
@@ -1134,8 +1170,8 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       transaction_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1151,7 +1187,7 @@ public final class CommitRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearTransaction() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       transaction_ = getDefaultInstance().getTransaction();
       onChanged();
       return this;

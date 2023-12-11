@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     return new ListenRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_ListenRequest_descriptor;
@@ -79,6 +74,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   private int targetChangeCase_ = 0;
+
+  @SuppressWarnings("serial")
   private java.lang.Object targetChange_;
 
   public enum TargetChangeCase
@@ -126,7 +123,9 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -275,6 +274,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
             "");
   }
 
+  @SuppressWarnings("serial")
   private com.google.protobuf.MapField<java.lang.String, java.lang.String> labels_;
 
   private com.google.protobuf.MapField<java.lang.String, java.lang.String> internalGetLabels() {
@@ -332,7 +332,10 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
    * <code>map&lt;string, string&gt; labels = 4;</code>
    */
   @java.lang.Override
-  public java.lang.String getLabelsOrDefault(java.lang.String key, java.lang.String defaultValue) {
+  public /* nullable */ java.lang.String getLabelsOrDefault(
+      java.lang.String key,
+      /* nullable */
+      java.lang.String defaultValue) {
     if (key == null) {
       throw new NullPointerException("map key");
     }
@@ -631,8 +634,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
       if (addTargetBuilder_ != null) {
         addTargetBuilder_.clear();
       }
@@ -666,23 +669,31 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.ListenRequest buildPartial() {
       com.google.firestore.v1.ListenRequest result =
           new com.google.firestore.v1.ListenRequest(this);
-      int from_bitField0_ = bitField0_;
-      result.database_ = database_;
-      if (targetChangeCase_ == 2) {
-        if (addTargetBuilder_ == null) {
-          result.targetChange_ = targetChange_;
-        } else {
-          result.targetChange_ = addTargetBuilder_.build();
-        }
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      if (targetChangeCase_ == 3) {
-        result.targetChange_ = targetChange_;
-      }
-      result.labels_ = internalGetLabels();
-      result.labels_.makeImmutable();
-      result.targetChangeCase_ = targetChangeCase_;
+      buildPartialOneofs(result);
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.ListenRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.labels_ = internalGetLabels();
+        result.labels_.makeImmutable();
+      }
+    }
+
+    private void buildPartialOneofs(com.google.firestore.v1.ListenRequest result) {
+      result.targetChangeCase_ = targetChangeCase_;
+      result.targetChange_ = this.targetChange_;
+      if (targetChangeCase_ == 2 && addTargetBuilder_ != null) {
+        result.targetChange_ = addTargetBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -732,9 +743,11 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.v1.ListenRequest.getDefaultInstance()) return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       internalGetMutableLabels().mergeFrom(other.internalGetLabels());
+      bitField0_ |= 0x00000008;
       switch (other.getTargetChangeCase()) {
         case ADD_TARGET:
           {
@@ -780,7 +793,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -804,6 +817,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
                 internalGetMutableLabels()
                     .getMutableMap()
                     .put(labels__.getKey(), labels__.getValue());
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             default:
@@ -903,8 +917,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -921,8 +935,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -944,8 +958,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1153,7 +1167,6 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       }
       targetChangeCase_ = 2;
       onChanged();
-      ;
       return addTargetBuilder_;
     }
 
@@ -1201,6 +1214,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setRemoveTarget(int value) {
+
       targetChangeCase_ = 3;
       targetChange_ = value;
       onChanged();
@@ -1237,14 +1251,14 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
 
     private com.google.protobuf.MapField<java.lang.String, java.lang.String>
         internalGetMutableLabels() {
-      onChanged();
-      ;
       if (labels_ == null) {
         labels_ = com.google.protobuf.MapField.newMapField(LabelsDefaultEntryHolder.defaultEntry);
       }
       if (!labels_.isMutable()) {
         labels_ = labels_.copy();
       }
+      bitField0_ |= 0x00000008;
+      onChanged();
       return labels_;
     }
 
@@ -1296,8 +1310,10 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      * <code>map&lt;string, string&gt; labels = 4;</code>
      */
     @java.lang.Override
-    public java.lang.String getLabelsOrDefault(
-        java.lang.String key, java.lang.String defaultValue) {
+    public /* nullable */ java.lang.String getLabelsOrDefault(
+        java.lang.String key,
+        /* nullable */
+        java.lang.String defaultValue) {
       if (key == null) {
         throw new NullPointerException("map key");
       }
@@ -1326,6 +1342,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     }
 
     public Builder clearLabels() {
+      bitField0_ = (bitField0_ & ~0x00000008);
       internalGetMutableLabels().getMutableMap().clear();
       return this;
     }
@@ -1348,6 +1365,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getMutableLabels() {
+      bitField0_ |= 0x00000008;
       return internalGetMutableLabels().getMutableMap();
     }
     /**
@@ -1366,8 +1384,8 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException("map value");
       }
-
       internalGetMutableLabels().getMutableMap().put(key, value);
+      bitField0_ |= 0x00000008;
       return this;
     }
     /**
@@ -1381,6 +1399,7 @@ public final class ListenRequest extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder putAllLabels(java.util.Map<java.lang.String, java.lang.String> values) {
       internalGetMutableLabels().getMutableMap().putAll(values);
+      bitField0_ |= 0x00000008;
       return this;
     }
 

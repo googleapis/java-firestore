@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     return new WriteResult();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.WriteProto
         .internal_static_google_firestore_v1_WriteResult_descriptor;
@@ -75,6 +70,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -93,6 +89,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -111,6 +108,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The last update time of the document after applying the write. Not set
    * after a `delete`.
+   *
    * If the write did not actually change the document, this will be the
    * previous update_time.
    * </pre>
@@ -119,17 +117,20 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
-    return getUpdateTime();
+    return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
   }
 
   public static final int TRANSFORM_RESULTS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Value> transformResults_;
   /**
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -142,8 +143,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -157,8 +159,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -171,8 +174,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -185,8 +189,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-   * same order.
+   * The results of applying each
+   * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+   * in the same order.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -407,10 +412,10 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      if (updateTimeBuilder_ == null) {
-        updateTime_ = null;
-      } else {
-        updateTime_ = null;
+      bitField0_ = 0;
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
         updateTimeBuilder_ = null;
       }
       if (transformResultsBuilder_ == null) {
@@ -419,7 +424,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
         transformResults_ = null;
         transformResultsBuilder_.clear();
       }
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -446,23 +451,31 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.WriteResult buildPartial() {
       com.google.firestore.v1.WriteResult result = new com.google.firestore.v1.WriteResult(this);
-      int from_bitField0_ = bitField0_;
-      if (updateTimeBuilder_ == null) {
-        result.updateTime_ = updateTime_;
-      } else {
-        result.updateTime_ = updateTimeBuilder_.build();
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
+      onBuilt();
+      return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.WriteResult result) {
       if (transformResultsBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           transformResults_ = java.util.Collections.unmodifiableList(transformResults_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.transformResults_ = transformResults_;
       } else {
         result.transformResults_ = transformResultsBuilder_.build();
       }
-      onBuilt();
-      return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.WriteResult result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.updateTime_ = updateTimeBuilder_ == null ? updateTime_ : updateTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -517,7 +530,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
         if (!other.transformResults_.isEmpty()) {
           if (transformResults_.isEmpty()) {
             transformResults_ = other.transformResults_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureTransformResultsIsMutable();
             transformResults_.addAll(other.transformResults_);
@@ -530,7 +543,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
             transformResultsBuilder_.dispose();
             transformResultsBuilder_ = null;
             transformResults_ = other.transformResults_;
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             transformResultsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
                     ? getTransformResultsFieldBuilder()
@@ -569,7 +582,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 input.readMessage(getUpdateTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
@@ -615,6 +628,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -624,7 +638,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the updateTime field is set.
      */
     public boolean hasUpdateTime() {
-      return updateTimeBuilder_ != null || updateTime_ != null;
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      *
@@ -632,6 +646,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -655,6 +670,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -667,11 +683,11 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         updateTime_ = value;
-        onChanged();
       } else {
         updateTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -680,6 +696,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -689,11 +706,11 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     public Builder setUpdateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (updateTimeBuilder_ == null) {
         updateTime_ = builderForValue.build();
-        onChanged();
       } else {
         updateTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -702,6 +719,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -710,17 +728,18 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeUpdateTime(com.google.protobuf.Timestamp value) {
       if (updateTimeBuilder_ == null) {
-        if (updateTime_ != null) {
-          updateTime_ =
-              com.google.protobuf.Timestamp.newBuilder(updateTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000001) != 0)
+            && updateTime_ != null
+            && updateTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getUpdateTimeBuilder().mergeFrom(value);
         } else {
           updateTime_ = value;
         }
-        onChanged();
       } else {
         updateTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000001;
+      onChanged();
       return this;
     }
     /**
@@ -729,6 +748,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -736,14 +756,13 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp update_time = 1;</code>
      */
     public Builder clearUpdateTime() {
-      if (updateTimeBuilder_ == null) {
-        updateTime_ = null;
-        onChanged();
-      } else {
-        updateTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
         updateTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -752,6 +771,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -759,7 +779,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp update_time = 1;</code>
      */
     public com.google.protobuf.Timestamp.Builder getUpdateTimeBuilder() {
-
+      bitField0_ |= 0x00000001;
       onChanged();
       return getUpdateTimeFieldBuilder().getBuilder();
     }
@@ -769,6 +789,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -790,6 +811,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The last update time of the document after applying the write. Not set
      * after a `delete`.
+     *
      * If the write did not actually change the document, this will be the
      * previous update_time.
      * </pre>
@@ -817,10 +839,10 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
         java.util.Collections.emptyList();
 
     private void ensureTransformResultsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         transformResults_ =
             new java.util.ArrayList<com.google.firestore.v1.Value>(transformResults_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
 
@@ -834,8 +856,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -851,8 +874,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -868,8 +892,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -885,8 +910,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -908,8 +934,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -929,8 +956,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -952,8 +980,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -975,8 +1004,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -995,8 +1025,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1016,8 +1047,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1037,8 +1069,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1046,7 +1079,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
     public Builder clearTransformResults() {
       if (transformResultsBuilder_ == null) {
         transformResults_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
       } else {
         transformResultsBuilder_.clear();
@@ -1057,8 +1090,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1077,8 +1111,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1090,8 +1125,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1107,8 +1143,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1125,8 +1162,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1139,8 +1177,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1153,8 +1192,9 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The results of applying each [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform], in the
-     * same order.
+     * The results of applying each
+     * [DocumentTransform.FieldTransform][google.firestore.v1.DocumentTransform.FieldTransform],
+     * in the same order.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Value transform_results = 2;</code>
@@ -1175,7 +1215,7 @@ public final class WriteResult extends com.google.protobuf.GeneratedMessageV3
                 com.google.firestore.v1.Value.Builder,
                 com.google.firestore.v1.ValueOrBuilder>(
                 transformResults_,
-                ((bitField0_ & 0x00000001) != 0),
+                ((bitField0_ & 0x00000002) != 0),
                 getParentForChildren(),
                 isClean());
         transformResults_ = null;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,6 +86,7 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -100,6 +101,7 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -114,6 +116,7 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -128,6 +131,7 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -142,6 +146,7 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * The writes to apply.
+   *
    * Always executed atomically and in order.
    * This must be empty on the first request.
    * This may be empty on the last request.
@@ -157,14 +162,18 @@ public interface WriteRequestOrBuilder
    *
    * <pre>
    * A stream token that was previously sent by the server.
+   *
    * The client should set this field to the token from the most recent
-   * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This acknowledges that the client has
-   * received responses up to this token. After sending this token, earlier
-   * tokens may not be used anymore.
+   * [WriteResponse][google.firestore.v1.WriteResponse] it has received. This
+   * acknowledges that the client has received responses up to this token. After
+   * sending this token, earlier tokens may not be used anymore.
+   *
    * The server may close the stream if there are too many unacknowledged
    * responses.
+   *
    * Leave this field unset when creating a new stream. To resume a stream at
    * a specific point, set this field and the `stream_id` field.
+   *
    * Leave this field unset when creating a new stream.
    * </pre>
    *
@@ -216,7 +225,6 @@ public interface WriteRequestOrBuilder
    *
    * <code>map&lt;string, string&gt; labels = 5;</code>
    */
-
   /* nullable */
   java.lang.String getLabelsOrDefault(
       java.lang.String key,

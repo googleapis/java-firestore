@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.v1;
  *
  *
  * <pre>
- * The request for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+ * The request for
+ * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.BeginTransactionRequest}
@@ -47,11 +48,6 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
     return new BeginTransactionRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.v1.FirestoreProto
         .internal_static_google_firestore_v1_BeginTransactionRequest_descriptor;
@@ -68,7 +64,9 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
   }
 
   public static final int DATABASE_FIELD_NUMBER = 1;
-  private volatile java.lang.Object database_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object database_ = "";
   /**
    *
    *
@@ -166,7 +164,9 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    */
   @java.lang.Override
   public com.google.firestore.v1.TransactionOptionsOrBuilder getOptionsOrBuilder() {
-    return getOptions();
+    return options_ == null
+        ? com.google.firestore.v1.TransactionOptions.getDefaultInstance()
+        : options_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -346,7 +346,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * The request for [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
+   * The request for
+   * [Firestore.BeginTransaction][google.firestore.v1.Firestore.BeginTransaction].
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.BeginTransactionRequest}
@@ -380,12 +381,11 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       database_ = "";
-
-      if (optionsBuilder_ == null) {
-        options_ = null;
-      } else {
-        options_ = null;
+      options_ = null;
+      if (optionsBuilder_ != null) {
+        optionsBuilder_.dispose();
         optionsBuilder_ = null;
       }
       return this;
@@ -415,14 +415,21 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
     public com.google.firestore.v1.BeginTransactionRequest buildPartial() {
       com.google.firestore.v1.BeginTransactionRequest result =
           new com.google.firestore.v1.BeginTransactionRequest(this);
-      result.database_ = database_;
-      if (optionsBuilder_ == null) {
-        result.options_ = options_;
-      } else {
-        result.options_ = optionsBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.BeginTransactionRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.database_ = database_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.options_ = optionsBuilder_ == null ? options_ : optionsBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -473,6 +480,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
         return this;
       if (!other.getDatabase().isEmpty()) {
         database_ = other.database_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasOptions()) {
@@ -507,13 +515,13 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
             case 10:
               {
                 database_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getOptionsFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             default:
@@ -532,6 +540,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object database_ = "";
     /**
@@ -597,8 +607,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
       if (value == null) {
         throw new NullPointerException();
       }
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -615,8 +625,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * @return This builder for chaining.
      */
     public Builder clearDatabase() {
-
       database_ = getDefaultInstance().getDatabase();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -638,8 +648,8 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       database_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -663,7 +673,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * @return Whether the options field is set.
      */
     public boolean hasOptions() {
-      return optionsBuilder_ != null || options_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -702,11 +712,11 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
           throw new NullPointerException();
         }
         options_ = value;
-        onChanged();
       } else {
         optionsBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -722,11 +732,11 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
     public Builder setOptions(com.google.firestore.v1.TransactionOptions.Builder builderForValue) {
       if (optionsBuilder_ == null) {
         options_ = builderForValue.build();
-        onChanged();
       } else {
         optionsBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -741,19 +751,18 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      */
     public Builder mergeOptions(com.google.firestore.v1.TransactionOptions value) {
       if (optionsBuilder_ == null) {
-        if (options_ != null) {
-          options_ =
-              com.google.firestore.v1.TransactionOptions.newBuilder(options_)
-                  .mergeFrom(value)
-                  .buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && options_ != null
+            && options_ != com.google.firestore.v1.TransactionOptions.getDefaultInstance()) {
+          getOptionsBuilder().mergeFrom(value);
         } else {
           options_ = value;
         }
-        onChanged();
       } else {
         optionsBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -767,14 +776,13 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * <code>.google.firestore.v1.TransactionOptions options = 2;</code>
      */
     public Builder clearOptions() {
-      if (optionsBuilder_ == null) {
-        options_ = null;
-        onChanged();
-      } else {
-        options_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      options_ = null;
+      if (optionsBuilder_ != null) {
+        optionsBuilder_.dispose();
         optionsBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -788,7 +796,7 @@ public final class BeginTransactionRequest extends com.google.protobuf.Generated
      * <code>.google.firestore.v1.TransactionOptions options = 2;</code>
      */
     public com.google.firestore.v1.TransactionOptions.Builder getOptionsBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getOptionsFieldBuilder().getBuilder();
     }

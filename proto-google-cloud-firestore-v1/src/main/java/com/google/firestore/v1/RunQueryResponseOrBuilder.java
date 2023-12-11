@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ public interface RunQueryResponseOrBuilder
    * <pre>
    * The transaction that was started as part of this request.
    * Can only be set in the first response, and only if
-   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction] was set in the request.
-   * If set, no other fields will be set in this response.
+   * [RunQueryRequest.new_transaction][google.firestore.v1.RunQueryRequest.new_transaction]
+   * was set in the request. If set, no other fields will be set in this
+   * response.
    * </pre>
    *
    * <code>bytes transaction = 2;</code>
@@ -81,6 +82,7 @@ public interface RunQueryResponseOrBuilder
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -98,6 +100,7 @@ public interface RunQueryResponseOrBuilder
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -115,6 +118,7 @@ public interface RunQueryResponseOrBuilder
    * The time at which the document was read. This may be monotonically
    * increasing; in this case, the previous documents in the result stream are
    * guaranteed not to have changed between their `read_time` and this one.
+   *
    * If the query returns no results, a response with `read_time` and no
    * `document` will be sent, and this represents the time at which the query
    * was run.
@@ -165,6 +169,5 @@ public interface RunQueryResponseOrBuilder
    */
   boolean getDone();
 
-  public com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase
-      getContinuationSelectorCase();
+  com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase getContinuationSelectorCase();
 }

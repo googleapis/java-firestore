@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,9 @@ public interface TargetOrBuilder
    *
    *
    * <pre>
-   * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   * A resume token from a prior
+   * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -110,7 +112,9 @@ public interface TargetOrBuilder
    *
    *
    * <pre>
-   * A resume token from a prior [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   * A resume token from a prior
+   * [TargetChange][google.firestore.v1.TargetChange] for an identical target.
+   *
    * Using a resume token with a different target is unsupported and may fail.
    * </pre>
    *
@@ -125,6 +129,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -138,6 +143,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -151,6 +157,7 @@ public interface TargetOrBuilder
    *
    * <pre>
    * Start listening after a specific `read_time`.
+   *
    * The client must know the state of matching documents at this time.
    * </pre>
    *
@@ -164,6 +171,21 @@ public interface TargetOrBuilder
    * <pre>
    * The target ID that identifies the target on the stream. Must be a positive
    * number and non-zero.
+   *
+   * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+   * target and return that in a `TargetChange::ADD` event. Once a target with
+   * `target_id=0` is added, all subsequent targets must also have
+   * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+   * sent to the server after a target with `target_id=0` is added, the server
+   * will immediately send a response with a `TargetChange::Remove` event.
+   *
+   * Note that if the client sends multiple `AddTarget` requests
+   * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+   * undefined. Therefore, clients should provide a target ID instead of relying
+   * on the server to assign one.
+   *
+   * If `target_id` is non-zero, there must not be an existing active target on
+   * this stream with the same ID.
    * </pre>
    *
    * <code>int32 target_id = 5;</code>
@@ -185,7 +207,57 @@ public interface TargetOrBuilder
    */
   boolean getOnce();
 
-  public com.google.firestore.v1.Target.TargetTypeCase getTargetTypeCase();
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return Whether the expectedCount field is set.
+   */
+  boolean hasExpectedCount();
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   *
+   * @return The expectedCount.
+   */
+  com.google.protobuf.Int32Value getExpectedCount();
+  /**
+   *
+   *
+   * <pre>
+   * The number of documents that last matched the query at the resume token or
+   * read time.
+   *
+   * This value is only relevant when a `resume_type` is provided. This value
+   * being present and greater than zero signals that the client wants
+   * `ExistenceFilter.unchanged_names` to be included in the response.
+   * </pre>
+   *
+   * <code>.google.protobuf.Int32Value expected_count = 12;</code>
+   */
+  com.google.protobuf.Int32ValueOrBuilder getExpectedCountOrBuilder();
 
-  public com.google.firestore.v1.Target.ResumeTypeCase getResumeTypeCase();
+  com.google.firestore.v1.Target.TargetTypeCase getTargetTypeCase();
+
+  com.google.firestore.v1.Target.ResumeTypeCase getResumeTypeCase();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * The request for [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
+ * The request for
+ * [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.GetFieldRequest}
@@ -47,11 +48,6 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
     return new GetFieldRequest();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
         .internal_static_google_firestore_admin_v1_GetFieldRequest_descriptor;
@@ -68,7 +64,9 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
-  private volatile java.lang.Object name_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
   /**
    *
    *
@@ -285,7 +283,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * The request for [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
+   * The request for
+   * [FirestoreAdmin.GetField][google.firestore.admin.v1.FirestoreAdmin.GetField].
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.GetFieldRequest}
@@ -319,8 +318,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       name_ = "";
-
       return this;
     }
 
@@ -348,9 +347,18 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
     public com.google.firestore.admin.v1.GetFieldRequest buildPartial() {
       com.google.firestore.admin.v1.GetFieldRequest result =
           new com.google.firestore.admin.v1.GetFieldRequest(this);
-      result.name_ = name_;
+      if (bitField0_ != 0) {
+        buildPartial0(result);
+      }
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.admin.v1.GetFieldRequest result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.name_ = name_;
+      }
     }
 
     @java.lang.Override
@@ -400,6 +408,7 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
       if (other == com.google.firestore.admin.v1.GetFieldRequest.getDefaultInstance()) return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -431,7 +440,7 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
             case 10:
               {
                 name_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             default:
@@ -450,6 +459,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object name_ = "";
     /**
@@ -521,8 +532,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
       if (value == null) {
         throw new NullPointerException();
       }
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -541,8 +552,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
      * @return This builder for chaining.
      */
     public Builder clearName() {
-
       name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -566,8 +577,8 @@ public final class GetFieldRequest extends com.google.protobuf.GeneratedMessageV
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       name_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }

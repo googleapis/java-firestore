@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -40,8 +41,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -53,8 +55,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>
@@ -67,8 +70,9 @@ public interface DocumentMaskOrBuilder
    *
    *
    * <pre>
-   * The list of field paths in the mask. See [Document.fields][google.firestore.v1.Document.fields] for a field
-   * path syntax reference.
+   * The list of field paths in the mask. See
+   * [Document.fields][google.firestore.v1.Document.fields] for a field path
+   * syntax reference.
    * </pre>
    *
    * <code>repeated string field_paths = 1;</code>

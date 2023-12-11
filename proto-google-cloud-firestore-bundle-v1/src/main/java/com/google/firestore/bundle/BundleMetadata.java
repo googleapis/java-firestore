@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     return new BundleMetadata();
   }
 
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
-  }
-
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.bundle.BundleProto
         .internal_static_google_firestore_bundle_BundleMetadata_descriptor;
@@ -68,7 +63,9 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int ID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object id_;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object id_ = "";
   /**
    *
    *
@@ -159,11 +156,11 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
-    return getCreateTime();
+    return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
   }
 
   public static final int VERSION_FIELD_NUMBER = 3;
-  private int version_;
+  private int version_ = 0;
   /**
    *
    *
@@ -181,7 +178,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TOTAL_DOCUMENTS_FIELD_NUMBER = 4;
-  private int totalDocuments_;
+  private int totalDocuments_ = 0;
   /**
    *
    *
@@ -199,7 +196,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TOTAL_BYTES_FIELD_NUMBER = 5;
-  private long totalBytes_;
+  private long totalBytes_ = 0L;
   /**
    *
    *
@@ -454,20 +451,16 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       id_ = "";
-
-      if (createTimeBuilder_ == null) {
-        createTime_ = null;
-      } else {
-        createTime_ = null;
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
         createTimeBuilder_ = null;
       }
       version_ = 0;
-
       totalDocuments_ = 0;
-
       totalBytes_ = 0L;
-
       return this;
     }
 
@@ -495,17 +488,30 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.bundle.BundleMetadata buildPartial() {
       com.google.firestore.bundle.BundleMetadata result =
           new com.google.firestore.bundle.BundleMetadata(this);
-      result.id_ = id_;
-      if (createTimeBuilder_ == null) {
-        result.createTime_ = createTime_;
-      } else {
-        result.createTime_ = createTimeBuilder_.build();
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
-      result.version_ = version_;
-      result.totalDocuments_ = totalDocuments_;
-      result.totalBytes_ = totalBytes_;
       onBuilt();
       return result;
+    }
+
+    private void buildPartial0(com.google.firestore.bundle.BundleMetadata result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.id_ = id_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.createTime_ = createTimeBuilder_ == null ? createTime_ : createTimeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.version_ = version_;
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.totalDocuments_ = totalDocuments_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.totalBytes_ = totalBytes_;
+      }
     }
 
     @java.lang.Override
@@ -555,6 +561,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
       if (other == com.google.firestore.bundle.BundleMetadata.getDefaultInstance()) return this;
       if (!other.getId().isEmpty()) {
         id_ = other.id_;
+        bitField0_ |= 0x00000001;
         onChanged();
       }
       if (other.hasCreateTime()) {
@@ -598,31 +605,31 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
             case 10:
               {
                 id_ = input.readStringRequireUtf8();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 10
             case 18:
               {
                 input.readMessage(getCreateTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000002;
                 break;
               } // case 18
             case 24:
               {
                 version_ = input.readUInt32();
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 24
             case 32:
               {
                 totalDocuments_ = input.readUInt32();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 32
             case 40:
               {
                 totalBytes_ = input.readUInt64();
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 40
             default:
@@ -641,6 +648,8 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
       } // finally
       return this;
     }
+
+    private int bitField0_;
 
     private java.lang.Object id_ = "";
     /**
@@ -703,8 +712,8 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       id_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -720,8 +729,8 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearId() {
-
       id_ = getDefaultInstance().getId();
+      bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
@@ -742,8 +751,8 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-
       id_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -766,7 +775,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the createTime field is set.
      */
     public boolean hasCreateTime() {
-      return createTimeBuilder_ != null || createTime_ != null;
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      *
@@ -803,11 +812,11 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         createTime_ = value;
-        onChanged();
       } else {
         createTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -822,11 +831,11 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     public Builder setCreateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (createTimeBuilder_ == null) {
         createTime_ = builderForValue.build();
-        onChanged();
       } else {
         createTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -840,17 +849,18 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeCreateTime(com.google.protobuf.Timestamp value) {
       if (createTimeBuilder_ == null) {
-        if (createTime_ != null) {
-          createTime_ =
-              com.google.protobuf.Timestamp.newBuilder(createTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000002) != 0)
+            && createTime_ != null
+            && createTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getCreateTimeBuilder().mergeFrom(value);
         } else {
           createTime_ = value;
         }
-        onChanged();
       } else {
         createTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000002;
+      onChanged();
       return this;
     }
     /**
@@ -863,14 +873,13 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
      */
     public Builder clearCreateTime() {
-      if (createTimeBuilder_ == null) {
-        createTime_ = null;
-        onChanged();
-      } else {
-        createTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
         createTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -883,7 +892,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp create_time = 2;</code>
      */
     public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
-
+      bitField0_ |= 0x00000002;
       onChanged();
       return getCreateTimeFieldBuilder().getBuilder();
     }
@@ -962,6 +971,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     public Builder setVersion(int value) {
 
       version_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -977,7 +987,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearVersion() {
-
+      bitField0_ = (bitField0_ & ~0x00000004);
       version_ = 0;
       onChanged();
       return this;
@@ -1014,6 +1024,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     public Builder setTotalDocuments(int value) {
 
       totalDocuments_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1029,7 +1040,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearTotalDocuments() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       totalDocuments_ = 0;
       onChanged();
       return this;
@@ -1066,6 +1077,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
     public Builder setTotalBytes(long value) {
 
       totalBytes_ = value;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -1081,7 +1093,7 @@ public final class BundleMetadata extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearTotalBytes() {
-
+      bitField0_ = (bitField0_ & ~0x00000010);
       totalBytes_ = 0L;
       onChanged();
       return this;

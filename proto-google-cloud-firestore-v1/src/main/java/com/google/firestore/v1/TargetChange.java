@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,6 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new TargetChange();
-  }
-
-  @java.lang.Override
-  public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-    return this.unknownFields;
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -115,8 +110,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
+     *
      * This will be sent after or with a `read_time` that is greater than or
      * equal to the time at which the targets were added.
+     *
      * Listeners can wait for this change if read-after-write semantics
      * are desired.
      * </pre>
@@ -130,6 +127,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
+     *
      * After the initial state is complete, `CURRENT` will be returned even
      * if the target was previously indicated to be `CURRENT`.
      * </pre>
@@ -176,8 +174,10 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets reflect all changes committed before the targets were added
      * to the stream.
+     *
      * This will be sent after or with a `read_time` that is greater than or
      * equal to the time at which the targets were added.
+     *
      * Listeners can wait for this change if read-after-write semantics
      * are desired.
      * </pre>
@@ -191,6 +191,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The targets have been reset, and a new initial state for the targets
      * will be returned in subsequent changes.
+     *
      * After the initial state is complete, `CURRENT` will be returned even
      * if the target was previously indicated to be `CURRENT`.
      * </pre>
@@ -289,7 +290,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
   }
 
   public static final int TARGET_CHANGE_TYPE_FIELD_NUMBER = 1;
-  private int targetChangeType_;
+  private int targetChangeType_ = 0;
   /**
    *
    *
@@ -318,22 +319,25 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
-    @SuppressWarnings("deprecation")
     com.google.firestore.v1.TargetChange.TargetChangeType result =
-        com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
+        com.google.firestore.v1.TargetChange.TargetChangeType.forNumber(targetChangeType_);
     return result == null
         ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED
         : result;
   }
 
   public static final int TARGET_IDS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
   private com.google.protobuf.Internal.IntList targetIds_;
   /**
    *
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -350,7 +354,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -366,7 +372,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * The target IDs of targets that have changed.
+   *
    * If empty, the change applies to all targets.
+   *
    * The order of the target IDs is not defined.
    * </pre>
    *
@@ -424,17 +432,18 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.rpc.StatusOrBuilder getCauseOrBuilder() {
-    return getCause();
+    return cause_ == null ? com.google.rpc.Status.getDefaultInstance() : cause_;
   }
 
   public static final int RESUME_TOKEN_FIELD_NUMBER = 4;
-  private com.google.protobuf.ByteString resumeToken_;
+  private com.google.protobuf.ByteString resumeToken_ = com.google.protobuf.ByteString.EMPTY;
   /**
    *
    *
    * <pre>
    * A token that can be used to resume the stream for the given `target_ids`,
    * or all targets if `target_ids` is empty.
+   *
    * Not set on every target change.
    * </pre>
    *
@@ -455,10 +464,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -477,10 +488,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -499,10 +512,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    * <pre>
    * The consistent `read_time` for the given `target_ids` (omitted when the
    * target_ids are not at a consistent snapshot).
+   *
    * The stream is guaranteed to send a `read_time` with `target_ids` empty
    * whenever the entire stream reaches a new consistent snapshot. ADD,
    * CURRENT, and RESET messages are guaranteed to (eventually) result in a
    * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+   *
    * For a given stream, `read_time` is guaranteed to be monotonically
    * increasing.
    * </pre>
@@ -511,7 +526,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder() {
-    return getReadTime();
+    return readTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : readTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -774,22 +789,18 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      bitField0_ = 0;
       targetChangeType_ = 0;
-
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000001);
-      if (causeBuilder_ == null) {
-        cause_ = null;
-      } else {
-        cause_ = null;
+      cause_ = null;
+      if (causeBuilder_ != null) {
+        causeBuilder_.dispose();
         causeBuilder_ = null;
       }
       resumeToken_ = com.google.protobuf.ByteString.EMPTY;
-
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-      } else {
-        readTime_ = null;
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
       return this;
@@ -818,26 +829,36 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     @java.lang.Override
     public com.google.firestore.v1.TargetChange buildPartial() {
       com.google.firestore.v1.TargetChange result = new com.google.firestore.v1.TargetChange(this);
-      int from_bitField0_ = bitField0_;
-      result.targetChangeType_ = targetChangeType_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        targetIds_.makeImmutable();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      }
-      result.targetIds_ = targetIds_;
-      if (causeBuilder_ == null) {
-        result.cause_ = cause_;
-      } else {
-        result.cause_ = causeBuilder_.build();
-      }
-      result.resumeToken_ = resumeToken_;
-      if (readTimeBuilder_ == null) {
-        result.readTime_ = readTime_;
-      } else {
-        result.readTime_ = readTimeBuilder_.build();
+      buildPartialRepeatedFields(result);
+      if (bitField0_ != 0) {
+        buildPartial0(result);
       }
       onBuilt();
       return result;
+    }
+
+    private void buildPartialRepeatedFields(com.google.firestore.v1.TargetChange result) {
+      if (((bitField0_ & 0x00000002) != 0)) {
+        targetIds_.makeImmutable();
+        bitField0_ = (bitField0_ & ~0x00000002);
+      }
+      result.targetIds_ = targetIds_;
+    }
+
+    private void buildPartial0(com.google.firestore.v1.TargetChange result) {
+      int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.targetChangeType_ = targetChangeType_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.cause_ = causeBuilder_ == null ? cause_ : causeBuilder_.build();
+      }
+      if (((from_bitField0_ & 0x00000008) != 0)) {
+        result.resumeToken_ = resumeToken_;
+      }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.readTime_ = readTimeBuilder_ == null ? readTime_ : readTimeBuilder_.build();
+      }
     }
 
     @java.lang.Override
@@ -891,7 +912,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       if (!other.targetIds_.isEmpty()) {
         if (targetIds_.isEmpty()) {
           targetIds_ = other.targetIds_;
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureTargetIdsIsMutable();
           targetIds_.addAll(other.targetIds_);
@@ -936,7 +957,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
             case 8:
               {
                 targetChangeType_ = input.readEnum();
-
+                bitField0_ |= 0x00000001;
                 break;
               } // case 8
             case 16:
@@ -960,19 +981,19 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
             case 26:
               {
                 input.readMessage(getCauseFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000004;
                 break;
               } // case 26
             case 34:
               {
                 resumeToken_ = input.readBytes();
-
+                bitField0_ |= 0x00000008;
                 break;
               } // case 34
             case 50:
               {
                 input.readMessage(getReadTimeFieldBuilder().getBuilder(), extensionRegistry);
-
+                bitField0_ |= 0x00000010;
                 break;
               } // case 50
             default:
@@ -1023,8 +1044,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setTargetChangeTypeValue(int value) {
-
       targetChangeType_ = value;
+      bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
@@ -1041,9 +1062,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      */
     @java.lang.Override
     public com.google.firestore.v1.TargetChange.TargetChangeType getTargetChangeType() {
-      @SuppressWarnings("deprecation")
       com.google.firestore.v1.TargetChange.TargetChangeType result =
-          com.google.firestore.v1.TargetChange.TargetChangeType.valueOf(targetChangeType_);
+          com.google.firestore.v1.TargetChange.TargetChangeType.forNumber(targetChangeType_);
       return result == null
           ? com.google.firestore.v1.TargetChange.TargetChangeType.UNRECOGNIZED
           : result;
@@ -1065,7 +1085,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
+      bitField0_ |= 0x00000001;
       targetChangeType_ = value.getNumber();
       onChanged();
       return this;
@@ -1082,7 +1102,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearTargetChangeType() {
-
+      bitField0_ = (bitField0_ & ~0x00000001);
       targetChangeType_ = 0;
       onChanged();
       return this;
@@ -1091,9 +1111,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     private com.google.protobuf.Internal.IntList targetIds_ = emptyIntList();
 
     private void ensureTargetIdsIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
+      if (!((bitField0_ & 0x00000002) != 0)) {
         targetIds_ = mutableCopy(targetIds_);
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
       }
     }
     /**
@@ -1101,7 +1121,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1110,7 +1132,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return A list containing the targetIds.
      */
     public java.util.List<java.lang.Integer> getTargetIdsList() {
-      return ((bitField0_ & 0x00000001) != 0)
+      return ((bitField0_ & 0x00000002) != 0)
           ? java.util.Collections.unmodifiableList(targetIds_)
           : targetIds_;
     }
@@ -1119,7 +1141,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1135,7 +1159,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1152,7 +1178,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1163,6 +1191,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder setTargetIds(int index, int value) {
+
       ensureTargetIdsIsMutable();
       targetIds_.setInt(index, value);
       onChanged();
@@ -1173,7 +1202,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1183,6 +1214,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder addTargetIds(int value) {
+
       ensureTargetIdsIsMutable();
       targetIds_.addInt(value);
       onChanged();
@@ -1193,7 +1225,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1213,7 +1247,9 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      *
      * <pre>
      * The target IDs of targets that have changed.
+     *
      * If empty, the change applies to all targets.
+     *
      * The order of the target IDs is not defined.
      * </pre>
      *
@@ -1223,7 +1259,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearTargetIds() {
       targetIds_ = emptyIntList();
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
@@ -1244,7 +1280,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the cause field is set.
      */
     public boolean hasCause() {
-      return causeBuilder_ != null || cause_ != null;
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      *
@@ -1279,11 +1315,11 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         cause_ = value;
-        onChanged();
       } else {
         causeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1298,11 +1334,11 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     public Builder setCause(com.google.rpc.Status.Builder builderForValue) {
       if (causeBuilder_ == null) {
         cause_ = builderForValue.build();
-        onChanged();
       } else {
         causeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1316,16 +1352,18 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeCause(com.google.rpc.Status value) {
       if (causeBuilder_ == null) {
-        if (cause_ != null) {
-          cause_ = com.google.rpc.Status.newBuilder(cause_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000004) != 0)
+            && cause_ != null
+            && cause_ != com.google.rpc.Status.getDefaultInstance()) {
+          getCauseBuilder().mergeFrom(value);
         } else {
           cause_ = value;
         }
-        onChanged();
       } else {
         causeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000004;
+      onChanged();
       return this;
     }
     /**
@@ -1338,14 +1376,13 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.rpc.Status cause = 3;</code>
      */
     public Builder clearCause() {
-      if (causeBuilder_ == null) {
-        cause_ = null;
-        onChanged();
-      } else {
-        cause_ = null;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      cause_ = null;
+      if (causeBuilder_ != null) {
+        causeBuilder_.dispose();
         causeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1358,7 +1395,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.rpc.Status cause = 3;</code>
      */
     public com.google.rpc.Status.Builder getCauseBuilder() {
-
+      bitField0_ |= 0x00000004;
       onChanged();
       return getCauseFieldBuilder().getBuilder();
     }
@@ -1408,6 +1445,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1425,6 +1463,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1437,8 +1476,8 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-
       resumeToken_ = value;
+      bitField0_ |= 0x00000008;
       onChanged();
       return this;
     }
@@ -1448,6 +1487,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * A token that can be used to resume the stream for the given `target_ids`,
      * or all targets if `target_ids` is empty.
+     *
      * Not set on every target change.
      * </pre>
      *
@@ -1456,7 +1496,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearResumeToken() {
-
+      bitField0_ = (bitField0_ & ~0x00000008);
       resumeToken_ = getDefaultInstance().getResumeToken();
       onChanged();
       return this;
@@ -1474,10 +1514,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1487,7 +1529,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the readTime field is set.
      */
     public boolean hasReadTime() {
-      return readTimeBuilder_ != null || readTime_ != null;
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      *
@@ -1495,10 +1537,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1520,10 +1564,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1536,11 +1582,11 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
           throw new NullPointerException();
         }
         readTime_ = value;
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1549,10 +1595,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1562,11 +1610,11 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
     public Builder setReadTime(com.google.protobuf.Timestamp.Builder builderForValue) {
       if (readTimeBuilder_ == null) {
         readTime_ = builderForValue.build();
-        onChanged();
       } else {
         readTimeBuilder_.setMessage(builderForValue.build());
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1575,10 +1623,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1587,17 +1637,18 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeReadTime(com.google.protobuf.Timestamp value) {
       if (readTimeBuilder_ == null) {
-        if (readTime_ != null) {
-          readTime_ =
-              com.google.protobuf.Timestamp.newBuilder(readTime_).mergeFrom(value).buildPartial();
+        if (((bitField0_ & 0x00000010) != 0)
+            && readTime_ != null
+            && readTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getReadTimeBuilder().mergeFrom(value);
         } else {
           readTime_ = value;
         }
-        onChanged();
       } else {
         readTimeBuilder_.mergeFrom(value);
       }
-
+      bitField0_ |= 0x00000010;
+      onChanged();
       return this;
     }
     /**
@@ -1606,10 +1657,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1617,14 +1670,13 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
     public Builder clearReadTime() {
-      if (readTimeBuilder_ == null) {
-        readTime_ = null;
-        onChanged();
-      } else {
-        readTime_ = null;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      readTime_ = null;
+      if (readTimeBuilder_ != null) {
+        readTimeBuilder_.dispose();
         readTimeBuilder_ = null;
       }
-
+      onChanged();
       return this;
     }
     /**
@@ -1633,10 +1685,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1644,7 +1698,7 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <code>.google.protobuf.Timestamp read_time = 6;</code>
      */
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
-
+      bitField0_ |= 0x00000010;
       onChanged();
       return getReadTimeFieldBuilder().getBuilder();
     }
@@ -1654,10 +1708,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>
@@ -1677,10 +1733,12 @@ public final class TargetChange extends com.google.protobuf.GeneratedMessageV3
      * <pre>
      * The consistent `read_time` for the given `target_ids` (omitted when the
      * target_ids are not at a consistent snapshot).
+     *
      * The stream is guaranteed to send a `read_time` with `target_ids` empty
      * whenever the entire stream reaches a new consistent snapshot. ADD,
      * CURRENT, and RESET messages are guaranteed to (eventually) result in a
      * new consistent snapshot (while NO_CHANGE and REMOVE messages are not).
+     *
      * For a given stream, `read_time` is guaranteed to be monotonically
      * increasing.
      * </pre>

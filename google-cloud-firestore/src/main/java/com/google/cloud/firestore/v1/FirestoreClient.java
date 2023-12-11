@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ import javax.annotation.Generated;
  * <p>Cloud Firestore is a fast, fully managed, serverless, cloud-native NoSQL document database
  * that simplifies storing, syncing, and querying data for your mobile, web, and IoT apps at global
  * scale. Its client libraries provide live synchronization and offline support, while its security
- * features and integrations with Firebase and Google Cloud Platform (GCP) accelerate building truly
+ * features and integrations with Firebase and Google Cloud Platform accelerate building truly
  * serverless apps.
  *
  * <p>This class provides the ability to make remote calls to the backing service through method
@@ -159,11 +159,7 @@ import javax.annotation.Generated;
  * // - It may require correct/in-range values for request initialization.
  * // - It may require specifying regional endpoints when creating the service client as shown in
  * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
- * FirestoreSettings firestoreSettings =
- *     FirestoreSettings.newBuilder()
- *         .setTransportChannelProvider(
- *             FirestoreSettings.defaultHttpJsonTransportProviderBuilder().build())
- *         .build();
+ * FirestoreSettings firestoreSettings = FirestoreSettings.newHttpJsonBuilder().build();
  * FirestoreClient firestoreClient = FirestoreClient.create(firestoreSettings);
  * }</pre>
  *
@@ -1043,7 +1039,8 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Streams batches of document updates and deletes, in order.
+   * Streams batches of document updates and deletes, in order. This method is only available via
+   * gRPC or WebChannel (not REST).
    *
    * <p>Sample code:
    *
@@ -1076,7 +1073,7 @@ public class FirestoreClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
-   * Listens to changes.
+   * Listens to changes. This method is only available via gRPC or WebChannel (not REST).
    *
    * <p>Sample code:
    *
