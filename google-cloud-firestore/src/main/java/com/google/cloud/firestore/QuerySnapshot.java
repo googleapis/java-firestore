@@ -208,7 +208,6 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   public <T> List<T> toObjects(@Nonnull Class<T> clazz) {
     List<QueryDocumentSnapshot> documents = getDocuments();
     List<T> results = new ArrayList<>(documents.size());
-
     for (DocumentSnapshot documentSnapshot : documents) {
       results.add(
           CustomClassMapper.convertToCustomClass(
