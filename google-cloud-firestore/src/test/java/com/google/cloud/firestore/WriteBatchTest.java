@@ -341,4 +341,41 @@ public class WriteBatchTest {
     CommitRequest commitRequest = commitCapture.getValue();
     assertEquals(commit(writes.toArray(new Write[] {})), commitRequest);
   }
+
+  @Test
+  public void throwsWhenModifyingACommittedWriteBatch() throws Exception {
+    doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+
+    String expectedErrorMessage = "Cannot modify a WriteBatch that has already been committed.";
+
+    // Commit a batch.
+    WriteBatch batch = firestoreMock.batch();
+    batch.commit().get();
+
+    // Then run other operations in the same batch.
+    LocalFirestoreHelper.assertException(
+        () -> {
+          batch.set(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          batch.update(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          batch.create(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          batch.delete(firestoreMock.collection("foo").document("bar"));
+        },
+        expectedErrorMessage);
+  }
 }
