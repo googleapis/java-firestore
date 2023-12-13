@@ -265,8 +265,8 @@ public class EnabledTraceUtil implements TraceUtil {
   /** Returns the OpenTelemetry tracer if enabled, and {@code null} otherwise. */
   @Nullable
   public Tracer getTracer() {
-    //return openTelemetrySdk.getTracer(LIBRARY_NAME);
-    return GlobalOpenTelemetry.getTracer(LIBRARY_NAME);
+    return openTelemetrySdk.getTracer(LIBRARY_NAME);
+    //return GlobalOpenTelemetry.getTracer(LIBRARY_NAME);
   }
 
   /** Returns the current span. */

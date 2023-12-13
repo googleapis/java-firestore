@@ -95,10 +95,9 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
     // It is possible that the user of the SDK does not provide an OpenTelemetrySdk instance to be
     // used.
     // In such cases, we'll create an instance, configure it, and use it.
-    // if (this.openTelemetrySdk == null) {
-    //   initializeOpenTelemetry();
-    // }
-    initializeOpenTelemetry();
+    if (this.openTelemetrySdk == null) {
+      initializeOpenTelemetry();
+    }
 
     this.traceUtil = new EnabledTraceUtil(firestoreOptions, openTelemetrySdk);
   }
