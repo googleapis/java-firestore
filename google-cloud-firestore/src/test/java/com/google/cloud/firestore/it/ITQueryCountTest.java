@@ -386,7 +386,11 @@ public class ITQueryCountTest extends ITBaseTest {
 
     Throwable throwable = executionException.getCause();
     assertThat(throwable).hasMessageThat().ignoringCase().contains("index");
-    assertThat(throwable).hasMessageThat().contains("https://console.firebase.google.com");
+    // TODO(b/316359394) Remove this check for the default databases once cl/582465034 is rolled out
+    //  to production.
+    if (collection.getFirestore().getOptions().getDatabaseId().equals("(default)")) {
+      assertThat(throwable).hasMessageThat().contains("https://console.firebase.google.com");
+    }
   }
 
   private CollectionReference createEmptyCollection() {
