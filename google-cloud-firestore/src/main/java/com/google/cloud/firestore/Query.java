@@ -39,6 +39,7 @@ import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -1763,7 +1764,7 @@ public class Query {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(
           new QuerySnapshotObserver() {

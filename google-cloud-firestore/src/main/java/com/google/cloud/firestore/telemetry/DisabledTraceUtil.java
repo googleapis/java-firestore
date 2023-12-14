@@ -17,9 +17,8 @@
 package com.google.cloud.firestore.telemetry;
 
 import com.google.api.core.ApiFuture;
-import io.opentelemetry.context.Context;
-import io.opentelemetry.context.Scope;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 public class DisabledTraceUtil implements TraceUtil {
 
@@ -55,8 +54,20 @@ public class DisabledTraceUtil implements TraceUtil {
 
     @Override
     public Scope makeCurrent() {
-      return null;
+      return new Scope();
     }
+  }
+
+  static class Context implements TraceUtil.Context {
+    @Override
+    public Scope makeCurrent() {
+      return new Scope();
+    }
+  }
+
+  static class Scope implements TraceUtil.Scope {
+    @Override
+    public void close() {}
   }
 
   @Override
@@ -65,12 +76,19 @@ public class DisabledTraceUtil implements TraceUtil {
   }
 
   @Override
-  public TraceUtil.Span startSpan(String spanName, Context parent) {
+  public TraceUtil.Span startSpan(String spanName, TraceUtil.Context parent) {
     return new Span();
   }
 
+  @Nonnull
   @Override
   public TraceUtil.Span currentSpan() {
     return new Span();
+  }
+
+  @Nonnull
+  @Override
+  public TraceUtil.Context currentContext() {
+    return new DisabledTraceUtil.Context();
   }
 }

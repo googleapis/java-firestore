@@ -27,6 +27,7 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.RunAggregationQueryRequest;
@@ -85,7 +86,7 @@ public class AggregateQuery {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
               transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());

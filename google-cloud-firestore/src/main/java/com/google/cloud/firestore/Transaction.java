@@ -20,6 +20,8 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Context;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
@@ -28,8 +30,6 @@ import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import io.opentelemetry.context.Context;
-import io.opentelemetry.context.Scope;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,10 +67,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   private final TransactionOptions transactionOptions;
   private ByteString transactionId;
-
-  // TODO(ehsan): storing Context could have overhead? Can we store the OpenTelemetryUtilContext
-  // instead?
-  @Nullable private Context txnTraceContext;
+  @Nonnull private final Context txnTraceContext;
 
   Transaction(
       FirestoreImpl firestore,
@@ -79,7 +76,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     super(firestore);
     this.transactionOptions = transactionOptions;
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
-    this.txnTraceContext = Context.current();
+    this.txnTraceContext = firestore.getTraceUtil().currentContext();
   }
 
   public boolean hasTransactionId() {
@@ -94,7 +91,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   ApiFuture<Void> begin() {
     TraceUtil.Span span =
         firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
       beginTransaction.setDatabase(firestore.getDatabaseName());
 
@@ -145,7 +142,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
       reqBuilder.setTransaction(transactionId);
       reqBuilder.setDatabase(firestore.getDatabaseName());
@@ -178,7 +175,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
               firestore.getAll(
@@ -208,7 +205,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
       span.endAtFuture(result);
@@ -236,7 +233,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
         firestore
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId);
       span.endAtFuture(result);

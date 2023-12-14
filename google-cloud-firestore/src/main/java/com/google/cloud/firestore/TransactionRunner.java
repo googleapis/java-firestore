@@ -27,6 +27,7 @@ import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
@@ -90,7 +91,7 @@ class TransactionRunner<T> {
     runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
     runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
-    try (io.opentelemetry.context.Scope ignored = runTransactionSpan.makeCurrent()) {
+    try (Scope ignored = runTransactionSpan.makeCurrent()) {
       this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
       --attemptsRemaining;

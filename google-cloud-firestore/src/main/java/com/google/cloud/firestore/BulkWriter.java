@@ -27,11 +27,12 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Context;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
-import io.opentelemetry.context.Context;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -223,7 +224,6 @@ public final class BulkWriter implements AutoCloseable {
   @GuardedBy("lock")
   private Executor errorExecutor;
 
-  // TODO(ehsan): Don't store Context.
   Context traceContext;
 
   /**
@@ -242,7 +242,7 @@ public final class BulkWriter implements AutoCloseable {
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
     this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
-    this.traceContext = Context.current();
+    this.traceContext = firestore.getTraceUtil().currentContext();
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -914,7 +914,7 @@ public final class BulkWriter implements AutoCloseable {
               .getTraceUtil()
               .startSpan(TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
               .setAttribute("numDocuments", batch.getWrites().size());
-      try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+      try (Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
         result.addListener(
             () -> {

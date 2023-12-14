@@ -24,6 +24,7 @@ import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -133,7 +134,7 @@ public class CollectionReference extends Query {
             .getFirestore()
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
       request.setParent(options.getParentPath().toString());
       request.setCollectionId(options.getCollectionId());
@@ -192,7 +193,7 @@ public class CollectionReference extends Query {
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
     TraceUtil.Span span =
         rpcContext.getFirestore().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
-    try (io.opentelemetry.context.Scope ignored = span.makeCurrent()) {
+    try (Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();
       ApiFuture<WriteResult> createFuture = documentReference.create(fields);
       ApiFuture<DocumentReference> result =
