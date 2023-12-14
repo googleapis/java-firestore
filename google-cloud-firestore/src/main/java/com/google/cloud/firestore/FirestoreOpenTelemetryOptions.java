@@ -16,39 +16,26 @@
 
 package com.google.cloud.firestore;
 
-import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.api.OpenTelemetry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
-  /** Sampling rate of 10% is chosen for traces by default. */
-  static double DEFAULT_TRACE_SAMPLING_RATE = 0.1;
-
   private final boolean enabled;
-  @Nullable private final OpenTelemetrySdk sdk;
 
-  private final double traceSamplingRate;
+  @Nullable private final OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.enabled = builder.enabled;
-    this.sdk = builder.sdk;
-    if (builder.traceSamplingRate == null) {
-      this.traceSamplingRate = DEFAULT_TRACE_SAMPLING_RATE;
-    } else {
-      this.traceSamplingRate = builder.traceSamplingRate;
-    }
+    this.openTelemetry = builder.openTelemetry;
   }
 
   public boolean getEnabled() {
     return enabled;
   }
 
-  public OpenTelemetrySdk getSdk() {
-    return sdk;
-  }
-
-  public double getTraceSamplingRate() {
-    return traceSamplingRate;
+  public OpenTelemetry getOpenTelemetry() {
+    return openTelemetry;
   }
 
   @Nonnull
@@ -62,20 +49,19 @@ public class FirestoreOpenTelemetryOptions {
   }
 
   public static class Builder {
+
     private boolean enabled;
-    @Nullable private OpenTelemetrySdk sdk;
-    private Double traceSamplingRate;
+
+    @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
       enabled = false;
-      sdk = null;
-      traceSamplingRate = null;
+      openTelemetry = null;
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
       this.enabled = options.enabled;
-      this.sdk = options.sdk;
-      this.traceSamplingRate = options.traceSamplingRate;
+      this.openTelemetry = options.openTelemetry;
     }
 
     @Nonnull
@@ -95,39 +81,16 @@ public class FirestoreOpenTelemetryOptions {
     }
 
     /**
-     * Sets the {@link OpenTelemetrySdk} to use with this Firestore client. In the absence of an
-     * OpenTelemetrySdk, the Firestore SDK will create an OpenTelemetrySdk instance which transmits
-     * telemetry information to Google Cloud.
+     * Sets the {@link OpenTelemetry} to use with this Firestore client. If telemetry collection is
+     * is enabled, but an `OpenTelemetry` is not provided, the Firestore SDK will attempt to use the
+     * GlobalOpenTelemetry.
      *
-     * @param sdk The OpenTelemetrySdk that can be used by this client.
+     * @param openTelemetry The OpenTelemetry that can be used by this client.
      */
     @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setOpenTelemetrySdk(
-        @Nonnull OpenTelemetrySdk sdk) {
-      if (this.traceSamplingRate != null) {
-        throw new IllegalArgumentException(
-            "OpenTelemetry trace sampling rate should not be set because you are providing an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
-      }
-      this.sdk = sdk;
-      return this;
-    }
-
-    /**
-     * Sets the trace sampling rate. This will only take effect if no OpenTelemetrySdk is provided.
-     *
-     * @param samplingRate The trace sampling rate between 0.0 and 1.0.
-     */
-    @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setTraceSamplingRate(
-        double samplingRate) {
-      if (this.sdk != null) {
-        throw new IllegalArgumentException(
-            "Cannot set OpenTelemetry trace sampling rate because you have already provided an OpenTelemetrySdk object. Please set the sampling rate directly on the OpenTelemetrySdk object.");
-      }
-      if (samplingRate < 0.0 || samplingRate > 1.0) {
-        throw new IllegalArgumentException("Trace sampling rate must be a number between 0.0 and 1.0.");
-      }
-      this.traceSamplingRate = samplingRate;
+    public FirestoreOpenTelemetryOptions.Builder setOpenTelemetry(
+        @Nonnull OpenTelemetry openTelemetry) {
+      this.openTelemetry = openTelemetry;
       return this;
     }
   }

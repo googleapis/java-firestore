@@ -28,11 +28,8 @@ import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -277,11 +274,10 @@ class TransactionRunner<T> {
             .rollback()
             .addListener(
                 () -> {
-                    runTransactionSpan.end(throwable);
-                    failedTransaction.setException(throwable);
-                  },
-                MoreExecutors.directExecutor()
-            );
+                  runTransactionSpan.end(throwable);
+                  failedTransaction.setException(throwable);
+                },
+                MoreExecutors.directExecutor());
       } else {
         runTransactionSpan.end(throwable);
         failedTransaction.setException(throwable);

@@ -21,7 +21,7 @@ import io.grpc.ManagedChannelBuilder;
 import javax.annotation.Nullable;
 
 public class DisabledOpenTelemetryUtil extends OpenTelemetryUtil {
-  private DisabledTraceUtil traceUtil;
+  private final DisabledTraceUtil traceUtil;
 
   public DisabledOpenTelemetryUtil() {
     traceUtil = new DisabledTraceUtil();
@@ -31,9 +31,6 @@ public class DisabledOpenTelemetryUtil extends OpenTelemetryUtil {
   public TraceUtil getTraceUtil() {
     return traceUtil;
   }
-
-  @Override
-  public void shutdown() {}
 
   @Override
   @Nullable

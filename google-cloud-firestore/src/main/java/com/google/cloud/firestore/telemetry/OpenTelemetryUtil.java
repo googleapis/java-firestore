@@ -32,20 +32,17 @@ import javax.annotation.Nullable;
  */
 public abstract class OpenTelemetryUtil {
   static final String ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME = "FIRESTORE_ENABLE_OPEN_TELEMETRY";
-  static final String OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME = "FIRESTORE_OPEN_TELEMETRY_TRACE_SAMPLING_RATE";
-  static final String SERVICE = "Firestore";
+  static final String LIBRARY_NAME = "com.google.cloud.firestore";
 
   /** Returns the Tracing utility object. */
   public abstract TraceUtil getTraceUtil();
-
-  /** Initiates an orderly shutdown in which remaining operations are finished, but no new work will be accepted. */
-  public abstract void shutdown();
 
   /**
    * Returns a channel configurator for gRPC, or {@code null} if telemetry collection is disabled.
    */
   @Nullable
-  public abstract ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
+  public abstract ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder>
+      getChannelConfigurator();
 
   @VisibleForTesting
   @Nullable
@@ -66,10 +63,12 @@ public abstract class OpenTelemetryUtil {
     // The environment variable can override options to enable/disable telemetry collection.
     String enableOpenTelemetryEnvVar = getEnableOpenTelemetryEnvVar();
     if (enableOpenTelemetryEnvVar != null) {
-      if (enableOpenTelemetryEnvVar.equalsIgnoreCase("true") || enableOpenTelemetryEnvVar.equalsIgnoreCase("on")) {
+      if (enableOpenTelemetryEnvVar.equalsIgnoreCase("true")
+          || enableOpenTelemetryEnvVar.equalsIgnoreCase("on")) {
         createEnabledInstance = true;
       }
-      if (enableOpenTelemetryEnvVar.equalsIgnoreCase("false") || enableOpenTelemetryEnvVar.equalsIgnoreCase("off")) {
+      if (enableOpenTelemetryEnvVar.equalsIgnoreCase("false")
+          || enableOpenTelemetryEnvVar.equalsIgnoreCase("off")) {
         createEnabledInstance = false;
       }
     }

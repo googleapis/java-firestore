@@ -16,60 +16,27 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
-
 import com.google.api.core.ApiFunction;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.sdk.trace.export.SpanExporter;
-import io.opentelemetry.sdk.trace.samplers.Sampler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
-  @Nullable private OpenTelemetrySdk openTelemetrySdk;
-  private final FirestoreOptions firestoreOptions;
+  private OpenTelemetry openTelemetry;
   private final EnabledTraceUtil traceUtil;
-
-  private boolean openTelemetrySdkRegisteredByFirestoreSdk = false;
-  private boolean isClosed = false;
 
   @Override
   public TraceUtil getTraceUtil() {
     return traceUtil;
   }
 
-  @Override
-  public void shutdown() {
-    if (!isClosed) {
-      isClosed = true;
-      //traceUtil.shutdown();
-      if(openTelemetrySdkRegisteredByFirestoreSdk) {
-        openTelemetrySdk.close();
-      }
-    }
-  }
-
   @VisibleForTesting
-  OpenTelemetrySdk getOpenTelemetrySdk() {
-    return openTelemetrySdk;
-  }
-
-  @VisibleForTesting
-  @Nullable
-  static String getOpenTelemetryTraceSamplingRateEnvVar() {
-    return System.getenv(OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME);
+  OpenTelemetry getOpenTelemetry() {
+    return openTelemetry;
   }
 
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
@@ -89,69 +56,15 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   }
 
   public EnabledOpenTelemetryUtil(FirestoreOptions firestoreOptions) {
-    this.firestoreOptions = firestoreOptions;
-    this.openTelemetrySdk = firestoreOptions.getOpenTelemetryOptions().getSdk();
+    this.openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
 
-    // It is possible that the user of the SDK does not provide an OpenTelemetrySdk instance to be
-    // used.
-    // In such cases, we'll create an instance, configure it, and use it.
-    if (this.openTelemetrySdk == null) {
-      initializeOpenTelemetry();
+    // If telemetry collection is enabled, but an OpenTelemetry instance is not provided, fall back
+    // to using GlobalOpenTelemetry.
+    if (this.openTelemetry == null) {
+      this.openTelemetry = GlobalOpenTelemetry.get();
     }
 
-    this.traceUtil = new EnabledTraceUtil(firestoreOptions, openTelemetrySdk);
-  }
-
-  public double getTraceSamplingRate() {
-    // The trace sampling rate environment variable can override the sampling rate in options.
-    String traceSamplingEnvVar = getOpenTelemetryTraceSamplingRateEnvVar();
-    if (traceSamplingEnvVar != null) {
-      try {
-        return Double.parseDouble(traceSamplingEnvVar);
-      } catch (NumberFormatException error) {
-        Logger.getLogger(OpenTelemetryUtil.class.getName())
-            .log(
-                Level.WARNING,
-                String.format(
-                    "Ignoring the %s environment variable as its value (%s) is not a valid number format.",
-                    OPEN_TELEMETRY_TRACE_SAMPLING_RATE_ENV_VAR_NAME, traceSamplingEnvVar));
-      }
-    }
-
-    return firestoreOptions.getOpenTelemetryOptions().getTraceSamplingRate();
-  }
-
-  private void initializeOpenTelemetry() {
-    try {
-      // Include required service.name resource attribute on all spans and metrics
-      Resource resource =
-          Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, SERVICE).build());
-      SpanExporter gcpTraceExporter = TraceExporter.createWithDefaultConfiguration();
-      SpanProcessor gcpSpanProcessor = SimpleSpanProcessor.create(gcpTraceExporter);
-      LoggingSpanExporter loggingSpanExporter = LoggingSpanExporter.create();
-      SpanProcessor loggingSpanProcessor = SimpleSpanProcessor.create(loggingSpanExporter);
-
-      this.openTelemetrySdk =
-              OpenTelemetrySdk.builder()
-                      .setTracerProvider(
-                              SdkTracerProvider.builder()
-                                      .setResource(resource)
-                                      .setSampler(Sampler.traceIdRatioBased(getTraceSamplingRate()))
-                                      .addSpanProcessor(gcpSpanProcessor)
-                                      .addSpanProcessor(loggingSpanProcessor)
-                                      .build())
-                      .buildAndRegisterGlobal();
-      this.openTelemetrySdkRegisteredByFirestoreSdk = true;
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(
-              Level.INFO, "OpenTelemetry SDK was not provided. Creating one in the Firestore SDK.");
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(Level.INFO, String.format("Trace sampling rate = %f", getTraceSamplingRate()));
-    } catch (Exception e) {
-      // During parallel testing, the OpenTelemetry SDK may get initialized multiple times which is
-      // not allowed.
-      Logger.getLogger("Firestore OpenTelemetry")
-          .log(Level.FINE, "GlobalOpenTelemetry has already been configured.");
-    }
+    this.traceUtil =
+        new EnabledTraceUtil(firestoreOptions, this.openTelemetry.getTracer(LIBRARY_NAME));
   }
 }

@@ -23,7 +23,6 @@ import java.util.Map;
 
 public interface TraceUtil {
   String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
-  String LIBRARY_NAME = "com.google.cloud.firestore";
   String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
   String SPAN_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
@@ -48,9 +47,6 @@ public interface TraceUtil {
   String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
-
-  /** Flushes remaining spans, if any. */
-  public void shutdown();
 
   interface Span {
     /** Ends this span. */

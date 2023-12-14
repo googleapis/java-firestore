@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class DisabledTraceUtil implements TraceUtil {
 
-  class Span implements TraceUtil.Span {
+  static class Span implements TraceUtil.Span {
     @Override
     public void end() {}
 
@@ -58,9 +58,6 @@ public class DisabledTraceUtil implements TraceUtil {
       return null;
     }
   }
-
-  @Override
-  public void shutdown() {}
 
   @Override
   public Span startSpan(String spanName) {
