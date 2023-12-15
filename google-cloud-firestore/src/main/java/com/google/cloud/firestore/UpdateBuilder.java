@@ -161,7 +161,10 @@ public abstract class UpdateBuilder<T> {
 
   private void verifyNotCommitted() {
     Preconditions.checkState(
-        !isCommitted(), "Cannot modify a WriteBatch that has already been committed.");
+        !isCommitted(),
+        String.format(
+            "Cannot modify a %s that has already been committed.",
+            this.getClass().getSimpleName()));
   }
 
   /**

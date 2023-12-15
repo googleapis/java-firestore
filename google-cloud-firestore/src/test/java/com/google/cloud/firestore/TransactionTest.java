@@ -36,6 +36,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
 import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -957,6 +958,43 @@ public class TransactionTest {
     ExecutionException executionException =
         assertThrows(ExecutionException.class, transaction::get);
     assertThat(executionException.getCause()).isInstanceOf(IllegalStateException.class);
+  }
+
+  @Test
+  public void givesProperErrorMessageForCommittedTransaction() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
+    String expectedErrorMessage = "Cannot modify a Transaction that has already been committed.";
+
+    DocumentReference docRef = firestoreMock.collection("foo").document("bar");
+
+    // Commit a transaction.
+    Transaction t = firestoreMock.runTransaction(transaction -> transaction).get();
+
+    // Then run other operations in the same transaction.
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.set(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.update(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.create(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.delete(docRef);
+        },
+        expectedErrorMessage);
   }
 
   private ApiException exception(Status.Code code, boolean shouldRetry) {
