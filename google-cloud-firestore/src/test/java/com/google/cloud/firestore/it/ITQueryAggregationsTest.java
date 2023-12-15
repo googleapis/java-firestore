@@ -28,6 +28,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -1080,5 +1081,30 @@ public class ITQueryAggregationsTest extends ITBaseTest {
         collection.whereGreaterThan("foo", 0).startAfter(docSnapshot).aggregate(sum("num"));
     AggregateQuerySnapshot snapshot = query.get().get();
     assertThat(snapshot.get(sum("num"))).isEqualTo(7);
+  }
+
+  @Test
+  public void aggregateQueryShouldFailWithMessageWithConsoleLinkIfMissingIndex() {
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because the Firestore emulator "
+            + "does not use indexes and never fails with a 'missing index' error",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    CollectionReference collection = testCollection();
+    Query compositeIndexQuery = collection.whereEqualTo("field1", 42).whereLessThan("field2", 99);
+    AggregateQuery compositeIndexAggregateQuery =
+        compositeIndexQuery.aggregate(
+            AggregateField.count(), AggregateField.sum("pages"), AggregateField.average("pages"));
+    ApiFuture<AggregateQuerySnapshot> future = compositeIndexAggregateQuery.get();
+
+    ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
+
+    Throwable throwable = executionException.getCause();
+    assertThat(throwable).hasMessageThat().ignoringCase().contains("index");
+    // TODO(b/316359394) Remove this check for the default databases once cl/582465034 is rolled out
+    //  to production.
+    if (collection.getFirestore().getOptions().getDatabaseId().equals("(default)")) {
+      assertThat(throwable).hasMessageThat().contains("https://console.firebase.google.com");
+    }
   }
 }
