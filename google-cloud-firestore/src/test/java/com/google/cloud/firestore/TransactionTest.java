@@ -969,28 +969,30 @@ public class TransactionTest {
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     String expectedErrorMessage = "Cannot modify a Transaction that has already been committed.";
 
+    DocumentReference docRef = firestoreMock.collection("foo").document("bar");
+
     // Commit a transaction.
     Transaction t = firestoreMock.runTransaction(transaction -> transaction).get();
 
     // Then run other operations in the same transaction.
     LocalFirestoreHelper.assertException(
         () -> {
-          t.set(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          t.set(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          t.update(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          t.update(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          t.create(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          t.create(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          t.delete(firestoreMock.collection("foo").document("bar"));
+          t.delete(docRef);
         },
         expectedErrorMessage);
   }

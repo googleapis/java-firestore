@@ -352,6 +352,8 @@ public class WriteBatchTest {
 
     String expectedErrorMessage = "Cannot modify a WriteBatch that has already been committed.";
 
+    DocumentReference docRef = firestoreMock.collection("foo").document("bar");
+
     // Commit a batch.
     WriteBatch batch = firestoreMock.batch();
     batch.commit().get();
@@ -359,22 +361,22 @@ public class WriteBatchTest {
     // Then run other operations in the same batch.
     LocalFirestoreHelper.assertException(
         () -> {
-          batch.set(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          batch.set(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          batch.update(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          batch.update(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          batch.create(firestoreMock.collection("foo").document("bar"), map("foo", "bar"));
+          batch.create(docRef, map("foo", "bar"));
         },
         expectedErrorMessage);
     LocalFirestoreHelper.assertException(
         () -> {
-          batch.delete(firestoreMock.collection("foo").document("bar"));
+          batch.delete(docRef);
         },
         expectedErrorMessage);
   }
