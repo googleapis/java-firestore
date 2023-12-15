@@ -357,33 +357,35 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void defaultQuery() throws Exception {
-    addDocument("foo", "bar");
-    addDocument("foo", "bar");
+    addDocument("foo1", "bar1");
+    addDocument("foo2", "bar2");
 
     QuerySnapshot querySnapshot = randomColl.get().get();
     assertEquals(2, querySnapshot.size());
 
     Iterator<QueryDocumentSnapshot> documents = querySnapshot.iterator();
-    assertEquals("bar", documents.next().get("foo"));
-    assertEquals("bar", documents.next().get("foo"));
+    assertEquals("bar1", documents.next().get("foo1"));
+    assertEquals("bar2", documents.next().get("foo2"));
   }
 
   @Test
   public void defaultQueryStream() throws Exception {
-    addDocument("foo", "bar");
-    addDocument("foo", "bar");
+    addDocument("foo1", "bar1");
+    addDocument("foo2", "bar2");
 
     final Semaphore semaphore = new Semaphore(0);
-    final Iterator<String> iterator = Arrays.asList("bar", "bar").iterator();
+    final Iterator<String> iterator = Arrays.asList("foo1", "foo2").iterator();
     randomColl.stream(
         new ApiStreamObserver<DocumentSnapshot>() {
           @Override
           public void onNext(DocumentSnapshot documentSnapshot) {
-            assertEquals(iterator.next(), documentSnapshot.get("foo"));
+            assertEquals(iterator.next(), documentSnapshot.getId());
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -424,7 +426,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -456,7 +460,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -522,7 +528,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -571,7 +579,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -609,7 +619,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -646,7 +658,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -690,7 +704,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
@@ -711,7 +727,9 @@ public class ITSystemTest extends ITBaseTest {
           }
 
           @Override
-          public void onError(Throwable throwable) {}
+          public void onError(Throwable throwable) {
+            fail();
+          }
 
           @Override
           public void onCompleted() {
