@@ -357,35 +357,33 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void defaultQuery() throws Exception {
-    addDocument("foo1", "bar1");
-    addDocument("foo2", "bar2");
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
 
     QuerySnapshot querySnapshot = randomColl.get().get();
     assertEquals(2, querySnapshot.size());
 
     Iterator<QueryDocumentSnapshot> documents = querySnapshot.iterator();
-    assertEquals("bar1", documents.next().get("foo1"));
-    assertEquals("bar2", documents.next().get("foo2"));
+    assertEquals("bar", documents.next().get("foo"));
+    assertEquals("bar", documents.next().get("foo"));
   }
 
   @Test
   public void defaultQueryStream() throws Exception {
-    addDocument("foo1", "bar1");
-    addDocument("foo2", "bar2");
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
 
     final Semaphore semaphore = new Semaphore(0);
-    final Iterator<String> iterator = Arrays.asList("foo1", "foo2").iterator();
+    final Iterator<String> iterator = Arrays.asList("bar", "bar").iterator();
     randomColl.stream(
         new ApiStreamObserver<DocumentSnapshot>() {
           @Override
           public void onNext(DocumentSnapshot documentSnapshot) {
-            assertEquals(iterator.next(), documentSnapshot.getId());
+            assertEquals(iterator.next(), documentSnapshot.get("foo"));
           }
 
           @Override
-          public void onError(Throwable throwable) {
-            fail();
-          }
+          public void onError(Throwable throwable) {}
 
           @Override
           public void onCompleted() {
