@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+ * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+ * results from
  * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
  * </pre>
  *
@@ -1213,7 +1214,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Information about an TTL configuration change.
+   * Information about a TTL configuration change.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta}
@@ -1629,7 +1630,7 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Information about an TTL configuration change.
+     * Information about a TTL configuration change.
      * </pre>
      *
      * Protobuf type {@code google.firestore.admin.v1.FieldOperationMetadata.TtlConfigDelta}
@@ -2146,8 +2147,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -2163,8 +2165,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -2181,8 +2184,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -2197,8 +2201,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -2214,8 +2219,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-   * operation.
+   * A list of
+   * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+   * which describe the intent of this operation.
    * </pre>
    *
    * <code>
@@ -2673,7 +2679,8 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+   * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+   * results from
    * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField].
    * </pre>
    *
@@ -3521,8 +3528,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3541,8 +3549,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3560,8 +3569,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3580,8 +3590,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3606,8 +3617,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3631,8 +3643,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3657,8 +3670,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3683,8 +3697,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3707,8 +3722,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3732,8 +3748,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3757,8 +3774,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3779,8 +3797,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3801,8 +3820,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3817,8 +3837,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3837,8 +3858,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3859,8 +3881,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3878,8 +3901,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>
@@ -3898,8 +3922,9 @@ public final class FieldOperationMetadata extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * A list of [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta], which describe the intent of this
-     * operation.
+     * A list of
+     * [IndexConfigDelta][google.firestore.admin.v1.FieldOperationMetadata.IndexConfigDelta],
+     * which describe the intent of this operation.
      * </pre>
      *
      * <code>

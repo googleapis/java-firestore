@@ -18,8 +18,11 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
+import com.google.firestore.v1.Value;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** The results of executing an {@link AggregateQuery}. */
 @InternalExtensionOnly
@@ -27,12 +30,15 @@ public class AggregateQuerySnapshot {
 
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
-  private final long count;
+  @Nonnull private final Map<String, Value> data;
 
-  AggregateQuerySnapshot(@Nonnull AggregateQuery query, @Nonnull Timestamp readTime, long count) {
+  AggregateQuerySnapshot(
+      @Nonnull AggregateQuery query,
+      @Nonnull Timestamp readTime,
+      @Nonnull Map<String, Value> data) {
     this.query = query;
     this.readTime = readTime;
-    this.count = count;
+    this.data = data;
   }
 
   /** Returns the query that was executed to produce this result. */
@@ -49,7 +55,99 @@ public class AggregateQuerySnapshot {
 
   /** Returns the number of documents in the result set of the underlying query. */
   public long getCount() {
-    return count;
+    AggregateField countField = AggregateField.count();
+    Object value = get(countField);
+    if (value == null) {
+      throw new IllegalArgumentException(
+          "RunAggregationQueryResponse alias " + countField.getAlias() + " is null");
+    } else if (!(value instanceof Long)) {
+      throw new IllegalArgumentException(
+          "RunAggregationQueryResponse alias "
+              + countField.getAlias()
+              + " has incorrect type: "
+              + value.getClass().getName());
+    }
+    return (Long) value;
+  }
+
+  /** Returns the number of documents in the result set of the underlying query. */
+  @SuppressWarnings({"unused"})
+  public long get(@Nonnull AggregateField.CountAggregateField unused) {
+    return getCount();
+  }
+
+  /**
+   * Returns the result of the given aggregation from the server without coercion of data types.
+   * Throws java.lang.RuntimeException if the `aggregateField` was not requested when calling
+   * `query.aggregate(...)`.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given aggregation.
+   */
+  @Nullable
+  public Object get(@Nonnull AggregateField aggregateField) {
+    if (!data.containsKey(aggregateField.getAlias())) {
+      throw new IllegalArgumentException(
+          "'"
+              + aggregateField.getOperator()
+              + "("
+              + aggregateField.getFieldPath()
+              + ")"
+              + "' was not requested in the aggregation query.");
+    }
+    Value value = data.get(aggregateField.getAlias());
+    if (value.hasNullValue()) {
+      return null;
+    } else if (value.hasDoubleValue()) {
+      return value.getDoubleValue();
+    } else if (value.hasIntegerValue()) {
+      return value.getIntegerValue();
+    } else {
+      throw new IllegalStateException("Found aggregation result that is not an integer nor double");
+    }
+  }
+
+  /**
+   * Returns the result of the given average aggregation. Since the result of an average aggregation
+   * performed by the server is always a double, this convenience overload can be used in lieu of
+   * the above `get` method. Throws java.lang.RuntimeException if the `aggregateField` was not
+   * requested when calling `query.aggregate(...)`.
+   *
+   * @param averageAggregateField The average aggregation for which the value is requested.
+   * @return The result of the given average aggregation.
+   */
+  @Nullable
+  public Double get(@Nonnull AggregateField.AverageAggregateField averageAggregateField) {
+    return (Double) get((AggregateField) averageAggregateField);
+  }
+
+  /**
+   * Returns the result of the given aggregation as a double. Coerces all numeric values and throws
+   * a RuntimeException if the result of the aggregate is non-numeric. In the case of coercion of
+   * long to double, uses java.lang.Long.doubleValue to perform the conversion, and may result in a
+   * loss of precision.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given average aggregation as a double.
+   */
+  @Nullable
+  public Double getDouble(@Nonnull AggregateField aggregateField) {
+    Number result = (Number) get(aggregateField);
+    return result == null ? null : result.doubleValue();
+  }
+
+  /**
+   * Returns the result of the given aggregation as a long. Coerces all numeric values and throws a
+   * RuntimeException if the result of the aggregate is non-numeric. In case of coercion of double
+   * to long, uses java.lang.Double.longValue to perform the conversion.
+   *
+   * @param aggregateField The aggregation for which the value is requested.
+   * @return The result of the given average aggregation as a long.
+   */
+  @Nullable
+  public Long getLong(@Nonnull AggregateField aggregateField) {
+    Number result = (Number) get(aggregateField);
+    return result == null ? null : result.longValue();
   }
 
   /**
@@ -79,7 +177,7 @@ public class AggregateQuerySnapshot {
     AggregateQuerySnapshot other = (AggregateQuerySnapshot) object;
 
     // Don't check `readTime`, because `DocumentSnapshot.equals()` doesn't either.
-    return query.equals(other.query) && count == other.count;
+    return query.equals(other.query) && data.equals(other.data);
   }
 
   /**
@@ -89,6 +187,6 @@ public class AggregateQuerySnapshot {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(query, count);
+    return Objects.hash(query, data);
   }
 }

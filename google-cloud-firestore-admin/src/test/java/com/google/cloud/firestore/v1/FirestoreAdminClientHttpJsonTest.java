@@ -44,8 +44,10 @@ import com.google.firestore.admin.v1.ListIndexesResponse;
 import com.google.firestore.admin.v1.ProjectName;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Any;
+import com.google.protobuf.Duration;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -927,6 +929,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -983,6 +987,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1039,6 +1045,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1086,6 +1094,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1217,6 +1227,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1232,6 +1244,8 @@ public class FirestoreAdminClientHttpJsonTest {
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1267,6 +1281,8 @@ public class FirestoreAdminClientHttpJsonTest {
           Database.newBuilder()
               .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
               .setLocationId("locationId1541836720")
+              .setVersionRetentionPeriod(Duration.newBuilder().build())
+              .setEarliestVersionTime(Timestamp.newBuilder().build())
               .setKeyPrefix("keyPrefix-2076395055")
               .setEtag("etag3123477")
               .build();

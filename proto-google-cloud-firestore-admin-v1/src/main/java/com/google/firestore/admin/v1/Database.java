@@ -44,6 +44,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     locationId_ = "";
     type_ = 0;
     concurrencyMode_ = 0;
+    pointInTimeRecoveryEnablement_ = 0;
     appEngineIntegrationMode_ = 0;
     keyPrefix_ = "";
     etag_ = "";
@@ -434,6 +435,182 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
+   * Point In Time Recovery feature enablement.
+   * </pre>
+   *
+   * Protobuf enum {@code google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement}
+   */
+  public enum PointInTimeRecoveryEnablement implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     *
+     *
+     * <pre>
+     * Not used.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED = 0;</code>
+     */
+    POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED(0),
+    /**
+     *
+     *
+     * <pre>
+     * Reads are supported on selected versions of the data from within the past
+     * 7 days:
+     *
+     * * Reads against any timestamp within the past hour
+     * * Reads against 1-minute snapshots beyond 1 hour and within 7 days
+     *
+     * `version_retention_period` and `earliest_version_time` can be
+     * used to determine the supported versions.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_ENABLED = 1;</code>
+     */
+    POINT_IN_TIME_RECOVERY_ENABLED(1),
+    /**
+     *
+     *
+     * <pre>
+     * Reads are supported on any version of the data from within the past 1
+     * hour.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_DISABLED = 2;</code>
+     */
+    POINT_IN_TIME_RECOVERY_DISABLED(2),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     *
+     *
+     * <pre>
+     * Not used.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED = 0;</code>
+     */
+    public static final int POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED_VALUE = 0;
+    /**
+     *
+     *
+     * <pre>
+     * Reads are supported on selected versions of the data from within the past
+     * 7 days:
+     *
+     * * Reads against any timestamp within the past hour
+     * * Reads against 1-minute snapshots beyond 1 hour and within 7 days
+     *
+     * `version_retention_period` and `earliest_version_time` can be
+     * used to determine the supported versions.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_ENABLED = 1;</code>
+     */
+    public static final int POINT_IN_TIME_RECOVERY_ENABLED_VALUE = 1;
+    /**
+     *
+     *
+     * <pre>
+     * Reads are supported on any version of the data from within the past 1
+     * hour.
+     * </pre>
+     *
+     * <code>POINT_IN_TIME_RECOVERY_DISABLED = 2;</code>
+     */
+    public static final int POINT_IN_TIME_RECOVERY_DISABLED_VALUE = 2;
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static PointInTimeRecoveryEnablement valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static PointInTimeRecoveryEnablement forNumber(int value) {
+      switch (value) {
+        case 0:
+          return POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED;
+        case 1:
+          return POINT_IN_TIME_RECOVERY_ENABLED;
+        case 2:
+          return POINT_IN_TIME_RECOVERY_DISABLED;
+        default:
+          return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<PointInTimeRecoveryEnablement>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<PointInTimeRecoveryEnablement>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<PointInTimeRecoveryEnablement>() {
+              public PointInTimeRecoveryEnablement findValueByNumber(int number) {
+                return PointInTimeRecoveryEnablement.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+      return com.google.firestore.admin.v1.Database.getDescriptor().getEnumTypes().get(2);
+    }
+
+    private static final PointInTimeRecoveryEnablement[] VALUES = values();
+
+    public static PointInTimeRecoveryEnablement valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private PointInTimeRecoveryEnablement(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement)
+  }
+
+  /**
+   *
+   *
+   * <pre>
    * The type of App Engine integration mode.
    * </pre>
    *
@@ -467,8 +644,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Appengine has no affect on the ability of this database to serve
+     * App Engine has no effect on the ability of this database to serve
      * requests.
+     *
+     * This is the default setting for databases created with the Firestore API.
      * </pre>
      *
      * <code>DISABLED = 2;</code>
@@ -504,8 +683,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Appengine has no affect on the ability of this database to serve
+     * App Engine has no effect on the ability of this database to serve
      * requests.
+     *
+     * This is the default setting for databases created with the Firestore API.
      * </pre>
      *
      * <code>DISABLED = 2;</code>
@@ -573,7 +754,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     }
 
     public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-      return com.google.firestore.admin.v1.Database.getDescriptor().getEnumTypes().get(2);
+      return com.google.firestore.admin.v1.Database.getDescriptor().getEnumTypes().get(3);
     }
 
     private static final AppEngineIntegrationMode[] VALUES = values();
@@ -659,7 +840,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The location of the database. Available databases are listed at
+   * The location of the database. Available locations are listed at
    * https://cloud.google.com/firestore/docs/locations.
    * </pre>
    *
@@ -683,7 +864,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * The location of the database. Available databases are listed at
+   * The location of the database. Available locations are listed at
    * https://cloud.google.com/firestore/docs/locations.
    * </pre>
    *
@@ -782,6 +963,209 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         : result;
   }
 
+  public static final int VERSION_RETENTION_PERIOD_FIELD_NUMBER = 17;
+  private com.google.protobuf.Duration versionRetentionPeriod_;
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the versionRetentionPeriod field is set.
+   */
+  @java.lang.Override
+  public boolean hasVersionRetentionPeriod() {
+    return versionRetentionPeriod_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The versionRetentionPeriod.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Duration getVersionRetentionPeriod() {
+    return versionRetentionPeriod_ == null
+        ? com.google.protobuf.Duration.getDefaultInstance()
+        : versionRetentionPeriod_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.DurationOrBuilder getVersionRetentionPeriodOrBuilder() {
+    return versionRetentionPeriod_ == null
+        ? com.google.protobuf.Duration.getDefaultInstance()
+        : versionRetentionPeriod_;
+  }
+
+  public static final int EARLIEST_VERSION_TIME_FIELD_NUMBER = 18;
+  private com.google.protobuf.Timestamp earliestVersionTime_;
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the earliestVersionTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasEarliestVersionTime() {
+    return earliestVersionTime_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The earliestVersionTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getEarliestVersionTime() {
+    return earliestVersionTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : earliestVersionTime_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getEarliestVersionTimeOrBuilder() {
+    return earliestVersionTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : earliestVersionTime_;
+  }
+
+  public static final int POINT_IN_TIME_RECOVERY_ENABLEMENT_FIELD_NUMBER = 21;
+  private int pointInTimeRecoveryEnablement_ = 0;
+  /**
+   *
+   *
+   * <pre>
+   * Whether to enable the PITR feature on this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for pointInTimeRecoveryEnablement.
+   */
+  @java.lang.Override
+  public int getPointInTimeRecoveryEnablementValue() {
+    return pointInTimeRecoveryEnablement_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Whether to enable the PITR feature on this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+   * </code>
+   *
+   * @return The pointInTimeRecoveryEnablement.
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement
+      getPointInTimeRecoveryEnablement() {
+    com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement result =
+        com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement.forNumber(
+            pointInTimeRecoveryEnablement_);
+    return result == null
+        ? com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement.UNRECOGNIZED
+        : result;
+  }
+
   public static final int APP_ENGINE_INTEGRATION_MODE_FIELD_NUMBER = 19;
   private int appEngineIntegrationMode_ = 0;
   /**
@@ -833,10 +1217,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * Output only. The key_prefix for this database. This key_prefix is used, in combination
-   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-   * application id that is returned from the Cloud Datastore APIs in Google App
-   * Engine first generation runtimes.
+   * Output only. The key_prefix for this database. This key_prefix is used, in
+   * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+   * the application id that is returned from the Cloud Datastore APIs in Google
+   * App Engine first generation runtimes.
    *
    * This value may be empty in which case the appid to use for URL-encoded keys
    * is the project_id (eg: foo instead of v~foo).
@@ -862,10 +1246,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    *
    * <pre>
-   * Output only. The key_prefix for this database. This key_prefix is used, in combination
-   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-   * application id that is returned from the Cloud Datastore APIs in Google App
-   * Engine first generation runtimes.
+   * Output only. The key_prefix for this database. This key_prefix is used, in
+   * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+   * the application id that is returned from the Cloud Datastore APIs in Google
+   * App Engine first generation runtimes.
    *
    * This value may be empty in which case the appid to use for URL-encoded keys
    * is the project_id (eg: foo instead of v~foo).
@@ -973,6 +1357,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             .getNumber()) {
       output.writeEnum(15, concurrencyMode_);
     }
+    if (versionRetentionPeriod_ != null) {
+      output.writeMessage(17, getVersionRetentionPeriod());
+    }
+    if (earliestVersionTime_ != null) {
+      output.writeMessage(18, getEarliestVersionTime());
+    }
     if (appEngineIntegrationMode_
         != com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
             .APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED
@@ -981,6 +1371,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(keyPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 20, keyPrefix_);
+    }
+    if (pointInTimeRecoveryEnablement_
+        != com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement
+            .POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED
+            .getNumber()) {
+      output.writeEnum(21, pointInTimeRecoveryEnablement_);
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 99, etag_);
@@ -1010,6 +1406,14 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             .getNumber()) {
       size += com.google.protobuf.CodedOutputStream.computeEnumSize(15, concurrencyMode_);
     }
+    if (versionRetentionPeriod_ != null) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(17, getVersionRetentionPeriod());
+    }
+    if (earliestVersionTime_ != null) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(18, getEarliestVersionTime());
+    }
     if (appEngineIntegrationMode_
         != com.google.firestore.admin.v1.Database.AppEngineIntegrationMode
             .APP_ENGINE_INTEGRATION_MODE_UNSPECIFIED
@@ -1018,6 +1422,13 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(keyPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(20, keyPrefix_);
+    }
+    if (pointInTimeRecoveryEnablement_
+        != com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement
+            .POINT_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED
+            .getNumber()) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeEnumSize(21, pointInTimeRecoveryEnablement_);
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(99, etag_);
@@ -1041,6 +1452,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     if (!getLocationId().equals(other.getLocationId())) return false;
     if (type_ != other.type_) return false;
     if (concurrencyMode_ != other.concurrencyMode_) return false;
+    if (hasVersionRetentionPeriod() != other.hasVersionRetentionPeriod()) return false;
+    if (hasVersionRetentionPeriod()) {
+      if (!getVersionRetentionPeriod().equals(other.getVersionRetentionPeriod())) return false;
+    }
+    if (hasEarliestVersionTime() != other.hasEarliestVersionTime()) return false;
+    if (hasEarliestVersionTime()) {
+      if (!getEarliestVersionTime().equals(other.getEarliestVersionTime())) return false;
+    }
+    if (pointInTimeRecoveryEnablement_ != other.pointInTimeRecoveryEnablement_) return false;
     if (appEngineIntegrationMode_ != other.appEngineIntegrationMode_) return false;
     if (!getKeyPrefix().equals(other.getKeyPrefix())) return false;
     if (!getEtag().equals(other.getEtag())) return false;
@@ -1063,6 +1483,16 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + type_;
     hash = (37 * hash) + CONCURRENCY_MODE_FIELD_NUMBER;
     hash = (53 * hash) + concurrencyMode_;
+    if (hasVersionRetentionPeriod()) {
+      hash = (37 * hash) + VERSION_RETENTION_PERIOD_FIELD_NUMBER;
+      hash = (53 * hash) + getVersionRetentionPeriod().hashCode();
+    }
+    if (hasEarliestVersionTime()) {
+      hash = (37 * hash) + EARLIEST_VERSION_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + getEarliestVersionTime().hashCode();
+    }
+    hash = (37 * hash) + POINT_IN_TIME_RECOVERY_ENABLEMENT_FIELD_NUMBER;
+    hash = (53 * hash) + pointInTimeRecoveryEnablement_;
     hash = (37 * hash) + APP_ENGINE_INTEGRATION_MODE_FIELD_NUMBER;
     hash = (53 * hash) + appEngineIntegrationMode_;
     hash = (37 * hash) + KEY_PREFIX_FIELD_NUMBER;
@@ -1214,6 +1644,17 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       locationId_ = "";
       type_ = 0;
       concurrencyMode_ = 0;
+      versionRetentionPeriod_ = null;
+      if (versionRetentionPeriodBuilder_ != null) {
+        versionRetentionPeriodBuilder_.dispose();
+        versionRetentionPeriodBuilder_ = null;
+      }
+      earliestVersionTime_ = null;
+      if (earliestVersionTimeBuilder_ != null) {
+        earliestVersionTimeBuilder_.dispose();
+        earliestVersionTimeBuilder_ = null;
+      }
+      pointInTimeRecoveryEnablement_ = 0;
       appEngineIntegrationMode_ = 0;
       keyPrefix_ = "";
       etag_ = "";
@@ -1266,12 +1707,27 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         result.concurrencyMode_ = concurrencyMode_;
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
+        result.versionRetentionPeriod_ =
+            versionRetentionPeriodBuilder_ == null
+                ? versionRetentionPeriod_
+                : versionRetentionPeriodBuilder_.build();
       }
       if (((from_bitField0_ & 0x00000020) != 0)) {
-        result.keyPrefix_ = keyPrefix_;
+        result.earliestVersionTime_ =
+            earliestVersionTimeBuilder_ == null
+                ? earliestVersionTime_
+                : earliestVersionTimeBuilder_.build();
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.pointInTimeRecoveryEnablement_ = pointInTimeRecoveryEnablement_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.keyPrefix_ = keyPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000200) != 0)) {
         result.etag_ = etag_;
       }
     }
@@ -1337,17 +1793,26 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (other.concurrencyMode_ != 0) {
         setConcurrencyModeValue(other.getConcurrencyModeValue());
       }
+      if (other.hasVersionRetentionPeriod()) {
+        mergeVersionRetentionPeriod(other.getVersionRetentionPeriod());
+      }
+      if (other.hasEarliestVersionTime()) {
+        mergeEarliestVersionTime(other.getEarliestVersionTime());
+      }
+      if (other.pointInTimeRecoveryEnablement_ != 0) {
+        setPointInTimeRecoveryEnablementValue(other.getPointInTimeRecoveryEnablementValue());
+      }
       if (other.appEngineIntegrationMode_ != 0) {
         setAppEngineIntegrationModeValue(other.getAppEngineIntegrationModeValue());
       }
       if (!other.getKeyPrefix().isEmpty()) {
         keyPrefix_ = other.keyPrefix_;
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000100;
         onChanged();
       }
       if (!other.getEtag().isEmpty()) {
         etag_ = other.etag_;
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000200;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -1400,22 +1865,42 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
                 bitField0_ |= 0x00000008;
                 break;
               } // case 120
+            case 138:
+              {
+                input.readMessage(
+                    getVersionRetentionPeriodFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 138
+            case 146:
+              {
+                input.readMessage(
+                    getEarliestVersionTimeFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 146
             case 152:
               {
                 appEngineIntegrationMode_ = input.readEnum();
-                bitField0_ |= 0x00000010;
+                bitField0_ |= 0x00000080;
                 break;
               } // case 152
             case 162:
               {
                 keyPrefix_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000020;
+                bitField0_ |= 0x00000100;
                 break;
               } // case 162
+            case 168:
+              {
+                pointInTimeRecoveryEnablement_ = input.readEnum();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 168
             case 794:
               {
                 etag_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000040;
+                bitField0_ |= 0x00000200;
                 break;
               } // case 794
             default:
@@ -1553,7 +2038,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The location of the database. Available databases are listed at
+     * The location of the database. Available locations are listed at
      * https://cloud.google.com/firestore/docs/locations.
      * </pre>
      *
@@ -1576,7 +2061,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The location of the database. Available databases are listed at
+     * The location of the database. Available locations are listed at
      * https://cloud.google.com/firestore/docs/locations.
      * </pre>
      *
@@ -1599,7 +2084,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The location of the database. Available databases are listed at
+     * The location of the database. Available locations are listed at
      * https://cloud.google.com/firestore/docs/locations.
      * </pre>
      *
@@ -1621,7 +2106,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The location of the database. Available databases are listed at
+     * The location of the database. Available locations are listed at
      * https://cloud.google.com/firestore/docs/locations.
      * </pre>
      *
@@ -1639,7 +2124,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * The location of the database. Available databases are listed at
+     * The location of the database. Available locations are listed at
      * https://cloud.google.com/firestore/docs/locations.
      * </pre>
      *
@@ -1854,6 +2339,657 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private com.google.protobuf.Duration versionRetentionPeriod_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Duration,
+            com.google.protobuf.Duration.Builder,
+            com.google.protobuf.DurationOrBuilder>
+        versionRetentionPeriodBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return Whether the versionRetentionPeriod field is set.
+     */
+    public boolean hasVersionRetentionPeriod() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The versionRetentionPeriod.
+     */
+    public com.google.protobuf.Duration getVersionRetentionPeriod() {
+      if (versionRetentionPeriodBuilder_ == null) {
+        return versionRetentionPeriod_ == null
+            ? com.google.protobuf.Duration.getDefaultInstance()
+            : versionRetentionPeriod_;
+      } else {
+        return versionRetentionPeriodBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setVersionRetentionPeriod(com.google.protobuf.Duration value) {
+      if (versionRetentionPeriodBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        versionRetentionPeriod_ = value;
+      } else {
+        versionRetentionPeriodBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setVersionRetentionPeriod(com.google.protobuf.Duration.Builder builderForValue) {
+      if (versionRetentionPeriodBuilder_ == null) {
+        versionRetentionPeriod_ = builderForValue.build();
+      } else {
+        versionRetentionPeriodBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder mergeVersionRetentionPeriod(com.google.protobuf.Duration value) {
+      if (versionRetentionPeriodBuilder_ == null) {
+        if (((bitField0_ & 0x00000010) != 0)
+            && versionRetentionPeriod_ != null
+            && versionRetentionPeriod_ != com.google.protobuf.Duration.getDefaultInstance()) {
+          getVersionRetentionPeriodBuilder().mergeFrom(value);
+        } else {
+          versionRetentionPeriod_ = value;
+        }
+      } else {
+        versionRetentionPeriodBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder clearVersionRetentionPeriod() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      versionRetentionPeriod_ = null;
+      if (versionRetentionPeriodBuilder_ != null) {
+        versionRetentionPeriodBuilder_.dispose();
+        versionRetentionPeriodBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.Duration.Builder getVersionRetentionPeriodBuilder() {
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return getVersionRetentionPeriodFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.DurationOrBuilder getVersionRetentionPeriodOrBuilder() {
+      if (versionRetentionPeriodBuilder_ != null) {
+        return versionRetentionPeriodBuilder_.getMessageOrBuilder();
+      } else {
+        return versionRetentionPeriod_ == null
+            ? com.google.protobuf.Duration.getDefaultInstance()
+            : versionRetentionPeriod_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The period during which past versions of data are retained in
+     * the database.
+     *
+     * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+     * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+     * a `read_time` within this window, and will read the state of the database
+     * at that time.
+     *
+     * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+     * the retention period is 1 hour.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Duration,
+            com.google.protobuf.Duration.Builder,
+            com.google.protobuf.DurationOrBuilder>
+        getVersionRetentionPeriodFieldBuilder() {
+      if (versionRetentionPeriodBuilder_ == null) {
+        versionRetentionPeriodBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Duration,
+                com.google.protobuf.Duration.Builder,
+                com.google.protobuf.DurationOrBuilder>(
+                getVersionRetentionPeriod(), getParentForChildren(), isClean());
+        versionRetentionPeriod_ = null;
+      }
+      return versionRetentionPeriodBuilder_;
+    }
+
+    private com.google.protobuf.Timestamp earliestVersionTime_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        earliestVersionTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return Whether the earliestVersionTime field is set.
+     */
+    public boolean hasEarliestVersionTime() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The earliestVersionTime.
+     */
+    public com.google.protobuf.Timestamp getEarliestVersionTime() {
+      if (earliestVersionTimeBuilder_ == null) {
+        return earliestVersionTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : earliestVersionTime_;
+      } else {
+        return earliestVersionTimeBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setEarliestVersionTime(com.google.protobuf.Timestamp value) {
+      if (earliestVersionTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        earliestVersionTime_ = value;
+      } else {
+        earliestVersionTimeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setEarliestVersionTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (earliestVersionTimeBuilder_ == null) {
+        earliestVersionTime_ = builderForValue.build();
+      } else {
+        earliestVersionTimeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder mergeEarliestVersionTime(com.google.protobuf.Timestamp value) {
+      if (earliestVersionTimeBuilder_ == null) {
+        if (((bitField0_ & 0x00000020) != 0)
+            && earliestVersionTime_ != null
+            && earliestVersionTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getEarliestVersionTimeBuilder().mergeFrom(value);
+        } else {
+          earliestVersionTime_ = value;
+        }
+      } else {
+        earliestVersionTimeBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder clearEarliestVersionTime() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      earliestVersionTime_ = null;
+      if (earliestVersionTimeBuilder_ != null) {
+        earliestVersionTimeBuilder_.dispose();
+        earliestVersionTimeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.Timestamp.Builder getEarliestVersionTimeBuilder() {
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return getEarliestVersionTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getEarliestVersionTimeOrBuilder() {
+      if (earliestVersionTimeBuilder_ != null) {
+        return earliestVersionTimeBuilder_.getMessageOrBuilder();
+      } else {
+        return earliestVersionTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : earliestVersionTime_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The earliest timestamp at which older versions of the data can
+     * be read from the database. See [version_retention_period] above; this field
+     * is populated with `now - version_retention_period`.
+     *
+     * This value is continuously updated, and becomes stale the moment it is
+     * queried. If you are using this value to recover data, make sure to account
+     * for the time from the moment when the value is queried to the moment when
+     * you initiate the recovery.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getEarliestVersionTimeFieldBuilder() {
+      if (earliestVersionTimeBuilder_ == null) {
+        earliestVersionTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getEarliestVersionTime(), getParentForChildren(), isClean());
+        earliestVersionTime_ = null;
+      }
+      return earliestVersionTimeBuilder_;
+    }
+
+    private int pointInTimeRecoveryEnablement_ = 0;
+    /**
+     *
+     *
+     * <pre>
+     * Whether to enable the PITR feature on this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+     * </code>
+     *
+     * @return The enum numeric value on the wire for pointInTimeRecoveryEnablement.
+     */
+    @java.lang.Override
+    public int getPointInTimeRecoveryEnablementValue() {
+      return pointInTimeRecoveryEnablement_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Whether to enable the PITR feature on this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+     * </code>
+     *
+     * @param value The enum numeric value on the wire for pointInTimeRecoveryEnablement to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPointInTimeRecoveryEnablementValue(int value) {
+      pointInTimeRecoveryEnablement_ = value;
+      bitField0_ |= 0x00000040;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Whether to enable the PITR feature on this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+     * </code>
+     *
+     * @return The pointInTimeRecoveryEnablement.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement
+        getPointInTimeRecoveryEnablement() {
+      com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement result =
+          com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement.forNumber(
+              pointInTimeRecoveryEnablement_);
+      return result == null
+          ? com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement.UNRECOGNIZED
+          : result;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Whether to enable the PITR feature on this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+     * </code>
+     *
+     * @param value The pointInTimeRecoveryEnablement to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPointInTimeRecoveryEnablement(
+        com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      bitField0_ |= 0x00000040;
+      pointInTimeRecoveryEnablement_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Whether to enable the PITR feature on this database.
+     * </pre>
+     *
+     * <code>
+     * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+     * </code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearPointInTimeRecoveryEnablement() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      pointInTimeRecoveryEnablement_ = 0;
+      onChanged();
+      return this;
+    }
+
     private int appEngineIntegrationMode_ = 0;
     /**
      *
@@ -1888,7 +3024,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setAppEngineIntegrationModeValue(int value) {
       appEngineIntegrationMode_ = value;
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }
@@ -1934,7 +3070,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       appEngineIntegrationMode_ = value.getNumber();
       onChanged();
       return this;
@@ -1953,7 +3089,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearAppEngineIntegrationMode() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000080);
       appEngineIntegrationMode_ = 0;
       onChanged();
       return this;
@@ -1964,10 +3100,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Output only. The key_prefix for this database. This key_prefix is used, in combination
-     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-     * application id that is returned from the Cloud Datastore APIs in Google App
-     * Engine first generation runtimes.
+     * Output only. The key_prefix for this database. This key_prefix is used, in
+     * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+     * the application id that is returned from the Cloud Datastore APIs in Google
+     * App Engine first generation runtimes.
      *
      * This value may be empty in which case the appid to use for URL-encoded keys
      * is the project_id (eg: foo instead of v~foo).
@@ -1992,10 +3128,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Output only. The key_prefix for this database. This key_prefix is used, in combination
-     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-     * application id that is returned from the Cloud Datastore APIs in Google App
-     * Engine first generation runtimes.
+     * Output only. The key_prefix for this database. This key_prefix is used, in
+     * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+     * the application id that is returned from the Cloud Datastore APIs in Google
+     * App Engine first generation runtimes.
      *
      * This value may be empty in which case the appid to use for URL-encoded keys
      * is the project_id (eg: foo instead of v~foo).
@@ -2020,10 +3156,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Output only. The key_prefix for this database. This key_prefix is used, in combination
-     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-     * application id that is returned from the Cloud Datastore APIs in Google App
-     * Engine first generation runtimes.
+     * Output only. The key_prefix for this database. This key_prefix is used, in
+     * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+     * the application id that is returned from the Cloud Datastore APIs in Google
+     * App Engine first generation runtimes.
      *
      * This value may be empty in which case the appid to use for URL-encoded keys
      * is the project_id (eg: foo instead of v~foo).
@@ -2039,7 +3175,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       keyPrefix_ = value;
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2047,10 +3183,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Output only. The key_prefix for this database. This key_prefix is used, in combination
-     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-     * application id that is returned from the Cloud Datastore APIs in Google App
-     * Engine first generation runtimes.
+     * Output only. The key_prefix for this database. This key_prefix is used, in
+     * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+     * the application id that is returned from the Cloud Datastore APIs in Google
+     * App Engine first generation runtimes.
      *
      * This value may be empty in which case the appid to use for URL-encoded keys
      * is the project_id (eg: foo instead of v~foo).
@@ -2062,7 +3198,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearKeyPrefix() {
       keyPrefix_ = getDefaultInstance().getKeyPrefix();
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000100);
       onChanged();
       return this;
     }
@@ -2070,10 +3206,10 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Output only. The key_prefix for this database. This key_prefix is used, in combination
-     * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-     * application id that is returned from the Cloud Datastore APIs in Google App
-     * Engine first generation runtimes.
+     * Output only. The key_prefix for this database. This key_prefix is used, in
+     * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+     * the application id that is returned from the Cloud Datastore APIs in Google
+     * App Engine first generation runtimes.
      *
      * This value may be empty in which case the appid to use for URL-encoded keys
      * is the project_id (eg: foo instead of v~foo).
@@ -2090,7 +3226,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       checkByteStringIsUtf8(value);
       keyPrefix_ = value;
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2163,7 +3299,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       etag_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000200;
       onChanged();
       return this;
     }
@@ -2182,7 +3318,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearEtag() {
       etag_ = getDefaultInstance().getEtag();
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000200);
       onChanged();
       return this;
     }
@@ -2206,7 +3342,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       checkByteStringIsUtf8(value);
       etag_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000200;
       onChanged();
       return this;
     }

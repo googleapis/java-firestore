@@ -88,7 +88,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *  * query, start_at B
    *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -117,7 +117,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *  * query, start_at B
    *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -147,7 +147,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *  * query, start_at B
    *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -176,7 +176,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *  * query, start_at B
    *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -205,7 +205,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
    *  * query, start_at B
    *
    * An empty result may indicate that the query has too few results to be
-   * partitioned.
+   * partitioned, or that the query is not yet supported for partitioning.
    * </pre>
    *
    * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -718,7 +718,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -750,7 +750,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -782,7 +782,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -814,7 +814,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -852,7 +852,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -888,7 +888,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -926,7 +926,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -964,7 +964,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -999,7 +999,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1035,7 +1035,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1071,7 +1071,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1106,7 +1106,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1141,7 +1141,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1169,7 +1169,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1201,7 +1201,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1234,7 +1234,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1263,7 +1263,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>
@@ -1292,7 +1292,7 @@ public final class PartitionQueryResponse extends com.google.protobuf.GeneratedM
      *  * query, start_at B
      *
      * An empty result may indicate that the query has too few results to be
-     * partitioned.
+     * partitioned, or that the query is not yet supported for partitioning.
      * </pre>
      *
      * <code>repeated .google.firestore.v1.Cursor partitions = 1;</code>

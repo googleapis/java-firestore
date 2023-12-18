@@ -38,7 +38,7 @@ public final class FirestoreGrpc {
 
   private FirestoreGrpc() {}
 
-  public static final String SERVICE_NAME = "google.firestore.v1.Firestore";
+  public static final java.lang.String SERVICE_NAME = "google.firestore.v1.Firestore";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<
@@ -2020,9 +2020,9 @@ public final class FirestoreGrpc {
   private static final class FirestoreMethodDescriptorSupplier
       extends FirestoreBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    FirestoreMethodDescriptorSupplier(String methodName) {
+    FirestoreMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

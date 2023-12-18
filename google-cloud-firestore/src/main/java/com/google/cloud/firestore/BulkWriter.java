@@ -932,7 +932,7 @@ public final class BulkWriter implements AutoCloseable {
       }
     } else {
       long delayMs = rateLimiter.getNextRequestDelayMs(batch.getMutationsSize());
-      logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
+      logger.log(Level.FINE, () -> String.format("Backing off for %d seconds", delayMs / 1000));
       bulkWriterExecutor.schedule(
           () -> {
             synchronized (lock) {

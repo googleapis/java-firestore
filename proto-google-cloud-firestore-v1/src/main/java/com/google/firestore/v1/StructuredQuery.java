@@ -7749,11 +7749,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The relative path of the document being referenced.
+     * A reference to a field in a document.
      *
      * Requires:
      *
-     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * * MUST be a dot-delimited (`.`) string of segments, where each segment
+     * conforms to [document field name][google.firestore.v1.Document.fields]
      * limitations.
      * </pre>
      *
@@ -7766,11 +7767,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The relative path of the document being referenced.
+     * A reference to a field in a document.
      *
      * Requires:
      *
-     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * * MUST be a dot-delimited (`.`) string of segments, where each segment
+     * conforms to [document field name][google.firestore.v1.Document.fields]
      * limitations.
      * </pre>
      *
@@ -7832,11 +7834,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The relative path of the document being referenced.
+     * A reference to a field in a document.
      *
      * Requires:
      *
-     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * * MUST be a dot-delimited (`.`) string of segments, where each segment
+     * conforms to [document field name][google.firestore.v1.Document.fields]
      * limitations.
      * </pre>
      *
@@ -7860,11 +7863,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
      *
      *
      * <pre>
-     * The relative path of the document being referenced.
+     * A reference to a field in a document.
      *
      * Requires:
      *
-     * * Conform to [document field name][google.firestore.v1.Document.fields]
+     * * MUST be a dot-delimited (`.`) string of segments, where each segment
+     * conforms to [document field name][google.firestore.v1.Document.fields]
      * limitations.
      * </pre>
      *
@@ -8237,11 +8241,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The relative path of the document being referenced.
+       * A reference to a field in a document.
        *
        * Requires:
        *
-       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * * MUST be a dot-delimited (`.`) string of segments, where each segment
+       * conforms to [document field name][google.firestore.v1.Document.fields]
        * limitations.
        * </pre>
        *
@@ -8264,11 +8269,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The relative path of the document being referenced.
+       * A reference to a field in a document.
        *
        * Requires:
        *
-       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * * MUST be a dot-delimited (`.`) string of segments, where each segment
+       * conforms to [document field name][google.firestore.v1.Document.fields]
        * limitations.
        * </pre>
        *
@@ -8291,11 +8297,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The relative path of the document being referenced.
+       * A reference to a field in a document.
        *
        * Requires:
        *
-       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * * MUST be a dot-delimited (`.`) string of segments, where each segment
+       * conforms to [document field name][google.firestore.v1.Document.fields]
        * limitations.
        * </pre>
        *
@@ -8317,11 +8324,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The relative path of the document being referenced.
+       * A reference to a field in a document.
        *
        * Requires:
        *
-       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * * MUST be a dot-delimited (`.`) string of segments, where each segment
+       * conforms to [document field name][google.firestore.v1.Document.fields]
        * limitations.
        * </pre>
        *
@@ -8339,11 +8347,12 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
        *
        *
        * <pre>
-       * The relative path of the document being referenced.
+       * A reference to a field in a document.
        *
        * Requires:
        *
-       * * Conform to [document field name][google.firestore.v1.Document.fields]
+       * * MUST be a dot-delimited (`.`) string of segments, where each segment
+       * conforms to [document field name][google.firestore.v1.Document.fields]
        * limitations.
        * </pre>
        *

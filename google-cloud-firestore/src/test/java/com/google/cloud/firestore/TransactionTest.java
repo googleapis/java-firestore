@@ -19,12 +19,12 @@ package com.google.cloud.firestore;
 import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQuery;
-import static com.google.cloud.firestore.LocalFirestoreHelper.aggregationQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.begin;
 import static com.google.cloud.firestore.LocalFirestoreHelper.beginResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQuery;
+import static com.google.cloud.firestore.LocalFirestoreHelper.countQueryResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.create;
 import static com.google.cloud.firestore.LocalFirestoreHelper.delete;
 import static com.google.cloud.firestore.LocalFirestoreHelper.get;
@@ -36,6 +36,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.rollback;
 import static com.google.cloud.firestore.LocalFirestoreHelper.rollbackResponse;
 import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
+import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -697,7 +698,7 @@ public class TransactionTest {
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
 
-    doAnswer(aggregationQueryResponse(42))
+    doAnswer(countQueryResponse(42))
         .when(firestoreMock)
         .streamRequest(
             requestCapture.capture(), streamObserverCapture.capture(), ArgumentMatchers.any());
@@ -711,7 +712,7 @@ public class TransactionTest {
     assertEquals(3, requests.size());
 
     assertEquals(begin(), requests.get(0));
-    assertEquals(aggregationQuery(TRANSACTION_ID), requests.get(1));
+    assertEquals(countQuery(TRANSACTION_ID), requests.get(1));
     assertEquals(commit(TRANSACTION_ID), requests.get(2));
   }
 
@@ -957,6 +958,43 @@ public class TransactionTest {
     ExecutionException executionException =
         assertThrows(ExecutionException.class, transaction::get);
     assertThat(executionException.getCause()).isInstanceOf(IllegalStateException.class);
+  }
+
+  @Test
+  public void givesProperErrorMessageForCommittedTransaction() throws Exception {
+    doReturn(beginResponse())
+        .doReturn(commitResponse(0, 0))
+        .when(firestoreMock)
+        .sendRequest(
+            requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
+    String expectedErrorMessage = "Cannot modify a Transaction that has already been committed.";
+
+    DocumentReference docRef = firestoreMock.collection("foo").document("bar");
+
+    // Commit a transaction.
+    Transaction t = firestoreMock.runTransaction(transaction -> transaction).get();
+
+    // Then run other operations in the same transaction.
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.set(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.update(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.create(docRef, map("foo", "bar"));
+        },
+        expectedErrorMessage);
+    LocalFirestoreHelper.assertException(
+        () -> {
+          t.delete(docRef);
+        },
+        expectedErrorMessage);
   }
 
   private ApiException exception(Status.Code code, boolean shouldRetry) {

@@ -171,6 +171,21 @@ public interface TargetOrBuilder
    * <pre>
    * The target ID that identifies the target on the stream. Must be a positive
    * number and non-zero.
+   *
+   * If `target_id` is 0 (or unspecified), the server will assign an ID for this
+   * target and return that in a `TargetChange::ADD` event. Once a target with
+   * `target_id=0` is added, all subsequent targets must also have
+   * `target_id=0`. If an `AddTarget` request with `target_id != 0` is
+   * sent to the server after a target with `target_id=0` is added, the server
+   * will immediately send a response with a `TargetChange::Remove` event.
+   *
+   * Note that if the client sends multiple `AddTarget` requests
+   * without an ID, the order of IDs returned in `TargetChage.target_ids` are
+   * undefined. Therefore, clients should provide a target ID instead of relying
+   * on the server to assign one.
+   *
+   * If `target_id` is non-zero, there must not be an existing active target on
+   * this stream with the same ID.
    * </pre>
    *
    * <code>int32 target_id = 5;</code>

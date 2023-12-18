@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+ * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+ * results from
  * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
  * </pre>
  *
@@ -42,6 +43,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     operationState_ = 0;
     collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
     outputUriPrefix_ = "";
+    namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
@@ -367,7 +369,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -390,7 +392,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Where the entities are being exported to.
+   * Where the documents are being exported to.
    * </pre>
    *
    * <code>string output_uri_prefix = 7;</code>
@@ -408,6 +410,126 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
+  }
+
+  public static final int NAMESPACE_IDS_FIELD_NUMBER = 8;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+    return namespaceIds_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  public int getNamespaceIdsCount() {
+    return namespaceIds_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  public java.lang.String getNamespaceIds(int index) {
+    return namespaceIds_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Which namespace ids are being exported.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 8;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+    return namespaceIds_.getByteString(index);
+  }
+
+  public static final int SNAPSHOT_TIME_FIELD_NUMBER = 9;
+  private com.google.protobuf.Timestamp snapshotTime_;
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return Whether the snapshotTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasSnapshotTime() {
+    return snapshotTime_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   *
+   * @return The snapshotTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getSnapshotTime() {
+    return snapshotTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : snapshotTime_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database that is being
+   * exported. If unspecified, there are no guarantees about the consistency of
+   * the documents being exported.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder() {
+    return snapshotTime_ == null
+        ? com.google.protobuf.Timestamp.getDefaultInstance()
+        : snapshotTime_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -446,6 +568,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(outputUriPrefix_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, outputUriPrefix_);
     }
+    for (int i = 0; i < namespaceIds_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, namespaceIds_.getRaw(i));
+    }
+    if (snapshotTime_ != null) {
+      output.writeMessage(9, getSnapshotTime());
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -482,6 +610,17 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(outputUriPrefix_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, outputUriPrefix_);
     }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < namespaceIds_.size(); i++) {
+        dataSize += computeStringSizeNoTag(namespaceIds_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getNamespaceIdsList().size();
+    }
+    if (snapshotTime_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(9, getSnapshotTime());
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -517,6 +656,11 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     }
     if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
     if (!getOutputUriPrefix().equals(other.getOutputUriPrefix())) return false;
+    if (!getNamespaceIdsList().equals(other.getNamespaceIdsList())) return false;
+    if (hasSnapshotTime() != other.hasSnapshotTime()) return false;
+    if (hasSnapshotTime()) {
+      if (!getSnapshotTime().equals(other.getSnapshotTime())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -552,6 +696,14 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
     }
     hash = (37 * hash) + OUTPUT_URI_PREFIX_FIELD_NUMBER;
     hash = (53 * hash) + getOutputUriPrefix().hashCode();
+    if (getNamespaceIdsCount() > 0) {
+      hash = (37 * hash) + NAMESPACE_IDS_FIELD_NUMBER;
+      hash = (53 * hash) + getNamespaceIdsList().hashCode();
+    }
+    if (hasSnapshotTime()) {
+      hash = (37 * hash) + SNAPSHOT_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + getSnapshotTime().hashCode();
+    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -657,7 +809,8 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
    *
    *
    * <pre>
-   * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+   * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+   * results from
    * [FirestoreAdmin.ExportDocuments][google.firestore.admin.v1.FirestoreAdmin.ExportDocuments].
    * </pre>
    *
@@ -716,6 +869,12 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       }
       collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       outputUriPrefix_ = "";
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      snapshotTime_ = null;
+      if (snapshotTimeBuilder_ != null) {
+        snapshotTimeBuilder_.dispose();
+        snapshotTimeBuilder_ = null;
+      }
       return this;
     }
 
@@ -777,6 +936,14 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       }
       if (((from_bitField0_ & 0x00000040) != 0)) {
         result.outputUriPrefix_ = outputUriPrefix_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
+        namespaceIds_.makeImmutable();
+        result.namespaceIds_ = namespaceIds_;
+      }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.snapshotTime_ =
+            snapshotTimeBuilder_ == null ? snapshotTime_ : snapshotTimeBuilder_.build();
       }
     }
 
@@ -856,6 +1023,19 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
         bitField0_ |= 0x00000040;
         onChanged();
       }
+      if (!other.namespaceIds_.isEmpty()) {
+        if (namespaceIds_.isEmpty()) {
+          namespaceIds_ = other.namespaceIds_;
+          bitField0_ |= 0x00000080;
+        } else {
+          ensureNamespaceIdsIsMutable();
+          namespaceIds_.addAll(other.namespaceIds_);
+        }
+        onChanged();
+      }
+      if (other.hasSnapshotTime()) {
+        mergeSnapshotTime(other.getSnapshotTime());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -926,6 +1106,19 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
                 bitField0_ |= 0x00000040;
                 break;
               } // case 58
+            case 66:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureNamespaceIdsIsMutable();
+                namespaceIds_.add(s);
+                break;
+              } // case 66
+            case 74:
+              {
+                input.readMessage(getSnapshotTimeFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -1949,7 +2142,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -1971,7 +2164,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -1993,7 +2186,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2014,7 +2207,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2031,7 +2224,7 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
      *
      *
      * <pre>
-     * Where the entities are being exported to.
+     * Where the documents are being exported to.
      * </pre>
      *
      * <code>string output_uri_prefix = 7;</code>
@@ -2048,6 +2241,381 @@ public final class ExportDocumentsMetadata extends com.google.protobuf.Generated
       bitField0_ |= 0x00000040;
       onChanged();
       return this;
+    }
+
+    private com.google.protobuf.LazyStringArrayList namespaceIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+
+    private void ensureNamespaceIdsIsMutable() {
+      if (!namespaceIds_.isModifiable()) {
+        namespaceIds_ = new com.google.protobuf.LazyStringArrayList(namespaceIds_);
+      }
+      bitField0_ |= 0x00000080;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return A list containing the namespaceIds.
+     */
+    public com.google.protobuf.ProtocolStringList getNamespaceIdsList() {
+      namespaceIds_.makeImmutable();
+      return namespaceIds_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return The count of namespaceIds.
+     */
+    public int getNamespaceIdsCount() {
+      return namespaceIds_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The namespaceIds at the given index.
+     */
+    public java.lang.String getNamespaceIds(int index) {
+      return namespaceIds_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the namespaceIds at the given index.
+     */
+    public com.google.protobuf.ByteString getNamespaceIdsBytes(int index) {
+      return namespaceIds_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The namespaceIds to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNamespaceIds(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.set(index, value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIds(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param values The namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllNamespaceIds(java.lang.Iterable<java.lang.String> values) {
+      ensureNamespaceIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, namespaceIds_);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearNamespaceIds() {
+      namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000080);
+      ;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Which namespace ids are being exported.
+     * </pre>
+     *
+     * <code>repeated string namespace_ids = 8;</code>
+     *
+     * @param value The bytes of the namespaceIds to add.
+     * @return This builder for chaining.
+     */
+    public Builder addNamespaceIdsBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureNamespaceIdsIsMutable();
+      namespaceIds_.add(value);
+      bitField0_ |= 0x00000080;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Timestamp snapshotTime_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        snapshotTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     *
+     * @return Whether the snapshotTime field is set.
+     */
+    public boolean hasSnapshotTime() {
+      return ((bitField0_ & 0x00000100) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     *
+     * @return The snapshotTime.
+     */
+    public com.google.protobuf.Timestamp getSnapshotTime() {
+      if (snapshotTimeBuilder_ == null) {
+        return snapshotTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : snapshotTime_;
+      } else {
+        return snapshotTimeBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder setSnapshotTime(com.google.protobuf.Timestamp value) {
+      if (snapshotTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        snapshotTime_ = value;
+      } else {
+        snapshotTimeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder setSnapshotTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (snapshotTimeBuilder_ == null) {
+        snapshotTime_ = builderForValue.build();
+      } else {
+        snapshotTimeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder mergeSnapshotTime(com.google.protobuf.Timestamp value) {
+      if (snapshotTimeBuilder_ == null) {
+        if (((bitField0_ & 0x00000100) != 0)
+            && snapshotTime_ != null
+            && snapshotTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getSnapshotTimeBuilder().mergeFrom(value);
+        } else {
+          snapshotTime_ = value;
+        }
+      } else {
+        snapshotTimeBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public Builder clearSnapshotTime() {
+      bitField0_ = (bitField0_ & ~0x00000100);
+      snapshotTime_ = null;
+      if (snapshotTimeBuilder_ != null) {
+        snapshotTimeBuilder_.dispose();
+        snapshotTimeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public com.google.protobuf.Timestamp.Builder getSnapshotTimeBuilder() {
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return getSnapshotTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder() {
+      if (snapshotTimeBuilder_ != null) {
+        return snapshotTimeBuilder_.getMessageOrBuilder();
+      } else {
+        return snapshotTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : snapshotTime_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The timestamp that corresponds to the version of the database that is being
+     * exported. If unspecified, there are no guarantees about the consistency of
+     * the documents being exported.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp snapshot_time = 9;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getSnapshotTimeFieldBuilder() {
+      if (snapshotTimeBuilder_ == null) {
+        snapshotTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getSnapshotTime(), getParentForChildren(), isClean());
+        snapshotTime_ = null;
+      }
+      return snapshotTimeBuilder_;
     }
 
     @java.lang.Override
