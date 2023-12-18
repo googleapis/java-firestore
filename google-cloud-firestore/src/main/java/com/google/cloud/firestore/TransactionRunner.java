@@ -29,8 +29,6 @@ import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
-import java.util.List;
-import io.opencensus.trace.AttributeValue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -99,9 +97,9 @@ class TransactionRunner<T> {
           ApiFutures.catchingAsync(
               ApiFutures.transformAsync(
                   maybeRollback(), this::rollbackCallback, MoreExecutors.directExecutor()),
-          Throwable.class,
-          this::restartTransactionCallback,
-          MoreExecutors.directExecutor());
+              Throwable.class,
+              this::restartTransactionCallback,
+              MoreExecutors.directExecutor());
       runTransactionSpan.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -212,7 +210,6 @@ class TransactionRunner<T> {
       return rollbackAndReject(firestoreException);
     }
   }
-
 
   /** Determines whether the provided error is considered retryable. */
   private static boolean isRetryableTransactionError(ApiException exception) {
