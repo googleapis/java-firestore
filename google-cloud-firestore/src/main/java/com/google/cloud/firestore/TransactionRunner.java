@@ -175,6 +175,10 @@ class TransactionRunner<T> {
         invokeUserCallback(), this::userFunctionCallback, MoreExecutors.directExecutor());
   }
 
+  /**
+   * The callback that is invoked after the user function finishes execution. It invokes the Commit
+   * RPC.
+   */
   private ApiFuture<T> userFunctionCallback(T userFunctionResult) {
     return ApiFutures.transform(
         transaction.commit(),
