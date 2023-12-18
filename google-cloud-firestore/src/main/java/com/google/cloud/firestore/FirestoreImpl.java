@@ -153,6 +153,43 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
         path, bulkWriter, RecursiveDelete.MAX_PENDING_OPS, RecursiveDelete.MIN_PENDING_OPS);
   }
 
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(CollectionReference reference) {
+    BulkWriter writer = getBulkWriter();
+    return recursiveDeleteDryRun(reference.getResourcePath(), writer);
+  }
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(CollectionReference reference, BulkWriter bulkWriter) {
+    return recursiveDeleteDryRun(reference.getResourcePath(), bulkWriter);
+  }
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(DocumentReference reference) {
+    BulkWriter writer = getBulkWriter();
+    return recursiveDeleteDryRun(reference.getResourcePath(), writer);
+  }
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(
+      DocumentReference reference, @Nonnull BulkWriter bulkWriter) {
+    return recursiveDeleteDryRun(reference.getResourcePath(), bulkWriter);
+  }
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(ResourcePath path, BulkWriter bulkWriter) {
+    return recursiveDeleteDryRun(
+        path, bulkWriter, RecursiveDelete.MAX_PENDING_OPS, RecursiveDelete.MIN_PENDING_OPS);
+  }
+
+  @Nonnull
+  @VisibleForTesting
+  ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(
+      ResourcePath path, @Nonnull BulkWriter bulkWriter, int maxLimit, int minLimit) {
+    RecursiveDelete deleter = new RecursiveDelete(this, bulkWriter, path, maxLimit, minLimit);
+    return deleter.dryRun();
+  }
+
   /**
    * This overload is not private in order to test the query resumption with startAfter() once the
    * RecursiveDelete instance has MAX_PENDING_OPS pending.

@@ -279,6 +279,11 @@
     <className>com/google/cloud/firestore/Firestore</className>
     <method>com.google.api.core.ApiFuture recursiveDelete(*)</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/Firestore</className>
+    <method>com.google.api.core.ApiFuture recursiveDeleteDryRun(*)</method>
+  </difference>
 
   <!-- Aggregate Queries  -->
   <difference>

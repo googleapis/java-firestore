@@ -22,11 +22,13 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -117,6 +119,9 @@ public final class RecursiveDelete {
    */
   private int pendingOperationsCount = 0;
 
+  private final List<DocumentReference> dryRunResults = new ArrayList<>();
+  private boolean isDryRun = false;
+
   RecursiveDelete(
       FirestoreRpcContext<?> firestoreRpcContext,
       BulkWriter writer,
@@ -131,6 +136,17 @@ public final class RecursiveDelete {
   }
 
   public ApiFuture<Void> run() {
+    isDryRun = false;
+    return runHelper();
+  }
+
+  public ApiFuture<List<DocumentReference>> dryRun() {
+    isDryRun = true;
+    dryRunResults.clear();
+    return ApiFutures.transform(runHelper(), unused -> dryRunResults, MoreExecutors.directExecutor());
+  }
+
+  private ApiFuture<Void> runHelper() {
     Preconditions.checkState(!started, "RecursiveDelete.run() should only be called once");
     started = true;
 
@@ -289,6 +305,12 @@ public final class RecursiveDelete {
   }
 
   /** Deletes the provided reference and starts the next stream if conditions are met. */
+  private ApiFuture<WriteResult> deleteReferenceDryRun(final DocumentReference reference) {
+    dryRunResults.add(reference);
+    return ApiFutures.immediateFuture(new WriteResult(Timestamp.MIN_VALUE));
+  }
+
+  /** Deletes the provided reference and starts the next stream if conditions are met. */
   private ApiFuture<Void> deleteReference(final DocumentReference reference) {
     synchronized (lock) {
       pendingOperationsCount++;
@@ -296,7 +318,7 @@ public final class RecursiveDelete {
 
     ApiFuture<WriteResult> catchingDeleteFuture =
         ApiFutures.catchingAsync(
-            writer.delete(reference),
+            isDryRun ? deleteReferenceDryRun(reference) : writer.delete(reference),
             Throwable.class,
             e -> {
               synchronized (lock) {

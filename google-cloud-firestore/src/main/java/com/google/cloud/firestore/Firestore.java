@@ -271,6 +271,22 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   ApiFuture<Void> recursiveDelete(DocumentReference reference, BulkWriter bulkWriter);
 
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(CollectionReference reference);
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(CollectionReference reference, BulkWriter bulkWriter);
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(DocumentReference reference);
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(DocumentReference reference, @Nonnull BulkWriter bulkWriter);
+
+  @Nonnull
+  public ApiFuture<List<DocumentReference>> recursiveDeleteDryRun(ResourcePath path, BulkWriter bulkWriter);
+
+
   /**
    * Returns a FirestoreBundle.Builder {@link FirestoreBundle.Builder} instance using an
    * automatically generated bundle ID. When loaded on clients, client SDKs use the bundle ID and
