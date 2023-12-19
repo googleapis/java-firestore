@@ -55,9 +55,13 @@ public class OpenTelemetryOptionsTest {
     }
   }
 
+  FirestoreOptions.Builder getBaseOptions() {
+    return FirestoreOptions.newBuilder().setProjectId("test-project").setDatabaseId("(default)");
+  }
+
   @Test
   public void defaultOptionsDisablesTelemetryCollection() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+    FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
     assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
     assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
@@ -68,7 +72,7 @@ public class OpenTelemetryOptionsTest {
   @Test
   public void canEnableTelemetryCollectionUsingOpenTelemetryOptions() {
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
@@ -88,7 +92,7 @@ public class OpenTelemetryOptionsTest {
 
     // Do _not_ pass it to FirestoreOptions.
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
@@ -106,7 +110,7 @@ public class OpenTelemetryOptionsTest {
   public void canPassOpenTelemetryToFirestore() {
     OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
@@ -125,7 +129,7 @@ public class OpenTelemetryOptionsTest {
   public void telemetryCollectionRemainsDisabledIfOpenTelemetryIsProvided() {
     OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(false)
@@ -142,7 +146,7 @@ public class OpenTelemetryOptionsTest {
     openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("true");
 
     // Do not enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+    FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
 
     // Expect OpenTelemetry to be enabled because of the environment variable.
@@ -157,7 +161,7 @@ public class OpenTelemetryOptionsTest {
     openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("on");
 
     // Do not enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
+    FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
 
     // Expect OpenTelemetry to be enabled because of the environment variable.
@@ -173,7 +177,7 @@ public class OpenTelemetryOptionsTest {
 
     // Enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
@@ -194,7 +198,7 @@ public class OpenTelemetryOptionsTest {
 
     // Enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions =
-        FirestoreOptions.newBuilder()
+        getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
