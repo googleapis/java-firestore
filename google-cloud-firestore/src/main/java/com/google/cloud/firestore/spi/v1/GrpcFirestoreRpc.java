@@ -41,6 +41,7 @@ import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.cloud.firestore.v1.stub.GrpcFirestoreStub;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.cloud.grpc.GrpcTransportOptions.ExecutorFactory;
+import com.google.common.base.Throwables;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.BatchWriteRequest;
@@ -87,14 +88,18 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
     executorFactory = transportOptions.getExecutorFactory();
     executor = executorFactory.get();
     try {
+      System.out.println("1");
       if (options.getHost().contains("localhost")
           || NoCredentials.getInstance().equals(options.getCredentials())) {
+        System.out.println("2");
         ManagedChannel managedChannel =
             ManagedChannelBuilder.forTarget(options.getHost())
                 .usePlaintext()
                 .executor(executor)
                 .build();
+        System.out.println("3");
         TransportChannel transportChannel = GrpcTransportChannel.create(managedChannel);
+        System.out.println("4");
         clientContext =
             ClientContext.newBuilder()
                 .setCredentials(null)
@@ -103,15 +108,20 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
                 .setDefaultCallContext(GrpcCallContext.of(managedChannel, CallOptions.DEFAULT))
                 .setBackgroundResources(Collections.singletonList(transportChannel))
                 .build();
+        System.out.println("5");
       } else {
+        System.out.println("6");
         FirestoreSettingsBuilder settingsBuilder =
             new FirestoreSettingsBuilder(FirestoreSettings.newBuilder().build());
-
+        System.out.println("7");
         DatabaseRootName databaseName =
             DatabaseRootName.of(options.getProjectId(), options.getDatabaseId());
+        System.out.println("8");
 
         settingsBuilder.setCredentialsProvider(options.getCredentialsProvider());
+        System.out.println("9");
         settingsBuilder.setTransportChannelProvider(options.getTransportChannelProvider());
+        System.out.println("10");
 
         HeaderProvider internalHeaderProvider =
             FirestoreSettings.defaultApiClientHeaderProviderBuilder()
@@ -120,25 +130,37 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
                     GaxProperties.getLibraryVersion(options.getClass()))
                 .setResourceToken(databaseName.toString())
                 .build();
+        System.out.println("11");
 
         settingsBuilder.setInternalHeaderProvider(internalHeaderProvider);
+        System.out.println("12");
         settingsBuilder.setHeaderProvider(options.getMergedHeaderProvider(new NoHeaderProvider()));
+        System.out.println("13");
 
         clientContext = ClientContext.create(settingsBuilder.build());
+        System.out.println("14");
       }
+      System.out.println("15");
       ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> retrySettingsSetter =
           builder -> {
             builder.setRetrySettings(options.getRetrySettings());
             return null;
           };
+      System.out.println("16");
       FirestoreStubSettings.Builder firestoreBuilder =
           FirestoreStubSettings.newBuilder(clientContext)
               .applyToAllUnaryMethods(retrySettingsSetter);
       // Manually apply the retry settings to streaming methods
+      System.out.println("17");
       firestoreBuilder.runQuerySettings().setRetrySettings(options.getRetrySettings());
+      System.out.println("18");
       firestoreBuilder.batchGetDocumentsSettings().setRetrySettings(options.getRetrySettings());
+      System.out.println("19");
       firestoreStub = GrpcFirestoreStub.create(firestoreBuilder.build());
+      System.out.println("20");
     } catch (Exception e) {
+      System.out.println(e.getMessage());
+      System.out.println(Throwables.getStackTraceAsString(e));
       throw new IOException(e);
     }
   }
