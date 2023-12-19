@@ -116,6 +116,11 @@
       <artifactId>opentelemetry-api</artifactId>
       <version>1.29.0</version>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-context</artifactId>
+      <version>1.29.0</version>
+    </dependency>
     <!-- END OTEL -->
 
     <!-- Test dependencies -->
@@ -139,7 +144,7 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
       <version>4.11.0</version>
-      <scope>test</scope>
+      <scope>test.java.com.google.cloud.firestore.telemetry</scope>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
@@ -162,6 +167,12 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk</artifactId>
+      <version>1.29.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-common</artifactId>
       <version>1.29.0</version>
       <scope>test</scope>
     </dependency>

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.Context;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
