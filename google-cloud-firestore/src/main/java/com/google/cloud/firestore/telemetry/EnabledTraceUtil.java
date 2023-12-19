@@ -191,60 +191,81 @@ public class EnabledTraceUtil implements TraceUtil {
     //     Runtime.getRuntime().totalMemory());
 
     spanBuilder =
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "availableProcessors",
+            Runtime.getRuntime().availableProcessors());
+
+    spanBuilder =
         spanBuilder.setAllAttributes(
             Attributes.builder()
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "availableProcessors",
-                    Runtime.getRuntime().availableProcessors())
                 .put(
                     ATTRIBUTE_SERVICE_PREFIX + "settings.databaseId",
                     firestoreOptions.getDatabaseId())
                 .put(ATTRIBUTE_SERVICE_PREFIX + "settings.host", firestoreOptions.getHost())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.channel.transportName",
-                    firestoreOptions.getTransportChannelProvider().getTransportName())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsCredentials",
-                    String.valueOf(
-                        firestoreOptions.getTransportChannelProvider().needsCredentials()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsEndpoint",
-                    String.valueOf(firestoreOptions.getTransportChannelProvider().needsEndpoint()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsHeaders",
-                    String.valueOf(firestoreOptions.getTransportChannelProvider().needsHeaders()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.channel.shouldAutoClose",
-                    String.valueOf(
-                        firestoreOptions.getTransportChannelProvider().shouldAutoClose()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.credentials.authenticationType",
-                    firestoreOptions.getCredentials().getAuthenticationType())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRetryDelay",
-                    firestoreOptions.getRetrySettings().getInitialRetryDelay().toString())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRetryDelay",
-                    firestoreOptions.getRetrySettings().getMaxRetryDelay().toString())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.retryDelayMultiplier",
-                    String.valueOf(firestoreOptions.getRetrySettings().getRetryDelayMultiplier()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxAttempts",
-                    String.valueOf(firestoreOptions.getRetrySettings().getMaxAttempts()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRpcTimeout",
-                    firestoreOptions.getRetrySettings().getInitialRpcTimeout().toString())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRpcTimeout",
-                    firestoreOptions.getRetrySettings().getMaxRpcTimeout().toString())
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.rpcTimeoutMultiplier",
-                    String.valueOf(firestoreOptions.getRetrySettings().getRpcTimeoutMultiplier()))
-                .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.totalTimeout",
-                    firestoreOptions.getRetrySettings().getTotalTimeout().toString())
                 .build());
+
+    if (firestoreOptions.getTransportChannelProvider() != null) {
+      spanBuilder =
+          spanBuilder.setAllAttributes(
+              Attributes.builder()
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.transportName",
+                      firestoreOptions.getTransportChannelProvider().getTransportName())
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsCredentials",
+                      String.valueOf(
+                          firestoreOptions.getTransportChannelProvider().needsCredentials()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsEndpoint",
+                      String.valueOf(
+                          firestoreOptions.getTransportChannelProvider().needsEndpoint()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsHeaders",
+                      String.valueOf(firestoreOptions.getTransportChannelProvider().needsHeaders()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.shouldAutoClose",
+                      String.valueOf(
+                          firestoreOptions.getTransportChannelProvider().shouldAutoClose()))
+                  .build());
+    }
+
+    if (firestoreOptions.getCredentials() != null) {
+      spanBuilder =
+          spanBuilder.setAttribute(
+              ATTRIBUTE_SERVICE_PREFIX + "settings.credentials.authenticationType",
+              firestoreOptions.getCredentials().getAuthenticationType());
+    }
+
+    if (firestoreOptions.getRetrySettings() != null) {
+      spanBuilder =
+          spanBuilder.setAllAttributes(
+              Attributes.builder()
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRetryDelay",
+                      firestoreOptions.getRetrySettings().getInitialRetryDelay().toString())
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRetryDelay",
+                      firestoreOptions.getRetrySettings().getMaxRetryDelay().toString())
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.retryDelayMultiplier",
+                      String.valueOf(firestoreOptions.getRetrySettings().getRetryDelayMultiplier()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxAttempts",
+                      String.valueOf(firestoreOptions.getRetrySettings().getMaxAttempts()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRpcTimeout",
+                      firestoreOptions.getRetrySettings().getInitialRpcTimeout().toString())
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRpcTimeout",
+                      firestoreOptions.getRetrySettings().getMaxRpcTimeout().toString())
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.rpcTimeoutMultiplier",
+                      String.valueOf(firestoreOptions.getRetrySettings().getRpcTimeoutMultiplier()))
+                  .put(
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.totalTimeout",
+                      firestoreOptions.getRetrySettings().getTotalTimeout().toString())
+                  .build());
+    }
 
     long totalMemory = Runtime.getRuntime().totalMemory();
     long freeMemory = Runtime.getRuntime().freeMemory();

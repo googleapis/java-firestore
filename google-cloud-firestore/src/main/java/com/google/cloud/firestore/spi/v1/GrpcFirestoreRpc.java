@@ -41,7 +41,6 @@ import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
 import com.google.cloud.firestore.v1.stub.GrpcFirestoreStub;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.cloud.grpc.GrpcTransportOptions.ExecutorFactory;
-import com.google.common.base.Throwables;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.BatchWriteRequest;
