@@ -90,6 +90,7 @@ public class TracingTest {
   public void before() {
     FirestoreOptions.Builder optionsBuilder =
         FirestoreOptions.newBuilder()
+            .setProjectId("test-project")
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
