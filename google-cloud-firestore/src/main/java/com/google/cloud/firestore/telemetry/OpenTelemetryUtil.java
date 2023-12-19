@@ -18,7 +18,6 @@ package com.google.cloud.firestore.telemetry;
 
 import com.google.api.core.ApiFunction;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,12 +43,6 @@ public abstract class OpenTelemetryUtil {
   public abstract ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder>
       getChannelConfigurator();
 
-  @VisibleForTesting
-  @Nullable
-  static String getEnableOpenTelemetryEnvVar() {
-    return System.getenv(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME);
-  }
-
   /**
    * Creates and returns an instance of the OpenTelemetryUtil class.
    *
@@ -61,7 +54,7 @@ public abstract class OpenTelemetryUtil {
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().getEnabled();
 
     // The environment variable can override options to enable/disable telemetry collection.
-    String enableOpenTelemetryEnvVar = getEnableOpenTelemetryEnvVar();
+    String enableOpenTelemetryEnvVar = System.getenv(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME);
     if (enableOpenTelemetryEnvVar != null) {
       if (enableOpenTelemetryEnvVar.equalsIgnoreCase("true")
           || enableOpenTelemetryEnvVar.equalsIgnoreCase("on")) {

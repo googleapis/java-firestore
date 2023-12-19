@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.*;
@@ -23,32 +24,20 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import javax.annotation.Nullable;
 import org.junit.*;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import uk.org.webcompere.systemstubs.rules.EnvironmentVariablesRule;
 
 public class OpenTelemetryOptionsTest {
-  private MockedStatic<OpenTelemetryUtil> openTelemetryUtilMock;
-  private MockedStatic<EnabledOpenTelemetryUtil> enabledOpenTelemetryUtilMock;
-
   @Nullable private Firestore firestore;
+
+  @Rule public EnvironmentVariablesRule environmentVariablesRule = new EnvironmentVariablesRule();
 
   @Before
   public void setUp() {
     GlobalOpenTelemetry.resetForTest();
-    this.openTelemetryUtilMock =
-        Mockito.mockStatic(
-            OpenTelemetryUtil.class,
-            Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
-    this.enabledOpenTelemetryUtilMock =
-        Mockito.mockStatic(
-            EnabledOpenTelemetryUtil.class,
-            Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
   }
 
   @After
   public void tearDown() {
-    this.openTelemetryUtilMock.close();
-    this.enabledOpenTelemetryUtilMock.close();
     if (firestore != null) {
       firestore.shutdown();
       firestore = null;
@@ -143,7 +132,7 @@ public class OpenTelemetryOptionsTest {
 
   @Test
   public void canEnableTelemetryCollectionUsingEnvVar() {
-    openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("true");
+    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "true");
 
     // Do not enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions = getBaseOptions().build();
@@ -158,7 +147,7 @@ public class OpenTelemetryOptionsTest {
 
   @Test
   public void canEnableTelemetryCollectionUsingEnvVar2() {
-    openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("on");
+    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "on");
 
     // Do not enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions = getBaseOptions().build();
@@ -173,7 +162,7 @@ public class OpenTelemetryOptionsTest {
 
   @Test
   public void canDisableTelemetryCollectionUsingEnvVar() {
-    openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("false");
+    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "false");
 
     // Enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions =
@@ -194,7 +183,7 @@ public class OpenTelemetryOptionsTest {
 
   @Test
   public void canDisableTelemetryCollectionUsingEnvVar2() {
-    openTelemetryUtilMock.when(OpenTelemetryUtil::getEnableOpenTelemetryEnvVar).thenReturn("off");
+    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "off");
 
     // Enable OpenTelemetry using FirestoreOptions.
     FirestoreOptions firestoreOptions =
