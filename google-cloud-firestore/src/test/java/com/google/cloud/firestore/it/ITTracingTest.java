@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.telemetry;
+package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
@@ -49,7 +49,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class TracingTest {
+public class ITTracingTest {
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITBaseTest.class.getName());
 
@@ -90,7 +90,6 @@ public class TracingTest {
   public void before() {
     FirestoreOptions.Builder optionsBuilder =
         FirestoreOptions.newBuilder()
-            .setProjectId("test-project")
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setTelemetryCollectionEnabled(true)
