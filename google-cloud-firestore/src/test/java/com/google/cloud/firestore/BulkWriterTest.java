@@ -57,9 +57,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -122,6 +122,8 @@ public class BulkWriterTest {
   private DocumentReference doc1;
   private DocumentReference doc2;
 
+  private ScheduledExecutorService timeoutExecutor;
+
   public static ApiFuture<BatchWriteResponse> successResponse(int updateTimeSeconds) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(updateTimeSeconds).build();
@@ -156,7 +158,7 @@ public class BulkWriterTest {
     lenient().doReturn(immediateExecutor).when(firestoreRpc).getExecutor();
     testExecutor = Executors.newSingleThreadScheduledExecutor();
 
-    final ScheduledExecutorService timeoutExecutor =
+    timeoutExecutor =
         new ScheduledThreadPoolExecutor(1) {
           @Override
           @Nonnull
@@ -169,6 +171,11 @@ public class BulkWriterTest {
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
+  }
+
+  @After
+  public void after() throws InterruptedException {
+    timeoutExecutor.awaitTermination(100, TimeUnit.MILLISECONDS);
   }
 
   @Test
@@ -1255,8 +1262,6 @@ public class BulkWriterTest {
     assertEquals(2, retryAttempts[0]);
   }
 
-  // TODO: This test times out in CI, but not otherwise.
-  @Ignore
   @Test
   public void sendsBackoffBatchAfterOtherEnqueuedBatches() throws Exception {
     ResponseStubber responseStubber =
