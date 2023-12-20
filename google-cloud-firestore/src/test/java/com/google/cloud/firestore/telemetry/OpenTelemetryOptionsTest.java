@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.OpenTelemetryUtil.ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.*;
@@ -24,12 +23,9 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import javax.annotation.Nullable;
 import org.junit.*;
-import uk.org.webcompere.systemstubs.rules.EnvironmentVariablesRule;
 
 public class OpenTelemetryOptionsTest {
   @Nullable private Firestore firestore;
-
-  @Rule public EnvironmentVariablesRule environmentVariablesRule = new EnvironmentVariablesRule();
 
   @Before
   public void setUp() {
@@ -128,77 +124,5 @@ public class OpenTelemetryOptionsTest {
     firestore = firestoreOptions.getService();
     assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
     assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-  }
-
-  @Test
-  public void canEnableTelemetryCollectionUsingEnvVar() {
-    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "true");
-
-    // Do not enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions = getBaseOptions().build();
-    firestore = firestoreOptions.getService();
-
-    // Expect OpenTelemetry to be enabled because of the environment variable.
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
-  }
-
-  @Test
-  public void canEnableTelemetryCollectionUsingEnvVar2() {
-    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "on");
-
-    // Do not enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions = getBaseOptions().build();
-    firestore = firestoreOptions.getService();
-
-    // Expect OpenTelemetry to be enabled because of the environment variable.
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
-  }
-
-  @Test
-  public void canDisableTelemetryCollectionUsingEnvVar() {
-    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "false");
-
-    // Enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions =
-        getBaseOptions()
-            .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
-                    .build())
-            .build();
-    firestore = firestoreOptions.getService();
-
-    // Expect OpenTelemetry to be disabled because of the environment variable.
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
-  }
-
-  @Test
-  public void canDisableTelemetryCollectionUsingEnvVar2() {
-    environmentVariablesRule.set(ENABLE_OPEN_TELEMETRY_ENV_VAR_NAME, "off");
-
-    // Enable OpenTelemetry using FirestoreOptions.
-    FirestoreOptions firestoreOptions =
-        getBaseOptions()
-            .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
-                    .build())
-            .build();
-    firestore = firestoreOptions.getService();
-
-    // Expect OpenTelemetry to be disabled because of the environment variable.
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
   }
 }
