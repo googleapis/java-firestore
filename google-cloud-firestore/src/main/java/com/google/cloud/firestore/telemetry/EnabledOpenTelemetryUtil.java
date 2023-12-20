@@ -18,7 +18,6 @@ package com.google.cloud.firestore.telemetry;
 
 import com.google.api.core.ApiFunction;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.common.annotations.VisibleForTesting;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -34,8 +33,7 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
     return traceUtil;
   }
 
-  @VisibleForTesting
-  OpenTelemetry getOpenTelemetry() {
+  public OpenTelemetry getOpenTelemetry() {
     return openTelemetry;
   }
 

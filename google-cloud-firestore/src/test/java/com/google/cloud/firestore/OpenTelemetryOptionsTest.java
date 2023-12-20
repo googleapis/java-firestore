@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.telemetry;
+package com.google.cloud.firestore;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.telemetry.DisabledOpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.DisabledTraceUtil;
+import com.google.cloud.firestore.telemetry.EnabledOpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.EnabledTraceUtil;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import javax.annotation.Nullable;
