@@ -72,7 +72,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
@@ -1763,8 +1762,8 @@ public class Query {
     return get(null);
   }
 
-  ApiFuture<QueryProfileInfo<QuerySnapshot>> getQueryProfileInfo(QueryMode queryMode) {
-    final SettableApiFuture<QueryProfileInfo<QuerySnapshot>> result = SettableApiFuture.create();
+  ApiFuture<QueryProfile<QuerySnapshot>> getQueryProfileInfo(QueryMode queryMode) {
+    final SettableApiFuture<QueryProfile<QuerySnapshot>> result = SettableApiFuture.create();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request
@@ -1777,7 +1776,7 @@ public class Query {
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
-          Struct planStruct = Struct.getDefaultInstance();
+          QueryPlan queryPlan = QueryPlan.getDefaultInstance();
           Struct statsStruct = Struct.getDefaultInstance();
 
           @Override
@@ -1800,10 +1799,10 @@ public class Query {
             if (response.hasStats()) {
               ResultSetStats stats = response.getStats();
               if (stats.hasQueryPlan()) {
-                planStruct = response.getStats().getQueryPlan().getPlanInfo();
+                queryPlan = new QueryPlan(stats.getQueryPlan());
               }
               if (stats.hasQueryStats()) {
-                statsStruct = response.getStats().getQueryStats();
+                statsStruct = stats.getQueryStats();
               }
             }
           }
@@ -1819,8 +1818,8 @@ public class Query {
           @Override
           public void onComplete() {
             result.set(
-                new QueryProfileInfo<>(
-                    UserDataConverter.decodeStruct(planStruct),
+                new QueryProfile<>(
+                    queryPlan,
                     UserDataConverter.decodeStruct(statsStruct),
                     QuerySnapshot.withDocuments(Query.this, readTime, documentSnapshots)));
           }
@@ -1840,10 +1839,10 @@ public class Query {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<Map<String, Object>> explain() {
-    ApiFuture<QueryProfileInfo<QuerySnapshot>> result = getQueryProfileInfo(QueryMode.PLAN);
+  public ApiFuture<QueryPlan> explain() {
+    ApiFuture<QueryProfile<QuerySnapshot>> result = getQueryProfileInfo(QueryMode.PLAN);
     return ApiFutures.transform(
-        result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
+        result, queryProfile -> queryProfile.getPlan(), MoreExecutors.directExecutor());
   }
 
   /**
@@ -1856,7 +1855,7 @@ public class Query {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfileInfo<QuerySnapshot>> explainAnalyze() {
+  public ApiFuture<QueryProfile<QuerySnapshot>> explainAnalyze() {
     return getQueryProfileInfo(QueryMode.PROFILE);
   }
 

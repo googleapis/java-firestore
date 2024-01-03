@@ -879,8 +879,9 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    Map<String, Object> plan = query.explain().get();
-    assertThat(plan).isNotEmpty();
+    QueryPlan plan = query.explain().get();
+    System.out.println(plan.getPlanInfo());
+    assertThat(plan.getPlanInfo()).isNotEmpty();
   }
 
   @Test
@@ -897,10 +898,10 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    QueryProfileInfo<QuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.plan).isNotEmpty();
-    assertThat(profile.stats).isNotEmpty();
-    assertThat(profile.snapshot.size()).isEqualTo(3);
+    QueryProfile<QuerySnapshot> profile = query.explainAnalyze().get();
+    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getStats()).isNotEmpty();
+    assertThat(profile.getSnapshot().size()).isEqualTo(3);
   }
 
   @Test
@@ -916,8 +917,8 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    Map<String, Object> plan = query.explain().get();
-    assertThat(plan).isNotEmpty();
+    QueryPlan plan = query.explain().get();
+    assertThat(plan.getPlanInfo()).isNotEmpty();
   }
 
   @Test
@@ -934,9 +935,9 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    QueryProfileInfo<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.plan).isNotEmpty();
-    assertThat(profile.stats).isNotEmpty();
-    assertThat(profile.snapshot.getCount()).isEqualTo(3);
+    QueryProfile<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
+    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getStats()).isNotEmpty();
+    assertThat(profile.getSnapshot().getCount()).isEqualTo(3);
   }
 }

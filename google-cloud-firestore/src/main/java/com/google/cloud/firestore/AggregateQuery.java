@@ -91,11 +91,11 @@ public class AggregateQuery {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<Map<String, Object>> explain() {
-    ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
+  public ApiFuture<QueryPlan> explain() {
+    ApiFuture<QueryProfile<AggregateQuerySnapshot>> result =
         getAggregateQueryProfileInfo(QueryMode.PLAN);
     return ApiFutures.transform(
-        result, queryProfileInfo -> queryProfileInfo.plan, MoreExecutors.directExecutor());
+        result, queryProfile -> queryProfile.getPlan(), MoreExecutors.directExecutor());
   }
 
   /**
@@ -108,7 +108,7 @@ public class AggregateQuery {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> explainAnalyze() {
+  public ApiFuture<QueryProfile<AggregateQuerySnapshot>> explainAnalyze() {
     return getAggregateQueryProfileInfo(QueryMode.PROFILE);
   }
 
@@ -232,17 +232,17 @@ public class AggregateQuery {
     public void onComplete() {}
   }
 
-  ApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(
+  ApiFuture<QueryProfile<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(
       QueryMode queryMode) {
     RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    final SettableApiFuture<QueryProfileInfo<AggregateQuerySnapshot>> result =
+    final SettableApiFuture<QueryProfile<AggregateQuerySnapshot>> result =
         SettableApiFuture.create();
 
     ResponseObserver<RunAggregationQueryResponse> observer =
         new ResponseObserver<RunAggregationQueryResponse>() {
           Timestamp readTime;
           Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-          Struct planStruct = Struct.getDefaultInstance();
+          QueryPlan queryPlan = QueryPlan.getDefaultInstance();
           Struct statsStruct = Struct.getDefaultInstance();
 
           @Override
@@ -263,10 +263,10 @@ public class AggregateQuery {
             if (response.hasStats()) {
               ResultSetStats stats = response.getStats();
               if (stats.hasQueryPlan()) {
-                planStruct = response.getStats().getQueryPlan().getPlanInfo();
+                queryPlan = new QueryPlan(stats.getQueryPlan());
               }
               if (stats.hasQueryStats()) {
-                statsStruct = response.getStats().getQueryStats();
+                statsStruct = stats.getQueryStats();
               }
             }
           }
@@ -280,8 +280,8 @@ public class AggregateQuery {
           @Override
           public void onComplete() {
             result.set(
-                new QueryProfileInfo<>(
-                    UserDataConverter.decodeStruct(planStruct),
+                new QueryProfile<>(
+                    queryPlan,
                     UserDataConverter.decodeStruct(statsStruct),
                     new AggregateQuerySnapshot(AggregateQuery.this, readTime, aggregateFieldsMap)));
           }
