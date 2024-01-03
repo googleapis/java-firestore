@@ -54,6 +54,116 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The uid.
+   */
+  java.lang.String getUid();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The bytes for uid.
+   */
+  com.google.protobuf.ByteString getUidBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the createTime field is set.
+   */
+  boolean hasCreateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The createTime.
+   */
+  com.google.protobuf.Timestamp getCreateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the updateTime field is set.
+   */
+  boolean hasUpdateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The updateTime.
+   */
+  com.google.protobuf.Timestamp getUpdateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
    * The location of the database. Available locations are listed at
    * https://cloud.google.com/firestore/docs/locations.
    * </pre>
@@ -356,6 +466,33 @@ public interface DatabaseOrBuilder
    * @return The bytes for keyPrefix.
    */
   com.google.protobuf.ByteString getKeyPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for deleteProtectionState.
+   */
+  int getDeleteProtectionStateValue();
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The deleteProtectionState.
+   */
+  com.google.firestore.admin.v1.Database.DeleteProtectionState getDeleteProtectionState();
 
   /**
    *

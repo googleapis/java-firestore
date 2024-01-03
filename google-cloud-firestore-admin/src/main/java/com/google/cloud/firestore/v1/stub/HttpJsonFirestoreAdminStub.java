@@ -41,6 +41,8 @@ import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -96,6 +98,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
           .add(FieldOperationMetadata.getDescriptor())
           .add(ExportDocumentsMetadata.getDescriptor())
           .add(IndexOperationMetadata.getDescriptor())
+          .add(DeleteDatabaseMetadata.getDescriptor())
           .build();
 
   private static final ApiMethodDescriptor<CreateIndexRequest, Operation>
@@ -584,6 +587,44 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<DeleteDatabaseRequest, Operation>
+      deleteDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<DeleteDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteDatabase")
+              .setHttpMethod("DELETE")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DeleteDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "etag", request.getEtag());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (DeleteDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -613,6 +654,9 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable;
   private final OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable;
+  private final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable;
+  private final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable;
 
   private final BackgroundResource backgroundResources;
   private final HttpJsonOperationsStub httpJsonOperationsStub;
@@ -828,6 +872,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    HttpJsonCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseTransportSettings =
+        HttpJsonCallSettings.<DeleteDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(deleteDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
 
     this.createIndexCallable =
         callableFactory.createUnaryCallable(
@@ -910,6 +965,15 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.updateDatabaseOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.deleteDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            deleteDatabaseTransportSettings, settings.deleteDatabaseSettings(), clientContext);
+    this.deleteDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            deleteDatabaseTransportSettings,
+            settings.deleteDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
 
     this.backgroundResources =
         new BackgroundResourceAggregation(clientContext.getBackgroundResources());
@@ -931,6 +995,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(getDatabaseMethodDescriptor);
     methodDescriptors.add(listDatabasesMethodDescriptor);
     methodDescriptors.add(updateDatabaseMethodDescriptor);
+    methodDescriptors.add(deleteDatabaseMethodDescriptor);
     return methodDescriptors;
   }
 
@@ -1047,6 +1112,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable() {
     return updateDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
+    return deleteDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable() {
+    return deleteDatabaseOperationCallable;
   }
 
   @Override

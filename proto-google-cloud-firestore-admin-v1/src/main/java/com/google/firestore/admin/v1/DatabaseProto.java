@@ -44,41 +44,50 @@ public final class DatabaseProto {
           + "to\022\031google.firestore.admin.v1\032\037google/ap"
           + "i/field_behavior.proto\032\031google/api/resou"
           + "rce.proto\032\036google/protobuf/duration.prot"
-          + "o\032\037google/protobuf/timestamp.proto\"\341\010\n\010D"
-          + "atabase\022\014\n\004name\030\001 \001(\t\022\023\n\013location_id\030\t \001"
-          + "(\t\022>\n\004type\030\n \001(\01620.google.firestore.admi"
-          + "n.v1.Database.DatabaseType\022M\n\020concurrenc"
-          + "y_mode\030\017 \001(\01623.google.firestore.admin.v1"
-          + ".Database.ConcurrencyMode\022A\n\030version_ret"
-          + "ention_period\030\021 \001(\0132\031.google.protobuf.Du"
-          + "rationB\004\342A\001\003\022?\n\025earliest_version_time\030\022 "
-          + "\001(\0132\032.google.protobuf.TimestampB\004\342A\001\003\022l\n"
-          + "!point_in_time_recovery_enablement\030\025 \001(\016"
-          + "2A.google.firestore.admin.v1.Database.Po"
-          + "intInTimeRecoveryEnablement\022a\n\033app_engin"
-          + "e_integration_mode\030\023 \001(\0162<.google.firest"
-          + "ore.admin.v1.Database.AppEngineIntegrati"
-          + "onMode\022\030\n\nkey_prefix\030\024 \001(\tB\004\342A\001\003\022\014\n\004etag"
-          + "\030c \001(\t\"W\n\014DatabaseType\022\035\n\031DATABASE_TYPE_"
-          + "UNSPECIFIED\020\000\022\024\n\020FIRESTORE_NATIVE\020\001\022\022\n\016D"
-          + "ATASTORE_MODE\020\002\"w\n\017ConcurrencyMode\022 \n\034CO"
-          + "NCURRENCY_MODE_UNSPECIFIED\020\000\022\016\n\nOPTIMIST"
-          + "IC\020\001\022\017\n\013PESSIMISTIC\020\002\022!\n\035OPTIMISTIC_WITH"
-          + "_ENTITY_GROUPS\020\003\"\233\001\n\035PointInTimeRecovery"
-          + "Enablement\0221\n-POINT_IN_TIME_RECOVERY_ENA"
-          + "BLEMENT_UNSPECIFIED\020\000\022\"\n\036POINT_IN_TIME_R"
-          + "ECOVERY_ENABLED\020\001\022#\n\037POINT_IN_TIME_RECOV"
-          + "ERY_DISABLED\020\002\"b\n\030AppEngineIntegrationMo"
-          + "de\022+\n\'APP_ENGINE_INTEGRATION_MODE_UNSPEC"
-          + "IFIED\020\000\022\013\n\007ENABLED\020\001\022\014\n\010DISABLED\020\002:R\352AO\n"
-          + "!firestore.googleapis.com/Database\022\'proj"
-          + "ects/{project}/databases/{database}R\001\001B\334"
-          + "\001\n\035com.google.firestore.admin.v1B\rDataba"
-          + "seProtoP\001Z9cloud.google.com/go/firestore"
-          + "/apiv1/admin/adminpb;adminpb\242\002\004GCFS\252\002\037Go"
-          + "ogle.Cloud.Firestore.Admin.V1\312\002\037Google\\C"
-          + "loud\\Firestore\\Admin\\V1\352\002#Google::Cloud:"
-          + ":Firestore::Admin::V1b\006proto3"
+          + "o\032\037google/protobuf/timestamp.proto\"\277\013\n\010D"
+          + "atabase\022\014\n\004name\030\001 \001(\t\022\021\n\003uid\030\003 \001(\tB\004\342A\001\003"
+          + "\0225\n\013create_time\030\005 \001(\0132\032.google.protobuf."
+          + "TimestampB\004\342A\001\003\0225\n\013update_time\030\006 \001(\0132\032.g"
+          + "oogle.protobuf.TimestampB\004\342A\001\003\022\023\n\013locati"
+          + "on_id\030\t \001(\t\022>\n\004type\030\n \001(\01620.google.fires"
+          + "tore.admin.v1.Database.DatabaseType\022M\n\020c"
+          + "oncurrency_mode\030\017 \001(\01623.google.firestore"
+          + ".admin.v1.Database.ConcurrencyMode\022A\n\030ve"
+          + "rsion_retention_period\030\021 \001(\0132\031.google.pr"
+          + "otobuf.DurationB\004\342A\001\003\022?\n\025earliest_versio"
+          + "n_time\030\022 \001(\0132\032.google.protobuf.Timestamp"
+          + "B\004\342A\001\003\022l\n!point_in_time_recovery_enablem"
+          + "ent\030\025 \001(\0162A.google.firestore.admin.v1.Da"
+          + "tabase.PointInTimeRecoveryEnablement\022a\n\033"
+          + "app_engine_integration_mode\030\023 \001(\0162<.goog"
+          + "le.firestore.admin.v1.Database.AppEngine"
+          + "IntegrationMode\022\030\n\nkey_prefix\030\024 \001(\tB\004\342A\001"
+          + "\003\022Z\n\027delete_protection_state\030\026 \001(\01629.goo"
+          + "gle.firestore.admin.v1.Database.DeletePr"
+          + "otectionState\022\014\n\004etag\030c \001(\t\"W\n\014DatabaseT"
+          + "ype\022\035\n\031DATABASE_TYPE_UNSPECIFIED\020\000\022\024\n\020FI"
+          + "RESTORE_NATIVE\020\001\022\022\n\016DATASTORE_MODE\020\002\"w\n\017"
+          + "ConcurrencyMode\022 \n\034CONCURRENCY_MODE_UNSP"
+          + "ECIFIED\020\000\022\016\n\nOPTIMISTIC\020\001\022\017\n\013PESSIMISTIC"
+          + "\020\002\022!\n\035OPTIMISTIC_WITH_ENTITY_GROUPS\020\003\"\233\001"
+          + "\n\035PointInTimeRecoveryEnablement\0221\n-POINT"
+          + "_IN_TIME_RECOVERY_ENABLEMENT_UNSPECIFIED"
+          + "\020\000\022\"\n\036POINT_IN_TIME_RECOVERY_ENABLED\020\001\022#"
+          + "\n\037POINT_IN_TIME_RECOVERY_DISABLED\020\002\"b\n\030A"
+          + "ppEngineIntegrationMode\022+\n\'APP_ENGINE_IN"
+          + "TEGRATION_MODE_UNSPECIFIED\020\000\022\013\n\007ENABLED\020"
+          + "\001\022\014\n\010DISABLED\020\002\"\177\n\025DeleteProtectionState"
+          + "\022\'\n#DELETE_PROTECTION_STATE_UNSPECIFIED\020"
+          + "\000\022\036\n\032DELETE_PROTECTION_DISABLED\020\001\022\035\n\031DEL"
+          + "ETE_PROTECTION_ENABLED\020\002:R\352AO\n!firestore"
+          + ".googleapis.com/Database\022\'projects/{proj"
+          + "ect}/databases/{database}R\001\001B\334\001\n\035com.goo"
+          + "gle.firestore.admin.v1B\rDatabaseProtoP\001Z"
+          + "9cloud.google.com/go/firestore/apiv1/adm"
+          + "in/adminpb;adminpb\242\002\004GCFS\252\002\037Google.Cloud"
+          + ".Firestore.Admin.V1\312\002\037Google\\Cloud\\Fires"
+          + "tore\\Admin\\V1\352\002#Google::Cloud::Firestore"
+          + "::Admin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -96,6 +105,9 @@ public final class DatabaseProto {
             internal_static_google_firestore_admin_v1_Database_descriptor,
             new java.lang.String[] {
               "Name",
+              "Uid",
+              "CreateTime",
+              "UpdateTime",
               "LocationId",
               "Type",
               "ConcurrencyMode",
@@ -104,6 +116,7 @@ public final class DatabaseProto {
               "PointInTimeRecoveryEnablement",
               "AppEngineIntegrationMode",
               "KeyPrefix",
+              "DeleteProtectionState",
               "Etag",
             });
     com.google.protobuf.ExtensionRegistry registry =
