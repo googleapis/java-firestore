@@ -22,9 +22,7 @@ import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
 import com.google.cloud.firestore.Transaction.Function;
-import com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder;
 import java.util.List;
-import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -168,7 +166,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * Gets a Firestore {@link WriteBatch} instance that can be used to combine multiple writes.
    *
    * @return A WriteBatch that operates on this Firestore client.
-   * @deprecated as of 3.16.0, replaced by {@link #bulkWriter()} or {@link #runTransaction(Function)}.
+   * @deprecated as of 3.16.0, replaced by {@link #bulkWriter()} or {@link
+   *     #runTransaction(Function)}.
    */
   @Deprecated
   @Nonnull
