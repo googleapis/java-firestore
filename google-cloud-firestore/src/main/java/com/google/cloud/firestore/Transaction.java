@@ -124,22 +124,26 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_ROLLBACK);
-    RollbackRequest req = RollbackRequest.newBuilder()
-        .setTransaction(transactionId)
-        .setDatabase(firestore.getDatabaseName())
-        .build();
+    RollbackRequest req =
+        RollbackRequest.newBuilder()
+            .setTransaction(transactionId)
+            .setDatabase(firestore.getDatabaseName())
+            .build();
 
     ApiFuture<Empty> rollbackFuture =
         firestore.sendRequest(req, firestore.getClient().rollbackCallable());
 
-    ApiFuture<Void> transform = ApiFutures.transform(rollbackFuture, resp -> null,
-        MoreExecutors.directExecutor());
+    ApiFuture<Void> transform =
+        ApiFutures.transform(rollbackFuture, resp -> null, MoreExecutors.directExecutor());
 
     return ApiFutures.catching(
         transform,
         Throwable.class,
         (error) -> {
-          LOGGER.log(Level.WARNING, "Failed best effort to rollback of transaction " + transactionId, error);
+          LOGGER.log(
+              Level.WARNING,
+              "Failed best effort to rollback of transaction " + transactionId,
+              error);
           return null;
         },
         MoreExecutors.directExecutor());

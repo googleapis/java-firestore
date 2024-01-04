@@ -1215,8 +1215,7 @@ public final class LocalFirestoreHelper {
       assertArrayEquals(
           "Expected requests, but got actual requests",
           operationList.stream().map(x -> x.request).toArray(),
-          actualRequestList.toArray()
-      );
+          actualRequestList.toArray());
     }
   }
 
