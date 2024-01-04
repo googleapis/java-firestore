@@ -880,7 +880,6 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
     QueryPlan plan = query.explain().get();
-    System.out.println(plan.getPlanInfo());
     assertThat(plan.getPlanInfo()).isNotEmpty();
   }
 
