@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.api.core.ApiFutures.immediateFailedFuture;
 import static com.google.cloud.firestore.LocalFirestoreHelper.IMMEDIATE_RETRY_SETTINGS;
 import static com.google.cloud.firestore.LocalFirestoreHelper.SINGLE_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.TRANSACTION_ID;
@@ -88,7 +89,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class TransactionTest {
 
   private final ApiFuture<GeneratedMessageV3> RETRYABLE_API_EXCEPTION =
-      ApiFutures.immediateFailedFuture(
+      immediateFailedFuture(
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));
 
@@ -244,7 +245,7 @@ public class TransactionTest {
 
     ApiFuture<String> transaction =
         firestoreMock.runAsyncTransaction(
-            t -> ApiFutures.immediateFailedFuture(new Exception("Expected exception")), options);
+            t -> immediateFailedFuture(new Exception("Expected exception")), options);
 
     try {
       transaction.get();
@@ -262,7 +263,7 @@ public class TransactionTest {
 
   @Test
   public void noRollbackOnBeginFailure() {
-    doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
+    doReturn(immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
@@ -288,7 +289,7 @@ public class TransactionTest {
 
   @Test
   public void noRollbackOnBeginFailureAsync() {
-    doReturn(ApiFutures.immediateFailedFuture(new Exception("Expected exception")))
+    doReturn(immediateFailedFuture(new Exception("Expected exception")))
         .when(firestoreMock)
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
@@ -493,7 +494,7 @@ public class TransactionTest {
             new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
-                put(commit("foo1"), ApiFutures.immediateFailedFuture(e));
+                put(commit("foo1"), immediateFailedFuture(e));
                 put(rollback("foo1"), rollbackResponse());
                 put(begin("foo1"), beginResponse("foo2"));
                 put(commit("foo2"), commitResponse(0, 0));
@@ -503,7 +504,7 @@ public class TransactionTest {
             new ResponseStubber() {
               {
                 put(begin(), beginResponse("foo1"));
-                put(commit("foo1"), ApiFutures.immediateFailedFuture(e));
+                put(commit("foo1"), immediateFailedFuture(e));
                 put(rollback("foo1"), rollbackResponse());
               }
             });
@@ -511,32 +512,33 @@ public class TransactionTest {
 
   @Test
   public void retriesRollbackBasedOnErrorCode() throws Exception {
-    final ApiException commitException = exception(Status.Code.ABORTED, true);
+    final ApiException retryable = exception(Status.Code.ABORTED, true);
 
+    // Regardless of exception thrown by rollback, we should never retry
+    // calling rollback. Rollback is best effort, and will sometimes return
+    // INTERNAL error (which is retryable) when transaction no longer exists
+    // on Firestore server side. Attempting to retry will in some cases simply
+    // exhaust retries with accumulated backoff delay, when a new transaction
+    // could simply be started (since the old transaction no longer exists
+    // server side).
     verifyRetries(
         /* expectedSequenceWithRetry= */ e -> {
-          final ApiFuture<GeneratedMessageV3> rollbackException =
-              ApiFutures.immediateFailedFuture(e);
           return new ResponseStubber() {
             {
               put(begin(), beginResponse("foo1"));
-              put(commit("foo1"), ApiFutures.immediateFailedFuture(commitException));
-              put(rollback("foo1"), rollbackException);
-              put(rollback("foo1"), rollbackResponse());
+              put(commit("foo1"), immediateFailedFuture(e));
+              put(rollback("foo1"), immediateFailedFuture(retryable));
               put(begin("foo1"), beginResponse("foo2"));
               put(commit("foo2"), commitResponse(0, 0));
             }
           };
         },
         /* expectedSequenceWithoutRetry= */ e -> {
-          final ApiFuture<GeneratedMessageV3> rollbackException =
-              ApiFutures.immediateFailedFuture(e);
           return new ResponseStubber() {
             {
               put(begin(), beginResponse("foo1"));
-              put(commit("foo1"), ApiFutures.immediateFailedFuture(commitException));
-              put(rollback("foo1"), rollbackException);
-              put(rollback("foo1"), rollbackResponse());
+              put(commit("foo1"), immediateFailedFuture(e));
+              put(rollback("foo1"), immediateFailedFuture(retryable));
             }
           };
         });

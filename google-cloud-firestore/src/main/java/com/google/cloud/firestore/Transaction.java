@@ -29,6 +29,8 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import io.opencensus.trace.Tracing;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,6 +42,7 @@ import javax.annotation.Nullable;
  */
 public final class Transaction extends UpdateBuilder<Transaction> {
 
+  private static final Logger LOGGER = Logger.getLogger(Transaction.class.getName());
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
 
@@ -121,15 +124,25 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_ROLLBACK);
-    RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
-    reqBuilder.setTransaction(transactionId);
-    reqBuilder.setDatabase(firestore.getDatabaseName());
+    RollbackRequest req = RollbackRequest.newBuilder()
+        .setTransaction(transactionId)
+        .setDatabase(firestore.getDatabaseName())
+        .build();
 
     ApiFuture<Empty> rollbackFuture =
-        firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
+        firestore.sendRequest(req, firestore.getClient().rollbackCallable());
 
-    return ApiFutures.transform(
-        rollbackFuture, beginTransactionResponse -> null, MoreExecutors.directExecutor());
+    ApiFuture<Void> transform = ApiFutures.transform(rollbackFuture, resp -> null,
+        MoreExecutors.directExecutor());
+
+    return ApiFutures.catching(
+        transform,
+        Throwable.class,
+        (error) -> {
+          LOGGER.log(Level.WARNING, "Failed best effort to rollback of transaction " + transactionId, error);
+          return null;
+        },
+        MoreExecutors.directExecutor());
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -83,6 +84,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
@@ -1179,9 +1181,9 @@ public final class LocalFirestoreHelper {
    * `sendRequest()` is called.
    */
   static class ResponseStubber {
-    int requestCount = 0;
-
     List<RequestResponsePair> operationList = new ArrayList<>();
+
+    List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
     void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
       operationList.add(new RequestResponsePair(request, response));
@@ -1193,8 +1195,11 @@ public final class LocalFirestoreHelper {
       for (final RequestResponsePair entry : operationList) {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
             invocationOnMock -> {
-              ++requestCount;
-              assertEquals(entry.request, invocationOnMock.getArguments()[0]);
+              actualRequestList.add(invocationOnMock.getArguments()[0]);
+              if (!entry.request.equals(invocationOnMock.getArguments()[0])) {
+                System.out.println("BAD INVOCATION");
+                System.out.println(invocationOnMock.getArguments()[0]);
+              }
               return entry.response;
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
@@ -1207,10 +1212,11 @@ public final class LocalFirestoreHelper {
     }
 
     public void verifyAllRequestsSent() {
-      assertEquals(
-          String.format("Expected %d requests, but got %d", operationList.size(), requestCount),
-          operationList.size(),
-          requestCount);
+      assertArrayEquals(
+          "Expected requests, but got actual requests",
+          operationList.stream().map(x -> x.request).toArray(),
+          actualRequestList.toArray()
+      );
     }
   }
 
