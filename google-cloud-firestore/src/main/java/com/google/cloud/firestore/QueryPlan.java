@@ -15,19 +15,17 @@
  */
 package com.google.cloud.firestore;
 
-import com.google.api.core.InternalApi;
 import java.util.Map;
 
 /** A QueryPlan contains information about the planning stage of a query. */
 public class QueryPlan {
   private final Map<String, Object> planInfo;
 
-  @InternalApi
-  public QueryPlan(com.google.firestore.v1.QueryPlan proto) {
+  QueryPlan(com.google.firestore.v1.QueryPlan proto) {
     this.planInfo = UserDataConverter.decodeStruct(proto.getPlanInfo());
   }
 
-  public static QueryPlan getDefaultInstance() {
+  static QueryPlan getDefaultInstance() {
     return new QueryPlan(com.google.firestore.v1.QueryPlan.newBuilder().build());
   }
 
