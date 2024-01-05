@@ -67,7 +67,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   private final TransactionOptions transactionOptions;
   private ByteString transactionId;
-  @Nonnull private final Context txnTraceContext;
+  @Nonnull private final Context transactionTraceContext;
 
   Transaction(
       FirestoreImpl firestore,
@@ -76,7 +76,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     super(firestore);
     this.transactionOptions = transactionOptions;
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
-    this.txnTraceContext = firestore.getTraceUtil().currentContext();
+    this.transactionTraceContext = firestore.getTraceUtil().currentContext();
   }
 
   public boolean hasTransactionId() {
@@ -90,7 +90,9 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
     TraceUtil.Span span =
-        firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
+        firestore
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, transactionTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
       beginTransaction.setDatabase(firestore.getDatabaseName());
@@ -131,7 +133,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Commits a transaction. */
   ApiFuture<List<WriteResult>> commit() {
-    try (Scope ignored = txnTraceContext.makeCurrent()) {
+    try (Scope ignored = transactionTraceContext.makeCurrent()) {
       return super.commit(transactionId);
     }
   }
@@ -141,7 +143,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     TraceUtil.Span span =
         firestore
             .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, transactionTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
       reqBuilder.setTransaction(transactionId);
@@ -174,7 +176,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     TraceUtil.Span span =
         firestore
             .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
@@ -204,7 +206,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     TraceUtil.Span span =
         firestore
             .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
@@ -232,7 +234,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     TraceUtil.Span span =
         firestore
             .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId);
@@ -254,7 +256,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
-    try (Scope ignored = txnTraceContext.makeCurrent()) {
+    try (Scope ignored = transactionTraceContext.makeCurrent()) {
       return query.get(transactionId);
     }
   }
@@ -269,7 +271,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
-    try (Scope ignored = txnTraceContext.makeCurrent()) {
+    try (Scope ignored = transactionTraceContext.makeCurrent()) {
       return query.get(transactionId);
     }
   }
