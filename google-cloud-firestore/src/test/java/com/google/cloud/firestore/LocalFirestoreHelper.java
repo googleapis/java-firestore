@@ -1196,10 +1196,6 @@ public final class LocalFirestoreHelper {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
             invocationOnMock -> {
               actualRequestList.add(invocationOnMock.getArguments()[0]);
-              if (!entry.request.equals(invocationOnMock.getArguments()[0])) {
-                System.out.println("BAD INVOCATION");
-                System.out.println(invocationOnMock.getArguments()[0]);
-              }
               return entry.response;
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);

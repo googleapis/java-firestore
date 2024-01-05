@@ -516,11 +516,11 @@ public class TransactionTest {
 
     // Regardless of exception thrown by rollback, we should never retry
     // calling rollback. Rollback is best effort, and will sometimes return
-    // INTERNAL error (which is retryable) when transaction no longer exists
-    // on Firestore server side. Attempting to retry will in some cases simply
-    // exhaust retries with accumulated backoff delay, when a new transaction
-    // could simply be started (since the old transaction no longer exists
-    // server side).
+    // ABORT error (which a transaction will retry) when transaction no longer
+    // exists on Firestore server side. Attempting to retry will in some cases
+    // simply exhaust retries with accumulated backoff delay, when a new
+    // transaction could simply be started (since the old transaction no longer
+    // exists server side).
     verifyRetries(
         /* expectedSequenceWithRetry= */ e -> {
           return new ResponseStubber() {
