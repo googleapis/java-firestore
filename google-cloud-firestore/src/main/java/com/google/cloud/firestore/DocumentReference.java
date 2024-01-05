@@ -16,7 +16,9 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.*;
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.telemetry.TraceUtil;
@@ -24,7 +26,10 @@ import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
