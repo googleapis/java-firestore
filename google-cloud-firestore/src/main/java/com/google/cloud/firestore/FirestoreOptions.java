@@ -225,7 +225,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     }
 
     /**
-     * Sets the {@link FirestoreOpenTelemetryOptions} to be used for this Firestore client.
+     * Sets the {@link FirestoreOpenTelemetryOptions} to be used for this Firestore instance.
      *
      * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
      */
