@@ -21,8 +21,6 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
-import com.google.cloud.firestore.telemetry.TraceUtil;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -307,10 +305,4 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
 
   /** Attempts to stop all actively executing work and halts the processing of waiting work. */
   void shutdownNow();
-
-  /** Returns the OpenTelemetry utility object associated with this Firestore instance. */
-  OpenTelemetryUtil getOpenTelemetryUtil();
-
-  /** Returns the OpenTelemetry Tracing utility object associated with this Firestore instance. */
-  TraceUtil getTraceUtil();
 }

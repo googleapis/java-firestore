@@ -31,6 +31,7 @@ import com.google.cloud.TransportOptions;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
 import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.common.collect.ImmutableMap;
@@ -121,6 +122,11 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @Nonnull
   OpenTelemetryUtil getOpenTelemetryUtil() {
     return openTelemetryUtil;
+  }
+
+  @Nonnull
+  TraceUtil getTraceUtil() {
+    return openTelemetryUtil.getTraceUtil();
   }
 
   @BetaApi

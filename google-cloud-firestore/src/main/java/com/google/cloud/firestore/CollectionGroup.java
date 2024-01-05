@@ -105,7 +105,11 @@ public class CollectionGroup extends Query {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       TraceUtil.Span span =
-          rpcContext.getFirestore().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_PARTITION_QUERY);
+          rpcContext
+              .getFirestore()
+              .getOptions()
+              .getTraceUtil()
+              .startSpan(TraceUtil.SPAN_NAME_PARTITION_QUERY);
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<List<QueryPartition>> result =
             ApiFutures.transform(

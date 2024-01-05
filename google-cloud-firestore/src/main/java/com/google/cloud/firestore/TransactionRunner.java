@@ -32,6 +32,7 @@ import io.grpc.Context;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 
 /**
  * Implements backoff and retry semantics for Firestore transactions.
@@ -83,8 +84,13 @@ class TransactionRunner<T> {
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
   }
 
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return firestore.getOptions().getTraceUtil();
+  }
+
   ApiFuture<T> run() {
-    runTransactionSpan = firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+    runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
     runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
     runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
@@ -199,7 +205,7 @@ class TransactionRunner<T> {
     ApiException apiException = (ApiException) throwable;
     if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
       if (attemptsRemaining > 0) {
-        firestore.getTraceUtil().currentSpan().addEvent("Initiate transaction retry");
+        getTraceUtil().currentSpan().addEvent("Initiate transaction retry");
         return run();
       } else {
         final FirestoreException firestoreException =

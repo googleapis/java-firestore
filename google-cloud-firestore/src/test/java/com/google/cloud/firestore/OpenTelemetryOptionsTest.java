@@ -51,10 +51,11 @@ public class OpenTelemetryOptionsTest {
   public void defaultOptionsDisablesTelemetryCollection() {
     FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof DisabledTraceUtil).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil)
+        .isTrue();
+    assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
+    assertThat(firestore.getOptions().getTraceUtil() instanceof DisabledTraceUtil).isTrue();
   }
 
   @Test
@@ -67,10 +68,11 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
-    assertThat(firestore.getTraceUtil()).isNotNull();
-    assertThat(firestore.getTraceUtil() instanceof EnabledTraceUtil).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
+        .isTrue();
+    assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
+    assertThat(firestore.getOptions().getTraceUtil() instanceof EnabledTraceUtil).isTrue();
   }
 
   @Test
@@ -87,10 +89,11 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
+        .isTrue();
     EnabledOpenTelemetryUtil enabledOpenTelemetryUtil =
-        (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
+        (EnabledOpenTelemetryUtil) firestore.getOptions().getOpenTelemetryUtil();
     assertThat(enabledOpenTelemetryUtil.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
   }
 
@@ -106,10 +109,11 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
+        .isTrue();
     EnabledOpenTelemetryUtil enabledOpenTelemetryUtil =
-        (EnabledOpenTelemetryUtil) firestore.getOpenTelemetryUtil();
+        (EnabledOpenTelemetryUtil) firestore.getOptions().getOpenTelemetryUtil();
     assertThat(enabledOpenTelemetryUtil.getOpenTelemetry()).isEqualTo(myOpenTelemetrySdk);
   }
 
@@ -125,7 +129,8 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
+    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil)
+        .isTrue();
   }
 }

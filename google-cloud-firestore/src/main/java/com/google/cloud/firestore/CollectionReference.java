@@ -132,6 +132,7 @@ public class CollectionReference extends Query {
     TraceUtil.Span span =
         rpcContext
             .getFirestore()
+            .getOptions()
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS);
     try (Scope ignored = span.makeCurrent()) {
@@ -192,7 +193,11 @@ public class CollectionReference extends Query {
   @Nonnull
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
     TraceUtil.Span span =
-        rpcContext.getFirestore().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
+        rpcContext
+            .getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
     try (Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();
       ApiFuture<WriteResult> createFuture = documentReference.create(fields);

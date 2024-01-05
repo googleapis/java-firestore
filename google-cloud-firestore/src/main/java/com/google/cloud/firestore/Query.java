@@ -1633,7 +1633,7 @@ public class Query {
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime,
       final boolean isRetryRequestWithCursor) {
-    TraceUtil traceUtil = getFirestore().getTraceUtil();
+    TraceUtil traceUtil = getFirestore().getOptions().getTraceUtil();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
@@ -1796,6 +1796,7 @@ public class Query {
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
     TraceUtil.Span span =
         getFirestore()
+            .getOptions()
             .getTraceUtil()
             .startSpan(
                 transactionId == null

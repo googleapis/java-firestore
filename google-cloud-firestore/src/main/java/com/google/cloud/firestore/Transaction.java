@@ -76,7 +76,12 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     super(firestore);
     this.transactionOptions = transactionOptions;
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
-    this.txnTraceContext = firestore.getTraceUtil().currentContext();
+    this.txnTraceContext = firestore.getOptions().getTraceUtil().currentContext();
+  }
+
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return firestore.getOptions().getTraceUtil();
   }
 
   public boolean hasTransactionId() {
@@ -90,7 +95,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
     TraceUtil.Span span =
-        firestore.getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, txnTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
       beginTransaction.setDatabase(firestore.getDatabaseName());
@@ -139,9 +144,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
     TraceUtil.Span span =
-        firestore
-            .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, txnTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
       reqBuilder.setTransaction(transactionId);
@@ -172,9 +175,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     TraceUtil.Span span =
-        firestore
-            .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, txnTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
@@ -202,9 +203,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     TraceUtil.Span span =
-        firestore
-            .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
@@ -230,9 +229,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
 
     TraceUtil.Span span =
-        firestore
-            .getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, txnTraceContext);
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId);

@@ -65,6 +65,11 @@ public class AggregateQuery {
     this.aliasMap = new HashMap<>();
   }
 
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return query.getFirestore().getOptions().getTraceUtil();
+  }
+
   /** Returns the query whose aggregations will be calculated by this object. */
   @Nonnull
   public Query getQuery() {
@@ -84,9 +89,7 @@ public class AggregateQuery {
   @Nonnull
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
     TraceUtil.Span span =
-        query
-            .getFirestore()
-            .getTraceUtil()
+        getTraceUtil()
             .startSpan(
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
@@ -182,9 +185,7 @@ public class AggregateQuery {
 
     @Override
     public void onStart(StreamController streamController) {
-      rpcContext
-          .getFirestore()
-          .getTraceUtil()
+      getTraceUtil()
           .currentSpan()
           .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
       this.streamController = streamController;
@@ -192,9 +193,7 @@ public class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      rpcContext
-          .getFirestore()
-          .getTraceUtil()
+      getTraceUtil()
           .currentSpan()
           .addEvent(
               SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
@@ -213,9 +212,7 @@ public class AggregateQuery {
     @Override
     public void onError(Throwable throwable) {
       if (shouldRetry(throwable)) {
-        rpcContext
-            .getFirestore()
-            .getTraceUtil()
+        getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
@@ -223,9 +220,7 @@ public class AggregateQuery {
 
         runQuery(responseDeliverer, attempt + 1);
       } else {
-        rpcContext
-            .getFirestore()
-            .getTraceUtil()
+        getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",

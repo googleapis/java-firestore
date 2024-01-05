@@ -131,7 +131,7 @@ public class DocumentReference {
   /** Gets the TraceUtil object associated with this DocumentReference's Firestore instance. */
   @Nonnull
   private TraceUtil getTraceUtil() {
-    return getFirestore().getTraceUtil();
+    return getFirestore().getOptions().getTraceUtil();
   }
 
   /**

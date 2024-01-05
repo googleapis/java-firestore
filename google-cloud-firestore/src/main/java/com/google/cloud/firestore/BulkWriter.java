@@ -242,7 +242,7 @@ public final class BulkWriter implements AutoCloseable {
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
     this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
-    this.traceContext = firestore.getTraceUtil().currentContext();
+    this.traceContext = firestore.getOptions().getTraceUtil().currentContext();
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -911,6 +911,7 @@ public final class BulkWriter implements AutoCloseable {
     if (underRateLimit) {
       TraceUtil.Span span =
           firestore
+              .getOptions()
               .getTraceUtil()
               .startSpan(TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
               .setAttribute("numDocuments", batch.getWrites().size());

@@ -608,6 +608,7 @@ public abstract class UpdateBuilder<T> {
 
     TraceUtil.Span span =
         firestore
+            .getOptions()
             .getTraceUtil()
             .startSpan(
                 transactionId == null

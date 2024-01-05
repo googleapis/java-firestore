@@ -30,7 +30,6 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -58,7 +57,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   private final FirestoreRpc firestoreClient;
   private final FirestoreOptions firestoreOptions;
   private final ResourcePath databasePath;
-  private final OpenTelemetryUtil openTelemetryUtil;
 
   /**
    * A lazy-loaded BulkWriter instance to be used with recursiveDelete() if no BulkWriter instance
@@ -81,7 +79,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
-    this.openTelemetryUtil = options.getOpenTelemetryUtil();
+  }
+
+  /** Gets the TraceUtil object associated with this Firestore instance. */
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return getOptions().getTraceUtil();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -90,15 +93,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       bulkWriterInstance = bulkWriter();
     }
     return bulkWriterInstance;
-  }
-
-  public OpenTelemetryUtil getOpenTelemetryUtil() {
-    return this.openTelemetryUtil;
-  }
-
-  @Override
-  public TraceUtil getTraceUtil() {
-    return this.openTelemetryUtil.getTraceUtil();
   }
 
   /** Creates a pseudo-random 20-character ID that can be used for Firestore documents. */
