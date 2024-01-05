@@ -281,7 +281,8 @@ public final class LocalFirestoreHelper {
       responses[i] = response.build();
     }
 
-    return streamingResponse(responses, null);
+    // Verify with logical termination, the return of results no longer depends on calling OnComplete.
+    return streamingResponseWithoutOnComplete(responses);
   }
 
   public static ApiFuture<Empty> rollbackResponse() {
