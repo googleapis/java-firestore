@@ -281,7 +281,8 @@ public final class LocalFirestoreHelper {
       responses[i] = response.build();
     }
 
-    // Verify with logical termination, the return of results no longer depends on calling OnComplete.
+    // Verify with logical termination, the return of results no longer depends on calling
+    // OnComplete.
     return streamingResponseWithoutOnComplete(responses);
   }
 
