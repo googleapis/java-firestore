@@ -222,6 +222,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses;
+          boolean hasCompleted = false;
 
           @Override
           public void onStart(StreamController streamController) {}
@@ -265,6 +266,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                 return;
             }
             apiStreamObserver.onNext(documentSnapshot);
+
+            // Logical termination: if we have already received as many documents as we had
+            // requested, we can
+            // raise the results without waiting for the termination from the server.
+            if (numResponses == documentReferences.length) {
+              onComplete();
+            }
           }
 
           @Override
@@ -277,6 +285,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onComplete() {
+            if (hasCompleted) return;
+            hasCompleted = true;
             tracer
                 .getCurrentSpan()
                 .addAnnotation(TraceUtil.SPAN_NAME_BATCHGETDOCUMENTS + ": Complete");
