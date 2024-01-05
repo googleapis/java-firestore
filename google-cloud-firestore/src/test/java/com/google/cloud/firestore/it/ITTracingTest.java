@@ -91,9 +91,7 @@ public class ITTracingTest {
     FirestoreOptions.Builder optionsBuilder =
         FirestoreOptions.newBuilder()
             .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
-                    .build());
+                FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
       logger.log(Level.INFO, "Integration test using named database " + namedDb);

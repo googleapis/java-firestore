@@ -70,22 +70,22 @@ public class FirestoreOpenTelemetryOptions {
     }
 
     /**
-     * Sets whether the Firestore SDK should collect telemetry information.
+     * Sets whether tracing should be enabled.
      *
-     * @param enable Whether telemetry collection should be enabled.
+     * @param enable Whether tracing should be enabled.
      */
     @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setTelemetryCollectionEnabled(boolean enable) {
+    public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean enable) {
       this.enabled = enable;
       return this;
     }
 
     /**
-     * Sets the {@link OpenTelemetry} to use with this Firestore client. If telemetry collection is
+     * Sets the {@link OpenTelemetry} to use with this Firestore instance. If telemetry collection
      * is enabled, but an `OpenTelemetry` is not provided, the Firestore SDK will attempt to use the
-     * GlobalOpenTelemetry.
+     * `GlobalOpenTelemetry`.
      *
-     * @param openTelemetry The OpenTelemetry that can be used by this client.
+     * @param openTelemetry The OpenTelemetry that should be used by this Firestore instance.
      */
     @Nonnull
     public FirestoreOpenTelemetryOptions.Builder setOpenTelemetry(

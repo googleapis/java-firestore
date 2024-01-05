@@ -62,9 +62,7 @@ public class OpenTelemetryOptionsTest {
     FirestoreOptions firestoreOptions =
         getBaseOptions()
             .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
-                    .build())
+                FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
             .build();
     firestore = firestoreOptions.getService();
     assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
@@ -82,9 +80,7 @@ public class OpenTelemetryOptionsTest {
     FirestoreOptions firestoreOptions =
         getBaseOptions()
             .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
-                    .build())
+                FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
             .build();
     firestore = firestoreOptions.getService();
     assertThat(firestore.getOpenTelemetryUtil()).isNotNull();
@@ -101,7 +97,7 @@ public class OpenTelemetryOptionsTest {
         getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(true)
+                    .setTracingEnabled(true)
                     .setOpenTelemetry(myOpenTelemetrySdk)
                     .build())
             .build();
@@ -120,7 +116,7 @@ public class OpenTelemetryOptionsTest {
         getBaseOptions()
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
-                    .setTelemetryCollectionEnabled(false)
+                    .setTracingEnabled(false)
                     .setOpenTelemetry(myOpenTelemetrySdk)
                     .build())
             .build();
