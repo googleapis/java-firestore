@@ -47,6 +47,7 @@ public interface TraceUtil {
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
 
+  /** Represents a trace span. */
   interface Span {
     /** Adds the given event to this span. */
     Span addEvent(String name);
@@ -78,11 +79,13 @@ public interface TraceUtil {
     <T> void endAtFuture(ApiFuture<T> futureValue);
   }
 
+  /** Represents a trace context. */
   interface Context {
     /** Makes this context the current context. */
     Scope makeCurrent();
   }
 
+  /** Represents a trace scope. */
   interface Scope extends AutoCloseable {
     /** Closes the current scope. */
     void close();
