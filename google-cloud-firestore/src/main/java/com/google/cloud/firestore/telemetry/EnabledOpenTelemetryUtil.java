@@ -38,11 +38,11 @@ public class EnabledOpenTelemetryUtil extends OpenTelemetryUtil {
   }
 
   // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
-  public static class OpenTelemetryGrpcChannelConfigurator
+  public class OpenTelemetryGrpcChannelConfigurator
       implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
     @Override
     public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
-      GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(GlobalOpenTelemetry.get());
+      GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(getOpenTelemetry());
       return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
     }
   }
