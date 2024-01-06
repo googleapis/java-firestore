@@ -111,8 +111,7 @@ public class AggregateQuery {
   private void runQuery(AggregateQueryResponseDeliverer responseDeliverer, int attempt) {
     RunAggregationQueryRequest request = toProto(responseDeliverer.getTransactionId());
     AggregateQueryResponseObserver responseObserver =
-        new AggregateQueryResponseObserver(
-            responseDeliverer, attempt, query.getFirestore().getOptions().getTraceUtil());
+        new AggregateQueryResponseObserver(responseDeliverer, attempt);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
     query.rpcContext.streamRequest(request, responseObserver, callable);
@@ -164,13 +163,10 @@ public class AggregateQuery {
     private final AggregateQueryResponseDeliverer responseDeliverer;
     private StreamController streamController;
     private int attempt;
-    private TraceUtil traceUtil;
 
-    AggregateQueryResponseObserver(
-        AggregateQueryResponseDeliverer responseDeliverer, int attempt, TraceUtil traceUtil) {
+    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer, int attempt) {
       this.responseDeliverer = responseDeliverer;
       this.attempt = attempt;
-      this.traceUtil = traceUtil;
     }
 
     Map<String, Object> getAttemptAttributes() {
@@ -184,7 +180,7 @@ public class AggregateQuery {
 
     @Override
     public void onStart(StreamController streamController) {
-      traceUtil
+      getTraceUtil()
           .currentSpan()
           .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
       this.streamController = streamController;
@@ -192,7 +188,7 @@ public class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      traceUtil
+      getTraceUtil()
           .currentSpan()
           .addEvent(
               SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
@@ -211,7 +207,7 @@ public class AggregateQuery {
     @Override
     public void onError(Throwable throwable) {
       if (shouldRetry(throwable)) {
-        traceUtil
+        getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
@@ -219,7 +215,7 @@ public class AggregateQuery {
 
         runQuery(responseDeliverer, attempt + 1);
       } else {
-        traceUtil
+        getTraceUtil()
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
