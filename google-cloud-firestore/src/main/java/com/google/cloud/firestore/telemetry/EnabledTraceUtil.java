@@ -174,28 +174,6 @@ public class EnabledTraceUtil implements TraceUtil {
 
   /** Applies the current Firestore instance settings as attributes to the current Span */
   private SpanBuilder addSettingsAttributesToCurrentSpan(SpanBuilder spanBuilder) {
-    // System.out.println("Available processors (cores): " +
-    //     Runtime.getRuntime().availableProcessors());
-    //
-    // /* Total amount of free memory available to the JVM */
-    // System.out.println("Free memory (bytes): " +
-    //     Runtime.getRuntime().freeMemory());
-    //
-    // /* This will return Long.MAX_VALUE if there is no preset limit */
-    // long maxMemory = Runtime.getRuntime().maxMemory();
-    // /* Maximum amount of memory the JVM will attempt to use */
-    // System.out.println("Maximum memory (bytes): " +
-    //     (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
-    //
-    // /* Total memory currently available to the JVM */
-    // System.out.println("Total memory available to JVM (bytes): " +
-    //     Runtime.getRuntime().totalMemory());
-
-    spanBuilder =
-        spanBuilder.setAttribute(
-            ATTRIBUTE_SERVICE_PREFIX + "availableProcessors",
-            Runtime.getRuntime().availableProcessors());
-
     spanBuilder =
         spanBuilder.setAllAttributes(
             Attributes.builder()
@@ -268,17 +246,14 @@ public class EnabledTraceUtil implements TraceUtil {
                   .build());
     }
 
+    // Add the memory utilization of the client at the time this trace was collected.
     long totalMemory = Runtime.getRuntime().totalMemory();
     long freeMemory = Runtime.getRuntime().freeMemory();
     double memoryUtilization = ((double) (totalMemory - freeMemory)) / totalMemory;
-    spanBuilder.setAttribute(ATTRIBUTE_SERVICE_PREFIX + "memoryUtilization", memoryUtilization);
-    // OperatingSystemMXBean osBean =
-    // ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-    // double systemLoadAverage = osBean.getSystemLoadAverage();
-    // if(osBean.getSystemLoadAverage() > 0) {
-    //   spanBuilder.setAttribute(ATTRIBUTE_SERVICE_PREFIX + "systemLoadAverage",
-    // systemLoadAverage);
-    // }
+    spanBuilder.setAttribute(
+        ATTRIBUTE_SERVICE_PREFIX + "memoryUtilization",
+        String.format("%.2f", memoryUtilization * 100) + "%");
+
     return spanBuilder;
   }
 
