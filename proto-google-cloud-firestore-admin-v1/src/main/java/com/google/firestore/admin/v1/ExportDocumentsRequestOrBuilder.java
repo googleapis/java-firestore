@@ -143,4 +143,128 @@ public interface ExportDocumentsRequestOrBuilder
    * @return The bytes for outputUriPrefix.
    */
   com.google.protobuf.ByteString getOutputUriPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * An empty list represents all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return A list containing the namespaceIds.
+   */
+  java.util.List<java.lang.String> getNamespaceIdsList();
+  /**
+   *
+   *
+   * <pre>
+   * An empty list represents all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @return The count of namespaceIds.
+   */
+  int getNamespaceIdsCount();
+  /**
+   *
+   *
+   * <pre>
+   * An empty list represents all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The namespaceIds at the given index.
+   */
+  java.lang.String getNamespaceIds(int index);
+  /**
+   *
+   *
+   * <pre>
+   * An empty list represents all namespaces. This is the preferred
+   * usage for databases that don't use namespaces.
+   *
+   * An empty string element represents the default namespace. This should be
+   * used if the database has data in non-default namespaces, but doesn't want
+   * to include them. Each namespace in this list must be unique.
+   * </pre>
+   *
+   * <code>repeated string namespace_ids = 4;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the namespaceIds at the given index.
+   */
+  com.google.protobuf.ByteString getNamespaceIdsBytes(int index);
+
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database to be
+   * exported. The timestamp must be in the past, rounded to the minute and not
+   * older than
+   * [earliestVersionTime][google.firestore.admin.v1.Database.earliest_version_time].
+   * If specified, then the exported documents will represent a consistent view
+   * of the database at the provided time. Otherwise, there are no guarantees
+   * about the consistency of the exported documents.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 5;</code>
+   *
+   * @return Whether the snapshotTime field is set.
+   */
+  boolean hasSnapshotTime();
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database to be
+   * exported. The timestamp must be in the past, rounded to the minute and not
+   * older than
+   * [earliestVersionTime][google.firestore.admin.v1.Database.earliest_version_time].
+   * If specified, then the exported documents will represent a consistent view
+   * of the database at the provided time. Otherwise, there are no guarantees
+   * about the consistency of the exported documents.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 5;</code>
+   *
+   * @return The snapshotTime.
+   */
+  com.google.protobuf.Timestamp getSnapshotTime();
+  /**
+   *
+   *
+   * <pre>
+   * The timestamp that corresponds to the version of the database to be
+   * exported. The timestamp must be in the past, rounded to the minute and not
+   * older than
+   * [earliestVersionTime][google.firestore.admin.v1.Database.earliest_version_time].
+   * If specified, then the exported documents will represent a consistent view
+   * of the database at the provided time. Otherwise, there are no guarantees
+   * about the consistency of the exported documents.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp snapshot_time = 5;</code>
+   */
+  com.google.protobuf.TimestampOrBuilder getSnapshotTimeOrBuilder();
 }

@@ -22,6 +22,7 @@ import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestore
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
@@ -367,6 +368,29 @@ public class ITQueryCountTest extends ITBaseTest {
 
     Long transactionCount = transactionFuture.get();
     assertThat(transactionCount).isEqualTo(5);
+  }
+
+  @Test
+  public void countQueryShouldFailWithMessageWithConsoleLinkIfMissingIndex() {
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because the Firestore emulator "
+            + "does not use indexes and never fails with a 'missing index' error",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    CollectionReference collection = createEmptyCollection();
+    Query compositeIndexQuery = collection.whereEqualTo("field1", 42).whereLessThan("field2", 99);
+    AggregateQuery compositeIndexCountQuery = compositeIndexQuery.count();
+    ApiFuture<AggregateQuerySnapshot> future = compositeIndexCountQuery.get();
+
+    ExecutionException executionException = assertThrows(ExecutionException.class, future::get);
+
+    Throwable throwable = executionException.getCause();
+    assertThat(throwable).hasMessageThat().ignoringCase().contains("index");
+    // TODO(b/316359394) Remove this check for the default databases once cl/582465034 is rolled out
+    //  to production.
+    if (collection.getFirestore().getOptions().getDatabaseId().equals("(default)")) {
+      assertThat(throwable).hasMessageThat().contains("https://console.firebase.google.com");
+    }
   }
 
   private CollectionReference createEmptyCollection() {

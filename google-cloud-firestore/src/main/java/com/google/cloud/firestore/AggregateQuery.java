@@ -318,7 +318,8 @@ public class AggregateQuery {
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    // We use this set to remove duplicate aggregates. e.g. `aggregate(sum("foo"), sum("foo"))`
+    // We use this set to remove duplicate aggregates.
+    // For example, `aggregate(sum("foo"), sum("foo"))`
     HashSet<String> uniqueAggregates = new HashSet<>();
     List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
     int aggregationNum = 0;

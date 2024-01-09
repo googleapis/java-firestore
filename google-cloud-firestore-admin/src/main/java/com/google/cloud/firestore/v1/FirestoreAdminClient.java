@@ -37,6 +37,8 @@ import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -1106,7 +1108,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false` .
+   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1142,7 +1144,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false` .
+   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1176,7 +1178,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false` .
+   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1215,7 +1217,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false` .
+   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1253,7 +1255,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false` .
+   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1390,6 +1392,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ExportDocumentsResponse response = firestoreAdminClient.exportDocumentsAsync(request).get();
    * }
@@ -1429,6 +1433,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   OperationFuture<ExportDocumentsResponse, ExportDocumentsMetadata> future =
    *       firestoreAdminClient.exportDocumentsOperationCallable().futureCall(request);
@@ -1469,6 +1475,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setOutputUriPrefix("outputUriPrefix499858205")
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .setSnapshotTime(Timestamp.newBuilder().build())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.exportDocumentsCallable().futureCall(request);
@@ -1564,6 +1572,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   firestoreAdminClient.importDocumentsAsync(request).get();
    * }
@@ -1598,6 +1607,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   OperationFuture<Empty, ImportDocumentsMetadata> future =
    *       firestoreAdminClient.importDocumentsOperationCallable().futureCall(request);
@@ -1632,6 +1642,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
    *           .addAllCollectionIds(new ArrayList<String>())
    *           .setInputUriPrefix("inputUriPrefix-97481100")
+   *           .addAllNamespaceIds(new ArrayList<String>())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.importDocumentsCallable().futureCall(request);
@@ -1669,7 +1680,10 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @param database Required. The Database to create.
    * @param databaseId Required. The ID to use for the database, which will become the final
    *     component of the database's resource name.
-   *     <p>The value must be set to "(default)".
+   *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
+   *     character a letter and the last a letter or a number. Must not be UUID-like
+   *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
+   *     <p>"(default)" database id is also valid.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
@@ -1708,7 +1722,10 @@ public class FirestoreAdminClient implements BackgroundResource {
    * @param database Required. The Database to create.
    * @param databaseId Required. The ID to use for the database, which will become the final
    *     component of the database's resource name.
-   *     <p>The value must be set to "(default)".
+   *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
+   *     character a letter and the last a letter or a number. Must not be UUID-like
+   *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
+   *     <p>"(default)" database id is also valid.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
@@ -2150,6 +2167,149 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable() {
     return stub.updateDatabaseCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   Database response = firestoreAdminClient.deleteDatabaseAsync(name).get();
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, DeleteDatabaseMetadata> deleteDatabaseAsync(
+      DatabaseName name) {
+    DeleteDatabaseRequest request =
+        DeleteDatabaseRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return deleteDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   Database response = firestoreAdminClient.deleteDatabaseAsync(name).get();
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, DeleteDatabaseMetadata> deleteDatabaseAsync(String name) {
+    DeleteDatabaseRequest request = DeleteDatabaseRequest.newBuilder().setName(name).build();
+    return deleteDatabaseAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteDatabaseRequest request =
+   *       DeleteDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setEtag("etag3123477")
+   *           .build();
+   *   Database response = firestoreAdminClient.deleteDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, DeleteDatabaseMetadata> deleteDatabaseAsync(
+      DeleteDatabaseRequest request) {
+    return deleteDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteDatabaseRequest request =
+   *       DeleteDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setEtag("etag3123477")
+   *           .build();
+   *   OperationFuture<Database, DeleteDatabaseMetadata> future =
+   *       firestoreAdminClient.deleteDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable() {
+    return stub.deleteDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a database.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteDatabaseRequest request =
+   *       DeleteDatabaseRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setEtag("etag3123477")
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.deleteDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
+    return stub.deleteDatabaseCallable();
   }
 
   @Override

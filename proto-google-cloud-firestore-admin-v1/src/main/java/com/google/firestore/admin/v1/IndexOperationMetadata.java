@@ -22,7 +22,8 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+ * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+ * results from
  * [FirestoreAdmin.CreateIndex][google.firestore.admin.v1.FirestoreAdmin.CreateIndex].
  * </pre>
  *
@@ -577,7 +578,8 @@ public final class IndexOperationMetadata extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Metadata for [google.longrunning.Operation][google.longrunning.Operation] results from
+   * Metadata for [google.longrunning.Operation][google.longrunning.Operation]
+   * results from
    * [FirestoreAdmin.CreateIndex][google.firestore.admin.v1.FirestoreAdmin.CreateIndex].
    * </pre>
    *

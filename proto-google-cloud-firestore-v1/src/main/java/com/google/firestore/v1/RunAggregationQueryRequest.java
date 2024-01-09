@@ -40,6 +40,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
 
   private RunAggregationQueryRequest() {
     parent_ = "";
+    mode_ = 0;
   }
 
   @java.lang.Override
@@ -436,6 +437,44 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
     return com.google.protobuf.Timestamp.getDefaultInstance();
   }
 
+  public static final int MODE_FIELD_NUMBER = 7;
+  private int mode_ = 0;
+  /**
+   *
+   *
+   * <pre>
+   * Optional. The mode in which the query request is processed. This field is
+   * optional, and when not provided, it defaults to `NORMAL` mode where no
+   * additional statistics will be returned with the query results.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+   *
+   * @return The enum numeric value on the wire for mode.
+   */
+  @java.lang.Override
+  public int getModeValue() {
+    return mode_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Optional. The mode in which the query request is processed. This field is
+   * optional, and when not provided, it defaults to `NORMAL` mode where no
+   * additional statistics will be returned with the query results.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+   *
+   * @return The mode.
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.QueryMode getMode() {
+    com.google.firestore.v1.QueryMode result = com.google.firestore.v1.QueryMode.forNumber(mode_);
+    return result == null ? com.google.firestore.v1.QueryMode.UNRECOGNIZED : result;
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -464,6 +503,9 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
     }
     if (consistencySelectorCase_ == 6) {
       output.writeMessage(6, (com.google.protobuf.Timestamp) consistencySelector_);
+    }
+    if (mode_ != com.google.firestore.v1.QueryMode.NORMAL.getNumber()) {
+      output.writeEnum(7, mode_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -497,6 +539,9 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               6, (com.google.protobuf.Timestamp) consistencySelector_);
     }
+    if (mode_ != com.google.firestore.v1.QueryMode.NORMAL.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(7, mode_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -514,6 +559,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
         (com.google.firestore.v1.RunAggregationQueryRequest) obj;
 
     if (!getParent().equals(other.getParent())) return false;
+    if (mode_ != other.mode_) return false;
     if (!getQueryTypeCase().equals(other.getQueryTypeCase())) return false;
     switch (queryTypeCase_) {
       case 2:
@@ -550,6 +596,8 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + PARENT_FIELD_NUMBER;
     hash = (53 * hash) + getParent().hashCode();
+    hash = (37 * hash) + MODE_FIELD_NUMBER;
+    hash = (53 * hash) + mode_;
     switch (queryTypeCase_) {
       case 2:
         hash = (37 * hash) + STRUCTURED_AGGREGATION_QUERY_FIELD_NUMBER;
@@ -724,6 +772,7 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
       if (readTimeBuilder_ != null) {
         readTimeBuilder_.clear();
       }
+      mode_ = 0;
       queryTypeCase_ = 0;
       queryType_ = null;
       consistencySelectorCase_ = 0;
@@ -767,6 +816,9 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.mode_ = mode_;
       }
     }
 
@@ -836,6 +888,9 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
         parent_ = other.parent_;
         bitField0_ |= 0x00000001;
         onChanged();
+      }
+      if (other.mode_ != 0) {
+        setModeValue(other.getModeValue());
       }
       switch (other.getQueryTypeCase()) {
         case STRUCTURED_AGGREGATION_QUERY:
@@ -926,6 +981,12 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
                 consistencySelectorCase_ = 6;
                 break;
               } // case 50
+            case 56:
+              {
+                mode_ = input.readEnum();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 56
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -1886,6 +1947,110 @@ public final class RunAggregationQueryRequest extends com.google.protobuf.Genera
       consistencySelectorCase_ = 6;
       onChanged();
       return readTimeBuilder_;
+    }
+
+    private int mode_ = 0;
+    /**
+     *
+     *
+     * <pre>
+     * Optional. The mode in which the query request is processed. This field is
+     * optional, and when not provided, it defaults to `NORMAL` mode where no
+     * additional statistics will be returned with the query results.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
+     *
+     * @return The enum numeric value on the wire for mode.
+     */
+    @java.lang.Override
+    public int getModeValue() {
+      return mode_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Optional. The mode in which the query request is processed. This field is
+     * optional, and when not provided, it defaults to `NORMAL` mode where no
+     * additional statistics will be returned with the query results.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
+     *
+     * @param value The enum numeric value on the wire for mode to set.
+     * @return This builder for chaining.
+     */
+    public Builder setModeValue(int value) {
+      mode_ = value;
+      bitField0_ |= 0x00000020;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Optional. The mode in which the query request is processed. This field is
+     * optional, and when not provided, it defaults to `NORMAL` mode where no
+     * additional statistics will be returned with the query results.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
+     *
+     * @return The mode.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.QueryMode getMode() {
+      com.google.firestore.v1.QueryMode result = com.google.firestore.v1.QueryMode.forNumber(mode_);
+      return result == null ? com.google.firestore.v1.QueryMode.UNRECOGNIZED : result;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Optional. The mode in which the query request is processed. This field is
+     * optional, and when not provided, it defaults to `NORMAL` mode where no
+     * additional statistics will be returned with the query results.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
+     *
+     * @param value The mode to set.
+     * @return This builder for chaining.
+     */
+    public Builder setMode(com.google.firestore.v1.QueryMode value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      bitField0_ |= 0x00000020;
+      mode_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Optional. The mode in which the query request is processed. This field is
+     * optional, and when not provided, it defaults to `NORMAL` mode where no
+     * additional statistics will be returned with the query results.
+     * </pre>
+     *
+     * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];
+     * </code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearMode() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      mode_ = 0;
+      onChanged();
+      return this;
     }
 
     @java.lang.Override

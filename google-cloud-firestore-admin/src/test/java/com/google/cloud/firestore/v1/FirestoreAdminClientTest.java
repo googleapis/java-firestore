@@ -33,6 +33,7 @@ import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -56,8 +57,10 @@ import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Any;
+import com.google.protobuf.Duration;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
 import io.grpc.StatusRuntimeException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -844,7 +847,12 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -899,7 +907,12 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -954,7 +967,12 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -995,7 +1013,12 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1034,7 +1057,10 @@ public class FirestoreAdminClientTest {
   @Test
   public void listDatabasesTest() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
     ProjectName parent = ProjectName.of("[PROJECT]");
@@ -1070,7 +1096,10 @@ public class FirestoreAdminClientTest {
   @Test
   public void listDatabasesTest2() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
     String parent = "parent-995424086";
@@ -1108,7 +1137,12 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1147,6 +1181,114 @@ public class FirestoreAdminClientTest {
       Database database = Database.newBuilder().build();
       FieldMask updateMask = FieldMask.newBuilder().build();
       client.updateDatabaseAsync(database, updateMask).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteDatabaseRequest actualRequest = ((DeleteDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.deleteDatabaseAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest2() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    String name = "name3373707";
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteDatabaseRequest actualRequest = ((DeleteDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.deleteDatabaseAsync(name).get();
       Assert.fail("No exception raised");
     } catch (ExecutionException e) {
       Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());

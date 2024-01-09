@@ -44,8 +44,10 @@ import com.google.firestore.admin.v1.ListIndexesResponse;
 import com.google.firestore.admin.v1.ProjectName;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Any;
+import com.google.protobuf.Duration;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -926,7 +928,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -982,7 +989,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1038,7 +1050,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1085,7 +1102,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1130,7 +1152,10 @@ public class FirestoreAdminClientHttpJsonTest {
   @Test
   public void listDatabasesTest() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockService.addResponse(expectedResponse);
 
     ProjectName parent = ProjectName.of("[PROJECT]");
@@ -1172,7 +1197,10 @@ public class FirestoreAdminClientHttpJsonTest {
   @Test
   public void listDatabasesTest2() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockService.addResponse(expectedResponse);
 
     String parent = "projects/project-2353";
@@ -1216,7 +1244,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1231,7 +1264,12 @@ public class FirestoreAdminClientHttpJsonTest {
     Database database =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
             .setEtag("etag3123477")
             .build();
@@ -1266,12 +1304,131 @@ public class FirestoreAdminClientHttpJsonTest {
       Database database =
           Database.newBuilder()
               .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+              .setUid("uid115792")
+              .setCreateTime(Timestamp.newBuilder().build())
+              .setUpdateTime(Timestamp.newBuilder().build())
               .setLocationId("locationId1541836720")
+              .setVersionRetentionPeriod(Duration.newBuilder().build())
+              .setEarliestVersionTime(Timestamp.newBuilder().build())
               .setKeyPrefix("keyPrefix-2076395055")
               .setEtag("etag3123477")
               .build();
       FieldMask updateMask = FieldMask.newBuilder().build();
       client.updateDatabaseAsync(database, updateMask).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockService.addResponse(resultOperation);
+
+    DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<String> actualRequests = mockService.getRequestPaths();
+    Assert.assertEquals(1, actualRequests.size());
+
+    String apiClientHeaderKey =
+        mockService
+            .getRequestHeaders()
+            .get(ApiClientHeaderProvider.getDefaultApiClientHeaderKey())
+            .iterator()
+            .next();
+    Assert.assertTrue(
+        GaxHttpJsonProperties.getDefaultApiClientHeaderPattern()
+            .matcher(apiClientHeaderKey)
+            .matches());
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest() throws Exception {
+    ApiException exception =
+        ApiExceptionFactory.createException(
+            new Exception(), FakeStatusCode.of(StatusCode.Code.INVALID_ARGUMENT), false);
+    mockService.addException(exception);
+
+    try {
+      DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.deleteDatabaseAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest2() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockService.addResponse(resultOperation);
+
+    String name = "projects/project-2580/databases/database-2580";
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<String> actualRequests = mockService.getRequestPaths();
+    Assert.assertEquals(1, actualRequests.size());
+
+    String apiClientHeaderKey =
+        mockService
+            .getRequestHeaders()
+            .get(ApiClientHeaderProvider.getDefaultApiClientHeaderKey())
+            .iterator()
+            .next();
+    Assert.assertTrue(
+        GaxHttpJsonProperties.getDefaultApiClientHeaderPattern()
+            .matcher(apiClientHeaderKey)
+            .matches());
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest2() throws Exception {
+    ApiException exception =
+        ApiExceptionFactory.createException(
+            new Exception(), FakeStatusCode.of(StatusCode.Code.INVALID_ARGUMENT), false);
+    mockService.addException(exception);
+
+    try {
+      String name = "projects/project-2580/databases/database-2580";
+      client.deleteDatabaseAsync(name).get();
       Assert.fail("No exception raised");
     } catch (ExecutionException e) {
     }

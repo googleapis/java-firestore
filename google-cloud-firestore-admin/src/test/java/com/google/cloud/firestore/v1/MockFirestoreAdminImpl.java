@@ -20,6 +20,7 @@ import com.google.api.core.BetaApi;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.Field;
@@ -340,6 +341,27 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
           new IllegalArgumentException(
               String.format(
                   "Unrecognized response type %s for method UpdateDatabase, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  Operation.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void deleteDatabase(
+      DeleteDatabaseRequest request, StreamObserver<Operation> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof Operation) {
+      requests.add(request);
+      responseObserver.onNext(((Operation) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method DeleteDatabase, expected %s or %s",
                   response == null ? "null" : response.getClass().getName(),
                   Operation.class.getName(),
                   Exception.class.getName())));

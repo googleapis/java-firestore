@@ -54,7 +54,117 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
-   * The location of the database. Available databases are listed at
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The uid.
+   */
+  java.lang.String getUid();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The bytes for uid.
+   */
+  com.google.protobuf.ByteString getUidBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the createTime field is set.
+   */
+  boolean hasCreateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The createTime.
+   */
+  com.google.protobuf.Timestamp getCreateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the updateTime field is set.
+   */
+  boolean hasUpdateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The updateTime.
+   */
+  com.google.protobuf.Timestamp getUpdateTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * The location of the database. Available locations are listed at
    * https://cloud.google.com/firestore/docs/locations.
    * </pre>
    *
@@ -67,7 +177,7 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
-   * The location of the database. Available databases are listed at
+   * The location of the database. Available locations are listed at
    * https://cloud.google.com/firestore/docs/locations.
    * </pre>
    *
@@ -135,6 +245,166 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the versionRetentionPeriod field is set.
+   */
+  boolean hasVersionRetentionPeriod();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The versionRetentionPeriod.
+   */
+  com.google.protobuf.Duration getVersionRetentionPeriod();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The period during which past versions of data are retained in
+   * the database.
+   *
+   * Any [read][google.firestore.v1.GetDocumentRequest.read_time]
+   * or [query][google.firestore.v1.ListDocumentsRequest.read_time] can specify
+   * a `read_time` within this window, and will read the state of the database
+   * at that time.
+   *
+   * If the PITR feature is enabled, the retention period is 7 days. Otherwise,
+   * the retention period is 1 hour.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Duration version_retention_period = 17 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.DurationOrBuilder getVersionRetentionPeriodOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the earliestVersionTime field is set.
+   */
+  boolean hasEarliestVersionTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The earliestVersionTime.
+   */
+  com.google.protobuf.Timestamp getEarliestVersionTime();
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The earliest timestamp at which older versions of the data can
+   * be read from the database. See [version_retention_period] above; this field
+   * is populated with `now - version_retention_period`.
+   *
+   * This value is continuously updated, and becomes stale the moment it is
+   * queried. If you are using this value to recover data, make sure to account
+   * for the time from the moment when the value is queried to the moment when
+   * you initiate the recovery.
+   * </pre>
+   *
+   * <code>
+   * .google.protobuf.Timestamp earliest_version_time = 18 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  com.google.protobuf.TimestampOrBuilder getEarliestVersionTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Whether to enable the PITR feature on this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for pointInTimeRecoveryEnablement.
+   */
+  int getPointInTimeRecoveryEnablementValue();
+  /**
+   *
+   *
+   * <pre>
+   * Whether to enable the PITR feature on this database.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement point_in_time_recovery_enablement = 21;
+   * </code>
+   *
+   * @return The pointInTimeRecoveryEnablement.
+   */
+  com.google.firestore.admin.v1.Database.PointInTimeRecoveryEnablement
+      getPointInTimeRecoveryEnablement();
+
+  /**
+   *
+   *
+   * <pre>
    * The App Engine integration mode to use for this database.
    * </pre>
    *
@@ -164,10 +434,10 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
-   * Output only. The key_prefix for this database. This key_prefix is used, in combination
-   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-   * application id that is returned from the Cloud Datastore APIs in Google App
-   * Engine first generation runtimes.
+   * Output only. The key_prefix for this database. This key_prefix is used, in
+   * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+   * the application id that is returned from the Cloud Datastore APIs in Google
+   * App Engine first generation runtimes.
    *
    * This value may be empty in which case the appid to use for URL-encoded keys
    * is the project_id (eg: foo instead of v~foo).
@@ -182,10 +452,10 @@ public interface DatabaseOrBuilder
    *
    *
    * <pre>
-   * Output only. The key_prefix for this database. This key_prefix is used, in combination
-   * with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct the
-   * application id that is returned from the Cloud Datastore APIs in Google App
-   * Engine first generation runtimes.
+   * Output only. The key_prefix for this database. This key_prefix is used, in
+   * combination with the project id ("&lt;key prefix&gt;~&lt;project id&gt;") to construct
+   * the application id that is returned from the Cloud Datastore APIs in Google
+   * App Engine first generation runtimes.
    *
    * This value may be empty in which case the appid to use for URL-encoded keys
    * is the project_id (eg: foo instead of v~foo).
@@ -196,6 +466,33 @@ public interface DatabaseOrBuilder
    * @return The bytes for keyPrefix.
    */
   com.google.protobuf.ByteString getKeyPrefixBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for deleteProtectionState.
+   */
+  int getDeleteProtectionStateValue();
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The deleteProtectionState.
+   */
+  com.google.firestore.admin.v1.Database.DeleteProtectionState getDeleteProtectionState();
 
   /**
    *

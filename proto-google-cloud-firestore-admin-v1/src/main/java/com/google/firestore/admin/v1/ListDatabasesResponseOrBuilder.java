@@ -74,4 +74,87 @@ public interface ListDatabasesResponseOrBuilder
    * <code>repeated .google.firestore.admin.v1.Database databases = 1;</code>
    */
   com.google.firestore.admin.v1.DatabaseOrBuilder getDatabasesOrBuilder(int index);
+
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @return A list containing the unreachable.
+   */
+  java.util.List<java.lang.String> getUnreachableList();
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @return The count of unreachable.
+   */
+  int getUnreachableCount();
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The unreachable at the given index.
+   */
+  java.lang.String getUnreachable(int index);
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the unreachable at the given index.
+   */
+  com.google.protobuf.ByteString getUnreachableBytes(int index);
 }

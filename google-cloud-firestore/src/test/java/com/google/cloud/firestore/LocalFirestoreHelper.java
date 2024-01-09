@@ -1242,4 +1242,20 @@ public final class LocalFirestoreHelper {
 
     return result;
   }
+
+  @FunctionalInterface
+  interface VoidFunction {
+    void apply();
+  }
+
+  static void assertException(VoidFunction voidFunction, String expectedErrorMessage) {
+    String errorMessage = "";
+    try {
+      voidFunction.apply();
+    } catch (Exception e) {
+      errorMessage = e.getMessage();
+    } finally {
+      assertEquals(errorMessage, expectedErrorMessage);
+    }
+  }
 }
