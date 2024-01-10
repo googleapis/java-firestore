@@ -41,7 +41,6 @@ import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
@@ -58,8 +57,6 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
 import io.grpc.Status;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1645,37 +1642,18 @@ public class Query {
       request.setReadTime(readTime.toProto());
     }
 
-    Tracing.getTracer()
-        .getCurrentSpan()
-        .addAnnotation(
-            TraceUtil.SPAN_NAME_RUNQUERY + ": Start",
-            ImmutableMap.of(
-                "transactional", AttributeValue.booleanAttributeValue(transactionId != null)));
-
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
-          boolean firstResponse;
-          int numDocuments;
 
           @Override
           public void onStart(StreamController streamController) {}
 
           @Override
           public void onResponse(RunQueryResponse response) {
-            if (!firstResponse) {
-              firstResponse = true;
-              Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: First response");
-            }
             if (response.hasDocument()) {
-              numDocuments++;
-              if (numDocuments % 100 == 0) {
-                Tracing.getTracer()
-                    .getCurrentSpan()
-                    .addAnnotation("Firestore.Query: Received 100 documents");
-              }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
@@ -1689,12 +1667,6 @@ public class Query {
             }
 
             if (response.getDone()) {
-              Tracing.getTracer()
-                  .getCurrentSpan()
-                  .addAnnotation(
-                      "Firestore.Query: Completed",
-                      ImmutableMap.of(
-                          "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
               documentObserver.onCompleted(readTime);
             }
           }
@@ -1703,10 +1675,6 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
-              Tracing.getTracer()
-                  .getCurrentSpan()
-                  .addAnnotation("Firestore.Query: Retryable Error");
-
               Query.this
                   .startAfter(cursor)
                   .internalStream(
@@ -1716,19 +1684,12 @@ public class Query {
                       options.getRequireConsistency() ? cursor.getReadTime() : null);
 
             } else {
-              Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
               documentObserver.onError(throwable);
             }
           }
 
           @Override
           public void onComplete() {
-            Tracing.getTracer()
-                .getCurrentSpan()
-                .addAnnotation(
-                    "Firestore.Query: Completed",
-                    ImmutableMap.of(
-                        "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
             documentObserver.onCompleted(readTime);
           }
 

@@ -27,9 +27,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.PartitionQueryRequest;
-import io.opencensus.common.Scope;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,9 +74,7 @@ public class CollectionGroup extends Query {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
       final PartitionQueryPagedResponse response;
-      final TraceUtil traceUtil = TraceUtil.getInstance();
-      Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
-      try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+      try {
         response =
             ApiExceptions.callAndTranslateApiException(
                 rpcContext.sendRequest(
@@ -94,10 +89,7 @@ public class CollectionGroup extends Query {
 
         observer.onCompleted();
       } catch (ApiException exception) {
-        span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
         throw FirestoreException.forApiException(exception);
-      } finally {
-        span.end(TraceUtil.END_SPAN_OPTIONS);
       }
     }
   }
@@ -110,9 +102,7 @@ public class CollectionGroup extends Query {
     } else {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
-      final TraceUtil traceUtil = TraceUtil.getInstance();
-      Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_PARTITIONQUERY);
-      try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+      try {
         return ApiFutures.transform(
             rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
             response -> {
@@ -127,10 +117,7 @@ public class CollectionGroup extends Query {
             },
             MoreExecutors.directExecutor());
       } catch (ApiException exception) {
-        span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
         throw FirestoreException.forApiException(exception);
-      } finally {
-        span.end(TraceUtil.END_SPAN_OPTIONS);
       }
     }
   }

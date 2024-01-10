@@ -24,9 +24,6 @@ import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
-import io.opencensus.common.Scope;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Status;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -378,18 +375,13 @@ public class DocumentReference {
     ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
     request.setParent(path.toString());
     final ListCollectionIdsPagedResponse response;
-    final TraceUtil traceUtil = TraceUtil.getInstance();
-    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_LISTCOLLECTIONIDS);
-    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+    try {
       response =
           ApiExceptions.callAndTranslateApiException(
               rpcContext.sendRequest(
                   request.build(), rpcContext.getClient().listCollectionIdsPagedCallable()));
     } catch (ApiException exception) {
-      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
       throw FirestoreException.forApiException(exception);
-    } finally {
-      span.end(TraceUtil.END_SPAN_OPTIONS);
     }
 
     return new Iterable<CollectionReference>() {
