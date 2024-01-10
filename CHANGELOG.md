@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.16.0](https://github.com/googleapis/java-firestore/compare/v3.15.7...v3.16.0) (2024-01-10)
+
+
+### Features
+
+* Add DeleteDatabase API and delete protection ([#1508](https://github.com/googleapis/java-firestore/issues/1508)) ([81a1b48](https://github.com/googleapis/java-firestore/commit/81a1b48bae2398f13d0081ea203d8dbac2e74987))
+* Add new types QueryMode, QueryPlan, ResultSetStats ([#1516](https://github.com/googleapis/java-firestore/issues/1516)) ([3060e86](https://github.com/googleapis/java-firestore/commit/3060e868e467a9ef8399f9d15bd91cc819e7bf05))
+* Expose Firestore namespace ID fields in import/export APIs to stable ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Expose Firestore PITR fields in Database to stable ([#1495](https://github.com/googleapis/java-firestore/issues/1495)) ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Expose Firestore snapshot_time field in export API to stable ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Logical termination for firestore.getAll(...). ([#1517](https://github.com/googleapis/java-firestore/issues/1517)) ([c6448fc](https://github.com/googleapis/java-firestore/commit/c6448fc6411de01b3453e58bcbfca633e0849166))
+
+
+### Bug Fixes
+
+* Better error message when Transaction/WriteBatch is modified after commit. ([#1503](https://github.com/googleapis/java-firestore/issues/1503)) ([9693c7b](https://github.com/googleapis/java-firestore/commit/9693c7b46dcb63b0348217ecb7c29b95ecd04191))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.31.0 ([#1520](https://github.com/googleapis/java-firestore/issues/1520)) ([c4c5a0b](https://github.com/googleapis/java-firestore/commit/c4c5a0b5a5f0e428b041c0ace80c1bbed3872564))
+
+
+### Dependencies
+
+* Update beam.version to v2.53.0 ([#1514](https://github.com/googleapis/java-firestore/issues/1514)) ([7639e0d](https://github.com/googleapis/java-firestore/commit/7639e0d0eefb9df84ab535f61c836d0dfb0ef6cf))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.21.0 ([#1518](https://github.com/googleapis/java-firestore/issues/1518)) ([866b2b4](https://github.com/googleapis/java-firestore/commit/866b2b48ee7acf644dc6355054d7b2ae7e627c13))
+
+
+### Documentation
+
+* Assorted typo fixes and whitespace updates ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Remove latin abbreviations from comments. ([#1457](https://github.com/googleapis/java-firestore/issues/1457)) ([1cfa03d](https://github.com/googleapis/java-firestore/commit/1cfa03d36a04f17fba91cc7b1f05a59ee149c7aa))
+* Tweak Count API docs ([#1522](https://github.com/googleapis/java-firestore/issues/1522)) ([e25ae13](https://github.com/googleapis/java-firestore/commit/e25ae1391893f26faac9938d49918fcad6a9d0ed))
+
 ## [3.15.7](https://github.com/googleapis/java-firestore/compare/v3.15.6...v3.15.7) (2023-12-01)
 
 
