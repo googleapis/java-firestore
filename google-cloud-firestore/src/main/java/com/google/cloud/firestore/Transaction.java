@@ -27,7 +27,6 @@ import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import io.opencensus.trace.Tracing;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,7 +87,6 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Starts a transaction and obtains the transaction id. */
   ApiFuture<Void> begin() {
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_BEGINTRANSACTION);
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
@@ -123,7 +121,6 @@ public final class Transaction extends UpdateBuilder<Transaction> {
 
   /** Rolls a transaction back and releases all read locks. */
   ApiFuture<Void> rollback() {
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_ROLLBACK);
     RollbackRequest req =
         RollbackRequest.newBuilder()
             .setTransaction(transactionId)
@@ -158,7 +155,6 @@ public final class Transaction extends UpdateBuilder<Transaction> {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
     return ApiFutures.transform(
         firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
         snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
