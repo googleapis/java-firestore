@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 /** A QueryPlan contains information about the planning stage of a query. */
 public final class QueryPlan {
   private static final QueryPlan DEFAULT_INSTANCE =
-      new QueryPlan(com.google.firestore.v1.QueryPlan.newBuilder().build());
+      new QueryPlan(com.google.firestore.v1.QueryPlan.getDefaultInstance());
 
   private final Map<String, Object> planInfo;
 
