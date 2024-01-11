@@ -262,6 +262,16 @@ public final class LocalFirestoreHelper {
 
   public static Answer<BatchGetDocumentsResponse> getAllResponse(
       final Map<String, Value>... fields) {
+    return getAllResponseImpl(true, fields);
+  }
+
+  public static Answer<BatchGetDocumentsResponse> getAllResponseWithoutOnComplete(
+      final Map<String, Value>... fields) {
+    return getAllResponseImpl(false, fields);
+  }
+
+  public static Answer<BatchGetDocumentsResponse> getAllResponseImpl(
+      boolean withOnComplete, final Map<String, Value>... fields) {
     BatchGetDocumentsResponse[] responses = new BatchGetDocumentsResponse[fields.length];
 
     for (int i = 0; i < fields.length; ++i) {
@@ -281,7 +291,13 @@ public final class LocalFirestoreHelper {
       responses[i] = response.build();
     }
 
-    return streamingResponse(responses, null);
+    if (withOnComplete) {
+      return streamingResponse(responses, null);
+    } else {
+      // Verify with logical termination, the return of results no longer depends on calling
+      // OnComplete.
+      return streamingResponseWithoutOnComplete(responses);
+    }
   }
 
   public static ApiFuture<Empty> rollbackResponse() {

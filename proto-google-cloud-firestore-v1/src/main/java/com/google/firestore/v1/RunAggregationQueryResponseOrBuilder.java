@@ -135,4 +135,51 @@ public interface RunAggregationQueryResponseOrBuilder
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 6;</code>
+   *
+   * @return Whether the stats field is set.
+   */
+  boolean hasStats();
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 6;</code>
+   *
+   * @return The stats.
+   */
+  com.google.firestore.v1.ResultSetStats getStats();
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 6;</code>
+   */
+  com.google.firestore.v1.ResultSetStatsOrBuilder getStatsOrBuilder();
 }

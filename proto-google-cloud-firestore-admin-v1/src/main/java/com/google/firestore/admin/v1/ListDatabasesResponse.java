@@ -39,6 +39,7 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
 
   private ListDatabasesResponse() {
     databases_ = java.util.Collections.emptyList();
+    unreachable_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
@@ -133,6 +134,102 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     return databases_.get(index);
   }
 
+  public static final int UNREACHABLE_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
+  private com.google.protobuf.LazyStringArrayList unreachable_ =
+      com.google.protobuf.LazyStringArrayList.emptyList();
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @return A list containing the unreachable.
+   */
+  public com.google.protobuf.ProtocolStringList getUnreachableList() {
+    return unreachable_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @return The count of unreachable.
+   */
+  public int getUnreachableCount() {
+    return unreachable_.size();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @param index The index of the element to return.
+   * @return The unreachable at the given index.
+   */
+  public java.lang.String getUnreachable(int index) {
+    return unreachable_.get(index);
+  }
+  /**
+   *
+   *
+   * <pre>
+   * In the event that data about individual databases cannot be listed they
+   * will be recorded here.
+   *
+   * An example entry might be: projects/some_project/locations/some_location
+   * This can happen if the Cloud Region that the Database resides in is
+   * currently unavailable.  In this case we can't fetch all the details about
+   * the database. You may be able to get a more detailed error message
+   * (or possibly fetch the resource) by sending a 'Get' request for the
+   * resource or a 'List' request for the specific location.
+   * </pre>
+   *
+   * <code>repeated string unreachable = 3;</code>
+   *
+   * @param index The index of the value to return.
+   * @return The bytes of the unreachable at the given index.
+   */
+  public com.google.protobuf.ByteString getUnreachableBytes(int index) {
+    return unreachable_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -150,6 +247,9 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     for (int i = 0; i < databases_.size(); i++) {
       output.writeMessage(1, databases_.get(i));
     }
+    for (int i = 0; i < unreachable_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, unreachable_.getRaw(i));
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -161,6 +261,14 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     size = 0;
     for (int i = 0; i < databases_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, databases_.get(i));
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < unreachable_.size(); i++) {
+        dataSize += computeStringSizeNoTag(unreachable_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getUnreachableList().size();
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -179,6 +287,7 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
         (com.google.firestore.admin.v1.ListDatabasesResponse) obj;
 
     if (!getDatabasesList().equals(other.getDatabasesList())) return false;
+    if (!getUnreachableList().equals(other.getUnreachableList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -193,6 +302,10 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
     if (getDatabasesCount() > 0) {
       hash = (37 * hash) + DATABASES_FIELD_NUMBER;
       hash = (53 * hash) + getDatabasesList().hashCode();
+    }
+    if (getUnreachableCount() > 0) {
+      hash = (37 * hash) + UNREACHABLE_FIELD_NUMBER;
+      hash = (53 * hash) + getUnreachableList().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -340,6 +453,7 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
         databasesBuilder_.clear();
       }
       bitField0_ = (bitField0_ & ~0x00000001);
+      unreachable_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
 
@@ -390,6 +504,10 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
 
     private void buildPartial0(com.google.firestore.admin.v1.ListDatabasesResponse result) {
       int from_bitField0_ = bitField0_;
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        unreachable_.makeImmutable();
+        result.unreachable_ = unreachable_;
+      }
     }
 
     @java.lang.Override
@@ -465,6 +583,16 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
           }
         }
       }
+      if (!other.unreachable_.isEmpty()) {
+        if (unreachable_.isEmpty()) {
+          unreachable_ = other.unreachable_;
+          bitField0_ |= 0x00000002;
+        } else {
+          ensureUnreachableIsMutable();
+          unreachable_.addAll(other.unreachable_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -504,6 +632,13 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
                 }
                 break;
               } // case 10
+            case 26:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                ensureUnreachableIsMutable();
+                unreachable_.add(s);
+                break;
+              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -870,6 +1005,252 @@ public final class ListDatabasesResponse extends com.google.protobuf.GeneratedMe
         databases_ = null;
       }
       return databasesBuilder_;
+    }
+
+    private com.google.protobuf.LazyStringArrayList unreachable_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+
+    private void ensureUnreachableIsMutable() {
+      if (!unreachable_.isModifiable()) {
+        unreachable_ = new com.google.protobuf.LazyStringArrayList(unreachable_);
+      }
+      bitField0_ |= 0x00000002;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @return A list containing the unreachable.
+     */
+    public com.google.protobuf.ProtocolStringList getUnreachableList() {
+      unreachable_.makeImmutable();
+      return unreachable_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @return The count of unreachable.
+     */
+    public int getUnreachableCount() {
+      return unreachable_.size();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param index The index of the element to return.
+     * @return The unreachable at the given index.
+     */
+    public java.lang.String getUnreachable(int index) {
+      return unreachable_.get(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param index The index of the value to return.
+     * @return The bytes of the unreachable at the given index.
+     */
+    public com.google.protobuf.ByteString getUnreachableBytes(int index) {
+      return unreachable_.getByteString(index);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param index The index to set the value at.
+     * @param value The unreachable to set.
+     * @return This builder for chaining.
+     */
+    public Builder setUnreachable(int index, java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureUnreachableIsMutable();
+      unreachable_.set(index, value);
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param value The unreachable to add.
+     * @return This builder for chaining.
+     */
+    public Builder addUnreachable(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      ensureUnreachableIsMutable();
+      unreachable_.add(value);
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param values The unreachable to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllUnreachable(java.lang.Iterable<java.lang.String> values) {
+      ensureUnreachableIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(values, unreachable_);
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearUnreachable() {
+      unreachable_ = com.google.protobuf.LazyStringArrayList.emptyList();
+      bitField0_ = (bitField0_ & ~0x00000002);
+      ;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * In the event that data about individual databases cannot be listed they
+     * will be recorded here.
+     *
+     * An example entry might be: projects/some_project/locations/some_location
+     * This can happen if the Cloud Region that the Database resides in is
+     * currently unavailable.  In this case we can't fetch all the details about
+     * the database. You may be able to get a more detailed error message
+     * (or possibly fetch the resource) by sending a 'Get' request for the
+     * resource or a 'List' request for the specific location.
+     * </pre>
+     *
+     * <code>repeated string unreachable = 3;</code>
+     *
+     * @param value The bytes of the unreachable to add.
+     * @return This builder for chaining.
+     */
+    public Builder addUnreachableBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      ensureUnreachableIsMutable();
+      unreachable_.add(value);
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
     }
 
     @java.lang.Override
