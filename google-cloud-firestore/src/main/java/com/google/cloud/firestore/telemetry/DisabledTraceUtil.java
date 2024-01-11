@@ -16,9 +16,12 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
+import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class DisabledTraceUtil implements TraceUtil {
 
@@ -68,6 +71,12 @@ public class DisabledTraceUtil implements TraceUtil {
   static class Scope implements TraceUtil.Scope {
     @Override
     public void close() {}
+  }
+
+  @Nullable
+  @Override
+  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    return null;
   }
 
   @Override

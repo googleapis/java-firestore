@@ -30,7 +30,6 @@ import com.google.cloud.ServiceOptions;
 import com.google.cloud.TransportOptions;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
-import com.google.cloud.firestore.telemetry.OpenTelemetryUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.grpc.GrpcTransportOptions;
@@ -64,7 +63,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
   @Nonnull private final FirestoreOpenTelemetryOptions openTelemetryOptions;
-  @Nonnull private final OpenTelemetryUtil openTelemetryUtil;
+  @Nonnull private final TraceUtil traceUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -124,13 +123,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   }
 
   @Nonnull
-  OpenTelemetryUtil getOpenTelemetryUtil() {
-    return openTelemetryUtil;
-  }
-
-  @Nonnull
   TraceUtil getTraceUtil() {
-    return openTelemetryUtil.getTraceUtil();
+    return traceUtil;
   }
 
   @BetaApi
@@ -323,7 +317,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.openTelemetryOptions = builder.openTelemetryOptions;
     }
 
-    this.openTelemetryUtil = OpenTelemetryUtil.getInstance(this);
+    this.traceUtil = TraceUtil.getInstance(this);
 
     this.databaseId =
         builder.databaseId != null
@@ -332,7 +326,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
     if (builder.channelProvider == null) {
       ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> channelConfigurator =
-          this.openTelemetryUtil.getChannelConfigurator();
+          this.traceUtil.getChannelConfigurator();
       if (channelConfigurator == null) {
         this.channelProvider =
             GrpcTransportOptions.setUpChannelProvider(

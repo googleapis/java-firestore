@@ -16,9 +16,13 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.FirestoreOptions;
+import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface TraceUtil {
   String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
@@ -46,6 +50,43 @@ public interface TraceUtil {
   String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
+
+  String ENABLE_TRACING_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
+  String LIBRARY_NAME = "com.google.cloud.firestore";
+
+  /**
+   * Creates and returns an instance of the TraceUtil class.
+   *
+   * @param firestoreOptions The FirestoreOptions object that is requesting an instance of
+   *     TraceUtil.
+   * @return An instance of the TraceUtil class.
+   */
+  static TraceUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().getEnabled();
+
+    // The environment variable can override options to enable/disable telemetry collection.
+    String enableTracingEnvVar = System.getenv(ENABLE_TRACING_ENV_VAR);
+    if (enableTracingEnvVar != null) {
+      if (enableTracingEnvVar.equalsIgnoreCase("true")
+          || enableTracingEnvVar.equalsIgnoreCase("on")) {
+        createEnabledInstance = true;
+      }
+      if (enableTracingEnvVar.equalsIgnoreCase("false")
+          || enableTracingEnvVar.equalsIgnoreCase("off")) {
+        createEnabledInstance = false;
+      }
+    }
+
+    if (createEnabledInstance) {
+      return new EnabledTraceUtil(firestoreOptions);
+    } else {
+      return new DisabledTraceUtil();
+    }
+  }
+
+  /** Returns a channel configurator for gRPC, or {@code null} if tracing is disabled. */
+  @Nullable
+  ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator();
 
   /** Represents a trace span. */
   interface Span {

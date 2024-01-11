@@ -117,15 +117,10 @@ public class ITTracingTest {
   }
 
   void waitForTracesToComplete() throws Exception {
-    // This forces the tracer to flush any remaining traces.
-    // We need to do this before we can check spans for correctness.
-    // Note that performing `OpenTelemetryUtil.shutdown()` is not enough. We need to call
-    // `Firestore.close()`
-    // because that will also close the gRPC channel and hence force the gRPC instrumentation
-    // library to flush
-    // their spans.
-    // firestore.close();
-    java.util.concurrent.TimeUnit.SECONDS.sleep(2);
+    // We need to call `firestore.close()` because that will also close the
+    // gRPC channel and hence force the gRPC instrumentation library to flush
+    // its spans.
+    firestore.close();
   }
 
   void buildSpanMaps(List<SpanData> spans) {

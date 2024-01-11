@@ -16,25 +16,60 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import com.google.api.Context;
+import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Throwables;
+import io.grpc.ManagedChannelBuilder;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.*;
+import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EnabledTraceUtil implements TraceUtil {
   private final Tracer tracer;
+  private final OpenTelemetry openTelemetry;
   private final FirestoreOptions firestoreOptions;
 
-  EnabledTraceUtil(FirestoreOptions firestoreOptions, Tracer tracer) {
+  EnabledTraceUtil(FirestoreOptions firestoreOptions) {
+    OpenTelemetry openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
+
+    // If tracing is enabled, but an OpenTelemetry instance is not provided, fall back
+    // to using GlobalOpenTelemetry.
+    if (openTelemetry == null) {
+      openTelemetry = GlobalOpenTelemetry.get();
+    }
+
     this.firestoreOptions = firestoreOptions;
-    this.tracer = tracer;
+    this.openTelemetry = openTelemetry;
+    this.tracer = openTelemetry.getTracer(LIBRARY_NAME);
+  }
+
+  public OpenTelemetry getOpenTelemetry() {
+    return openTelemetry;
+  }
+
+  // The gRPC channel configurator that intercepts gRPC calls for tracing purposes.
+  public class OpenTelemetryGrpcChannelConfigurator
+      implements ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> {
+    @Override
+    public ManagedChannelBuilder apply(ManagedChannelBuilder managedChannelBuilder) {
+      GrpcTelemetry grpcTelemetry = GrpcTelemetry.create(getOpenTelemetry());
+      return managedChannelBuilder.intercept(grpcTelemetry.newClientInterceptor());
+    }
+  }
+
+  @Override
+  @Nullable
+  public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    return new OpenTelemetryGrpcChannelConfigurator();
   }
 
   static class Span implements TraceUtil.Span {

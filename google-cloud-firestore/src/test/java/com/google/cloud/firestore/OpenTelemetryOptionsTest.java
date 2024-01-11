@@ -18,9 +18,7 @@ package com.google.cloud.firestore;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.cloud.firestore.telemetry.DisabledOpenTelemetryUtil;
 import com.google.cloud.firestore.telemetry.DisabledTraceUtil;
-import com.google.cloud.firestore.telemetry.EnabledOpenTelemetryUtil;
 import com.google.cloud.firestore.telemetry.EnabledTraceUtil;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -51,9 +49,6 @@ public class OpenTelemetryOptionsTest {
   public void defaultOptionsDisablesTelemetryCollection() {
     FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil)
-        .isTrue();
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
     assertThat(firestore.getOptions().getTraceUtil() instanceof DisabledTraceUtil).isTrue();
   }
@@ -66,9 +61,6 @@ public class OpenTelemetryOptionsTest {
                 FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
-        .isTrue();
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
     assertThat(firestore.getOptions().getTraceUtil() instanceof EnabledTraceUtil).isTrue();
   }
@@ -85,12 +77,8 @@ public class OpenTelemetryOptionsTest {
                 FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
-        .isTrue();
-    EnabledOpenTelemetryUtil enabledOpenTelemetryUtil =
-        (EnabledOpenTelemetryUtil) firestore.getOptions().getOpenTelemetryUtil();
-    assertThat(enabledOpenTelemetryUtil.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
+    EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
   }
 
   @Test
@@ -105,16 +93,12 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof EnabledOpenTelemetryUtil)
-        .isTrue();
-    EnabledOpenTelemetryUtil enabledOpenTelemetryUtil =
-        (EnabledOpenTelemetryUtil) firestore.getOptions().getOpenTelemetryUtil();
-    assertThat(enabledOpenTelemetryUtil.getOpenTelemetry()).isEqualTo(myOpenTelemetrySdk);
+    EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(myOpenTelemetrySdk);
   }
 
   @Test
-  public void telemetryCollectionRemainsDisabledIfOpenTelemetryIsProvided() {
+  public void traceCollectionRemainsDisabledIfOpenTelemetryIsProvided() {
     OpenTelemetrySdk myOpenTelemetrySdk = OpenTelemetrySdk.builder().build();
     FirestoreOptions firestoreOptions =
         getBaseOptions()
@@ -125,8 +109,7 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil()).isNotNull();
-    assertThat(firestore.getOptions().getOpenTelemetryUtil() instanceof DisabledOpenTelemetryUtil)
-        .isTrue();
+    assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
+    assertThat(firestore.getOptions().getTraceUtil() instanceof DisabledTraceUtil).isTrue();
   }
 }
