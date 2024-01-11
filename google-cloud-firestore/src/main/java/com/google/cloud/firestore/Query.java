@@ -1764,7 +1764,7 @@ public class Query {
   }
 
   ApiFuture<QueryProfile<QuerySnapshot>> getQueryProfileInfo(QueryMode queryMode) {
-    final SettableApiFuture<QueryProfile<QuerySnapshot>> result = SettableApiFuture.create();
+    SettableApiFuture<QueryProfile<QuerySnapshot>> result = SettableApiFuture.create();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request
@@ -1772,13 +1772,12 @@ public class Query {
         .setParent(options.getParentPath().toString())
         .setMode(queryMode);
 
-    final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
           QueryPlan queryPlan = QueryPlan.getDefaultInstance();
           Struct statsStruct = Struct.getDefaultInstance();
+          List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
           @Override
           public void onStart(StreamController streamController) {}
@@ -1842,8 +1841,7 @@ public class Query {
   @Nonnull
   public ApiFuture<QueryPlan> explain() {
     ApiFuture<QueryProfile<QuerySnapshot>> result = getQueryProfileInfo(QueryMode.PLAN);
-    return ApiFutures.transform(
-        result, queryProfile -> queryProfile.getPlan(), MoreExecutors.directExecutor());
+    return ApiFutures.transform(result, QueryProfile::getPlan, MoreExecutors.directExecutor());
   }
 
   /**

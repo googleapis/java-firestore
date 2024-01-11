@@ -94,8 +94,7 @@ public class AggregateQuery {
   public ApiFuture<QueryPlan> explain() {
     ApiFuture<QueryProfile<AggregateQuerySnapshot>> result =
         getAggregateQueryProfileInfo(QueryMode.PLAN);
-    return ApiFutures.transform(
-        result, queryProfile -> queryProfile.getPlan(), MoreExecutors.directExecutor());
+    return ApiFutures.transform(result, QueryProfile::getPlan, MoreExecutors.directExecutor());
   }
 
   /**

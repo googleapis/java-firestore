@@ -16,9 +16,13 @@
 package com.google.cloud.firestore;
 
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /** A QueryPlan contains information about the planning stage of a query. */
-public class QueryPlan {
+public final class QueryPlan {
+  private static final QueryPlan DEFAULT_INSTANCE =
+      new QueryPlan(com.google.firestore.v1.QueryPlan.newBuilder().build());
+
   private final Map<String, Object> planInfo;
 
   QueryPlan(com.google.firestore.v1.QueryPlan proto) {
@@ -26,12 +30,13 @@ public class QueryPlan {
   }
 
   static QueryPlan getDefaultInstance() {
-    return new QueryPlan(com.google.firestore.v1.QueryPlan.newBuilder().build());
+    return DEFAULT_INSTANCE;
   }
 
   /*
    * Returns the plan info as a map.
    */
+  @Nonnull
   public Map<String, Object> getPlanInfo() {
     return this.planInfo;
   }
