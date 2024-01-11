@@ -234,8 +234,7 @@ public class AggregateQuery {
   ApiFuture<QueryProfile<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(
       QueryMode queryMode) {
     RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    final SettableApiFuture<QueryProfile<AggregateQuerySnapshot>> result =
-        SettableApiFuture.create();
+    SettableApiFuture<QueryProfile<AggregateQuerySnapshot>> result = SettableApiFuture.create();
 
     ResponseObserver<RunAggregationQueryResponse> observer =
         new ResponseObserver<RunAggregationQueryResponse>() {
