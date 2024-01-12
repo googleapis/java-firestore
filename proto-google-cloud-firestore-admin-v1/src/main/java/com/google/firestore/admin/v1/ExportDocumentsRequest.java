@@ -261,7 +261,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Unspecified means all namespaces. This is the preferred
+   * An empty list represents all namespaces. This is the preferred
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
@@ -280,7 +280,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Unspecified means all namespaces. This is the preferred
+   * An empty list represents all namespaces. This is the preferred
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
@@ -299,7 +299,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Unspecified means all namespaces. This is the preferred
+   * An empty list represents all namespaces. This is the preferred
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
@@ -319,7 +319,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Unspecified means all namespaces. This is the preferred
+   * An empty list represents all namespaces. This is the preferred
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
@@ -1328,7 +1328,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1348,7 +1348,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1367,7 +1367,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1387,7 +1387,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1407,7 +1407,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1435,7 +1435,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1462,7 +1462,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1486,7 +1486,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
@@ -1509,7 +1509,7 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Unspecified means all namespaces. This is the preferred
+     * An empty list represents all namespaces. This is the preferred
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be

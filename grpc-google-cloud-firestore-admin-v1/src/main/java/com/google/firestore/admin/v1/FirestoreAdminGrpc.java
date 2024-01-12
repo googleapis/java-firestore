@@ -619,6 +619,49 @@ public final class FirestoreAdminGrpc {
     return getUpdateDatabaseMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+      getDeleteDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeleteDatabase",
+      requestType = com.google.firestore.admin.v1.DeleteDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+      getDeleteDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+        getDeleteDatabaseMethod;
+    if ((getDeleteDatabaseMethod = FirestoreAdminGrpc.getDeleteDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getDeleteDatabaseMethod = FirestoreAdminGrpc.getDeleteDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getDeleteDatabaseMethod =
+              getDeleteDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.DeleteDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeleteDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.DeleteDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("DeleteDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getDeleteDatabaseMethod;
+  }
+
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreAdminStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminStub> factory =
@@ -798,7 +841,8 @@ public final class FirestoreAdminGrpc {
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with the filter set to `indexConfig.usesAncestorConfig:false` .
+     * with the filter set to `indexConfig.usesAncestorConfig:false or
+     * `ttlConfig:*`.
      * </pre>
      */
     default void listFields(
@@ -904,6 +948,20 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
           getUpdateDatabaseMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    default void deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getDeleteDatabaseMethod(), responseObserver);
     }
   }
 
@@ -1099,7 +1157,8 @@ public final class FirestoreAdminGrpc {
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with the filter set to `indexConfig.usesAncestorConfig:false` .
+     * with the filter set to `indexConfig.usesAncestorConfig:false or
+     * `ttlConfig:*`.
      * </pre>
      */
     public void listFields(
@@ -1216,6 +1275,22 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public void deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getDeleteDatabaseMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -1364,7 +1439,8 @@ public final class FirestoreAdminGrpc {
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with the filter set to `indexConfig.usesAncestorConfig:false` .
+     * with the filter set to `indexConfig.usesAncestorConfig:false or
+     * `ttlConfig:*`.
      * </pre>
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
@@ -1462,6 +1538,19 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.UpdateDatabaseRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteDatabaseMethod(), getCallOptions(), request);
     }
   }
 
@@ -1609,7 +1698,8 @@ public final class FirestoreAdminGrpc {
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with the filter set to `indexConfig.usesAncestorConfig:false` .
+     * with the filter set to `indexConfig.usesAncestorConfig:false or
+     * `ttlConfig:*`.
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<
@@ -1711,6 +1801,19 @@ public final class FirestoreAdminGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateDatabaseMethod(), getCallOptions()), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        deleteDatabase(com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getDeleteDatabaseMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_INDEX = 0;
@@ -1726,6 +1829,7 @@ public final class FirestoreAdminGrpc {
   private static final int METHODID_GET_DATABASE = 10;
   private static final int METHODID_LIST_DATABASES = 11;
   private static final int METHODID_UPDATE_DATABASE = 12;
+  private static final int METHODID_DELETE_DATABASE = 13;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1811,6 +1915,11 @@ public final class FirestoreAdminGrpc {
         case METHODID_UPDATE_DATABASE:
           serviceImpl.updateDatabase(
               (com.google.firestore.admin.v1.UpdateDatabaseRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_DELETE_DATABASE:
+          serviceImpl.deleteDatabase(
+              (com.google.firestore.admin.v1.DeleteDatabaseRequest) request,
               (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
           break;
         default:
@@ -1912,6 +2021,12 @@ public final class FirestoreAdminGrpc {
                 new MethodHandlers<
                     com.google.firestore.admin.v1.UpdateDatabaseRequest,
                     com.google.longrunning.Operation>(service, METHODID_UPDATE_DATABASE)))
+        .addMethod(
+            getDeleteDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.DeleteDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_DELETE_DATABASE)))
         .build();
   }
 
@@ -1976,6 +2091,7 @@ public final class FirestoreAdminGrpc {
                       .addMethod(getGetDatabaseMethod())
                       .addMethod(getListDatabasesMethod())
                       .addMethod(getUpdateDatabaseMethod())
+                      .addMethod(getDeleteDatabaseMethod())
                       .build();
         }
       }

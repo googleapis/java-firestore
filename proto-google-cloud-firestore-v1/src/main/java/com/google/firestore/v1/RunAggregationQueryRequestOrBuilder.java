@@ -214,6 +214,35 @@ public interface RunAggregationQueryRequestOrBuilder
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
+  /**
+   *
+   *
+   * <pre>
+   * Optional. The mode in which the query request is processed. This field is
+   * optional, and when not provided, it defaults to `NORMAL` mode where no
+   * additional statistics will be returned with the query results.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+   *
+   * @return The enum numeric value on the wire for mode.
+   */
+  int getModeValue();
+  /**
+   *
+   *
+   * <pre>
+   * Optional. The mode in which the query request is processed. This field is
+   * optional, and when not provided, it defaults to `NORMAL` mode where no
+   * additional statistics will be returned with the query results.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.QueryMode mode = 7 [(.google.api.field_behavior) = OPTIONAL];</code>
+   *
+   * @return The mode.
+   */
+  com.google.firestore.v1.QueryMode getMode();
+
   com.google.firestore.v1.RunAggregationQueryRequest.QueryTypeCase getQueryTypeCase();
 
   com.google.firestore.v1.RunAggregationQueryRequest.ConsistencySelectorCase

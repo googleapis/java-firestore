@@ -31,6 +31,8 @@ import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -188,6 +190,16 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
               .build();
 
+  private static final MethodDescriptor<DeleteDatabaseRequest, Operation>
+      deleteDatabaseMethodDescriptor =
+          MethodDescriptor.<DeleteDatabaseRequest, Operation>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteDatabase")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(DeleteDatabaseRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -217,6 +229,9 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable;
   private final OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable;
+  private final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable;
+  private final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable;
 
   private final BackgroundResource backgroundResources;
   private final GrpcOperationsStub operationsStub;
@@ -392,6 +407,16 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    GrpcCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseTransportSettings =
+        GrpcCallSettings.<DeleteDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(deleteDatabaseMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
 
     this.createIndexCallable =
         callableFactory.createUnaryCallable(
@@ -472,6 +497,15 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
         callableFactory.createOperationCallable(
             updateDatabaseTransportSettings,
             settings.updateDatabaseOperationSettings(),
+            clientContext,
+            operationsStub);
+    this.deleteDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            deleteDatabaseTransportSettings, settings.deleteDatabaseSettings(), clientContext);
+    this.deleteDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            deleteDatabaseTransportSettings,
+            settings.deleteDatabaseOperationSettings(),
             clientContext,
             operationsStub);
 
@@ -592,6 +626,17 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable() {
     return updateDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
+    return deleteDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable() {
+    return deleteDatabaseOperationCallable;
   }
 
   @Override

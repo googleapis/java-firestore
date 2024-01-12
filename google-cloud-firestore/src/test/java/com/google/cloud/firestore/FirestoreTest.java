@@ -23,7 +23,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.arrayRemove;
 import static com.google.cloud.firestore.LocalFirestoreHelper.arrayUnion;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
 import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
-import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponseWithoutOnComplete;
 import static com.google.cloud.firestore.LocalFirestoreHelper.transform;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertEquals;
@@ -80,7 +80,7 @@ public class FirestoreTest {
 
   @Test
   public void illegalFieldPath() throws Exception {
-    doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
+    doAnswer(getAllResponseWithoutOnComplete(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
         .streamRequest(
             getAllCapture.capture(),
@@ -110,7 +110,7 @@ public class FirestoreTest {
   @Test
   public void getAll() throws Exception {
     doAnswer(
-            getAllResponse(
+            getAllResponseWithoutOnComplete(
                 SINGLE_FIELD_PROTO, SINGLE_FIELD_PROTO, SINGLE_FIELD_PROTO, SINGLE_FIELD_PROTO))
         .when(firestoreMock)
         .streamRequest(
@@ -132,7 +132,7 @@ public class FirestoreTest {
 
   @Test
   public void getAllWithFieldMask() throws Exception {
-    doAnswer(getAllResponse(SINGLE_FIELD_PROTO))
+    doAnswer(getAllResponseWithoutOnComplete(SINGLE_FIELD_PROTO))
         .when(firestoreMock)
         .streamRequest(
             getAllCapture.capture(),

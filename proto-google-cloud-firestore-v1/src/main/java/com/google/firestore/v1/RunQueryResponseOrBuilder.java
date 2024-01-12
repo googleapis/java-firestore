@@ -169,5 +169,52 @@ public interface RunQueryResponseOrBuilder
    */
   boolean getDone();
 
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 7;</code>
+   *
+   * @return Whether the stats field is set.
+   */
+  boolean hasStats();
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 7;</code>
+   *
+   * @return The stats.
+   */
+  com.google.firestore.v1.ResultSetStats getStats();
+  /**
+   *
+   *
+   * <pre>
+   * Query plan and execution statistics. Note that the returned stats are
+   * subject to change as Firestore evolves.
+   *
+   * This is only present when the request specifies a mode other than `NORMAL`
+   * and is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ResultSetStats stats = 7;</code>
+   */
+  com.google.firestore.v1.ResultSetStatsOrBuilder getStatsOrBuilder();
+
   com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase getContinuationSelectorCase();
 }

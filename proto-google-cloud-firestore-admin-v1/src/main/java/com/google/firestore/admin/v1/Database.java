@@ -23,8 +23,6 @@ package com.google.firestore.admin.v1;
  *
  * <pre>
  * A Cloud Firestore Database.
- * Currently only one database is allowed per cloud project; this database
- * must have a `database_id` of '(default)'.
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.Database}
@@ -41,12 +39,14 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
 
   private Database() {
     name_ = "";
+    uid_ = "";
     locationId_ = "";
     type_ = 0;
     concurrencyMode_ = 0;
     pointInTimeRecoveryEnablement_ = 0;
     appEngineIntegrationMode_ = 0;
     keyPrefix_ = "";
+    deleteProtectionState_ = 0;
     etag_ = "";
   }
 
@@ -779,6 +779,166 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Database.AppEngineIntegrationMode)
   }
 
+  /**
+   *
+   *
+   * <pre>
+   * The delete protection state of the database.
+   * </pre>
+   *
+   * Protobuf enum {@code google.firestore.admin.v1.Database.DeleteProtectionState}
+   */
+  public enum DeleteProtectionState implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     *
+     *
+     * <pre>
+     * The default value. Delete protection type is not specified
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_STATE_UNSPECIFIED = 0;</code>
+     */
+    DELETE_PROTECTION_STATE_UNSPECIFIED(0),
+    /**
+     *
+     *
+     * <pre>
+     * Delete protection is disabled
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_DISABLED = 1;</code>
+     */
+    DELETE_PROTECTION_DISABLED(1),
+    /**
+     *
+     *
+     * <pre>
+     * Delete protection is enabled
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_ENABLED = 2;</code>
+     */
+    DELETE_PROTECTION_ENABLED(2),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     *
+     *
+     * <pre>
+     * The default value. Delete protection type is not specified
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_STATE_UNSPECIFIED = 0;</code>
+     */
+    public static final int DELETE_PROTECTION_STATE_UNSPECIFIED_VALUE = 0;
+    /**
+     *
+     *
+     * <pre>
+     * Delete protection is disabled
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_DISABLED = 1;</code>
+     */
+    public static final int DELETE_PROTECTION_DISABLED_VALUE = 1;
+    /**
+     *
+     *
+     * <pre>
+     * Delete protection is enabled
+     * </pre>
+     *
+     * <code>DELETE_PROTECTION_ENABLED = 2;</code>
+     */
+    public static final int DELETE_PROTECTION_ENABLED_VALUE = 2;
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static DeleteProtectionState valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static DeleteProtectionState forNumber(int value) {
+      switch (value) {
+        case 0:
+          return DELETE_PROTECTION_STATE_UNSPECIFIED;
+        case 1:
+          return DELETE_PROTECTION_DISABLED;
+        case 2:
+          return DELETE_PROTECTION_ENABLED;
+        default:
+          return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<DeleteProtectionState>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<DeleteProtectionState>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<DeleteProtectionState>() {
+              public DeleteProtectionState findValueByNumber(int number) {
+                return DeleteProtectionState.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+      return com.google.firestore.admin.v1.Database.getDescriptor().getEnumTypes().get(4);
+    }
+
+    private static final DeleteProtectionState[] VALUES = values();
+
+    public static DeleteProtectionState valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private DeleteProtectionState(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Database.DeleteProtectionState)
+  }
+
   public static final int NAME_FIELD_NUMBER = 1;
 
   @SuppressWarnings("serial")
@@ -830,6 +990,164 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
+  }
+
+  public static final int UID_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object uid_ = "";
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The uid.
+   */
+  @java.lang.Override
+  public java.lang.String getUid() {
+    java.lang.Object ref = uid_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      uid_ = s;
+      return s;
+    }
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The system-generated UUID4 for this Database.
+   * </pre>
+   *
+   * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+   *
+   * @return The bytes for uid.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getUidBytes() {
+    java.lang.Object ref = uid_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      uid_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int CREATE_TIME_FIELD_NUMBER = 5;
+  private com.google.protobuf.Timestamp createTime_;
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the createTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasCreateTime() {
+    return createTime_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The createTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getCreateTime() {
+    return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was created. Databases
+   * created before 2016 do not populate create_time.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
+    return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
+  }
+
+  public static final int UPDATE_TIME_FIELD_NUMBER = 6;
+  private com.google.protobuf.Timestamp updateTime_;
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return Whether the updateTime field is set.
+   */
+  @java.lang.Override
+  public boolean hasUpdateTime() {
+    return updateTime_ != null;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   *
+   * @return The updateTime.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getUpdateTime() {
+    return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Output only. The timestamp at which this database was most recently
+   * updated. Note this only includes updates to the database resource and not
+   * data contained by the database.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+   * </code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
+    return updateTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : updateTime_;
   }
 
   public static final int LOCATION_ID_FIELD_NUMBER = 9;
@@ -1272,6 +1590,46 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     }
   }
 
+  public static final int DELETE_PROTECTION_STATE_FIELD_NUMBER = 22;
+  private int deleteProtectionState_ = 0;
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The enum numeric value on the wire for deleteProtectionState.
+   */
+  @java.lang.Override
+  public int getDeleteProtectionStateValue() {
+    return deleteProtectionState_;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * State of delete protection for the database.
+   * </pre>
+   *
+   * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+   * </code>
+   *
+   * @return The deleteProtectionState.
+   */
+  @java.lang.Override
+  public com.google.firestore.admin.v1.Database.DeleteProtectionState getDeleteProtectionState() {
+    com.google.firestore.admin.v1.Database.DeleteProtectionState result =
+        com.google.firestore.admin.v1.Database.DeleteProtectionState.forNumber(
+            deleteProtectionState_);
+    return result == null
+        ? com.google.firestore.admin.v1.Database.DeleteProtectionState.UNRECOGNIZED
+        : result;
+  }
+
   public static final int ETAG_FIELD_NUMBER = 99;
 
   @SuppressWarnings("serial")
@@ -1344,6 +1702,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
     }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uid_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, uid_);
+    }
+    if (createTime_ != null) {
+      output.writeMessage(5, getCreateTime());
+    }
+    if (updateTime_ != null) {
+      output.writeMessage(6, getUpdateTime());
+    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(locationId_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 9, locationId_);
     }
@@ -1378,6 +1745,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
             .getNumber()) {
       output.writeEnum(21, pointInTimeRecoveryEnablement_);
     }
+    if (deleteProtectionState_
+        != com.google.firestore.admin.v1.Database.DeleteProtectionState
+            .DELETE_PROTECTION_STATE_UNSPECIFIED
+            .getNumber()) {
+      output.writeEnum(22, deleteProtectionState_);
+    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 99, etag_);
     }
@@ -1392,6 +1765,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     size = 0;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uid_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, uid_);
+    }
+    if (createTime_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(5, getCreateTime());
+    }
+    if (updateTime_ != null) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(6, getUpdateTime());
     }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(locationId_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, locationId_);
@@ -1430,6 +1812,12 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       size +=
           com.google.protobuf.CodedOutputStream.computeEnumSize(21, pointInTimeRecoveryEnablement_);
     }
+    if (deleteProtectionState_
+        != com.google.firestore.admin.v1.Database.DeleteProtectionState
+            .DELETE_PROTECTION_STATE_UNSPECIFIED
+            .getNumber()) {
+      size += com.google.protobuf.CodedOutputStream.computeEnumSize(22, deleteProtectionState_);
+    }
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(etag_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(99, etag_);
     }
@@ -1449,6 +1837,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     com.google.firestore.admin.v1.Database other = (com.google.firestore.admin.v1.Database) obj;
 
     if (!getName().equals(other.getName())) return false;
+    if (!getUid().equals(other.getUid())) return false;
+    if (hasCreateTime() != other.hasCreateTime()) return false;
+    if (hasCreateTime()) {
+      if (!getCreateTime().equals(other.getCreateTime())) return false;
+    }
+    if (hasUpdateTime() != other.hasUpdateTime()) return false;
+    if (hasUpdateTime()) {
+      if (!getUpdateTime().equals(other.getUpdateTime())) return false;
+    }
     if (!getLocationId().equals(other.getLocationId())) return false;
     if (type_ != other.type_) return false;
     if (concurrencyMode_ != other.concurrencyMode_) return false;
@@ -1463,6 +1860,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     if (pointInTimeRecoveryEnablement_ != other.pointInTimeRecoveryEnablement_) return false;
     if (appEngineIntegrationMode_ != other.appEngineIntegrationMode_) return false;
     if (!getKeyPrefix().equals(other.getKeyPrefix())) return false;
+    if (deleteProtectionState_ != other.deleteProtectionState_) return false;
     if (!getEtag().equals(other.getEtag())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -1477,6 +1875,16 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + NAME_FIELD_NUMBER;
     hash = (53 * hash) + getName().hashCode();
+    hash = (37 * hash) + UID_FIELD_NUMBER;
+    hash = (53 * hash) + getUid().hashCode();
+    if (hasCreateTime()) {
+      hash = (37 * hash) + CREATE_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + getCreateTime().hashCode();
+    }
+    if (hasUpdateTime()) {
+      hash = (37 * hash) + UPDATE_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + getUpdateTime().hashCode();
+    }
     hash = (37 * hash) + LOCATION_ID_FIELD_NUMBER;
     hash = (53 * hash) + getLocationId().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
@@ -1497,6 +1905,8 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
     hash = (53 * hash) + appEngineIntegrationMode_;
     hash = (37 * hash) + KEY_PREFIX_FIELD_NUMBER;
     hash = (53 * hash) + getKeyPrefix().hashCode();
+    hash = (37 * hash) + DELETE_PROTECTION_STATE_FIELD_NUMBER;
+    hash = (53 * hash) + deleteProtectionState_;
     hash = (37 * hash) + ETAG_FIELD_NUMBER;
     hash = (53 * hash) + getEtag().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
@@ -1604,8 +2014,6 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
    *
    * <pre>
    * A Cloud Firestore Database.
-   * Currently only one database is allowed per cloud project; this database
-   * must have a `database_id` of '(default)'.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.Database}
@@ -1641,6 +2049,17 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       super.clear();
       bitField0_ = 0;
       name_ = "";
+      uid_ = "";
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
+        createTimeBuilder_ = null;
+      }
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
+        updateTimeBuilder_ = null;
+      }
       locationId_ = "";
       type_ = 0;
       concurrencyMode_ = 0;
@@ -1657,6 +2076,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       pointInTimeRecoveryEnablement_ = 0;
       appEngineIntegrationMode_ = 0;
       keyPrefix_ = "";
+      deleteProtectionState_ = 0;
       etag_ = "";
       return this;
     }
@@ -1698,36 +2118,48 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         result.name_ = name_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
-        result.locationId_ = locationId_;
+        result.uid_ = uid_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.type_ = type_;
+        result.createTime_ = createTimeBuilder_ == null ? createTime_ : createTimeBuilder_.build();
       }
       if (((from_bitField0_ & 0x00000008) != 0)) {
-        result.concurrencyMode_ = concurrencyMode_;
+        result.updateTime_ = updateTimeBuilder_ == null ? updateTime_ : updateTimeBuilder_.build();
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.locationId_ = locationId_;
+      }
+      if (((from_bitField0_ & 0x00000020) != 0)) {
+        result.type_ = type_;
+      }
+      if (((from_bitField0_ & 0x00000040) != 0)) {
+        result.concurrencyMode_ = concurrencyMode_;
+      }
+      if (((from_bitField0_ & 0x00000080) != 0)) {
         result.versionRetentionPeriod_ =
             versionRetentionPeriodBuilder_ == null
                 ? versionRetentionPeriod_
                 : versionRetentionPeriodBuilder_.build();
       }
-      if (((from_bitField0_ & 0x00000020) != 0)) {
+      if (((from_bitField0_ & 0x00000100) != 0)) {
         result.earliestVersionTime_ =
             earliestVersionTimeBuilder_ == null
                 ? earliestVersionTime_
                 : earliestVersionTimeBuilder_.build();
       }
-      if (((from_bitField0_ & 0x00000040) != 0)) {
+      if (((from_bitField0_ & 0x00000200) != 0)) {
         result.pointInTimeRecoveryEnablement_ = pointInTimeRecoveryEnablement_;
       }
-      if (((from_bitField0_ & 0x00000080) != 0)) {
+      if (((from_bitField0_ & 0x00000400) != 0)) {
         result.appEngineIntegrationMode_ = appEngineIntegrationMode_;
       }
-      if (((from_bitField0_ & 0x00000100) != 0)) {
+      if (((from_bitField0_ & 0x00000800) != 0)) {
         result.keyPrefix_ = keyPrefix_;
       }
-      if (((from_bitField0_ & 0x00000200) != 0)) {
+      if (((from_bitField0_ & 0x00001000) != 0)) {
+        result.deleteProtectionState_ = deleteProtectionState_;
+      }
+      if (((from_bitField0_ & 0x00002000) != 0)) {
         result.etag_ = etag_;
       }
     }
@@ -1782,9 +2214,20 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         bitField0_ |= 0x00000001;
         onChanged();
       }
+      if (!other.getUid().isEmpty()) {
+        uid_ = other.uid_;
+        bitField0_ |= 0x00000002;
+        onChanged();
+      }
+      if (other.hasCreateTime()) {
+        mergeCreateTime(other.getCreateTime());
+      }
+      if (other.hasUpdateTime()) {
+        mergeUpdateTime(other.getUpdateTime());
+      }
       if (!other.getLocationId().isEmpty()) {
         locationId_ = other.locationId_;
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000010;
         onChanged();
       }
       if (other.type_ != 0) {
@@ -1807,12 +2250,15 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       if (!other.getKeyPrefix().isEmpty()) {
         keyPrefix_ = other.keyPrefix_;
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000800;
         onChanged();
+      }
+      if (other.deleteProtectionState_ != 0) {
+        setDeleteProtectionStateValue(other.getDeleteProtectionStateValue());
       }
       if (!other.getEtag().isEmpty()) {
         etag_ = other.etag_;
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00002000;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -1847,60 +2293,84 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
                 bitField0_ |= 0x00000001;
                 break;
               } // case 10
+            case 26:
+              {
+                uid_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 26
+            case 42:
+              {
+                input.readMessage(getCreateTimeFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 42
+            case 50:
+              {
+                input.readMessage(getUpdateTimeFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 50
             case 74:
               {
                 locationId_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000010;
                 break;
               } // case 74
             case 80:
               {
                 type_ = input.readEnum();
-                bitField0_ |= 0x00000004;
+                bitField0_ |= 0x00000020;
                 break;
               } // case 80
             case 120:
               {
                 concurrencyMode_ = input.readEnum();
-                bitField0_ |= 0x00000008;
+                bitField0_ |= 0x00000040;
                 break;
               } // case 120
             case 138:
               {
                 input.readMessage(
                     getVersionRetentionPeriodFieldBuilder().getBuilder(), extensionRegistry);
-                bitField0_ |= 0x00000010;
+                bitField0_ |= 0x00000080;
                 break;
               } // case 138
             case 146:
               {
                 input.readMessage(
                     getEarliestVersionTimeFieldBuilder().getBuilder(), extensionRegistry);
-                bitField0_ |= 0x00000020;
+                bitField0_ |= 0x00000100;
                 break;
               } // case 146
             case 152:
               {
                 appEngineIntegrationMode_ = input.readEnum();
-                bitField0_ |= 0x00000080;
+                bitField0_ |= 0x00000400;
                 break;
               } // case 152
             case 162:
               {
                 keyPrefix_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000100;
+                bitField0_ |= 0x00000800;
                 break;
               } // case 162
             case 168:
               {
                 pointInTimeRecoveryEnablement_ = input.readEnum();
-                bitField0_ |= 0x00000040;
+                bitField0_ |= 0x00000200;
                 break;
               } // case 168
+            case 176:
+              {
+                deleteProtectionState_ = input.readEnum();
+                bitField0_ |= 0x00001000;
+                break;
+              } // case 176
             case 794:
               {
                 etag_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000200;
+                bitField0_ |= 0x00002000;
                 break;
               } // case 794
             default:
@@ -2033,6 +2503,541 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       return this;
     }
 
+    private java.lang.Object uid_ = "";
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The system-generated UUID4 for this Database.
+     * </pre>
+     *
+     * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return The uid.
+     */
+    public java.lang.String getUid() {
+      java.lang.Object ref = uid_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        uid_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The system-generated UUID4 for this Database.
+     * </pre>
+     *
+     * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return The bytes for uid.
+     */
+    public com.google.protobuf.ByteString getUidBytes() {
+      java.lang.Object ref = uid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        uid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The system-generated UUID4 for this Database.
+     * </pre>
+     *
+     * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @param value The uid to set.
+     * @return This builder for chaining.
+     */
+    public Builder setUid(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      uid_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The system-generated UUID4 for this Database.
+     * </pre>
+     *
+     * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearUid() {
+      uid_ = getDefaultInstance().getUid();
+      bitField0_ = (bitField0_ & ~0x00000002);
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The system-generated UUID4 for this Database.
+     * </pre>
+     *
+     * <code>string uid = 3 [(.google.api.field_behavior) = OUTPUT_ONLY];</code>
+     *
+     * @param value The bytes for uid to set.
+     * @return This builder for chaining.
+     */
+    public Builder setUidBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      uid_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Timestamp createTime_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        createTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return Whether the createTime field is set.
+     */
+    public boolean hasCreateTime() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The createTime.
+     */
+    public com.google.protobuf.Timestamp getCreateTime() {
+      if (createTimeBuilder_ == null) {
+        return createTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : createTime_;
+      } else {
+        return createTimeBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setCreateTime(com.google.protobuf.Timestamp value) {
+      if (createTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        createTime_ = value;
+      } else {
+        createTimeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setCreateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (createTimeBuilder_ == null) {
+        createTime_ = builderForValue.build();
+      } else {
+        createTimeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder mergeCreateTime(com.google.protobuf.Timestamp value) {
+      if (createTimeBuilder_ == null) {
+        if (((bitField0_ & 0x00000004) != 0)
+            && createTime_ != null
+            && createTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getCreateTimeBuilder().mergeFrom(value);
+        } else {
+          createTime_ = value;
+        }
+      } else {
+        createTimeBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder clearCreateTime() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      createTime_ = null;
+      if (createTimeBuilder_ != null) {
+        createTimeBuilder_.dispose();
+        createTimeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return getCreateTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
+      if (createTimeBuilder_ != null) {
+        return createTimeBuilder_.getMessageOrBuilder();
+      } else {
+        return createTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : createTime_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was created. Databases
+     * created before 2016 do not populate create_time.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp create_time = 5 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getCreateTimeFieldBuilder() {
+      if (createTimeBuilder_ == null) {
+        createTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getCreateTime(), getParentForChildren(), isClean());
+        createTime_ = null;
+      }
+      return createTimeBuilder_;
+    }
+
+    private com.google.protobuf.Timestamp updateTime_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        updateTimeBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return Whether the updateTime field is set.
+     */
+    public boolean hasUpdateTime() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     *
+     * @return The updateTime.
+     */
+    public com.google.protobuf.Timestamp getUpdateTime() {
+      if (updateTimeBuilder_ == null) {
+        return updateTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : updateTime_;
+      } else {
+        return updateTimeBuilder_.getMessage();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setUpdateTime(com.google.protobuf.Timestamp value) {
+      if (updateTimeBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        updateTime_ = value;
+      } else {
+        updateTimeBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder setUpdateTime(com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (updateTimeBuilder_ == null) {
+        updateTime_ = builderForValue.build();
+      } else {
+        updateTimeBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder mergeUpdateTime(com.google.protobuf.Timestamp value) {
+      if (updateTimeBuilder_ == null) {
+        if (((bitField0_ & 0x00000008) != 0)
+            && updateTime_ != null
+            && updateTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
+          getUpdateTimeBuilder().mergeFrom(value);
+        } else {
+          updateTime_ = value;
+        }
+      } else {
+        updateTimeBuilder_.mergeFrom(value);
+      }
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public Builder clearUpdateTime() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      updateTime_ = null;
+      if (updateTimeBuilder_ != null) {
+        updateTimeBuilder_.dispose();
+        updateTimeBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.Timestamp.Builder getUpdateTimeBuilder() {
+      bitField0_ |= 0x00000008;
+      onChanged();
+      return getUpdateTimeFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder() {
+      if (updateTimeBuilder_ != null) {
+        return updateTimeBuilder_.getMessageOrBuilder();
+      } else {
+        return updateTime_ == null
+            ? com.google.protobuf.Timestamp.getDefaultInstance()
+            : updateTime_;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Output only. The timestamp at which this database was most recently
+     * updated. Note this only includes updates to the database resource and not
+     * data contained by the database.
+     * </pre>
+     *
+     * <code>
+     * .google.protobuf.Timestamp update_time = 6 [(.google.api.field_behavior) = OUTPUT_ONLY];
+     * </code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp,
+            com.google.protobuf.Timestamp.Builder,
+            com.google.protobuf.TimestampOrBuilder>
+        getUpdateTimeFieldBuilder() {
+      if (updateTimeBuilder_ == null) {
+        updateTimeBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.protobuf.Timestamp,
+                com.google.protobuf.Timestamp.Builder,
+                com.google.protobuf.TimestampOrBuilder>(
+                getUpdateTime(), getParentForChildren(), isClean());
+        updateTime_ = null;
+      }
+      return updateTimeBuilder_;
+    }
+
     private java.lang.Object locationId_ = "";
     /**
      *
@@ -2098,7 +3103,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       locationId_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -2116,7 +3121,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearLocationId() {
       locationId_ = getDefaultInstance().getLocationId();
-      bitField0_ = (bitField0_ & ~0x00000002);
+      bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
@@ -2139,7 +3144,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       checkByteStringIsUtf8(value);
       locationId_ = value;
-      bitField0_ |= 0x00000002;
+      bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
@@ -2178,7 +3183,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setTypeValue(int value) {
       type_ = value;
-      bitField0_ |= 0x00000004;
+      bitField0_ |= 0x00000020;
       onChanged();
       return this;
     }
@@ -2221,7 +3226,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000004;
+      bitField0_ |= 0x00000020;
       type_ = value.getNumber();
       onChanged();
       return this;
@@ -2240,7 +3245,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearType() {
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000020);
       type_ = 0;
       onChanged();
       return this;
@@ -2276,7 +3281,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setConcurrencyModeValue(int value) {
       concurrencyMode_ = value;
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000040;
       onChanged();
       return this;
     }
@@ -2316,7 +3321,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000040;
       concurrencyMode_ = value.getNumber();
       onChanged();
       return this;
@@ -2333,7 +3338,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearConcurrencyMode() {
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000040);
       concurrencyMode_ = 0;
       onChanged();
       return this;
@@ -2368,7 +3373,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the versionRetentionPeriod field is set.
      */
     public boolean hasVersionRetentionPeriod() {
-      return ((bitField0_ & 0x00000010) != 0);
+      return ((bitField0_ & 0x00000080) != 0);
     }
     /**
      *
@@ -2430,7 +3435,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         versionRetentionPeriodBuilder_.setMessage(value);
       }
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }
@@ -2460,7 +3465,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         versionRetentionPeriodBuilder_.setMessage(builderForValue.build());
       }
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }
@@ -2486,7 +3491,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeVersionRetentionPeriod(com.google.protobuf.Duration value) {
       if (versionRetentionPeriodBuilder_ == null) {
-        if (((bitField0_ & 0x00000010) != 0)
+        if (((bitField0_ & 0x00000080) != 0)
             && versionRetentionPeriod_ != null
             && versionRetentionPeriod_ != com.google.protobuf.Duration.getDefaultInstance()) {
           getVersionRetentionPeriodBuilder().mergeFrom(value);
@@ -2496,7 +3501,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         versionRetentionPeriodBuilder_.mergeFrom(value);
       }
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       onChanged();
       return this;
     }
@@ -2521,7 +3526,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * </code>
      */
     public Builder clearVersionRetentionPeriod() {
-      bitField0_ = (bitField0_ & ~0x00000010);
+      bitField0_ = (bitField0_ & ~0x00000080);
       versionRetentionPeriod_ = null;
       if (versionRetentionPeriodBuilder_ != null) {
         versionRetentionPeriodBuilder_.dispose();
@@ -2551,7 +3556,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * </code>
      */
     public com.google.protobuf.Duration.Builder getVersionRetentionPeriodBuilder() {
-      bitField0_ |= 0x00000010;
+      bitField0_ |= 0x00000080;
       onChanged();
       return getVersionRetentionPeriodFieldBuilder().getBuilder();
     }
@@ -2648,7 +3653,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return Whether the earliestVersionTime field is set.
      */
     public boolean hasEarliestVersionTime() {
-      return ((bitField0_ & 0x00000020) != 0);
+      return ((bitField0_ & 0x00000100) != 0);
     }
     /**
      *
@@ -2706,7 +3711,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         earliestVersionTimeBuilder_.setMessage(value);
       }
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2734,7 +3739,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         earliestVersionTimeBuilder_.setMessage(builderForValue.build());
       }
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2758,7 +3763,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder mergeEarliestVersionTime(com.google.protobuf.Timestamp value) {
       if (earliestVersionTimeBuilder_ == null) {
-        if (((bitField0_ & 0x00000020) != 0)
+        if (((bitField0_ & 0x00000100) != 0)
             && earliestVersionTime_ != null
             && earliestVersionTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
           getEarliestVersionTimeBuilder().mergeFrom(value);
@@ -2768,7 +3773,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       } else {
         earliestVersionTimeBuilder_.mergeFrom(value);
       }
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return this;
     }
@@ -2791,7 +3796,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * </code>
      */
     public Builder clearEarliestVersionTime() {
-      bitField0_ = (bitField0_ & ~0x00000020);
+      bitField0_ = (bitField0_ & ~0x00000100);
       earliestVersionTime_ = null;
       if (earliestVersionTimeBuilder_ != null) {
         earliestVersionTimeBuilder_.dispose();
@@ -2819,7 +3824,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * </code>
      */
     public com.google.protobuf.Timestamp.Builder getEarliestVersionTimeBuilder() {
-      bitField0_ |= 0x00000020;
+      bitField0_ |= 0x00000100;
       onChanged();
       return getEarliestVersionTimeFieldBuilder().getBuilder();
     }
@@ -2919,7 +3924,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setPointInTimeRecoveryEnablementValue(int value) {
       pointInTimeRecoveryEnablement_ = value;
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000200;
       onChanged();
       return this;
     }
@@ -2965,7 +3970,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000040;
+      bitField0_ |= 0x00000200;
       pointInTimeRecoveryEnablement_ = value.getNumber();
       onChanged();
       return this;
@@ -2984,7 +3989,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearPointInTimeRecoveryEnablement() {
-      bitField0_ = (bitField0_ & ~0x00000040);
+      bitField0_ = (bitField0_ & ~0x00000200);
       pointInTimeRecoveryEnablement_ = 0;
       onChanged();
       return this;
@@ -3024,7 +4029,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder setAppEngineIntegrationModeValue(int value) {
       appEngineIntegrationMode_ = value;
-      bitField0_ |= 0x00000080;
+      bitField0_ |= 0x00000400;
       onChanged();
       return this;
     }
@@ -3070,7 +4075,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       if (value == null) {
         throw new NullPointerException();
       }
-      bitField0_ |= 0x00000080;
+      bitField0_ |= 0x00000400;
       appEngineIntegrationMode_ = value.getNumber();
       onChanged();
       return this;
@@ -3089,7 +4094,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      * @return This builder for chaining.
      */
     public Builder clearAppEngineIntegrationMode() {
-      bitField0_ = (bitField0_ & ~0x00000080);
+      bitField0_ = (bitField0_ & ~0x00000400);
       appEngineIntegrationMode_ = 0;
       onChanged();
       return this;
@@ -3175,7 +4180,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       keyPrefix_ = value;
-      bitField0_ |= 0x00000100;
+      bitField0_ |= 0x00000800;
       onChanged();
       return this;
     }
@@ -3198,7 +4203,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearKeyPrefix() {
       keyPrefix_ = getDefaultInstance().getKeyPrefix();
-      bitField0_ = (bitField0_ & ~0x00000100);
+      bitField0_ = (bitField0_ & ~0x00000800);
       onChanged();
       return this;
     }
@@ -3226,7 +4231,106 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       checkByteStringIsUtf8(value);
       keyPrefix_ = value;
-      bitField0_ |= 0x00000100;
+      bitField0_ |= 0x00000800;
+      onChanged();
+      return this;
+    }
+
+    private int deleteProtectionState_ = 0;
+    /**
+     *
+     *
+     * <pre>
+     * State of delete protection for the database.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+     * </code>
+     *
+     * @return The enum numeric value on the wire for deleteProtectionState.
+     */
+    @java.lang.Override
+    public int getDeleteProtectionStateValue() {
+      return deleteProtectionState_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * State of delete protection for the database.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+     * </code>
+     *
+     * @param value The enum numeric value on the wire for deleteProtectionState to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDeleteProtectionStateValue(int value) {
+      deleteProtectionState_ = value;
+      bitField0_ |= 0x00001000;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * State of delete protection for the database.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+     * </code>
+     *
+     * @return The deleteProtectionState.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Database.DeleteProtectionState getDeleteProtectionState() {
+      com.google.firestore.admin.v1.Database.DeleteProtectionState result =
+          com.google.firestore.admin.v1.Database.DeleteProtectionState.forNumber(
+              deleteProtectionState_);
+      return result == null
+          ? com.google.firestore.admin.v1.Database.DeleteProtectionState.UNRECOGNIZED
+          : result;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * State of delete protection for the database.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+     * </code>
+     *
+     * @param value The deleteProtectionState to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDeleteProtectionState(
+        com.google.firestore.admin.v1.Database.DeleteProtectionState value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      bitField0_ |= 0x00001000;
+      deleteProtectionState_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * State of delete protection for the database.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Database.DeleteProtectionState delete_protection_state = 22;
+     * </code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearDeleteProtectionState() {
+      bitField0_ = (bitField0_ & ~0x00001000);
+      deleteProtectionState_ = 0;
       onChanged();
       return this;
     }
@@ -3299,7 +4403,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
         throw new NullPointerException();
       }
       etag_ = value;
-      bitField0_ |= 0x00000200;
+      bitField0_ |= 0x00002000;
       onChanged();
       return this;
     }
@@ -3318,7 +4422,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
      */
     public Builder clearEtag() {
       etag_ = getDefaultInstance().getEtag();
-      bitField0_ = (bitField0_ & ~0x00000200);
+      bitField0_ = (bitField0_ & ~0x00002000);
       onChanged();
       return this;
     }
@@ -3342,7 +4446,7 @@ public final class Database extends com.google.protobuf.GeneratedMessageV3
       }
       checkByteStringIsUtf8(value);
       etag_ = value;
-      bitField0_ |= 0x00000200;
+      bitField0_ |= 0x00002000;
       onChanged();
       return this;
     }

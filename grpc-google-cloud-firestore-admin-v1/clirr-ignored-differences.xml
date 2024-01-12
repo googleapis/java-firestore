@@ -4,6 +4,6 @@
   <difference>
     <differenceType>7012</differenceType>
     <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
-    <method>*createDatabase(com.google.firestore.admin.v1.CreateDatabaseRequest, io.grpc.stub.StreamObserver)</method>
+    <method>*deleteDatabase(com.google.firestore.admin.v1.DeleteDatabaseRequest, io.grpc.stub.StreamObserver)</method>
   </difference>
 </differences>

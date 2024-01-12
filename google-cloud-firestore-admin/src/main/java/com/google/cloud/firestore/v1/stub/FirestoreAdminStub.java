@@ -26,6 +26,8 @@ import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -158,6 +160,15 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable() {
     throw new UnsupportedOperationException("Not implemented: updateDatabaseCallable()");
+  }
+
+  public OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteDatabaseCallable()");
   }
 
   @Override
