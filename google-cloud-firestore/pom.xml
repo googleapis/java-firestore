@@ -112,7 +112,13 @@
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java-util</artifactId>
     </dependency>
-
+    <!-- OpenTelemetry -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+      <version>1.29.0</version>
+    </dependency>
+    <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
     <dependency>
