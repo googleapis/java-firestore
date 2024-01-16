@@ -106,7 +106,6 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
       } else {
         FirestoreSettingsBuilder settingsBuilder =
             new FirestoreSettingsBuilder(FirestoreSettings.newBuilder().build());
-
         DatabaseRootName databaseName =
             DatabaseRootName.of(options.getProjectId(), options.getDatabaseId());
 
