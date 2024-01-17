@@ -246,7 +246,7 @@ import javax.annotation.Generated;
  *    <tr>
  *      <td>ListFields</td>
  *      <td><p> Lists the field configuration and metadata for this database.
- * <p>  Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields that have been explicitly overridden. To issue this query, call [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.</td>
+ * <p>  Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields that have been explicitly overridden. To issue this query, call [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
@@ -1379,7 +1379,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
+   * filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1415,7 +1415,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
+   * filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1449,7 +1449,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
+   * filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1488,7 +1488,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
+   * filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
@@ -1526,7 +1526,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * <p>Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
    * only supports listing fields that have been explicitly overridden. To issue this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the
-   * filter set to `indexConfig.usesAncestorConfig:false or `ttlConfig:&#42;`.
+   * filter set to `indexConfig.usesAncestorConfig:false` or `ttlConfig:&#42;`.
    *
    * <p>Sample code:
    *
