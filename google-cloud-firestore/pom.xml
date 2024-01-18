@@ -118,6 +118,16 @@
       <artifactId>opentelemetry-api</artifactId>
       <version>1.29.0</version>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-context</artifactId>
+      <version>1.29.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-grpc-1.6</artifactId>
+      <version>1.29.0-alpha</version>
+    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
@@ -179,6 +189,14 @@
       <version>3.14.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- OpenTelemetry -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+      <version>1.29.0</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- END OpenTelemetry -->
   </dependencies>
 
   <reporting>
