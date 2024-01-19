@@ -16,6 +16,9 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.common.base.Predicates.not;
+import static java.util.stream.Collectors.toCollection;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
@@ -276,9 +279,11 @@ public abstract class UpdateBuilder<T> {
         DocumentTransform.fromFieldPathMap(documentReference, documentData);
 
     if (options.getFieldMask() != null) {
-      List<FieldPath> fieldMask = new ArrayList<>(options.getFieldMask());
-      fieldMask.removeAll(documentTransform.getFields());
-      documentMask = new FieldMask(fieldMask);
+      TreeSet<FieldPath> fieldPaths =
+          options.getFieldMask().stream()
+              .filter(not(documentTransform.getFields()::contains))
+              .collect(toCollection(TreeSet::new));
+      documentMask = new FieldMask(fieldPaths);
     } else if (options.isMerge()) {
       documentMask = FieldMask.fromObject(fields);
     }
@@ -547,10 +552,12 @@ public abstract class UpdateBuilder<T> {
                 return true;
               }
             });
-    List<FieldPath> fieldPaths = new ArrayList<>(fields.keySet());
     DocumentTransform documentTransform =
         DocumentTransform.fromFieldPathMap(documentReference, fields);
-    fieldPaths.removeAll(documentTransform.getFields());
+    TreeSet<FieldPath> fieldPaths =
+        fields.keySet().stream()
+            .filter(not(documentTransform.getFields()::contains))
+            .collect(toCollection(TreeSet::new));
     FieldMask fieldMask = new FieldMask(fieldPaths);
 
     Write.Builder write = documentSnapshot.toPb();
