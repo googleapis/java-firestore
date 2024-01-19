@@ -30,6 +30,7 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
 
+  // CopyOnWriteArrayList is a thread safe implementation. Client code,
+  // especially within asynchronous callbacks running on thread pool, can
+  // concurrently add writes to builder.
   private final List<WriteOperation> writes = new CopyOnWriteArrayList<>();
 
   protected boolean committed;
@@ -288,7 +292,6 @@ public abstract class UpdateBuilder<T> {
     if (options.isMerge() || options.getFieldMask() != null) {
       write.setUpdateMask(documentMask.toPb());
     }
-
     writes.add(new WriteOperation(documentReference, write));
 
     return wrapResult(writes.size() - 1);
