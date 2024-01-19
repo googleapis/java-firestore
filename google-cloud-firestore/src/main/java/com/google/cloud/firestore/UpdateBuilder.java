@@ -275,9 +275,10 @@ public abstract class UpdateBuilder<T> {
         DocumentTransform.fromFieldPathMap(documentReference, documentData);
 
     if (options.getFieldMask() != null) {
-      TreeSet<FieldPath> fieldPaths = options.getFieldMask().stream()
-          .filter(not(documentTransform.getFields()::contains))
-          .collect(toCollection(TreeSet::new));
+      TreeSet<FieldPath> fieldPaths =
+          options.getFieldMask().stream()
+              .filter(not(documentTransform.getFields()::contains))
+              .collect(toCollection(TreeSet::new));
       documentMask = new FieldMask(fieldPaths);
     } else if (options.isMerge()) {
       documentMask = FieldMask.fromObject(fields);
@@ -550,9 +551,10 @@ public abstract class UpdateBuilder<T> {
             });
     DocumentTransform documentTransform =
         DocumentTransform.fromFieldPathMap(documentReference, fields);
-    TreeSet<FieldPath> fieldPaths = fields.keySet().stream()
-        .filter(not(documentTransform.getFields()::contains))
-        .collect(toCollection(TreeSet::new));
+    TreeSet<FieldPath> fieldPaths =
+        fields.keySet().stream()
+            .filter(not(documentTransform.getFields()::contains))
+            .collect(toCollection(TreeSet::new));
     FieldMask fieldMask = new FieldMask(fieldPaths);
 
     Write.Builder write = documentSnapshot.toPb();
