@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -62,7 +63,7 @@ public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
 
-  private final List<WriteOperation> writes = new ArrayList<>();
+  private final List<WriteOperation> writes = new CopyOnWriteArrayList<>();
 
   protected boolean committed;
 
