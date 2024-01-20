@@ -20,22 +20,24 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.*;
 
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
-import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.*;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.SpanProcessor;
+import io.opentelemetry.sdk.trace.data.EventData;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
@@ -56,6 +58,8 @@ public class ITTracingTest {
   private static final String SERVICE = "google.firestore.v1.Firestore/";
   private static final String BATCH_GET_DOCUMENTS_RPC_NAME = "BatchGetDocuments";
   private static final String COMMIT_RPC_NAME = "Commit";
+  private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
+  private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
   // We use an InMemorySpanExporter for testing which keeps all generated trace spans
   // in memory so that we can check their correctness.
@@ -123,6 +127,14 @@ public class ITTracingTest {
     firestore.close();
   }
 
+  // Prepares all the spans in memory for inspection.
+  List<SpanData> prepareSpans() throws Exception {
+    waitForTracesToComplete();
+    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
+    buildSpanMaps(spans);
+    return spans;
+  }
+
   void buildSpanMaps(List<SpanData> spans) {
     for (SpanData spanData : spans) {
       spanNameToSpanData.put(spanData.getName(), spanData);
@@ -145,6 +157,10 @@ public class ITTracingTest {
     return getSpanByName(SERVICE + rpcName);
   }
 
+  String grpcSpanName(String rpcName) {
+    return SERVICE + rpcName;
+  }
+
   void assertSameTrace(SpanData... spans) {
     if (spans.length > 1) {
       String traceId = spans[0].getTraceId();
@@ -158,103 +174,201 @@ public class ITTracingTest {
   void printSpans() {
     for (SpanData spanData : spanNameToSpanData.values()) {
       System.out.printf(
-          "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s%n",
+          "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s, ATTRIBUTES:%s, EVENTS:%s\n",
           spanData.getSpanId(),
           spanData.getParentSpanId(),
           spanData.getKind(),
           spanData.getTraceId(),
-          spanData.getName());
+          spanData.getName(),
+          spanData.getAttributes().toString(),
+          spanData.getEvents().toString());
+    }
+  }
+
+  // Asserts that the span hierarchy exists for the given span names. The hierarchy starts with the
+  // root span, followed
+  // by the child span, grandchild span, and so on. It also asserts that all the given spans belong
+  // to the same trace,
+  // and that Firestore-generated spans contain the expected Firestore attributes.
+  void assertSpanHierarchy(String... spanNamesHierarchy) {
+    List<String> spanNames = Arrays.asList(spanNamesHierarchy);
+
+    for (int i = 0; i + 1 < spanNames.size(); ++i) {
+      String parentSpanName = spanNames.get(i);
+      String childSpanName = spanNames.get(i + 1);
+      SpanData parentSpan = getSpanByName(parentSpanName);
+      SpanData childSpan = getSpanByName(childSpanName);
+      assertNotNull(parentSpan);
+      assertNotNull(childSpan);
+      assertEquals(childSpan.getParentSpanId(), parentSpan.getSpanId());
+      assertSameTrace(childSpan, parentSpan);
+      // gRPC spans do not have Firestore attributes.
+      if (!parentSpanName.startsWith(SERVICE)) {
+        assertHasExpectedAttributes(parentSpan);
+      }
+      if (!childSpanName.startsWith(SERVICE)) {
+        assertHasExpectedAttributes(childSpan);
+      }
+    }
+  }
+
+  void assertHasExpectedAttributes(SpanData spanData, String... additionalExpectedAttributes) {
+    // All Firestore-generated spans have the settings attributes.
+    List<String> expectedAttributes =
+        Arrays.asList(
+            "gcp.firestore.memoryUtilization",
+            "gcp.firestore.settings.host",
+            "gcp.firestore.settings.databaseId",
+            "gcp.firestore.settings.channel.needsCredentials",
+            "gcp.firestore.settings.channel.needsEndpoint",
+            "gcp.firestore.settings.channel.needsHeaders",
+            "gcp.firestore.settings.channel.shouldAutoClose",
+            "gcp.firestore.settings.channel.transportName",
+            "gcp.firestore.settings.retrySettings.maxRpcTimeout",
+            "gcp.firestore.settings.retrySettings.retryDelayMultiplier",
+            "gcp.firestore.settings.retrySettings.initialRetryDelay",
+            "gcp.firestore.settings.credentials.authenticationType",
+            "gcp.firestore.settings.retrySettings.maxAttempts",
+            "gcp.firestore.settings.retrySettings.maxRetryDelay",
+            "gcp.firestore.settings.retrySettings.rpcTimeoutMultiplier",
+            "gcp.firestore.settings.retrySettings.totalTimeout",
+            "gcp.firestore.settings.retrySettings.initialRpcTimeout");
+
+    expectedAttributes.addAll(Arrays.asList(additionalExpectedAttributes));
+
+    Attributes spanAttributes = spanData.getAttributes();
+    for (String expectedAttribute : expectedAttributes) {
+      assertNotNull(spanAttributes.get(AttributeKey.stringKey(expectedAttribute)));
+    }
+  }
+
+  // This is a POJO used for testing APIs that take a POJO.
+  class Pojo {
+    public int bar;
+
+    Pojo(int bar) {
+      this.bar = bar;
     }
   }
 
   @Test
-  public void testDocRefGetSpans() throws Exception {
-    firestore.collection("col").document("doc0").get().get();
+  public void aggregateQueryGet() throws Exception {
+    firestore.collection("col").count().get().get();
     waitForTracesToComplete();
     List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
     buildSpanMaps(spans);
+    printSpans();
     assertEquals(2, spans.size());
-    SpanData getSpan = getSpanByName(SPAN_NAME_DOC_REF_GET);
-    SpanData grpcSpan = getGrpcSpanByName(BATCH_GET_DOCUMENTS_RPC_NAME);
+    SpanData getSpan = getSpanByName(SPAN_NAME_AGGREGATION_QUERY_GET);
+    SpanData grpcSpan = getGrpcSpanByName(SPAN_NAME_RUN_AGGREGATION_QUERY);
     assertNotNull(getSpan);
     assertNotNull(grpcSpan);
     assertEquals(grpcSpan.getParentSpanId(), getSpan.getSpanId());
     assertSameTrace(getSpan, grpcSpan);
+    assertHasExpectedAttributes(getSpan);
+    List<EventData> events = getSpan.getEvents();
+    assertTrue(events.size() > 0);
+    assertTrue(events.get(0).getAttributes().size() > 0);
+    assertEquals(events.get(0).getName(), "RunAggregationQuery Stream started.");
+    assertEquals(
+        events.get(0).getAttributes().get(AttributeKey.booleanKey("isRetryAttempt")), false);
   }
 
   @Test
-  public void testDocRefCreateSpans() throws Exception {
+  public void bulkWriterCommit() throws Exception {
+    ScheduledExecutorService bulkWriterExecutor = Executors.newSingleThreadScheduledExecutor();
+    BulkWriter bulkWriter =
+        firestore.bulkWriter(BulkWriterOptions.builder().setExecutor(bulkWriterExecutor).build());
+    bulkWriter.set(
+        firestore.collection("col").document("foo"),
+        Collections.singletonMap("bulk-foo", "bulk-bar"));
+    bulkWriter.close();
+    bulkWriterExecutor.awaitTermination(100, TimeUnit.MILLISECONDS);
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_BULK_WRITER_COMMIT, grpcSpanName(BATCH_WRITE_RPC_NAME));
+  }
+
+  @Test
+  public void partitionQuery() throws Exception {
+    CollectionGroup collectionGroup = firestore.collectionGroup("col");
+    collectionGroup.getPartitions(3).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_PARTITION_QUERY, grpcSpanName(SPAN_NAME_PARTITION_QUERY));
+  }
+
+  @Test
+  public void collectionListDocuments() throws Exception {
+    firestore.collection("col").listDocuments();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
+  }
+
+  @Test
+  public void docRefGet() throws Exception {
+    firestore.collection("col").document("doc0").get().get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
+
+  @Test
+  public void docRefCreate() throws Exception {
     firestore.collection("col").document().create(Collections.singletonMap("foo", "bar")).get();
-    waitForTracesToComplete();
-    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-    buildSpanMaps(spans);
+
+    List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
-    SpanData createSpan = getSpanByName(SPAN_NAME_DOC_REF_CREATE);
-    SpanData commitSpan = getSpanByName(SPAN_NAME_BATCH_COMMIT);
-    SpanData grpcSpan = getGrpcSpanByName(COMMIT_RPC_NAME);
-    assertNotNull(createSpan);
-    assertNotNull(commitSpan);
-    assertNotNull(grpcSpan);
-    assertEquals(grpcSpan.getParentSpanId(), commitSpan.getSpanId());
-    assertEquals(commitSpan.getParentSpanId(), createSpan.getSpanId());
-    assertSameTrace(createSpan, commitSpan, grpcSpan);
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void testDocRefSetSpans() throws Exception {
+  public void docRefCreate2() throws Exception {
+    firestore.collection("col").document().create(new Pojo(1)).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet() throws Exception {
     firestore.collection("col").document("foo").set(Collections.singletonMap("foo", "bar")).get();
-    waitForTracesToComplete();
-    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-    buildSpanMaps(spans);
+
+    List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
-    SpanData setSpan = getSpanByName(SPAN_NAME_DOC_REF_SET);
-    SpanData commitSpan = getSpanByName(SPAN_NAME_BATCH_COMMIT);
-    SpanData grpcSpan = getGrpcSpanByName(COMMIT_RPC_NAME);
-    assertNotNull(setSpan);
-    assertNotNull(commitSpan);
-    assertNotNull(grpcSpan);
-    assertEquals(grpcSpan.getParentSpanId(), commitSpan.getSpanId());
-    assertEquals(commitSpan.getParentSpanId(), setSpan.getSpanId());
-    assertSameTrace(setSpan, commitSpan, grpcSpan);
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void testDocRefUpdateSpans() throws Exception {
+  public void docRefUpdate() throws Exception {
     firestore
         .collection("col")
         .document("foo")
         .update(Collections.singletonMap("foo", "bar"))
         .get();
-    waitForTracesToComplete();
-    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-    buildSpanMaps(spans);
+
+    List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
-    SpanData updateSpan = getSpanByName(SPAN_NAME_DOC_REF_UPDATE);
-    SpanData commitSpan = getSpanByName(SPAN_NAME_BATCH_COMMIT);
-    SpanData grpcSpan = getGrpcSpanByName(COMMIT_RPC_NAME);
-    assertNotNull(updateSpan);
-    assertNotNull(commitSpan);
-    assertNotNull(grpcSpan);
-    assertEquals(grpcSpan.getParentSpanId(), commitSpan.getSpanId());
-    assertEquals(commitSpan.getParentSpanId(), updateSpan.getSpanId());
-    assertSameTrace(updateSpan, commitSpan, grpcSpan);
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void testDocRefDeleteSpans() throws Exception {
+  public void docRefDelete() throws Exception {
     firestore.collection("col").document("doc0").delete().get();
-    waitForTracesToComplete();
-    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-    buildSpanMaps(spans);
+
+    List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
-    SpanData deleteSpan = getSpanByName(SPAN_NAME_DOC_REF_DELETE);
-    SpanData commitSpan = getSpanByName(SPAN_NAME_BATCH_COMMIT);
-    SpanData grpcSpan = getGrpcSpanByName(COMMIT_RPC_NAME);
-    assertNotNull(deleteSpan);
-    assertNotNull(commitSpan);
-    assertNotNull(grpcSpan);
-    assertEquals(grpcSpan.getParentSpanId(), commitSpan.getSpanId());
-    assertEquals(commitSpan.getParentSpanId(), deleteSpan.getSpanId());
-    assertSameTrace(deleteSpan, commitSpan, grpcSpan);
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_DELETE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 }
