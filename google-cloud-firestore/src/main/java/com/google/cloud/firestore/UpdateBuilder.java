@@ -30,6 +30,7 @@ import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Timestamp;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -633,16 +635,10 @@ public abstract class UpdateBuilder<T> {
     return ApiFutures.transform(
         response,
         commitResponse -> {
-          List<com.google.firestore.v1.WriteResult> writeResults =
-              commitResponse.getWriteResultsList();
-
-          List<WriteResult> result = new ArrayList<>();
-
-          for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-            result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-          }
-
-          return result;
+          Timestamp commitTime = commitResponse.getCommitTime();
+          return commitResponse.getWriteResultsList().stream()
+              .map(writeResult -> WriteResult.fromProto(writeResult, commitTime))
+              .collect(Collectors.toList());
         },
         MoreExecutors.directExecutor());
   }
