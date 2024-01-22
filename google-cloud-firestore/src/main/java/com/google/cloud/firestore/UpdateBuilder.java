@@ -67,9 +67,7 @@ public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
 
-  // CopyOnWriteArrayList is a thread safe implementation. Client code,
-  // especially within asynchronous callbacks running on thread pool, can
-  // concurrently add writes to builder.
+  // This class can have writes added from multiple threads.
   private final List<WriteOperation> writes = Collections.synchronizedList(new ArrayList<>());
 
   protected boolean committed;
