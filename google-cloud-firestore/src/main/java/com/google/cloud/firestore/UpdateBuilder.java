@@ -33,13 +33,14 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -50,12 +51,12 @@ import javax.annotation.Nullable;
 @InternalExtensionOnly
 public abstract class UpdateBuilder<T> {
   static class WriteOperation {
-    Write.Builder write;
+    Write write;
     DocumentReference documentReference;
 
     WriteOperation(DocumentReference documentReference, Write.Builder write) {
       this.documentReference = documentReference;
-      this.write = write;
+      this.write = write.build();
     }
 
     @Override
@@ -69,7 +70,7 @@ public abstract class UpdateBuilder<T> {
   // CopyOnWriteArrayList is a thread safe implementation. Client code,
   // especially within asynchronous callbacks running on thread pool, can
   // concurrently add writes to builder.
-  private final List<WriteOperation> writes = new CopyOnWriteArrayList<>();
+  private final List<WriteOperation> writes = Collections.synchronizedList(new ArrayList<>());
 
   protected boolean committed;
 
@@ -161,9 +162,7 @@ public abstract class UpdateBuilder<T> {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    writes.add(new WriteOperation(documentReference, write));
-
-    return wrapResult(writes.size() - 1);
+    return writesAdd(new WriteOperation(documentReference, write));
   }
 
   private void verifyNotCommitted() {
@@ -296,9 +295,17 @@ public abstract class UpdateBuilder<T> {
     if (options.isMerge() || options.getFieldMask() != null) {
       write.setUpdateMask(documentMask.toPb());
     }
-    writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(writes.size() - 1);
+    return writesAdd(new WriteOperation(documentReference, write));
+  }
+
+  private T writesAdd(WriteOperation operation) {
+    int writeIndex;
+    synchronized (writes) {
+      writes.add(operation);
+      writeIndex = writes.size() - 1;
+    }
+    return wrapResult(writeIndex);
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
@@ -567,9 +574,8 @@ public abstract class UpdateBuilder<T> {
     if (!documentTransform.isEmpty()) {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
-    writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(writes.size() - 1);
+    return writesAdd(new WriteOperation(documentReference, write));
   }
 
   /**
@@ -605,9 +611,8 @@ public abstract class UpdateBuilder<T> {
     if (!precondition.isEmpty()) {
       write.setCurrentDocument(precondition.toPb());
     }
-    writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(writes.size() - 1);
+    return writesAdd(new WriteOperation(documentReference, write));
   }
 
   /** Commit the current batch. */
@@ -621,8 +626,10 @@ public abstract class UpdateBuilder<T> {
     final CommitRequest.Builder request = CommitRequest.newBuilder();
     request.setDatabase(firestore.getDatabaseName());
 
-    for (WriteOperation writeOperation : writes) {
-      request.addWrites(writeOperation.write);
+    synchronized (writes) {
+      for (WriteOperation writeOperation : writes) {
+        request.addWrites(writeOperation.write);
+      }
     }
 
     if (transactionId != null) {
@@ -656,8 +663,12 @@ public abstract class UpdateBuilder<T> {
     return writes.isEmpty();
   }
 
-  List<WriteOperation> getWrites() {
-    return writes;
+  void forEach(Consumer<Write> consumer) {
+    synchronized (writes) {
+      for (WriteOperation writeOperation : writes) {
+        consumer.accept(writeOperation.write);
+      }
+    }
   }
 
   /** Get the number of writes. */

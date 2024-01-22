@@ -69,24 +69,20 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
    * <p>The writes in the batch are not applied atomically and can be applied out of order.
    */
   ApiFuture<Void> bulkCommit() {
+    BatchWriteRequest request = buildBatchWriteRequest();
+
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
             TraceUtil.SPAN_NAME_BATCHWRITE,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(getWrites().size())));
-
-    final BatchWriteRequest.Builder request = BatchWriteRequest.newBuilder();
-    request.setDatabase(firestore.getDatabaseName());
-
-    for (WriteOperation writeOperation : getWrites()) {
-      request.addWrites(writeOperation.write);
-    }
+            ImmutableMap.of(
+                "numDocuments", AttributeValue.longAttributeValue(request.getWritesCount())));
 
     committed = true;
 
     ApiFuture<BatchWriteResponse> response =
         processExceptions(
-            firestore.sendRequest(request.build(), firestore.getClient().batchWriteCallable()));
+            firestore.sendRequest(request, firestore.getClient().batchWriteCallable()));
 
     return ApiFutures.transformAsync(
         response,
@@ -115,6 +111,13 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
           return BulkWriter.silenceFuture(ApiFutures.allAsList(pendingUserCallbacks));
         },
         executor);
+  }
+
+  private BatchWriteRequest buildBatchWriteRequest() {
+    BatchWriteRequest.Builder builder = BatchWriteRequest.newBuilder();
+    builder.setDatabase(firestore.getDatabaseName());
+    forEach(builder::addWrites);
+    return builder.build();
   }
 
   /** Maps an RPC failure to each individual write's result. */
