@@ -300,6 +300,7 @@ public abstract class UpdateBuilder<T> {
   private T writesAdd(WriteOperation operation) {
     int writeIndex;
     synchronized (writes) {
+      verifyNotCommitted();
       writes.add(operation);
       writeIndex = writes.size() - 1;
     }
@@ -615,29 +616,18 @@ public abstract class UpdateBuilder<T> {
 
   /** Commit the current batch. */
   ApiFuture<List<WriteResult>> commit(@Nullable ByteString transactionId) {
+    committed = true;
+
+    CommitRequest request = buildCommitRequest(transactionId);
+
     Tracing.getTracer()
         .getCurrentSpan()
         .addAnnotation(
             TraceUtil.SPAN_NAME_COMMIT,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
-
-    final CommitRequest.Builder request = CommitRequest.newBuilder();
-    request.setDatabase(firestore.getDatabaseName());
-
-    synchronized (writes) {
-      for (WriteOperation writeOperation : writes) {
-        request.addWrites(writeOperation.write);
-      }
-    }
-
-    if (transactionId != null) {
-      request.setTransaction(transactionId);
-    }
-
-    committed = true;
+            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(request.getWritesCount())));
 
     ApiFuture<CommitResponse> response =
-        firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+        firestore.sendRequest(request, firestore.getClient().commitCallable());
 
     return ApiFutures.transform(
         response,
@@ -654,6 +644,16 @@ public abstract class UpdateBuilder<T> {
           return result;
         },
         MoreExecutors.directExecutor());
+  }
+
+  private CommitRequest buildCommitRequest(ByteString transactionId) {
+    CommitRequest.Builder builder = CommitRequest.newBuilder();
+    builder.setDatabase(firestore.getDatabaseName());
+    forEach(builder::addWrites);
+    if (transactionId != null) {
+      builder.setTransaction(transactionId);
+    }
+    return builder.build();
   }
 
   /** Checks whether any updates have been queued. */

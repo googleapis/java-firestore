@@ -69,6 +69,8 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
    * <p>The writes in the batch are not applied atomically and can be applied out of order.
    */
   ApiFuture<Void> bulkCommit() {
+    committed = true;
+
     BatchWriteRequest request = buildBatchWriteRequest();
 
     Tracing.getTracer()
@@ -77,8 +79,6 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
             TraceUtil.SPAN_NAME_BATCHWRITE,
             ImmutableMap.of(
                 "numDocuments", AttributeValue.longAttributeValue(request.getWritesCount())));
-
-    committed = true;
 
     ApiFuture<BatchWriteResponse> response =
         processExceptions(
