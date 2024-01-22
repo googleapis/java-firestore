@@ -433,7 +433,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
 
   /** Returns the default service endpoint. */
   public static String getDefaultEndpoint() {
-    return "firestore.googleapis.com:443";
+    // return "firestore.googleapis.com:443";
+    return "test-firestore.sandbox.googleapis.com:443";
   }
 
   /** Returns the default mTLS service endpoint. */

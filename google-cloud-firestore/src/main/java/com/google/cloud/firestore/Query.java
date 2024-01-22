@@ -29,7 +29,6 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_E
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -43,12 +42,10 @@ import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.QueryMode;
-import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.RunQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
@@ -61,7 +58,6 @@ import com.google.firestore.v1.StructuredQuery.Order;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
-import com.google.protobuf.Struct;
 import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
@@ -1763,8 +1759,8 @@ public class Query {
     return get(null);
   }
 
-  ApiFuture<QueryProfile<QuerySnapshot>> getQueryProfileInfo(QueryMode queryMode) {
-    SettableApiFuture<QueryProfile<QuerySnapshot>> result = SettableApiFuture.create();
+  ApiFuture<QuerySnapshot> getQueryProfileInfo(QueryMode queryMode) {
+    SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request
@@ -1775,8 +1771,7 @@ public class Query {
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
-          QueryPlan queryPlan = QueryPlan.getDefaultInstance();
-          Struct statsStruct = Struct.getDefaultInstance();
+          ResultSetStats stats;
           List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
           @Override
@@ -1797,13 +1792,7 @@ public class Query {
             }
 
             if (response.hasStats()) {
-              ResultSetStats stats = response.getStats();
-              if (stats.hasQueryPlan()) {
-                queryPlan = new QueryPlan(stats.getQueryPlan());
-              }
-              if (stats.hasQueryStats()) {
-                statsStruct = stats.getQueryStats();
-              }
+              stats = new ResultSetStats(response.getStats());
             }
           }
 
@@ -1817,11 +1806,9 @@ public class Query {
 
           @Override
           public void onComplete() {
-            result.set(
-                new QueryProfile<>(
-                    queryPlan,
-                    UserDataConverter.decodeStruct(statsStruct),
-                    QuerySnapshot.withDocuments(Query.this, readTime, documentSnapshots)));
+            QuerySnapshot querySnapshot =
+                QuerySnapshot.withDocumentsAndStats(Query.this, readTime, stats, documentSnapshots);
+            result.set(querySnapshot);
           }
         };
 
@@ -1839,9 +1826,8 @@ public class Query {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<QueryPlan> explain() {
-    ApiFuture<QueryProfile<QuerySnapshot>> result = getQueryProfileInfo(QueryMode.PLAN);
-    return ApiFutures.transform(result, QueryProfile::getPlan, MoreExecutors.directExecutor());
+  public ApiFuture<QuerySnapshot> explain() {
+    return getQueryProfileInfo(QueryMode.PLAN);
   }
 
   /**
@@ -1854,7 +1840,7 @@ public class Query {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfile<QuerySnapshot>> explainAnalyze() {
+  public ApiFuture<QuerySnapshot> explainAnalyze() {
     return getQueryProfileInfo(QueryMode.PROFILE);
   }
 

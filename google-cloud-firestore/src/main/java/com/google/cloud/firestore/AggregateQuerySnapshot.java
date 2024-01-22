@@ -31,6 +31,7 @@ public class AggregateQuerySnapshot {
   @Nonnull private final AggregateQuery query;
   @Nonnull private final Timestamp readTime;
   @Nonnull private final Map<String, Value> data;
+  @Nullable private final ResultSetStats stats;
 
   AggregateQuerySnapshot(
       @Nonnull AggregateQuery query,
@@ -39,6 +40,18 @@ public class AggregateQuerySnapshot {
     this.query = query;
     this.readTime = readTime;
     this.data = data;
+    this.stats = null;
+  }
+
+  AggregateQuerySnapshot(
+      @Nonnull AggregateQuery query,
+      @Nonnull Timestamp readTime,
+      @Nonnull Map<String, Value> data,
+      @Nonnull ResultSetStats stats) {
+    this.query = query;
+    this.readTime = readTime;
+    this.data = data;
+    this.stats = stats;
   }
 
   /** Returns the query that was executed to produce this result. */
@@ -53,7 +66,11 @@ public class AggregateQuerySnapshot {
     return readTime;
   }
 
-  /** Returns the number of documents in the result set of the underlying query. */
+  /**
+   * Returns the number of documents in the result set of the underlying query.
+   *
+   * <p>Note: This method throws an exception if the query was executed `explain` without `analyze`.
+   */
   public long getCount() {
     AggregateField countField = AggregateField.count();
     Object value = get(countField);
@@ -70,7 +87,12 @@ public class AggregateQuerySnapshot {
     return (Long) value;
   }
 
-  /** Returns the number of documents in the result set of the underlying query. */
+  /**
+   * Returns the number of documents in the result set of the underlying query.
+   *
+   * <p>Note: This method throws an exception if the query was executed using `explain` without
+   * `analyze`.
+   */
   @SuppressWarnings({"unused"})
   public long get(@Nonnull AggregateField.CountAggregateField unused) {
     return getCount();
@@ -80,6 +102,9 @@ public class AggregateQuerySnapshot {
    * Returns the result of the given aggregation from the server without coercion of data types.
    * Throws java.lang.RuntimeException if the `aggregateField` was not requested when calling
    * `query.aggregate(...)`.
+   *
+   * <p>Note: This method throws an exception if the query was executed using `explain` without
+   * `analyze`.
    *
    * @param aggregateField The aggregation for which the value is requested.
    * @return The result of the given aggregation.
@@ -113,6 +138,9 @@ public class AggregateQuerySnapshot {
    * the above `get` method. Throws java.lang.RuntimeException if the `aggregateField` was not
    * requested when calling `query.aggregate(...)`.
    *
+   * <p>Note: This method throws an exception if the query was executed using `explain` without
+   * `analyze`.
+   *
    * @param averageAggregateField The average aggregation for which the value is requested.
    * @return The result of the given average aggregation.
    */
@@ -126,6 +154,9 @@ public class AggregateQuerySnapshot {
    * a RuntimeException if the result of the aggregate is non-numeric. In the case of coercion of
    * long to double, uses java.lang.Long.doubleValue to perform the conversion, and may result in a
    * loss of precision.
+   *
+   * <p>Note: This method throws an exception if the query was executed using `explain` without
+   * `analyze`.
    *
    * @param aggregateField The aggregation for which the value is requested.
    * @return The result of the given average aggregation as a double.
@@ -141,6 +172,9 @@ public class AggregateQuerySnapshot {
    * RuntimeException if the result of the aggregate is non-numeric. In case of coercion of double
    * to long, uses java.lang.Double.longValue to perform the conversion.
    *
+   * <p>Note: This method throws an exception if the query was executed using `explain` without
+   * `analyze`.
+   *
    * @param aggregateField The aggregation for which the value is requested.
    * @return The result of the given average aggregation as a long.
    */
@@ -148,6 +182,17 @@ public class AggregateQuerySnapshot {
   public Long getLong(@Nonnull AggregateField aggregateField) {
     Number result = (Number) get(aggregateField);
     return result == null ? null : result.longValue();
+  }
+
+  /**
+   * Returns the statistics related to this query if `explain` was used to execute the query, or
+   * null otherwise.
+   *
+   * @return The result set statistics.
+   */
+  @Nullable
+  public ResultSetStats getResultSetStats() {
+    return stats;
   }
 
   /**

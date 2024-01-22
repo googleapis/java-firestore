@@ -17,7 +17,6 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -27,9 +26,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.QueryMode;
-import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.RunQueryRequest;
@@ -38,7 +35,6 @@ import com.google.firestore.v1.StructuredAggregationQuery.Aggregation;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.Struct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,10 +87,8 @@ public class AggregateQuery {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<QueryPlan> explain() {
-    ApiFuture<QueryProfile<AggregateQuerySnapshot>> result =
-        getAggregateQueryProfileInfo(QueryMode.PLAN);
-    return ApiFutures.transform(result, QueryProfile::getPlan, MoreExecutors.directExecutor());
+  public ApiFuture<AggregateQuerySnapshot> explain() {
+    return getAggregateQueryProfileInfo(QueryMode.PLAN);
   }
 
   /**
@@ -107,7 +101,7 @@ public class AggregateQuery {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QueryProfile<AggregateQuerySnapshot>> explainAnalyze() {
+  public ApiFuture<AggregateQuerySnapshot> explainAnalyze() {
     return getAggregateQueryProfileInfo(QueryMode.PROFILE);
   }
 
@@ -231,17 +225,16 @@ public class AggregateQuery {
     public void onComplete() {}
   }
 
-  ApiFuture<QueryProfile<AggregateQuerySnapshot>> getAggregateQueryProfileInfo(
-      QueryMode queryMode) {
+  ApiFuture<AggregateQuerySnapshot> getAggregateQueryProfileInfo(QueryMode queryMode) {
     RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    SettableApiFuture<QueryProfile<AggregateQuerySnapshot>> result = SettableApiFuture.create();
+    SettableApiFuture<AggregateQuerySnapshot> result = SettableApiFuture.create();
 
     ResponseObserver<RunAggregationQueryResponse> observer =
         new ResponseObserver<RunAggregationQueryResponse>() {
           Timestamp readTime;
           Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-          QueryPlan queryPlan = QueryPlan.getDefaultInstance();
-          Struct statsStruct = Struct.getDefaultInstance();
+
+          ResultSetStats stats;
 
           @Override
           public void onStart(StreamController streamController) {}
@@ -259,13 +252,7 @@ public class AggregateQuery {
             }
 
             if (response.hasStats()) {
-              ResultSetStats stats = response.getStats();
-              if (stats.hasQueryPlan()) {
-                queryPlan = new QueryPlan(stats.getQueryPlan());
-              }
-              if (stats.hasQueryStats()) {
-                statsStruct = stats.getQueryStats();
-              }
+              stats = new ResultSetStats(response.getStats());
             }
           }
 
@@ -278,10 +265,8 @@ public class AggregateQuery {
           @Override
           public void onComplete() {
             result.set(
-                new QueryProfile<>(
-                    queryPlan,
-                    UserDataConverter.decodeStruct(statsStruct),
-                    new AggregateQuerySnapshot(AggregateQuery.this, readTime, aggregateFieldsMap)));
+                new AggregateQuerySnapshot(
+                    AggregateQuery.this, readTime, aggregateFieldsMap, stats));
           }
         };
 

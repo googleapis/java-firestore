@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A QuerySnapshot contains the results of a query. It can contain zero or more DocumentSnapshot
@@ -34,15 +35,28 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   private final Query query;
   private final Timestamp readTime;
 
+  @Nullable private final ResultSetStats resultSetStats;
+
   protected QuerySnapshot(Query query, Timestamp readTime) { // Elevated access level for mocking.
     this.query = query;
     this.readTime = readTime;
+    this.resultSetStats = null;
+  }
+
+  protected QuerySnapshot(
+      Query query, Timestamp readTime, ResultSetStats stats) { // Elevated access level for mocking.
+    this.query = query;
+    this.readTime = readTime;
+    this.resultSetStats = stats;
   }
 
   /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
-  public static QuerySnapshot withDocuments(
-      final Query query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
-    return new QuerySnapshot(query, readTime) {
+  static QuerySnapshot withDocumentsAndStats(
+      final Query query,
+      Timestamp readTime,
+      ResultSetStats stats,
+      final List<QueryDocumentSnapshot> documents) {
+    return new QuerySnapshot(query, readTime, stats) {
       volatile List<DocumentChange> documentChanges;
 
       @Nonnull
@@ -93,13 +107,19 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
     };
   }
 
+  /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
+  public static QuerySnapshot withDocuments(
+      final Query query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
+    return withDocumentsAndStats(query, readTime, /* ResultSetStats */ null, documents);
+  }
+
   /** Creates a new QuerySnapshot representing a snapshot of a Query with changed documents. */
   public static QuerySnapshot withChanges(
       final Query query,
       Timestamp readTime,
       final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
-    return new QuerySnapshot(query, readTime) {
+    return new QuerySnapshot(query, readTime, /* resultSetStats */ null) {
       volatile List<QueryDocumentSnapshot> documents;
 
       @Nonnull
@@ -168,7 +188,21 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   }
 
   /**
+   * Returns the statistics related to this query if `explain` was used to execute the query, or
+   * null otherwise.
+   *
+   * @return The result set statistics.
+   */
+  @Nullable
+  public ResultSetStats getResultSetStats() {
+    return resultSetStats;
+  }
+
+  /**
    * Returns the documents in this QuerySnapshot as a List in order of the query.
+   *
+   * <p>Note: If the query was run using `explain` without the `analyze` option, this will return an
+   * empty list.
    *
    * @return The list of documents.
    */
@@ -179,17 +213,30 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
    * Returns the list of documents that changed since the last snapshot. If it's the first snapshot
    * all documents will be in the list as added changes.
    *
+   * <p>Note: If the query was run using `explain` without the `analyze` option, this will return an
+   * empty list.
+   *
    * @return The list of documents that changed since the last snapshot.
    */
   @Nonnull
   public abstract List<DocumentChange> getDocumentChanges();
 
-  /** Returns true if there are no documents in the QuerySnapshot. */
+  /**
+   * Returns true if there are no documents in the QuerySnapshot.
+   *
+   * <p>Note: If the query was run using `explain` without the `analyze` option, this will return
+   * true.
+   */
   public boolean isEmpty() {
     return this.size() == 0;
   }
 
-  /** Returns the number of documents in the QuerySnapshot. */
+  /**
+   * Returns the number of documents in the QuerySnapshot.
+   *
+   * <p>Note: If the query was run using `explain` without the `analyze` option, this will return
+   * zero.
+   */
   public abstract int size();
 
   @Override

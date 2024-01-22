@@ -867,6 +867,13 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
+  public void regularQueryExecutionDoesNotHaveStats() throws Exception {
+    Query query = firestore.collection("foo").whereEqualTo("foo", "bar");
+    QuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.getResultSetStats()).isNull();
+  }
+
+  @Test
   public void testQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
@@ -879,8 +886,15 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    QueryPlan plan = query.explain().get();
-    assertThat(plan.getPlanInfo()).isNotEmpty();
+    QuerySnapshot snapshot = query.explain().get();
+
+    assertThat(snapshot.size()).isEqualTo(0);
+
+    ResultSetStats stats = snapshot.getResultSetStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getQueryPlan()).isNotNull();
+    assertThat(stats.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(stats.getQueryStats()).isNull();
   }
 
   @Test
@@ -897,10 +911,23 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    QueryProfile<QuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
-    assertThat(profile.getStats()).isNotEmpty();
-    assertThat(profile.getSnapshot().size()).isEqualTo(3);
+    QuerySnapshot snapshot = query.explainAnalyze().get();
+
+    assertThat(snapshot.size()).isEqualTo(3);
+
+    ResultSetStats profile = snapshot.getResultSetStats();
+    assertThat(profile).isNotNull();
+    assertThat(profile.getQueryPlan()).isNotNull();
+    assertThat(profile.getQueryStats()).isNotNull();
+    assertThat(profile.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getQueryStats()).isNotEmpty();
+  }
+
+  @Test
+  public void regularAggregateQueryExecutionDoesNotHaveStats() throws Exception {
+    AggregateQuery query = firestore.collection("foo").whereEqualTo("foo", "bar").count();
+    AggregateQuerySnapshot snapshot = query.get().get();
+    assertThat(snapshot.getResultSetStats()).isNull();
   }
 
   @Test
@@ -916,8 +943,13 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    QueryPlan plan = query.explain().get();
-    assertThat(plan.getPlanInfo()).isNotEmpty();
+    AggregateQuerySnapshot snapshot = query.explain().get();
+
+    ResultSetStats stats = snapshot.getResultSetStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getQueryPlan()).isNotNull();
+    assertThat(stats.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(stats.getQueryStats()).isNull();
   }
 
   @Test
@@ -934,9 +966,15 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    QueryProfile<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
-    assertThat(profile.getStats()).isNotEmpty();
-    assertThat(profile.getSnapshot().getCount()).isEqualTo(3);
+    AggregateQuerySnapshot snapshot = query.explainAnalyze().get();
+
+    assertThat(snapshot.getCount()).isEqualTo(3);
+
+    ResultSetStats profile = snapshot.getResultSetStats();
+    assertThat(profile).isNotNull();
+    assertThat(profile.getQueryPlan()).isNotNull();
+    assertThat(profile.getQueryStats()).isNotNull();
+    assertThat(profile.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getQueryStats()).isNotEmpty();
   }
 }
