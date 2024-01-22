@@ -624,7 +624,8 @@ public abstract class UpdateBuilder<T> {
         .getCurrentSpan()
         .addAnnotation(
             TraceUtil.SPAN_NAME_COMMIT,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(request.getWritesCount())));
+            ImmutableMap.of(
+                "numDocuments", AttributeValue.longAttributeValue(request.getWritesCount())));
 
     ApiFuture<CommitResponse> response =
         firestore.sendRequest(request, firestore.getClient().commitCallable());
