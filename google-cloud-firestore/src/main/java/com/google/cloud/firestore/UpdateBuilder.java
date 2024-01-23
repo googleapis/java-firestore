@@ -52,9 +52,9 @@ import javax.annotation.Nullable;
  */
 @InternalExtensionOnly
 public abstract class UpdateBuilder<T> {
-  static class WriteOperation {
-    Write write;
-    DocumentReference documentReference;
+  static final class WriteOperation {
+    final Write write;
+    final DocumentReference documentReference;
 
     WriteOperation(DocumentReference documentReference, Write.Builder write) {
       this.documentReference = documentReference;
