@@ -74,10 +74,6 @@ public abstract class UpdateBuilder<T> {
 
   protected volatile boolean committed;
 
-  boolean isCommitted() {
-    return committed;
-  }
-
   UpdateBuilder(FirestoreImpl firestore) {
     this.firestore = firestore;
   }
@@ -293,7 +289,7 @@ public abstract class UpdateBuilder<T> {
     int writeIndex;
     synchronized (writes) {
       Preconditions.checkState(
-          !isCommitted(),
+          !committed,
           String.format(
               "Cannot modify a %s that has already been committed.",
               this.getClass().getSimpleName()));
