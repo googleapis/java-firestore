@@ -304,7 +304,7 @@ public abstract class UpdateBuilder<T> {
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
-  private Map<FieldPath, Object> applyFieldMask(
+  private static Map<FieldPath, Object> applyFieldMask(
       Map<String, Object> fields, List<FieldPath> fieldMask) {
     List<FieldPath> remainingFields = new ArrayList<>(fieldMask);
     Map<FieldPath, Object> filteredData =
@@ -324,7 +324,7 @@ public abstract class UpdateBuilder<T> {
    * Strips all values in 'fields' that are not specified in 'fieldMask'. Modifies 'fieldMask'
    * inline and removes all matched fields.
    */
-  private Map<FieldPath, Object> applyFieldMask(
+  private static Map<FieldPath, Object> applyFieldMask(
       Map<String, Object> fields, List<FieldPath> fieldMask, FieldPath root) {
     Map<FieldPath, Object> filteredMap = new HashMap<>();
 
@@ -345,7 +345,7 @@ public abstract class UpdateBuilder<T> {
     return filteredMap;
   }
 
-  private Map<FieldPath, Object> convertToFieldPaths(
+  private static Map<FieldPath, Object> convertToFieldPaths(
       @Nonnull Map<String, Object> fields, boolean splitOnDots) {
     Map<FieldPath, Object> fieldPaths = new HashMap<>();
 
