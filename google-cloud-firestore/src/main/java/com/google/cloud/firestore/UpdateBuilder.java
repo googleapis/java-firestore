@@ -34,7 +34,6 @@ import com.google.protobuf.Timestamp;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,8 +68,9 @@ public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
 
-  // This class can have writes added from multiple threads.
-  private final List<WriteOperation> writes = Collections.synchronizedList(new ArrayList<>());
+  // All reads and writes on `writes` must be done in a block that is synchronized on `writes`;
+  // otherwise, you get undefined behavior.
+  private final List<WriteOperation> writes = new ArrayList<>();
 
   protected volatile boolean committed;
 
@@ -658,7 +658,9 @@ public abstract class UpdateBuilder<T> {
 
   /** Checks whether any updates have been queued. */
   boolean isEmpty() {
-    return writes.isEmpty();
+    synchronized (writes) {
+      return writes.isEmpty();
+    }
   }
 
   void forEach(Consumer<Write> consumer) {
@@ -671,12 +673,19 @@ public abstract class UpdateBuilder<T> {
 
   /** Get the number of writes. */
   public int getMutationsSize() {
-    return writes.size();
+    synchronized (writes) {
+      return writes.size();
+    }
   }
 
   @Override
   public String toString() {
+    final String writesAsString;
+    synchronized (writes) {
+      writesAsString = writes.toString();
+    }
+
     return String.format(
-        "%s{writes=%s, committed=%s}", getClass().getSimpleName(), writes, committed);
+        "%s{writes=%s, committed=%s}", getClass().getSimpleName(), writesAsString, committed);
   }
 }
