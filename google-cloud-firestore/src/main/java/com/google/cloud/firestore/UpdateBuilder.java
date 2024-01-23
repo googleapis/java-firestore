@@ -146,7 +146,6 @@ public abstract class UpdateBuilder<T> {
 
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
-    verifyNotCommitted();
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_CREATEDOCUMENT);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
@@ -163,14 +162,6 @@ public abstract class UpdateBuilder<T> {
     }
 
     return writesAdd(new WriteOperation(documentReference, write));
-  }
-
-  private void verifyNotCommitted() {
-    Preconditions.checkState(
-        !isCommitted(),
-        String.format(
-            "Cannot modify a %s that has already been committed.",
-            this.getClass().getSimpleName()));
   }
 
   /**
@@ -261,7 +252,6 @@ public abstract class UpdateBuilder<T> {
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
       @Nonnull SetOptions options) {
-    verifyNotCommitted();
     Map<FieldPath, Object> documentData;
 
     if (options.getFieldMask() != null) {
@@ -302,7 +292,11 @@ public abstract class UpdateBuilder<T> {
   private T writesAdd(WriteOperation operation) {
     int writeIndex;
     synchronized (writes) {
-      verifyNotCommitted();
+      Preconditions.checkState(
+          !isCommitted(),
+          String.format(
+              "Cannot modify a %s that has already been committed.",
+              this.getClass().getSimpleName()));
       writes.add(operation);
       writeIndex = writes.size() - 1;
     }
@@ -540,7 +534,6 @@ public abstract class UpdateBuilder<T> {
       @Nonnull DocumentReference documentReference,
       @Nonnull final Map<FieldPath, Object> fields,
       @Nonnull Precondition precondition) {
-    verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_UPDATEDOCUMENT);
     Map<String, Object> deconstructedMap = expandObject(fields);
@@ -605,7 +598,6 @@ public abstract class UpdateBuilder<T> {
 
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
-    verifyNotCommitted();
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_DELETEDOCUMENT);
     Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
