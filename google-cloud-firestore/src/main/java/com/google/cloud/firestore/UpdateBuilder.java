@@ -622,10 +622,10 @@ public abstract class UpdateBuilder<T> {
     // Step 2 uses `forEach(..)` that is synchronized, therefore will be blocked
     // until any writes are complete.
     //
-    // Writes will `verifyNotCommit()` within synchronized block of code before
-    // appending writes. Since committed is set to true before accessing writes,
-    // we are ensured that no more writes will be appended after commit accesses
-    // writes.
+    // Writes will verify `committed==false` within synchronized block of code
+    // before appending writes. Since committed is set to true before accessing
+    // writes, we are ensured that no more writes will be appended after commit
+    // accesses writes.
     committed = true;
     CommitRequest request = buildCommitRequest(transactionId);
 
