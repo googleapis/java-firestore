@@ -72,7 +72,7 @@ public abstract class UpdateBuilder<T> {
   // This class can have writes added from multiple threads.
   private final List<WriteOperation> writes = Collections.synchronizedList(new ArrayList<>());
 
-  protected boolean committed;
+  protected volatile boolean committed;
 
   boolean isCommitted() {
     return committed;
@@ -618,8 +618,23 @@ public abstract class UpdateBuilder<T> {
 
   /** Commit the current batch. */
   ApiFuture<List<WriteResult>> commit(@Nullable ByteString transactionId) {
-    committed = true;
 
+    // Sequence is thread safe.
+    //
+    // 1. Set committed = true
+    // 2. Build commit request
+    //
+    // Step 1 sets uses volatile property to ensure committed is visible to all
+    // threads immediately.
+    //
+    // Step 2 uses `forEach(..)` that is synchronized, therefore will be blocked
+    // until any writes are complete.
+    //
+    // Writes will `verifyNotCommit()` within synchronized block of code before
+    // appending writes. Since committed is set to true before accessing writes,
+    // we are ensured that no more writes will be appended after commit accesses
+    // writes.
+    committed = true;
     CommitRequest request = buildCommitRequest(transactionId);
 
     Tracing.getTracer()
