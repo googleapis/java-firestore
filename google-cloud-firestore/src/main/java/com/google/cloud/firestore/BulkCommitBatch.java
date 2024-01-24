@@ -88,18 +88,18 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
     return ApiFutures.transformAsync(
         response,
         batchWriteResponse -> {
+          List<ApiFuture<Void>> pendingUserCallbacks = new ArrayList<>();
+
           List<com.google.firestore.v1.WriteResult> writeResults =
               batchWriteResponse.getWriteResultsList();
           List<com.google.rpc.Status> statuses = batchWriteResponse.getStatusList();
 
-          int size = writeResults.size();
-          List<ApiFuture<Void>> pendingUserCallbacks = new ArrayList<>(size);
-          for (int i = 0; i < size; ++i) {
+          for (int i = 0; i < writeResults.size(); ++i) {
+            com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
             com.google.rpc.Status status = statuses.get(i);
             BulkWriterOperation operation = pendingOperations.get(i);
             Status code = Status.fromCodeValue(status.getCode());
             if (code == Status.OK) {
-              com.google.firestore.v1.WriteResult writeResult = writeResults.get(i);
               pendingUserCallbacks.add(
                   operation.onSuccess(
                       new WriteResult(Timestamp.fromProto(writeResult.getUpdateTime()))));
@@ -117,7 +117,7 @@ class BulkCommitBatch extends UpdateBuilder<ApiFuture<WriteResult>> {
   private BatchWriteRequest buildBatchWriteRequest() {
     BatchWriteRequest.Builder builder = BatchWriteRequest.newBuilder();
     builder.setDatabase(firestore.getDatabaseName());
-    forEach(builder::addWrites);
+    forEachWrite(builder::addWrites);
     return builder.build();
   }
 

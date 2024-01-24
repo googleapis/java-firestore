@@ -35,9 +35,11 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -55,9 +57,9 @@ public abstract class UpdateBuilder<T> {
     final Write write;
     final DocumentReference documentReference;
 
-    WriteOperation(DocumentReference documentReference, Write.Builder write) {
+    WriteOperation(DocumentReference documentReference, Write write) {
       this.documentReference = documentReference;
-      this.write = write.build();
+      this.write = write;
     }
 
     @Override
@@ -157,7 +159,7 @@ public abstract class UpdateBuilder<T> {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    return writesAdd(new WriteOperation(documentReference, write));
+    return addWrite(documentReference, write);
   }
 
   /**
@@ -282,10 +284,11 @@ public abstract class UpdateBuilder<T> {
       write.setUpdateMask(documentMask.toPb());
     }
 
-    return writesAdd(new WriteOperation(documentReference, write));
+    return addWrite(documentReference, write);
   }
 
-  private T writesAdd(WriteOperation operation) {
+  private T addWrite(DocumentReference documentReference, Write.Builder write) {
+    WriteOperation operation = new WriteOperation(documentReference, write.build());
     int writeIndex;
     synchronized (writes) {
       Preconditions.checkState(
@@ -302,7 +305,7 @@ public abstract class UpdateBuilder<T> {
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
   private static Map<FieldPath, Object> applyFieldMask(
       Map<String, Object> fields, List<FieldPath> fieldMask) {
-    List<FieldPath> remainingFields = new ArrayList<>(fieldMask);
+    Set<FieldPath> remainingFields = new HashSet<>(fieldMask);
     Map<FieldPath, Object> filteredData =
         applyFieldMask(fields, remainingFields, FieldPath.empty());
 
@@ -310,7 +313,7 @@ public abstract class UpdateBuilder<T> {
       throw new IllegalArgumentException(
           String.format(
               "Field masks contains invalid path. No data exist at field '%s'.",
-              remainingFields.get(0)));
+              remainingFields.iterator().next()));
     }
 
     return filteredData;
@@ -321,7 +324,7 @@ public abstract class UpdateBuilder<T> {
    * inline and removes all matched fields.
    */
   private static Map<FieldPath, Object> applyFieldMask(
-      Map<String, Object> fields, List<FieldPath> fieldMask, FieldPath root) {
+      Map<String, Object> fields, Set<FieldPath> fieldMask, FieldPath root) {
     Map<FieldPath, Object> filteredMap = new HashMap<>();
 
     for (Entry<String, Object> entry : fields.entrySet()) {
@@ -565,7 +568,7 @@ public abstract class UpdateBuilder<T> {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    return writesAdd(new WriteOperation(documentReference, write));
+    return addWrite(documentReference, write);
   }
 
   /**
@@ -601,7 +604,7 @@ public abstract class UpdateBuilder<T> {
       write.setCurrentDocument(precondition.toPb());
     }
 
-    return writesAdd(new WriteOperation(documentReference, write));
+    return addWrite(documentReference, write);
   }
 
   /** Commit the current batch. */
@@ -649,7 +652,7 @@ public abstract class UpdateBuilder<T> {
   private CommitRequest buildCommitRequest(ByteString transactionId) {
     CommitRequest.Builder builder = CommitRequest.newBuilder();
     builder.setDatabase(firestore.getDatabaseName());
-    forEach(builder::addWrites);
+    forEachWrite(builder::addWrites);
     if (transactionId != null) {
       builder.setTransaction(transactionId);
     }
@@ -663,7 +666,7 @@ public abstract class UpdateBuilder<T> {
     }
   }
 
-  void forEach(Consumer<Write> consumer) {
+  void forEachWrite(Consumer<Write> consumer) {
     synchronized (writes) {
       for (WriteOperation writeOperation : writes) {
         consumer.accept(writeOperation.write);
