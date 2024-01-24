@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.BetaApi;
 import com.google.auto.value.AutoValue;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nonnull;

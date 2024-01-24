@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.BulkWriter.OperationType;
 import io.grpc.Status;
 

@@ -20,8 +20,6 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.StructuredQuery;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
