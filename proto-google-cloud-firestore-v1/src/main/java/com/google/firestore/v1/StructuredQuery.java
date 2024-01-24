@@ -23,6 +23,14 @@ package com.google.firestore.v1;
  *
  * <pre>
  * A Firestore query.
+ *
+ * The query stages are executed in the following order:
+ * 1. from
+ * 2. where
+ * 3. select
+ * 4. order_by + start_at + end_at
+ * 5. offset
+ * 6. limit
  * </pre>
  *
  * Protobuf type {@code google.firestore.v1.StructuredQuery}
@@ -10417,6 +10425,14 @@ public final class StructuredQuery extends com.google.protobuf.GeneratedMessageV
    *
    * <pre>
    * A Firestore query.
+   *
+   * The query stages are executed in the following order:
+   * 1. from
+   * 2. where
+   * 3. select
+   * 4. order_by + start_at + end_at
+   * 5. offset
+   * 6. limit
    * </pre>
    *
    * Protobuf type {@code google.firestore.v1.StructuredQuery}

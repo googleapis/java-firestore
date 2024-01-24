@@ -105,148 +105,149 @@ import javax.annotation.Generated;
  *      <th>Method</th>
  *      <th>Description</th>
  *      <th>Method Variants</th>
+ *    </tr>
  *    <tr>
- *      <td>GetDocument</td>
+ *      <td><p> GetDocument</td>
  *      <td><p> Gets a single document.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>getDocument(GetDocumentRequest request)
+ *           <li><p> getDocument(GetDocumentRequest request)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>getDocumentCallable()
+ *           <li><p> getDocumentCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>ListDocuments</td>
+ *      <td><p> ListDocuments</td>
  *      <td><p> Lists documents.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>listDocuments(ListDocumentsRequest request)
+ *           <li><p> listDocuments(ListDocumentsRequest request)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>listDocumentsPagedCallable()
- *           <li>listDocumentsCallable()
+ *           <li><p> listDocumentsPagedCallable()
+ *           <li><p> listDocumentsCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>UpdateDocument</td>
+ *      <td><p> UpdateDocument</td>
  *      <td><p> Updates or inserts a document.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>updateDocument(UpdateDocumentRequest request)
+ *           <li><p> updateDocument(UpdateDocumentRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>updateDocument(Document document, DocumentMask updateMask)
+ *           <li><p> updateDocument(Document document, DocumentMask updateMask)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>updateDocumentCallable()
+ *           <li><p> updateDocumentCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>DeleteDocument</td>
+ *      <td><p> DeleteDocument</td>
  *      <td><p> Deletes a document.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>deleteDocument(DeleteDocumentRequest request)
+ *           <li><p> deleteDocument(DeleteDocumentRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>deleteDocument(String name)
+ *           <li><p> deleteDocument(String name)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>deleteDocumentCallable()
+ *           <li><p> deleteDocumentCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>BatchGetDocuments</td>
+ *      <td><p> BatchGetDocuments</td>
  *      <td><p> Gets multiple documents.
  * <p>  Documents returned by this method are not guaranteed to be returned in the same order that they were requested.</td>
  *      <td>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>batchGetDocumentsCallable()
+ *           <li><p> batchGetDocumentsCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>BeginTransaction</td>
+ *      <td><p> BeginTransaction</td>
  *      <td><p> Starts a new transaction.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>beginTransaction(BeginTransactionRequest request)
+ *           <li><p> beginTransaction(BeginTransactionRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>beginTransaction(String database)
+ *           <li><p> beginTransaction(String database)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>beginTransactionCallable()
+ *           <li><p> beginTransactionCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>Commit</td>
+ *      <td><p> Commit</td>
  *      <td><p> Commits a transaction, while optionally updating documents.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>commit(CommitRequest request)
+ *           <li><p> commit(CommitRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>commit(String database, List&lt;Write&gt; writes)
+ *           <li><p> commit(String database, List&lt;Write&gt; writes)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>commitCallable()
+ *           <li><p> commitCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>Rollback</td>
+ *      <td><p> Rollback</td>
  *      <td><p> Rolls back a transaction.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>rollback(RollbackRequest request)
+ *           <li><p> rollback(RollbackRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>rollback(String database, ByteString transaction)
+ *           <li><p> rollback(String database, ByteString transaction)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>rollbackCallable()
+ *           <li><p> rollbackCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>RunQuery</td>
+ *      <td><p> RunQuery</td>
  *      <td><p> Runs a query.</td>
  *      <td>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>runQueryCallable()
+ *           <li><p> runQueryCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>RunAggregationQuery</td>
+ *      <td><p> RunAggregationQuery</td>
  *      <td><p> Runs an aggregation query.
  * <p>  Rather than producing [Document][google.firestore.v1.Document] results like [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API allows running an aggregation to produce a series of [AggregationResult][google.firestore.v1.AggregationResult] server-side.
  * <p>  High-Level Example:
@@ -254,91 +255,91 @@ import javax.annotation.Generated;
  *      <td>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>runAggregationQueryCallable()
+ *           <li><p> runAggregationQueryCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>PartitionQuery</td>
+ *      <td><p> PartitionQuery</td>
  *      <td><p> Partitions a query by returning partition cursors that can be used to run the query in parallel. The returned partition cursors are split points that can be used by RunQuery as starting/end points for the query results.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>partitionQuery(PartitionQueryRequest request)
+ *           <li><p> partitionQuery(PartitionQueryRequest request)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>partitionQueryPagedCallable()
- *           <li>partitionQueryCallable()
+ *           <li><p> partitionQueryPagedCallable()
+ *           <li><p> partitionQueryCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>Write</td>
+ *      <td><p> Write</td>
  *      <td><p> Streams batches of document updates and deletes, in order. This method is only available via gRPC or WebChannel (not REST).</td>
  *      <td>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>writeCallable()
+ *           <li><p> writeCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>Listen</td>
+ *      <td><p> Listen</td>
  *      <td><p> Listens to changes. This method is only available via gRPC or WebChannel (not REST).</td>
  *      <td>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>listenCallable()
+ *           <li><p> listenCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>ListCollectionIds</td>
+ *      <td><p> ListCollectionIds</td>
  *      <td><p> Lists all the collection IDs underneath a document.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>listCollectionIds(ListCollectionIdsRequest request)
+ *           <li><p> listCollectionIds(ListCollectionIdsRequest request)
  *      </ul>
  *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
  *      <ul>
- *           <li>listCollectionIds(String parent)
+ *           <li><p> listCollectionIds(String parent)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>listCollectionIdsPagedCallable()
- *           <li>listCollectionIdsCallable()
+ *           <li><p> listCollectionIdsPagedCallable()
+ *           <li><p> listCollectionIdsCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>BatchWrite</td>
+ *      <td><p> BatchWrite</td>
  *      <td><p> Applies a batch of write operations.
  * <p>  The BatchWrite method does not apply the write operations atomically and can apply them out of order. Method does not allow more than one write per document. Each write succeeds or fails independently. See the [BatchWriteResponse][google.firestore.v1.BatchWriteResponse] for the success status of each write.
  * <p>  If you require an atomically applied set of writes, use [Commit][google.firestore.v1.Firestore.Commit] instead.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>batchWrite(BatchWriteRequest request)
+ *           <li><p> batchWrite(BatchWriteRequest request)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>batchWriteCallable()
+ *           <li><p> batchWriteCallable()
  *      </ul>
  *       </td>
  *    </tr>
  *    <tr>
- *      <td>CreateDocument</td>
+ *      <td><p> CreateDocument</td>
  *      <td><p> Creates a new document.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
- *           <li>createDocument(CreateDocumentRequest request)
+ *           <li><p> createDocument(CreateDocumentRequest request)
  *      </ul>
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
- *           <li>createDocumentCallable()
+ *           <li><p> createDocumentCallable()
  *      </ul>
  *       </td>
  *    </tr>
