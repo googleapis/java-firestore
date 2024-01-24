@@ -86,7 +86,8 @@ public class ToStringTest {
                         documentReference,
                         Collections.singletonMap("key", "value"),
                         UserDataConverter.NO_DELETES)
-                    .toPb())
+                    .toPb()
+                    .build())
             .toString();
     assertThat(toStringResult).startsWith("WriteOperation{");
     assertThat(toStringResult)
