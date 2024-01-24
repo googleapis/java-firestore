@@ -58,7 +58,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     for (int i = 0; i < fieldNames.length; ++i) {
       Preconditions.checkArgument(
           fieldNames[i] != null && !fieldNames[i].isEmpty(),
-          "Invalid field name at argument " + (i + 1) + ". Field names must not be null or empty.");
+          "Invalid field name at argument %s. Field names must not be null or empty.",
+          (i + 1));
     }
 
     return new AutoValue_FieldPath(ImmutableList.copyOf(fieldNames));
@@ -92,7 +93,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
    * https://github.com/firebase/firebase-android-sdk/blob/2d3b2be7d2d00d693eb74986f20a6265c918848f/firebase-firestore/src/main/java/com/google/firebase/firestore/model/FieldPath.java#L47
    */
   public static FieldPath fromServerFormat(String path) {
-    List<String> res = new ArrayList<>();
+    ImmutableList.Builder<String> res = ImmutableList.builder();
     StringBuilder builder = new StringBuilder();
 
     int i = 0;
@@ -100,10 +101,11 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     // If we're inside '`' backticks, then we should ignore '.' dots.
     boolean inBackticks = false;
 
-    while (i < path.length()) {
+    int length = path.length();
+    while (i < length) {
       char c = path.charAt(i);
       if (c == '\\') {
-        if (i + 1 == path.length()) {
+        if (i + 1 == length) {
           throw new IllegalArgumentException("Trailing escape character is not allowed");
         }
         i++;
@@ -138,7 +140,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
               + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
     }
     res.add(lastElem);
-    return FieldPath.of(res.toArray(new String[0]));
+    return new AutoValue_FieldPath(res.build());
   }
 
   /** Returns an empty field path. */

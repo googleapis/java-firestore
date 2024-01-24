@@ -21,7 +21,6 @@ import com.google.cloud.firestore.BulkWriter.OperationType;
 import io.grpc.Status;
 
 /** The error thrown when a BulkWriter operation fails. */
-@BetaApi
 public final class BulkWriterException extends FirestoreException {
   private final Status status;
   private final String message;

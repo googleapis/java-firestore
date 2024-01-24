@@ -46,7 +46,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
-@BetaApi
 public final class BulkWriter implements AutoCloseable {
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully

@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Options used to configure request throttling in BulkWriter. */
-@BetaApi
 @AutoValue
 public abstract class BulkWriterOptions {
   /**
