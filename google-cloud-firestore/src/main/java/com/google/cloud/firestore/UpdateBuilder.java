@@ -387,7 +387,8 @@ public abstract class UpdateBuilder<T> {
       @Nonnull Map<String, Object> fields,
       Precondition precondition) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
     return performUpdate(
         documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), precondition);
   }
@@ -455,7 +456,8 @@ public abstract class UpdateBuilder<T> {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
     return performUpdate(
         documentReference,
         precondition,
@@ -483,7 +485,8 @@ public abstract class UpdateBuilder<T> {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
     return performUpdate(documentReference, precondition, fieldPath, value, moreFieldsAndValues);
   }
 
