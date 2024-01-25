@@ -119,11 +119,11 @@ public class ParentName implements ResourceName {
     if (fieldValuesMap == null) {
       synchronized (this) {
         if (fieldValuesMap == null) {
-          fieldValuesMap =
-              ImmutableMap.of(
-                  "project", project,
-                  "database", database,
-                  "collectionId", collectionId);
+          ImmutableMap.Builder<String, String> fieldMapBuilder = ImmutableMap.builder();
+          fieldMapBuilder.put("project", project);
+          fieldMapBuilder.put("database", database);
+          fieldMapBuilder.put("collectionId", collectionId);
+          fieldValuesMap = fieldMapBuilder.build();
         }
       }
     }
