@@ -1212,12 +1212,12 @@ public class Query {
    */
   @Nonnull
   public Query select(FieldPath... fieldPaths) {
-    ImmutableList.Builder<FieldReference> fieldProjections = ImmutableList.builder();
-
     if (fieldPaths.length == 0) {
       fieldPaths = new FieldPath[] {FieldPath.DOCUMENT_ID};
     }
 
+    ImmutableList.Builder<FieldReference> fieldProjections =
+        ImmutableList.builderWithExpectedSize(fieldPaths.length);
     for (FieldPath path : fieldPaths) {
       FieldReference fieldReference =
           FieldReference.newBuilder().setFieldPath(path.getEncodedPath()).build();
@@ -1587,7 +1587,8 @@ public class Query {
       }
     }
 
-    ImmutableList.Builder<FieldOrder> fieldOrders = ImmutableList.builder();
+    ImmutableList.Builder<FieldOrder> fieldOrders =
+        ImmutableList.builderWithExpectedSize(structuredQuery.getOrderByCount());
     for (Order order : structuredQuery.getOrderByList()) {
       fieldOrders.add(
           new FieldOrder(order.getField(), Direction.valueOf(order.getDirection().name())));
@@ -1870,7 +1871,8 @@ public class Query {
    * list.
    */
   private <T> ImmutableList<T> append(ImmutableList<T> existingList, T newElement) {
-    ImmutableList.Builder<T> builder = ImmutableList.builder();
+    ImmutableList.Builder<T> builder =
+        ImmutableList.builderWithExpectedSize(existingList.size() + 1);
     builder.addAll(existingList);
     builder.add(newElement);
     return builder.build();

@@ -83,9 +83,12 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * @param path A relative path
    */
   B append(BasePath<B> path) {
-    ImmutableList.Builder<String> components = ImmutableList.builder();
-    components.addAll(this.getSegments());
-    components.addAll(path.getSegments());
+    ImmutableList<String> segments1 = this.getSegments();
+    ImmutableList<String> segments2 = path.getSegments();
+    ImmutableList.Builder<String> components =
+        ImmutableList.builderWithExpectedSize(segments1.size() + segments2.size());
+    components.addAll(segments1);
+    components.addAll(segments2);
     return createPathWithSegments(components.build());
   }
 
