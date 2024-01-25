@@ -99,8 +99,4 @@ public final class FieldMask {
     }
     return updateMask.build();
   }
-
-  boolean isEmpty() {
-    return fieldPaths.isEmpty();
-  }
 }

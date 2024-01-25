@@ -129,11 +129,6 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
     return Integer.compare(thisSegments.size(), otherSegments.size());
   }
 
-  /** Returns the number of path components. */
-  int size() {
-    return this.getSegments().size();
-  }
-
   abstract String[] splitChildPath(String path);
 
   abstract B createPathWithSegments(ImmutableList<String> segments);
