@@ -41,6 +41,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
 
   /** Regular expression to verify that dot-separated field paths do not contain ~*[]/. */
   private static final Pattern PROHIBITED_CHARACTERS = Pattern.compile(".*[~*/\\[\\]].*");
+  private static FieldPath EMPTY = null;
 
   /**
    * Creates a FieldPath from the provided field names. If more than one field name is provided, the
@@ -143,9 +144,9 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
 
   /** Returns an empty field path. */
   static FieldPath empty() {
-    // NOTE: This is not static since it would create a circular class dependency during
-    // initialization.
-    return new AutoValue_FieldPath(ImmutableList.of());
+    // NOTE: This static is lazy evaluated since otherwise it would create a
+    // circular class dependency during initialization.
+    return EMPTY == null ? (EMPTY = new AutoValue_FieldPath(ImmutableList.of())) : EMPTY;
   }
 
   private String encodedPath;

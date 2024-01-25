@@ -76,8 +76,8 @@ public final class FieldMask {
     for (Map.Entry<String, Object> entry : values.entrySet()) {
       Object value = entry.getValue();
       FieldPath childPath = path.append(FieldPath.of(entry.getKey()));
-      if (entry.getValue() instanceof FieldValue) {
-        if (((FieldValue) entry.getValue()).includeInDocumentMask()) {
+      if (value instanceof FieldValue) {
+        if (((FieldValue) value).includeInDocumentMask()) {
           fieldPaths.add(childPath);
         }
       } else if (value instanceof Map) {
