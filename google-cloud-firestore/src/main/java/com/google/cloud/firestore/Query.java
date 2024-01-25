@@ -358,26 +358,25 @@ public class Query {
         return false;
       }
       FieldOrder filter = (FieldOrder) o;
-      return Objects.equals(toProto(), filter.toProto());
+      if (direction != filter.direction) return false;
+      return fieldReference.equals(filter.fieldReference);
     }
 
     public int compare(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
       String path = fieldReference.getFieldPath();
-      int cmp;
       if (FieldPath.isDocumentId(path)) {
-        cmp = compareDocumentId(doc1, doc2);
-      } else {
-        FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
-        Preconditions.checkState(
-            doc1.contains(fieldPath) && doc2.contains(fieldPath),
-            "Can only compare fields that exist in the DocumentSnapshot."
-                + " Please include the fields you are ordering on in your select() call.");
-        Value v1 = doc1.extractField(fieldPath);
-        Value v2 = doc2.extractField(fieldPath);
-
-        cmp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
+        return direction.documentIdComparator.compare(doc1, doc2);
       }
-      return direction.direction == StructuredQuery.Direction.ASCENDING ? cmp : -cmp;
+      FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+      Preconditions.checkState(
+          doc1.contains(fieldPath) && doc2.contains(fieldPath),
+          "Can only compare fields that exist in the DocumentSnapshot."
+              + " Please include the fields you are ordering on in your select() call.");
+      Value v1 = doc1.extractField(fieldPath);
+      Value v2 = doc2.extractField(fieldPath);
+
+      int cmp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
+      return (direction == Direction.ASCENDING) ? cmp : -cmp;
     }
   }
 
@@ -1855,7 +1854,7 @@ public class Query {
     Comparator<QueryDocumentSnapshot> comparator = fieldOrder;
     while (iterator.hasNext()) {
       fieldOrder = iterator.next();
-      comparator.thenComparing(fieldOrder);
+      comparator = comparator.thenComparing(fieldOrder);
     }
     // Add implicit sorting by name, using the last specified direction.
     Direction lastDirection = fieldOrder.direction;

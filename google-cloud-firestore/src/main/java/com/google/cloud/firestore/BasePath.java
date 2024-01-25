@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -95,8 +96,8 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * @return true if current path is a prefix of the other path.
    */
   boolean isPrefixOf(BasePath<B> path) {
-    ImmutableList<String> prefixSegments = getSegments();
-    ImmutableList<String> childSegments = path.getSegments();
+    List<String> prefixSegments = getSegments();
+    List<String> childSegments = path.getSegments();
     int size = prefixSegments.size();
     if (size > childSegments.size()) {
       return false;
@@ -117,8 +118,8 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    */
   @Override
   public int compareTo(@Nonnull B other) {
-    ImmutableList<String> thisSegments = this.getSegments();
-    ImmutableList<String> otherSegments = other.getSegments();
+    List<String> thisSegments = this.getSegments();
+    List<String> otherSegments = other.getSegments();
     int length = Math.min(thisSegments.size(), otherSegments.size());
     for (int i = 0; i < length; i++) {
       int cmp = thisSegments.get(i).compareTo(otherSegments.get(i));
