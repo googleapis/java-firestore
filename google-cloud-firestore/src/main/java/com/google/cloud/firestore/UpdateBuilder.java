@@ -348,10 +348,9 @@ public abstract class UpdateBuilder<T> {
   }
 
   private static Map<FieldPath, Object> convertToFieldPaths(@Nonnull Map<String, Object> fields) {
-    ImmutableMap.Builder<FieldPath, Object> builder =
-        ImmutableMap.builderWithExpectedSize(fields.size());
-    fields.forEach((k, v) -> builder.put(FieldPath.of(k), v));
-    return builder.build();
+    Map<FieldPath, Object> fieldPaths = new HashMap<>();
+    fields.forEach((k, v) -> fieldPaths.put(FieldPath.of(k), v));
+    return fieldPaths;
   }
 
   private static SortedMap<FieldPath, Object> convertToSplitOnDotsFieldPaths(
