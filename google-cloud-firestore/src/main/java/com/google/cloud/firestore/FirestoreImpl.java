@@ -179,8 +179,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public DocumentReference document(@Nonnull String documentPath) {
     ResourcePath document = databasePath.append(documentPath);
     Preconditions.checkArgument(
-        document.isDocument(),
-        String.format("Path should point to a Document Reference: %s", documentPath));
+        document.isDocument(), "Path should point to a Document Reference: %s", documentPath);
     return new DocumentReference(this, document);
   }
 
@@ -358,8 +357,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public CollectionGroup collectionGroup(@Nonnull final String collectionId) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
-        String.format(
-            "Invalid collectionId '%s'. Collection IDs must not contain '/'.", collectionId));
+        "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
+        collectionId);
     return new CollectionGroup(this, collectionId);
   }
 
