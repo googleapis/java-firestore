@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.16.1](https://github.com/googleapis/java-firestore/compare/v3.16.0...v3.16.1) (2024-01-25)
+
+
+### Bug Fixes
+
+* `internalStream` should handle duplicate `onComplete`s. ([#1523](https://github.com/googleapis/java-firestore/issues/1523)) ([b3067d7](https://github.com/googleapis/java-firestore/commit/b3067d7b382ea5c4c9124a12a701abe2f7289503))
+* Allow an explicit MustExist precondition for update ([#1542](https://github.com/googleapis/java-firestore/issues/1542)) ([46e09aa](https://github.com/googleapis/java-firestore/commit/46e09aad7f6689d4dfe82bd284905d52edda4364))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.32.0 ([#1534](https://github.com/googleapis/java-firestore/issues/1534)) ([2281320](https://github.com/googleapis/java-firestore/commit/2281320fd924a1d6c259a493ce703a51f0cd8a03))
+* Make rollback best effort. ([#1515](https://github.com/googleapis/java-firestore/issues/1515)) ([4c39af5](https://github.com/googleapis/java-firestore/commit/4c39af50d6d416440164fc5d5360f3912cd8f01b))
+* Thread safe UpdateBuilder ([#1537](https://github.com/googleapis/java-firestore/issues/1537)) ([f9cdab5](https://github.com/googleapis/java-firestore/commit/f9cdab5885bd1d500c6fc412eb3090cea9347d0e))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.22.0 ([#1535](https://github.com/googleapis/java-firestore/issues/1535)) ([04c0e07](https://github.com/googleapis/java-firestore/commit/04c0e0736ddcd49eb42aacb31e2fc087b2a39754))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.23.0 ([#1544](https://github.com/googleapis/java-firestore/issues/1544)) ([79713bf](https://github.com/googleapis/java-firestore/commit/79713bf0fa376a4d22518ae2f5da9660795d9f89))
+
+
+### Documentation
+
+* Fix formatting due to unclosed backtick ([#1529](https://github.com/googleapis/java-firestore/issues/1529)) ([3c78fe3](https://github.com/googleapis/java-firestore/commit/3c78fe3c248cb212c6e4f91a5bb7aeb8b9b003b0))
+* Rring BulkWriter out of BetaApi status. ([#1513](https://github.com/googleapis/java-firestore/issues/1513)) ([c2812f7](https://github.com/googleapis/java-firestore/commit/c2812f7cb72257512ffecc98ec1bdb1109d7d044))
+
 ## [3.16.0](https://github.com/googleapis/java-firestore/compare/v3.15.7...v3.16.0) (2024-01-10)
 
 
