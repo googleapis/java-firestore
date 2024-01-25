@@ -359,7 +359,7 @@ public class Query {
       }
       FieldOrder filter = (FieldOrder) o;
       if (direction != filter.direction) return false;
-      return fieldReference.equals(filter.fieldReference);
+      return Objects.equals(fieldReference, filter.fieldReference);
     }
 
     public int compare(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
