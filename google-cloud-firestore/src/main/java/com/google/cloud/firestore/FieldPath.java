@@ -41,6 +41,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
 
   /** Regular expression to verify that dot-separated field paths do not contain ~*[]/. */
   private static final Pattern PROHIBITED_CHARACTERS = Pattern.compile(".*[~*/\\[\\]].*");
+
   private static FieldPath EMPTY = null;
 
   /**

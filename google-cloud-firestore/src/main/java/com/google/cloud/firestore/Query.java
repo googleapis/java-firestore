@@ -99,7 +99,8 @@ public class Query {
     private final StructuredQuery.Direction direction;
     private final Comparator<QueryDocumentSnapshot> documentIdComparator;
 
-    Direction(StructuredQuery.Direction direction,
+    Direction(
+        StructuredQuery.Direction direction,
         Comparator<QueryDocumentSnapshot> documentIdComparator) {
       this.direction = direction;
       this.documentIdComparator = documentIdComparator;
