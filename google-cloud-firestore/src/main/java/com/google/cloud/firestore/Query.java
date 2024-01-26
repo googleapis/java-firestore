@@ -399,6 +399,8 @@ public class Query {
     // query to provide consistent results.
     abstract boolean getRequireConsistency();
 
+    abstract QueryMode getQueryMode();
+
     static Builder builder() {
       return new AutoValue_Query_QueryOptions.Builder()
           .setAllDescendants(false)
@@ -407,6 +409,7 @@ public class Query {
           .setFilters(ImmutableList.of())
           .setFieldProjections(ImmutableList.of())
           .setKindless(false)
+          .setQueryMode(QueryMode.NORMAL)
           .setRequireConsistency(true);
     }
 
@@ -437,6 +440,8 @@ public class Query {
       abstract Builder setFieldProjections(ImmutableList<FieldReference> value);
 
       abstract Builder setKindless(boolean value);
+
+      abstract Builder setQueryMode(QueryMode value);
 
       abstract Builder setRequireConsistency(boolean value);
 
@@ -1477,12 +1482,18 @@ public class Query {
             + "Use Query.get() instead.");
 
     internalStream(
-        new QuerySnapshotObserver() {
+        new ApiStreamObserver<RunQueryResponse>() {
           boolean hasCompleted = false;
 
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            responseObserver.onNext(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              responseObserver.onNext(documentSnapshot);
+            }
           }
 
           @Override
@@ -1513,7 +1524,10 @@ public class Query {
    */
   public RunQueryRequest toProto() {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+    request
+        .setStructuredQuery(buildQuery())
+        .setParent(options.getParentPath().toString())
+        .setMode(options.getQueryMode());
     return request.build();
   }
 
@@ -1615,29 +1629,16 @@ public class Query {
     return encodedValue;
   }
 
-  /** Stream observer that captures DocumentSnapshots as well as the Query read time. */
-  private abstract static class QuerySnapshotObserver
-      implements ApiStreamObserver<QueryDocumentSnapshot> {
-
-    private Timestamp readTime;
-
-    void onCompleted(Timestamp readTime) {
-      this.readTime = readTime;
-      this.onCompleted();
-    }
-
-    Timestamp getReadTime() {
-      return readTime;
-    }
-  }
-
   private void internalStream(
-      final QuerySnapshotObserver documentObserver,
+      final ApiStreamObserver<RunQueryResponse> runQueryResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+    request
+        .setStructuredQuery(buildQuery())
+        .setParent(options.getParentPath().toString())
+        .setMode(options.getQueryMode());
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
@@ -1657,7 +1658,6 @@ public class Query {
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
-          Timestamp readTime;
           boolean firstResponse;
           int numDocuments;
 
@@ -1670,6 +1670,9 @@ public class Query {
               firstResponse = true;
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: First response");
             }
+
+            runQueryResponseObserver.onNext(response);
+
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
@@ -1681,12 +1684,7 @@ public class Query {
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
                       rpcContext, Timestamp.fromProto(response.getReadTime()), document);
-              documentObserver.onNext(documentSnapshot);
               lastReceivedDocument.set(documentSnapshot);
-            }
-
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
             }
 
             if (response.getDone()) {
@@ -1696,7 +1694,7 @@ public class Query {
                       "Firestore.Query: Completed",
                       ImmutableMap.of(
                           "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
-              documentObserver.onCompleted(readTime);
+              onComplete();
             }
           }
 
@@ -1711,14 +1709,14 @@ public class Query {
               Query.this
                   .startAfter(cursor)
                   .internalStream(
-                      documentObserver,
+                      runQueryResponseObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
                       options.getRequireConsistency() ? cursor.getReadTime() : null);
 
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
-              documentObserver.onError(throwable);
+              runQueryResponseObserver.onError(throwable);
             }
           }
 
@@ -1730,13 +1728,20 @@ public class Query {
                     "Firestore.Query: Completed",
                     ImmutableMap.of(
                         "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
-            documentObserver.onCompleted(readTime);
+            runQueryResponseObserver.onCompleted();
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
             if (lastDocument == null) {
               // Only retry if we have received a single result. Retries for RPCs with initial
               // failure are handled by Google Gax, which also implements backoff.
+              return false;
+            }
+
+            // Do not retry profiling requests because it'd be executing
+            // multiple queries. This means stats would have to be aggregated,
+            // and that may not even make sense for many statistics.
+            if (!options.getQueryMode().equals(QueryMode.NORMAL)) {
               return false;
             }
 
@@ -1759,64 +1764,6 @@ public class Query {
     return get(null);
   }
 
-  ApiFuture<QuerySnapshot> getQueryProfileInfo(QueryMode queryMode) {
-    SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
-
-    RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
-    request
-        .setStructuredQuery(buildQuery())
-        .setParent(options.getParentPath().toString())
-        .setMode(queryMode);
-
-    ResponseObserver<RunQueryResponse> observer =
-        new ResponseObserver<RunQueryResponse>() {
-          Timestamp readTime;
-          ResultSetStats stats;
-          List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-
-          @Override
-          public void onStart(StreamController streamController) {}
-
-          @Override
-          public void onResponse(RunQueryResponse response) {
-            if (response.hasDocument()) {
-              Document document = response.getDocument();
-              QueryDocumentSnapshot documentSnapshot =
-                  QueryDocumentSnapshot.fromDocument(
-                      rpcContext, Timestamp.fromProto(response.getReadTime()), document);
-              documentSnapshots.add(documentSnapshot);
-            }
-
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
-            }
-
-            if (response.hasStats()) {
-              stats = new ResultSetStats(response.getStats());
-            }
-          }
-
-          @Override
-          public void onError(Throwable throwable) {
-            // When regular queries fail, the SDK uses the last received document as cursor and
-            // tries to resume querying after that cursor if the error is considered retryable.
-            // We should not do this when profiling a query.
-            result.setException(throwable);
-          }
-
-          @Override
-          public void onComplete() {
-            QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocumentsAndStats(Query.this, readTime, stats, documentSnapshots);
-            result.set(querySnapshot);
-          }
-        };
-
-    rpcContext.streamRequest(request.build(), observer, rpcContext.getClient().runQueryCallable());
-
-    return result;
-  }
-
   /**
    * Performs the planning stage of this query, without actually executing the query. Returns an
    * ApiFuture that will be resolved with the query plan.
@@ -1826,8 +1773,10 @@ public class Query {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<QuerySnapshot> explain() {
-    return getQueryProfileInfo(QueryMode.PLAN);
+  public Query explain() {
+    Builder newOptions = options.toBuilder();
+    newOptions.setQueryMode(QueryMode.PLAN);
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -1840,8 +1789,10 @@ public class Query {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<QuerySnapshot> explainAnalyze() {
-    return getQueryProfileInfo(QueryMode.PROFILE);
+  public Query explainAnalyze() {
+    Builder newOptions = options.toBuilder();
+    newOptions.setQueryMode(QueryMode.PROFILE);
+    return new Query(rpcContext, newOptions.build());
   }
 
   /**
@@ -1872,15 +1823,28 @@ public class Query {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     internalStream(
-        new QuerySnapshotObserver() {
+        new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-          // The stream's onCompleted could be called more than once,
-          // this flag makes sure only the first one is actually processed.
-          boolean hasCompleted = false;
+          Timestamp readTime;
+          ResultSetStats stats;
 
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+
+            if (readTime == null) {
+              readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            }
+
+            if (runQueryResponse.hasStats()) {
+              stats = new ResultSetStats(runQueryResponse.getStats());
+            }
           }
 
           @Override
@@ -1890,9 +1854,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
-
             // The results for limitToLast queries need to be flipped since we reversed the
             // ordering constraints before sending the query to the backend.
             List<QueryDocumentSnapshot> resultView =
@@ -1900,7 +1861,7 @@ public class Query {
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
+                QuerySnapshot.withDocumentsAndStats(Query.this, readTime, stats, resultView);
             result.set(querySnapshot);
           }
         },
@@ -2017,7 +1978,8 @@ public class Query {
    */
   @Nonnull
   public AggregateQuery count() {
-    return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
+    return new AggregateQuery(
+        this, Collections.singletonList(AggregateField.count()), options.getQueryMode());
   }
 
   /**
@@ -2038,7 +2000,7 @@ public class Query {
     List<AggregateField> aggregateFieldList = new ArrayList<>();
     aggregateFieldList.add(aggregateField1);
     aggregateFieldList.addAll(Arrays.asList(aggregateFields));
-    return new AggregateQuery(this, aggregateFieldList);
+    return new AggregateQuery(this, aggregateFieldList, options.getQueryMode());
   }
 
   /**

@@ -886,7 +886,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    QuerySnapshot snapshot = query.explain().get();
+    QuerySnapshot snapshot = query.explain().get().get();
 
     assertThat(snapshot.size()).isEqualTo(0);
 
@@ -911,16 +911,16 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    QuerySnapshot snapshot = query.explainAnalyze().get();
+    QuerySnapshot snapshot = query.explainAnalyze().get().get();
 
     assertThat(snapshot.size()).isEqualTo(3);
 
-    ResultSetStats profile = snapshot.getResultSetStats();
-    assertThat(profile).isNotNull();
-    assertThat(profile.getQueryPlan()).isNotNull();
-    assertThat(profile.getQueryStats()).isNotNull();
-    assertThat(profile.getQueryPlan().getPlanInfo()).isNotEmpty();
-    assertThat(profile.getQueryStats()).isNotEmpty();
+    ResultSetStats stats = snapshot.getResultSetStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getQueryPlan()).isNotNull();
+    assertThat(stats.getQueryStats()).isNotNull();
+    assertThat(stats.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(stats.getQueryStats()).isNotEmpty();
   }
 
   @Test
@@ -943,7 +943,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    AggregateQuerySnapshot snapshot = query.explain().get();
+    AggregateQuerySnapshot snapshot = query.explain().get().get();
 
     ResultSetStats stats = snapshot.getResultSetStats();
     assertThat(stats).isNotNull();
@@ -966,15 +966,15 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    AggregateQuerySnapshot snapshot = query.explainAnalyze().get();
+    AggregateQuerySnapshot snapshot = query.explainAnalyze().get().get();
 
     assertThat(snapshot.getCount()).isEqualTo(3);
 
-    ResultSetStats profile = snapshot.getResultSetStats();
-    assertThat(profile).isNotNull();
-    assertThat(profile.getQueryPlan()).isNotNull();
-    assertThat(profile.getQueryStats()).isNotNull();
-    assertThat(profile.getQueryPlan().getPlanInfo()).isNotEmpty();
-    assertThat(profile.getQueryStats()).isNotEmpty();
+    ResultSetStats stats = snapshot.getResultSetStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getQueryPlan()).isNotNull();
+    assertThat(stats.getQueryStats()).isNotNull();
+    assertThat(stats.getQueryPlan().getPlanInfo()).isNotEmpty();
+    assertThat(stats.getQueryStats()).isNotEmpty();
   }
 }

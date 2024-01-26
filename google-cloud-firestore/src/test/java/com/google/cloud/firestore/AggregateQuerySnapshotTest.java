@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.Timestamp;
+import com.google.firestore.v1.QueryMode;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,9 +47,11 @@ public class AggregateQuerySnapshotTest {
   @Before
   public void initializeSampleObjects() {
     sampleAggregateQuery =
-        new AggregateQuery(mockQuery, Collections.singletonList(AggregateField.count()));
+        new AggregateQuery(
+            mockQuery, Collections.singletonList(AggregateField.count()), QueryMode.NORMAL);
     sampleAggregateQuery2 =
-        new AggregateQuery(mockQuery2, Collections.singletonList(AggregateField.count()));
+        new AggregateQuery(
+            mockQuery2, Collections.singletonList(AggregateField.count()), QueryMode.NORMAL);
     sampleTimestamp = Timestamp.ofTimeSecondsAndNanos(42, 42);
     sampleTimestamp2 = Timestamp.ofTimeSecondsAndNanos(24, 24);
     data42 = new HashMap<>();

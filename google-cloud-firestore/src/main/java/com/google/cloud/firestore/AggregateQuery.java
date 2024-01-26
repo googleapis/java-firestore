@@ -56,10 +56,14 @@ public class AggregateQuery {
 
   @Nonnull private Map<String, String> aliasMap;
 
-  AggregateQuery(@Nonnull Query query, @Nonnull List<AggregateField> aggregateFields) {
+  private final QueryMode queryMode;
+
+  AggregateQuery(
+      @Nonnull Query query, @Nonnull List<AggregateField> aggregateFields, QueryMode queryMode) {
     this.query = query;
     this.aggregateFieldList = aggregateFields;
     this.aliasMap = new HashMap<>();
+    this.queryMode = queryMode;
   }
 
   /** Returns the query whose aggregations will be calculated by this object. */
@@ -87,8 +91,8 @@ public class AggregateQuery {
    * @return An ApiFuture that will be resolved with the query plan.
    */
   @Nonnull
-  public ApiFuture<AggregateQuerySnapshot> explain() {
-    return getAggregateQueryProfileInfo(QueryMode.PLAN);
+  public AggregateQuery explain() {
+    return new AggregateQuery(this.query, this.aggregateFieldList, QueryMode.PLAN);
   }
 
   /**
@@ -101,8 +105,8 @@ public class AggregateQuery {
    *     query execution, and the query results.
    */
   @Nonnull
-  public ApiFuture<AggregateQuerySnapshot> explainAnalyze() {
-    return getAggregateQueryProfileInfo(QueryMode.PROFILE);
+  public AggregateQuery explainAnalyze() {
+    return new AggregateQuery(this.query, this.aggregateFieldList, QueryMode.PROFILE);
   }
 
   @Nonnull
@@ -156,13 +160,15 @@ public class AggregateQuery {
       return startTimeNanos;
     }
 
-    void deliverResult(@Nonnull Map<String, Value> serverData, Timestamp readTime) {
+    void deliverResult(
+        @Nonnull Map<String, Value> serverData, Timestamp readTime, ResultSetStats stats) {
       if (isFutureCompleted.compareAndSet(false, true)) {
         future.set(
             new AggregateQuerySnapshot(
                 AggregateQuery.this,
                 readTime,
-                convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
+                convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData),
+                stats));
       }
     }
 
@@ -178,6 +184,9 @@ public class AggregateQuery {
 
     private final AggregateQueryResponseDeliverer responseDeliverer;
     private StreamController streamController;
+    private Timestamp readTime = Timestamp.MAX_VALUE;
+    private Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
+    private ResultSetStats stats;
 
     AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
       this.responseDeliverer = responseDeliverer;
@@ -190,16 +199,26 @@ public class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
-      // Close the stream to avoid it dangling, since we're not expecting any more responses.
-      streamController.cancel();
+      if (response.hasReadTime()) {
+        readTime = Timestamp.fromProto(response.getReadTime());
+      }
 
-      // Extract the aggregations and read time from the RunAggregationQueryResponse.
-      Timestamp readTime = Timestamp.fromProto(response.getReadTime());
+      if (response.hasResult()) {
+        aggregateFieldsMap = response.getResult().getAggregateFieldsMap();
+      }
 
-      // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC, meaning
-      // that `onResponse()` can be called multiple times, it _should_ only be called once. But even
-      // if it is called more than once, `responseDeliverer` will drop superfluous results.
-      responseDeliverer.deliverResult(response.getResult().getAggregateFieldsMap(), readTime);
+      if (response.hasStats()) {
+        stats = new ResultSetStats(response.getStats());
+      }
+
+      if (queryMode.equals(QueryMode.NORMAL)) {
+        // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC,
+        // meaning that `onResponse()` can be called multiple times, it _should_ only be called
+        // once in NORMAL mode. But even if it is called more than once, `responseDeliverer` will
+        // drop superfluous results. In modes other than NORMAL, there will be more than one
+        // response, and the last response will contain stats.
+        onComplete();
+      }
     }
 
     @Override
@@ -212,6 +231,13 @@ public class AggregateQuery {
     }
 
     private boolean shouldRetry(Throwable throwable) {
+      // Do not retry profiling requests because it'd be executing
+      // multiple queries. This means stats would have to be aggregated,
+      // and that may not even make sense for many statistics.
+      if (!queryMode.equals(QueryMode.NORMAL)) {
+        return false;
+      }
+
       Set<StatusCode.Code> retryableCodes =
           FirestoreSettings.newBuilder().runAggregationQuerySettings().getRetryableCodes();
       return query.shouldRetryQuery(
@@ -222,58 +248,12 @@ public class AggregateQuery {
     }
 
     @Override
-    public void onComplete() {}
-  }
+    public void onComplete() {
+      responseDeliverer.deliverResult(aggregateFieldsMap, readTime, stats);
 
-  ApiFuture<AggregateQuerySnapshot> getAggregateQueryProfileInfo(QueryMode queryMode) {
-    RunAggregationQueryRequest request = toProto().toBuilder().setMode(queryMode).build();
-    SettableApiFuture<AggregateQuerySnapshot> result = SettableApiFuture.create();
-
-    ResponseObserver<RunAggregationQueryResponse> observer =
-        new ResponseObserver<RunAggregationQueryResponse>() {
-          Timestamp readTime;
-          Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-
-          ResultSetStats stats;
-
-          @Override
-          public void onStart(StreamController streamController) {}
-
-          @Override
-          public void onResponse(RunAggregationQueryResponse response) {
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
-            }
-
-            if (aggregateFieldsMap.isEmpty() && response.hasResult()) {
-              aggregateFieldsMap =
-                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(
-                      response.getResult().getAggregateFieldsMap());
-            }
-
-            if (response.hasStats()) {
-              stats = new ResultSetStats(response.getStats());
-            }
-          }
-
-          @Override
-          public void onError(Throwable throwable) {
-            // We don't implement retry logic for profiling.
-            result.setException(throwable);
-          }
-
-          @Override
-          public void onComplete() {
-            result.set(
-                new AggregateQuerySnapshot(
-                    AggregateQuery.this, readTime, aggregateFieldsMap, stats));
-          }
-        };
-
-    query.rpcContext.streamRequest(
-        request, observer, query.rpcContext.getClient().runAggregationQueryCallable());
-
-    return result;
+      // Close the stream to avoid it dangling, since we're not expecting any more responses.
+      streamController.cancel();
+    }
   }
 
   /**
@@ -293,6 +273,7 @@ public class AggregateQuery {
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
     request.setParent(runQueryRequest.getParent());
+    request.setMode(queryMode);
     if (transactionId != null) {
       request.setTransaction(transactionId);
     }
@@ -361,6 +342,7 @@ public class AggregateQuery {
         RunQueryRequest.newBuilder()
             .setParent(proto.getParent())
             .setStructuredQuery(proto.getStructuredAggregationQuery().getStructuredQuery())
+            .setMode(proto.getMode())
             .build();
     Query query = Query.fromProto(firestore, runQueryRequest);
 
@@ -379,7 +361,7 @@ public class AggregateQuery {
             throw new RuntimeException("Unsupported aggregation.");
           }
         });
-    return new AggregateQuery(query, aggregateFields);
+    return new AggregateQuery(query, aggregateFields, proto.getMode());
   }
 
   /**
