@@ -54,8 +54,8 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   static QuerySnapshot withDocumentsAndStats(
       final Query query,
       Timestamp readTime,
-      ResultSetStats stats,
-      final List<QueryDocumentSnapshot> documents) {
+      final List<QueryDocumentSnapshot> documents,
+      @Nullable ResultSetStats stats) {
     return new QuerySnapshot(query, readTime, stats) {
       volatile List<DocumentChange> documentChanges;
 
@@ -110,7 +110,7 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
   public static QuerySnapshot withDocuments(
       final Query query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
-    return withDocumentsAndStats(query, readTime, /* ResultSetStats */ null, documents);
+    return withDocumentsAndStats(query, readTime, documents, /* ResultSetStats */ null);
   }
 
   /** Creates a new QuerySnapshot representing a snapshot of a Query with changed documents. */

@@ -1825,8 +1825,8 @@ public class Query {
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-          Timestamp readTime;
-          ResultSetStats stats;
+          Timestamp readTime = Timestamp.MIN_VALUE;
+          @Nullable ResultSetStats stats;
 
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
@@ -1838,7 +1838,7 @@ public class Query {
               documentSnapshots.add(documentSnapshot);
             }
 
-            if (readTime == null) {
+            if (readTime == Timestamp.MIN_VALUE) {
               readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
             }
 
@@ -1861,7 +1861,7 @@ public class Query {
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocumentsAndStats(Query.this, readTime, stats, resultView);
+                QuerySnapshot.withDocumentsAndStats(Query.this, readTime, resultView, stats);
             result.set(querySnapshot);
           }
         },

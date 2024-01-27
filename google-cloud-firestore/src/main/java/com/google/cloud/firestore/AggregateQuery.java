@@ -184,9 +184,9 @@ public class AggregateQuery {
 
     private final AggregateQueryResponseDeliverer responseDeliverer;
     private StreamController streamController;
-    private Timestamp readTime = Timestamp.MAX_VALUE;
+    private Timestamp readTime = Timestamp.MIN_VALUE;
     private Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-    private ResultSetStats stats;
+    private @Nullable ResultSetStats stats;
 
     AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
       this.responseDeliverer = responseDeliverer;

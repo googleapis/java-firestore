@@ -47,7 +47,7 @@ public class AggregateQuerySnapshot {
       @Nonnull AggregateQuery query,
       @Nonnull Timestamp readTime,
       @Nonnull Map<String, Value> data,
-      @Nonnull ResultSetStats stats) {
+      @Nullable ResultSetStats stats) {
     this.query = query;
     this.readTime = readTime;
     this.data = data;
