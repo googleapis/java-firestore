@@ -358,7 +358,9 @@ public class Query {
         return false;
       }
       FieldOrder filter = (FieldOrder) o;
-      if (direction != filter.direction) return false;
+      if (direction != filter.direction) {
+        return false;
+      }
       return Objects.equals(fieldReference, filter.fieldReference);
     }
 
