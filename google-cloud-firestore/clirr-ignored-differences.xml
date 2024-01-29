@@ -286,4 +286,11 @@
     <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
     <method>com.google.api.gax.rpc.ServerStreamingCallable runAggregationQueryCallable()</method>
   </difference>
+
+  <!-- StandardComparator no longer in use -->
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/collection/StandardComparator</className>
+    <to>*</to>
+  </difference>
 </differences>
