@@ -2,18 +2,79 @@
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
   <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/*OrBuilder</className>
-    <method>* get*(*)</method>
+    <differenceType>8001</differenceType>
+    <className>com.google.firestore.v1.QueryMode</className>
   </difference>
   <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/*OrBuilder</className>
-    <method>boolean contains*(*)</method>
+    <differenceType>8001</differenceType>
+    <className>com.google.firestore.v1.QueryPlan*</className>
   </difference>
   <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/*OrBuilder</className>
-    <method>boolean has*(*)</method>
+    <differenceType>8001</differenceType>
+    <className>com.google.firestore.v1.QueryProfileProto</className>
+  </difference>
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com.google.firestore.v1.ResultSetStats*</className>
+  </difference>
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com.google.firestore.v1.Run*QueryRequest</className>
+    <method>MODE_FIELD_NUMBER</method>
+  </difference>
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com.google.firestore.v1.Run*QueryResponse</className>
+    <method>STATS_FIELD_NUMBER</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequest*</className>
+    <method>* getMode()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequest*</className>
+    <method>* getModeValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequest*</className>
+    <method>* clearMode()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequest$Builder</className>
+    <method>* setMode(*)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequest$Builder</className>
+    <method>* setModeValue(*)</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponse*</className>
+    <method>* getStats()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponse*</className>
+    <method>* hasStats()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponse*</className>
+    <method>* getStatsOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponse$Builder</className>
+    <method>* getStatsBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponse$Builder</className>
+    <method>* mergeStats(*)</method>
   </difference>
 </differences>
