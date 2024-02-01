@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.16.2](https://github.com/googleapis/java-firestore/compare/v3.16.1...v3.16.2) (2024-02-01)
+
+
+### Bug Fixes
+
+* Remove QueryMode field from RunAggregationQueryRequest ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove QueryMode field from RunQueryRequest ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove ResultSetStats field from RunAggregationQueryResponse ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove ResultSetStats field from RunQueryResponse ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove types QueryMode, QueryPlan, ResultSetStats ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.24.0 ([#1551](https://github.com/googleapis/java-firestore/issues/1551)) ([6874143](https://github.com/googleapis/java-firestore/commit/68741438c7a7fe50da2a72cb9688947ccccf7638))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.10.0 ([#1553](https://github.com/googleapis/java-firestore/issues/1553)) ([701d820](https://github.com/googleapis/java-firestore/commit/701d82078df9e7cff902072abcc6767a67bde3d6))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.10.0 ([#1554](https://github.com/googleapis/java-firestore/issues/1554)) ([581da1f](https://github.com/googleapis/java-firestore/commit/581da1f963ac951b5ca2d5b9edc2ad8a9f189ca6))
+
 ## [3.16.1](https://github.com/googleapis/java-firestore/compare/v3.16.0...v3.16.1) (2024-01-25)
 
 
