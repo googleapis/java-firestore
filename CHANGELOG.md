@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.3](https://github.com/googleapis/java-firestore/compare/v3.16.2...v3.16.3) (2024-02-05)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.2 ([#1559](https://github.com/googleapis/java-firestore/issues/1559)) ([502cf05](https://github.com/googleapis/java-firestore/commit/502cf0594c030460db5f7d44c08ea0e9398ad2ac))
+
 ## [3.16.2](https://github.com/googleapis/java-firestore/compare/v3.16.1...v3.16.2) (2024-02-01)
 
 
