@@ -194,14 +194,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
-    return this.getAll(documentReferences, null, (ByteString) null);
+    return this.getAll(documentReferences, null, (ByteString) null, null);
   }
 
   @Nonnull
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
-    return this.getAll(documentReferences, fieldMask, (ByteString) null);
+    return this.getAll(documentReferences, fieldMask, (ByteString) null, null);
   }
 
   @Override
@@ -209,13 +209,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
       @Nonnull final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
-    this.getAll(documentReferences, fieldMask, null, apiStreamObserver);
+    this.getAll(documentReferences, fieldMask, null, null, apiStreamObserver);
   }
 
   void getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
+      @Nullable com.google.protobuf.Timestamp readTime,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
 
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
@@ -304,6 +305,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       request.setTransaction(transactionId);
     }
 
+    if (readTime != null) {
+      request.setReadTime(readTime);
+    }
+
     for (DocumentReference docRef : documentReferences) {
       request.addDocuments(docRef.getName());
     }
@@ -322,13 +327,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   ApiFuture<List<DocumentSnapshot>> getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
-      @Nullable ByteString transactionId) {
+      @Nullable ByteString transactionId,
+      @Nullable com.google.protobuf.Timestamp readTime) {
     final SettableApiFuture<List<DocumentSnapshot>> futureList = SettableApiFuture.create();
     final Map<DocumentReference, DocumentSnapshot> documentSnapshotMap = new HashMap<>();
     getAll(
         documentReferences,
         fieldMask,
         transactionId,
+        readTime,
         new ApiStreamObserver<DocumentSnapshot>() {
           @Override
           public void onNext(DocumentSnapshot documentSnapshot) {
@@ -390,9 +397,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    TransactionRunner<T> transactionRunner =
-        new TransactionRunner<>(this, updateFunction, transactionOptions);
-    return transactionRunner.run();
+    switch (transactionOptions.getType()) {
+      case READ_ONLY:
+        return updateFunction.updateCallback(
+            new ReadOnlyTransaction(this, transactionOptions.getReadTime()));
+      case READ_WRITE:
+      default:
+        return new TransactionRunner<>(this, updateFunction, transactionOptions).run();
+    }
   }
 
   @Nonnull

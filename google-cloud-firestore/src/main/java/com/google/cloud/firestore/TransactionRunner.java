@@ -24,6 +24,8 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
@@ -60,9 +62,8 @@ class TransactionRunner<T> {
   private final ScheduledExecutorService firestoreExecutor;
   private final Executor userCallbackExecutor;
   private final ExponentialRetryAlgorithm backoffAlgorithm;
-  private final TransactionOptions transactionOptions;
   private TimedAttemptSettings nextBackoffAttempt;
-  private Transaction transaction;
+  private ReadWriteTransaction transaction;
   private int attemptsRemaining;
 
   /**
@@ -75,7 +76,8 @@ class TransactionRunner<T> {
       FirestoreImpl firestore,
       Transaction.AsyncFunction<T> userCallback,
       TransactionOptions transactionOptions) {
-    this.transactionOptions = transactionOptions;
+    Preconditions.checkArgument(
+        TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType()));
     this.span = tracer.spanBuilder("CloudFirestore.Transaction").startSpan();
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
@@ -94,7 +96,7 @@ class TransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
+    this.transaction = new ReadWriteTransaction(firestore, this.transaction);
 
     --attemptsRemaining;
 
