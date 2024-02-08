@@ -89,8 +89,7 @@ final class ReadOnlyTransaction implements Transaction {
 
   @Nonnull
   @Override
-  public Transaction create(
-      @Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
+  public Transaction create(@Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
     throw new IllegalStateException(WRITE_EXCEPTION_MSG);
   }
 
@@ -112,8 +111,7 @@ final class ReadOnlyTransaction implements Transaction {
 
   @Nonnull
   @Override
-  public Transaction set(
-      @Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
+  public Transaction set(@Nonnull DocumentReference documentReference, @Nonnull Object pojo) {
     throw new IllegalStateException(WRITE_EXCEPTION_MSG);
   }
 

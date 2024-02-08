@@ -61,13 +61,15 @@ public interface Transaction {
   ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query);
 
   @Nonnull
-  Transaction create(@Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
+  Transaction create(
+      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
 
   @Nonnull
   Transaction create(@Nonnull DocumentReference documentReference, @Nonnull Object pojo);
 
   @Nonnull
-  Transaction set(@Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
+  Transaction set(
+      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
 
   @Nonnull
   Transaction set(
@@ -85,7 +87,8 @@ public interface Transaction {
       @Nonnull SetOptions options);
 
   @Nonnull
-  Transaction update(@Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
+  Transaction update(
+      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
 
   @Nonnull
   Transaction update(
@@ -124,7 +127,8 @@ public interface Transaction {
       Object... moreFieldsAndValues);
 
   @Nonnull
-  Transaction delete(@Nonnull DocumentReference documentReference, @Nonnull Precondition precondition);
+  Transaction delete(
+      @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition);
 
   @Nonnull
   Transaction delete(@Nonnull DocumentReference documentReference);
