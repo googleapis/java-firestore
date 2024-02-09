@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
  *
  * @see Firestore#runTransaction(Function)
  */
-public final class ReadWriteTransaction extends UpdateBuilder<ReadWriteTransaction>
+final class ReadWriteTransaction extends UpdateBuilder<ReadWriteTransaction>
     implements Transaction {
 
   private static final Logger LOGGER = Logger.getLogger(ReadWriteTransaction.class.getName());

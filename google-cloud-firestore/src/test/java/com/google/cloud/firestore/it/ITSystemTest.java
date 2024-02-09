@@ -1785,18 +1785,17 @@ public class ITSystemTest extends ITBaseTest {
             },
             TransactionOptions.createReadOnlyOptionsBuilder().build());
 
-    try {
+    ExecutionException e = assertThrows(ExecutionException.class, () -> {
       runTransaction.get(10, TimeUnit.SECONDS);
-    } catch (ExecutionException e) {
-      final Throwable cause = e.getCause();
-      assertThat(cause).isInstanceOf(FirestoreException.class);
-      final Throwable rootCause = ExceptionUtils.getRootCause(cause);
-      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
-      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
-      final Status status = invalidArgument.getStatus();
-      assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
-      assertThat(status.getDescription()).contains("read-only");
-    }
+    });
+    final Throwable cause = e.getCause();
+    assertThat(cause).isInstanceOf(FirestoreException.class);
+    final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+    assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+    final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+    final Status status = invalidArgument.getStatus();
+    assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
+    assertThat(status.getDescription()).contains("read-only");
   }
 
   @Test
