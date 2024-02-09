@@ -62,8 +62,9 @@ class TransactionRunner<T> {
   private final ScheduledExecutorService firestoreExecutor;
   private final Executor userCallbackExecutor;
   private final ExponentialRetryAlgorithm backoffAlgorithm;
+  private final TransactionOptions transactionOptions;
   private TimedAttemptSettings nextBackoffAttempt;
-  private ReadWriteTransaction transaction;
+  private ServerSideTransaction transaction;
   private int attemptsRemaining;
 
   /**
@@ -76,8 +77,7 @@ class TransactionRunner<T> {
       FirestoreImpl firestore,
       Transaction.AsyncFunction<T> userCallback,
       TransactionOptions transactionOptions) {
-    Preconditions.checkArgument(
-        TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType()));
+    this.transactionOptions = transactionOptions;
     this.span = tracer.spanBuilder("CloudFirestore.Transaction").startSpan();
     this.firestore = firestore;
     this.firestoreExecutor = firestore.getClient().getExecutor();
@@ -96,7 +96,7 @@ class TransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    this.transaction = new ReadWriteTransaction(firestore, this.transaction);
+    this.transaction = new ServerSideTransaction(firestore, transactionOptions, this.transaction);
 
     --attemptsRemaining;
 

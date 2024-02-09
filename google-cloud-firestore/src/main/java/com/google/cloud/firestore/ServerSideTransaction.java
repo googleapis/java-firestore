@@ -18,11 +18,13 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.BeginTransactionRequest;
 import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.TransactionOptions.ReadOnly;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import io.opencensus.trace.Tracing;
@@ -38,18 +40,22 @@ import javax.annotation.Nullable;
  *
  * @see Firestore#runTransaction(Function)
  */
-final class ReadWriteTransaction extends UpdateBuilder<ReadWriteTransaction>
+final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
     implements Transaction {
 
-  private static final Logger LOGGER = Logger.getLogger(ReadWriteTransaction.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(ServerSideTransaction.class.getName());
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
 
+  private final TransactionOptions transactionOptions;
   private ByteString transactionId;
 
-  ReadWriteTransaction(
-      FirestoreImpl firestore, @Nullable ReadWriteTransaction previousTransaction) {
+  ServerSideTransaction(
+      FirestoreImpl firestore,
+      TransactionOptions transactionOptions,
+      @Nullable ServerSideTransaction previousTransaction) {
     super(firestore);
+    this.transactionOptions = transactionOptions;
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
   }
 
@@ -58,7 +64,7 @@ final class ReadWriteTransaction extends UpdateBuilder<ReadWriteTransaction>
   }
 
   @Override
-  ReadWriteTransaction wrapResult(int writeIndex) {
+  ServerSideTransaction wrapResult(int writeIndex) {
     return this;
   }
 
@@ -68,8 +74,15 @@ final class ReadWriteTransaction extends UpdateBuilder<ReadWriteTransaction>
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
 
-    if (transactionId != null) {
+    if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
+        && transactionId != null) {
       beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
+    } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
+      final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
+      if (transactionOptions.getReadTime() != null) {
+        readOnlyBuilder.setReadTime(transactionOptions.getReadTime());
+      }
+      beginTransaction.getOptionsBuilder().setReadOnly(readOnlyBuilder);
     }
 
     ApiFuture<BeginTransactionResponse> transactionBeginFuture =

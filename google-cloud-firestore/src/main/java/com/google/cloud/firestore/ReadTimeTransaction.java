@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
@@ -27,13 +28,14 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-final class ReadOnlyTransaction implements Transaction {
+final class ReadTimeTransaction implements Transaction {
 
   public static final String WRITE_EXCEPTION_MSG = "Firestore ready-only transactions do not support writes";
   private final FirestoreImpl firestore;
   private final Timestamp readTime;
 
-  ReadOnlyTransaction(FirestoreImpl firestore, Timestamp readTime) {
+  ReadTimeTransaction(FirestoreImpl firestore, Timestamp readTime) {
+    Preconditions.checkNotNull(readTime, "readTime cannot be null");
     this.firestore = firestore;
     this.readTime = readTime;
   }

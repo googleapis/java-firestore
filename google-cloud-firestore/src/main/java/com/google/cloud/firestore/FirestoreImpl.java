@@ -29,6 +29,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -397,13 +398,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    switch (transactionOptions.getType()) {
-      case READ_ONLY:
-        return updateFunction.updateCallback(
-            new ReadOnlyTransaction(this, transactionOptions.getReadTime()));
-      case READ_WRITE:
-      default:
-        return new TransactionRunner<>(this, updateFunction, transactionOptions).run();
+    if (transactionOptions.getReadTime() != null) {
+      return updateFunction.updateCallback(
+          new ReadTimeTransaction(this, transactionOptions.getReadTime()));
+    } else {
+      // For READ_ONLY transactions without readTime, there is still strong consistency applied,
+      // that cannot be tracked client side.
+      return new TransactionRunner<>(this, updateFunction, transactionOptions).run();
     }
   }
 
