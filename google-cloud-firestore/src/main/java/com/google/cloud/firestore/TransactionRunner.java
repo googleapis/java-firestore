@@ -32,6 +32,7 @@ import io.opencensus.trace.Span;
 import io.opencensus.trace.Tracer;
 import io.opencensus.trace.Tracing;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -85,7 +86,7 @@ class TransactionRunner<T> {
         Context.currentContextExecutor(
             transactionOptions.getExecutor() != null
                 ? transactionOptions.getExecutor()
-                : this.firestore.getClient().getExecutor());
+                : Executors.newCachedThreadPool());
 
     this.backoffAlgorithm =
         new ExponentialRetryAlgorithm(
