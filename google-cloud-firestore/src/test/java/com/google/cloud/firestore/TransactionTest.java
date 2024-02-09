@@ -970,7 +970,7 @@ public class TransactionTest {
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     String expectedErrorMessage =
-        "Cannot modify a ReadWriteTransaction that has already been committed.";
+        "Cannot modify a Transaction that has already been committed.";
 
     DocumentReference docRef = firestoreMock.collection("foo").document("bar");
 

@@ -59,6 +59,11 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
     this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
   }
 
+  @Override
+  protected String className() {
+    return "Transaction";
+  }
+
   public boolean hasTransactionId() {
     return transactionId != null;
   }
