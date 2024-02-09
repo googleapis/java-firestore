@@ -1785,9 +1785,12 @@ public class ITSystemTest extends ITBaseTest {
             },
             TransactionOptions.createReadOnlyOptionsBuilder().build());
 
-    ExecutionException e = assertThrows(ExecutionException.class, () -> {
-      runTransaction.get(10, TimeUnit.SECONDS);
-    });
+    ExecutionException e =
+        assertThrows(
+            ExecutionException.class,
+            () -> {
+              runTransaction.get(10, TimeUnit.SECONDS);
+            });
     final Throwable cause = e.getCause();
     assertThat(cause).isInstanceOf(FirestoreException.class);
     final Throwable rootCause = ExceptionUtils.getRootCause(cause);

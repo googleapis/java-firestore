@@ -296,9 +296,7 @@ public abstract class UpdateBuilder<T> {
     synchronized (writes) {
       Preconditions.checkState(
           !committed,
-          String.format(
-              "Cannot modify a %s that has already been committed.",
-              className()));
+          String.format("Cannot modify a %s that has already been committed.", className()));
       writes.add(operation);
       writeIndex = writes.size() - 1;
     }

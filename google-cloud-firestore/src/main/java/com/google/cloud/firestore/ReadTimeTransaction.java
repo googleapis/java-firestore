@@ -30,7 +30,8 @@ import javax.annotation.Nullable;
 
 final class ReadTimeTransaction implements Transaction {
 
-  public static final String WRITE_EXCEPTION_MSG = "Firestore ready-only transactions do not support writes";
+  public static final String WRITE_EXCEPTION_MSG =
+      "Firestore ready-only transactions do not support writes";
   private final FirestoreImpl firestore;
   private final Timestamp readTime;
 

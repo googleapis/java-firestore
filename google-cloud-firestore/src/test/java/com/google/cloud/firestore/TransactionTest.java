@@ -969,8 +969,7 @@ public class TransactionTest {
         .when(firestoreMock)
         .sendRequest(
             requestCapture.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
-    String expectedErrorMessage =
-        "Cannot modify a Transaction that has already been committed.";
+    String expectedErrorMessage = "Cannot modify a Transaction that has already been committed.";
 
     DocumentReference docRef = firestoreMock.collection("foo").document("bar");
 
