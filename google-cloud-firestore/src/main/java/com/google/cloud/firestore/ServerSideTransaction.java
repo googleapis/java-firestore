@@ -123,6 +123,11 @@ final class ServerSideTransaction extends Transaction {
         MoreExecutors.directExecutor());
   }
 
+  @Override
+  public boolean hasTransactionId() {
+    return true;
+  }
+
   /**
    * Reads the document referred to by the provided DocumentReference. Holds a pessimistic lock on
    * the returned document.

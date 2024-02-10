@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * <p>TransactionRunner uses exponential backoff to increase the chance that retries succeed. To
  * customize the backoff settings, you can specify custom settings via {@link FirestoreOptions}.
  */
-class ServerSideTransactionRunner<T> {
+final class ServerSideTransactionRunner<T> {
 
   private static final Tracer tracer = Tracing.getTracer();
   private static final io.opencensus.trace.Status TOO_MANY_RETRIES_STATUS =

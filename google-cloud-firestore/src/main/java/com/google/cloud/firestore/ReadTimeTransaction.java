@@ -40,6 +40,11 @@ final class ReadTimeTransaction extends Transaction {
     this.readTime = readTime;
   }
 
+  @Override
+  public boolean hasTransactionId() {
+    return false;
+  }
+
   @Nonnull
   @Override
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {

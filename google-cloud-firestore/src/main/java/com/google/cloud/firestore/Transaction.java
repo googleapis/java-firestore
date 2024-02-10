@@ -63,6 +63,8 @@ public abstract class Transaction extends UpdateBuilder<Transaction> {
     return "Transaction";
   }
 
+  public abstract boolean hasTransactionId();
+
   @Override
   Transaction wrapResult(int writeIndex) {
     return this;
