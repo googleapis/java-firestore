@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,25 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface Transaction {
+/**
+ * A Transaction is passed to a Function to provide the methods to read and write data within the
+ * transaction context.
+ *
+ * @see Firestore#runTransaction(Function)
+ */
+public abstract class Transaction extends UpdateBuilder<Transaction> {
+
+  private static final Logger LOGGER = Logger.getLogger(Transaction.class.getName());
+  private static final String READ_BEFORE_WRITE_ERROR_MSG =
+      "Firestore transactions require all reads to be executed before all writes";
+
+  Transaction(FirestoreImpl firestore) {
+    super(firestore);
+  }
 
   /**
    * User callback that takes a Firestore Transaction.
@@ -44,92 +58,62 @@ public interface Transaction {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
-  @Nonnull
-  ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef);
+  @Override
+  protected String className() {
+    return "Transaction";
+  }
 
-  @Nonnull
-  ApiFuture<List<DocumentSnapshot>> getAll(@Nonnull DocumentReference... documentReferences);
+  @Override
+  Transaction wrapResult(int writeIndex) {
+    return this;
+  }
 
+  /**
+   * Reads the document referred to by the provided DocumentReference. Holds a pessimistic lock on
+   * the returned document.
+   *
+   * @return The contents of the Document at this DocumentReference.
+   */
   @Nonnull
-  ApiFuture<List<DocumentSnapshot>> getAll(
+  public abstract ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef);
+
+  /**
+   * Retrieves multiple documents from Firestore. Holds a pessimistic lock on all returned
+   * documents.
+   *
+   * @param documentReferences List of Document References to fetch.
+   */
+  @Nonnull
+  public abstract ApiFuture<List<DocumentSnapshot>> getAll(
+      @Nonnull DocumentReference... documentReferences);
+
+  /**
+   * Retrieves multiple documents from Firestore, while optionally applying a field mask to reduce
+   * the amount of data transmitted from the backend. Holds a pessimistic lock on all returned
+   * documents.
+   *
+   * @param documentReferences Array with Document References to fetch.
+   * @param fieldMask If set, specifies the subset of fields to return.
+   */
+  @Nonnull
+  public abstract ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask);
 
+  /**
+   * Returns the result set from the provided query. Holds a pessimistic lock on all returned
+   * documents.
+   *
+   * @return The contents of the Document at this DocumentReference.
+   */
   @Nonnull
-  ApiFuture<QuerySnapshot> get(@Nonnull Query query);
+  public abstract ApiFuture<QuerySnapshot> get(@Nonnull Query query);
 
+  /**
+   * Returns the result from the provided aggregate query. Holds a pessimistic lock on all accessed
+   * documents.
+   *
+   * @return The result of the aggregation.
+   */
   @Nonnull
-  ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query);
-
-  @Nonnull
-  Transaction create(
-      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
-
-  @Nonnull
-  Transaction create(@Nonnull DocumentReference documentReference, @Nonnull Object pojo);
-
-  @Nonnull
-  Transaction set(
-      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
-
-  @Nonnull
-  Transaction set(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull Map<String, Object> fields,
-      @Nonnull SetOptions options);
-
-  @Nonnull
-  Transaction set(@Nonnull DocumentReference documentReference, @Nonnull Object pojo);
-
-  @Nonnull
-  Transaction set(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull Object pojo,
-      @Nonnull SetOptions options);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull Map<String, Object> fields,
-      Precondition precondition);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull String field,
-      @Nullable Object value,
-      Object... moreFieldsAndValues);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull FieldPath fieldPath,
-      @Nullable Object value,
-      Object... moreFieldsAndValues);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition precondition,
-      @Nonnull String field,
-      @Nullable Object value,
-      Object... moreFieldsAndValues);
-
-  @Nonnull
-  Transaction update(
-      @Nonnull DocumentReference documentReference,
-      @Nonnull Precondition precondition,
-      @Nonnull FieldPath fieldPath,
-      @Nullable Object value,
-      Object... moreFieldsAndValues);
-
-  @Nonnull
-  Transaction delete(
-      @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition);
-
-  @Nonnull
-  Transaction delete(@Nonnull DocumentReference documentReference);
+  public abstract ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query);
 }

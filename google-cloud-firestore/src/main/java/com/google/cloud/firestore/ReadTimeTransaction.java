@@ -28,16 +28,15 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-final class ReadTimeTransaction implements Transaction {
+final class ReadTimeTransaction extends Transaction {
 
   public static final String WRITE_EXCEPTION_MSG =
       "Firestore ready-only transactions do not support writes";
-  private final FirestoreImpl firestore;
   private final Timestamp readTime;
 
   ReadTimeTransaction(FirestoreImpl firestore, Timestamp readTime) {
+    super(firestore);
     Preconditions.checkNotNull(readTime, "readTime cannot be null");
-    this.firestore = firestore;
     this.readTime = readTime;
   }
 
@@ -196,5 +195,10 @@ final class ReadTimeTransaction implements Transaction {
   @Override
   public Transaction delete(@Nonnull DocumentReference documentReference) {
     throw new IllegalStateException(WRITE_EXCEPTION_MSG);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s{readTime=%s}", getClass().getSimpleName(), readTime);
   }
 }

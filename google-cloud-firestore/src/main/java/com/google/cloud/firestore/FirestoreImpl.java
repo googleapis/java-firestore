@@ -403,7 +403,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     } else {
       // For READ_ONLY transactions without readTime, there is still strong consistency applied,
       // that cannot be tracked client side.
-      return new TransactionRunner<>(this, updateFunction, transactionOptions).run();
+      return new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
     }
   }
 

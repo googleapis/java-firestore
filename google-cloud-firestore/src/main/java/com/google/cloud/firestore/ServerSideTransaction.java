@@ -34,54 +34,43 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * A Transaction is passed to a Function to provide the methods to read and write data within the
- * transaction context.
- *
- * @see Firestore#runTransaction(Function)
- */
-final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
-    implements Transaction {
+final class ServerSideTransaction extends Transaction {
 
   private static final Logger LOGGER = Logger.getLogger(ServerSideTransaction.class.getName());
+
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
 
-  private final TransactionOptions transactionOptions;
-  private ByteString transactionId;
+  private final FirestoreImpl firestore;
 
-  ServerSideTransaction(
+  final ByteString transactionId;
+
+  private ServerSideTransaction(FirestoreImpl firestore, ByteString transactionId) {
+    super(firestore);
+    this.firestore = firestore;
+    this.transactionId = transactionId;
+  }
+
+  public ByteString getTransactionId() {
+    return transactionId;
+  }
+
+  public static ApiFuture<ServerSideTransaction> begin(
       FirestoreImpl firestore,
       TransactionOptions transactionOptions,
       @Nullable ServerSideTransaction previousTransaction) {
-    super(firestore);
-    this.transactionOptions = transactionOptions;
-    this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
-  }
-
-  @Override
-  protected String className() {
-    return "Transaction";
-  }
-
-  public boolean hasTransactionId() {
-    return transactionId != null;
-  }
-
-  @Override
-  ServerSideTransaction wrapResult(int writeIndex) {
-    return this;
-  }
-
-  /** Starts a transaction and obtains the transaction id. */
-  ApiFuture<Void> begin() {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_BEGINTRANSACTION);
     BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
     beginTransaction.setDatabase(firestore.getDatabaseName());
+    ByteString previousTransactionId =
+        previousTransaction != null ? previousTransaction.transactionId : null;
 
     if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
-        && transactionId != null) {
-      beginTransaction.getOptionsBuilder().getReadWriteBuilder().setRetryTransaction(transactionId);
+        && previousTransactionId != null) {
+      beginTransaction
+          .getOptionsBuilder()
+          .getReadWriteBuilder()
+          .setRetryTransaction(previousTransactionId);
     } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
       final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
       if (transactionOptions.getReadTime() != null) {
@@ -96,10 +85,8 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
 
     return ApiFutures.transform(
         transactionBeginFuture,
-        beginTransactionResponse -> {
-          transactionId = beginTransactionResponse.getTransaction();
-          return null;
-        },
+        beginTransactionResponse ->
+            new ServerSideTransaction(firestore, beginTransactionResponse.getTransaction()),
         MoreExecutors.directExecutor());
   }
 
@@ -145,8 +132,8 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
   @Override
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
+    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
     return ApiFutures.transform(
         firestore.getAll(
             new DocumentReference[] {documentRef},
@@ -168,7 +155,6 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
     return firestore.getAll(
         documentReferences, /*fieldMask=*/ null, transactionId, /*readTime=*/ null);
   }
@@ -186,7 +172,6 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
     return firestore.getAll(documentReferences, fieldMask, transactionId, /*readTime=*/ null);
   }
 
@@ -200,7 +185,6 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
   @Nonnull
   public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
     return query.get(transactionId, /*readTime=*/ null);
   }
 
@@ -214,7 +198,6 @@ final class ServerSideTransaction extends UpdateBuilder<ServerSideTransaction>
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
     return query.get(transactionId, null);
   }
 }
