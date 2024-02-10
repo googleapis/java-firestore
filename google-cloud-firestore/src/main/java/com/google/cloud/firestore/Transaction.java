@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalExtensionOnly;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -28,13 +29,14 @@ import javax.annotation.Nullable;
  *
  * @see Firestore#runTransaction(Function)
  */
+@InternalExtensionOnly
 public abstract class Transaction extends UpdateBuilder<Transaction> {
 
   private static final Logger LOGGER = Logger.getLogger(Transaction.class.getName());
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
 
-  Transaction(FirestoreImpl firestore) {
+  protected Transaction(FirestoreImpl firestore) {
     super(firestore);
   }
 
