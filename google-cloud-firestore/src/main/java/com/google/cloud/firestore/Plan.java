@@ -18,26 +18,26 @@ package com.google.cloud.firestore;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-/** A QueryPlan contains information about the planning stage of a query. */
-public final class QueryPlan {
-  private static final QueryPlan DEFAULT_INSTANCE =
-      new QueryPlan(com.google.firestore.v1.QueryPlan.getDefaultInstance());
+/** A Plan contains information about the planning stage of a query. */
+public final class Plan {
+  private static final Plan DEFAULT_INSTANCE =
+      new Plan(com.google.firestore.v1.QueryPlan.getDefaultInstance());
 
-  private final Map<String, Object> planInfo;
+  private final Map<String, Object> indexesUsed;
 
-  QueryPlan(com.google.firestore.v1.QueryPlan proto) {
-    this.planInfo = UserDataConverter.decodeStruct(proto.getPlanInfo());
+  Plan(com.google.firestore.v1.QueryPlan proto) {
+    this.indexesUsed = UserDataConverter.decodeStruct(proto.getPlanInfo());
   }
 
-  static QueryPlan getDefaultInstance() {
+  static Plan getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
   /*
-   * Returns the plan info as a map.
+   * Returns the indexes used to serve the query.
    */
   @Nonnull
-  public Map<String, Object> getPlanInfo() {
-    return this.planInfo;
+  public Map<String, Object> getIndexesUsed() {
+    return this.indexesUsed;
   }
 }

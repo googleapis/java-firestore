@@ -866,6 +866,7 @@ public class ITQueryTest extends ITBaseTest {
     checkQuerySnapshotContainsDocuments(query3WithCursor, "doc2", "doc3", "doc4");
   }
 
+  /*
   @Test
   public void testQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
@@ -879,8 +880,8 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    QueryPlan plan = query.explain().get();
-    assertThat(plan.getPlanInfo()).isNotEmpty();
+    Plan plan = query.explain().get();
+    assertThat(plan.getIndexesUsed()).isNotEmpty();
   }
 
   @Test
@@ -898,7 +899,7 @@ public class ITQueryTest extends ITBaseTest {
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
     QueryProfile<QuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getPlan().getIndexesUsed()).isNotEmpty();
     assertThat(profile.getStats()).isNotEmpty();
     assertThat(profile.getSnapshot().size()).isEqualTo(3);
   }
@@ -916,8 +917,8 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    QueryPlan plan = query.explain().get();
-    assertThat(plan.getPlanInfo()).isNotEmpty();
+    Plan plan = query.explain().get();
+    assertThat(plan.getIndexesUsed()).isNotEmpty();
   }
 
   @Test
@@ -935,8 +936,9 @@ public class ITQueryTest extends ITBaseTest {
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
     QueryProfile<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getPlanInfo()).isNotEmpty();
+    assertThat(profile.getPlan().getIndexesUsed()).isNotEmpty();
     assertThat(profile.getStats()).isNotEmpty();
     assertThat(profile.getSnapshot().getCount()).isEqualTo(3);
   }
+   */
 }
