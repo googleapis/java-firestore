@@ -20,7 +20,6 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import io.opencensus.trace.Tracing;
 import java.util.List;
@@ -28,6 +27,14 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * The ReadTimeTransaction is a ready-only Transaction that specifies a ReadTime. Unlike a
+ * `ServerSideTransaction`, we do not need a `transactionId` since we provide a `readTime` on all
+ * requests. No concurrency control is required, since data in the past is immutable. As with all
+ * `read-only` transactions, we do not allow any write request.
+ *
+ * @see Transaction
+ */
 final class ReadTimeTransaction extends Transaction {
 
   public static final String WRITE_EXCEPTION_MSG =
@@ -50,11 +57,7 @@ final class ReadTimeTransaction extends Transaction {
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
     return ApiFutures.transform(
-        firestore.getAll(
-            new DocumentReference[] {documentRef},
-            /*fieldMask=*/ null,
-            /*transactionId=*/ (ByteString) null,
-            readTime),
+        firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, readTime),
         snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
         MoreExecutors.directExecutor());
   }
@@ -63,16 +66,14 @@ final class ReadTimeTransaction extends Transaction {
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
-    return firestore.getAll(
-        documentReferences, /*fieldMask=*/ null, /*transactionId=*/ (ByteString) null, readTime);
+    return firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
   }
 
   @Nonnull
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
-    return firestore.getAll(
-        documentReferences, /*fieldMask=*/ null, /*transactionId=*/ (ByteString) null, readTime);
+    return firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
   }
 
   @Nonnull

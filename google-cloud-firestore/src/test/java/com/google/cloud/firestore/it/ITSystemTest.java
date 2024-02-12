@@ -1841,7 +1841,11 @@ public class ITSystemTest extends ITBaseTest {
     // To ensure we exceed this, we use 120 minutes.
     // If this test fails, we should likely be update documentation to reflect new value. See all
     // usages of "Read Time" on proto, and within SDK.
-    final long twoHours = System.currentTimeMillis() / 1000 - 7200;
+    //
+    // If Point-in-Time Recovery is enabled, can additionally be a whole minute timestamp within the
+    // past 7 days. For that reason `twoHours` is calculated to whole minute to more accurately
+    // catch this situation.
+    final long twoHours = (System.currentTimeMillis() / 60_000 - 120) * 60;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
             .setReadTime(

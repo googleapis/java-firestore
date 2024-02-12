@@ -34,6 +34,15 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A `ServerSideTransaction` is a `Transaction` that uses server generated `transactionId` on
+ * requests. The implementation starts with a `beginTransaction` request that receives a
+ * `transactionId` from server. The `ServerSideTransactionRunner` must either `commit()` or
+ * `rollback()` when done.
+ *
+ * @see Transaction
+ * @see ServerSideTransactionRunner
+ */
 final class ServerSideTransaction extends Transaction {
 
   private static final Logger LOGGER = Logger.getLogger(ServerSideTransaction.class.getName());

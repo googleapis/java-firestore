@@ -194,14 +194,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
-    return this.getAll(documentReferences, null, (ByteString) null, null);
+    return this.getAll(documentReferences, null, (ByteString) null);
   }
 
   @Nonnull
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
-    return this.getAll(documentReferences, fieldMask, (ByteString) null, null);
+    return this.getAll(documentReferences, fieldMask, (ByteString) null);
   }
 
   @Override
@@ -323,6 +323,20 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     streamRequest(request.build(), responseObserver, firestoreClient.batchGetDocumentsCallable());
   }
 
+  final ApiFuture<List<DocumentSnapshot>> getAll(
+      final @Nonnull DocumentReference[] documentReferences,
+      @Nullable FieldMask fieldMask,
+      @Nullable com.google.protobuf.Timestamp readTime) {
+    return getAll(documentReferences, fieldMask, null, readTime);
+  }
+
+  private ApiFuture<List<DocumentSnapshot>> getAll(
+      final @Nonnull DocumentReference[] documentReferences,
+      @Nullable FieldMask fieldMask,
+      @Nullable ByteString transactionId) {
+    return getAll(documentReferences, fieldMask, transactionId, null);
+  }
+
   /** Internal getAll() method that accepts an optional transaction id. */
   ApiFuture<List<DocumentSnapshot>> getAll(
       final @Nonnull DocumentReference[] documentReferences,
@@ -398,6 +412,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull TransactionOptions transactionOptions) {
 
     if (transactionOptions.getReadTime() != null) {
+      // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't need
+      // a runner.
       return updateFunction.updateCallback(
           new ReadTimeTransaction(this, transactionOptions.getReadTime()));
     } else {

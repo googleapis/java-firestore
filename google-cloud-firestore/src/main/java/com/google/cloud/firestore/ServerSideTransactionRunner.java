@@ -115,7 +115,11 @@ final class ServerSideTransactionRunner<T> {
   }
 
   private ApiFuture<Void> maybeRollback() {
-    return transaction != null ? transaction.rollback() : ApiFutures.immediateFuture(null);
+    return hasTransaction() ? transaction.rollback() : ApiFutures.immediateFuture(null);
+  }
+
+  private boolean hasTransaction() {
+    return transaction != null;
   }
 
   /** A callback that invokes the BeginTransaction callback. */
@@ -251,7 +255,7 @@ final class ServerSideTransactionRunner<T> {
   private ApiFuture<T> rollbackAndReject(final Throwable throwable) {
     final SettableApiFuture<T> failedTransaction = SettableApiFuture.create();
 
-    if (transaction != null) {
+    if (hasTransaction()) {
       // We use `addListener()` since we want to return the original exception regardless of
       // whether rollback() succeeds.
       transaction
