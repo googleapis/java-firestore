@@ -296,13 +296,15 @@ public abstract class UpdateBuilder<T> {
     synchronized (writes) {
       Preconditions.checkState(
           !committed,
-          String.format(
-              "Cannot modify a %s that has already been committed.",
-              this.getClass().getSimpleName()));
+          String.format("Cannot modify a %s that has already been committed.", className()));
       writes.add(operation);
       writeIndex = writes.size() - 1;
     }
     return wrapResult(writeIndex);
+  }
+
+  protected String className() {
+    return this.getClass().getSimpleName();
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */

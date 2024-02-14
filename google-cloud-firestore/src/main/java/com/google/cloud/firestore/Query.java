@@ -1784,7 +1784,7 @@ public class Query {
    */
   @Nonnull
   public ApiFuture<QuerySnapshot> get() {
-    return get(null);
+    return get(null, null);
   }
 
   /**
@@ -1811,7 +1811,7 @@ public class Query {
     return Watch.forQuery(this).runWatch(executor, listener);
   }
 
-  ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
+  ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId, @Nullable Timestamp readTime) {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     internalStream(
@@ -1843,7 +1843,7 @@ public class Query {
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
-        /* readTime= */ null);
+        readTime);
 
     return result;
   }
