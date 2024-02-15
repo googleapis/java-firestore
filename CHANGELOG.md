@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.17.0](https://github.com/googleapis/java-firestore/compare/v3.16.3...v3.17.0) (2024-02-15)
+
+
+### Features
+
+* Add an API method for reordering firewall policies ([#1572](https://github.com/googleapis/java-firestore/issues/1572)) ([60d8ab1](https://github.com/googleapis/java-firestore/commit/60d8ab167e56806a9ef66d904f6d11f6b45b4ef9))
+
+
+### Bug Fixes
+
+* Transactions with `readTime` will omit begin and commit transaction requests, and instead pass `readTime` on individual read requests. ([#1565](https://github.com/googleapis/java-firestore/issues/1565)) ([d5fb01a](https://github.com/googleapis/java-firestore/commit/d5fb01ad99a04f7e1ac8327eb14931db0307b13a))
+
+
+### Dependencies
+
+* Update beam.version to v2.54.0 ([#1571](https://github.com/googleapis/java-firestore/issues/1571)) ([e0d4daa](https://github.com/googleapis/java-firestore/commit/e0d4daafcf7f37f399c2e7a32a69429c451f8ee9))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.25.0 ([#1567](https://github.com/googleapis/java-firestore/issues/1567)) ([b6c1531](https://github.com/googleapis/java-firestore/commit/b6c1531abd2f2075ec3eb925682d65a23298dc29))
+
 ## [3.16.3](https://github.com/googleapis/java-firestore/compare/v3.16.2...v3.16.3) (2024-02-05)
 
 
