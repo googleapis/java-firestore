@@ -24,7 +24,7 @@ data class Offset(val offset: Int): Operation
 data class Limit(val limit: Int): Operation
 data class Union(val pipeline: Pipeline, val distinct: Boolean): Operation
 
-data class Group(val fields: Map<Field, Expr>, val accumulators: Map<Field, Expr>)
+data class Group(val fields: Map<Field, Expr>, val accumulators: Map<Field, Expr>): Operation
 
 data class FindNearest(val property: Field,
                        val vector: Array<Double>,
@@ -98,4 +98,6 @@ data class Unnest(val mode: Mode, val field: Field): Operation {
     MERGE_PREFER_PARENT;
   }
 }
+
+data class RawOperation(val name: String, val params: Map<String, Any>?): Operation
 
