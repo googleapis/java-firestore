@@ -2,32 +2,38 @@ package com.google.cloud.firestore.pipeline
 
 import com.google.firestore.v1.Value
 
+interface Projectable
+
+
 sealed interface Expr {
-  data class Constant(val value: Value): Expr {}
+  data class Constant(val value: Value): Expr, Projectable {}
   data class FieldReference(val field: String): Expr {}
 
   data class ListOfExprs(val exprs: List<Expr>): Expr {}
 
+  data class ExprAsAlias(val current: Expr, val alias: String): Expr, Projectable {}
+
   sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
-    data class Equal(val left: Expr, val right: Expr) : Function("equal", mapOf("left" to left, "right" to right))
-    data class NotEqual(val left: Expr, val right: Expr) : Function("not_equal", mapOf("left" to left, "right" to right))
-    data class GreaterThan(val left: Expr, val right: Expr) : Function("greater_than", mapOf("left" to left, "right" to right))
-    data class GreaterThanOrEqual(val left: Expr, val right: Expr) : Function("greater_than_equal", mapOf("left" to left, "right" to right))
-    data class In(val left: Expr, val others: List<Expr>) : Function("in", mapOf("left" to left, "others" to ListOfExprs(others))) // For 'in'
-    data class LessThan(val left: Expr, val right: Expr) : Function("less_than", mapOf("left" to left, "right" to right))
-    data class LessThanOrEqual(val left: Expr, val right: Expr) : Function("less_than_equal", mapOf("left" to left, "right" to right))
-    data class NotIn(val left: Expr, val others: List<Expr>) : Function("not_in", mapOf("left" to left, "others" to ListOfExprs(others))) // For 'not in'
-    data class And(val conditions: List<Expr>) : Function("and", mapOf("conditions" to ListOfExprs(conditions)))
-    data class Or(val conditions: List<Expr>) : Function("or", mapOf("conditions" to ListOfExprs(conditions)))
-    data class Not(val condition: Expr) : Function("not", mapOf("condition" to condition))
-    data class Exists(val current: FieldReference) : Function("exists", mapOf("current" to current))
+    interface ProducingBoolean
+    data class Equal(val left: Expr, val right: Expr) : Function("equal", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class NotEqual(val left: Expr, val right: Expr) : Function("not_equal", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class GreaterThan(val left: Expr, val right: Expr) : Function("greater_than", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class GreaterThanOrEqual(val left: Expr, val right: Expr) : Function("greater_than_equal", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class In(val left: Expr, val others: List<Expr>) : Function("in", mapOf("left" to left, "others" to ListOfExprs(others))), ProducingBoolean // For 'in'
+    data class LessThan(val left: Expr, val right: Expr) : Function("less_than", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class LessThanOrEqual(val left: Expr, val right: Expr) : Function("less_than_equal", mapOf("left" to left, "right" to right)), ProducingBoolean
+    data class NotIn(val left: Expr, val others: List<Expr>) : Function("not_in", mapOf("left" to left, "others" to ListOfExprs(others))), ProducingBoolean // For 'not in'
+    data class And(val conditions: List<Expr>) : Function("and", mapOf("conditions" to ListOfExprs(conditions))), ProducingBoolean
+    data class Or(val conditions: List<Expr>) : Function("or", mapOf("conditions" to ListOfExprs(conditions))), ProducingBoolean
+    data class Not(val condition: Expr) : Function("not", mapOf("condition" to condition)), ProducingBoolean
+    data class Exists(val current: FieldReference) : Function("exists", mapOf("current" to current)), ProducingBoolean
 
     data class MapGet(val map: Expr, val key: String) : Function("map_get", mapOf("map" to map, "key" to Constant(Value.getDefaultInstance().toBuilder().setStringValue(key).build())))
 
-    data class ArrayContains(val array: Expr, val element: Expr) : Function("array_contains", mapOf("array" to array, "element" to element))
-    data class ArrayContainsAny(val array: Expr, val elements: List<Expr>) : Function("array_contains_any", mapOf("array" to array, "elements" to ListOfExprs(elements)))
-    data class IsNaN(val value: Expr) : Function("is_nan", mapOf("value" to value))
-    data class IsNull(val value: Expr) : Function("is_null", mapOf("value" to value))
+    data class ArrayContains(val array: Expr, val element: Expr) : Function("array_contains", mapOf("array" to array, "element" to element)), ProducingBoolean
+    data class ArrayContainsAny(val array: Expr, val elements: List<Expr>) : Function("array_contains_any", mapOf("array" to array, "elements" to ListOfExprs(elements))), ProducingBoolean
+    data class IsNaN(val value: Expr) : Function("is_nan", mapOf("value" to value)), ProducingBoolean
+    data class IsNull(val value: Expr) : Function("is_null", mapOf("value" to value)), ProducingBoolean
 
     data class Sum(val value: Expr) : Function("sum", mapOf("value" to value))
     data class Avg(val value: Expr) : Function("avg", mapOf("value" to value))
@@ -35,7 +41,7 @@ sealed interface Expr {
 
     data class CosineDistance(val vector1: Expr, val vector2: Expr) : Function("cosine_distance", mapOf("vector1" to vector1, "vector2" to vector2))
     data class EuclideanDistance(val vector1: Expr, val vector2: Expr) : Function("euclidean_distance", mapOf("vector1" to vector1, "vector2" to vector2))
-    data class HasAncestor(val child: Expr, val ancestor: Expr): Function("has_ancestor", mapOf("child" to child, "ancestor" to ancestor))
+    data class HasAncestor(val child: Expr, val ancestor: Expr): Function("has_ancestor", mapOf("child" to child, "ancestor" to ancestor)), ProducingBoolean
     data class Raw(val n: String, val ps: Map<String, Expr>?): Function(n, ps)
   }
 
@@ -68,4 +74,8 @@ sealed interface Expr {
   infix fun hasAncestor(ancestor: Expr): Function = Function.HasAncestor(this, ancestor)
 
   fun function(name: String, params: Map<String, Expr>?): Function = Function.Raw(name, params)
+
+  fun withAlias(alias: String): ExprAsAlias {
+    return ExprAsAlias(this, alias)
+  }
 }

@@ -4,7 +4,7 @@ import com.google.cloud.firestore.Pipeline
 
 interface Operation {}
 
-data class Field internal constructor(val path: String) {
+data class Field internal constructor(val path: String): Projectable {
   companion object {
     fun of(path: String): Field {
       return Field(path)
@@ -19,10 +19,10 @@ data class CollectionGroup(val path: String): Operation
 data class Project(val projections: Map<Field, Expr>): Operation
 data class AddFields(val additions: Map<Field, Expr>): Operation
 data class RemoveFields(val removals: List<Field>): Operation
-data class Filter(val condition: Expr): Operation
+data class Filter(val condition: Expr.Function.ProducingBoolean): Operation
 data class Offset(val offset: Int): Operation
 data class Limit(val limit: Int): Operation
-data class Union(val pipeline: Pipeline, val distinct: Boolean): Operation
+data class UnionWith(val pipeline: Pipeline, val distinct: Boolean): Operation
 
 data class Group(val fields: Map<Field, Expr>, val accumulators: Map<Field, Expr>): Operation
 
