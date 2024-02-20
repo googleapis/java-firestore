@@ -5,7 +5,8 @@ import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
 import com.google.cloud.firestore.pipeline.Database
 import com.google.cloud.firestore.pipeline.Expr
-import com.google.cloud.firestore.pipeline.Field
+import com.google.cloud.firestore.pipeline.Expr.Field
+import com.google.cloud.firestore.pipeline.Fields
 import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
 import com.google.cloud.firestore.pipeline.Group
@@ -99,7 +100,7 @@ class Pipeline {
     return this
   }
 
-  fun filter(condition: Expr.Function.ProducingBoolean): Pipeline {
+  fun filter(condition: Expr.Function.FilterCondition): Pipeline {
     operations.add(Filter(condition))
     return this
   }
@@ -121,6 +122,16 @@ class Pipeline {
 
   fun group(fields: Map<Field, Expr>, accumulators: Map<Field, Expr>): Pipeline {
     operations.add(Group(fields, accumulators))
+    return this
+  }
+
+  fun group(by: Fields, vararg accumulators: Expr.AccumulatorTarget): Pipeline {
+    // operations.add(Group(fields, accumulators))
+    return this
+  }
+
+  fun group(by: Projectable, vararg accumulators: Expr.AccumulatorTarget): Pipeline {
+    // operations.add(Group(fields, accumulators))
     return this
   }
 

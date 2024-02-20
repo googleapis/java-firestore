@@ -4,29 +4,21 @@ import com.google.cloud.firestore.Pipeline
 
 interface Operation {}
 
-data class Field internal constructor(val path: String): Projectable {
-  companion object {
-    fun of(path: String): Field {
-      return Field(path)
-    }
-  }
-}
-
 class Database(): Operation
 data class Collection(val path: String): Operation
 data class CollectionGroup(val path: String): Operation
 
-data class Project(val projections: Map<Field, Expr>): Operation
-data class AddFields(val additions: Map<Field, Expr>): Operation
-data class RemoveFields(val removals: List<Field>): Operation
-data class Filter(val condition: Expr.Function.ProducingBoolean): Operation
+data class Project(val projections: Map<Expr.Field, Expr>): Operation
+data class AddFields(val additions: Map<Expr.Field, Expr>): Operation
+data class RemoveFields(val removals: List<Expr.Field>): Operation
+data class Filter(val condition: Expr.Function.FilterCondition): Operation
 data class Offset(val offset: Int): Operation
 data class Limit(val limit: Int): Operation
 data class UnionWith(val pipeline: Pipeline, val distinct: Boolean): Operation
 
-data class Group(val fields: Map<Field, Expr>, val accumulators: Map<Field, Expr>): Operation
+data class Group(val fields: Map<Expr.Field, Expr>, val accumulators: Map<Expr.Field, Expr>): Operation
 
-data class FindNearest(val property: Field,
+data class FindNearest(val property: Expr.Field,
                        val vector: Array<Double>,
                        val options: FindNearestOptions): Operation {
   enum class Similarity {
@@ -35,19 +27,19 @@ data class FindNearest(val property: Field,
     DOT_PRODUCT
   }
 
-  data class FindNearestOptions(val similarity: Similarity, val limit: Long, val output: Field) {}
+  data class FindNearestOptions(val similarity: Similarity, val limit: Long, val output: Expr.Field) {}
 }
 
 sealed interface JoinCondition {
   data class Expression(val expr: Expr): JoinCondition
-  data class Using(val fields: Set<Field>): JoinCondition
+  data class Using(val fields: Set<Expr.Field>): JoinCondition
 }
 
 data class Join(val type: Type,
                 val condition: JoinCondition,
-                val alias: Field,
+                val alias: Expr.Field,
                 val otherPipeline: Pipeline,
-                val otherAlias: Field): Operation {
+                val otherAlias: Expr.Field): Operation {
   enum class Type {
     CROSS,
     INNER,
@@ -59,9 +51,9 @@ data class Join(val type: Type,
 
 data class SemiJoin(val type: Type,
                     val condition: JoinCondition,
-                    val alias: Field,
+                    val alias: Expr.Field,
                     val otherPipeline: Pipeline,
-                    val otherAlias: Field): Operation {
+                    val otherAlias: Expr.Field): Operation {
   enum class Type {
     LEFT_SEMI,
     RIGHT_SEMI,
@@ -91,7 +83,7 @@ data class Sort(val orders: List<Ordering>,
   }
 }
 
-data class Unnest(val mode: Mode, val field: Field): Operation {
+data class Unnest(val mode: Mode, val field: Expr.Field): Operation {
   enum class Mode {
     FULL_REPLACE,
     MERGE_PREFER_NEST,
