@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.it;
 
-
 import static com.google.cloud.firestore.pipeline.Expr.and;
 import static com.google.cloud.firestore.pipeline.Expr.avg;
 import static com.google.cloud.firestore.pipeline.Expr.not;
@@ -25,7 +24,6 @@ import static com.google.cloud.firestore.pipeline.Expr.or;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Pipeline;
-import com.google.cloud.firestore.pipeline.Expr;
 import com.google.cloud.firestore.pipeline.Expr.Constant;
 import com.google.cloud.firestore.pipeline.Expr.Field;
 import com.google.cloud.firestore.pipeline.Fields;
@@ -50,72 +48,75 @@ public class ITPipelineTest {
 
   @Test
   public void projections() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
-        .project(
-            Field.of("foo"),
-            Constant.of("emptyValue").asAlias("emptyField"),
-            Field.of("embedding").cosineDistance(new double[]{1, 2, 3.0}).asAlias("distance")
-        );
+    Pipeline p =
+        Pipeline.from("coll1")
+            .project(
+                Field.of("foo"),
+                Constant.of("emptyValue").asAlias("emptyField"),
+                Field.of("embedding").cosineDistance(new double[] {1, 2, 3.0}).asAlias("distance"));
   }
 
   @Test
   public void addRemoveFields() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
-        .addFields(
-            Constant.of("emptyValue").asAlias("emptyField"),
-            Field.of("embedding").cosineDistance(new double[]{1, 2, 3.0}).asAlias("distance")
-        )
-        .removeFields(Field.of("emptyField"));
+    Pipeline p =
+        Pipeline.from("coll1")
+            .addFields(
+                Constant.of("emptyValue").asAlias("emptyField"),
+                Field.of("embedding").cosineDistance(new double[] {1, 2, 3.0}).asAlias("distance"))
+            .removeFields(Field.of("emptyField"));
   }
 
   @Test
   public void filters() throws Exception {
-    Pipeline p = Pipeline.fromCollectionGroup("coll1")
-        .filter(Field.of("foo").equal(Constant.of(42)))
-        .filter(or(Field.of("bar").lessThan(Constant.of(100)),
-            Constant.of("value").equal(Field.of("key"))
-        ))
-        .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
+    Pipeline p =
+        Pipeline.fromCollectionGroup("coll1")
+            .filter(Field.of("foo").equal(Constant.of(42)))
+            .filter(
+                or(
+                    Field.of("bar").lessThan(Constant.of(100)),
+                    Constant.of("value").equal(Field.of("key"))))
+            .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
   }
 
   @Test
   public void inFilters() throws Exception {
-    Pipeline p = Pipeline.fromCollectionGroup("coll1")
-        .filter(Field.of("foo").inAny(
-            Constant.of(42),
-            Field.of("bar")));
+    Pipeline p =
+        Pipeline.fromCollectionGroup("coll1")
+            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")));
   }
 
   @Test
   public void groupBy() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
-        .filter(Field.of("foo").inAny(
-            Constant.of(42),
-            Field.of("bar")))
-        .group(Fields.of("given_name", "family_name"))
-        .accumulate(avg(Field.of("score")).toField("avg_score_1"))
-        // Equivalent but more fluency
-        .group(Fields.of("given_name", "family_name"))
-        .accumulate(Field.of("score").avg().toField("avg_score_2"));
+    Pipeline p =
+        Pipeline.from("coll1")
+            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .group(Fields.of("given_name", "family_name"))
+            .accumulate(avg(Field.of("score")).toField("avg_score_1"))
+            // Equivalent but more fluency
+            .group(Fields.of("given_name", "family_name"))
+            .accumulate(Field.of("score").avg().toField("avg_score_2"));
   }
 
   @Test
   public void joins() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
-        .filter(Field.of("foo").inAny(
-            Constant.of(42),
-            Field.of("bar")));
-    Pipeline pipe = Pipeline.from("users")
-        .findNearest(Field.of("embedding"), new double[]{1.0,2.0},
-            new FindNearestOptions(Similarity.COSINE, 1000, Field.of("distance")))
-        .innerJoin(p)
-        .on(and(
-            Field.of("foo").equal(p.fieldOf("bar")),
-            p.fieldOf("requirement").greaterThan(Field.of("distance"))));
+    Pipeline p =
+        Pipeline.from("coll1").filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")));
+    Pipeline pipe =
+        Pipeline.from("users")
+            .findNearest(
+                Field.of("embedding"),
+                new double[] {1.0, 2.0},
+                new FindNearestOptions(Similarity.COSINE, 1000, Field.of("distance")))
+            .innerJoin(p)
+            .on(
+                and(
+                    Field.of("foo").equal(p.fieldOf("bar")),
+                    p.fieldOf("requirement").greaterThan(Field.of("distance"))));
 
-    Pipeline another = Pipeline.from("users")
-        .innerJoin(p)
-        .on(Fields.of("foo", "bar"))
-        .project(Field.of("*").withPrefix("left"), p.fieldOf("*").withPrefix("right"));
+    Pipeline another =
+        Pipeline.from("users")
+            .innerJoin(p)
+            .on(Fields.of("foo", "bar"))
+            .project(Field.of("*").withPrefix("left"), p.fieldOf("*").withPrefix("right"));
   }
 }
