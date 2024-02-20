@@ -19,7 +19,7 @@ data class UnionWith(val pipeline: Pipeline, val distinct: Boolean): Operation
 data class Group(val fields: Map<Expr.Field, Expr>, val accumulators: Map<Expr.Field, Expr>): Operation
 
 data class FindNearest(val property: Expr.Field,
-                       val vector: Array<Double>,
+                       val vector: DoubleArray,
                        val options: FindNearestOptions): Operation {
   enum class Similarity {
     EUCLIDEAN,
@@ -45,16 +45,7 @@ data class Join(val type: Type,
     INNER,
     FULL,
     LEFT,
-    RIGHT
-  }
-}
-
-data class SemiJoin(val type: Type,
-                    val condition: JoinCondition,
-                    val alias: Expr.Field,
-                    val otherPipeline: Pipeline,
-                    val otherAlias: Expr.Field): Operation {
-  enum class Type {
+    RIGHT,
     LEFT_SEMI,
     RIGHT_SEMI,
     LEFT_ANTI_SEMI,

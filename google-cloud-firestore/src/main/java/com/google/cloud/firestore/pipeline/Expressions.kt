@@ -1,5 +1,6 @@
 package com.google.cloud.firestore.pipeline
 
+import com.google.cloud.firestore.Pipeline
 import com.google.firestore.v1.Value
 
 interface Projectable
@@ -26,12 +27,16 @@ sealed interface Expr {
       }
     }
   }
-  data class Field(val field: String): Expr, Projectable {
+  data class Field(val field: String, var pipeline: Pipeline? = null): Expr, Projectable {
     companion object {
       @JvmStatic
       fun of(path: String): Field {
         return Field(path)
       }
+    }
+
+    fun withPrefix(prefix: String): Field {
+      return this
     }
   }
 

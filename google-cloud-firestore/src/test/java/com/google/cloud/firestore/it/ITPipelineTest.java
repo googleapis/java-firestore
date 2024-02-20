@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 
+import static com.google.cloud.firestore.pipeline.Expr.and;
 import static com.google.cloud.firestore.pipeline.Expr.avg;
 import static com.google.cloud.firestore.pipeline.Expr.not;
 import static com.google.cloud.firestore.pipeline.Expr.or;
@@ -28,6 +29,8 @@ import com.google.cloud.firestore.pipeline.Expr;
 import com.google.cloud.firestore.pipeline.Expr.Constant;
 import com.google.cloud.firestore.pipeline.Expr.Field;
 import com.google.cloud.firestore.pipeline.Fields;
+import com.google.cloud.firestore.pipeline.FindNearest.FindNearestOptions;
+import com.google.cloud.firestore.pipeline.FindNearest.Similarity;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,11 +92,30 @@ public class ITPipelineTest {
         .filter(Field.of("foo").inAny(
             Constant.of(42),
             Field.of("bar")))
-        .group(Fields.of("given_name", "family_name"),
-            avg(Field.of("score")).toField("avg_score_1"))
+        .group(Fields.of("given_name", "family_name"))
+        .accumulate(avg(Field.of("score")).toField("avg_score_1"))
         // Equivalent but more fluency
-        .group(Fields.of("given_name", "family_name"),
-            Field.of("score").avg().toField("avg_score_2"))
-        ;
+        .group(Fields.of("given_name", "family_name"))
+        .accumulate(Field.of("score").avg().toField("avg_score_2"));
+  }
+
+  @Test
+  public void joins() throws Exception {
+    Pipeline p = Pipeline.from("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")));
+    Pipeline pipe = Pipeline.from("users")
+        .findNearest(Field.of("embedding"), new double[]{1.0,2.0},
+            new FindNearestOptions(Similarity.COSINE, 1000, Field.of("distance")))
+        .innerJoin(p)
+        .on(and(
+            Field.of("foo").equal(p.fieldOf("bar")),
+            p.fieldOf("requirement").greaterThan(Field.of("distance"))));
+
+    Pipeline another = Pipeline.from("users")
+        .innerJoin(p)
+        .on(Fields.of("foo", "bar"))
+        .project(Field.of("*").withPrefix("left"), p.fieldOf("*").withPrefix("right"));
   }
 }

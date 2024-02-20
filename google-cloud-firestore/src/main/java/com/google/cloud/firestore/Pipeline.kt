@@ -11,7 +11,6 @@ import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
 import com.google.cloud.firestore.pipeline.Group
 import com.google.cloud.firestore.pipeline.Join
-import com.google.cloud.firestore.pipeline.JoinCondition
 import com.google.cloud.firestore.pipeline.Limit
 import com.google.cloud.firestore.pipeline.Offset
 import com.google.cloud.firestore.pipeline.Operation
@@ -20,13 +19,36 @@ import com.google.cloud.firestore.pipeline.Project
 import com.google.cloud.firestore.pipeline.Projectable
 import com.google.cloud.firestore.pipeline.RawOperation
 import com.google.cloud.firestore.pipeline.RemoveFields
-import com.google.cloud.firestore.pipeline.SemiJoin
 import com.google.cloud.firestore.pipeline.Sort
 import com.google.cloud.firestore.pipeline.UnionWith
 import com.google.cloud.firestore.pipeline.Unnest
 
+class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Projectable) {
+  fun accumulate(vararg accumulator: Expr.AccumulatorTarget): Pipeline {
+    // TODO: this.p.operations.add()
+    return this.p;
+  }
+}
+
+class JoiningPipeline internal constructor(val left: Pipeline, val right: Pipeline, val join: Join.Type) {
+  fun on(condition: Expr.Function): Pipeline {
+    // TODO: this.p.operations.add()
+    return left;
+  }
+
+  fun on(vararg field: Field): Pipeline {
+    // TODO: this.p.operations.add()
+    return left
+  }
+
+  fun on(field: Fields): Pipeline {
+    // TODO: this.p.operations.add()
+    return left
+  }
+}
+
 class Pipeline {
-  private val operations: MutableList<Operation> = mutableListOf()
+  internal val operations: MutableList<Operation> = mutableListOf()
   private var name: String
 
   private constructor(db: Database) {
@@ -59,6 +81,10 @@ class Pipeline {
     fun entireDatabase(): Pipeline {
       return Pipeline(Database())
     }
+  }
+
+  fun fieldOf(name: String): Field {
+    return Field(name, this);
   }
 
   // Fluent API
@@ -125,19 +151,19 @@ class Pipeline {
     return this
   }
 
-  fun group(by: Fields, vararg accumulators: Expr.AccumulatorTarget): Pipeline {
+  fun group(by: Fields): GroupingPipeline{
     // operations.add(Group(fields, accumulators))
-    return this
+    return GroupingPipeline(this, /*TODO*/)
   }
 
-  fun group(by: Projectable, vararg accumulators: Expr.AccumulatorTarget): Pipeline {
+  fun group(by: Projectable): GroupingPipeline{
     // operations.add(Group(fields, accumulators))
-    return this
+    return GroupingPipeline(this, /*TODO*/)
   }
 
   fun findNearest(
     property: Field,
-    vector: Array<Double>,
+    vector: DoubleArray,
     options: FindNearest.FindNearestOptions
   ): Pipeline {
     operations.add(FindNearest(property, vector, options))
@@ -145,110 +171,23 @@ class Pipeline {
   }
 
   fun innerJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(Join(Join.Type.INNER, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+    otherPipeline: Pipeline
+  ) = JoiningPipeline(this, otherPipeline, Join.Type.INNER)
+  fun crossJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.CROSS)
 
-  fun crossJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(Join(Join.Type.CROSS, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun fullJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.FULL)
 
-  fun fullJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(Join(Join.Type.FULL, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun leftJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT)
 
-  fun leftJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(Join(Join.Type.LEFT, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun rightJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT)
 
-  fun rightJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(Join(Join.Type.RIGHT, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun leftSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT_SEMI)
 
-  fun leftSemiJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(SemiJoin(SemiJoin.Type.LEFT_SEMI, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun rightSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_SEMI)
 
-  fun rightSemiJoin(
-    condition: JoinCondition,
-    alias: Field,
-    otherPipeline: Pipeline,
-    otherAlias: Field
-  ): Pipeline {
-    operations.add(SemiJoin(SemiJoin.Type.RIGHT_SEMI, condition, alias, otherPipeline, otherAlias))
-    return this
-  }
+  fun leftAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT_ANTI_SEMI)
 
-  fun leftAntiSemiJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(
-      SemiJoin(
-        SemiJoin.Type.LEFT_ANTI_SEMI,
-        condition,
-        alias,
-        otherPipeline,
-        otherAlias
-      )
-    )
-    return this
-  }
-
-  fun rightAntiSemiJoin(
-    otherPipeline: Pipeline,
-    condition: JoinCondition,
-    alias: Field = Field.of(this.name),
-    otherAlias: Field = Field.of(otherPipeline.name)
-  ): Pipeline {
-    operations.add(
-      SemiJoin(
-        SemiJoin.Type.RIGHT_ANTI_SEMI,
-        condition,
-        alias,
-        otherPipeline,
-        otherAlias
-      )
-    )
-    return this
-  }
+  fun rightAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_ANTI_SEMI)
 
   fun sort(
     orders: List<Ordering>,
