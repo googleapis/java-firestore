@@ -1778,7 +1778,7 @@ public class Query {
 
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
-          final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
           Timestamp readTime;
           PlanSummary plan;
           ExecutionStats stats;
@@ -1790,6 +1790,10 @@ public class Query {
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
             if (runQueryResponse.hasDocument()) {
+              if (documentSnapshots == null) {
+                documentSnapshots = new ArrayList<>();
+              }
+
               Document document = runQueryResponse.getDocument();
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
@@ -1816,13 +1820,17 @@ public class Query {
             if (hasCompleted) return;
             hasCompleted = true;
 
-            // The results for limitToLast queries need to be flipped since we reversed the
-            // ordering constraints before sending the query to the backend.
-            List<QueryDocumentSnapshot> resultView =
-                LimitType.Last.equals(Query.this.options.getLimitType())
-                    ? reverse(documentSnapshots)
-                    : documentSnapshots;
-            QuerySnapshot snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+            @Nullable QuerySnapshot snapshot = null;
+            if (documentSnapshots != null) {
+              // The results for limitToLast queries need to be flipped since we reversed the
+              // ordering constraints before sending the query to the backend.
+              List<QueryDocumentSnapshot> resultView =
+                  LimitType.Last.equals(Query.this.options.getLimitType())
+                      ? reverse(documentSnapshots)
+                      : documentSnapshots;
+              snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+            }
+
             ExplainMetrics metrics = new ExplainMetrics(plan, stats);
             result.set(new ExplainResults<>(metrics, snapshot));
           }

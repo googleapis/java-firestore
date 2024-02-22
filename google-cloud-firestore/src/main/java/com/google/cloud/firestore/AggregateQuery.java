@@ -51,9 +51,9 @@ import javax.annotation.Nullable;
 public class AggregateQuery {
   @Nonnull private final Query query;
 
-  @Nonnull private List<AggregateField> aggregateFieldList;
+  @Nonnull private final List<AggregateField> aggregateFieldList;
 
-  @Nonnull private Map<String, String> aliasMap;
+  @Nonnull private final Map<String, String> aliasMap;
 
   AggregateQuery(@Nonnull Query query, @Nonnull List<AggregateField> aggregateFields) {
     this.query = query;
@@ -90,7 +90,8 @@ public class AggregateQuery {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
             /* transactionId= */ null,
-            /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+            /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
+            /* isExplainQuery= */ true);
     runQuery(responseDeliverer, options);
     return responseDeliverer.getExplainResultsFuture();
   }
@@ -99,7 +100,9 @@ public class AggregateQuery {
   ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
-            transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+            transactionId,
+            /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
+            /* isExplainQuery= */ false);
     runQuery(responseDeliverer, /* explainOptions= */ null);
     return responseDeliverer.getAggregateQuerySnapshotFuture();
   }
@@ -126,6 +129,7 @@ public class AggregateQuery {
 
     @Nullable private final ByteString transactionId;
     private final long startTimeNanos;
+    private final boolean isExplainQuery;
     private final SettableApiFuture<AggregateQuerySnapshot> aggregateQuerySnapshotFuture =
         SettableApiFuture.create();
     private final SettableApiFuture<ExplainResults<AggregateQuerySnapshot>> explainFuture =
@@ -133,9 +137,11 @@ public class AggregateQuery {
     private final AtomicBoolean isAggregateQuerySnapshotFutureCompleted = new AtomicBoolean(false);
     private final AtomicBoolean isExplainFutureCompleted = new AtomicBoolean(false);
 
-    AggregateQueryResponseDeliverer(@Nullable ByteString transactionId, long startTimeNanos) {
+    AggregateQueryResponseDeliverer(
+        @Nullable ByteString transactionId, long startTimeNanos, boolean isExplainQuery) {
       this.transactionId = transactionId;
       this.startTimeNanos = startTimeNanos;
+      this.isExplainQuery = isExplainQuery;
     }
 
     ApiFuture<AggregateQuerySnapshot> getAggregateQuerySnapshotFuture() {
@@ -158,11 +164,9 @@ public class AggregateQuery {
     void deliverResult(
         @Nonnull Map<String, Value> serverData,
         Timestamp readTime,
-        @Nullable PlanSummary planSummary,
-        @Nullable ExecutionStats executionStats) {
-      if (planSummary != null) {
+        @Nullable ExplainMetrics metrics) {
+      if (isExplainQuery) {
         if (isExplainFutureCompleted.compareAndSet(false, true)) {
-          ExplainMetrics metrics = new ExplainMetrics(planSummary, executionStats);
           AggregateQuerySnapshot snapshot =
               new AggregateQuerySnapshot(
                   AggregateQuery.this,
@@ -182,8 +186,14 @@ public class AggregateQuery {
     }
 
     void deliverError(Throwable throwable) {
-      if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
-        aggregateQuerySnapshotFuture.setException(throwable);
+      if (isExplainQuery) {
+        if (isExplainFutureCompleted.compareAndSet(false, true)) {
+          explainFuture.setException(throwable);
+        }
+      } else {
+        if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
+          aggregateQuerySnapshotFuture.setException(throwable);
+        }
       }
     }
   }
@@ -196,8 +206,7 @@ public class AggregateQuery {
     private StreamController streamController;
     private Timestamp readTime = Timestamp.MAX_VALUE;
     private Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-    private PlanSummary planSummary;
-    private ExecutionStats stats;
+    private ExplainMetrics metrics;
 
     AggregateQueryResponseObserver(
         AggregateQueryResponseDeliverer responseDeliverer,
@@ -222,7 +231,7 @@ public class AggregateQuery {
       }
 
       if (response.hasStats()) {
-        // set plan and stats.
+        // create ExplainMetrics.
       }
 
       if (explainOptions == null) {
@@ -263,7 +272,7 @@ public class AggregateQuery {
 
     @Override
     public void onComplete() {
-      responseDeliverer.deliverResult(aggregateFieldsMap, readTime, planSummary, stats);
+      responseDeliverer.deliverResult(aggregateFieldsMap, readTime, metrics);
 
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();
