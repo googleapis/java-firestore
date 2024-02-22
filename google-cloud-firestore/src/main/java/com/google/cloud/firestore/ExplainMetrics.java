@@ -18,28 +18,28 @@ package com.google.cloud.firestore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** ExplainResults contains information about planning, execution, and results of a query. */
-public final class ExplainResults<T> {
-  @Nonnull private final ExplainMetrics metrics;
-  @Nullable private final T snapshot;
+/** ExplainResults contains information about planning and execution of a query. */
+public class ExplainMetrics {
+  @Nonnull private final PlanSummary planSummary;
+  @Nullable private final ExecutionStats executionStats;
 
-  ExplainResults(@Nonnull ExplainMetrics metrics, @Nullable T snapshot) {
-    this.metrics = metrics;
-    this.snapshot = snapshot;
+  ExplainMetrics(@Nonnull PlanSummary planSummary, @Nullable ExecutionStats executionStats) {
+    this.planSummary = planSummary;
+    this.executionStats = executionStats;
   }
 
-  /** Returns the information about planning and execution (if any) of the query. */
+  /** Returns the information about the query plan. */
   @Nonnull
-  public ExplainMetrics getMetrics() {
-    return metrics;
+  public PlanSummary getPlanSummary() {
+    return planSummary;
   }
 
   /**
-   * Returns the snapshot that contains the results of executing the query, or null if the query was
-   * not executed.
+   * Returns the information about the execution of the query, or null if the query was not
+   * executed.
    */
   @Nullable
-  public T getSnapshot() {
-    return snapshot;
+  public ExecutionStats getExecutionStats() {
+    return executionStats;
   }
 }

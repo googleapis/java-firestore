@@ -158,18 +158,17 @@ public class AggregateQuery {
     void deliverResult(
         @Nonnull Map<String, Value> serverData,
         Timestamp readTime,
-        @Nullable Plan queryPlan,
+        @Nullable PlanSummary planSummary,
         @Nullable ExecutionStats executionStats) {
-      if (queryPlan != null) {
+      if (planSummary != null) {
         if (isExplainFutureCompleted.compareAndSet(false, true)) {
-          explainFuture.set(
-              new ExplainResults<>(
-                  queryPlan,
-                  executionStats,
-                  new AggregateQuerySnapshot(
-                      AggregateQuery.this,
-                      readTime,
-                      convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData))));
+          ExplainMetrics metrics = new ExplainMetrics(planSummary, executionStats);
+          AggregateQuerySnapshot snapshot =
+              new AggregateQuerySnapshot(
+                  AggregateQuery.this,
+                  readTime,
+                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
+          explainFuture.set(new ExplainResults<>(metrics, snapshot));
         }
       } else {
         if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
@@ -197,7 +196,7 @@ public class AggregateQuery {
     private StreamController streamController;
     private Timestamp readTime = Timestamp.MAX_VALUE;
     private Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-    private Plan plan;
+    private PlanSummary planSummary;
     private ExecutionStats stats;
 
     AggregateQueryResponseObserver(
@@ -264,7 +263,7 @@ public class AggregateQuery {
 
     @Override
     public void onComplete() {
-      responseDeliverer.deliverResult(aggregateFieldsMap, readTime, plan, stats);
+      responseDeliverer.deliverResult(aggregateFieldsMap, readTime, planSummary, stats);
 
       // Close the stream to avoid it dangling, since we're not expecting any more responses.
       streamController.cancel();

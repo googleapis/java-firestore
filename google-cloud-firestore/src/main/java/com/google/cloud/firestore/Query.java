@@ -1780,7 +1780,7 @@ public class Query {
         new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
           Timestamp readTime;
-          Plan plan;
+          PlanSummary plan;
           ExecutionStats stats;
 
           // The stream's onCompleted could be called more than once,
@@ -1822,9 +1822,9 @@ public class Query {
                 LimitType.Last.equals(Query.this.options.getLimitType())
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
-            QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, readTime, resultView);
-            result.set(new ExplainResults<>(plan, stats, querySnapshot));
+            QuerySnapshot snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+            ExplainMetrics metrics = new ExplainMetrics(plan, stats);
+            result.set(new ExplainResults<>(metrics, snapshot));
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),

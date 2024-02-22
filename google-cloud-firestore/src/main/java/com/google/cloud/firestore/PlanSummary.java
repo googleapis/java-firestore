@@ -19,17 +19,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 /** A Plan contains information about the planning stage of a query. */
-public final class Plan {
-  private static final Plan DEFAULT_INSTANCE =
-      new Plan(com.google.firestore.v1.QueryPlan.getDefaultInstance());
+public final class PlanSummary {
+  private static final PlanSummary DEFAULT_INSTANCE =
+      new PlanSummary(com.google.firestore.v1.QueryPlan.getDefaultInstance());
 
   private final Map<String, Object> indexesUsed;
 
-  Plan(com.google.firestore.v1.QueryPlan proto) {
+  PlanSummary(com.google.firestore.v1.QueryPlan proto) {
     this.indexesUsed = UserDataConverter.decodeStruct(proto.getPlanInfo());
   }
 
-  static Plan getDefaultInstance() {
+  static PlanSummary getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
