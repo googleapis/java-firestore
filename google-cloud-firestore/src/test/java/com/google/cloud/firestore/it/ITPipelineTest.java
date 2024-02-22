@@ -19,18 +19,20 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.pipeline.Expr.and;
 import static com.google.cloud.firestore.pipeline.Expr.avg;
+import static com.google.cloud.firestore.pipeline.Expr.cosineDistance;
 import static com.google.cloud.firestore.pipeline.Expr.not;
 import static com.google.cloud.firestore.pipeline.Expr.or;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Pipeline;
-import com.google.cloud.firestore.pipeline.Expr;
 import com.google.cloud.firestore.pipeline.Expr.Constant;
 import com.google.cloud.firestore.pipeline.Expr.Field;
 import com.google.cloud.firestore.pipeline.Fields;
 import com.google.cloud.firestore.pipeline.FindNearest.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.FindNearest.Similarity;
+import com.google.cloud.firestore.pipeline.Ordering;
+import com.google.cloud.firestore.pipeline.Ordering.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,12 +47,12 @@ public class ITPipelineTest {
 
   @Test
   public void pipelineWithDb() throws Exception {
-    Pipeline p = Pipeline.entireDatabase();
+    Pipeline p = Pipeline.fromDatabase();
   }
 
   @Test
   public void projections() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
+    Pipeline p = Pipeline.fromCollection("coll1")
         .project(
             Field.of("foo"),
             Constant.of("emptyValue").asAlias("emptyField"),
@@ -60,7 +62,7 @@ public class ITPipelineTest {
 
   @Test
   public void addRemoveFields() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
+    Pipeline p = Pipeline.fromCollection("coll1")
         .addFields(
             Constant.of("emptyValue").asAlias("emptyField"),
             Field.of("embedding").cosineDistance(new double[]{1, 2, 3.0}).asAlias("distance")
@@ -88,34 +90,55 @@ public class ITPipelineTest {
 
   @Test
   public void groupBy() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
+    Pipeline p = Pipeline.fromCollection("coll1")
         .filter(Field.of("foo").inAny(
             Constant.of(42),
             Field.of("bar")))
         .group(Fields.of("given_name", "family_name"))
-        .accumulate(avg(Field.of("score")).toField("avg_score_1"))
+        .aggregate(avg(Field.of("score")).toField("avg_score_1"))
         // Equivalent but more fluency
         .group(Fields.of("given_name", "family_name"))
-        .accumulate(Field.of("score").avg().toField("avg_score_2"));
+        .aggregate(Field.of("score").avg().toField("avg_score_2"));
+  }
+
+  @Test
+  public void aggregateWithoutGrouping() throws Exception {
+    Pipeline p = Pipeline.fromCollection("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")))
+        .aggregate(avg(Field.of("score")).toField("avg_score_1"));
   }
 
   @Test
   public void joins() throws Exception {
-    Pipeline p = Pipeline.from("coll1")
+    Pipeline p = Pipeline.fromCollection("coll1")
         .filter(Field.of("foo").inAny(
             Constant.of(42),
             Field.of("bar")));
-    Pipeline pipe = Pipeline.from("users")
-        .findNearest(Field.of("embedding"), new double[]{1.0,2.0},
-            new FindNearestOptions(Similarity.COSINE, 1000, Field.of("distance")))
+    Pipeline pipe = Pipeline.fromCollection("users")
+        .findNearest(Field.of("embedding"), new double[]{1.0, 2.0},
+            new FindNearestOptions(Similarity.euclidean(), 1000, Field.of("distance")))
         .innerJoin(p)
         .on(and(
             Field.of("foo").equal(p.fieldOf("bar")),
             p.fieldOf("requirement").greaterThan(Field.of("distance"))));
 
-    Pipeline another = Pipeline.from("users")
+    Pipeline another = Pipeline.fromCollection("users")
         .innerJoin(p)
         .on(Fields.of("foo", "bar"))
-        .project(Field.of("*").withPrefix("left"), p.fieldOf("*").withPrefix("right"));
+        .project(Field.ofAll().withPrefix("left"), p.fieldOfAll().withPrefix("right"));
+  }
+
+  @Test
+  public void sorts() throws Exception {
+    Pipeline p = Pipeline.fromCollection("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")))
+        .sort(Ordering.of(Field.of("rank")),
+            Ordering.of(cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
+                Direction.DESC))
+        .limit(100);
   }
 }

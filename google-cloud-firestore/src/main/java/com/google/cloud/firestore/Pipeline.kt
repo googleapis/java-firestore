@@ -5,10 +5,12 @@ import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
 import com.google.cloud.firestore.pipeline.Database
 import com.google.cloud.firestore.pipeline.Expr
+import com.google.cloud.firestore.pipeline.Expr.AllFields
 import com.google.cloud.firestore.pipeline.Expr.Field
 import com.google.cloud.firestore.pipeline.Fields
 import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
+import com.google.cloud.firestore.pipeline.GenericOperation
 import com.google.cloud.firestore.pipeline.Group
 import com.google.cloud.firestore.pipeline.Join
 import com.google.cloud.firestore.pipeline.Limit
@@ -17,23 +19,26 @@ import com.google.cloud.firestore.pipeline.Operation
 import com.google.cloud.firestore.pipeline.Ordering
 import com.google.cloud.firestore.pipeline.Project
 import com.google.cloud.firestore.pipeline.Projectable
-import com.google.cloud.firestore.pipeline.RawOperation
 import com.google.cloud.firestore.pipeline.RemoveFields
 import com.google.cloud.firestore.pipeline.Sort
 import com.google.cloud.firestore.pipeline.UnionWith
 import com.google.cloud.firestore.pipeline.Unnest
 
 class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Projectable) {
-  fun accumulate(vararg accumulator: Expr.AccumulatorTarget): Pipeline {
+  fun aggregate(vararg aggregator: Expr.AggregateorTarget): Pipeline {
     // TODO: this.p.operations.add()
-    return this.p;
+    return this.p
   }
 }
 
-class JoiningPipeline internal constructor(val left: Pipeline, val right: Pipeline, val join: Join.Type) {
+class JoiningPipeline internal constructor(
+  val left: Pipeline,
+  val right: Pipeline,
+  val join: Join.Type
+) {
   fun on(condition: Expr.Function): Pipeline {
     // TODO: this.p.operations.add()
-    return left;
+    return left
   }
 
   fun on(vararg field: Field): Pipeline {
@@ -68,7 +73,17 @@ class Pipeline {
 
   companion object {
     @JvmStatic
-    fun from(collectionName: String): Pipeline {
+    fun from(source: CollectionReference): Pipeline {
+      return Pipeline(Collection(source.path))
+    }
+
+    @JvmStatic
+    fun from(source: com.google.cloud.firestore.CollectionGroup): Pipeline {
+      return Pipeline(CollectionGroup(source.options.collectionId))
+    }
+
+    @JvmStatic
+    fun fromCollection(collectionName: String): Pipeline {
       return Pipeline(Collection(collectionName))
     }
 
@@ -78,13 +93,17 @@ class Pipeline {
     }
 
     @JvmStatic
-    fun entireDatabase(): Pipeline {
+    fun fromDatabase(): Pipeline {
       return Pipeline(Database())
     }
   }
 
   fun fieldOf(name: String): Field {
-    return Field(name, this);
+    return Field(name, this)
+  }
+
+  fun fieldOfAll(): AllFields {
+    return AllFields(this)
   }
 
   // Fluent API
@@ -151,14 +170,20 @@ class Pipeline {
     return this
   }
 
-  fun group(by: Fields): GroupingPipeline{
+  fun group(by: Fields): GroupingPipeline {
     // operations.add(Group(fields, accumulators))
-    return GroupingPipeline(this, /*TODO*/)
+    return GroupingPipeline(this /*TODO*/)
   }
 
-  fun group(by: Projectable): GroupingPipeline{
+  fun group(by: Projectable): GroupingPipeline {
     // operations.add(Group(fields, accumulators))
-    return GroupingPipeline(this, /*TODO*/)
+    return GroupingPipeline(this /*TODO*/)
+  }
+
+  fun aggregate(vararg aggregator: Expr.AggregateorTarget): Pipeline {
+    // operations.add(Group())
+    // operations.add(aggregator)
+    return this
   }
 
   fun findNearest(
@@ -173,21 +198,30 @@ class Pipeline {
   fun innerJoin(
     otherPipeline: Pipeline
   ) = JoiningPipeline(this, otherPipeline, Join.Type.INNER)
-  fun crossJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.CROSS)
 
-  fun fullJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.FULL)
+  fun crossJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.CROSS)
 
-  fun leftJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT)
+  fun fullJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.FULL)
 
-  fun rightJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT)
+  fun leftJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT)
 
-  fun leftSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT_SEMI)
+  fun rightJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT)
 
-  fun rightSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_SEMI)
+  fun leftSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_SEMI)
 
-  fun leftAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.LEFT_ANTI_SEMI)
+  fun rightSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_SEMI)
 
-  fun rightAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline = JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_ANTI_SEMI)
+  fun leftAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_ANTI_SEMI)
+
+  fun rightAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_ANTI_SEMI)
 
   fun sort(
     orders: List<Ordering>,
@@ -203,13 +237,13 @@ class Pipeline {
     return this
   }
 
-  fun unnest(field: Field, mode: Unnest.Mode = Unnest.Mode.FULL_REPLACE ): Pipeline {
+  fun unnest(field: Field, mode: Unnest.Mode = Unnest.Mode.FULL_REPLACE): Pipeline {
     operations.add(Unnest(mode, field))
     return this
   }
 
   fun rawOperation(name: String, params: Map<String, Any>? = null): Pipeline {
-    operations.add(RawOperation(name, params))
+    operations.add(GenericOperation(name, params))
     return this
   }
 }
