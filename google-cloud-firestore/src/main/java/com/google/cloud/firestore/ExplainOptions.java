@@ -40,6 +40,6 @@ public abstract class ExplainOptions {
      */
     public abstract Builder setAnalyze(boolean enabled);
 
-    public abstract ExplainOptions autoBuild();
+    public abstract ExplainOptions build();
   }
 }

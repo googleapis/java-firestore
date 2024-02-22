@@ -880,8 +880,20 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    Plan plan = query.explain().get();
-    assertThat(plan.getIndexesUsed()).isNotEmpty();
+    ExplainResults<QuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
+
+    @Nullable QuerySnapshot snapshot = explainResults.getSnapshot();
+    assertThat(snapshot).isNull();
+
+    ExplainMetrics metrics = explainResults.getMetrics();
+    assertThat(metrics).isNotNull();
+
+    PlanSummary planSummary = metrics.getPlanSummary();
+    assertThat(planSummary).isNotNull();
+    assertThat(planSummary.getIndexesUsed()).isNotEmpty();
+
+    ExecutionStats stats = metrics.getExecutionStats();
+    assertThat(stats).isNull();
   }
 
   @Test
@@ -897,11 +909,26 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
+    ExplainResults<QuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
 
-    QueryProfile<QuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getIndexesUsed()).isNotEmpty();
-    assertThat(profile.getStats()).isNotEmpty();
-    assertThat(profile.getSnapshot().size()).isEqualTo(3);
+    @Nullable QuerySnapshot snapshot = explainResults.getSnapshot();
+    assertThat(snapshot).isNotNull();
+    assertThat(snapshot.size()).isEqualTo(3);
+
+    ExplainMetrics metrics = explainResults.getMetrics();
+    assertThat(metrics).isNotNull();
+
+    PlanSummary planSummary = metrics.getPlanSummary();
+    assertThat(planSummary).isNotNull();
+    assertThat(planSummary.getIndexesUsed()).isNotEmpty();
+
+    ExecutionStats stats = metrics.getExecutionStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getDebugStats()).isNotEmpty();
+    assertThat(stats.getBytesReturned()).isGreaterThan(0);
+    assertThat(stats.getReadOperations()).isGreaterThan(0);
+    assertThat(stats.getResultsReturned()).isGreaterThan(0);
+    assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
   }
 
   @Test
@@ -917,8 +944,21 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
-    Plan plan = query.explain().get();
-    assertThat(plan.getIndexesUsed()).isNotEmpty();
+
+    ExplainResults<AggregateQuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
+
+    @Nullable AggregateQuerySnapshot snapshot = explainResults.getSnapshot();
+    assertThat(snapshot).isNull();
+
+    ExplainMetrics metrics = explainResults.getMetrics();
+    assertThat(metrics).isNotNull();
+
+    PlanSummary planSummary = metrics.getPlanSummary();
+    assertThat(planSummary).isNotNull();
+    assertThat(planSummary.getIndexesUsed()).isNotEmpty();
+
+    ExecutionStats stats = metrics.getExecutionStats();
+    assertThat(stats).isNull();
   }
 
   @Test
@@ -935,10 +975,26 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    QueryProfile<AggregateQuerySnapshot> profile = query.explainAnalyze().get();
-    assertThat(profile.getPlan().getIndexesUsed()).isNotEmpty();
-    assertThat(profile.getStats()).isNotEmpty();
-    assertThat(profile.getSnapshot().getCount()).isEqualTo(3);
+    ExplainResults<AggregateQuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
+
+    @Nullable AggregateQuerySnapshot snapshot = explainResults.getSnapshot();
+    assertThat(snapshot).isNotNull();
+    assertThat(snapshot.getCount()).isEqualTo(3);
+
+    ExplainMetrics metrics = explainResults.getMetrics();
+    assertThat(metrics).isNotNull();
+
+    PlanSummary planSummary = metrics.getPlanSummary();
+    assertThat(planSummary).isNotNull();
+    assertThat(planSummary.getIndexesUsed()).isNotEmpty();
+
+    ExecutionStats stats = metrics.getExecutionStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getDebugStats()).isNotEmpty();
+    assertThat(stats.getBytesReturned()).isGreaterThan(0);
+    assertThat(stats.getReadOperations()).isGreaterThan(0);
+    assertThat(stats.getResultsReturned()).isGreaterThan(0);
+    assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
   }
-   */
+  */
 }
