@@ -72,20 +72,22 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
-    return get(null);
+    return get(null, null);
   }
 
   @Nonnull
-  ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
+  ApiFuture<AggregateQuerySnapshot> get(
+      @Nullable final ByteString transactionId, @Nullable com.google.protobuf.Timestamp readTime) {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
-            transactionId, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+            transactionId, readTime, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
     runQuery(responseDeliverer);
     return responseDeliverer.getFuture();
   }
 
   private void runQuery(AggregateQueryResponseDeliverer responseDeliverer) {
-    RunAggregationQueryRequest request = toProto(responseDeliverer.getTransactionId());
+    RunAggregationQueryRequest request =
+        toProto(responseDeliverer.transactionId, responseDeliverer.readTime);
     AggregateQueryResponseObserver responseObserver =
         new AggregateQueryResponseObserver(responseDeliverer);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
@@ -96,26 +98,22 @@ public class AggregateQuery {
   private final class AggregateQueryResponseDeliverer {
 
     @Nullable private final ByteString transactionId;
+    @Nullable private final com.google.protobuf.Timestamp readTime;
     private final long startTimeNanos;
     private final SettableApiFuture<AggregateQuerySnapshot> future = SettableApiFuture.create();
     private final AtomicBoolean isFutureCompleted = new AtomicBoolean(false);
 
-    AggregateQueryResponseDeliverer(@Nullable ByteString transactionId, long startTimeNanos) {
+    AggregateQueryResponseDeliverer(
+        @Nullable ByteString transactionId,
+        @Nullable com.google.protobuf.Timestamp readTime,
+        long startTimeNanos) {
       this.transactionId = transactionId;
+      this.readTime = readTime;
       this.startTimeNanos = startTimeNanos;
     }
 
     ApiFuture<AggregateQuerySnapshot> getFuture() {
       return future;
-    }
-
-    @Nullable
-    ByteString getTransactionId() {
-      return transactionId;
-    }
-
-    long getStartTimeNanos() {
-      return startTimeNanos;
     }
 
     void deliverResult(@Nonnull Map<String, Value> data, Timestamp readTime) {
@@ -176,8 +174,8 @@ public class AggregateQuery {
           FirestoreSettings.newBuilder().runAggregationQuerySettings().getRetryableCodes();
       return query.shouldRetryQuery(
           throwable,
-          responseDeliverer.getTransactionId(),
-          responseDeliverer.getStartTimeNanos(),
+          responseDeliverer.transactionId,
+          responseDeliverer.startTimeNanos,
           retryableCodes);
     }
 
@@ -193,11 +191,13 @@ public class AggregateQuery {
    */
   @Nonnull
   public RunAggregationQueryRequest toProto() {
-    return toProto(null);
+    return toProto(null, null);
   }
 
   @Nonnull
-  RunAggregationQueryRequest toProto(@Nullable final ByteString transactionId) {
+  RunAggregationQueryRequest toProto(
+      @Nullable final ByteString transactionId,
+      @Nullable final com.google.protobuf.Timestamp readTime) {
     RunQueryRequest runQueryRequest = query.toProto();
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
@@ -205,12 +205,16 @@ public class AggregateQuery {
     if (transactionId != null) {
       request.setTransaction(transactionId);
     }
+    if (readTime != null) {
+      request.setReadTime(readTime);
+    }
 
     StructuredAggregationQuery.Builder structuredAggregationQuery =
         request.getStructuredAggregationQueryBuilder();
     structuredAggregationQuery.setStructuredQuery(runQueryRequest.getStructuredQuery());
 
-    // We use this set to remove duplicate aggregates. e.g. `aggregate(sum("foo"), sum("foo"))`
+    // We use this set to remove duplicate aggregates.
+    // For example, `aggregate(sum("foo"), sum("foo"))`
     HashSet<String> uniqueAggregates = new HashSet<>();
     List<StructuredAggregationQuery.Aggregation> aggregations = new ArrayList<>();
     int aggregationNum = 0;

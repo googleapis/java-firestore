@@ -16,6 +16,9 @@
             "CreateIndex": {
               "methods": ["createIndexAsync", "createIndexAsync", "createIndexAsync", "createIndexOperationCallable", "createIndexCallable"]
             },
+            "DeleteDatabase": {
+              "methods": ["deleteDatabaseAsync", "deleteDatabaseAsync", "deleteDatabaseAsync", "deleteDatabaseOperationCallable", "deleteDatabaseCallable"]
+            },
             "DeleteIndex": {
               "methods": ["deleteIndex", "deleteIndex", "deleteIndex", "deleteIndexCallable"]
             },

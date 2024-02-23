@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -209,6 +211,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).updateDatabaseOperationSettings();
   }
 
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteDatabaseOperationSettings();
+  }
+
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
       throws IOException {
     return new FirestoreAdminSettings.Builder(stub.toBuilder()).build();
@@ -250,7 +263,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return FirestoreAdminStubSettings.defaultTransportChannelProvider();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
     return FirestoreAdminStubSettings.defaultApiClientHeaderProviderBuilder();
   }
@@ -428,6 +440,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings() {
       return getStubSettingsBuilder().updateDatabaseOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    public UnaryCallSettings.Builder<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+      return getStubSettingsBuilder().deleteDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+        deleteDatabaseOperationSettings() {
+      return getStubSettingsBuilder().deleteDatabaseOperationSettings();
     }
 
     @Override

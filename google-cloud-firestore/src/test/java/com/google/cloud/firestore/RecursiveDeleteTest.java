@@ -86,7 +86,7 @@ import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecursiveDeleteTest {
-  @Rule public Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(10, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 

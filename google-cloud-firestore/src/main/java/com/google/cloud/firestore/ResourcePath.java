@@ -105,19 +105,7 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
    * @return The resource path relative to the root of the database.
    */
   String getPath() {
-    StringBuilder result = new StringBuilder();
-
-    boolean first = true;
-    for (String part : getSegments()) {
-      if (first) {
-        result.append(part);
-        first = false;
-      } else {
-        result.append("/").append(part);
-      }
-    }
-
-    return result.toString();
+    return String.join("/", getSegments());
   }
 
   /**
@@ -130,7 +118,7 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
     if (path.isEmpty()) {
       return getDatabaseName() + "/documents";
     } else {
-      return getDatabaseName() + "/documents/" + getPath();
+      return getDatabaseName() + "/documents/" + path;
     }
   }
 
@@ -142,16 +130,21 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
    */
   @Override
   public int compareTo(@Nonnull ResourcePath other) {
-    int cmp = this.getDatabaseName().getProject().compareTo(other.getDatabaseName().getProject());
+    DatabaseRootName thisDatabaseName = this.getDatabaseName();
+    DatabaseRootName otherDatabaseName = other.getDatabaseName();
 
-    if (cmp != 0) {
-      return cmp;
-    }
+    if (thisDatabaseName != otherDatabaseName) {
+      int cmp = thisDatabaseName.getProject().compareTo(otherDatabaseName.getProject());
 
-    cmp = this.getDatabaseName().getDatabase().compareTo(other.getDatabaseName().getDatabase());
+      if (cmp != 0) {
+        return cmp;
+      }
 
-    if (cmp != 0) {
-      return cmp;
+      cmp = thisDatabaseName.getDatabase().compareTo(otherDatabaseName.getDatabase());
+
+      if (cmp != 0) {
+        return cmp;
+      }
     }
 
     return super.compareTo(other);

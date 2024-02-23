@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,8 @@ import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
@@ -160,6 +162,9 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<UpdateDatabaseRequest, Operation> updateDatabaseSettings;
   private final OperationCallSettings<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationSettings;
+  private final UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings;
+  private final OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationSettings;
 
   private static final PagedListDescriptor<ListIndexesRequest, ListIndexesResponse, Index>
       LIST_INDEXES_PAGE_STR_DESC =
@@ -371,6 +376,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return updateDatabaseOperationSettings;
   }
 
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+    return deleteDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationSettings() {
+    return deleteDatabaseOperationSettings;
+  }
+
   public FirestoreAdminStub createStub() throws IOException {
     if (getTransportChannelProvider()
         .getTransportName()
@@ -385,6 +401,21 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     throw new UnsupportedOperationException(
         String.format(
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
+  }
+
+  /** Returns the endpoint set by the user or the the service's default endpoint. */
+  @Override
+  public String getEndpoint() {
+    if (super.getEndpoint() != null) {
+      return super.getEndpoint();
+    }
+    return getDefaultEndpoint();
+  }
+
+  /** Returns the default service name. */
+  @Override
+  public String getServiceName() {
+    return "firestore";
   }
 
   /** Returns a builder for the default ExecutorProvider for this service. */
@@ -431,7 +462,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return defaultGrpcTransportProviderBuilder().build();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -440,7 +470,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -496,6 +525,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     listDatabasesSettings = settingsBuilder.listDatabasesSettings().build();
     updateDatabaseSettings = settingsBuilder.updateDatabaseSettings().build();
     updateDatabaseOperationSettings = settingsBuilder.updateDatabaseOperationSettings().build();
+    deleteDatabaseSettings = settingsBuilder.deleteDatabaseSettings().build();
+    deleteDatabaseOperationSettings = settingsBuilder.deleteDatabaseOperationSettings().build();
   }
 
   /** Builder for FirestoreAdminStubSettings. */
@@ -539,6 +570,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private final OperationCallSettings.Builder<
             UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings;
+    private final UnaryCallSettings.Builder<DeleteDatabaseRequest, Operation>
+        deleteDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+        deleteDatabaseOperationSettings;
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
 
@@ -613,6 +649,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listDatabasesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateDatabaseOperationSettings = OperationCallSettings.newBuilder();
+      deleteDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      deleteDatabaseOperationSettings = OperationCallSettings.newBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -628,7 +666,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
-              updateDatabaseSettings);
+              updateDatabaseSettings,
+              deleteDatabaseSettings);
       initDefaults(this);
     }
 
@@ -654,6 +693,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listDatabasesSettings = settings.listDatabasesSettings.toBuilder();
       updateDatabaseSettings = settings.updateDatabaseSettings.toBuilder();
       updateDatabaseOperationSettings = settings.updateDatabaseOperationSettings.toBuilder();
+      deleteDatabaseSettings = settings.deleteDatabaseSettings.toBuilder();
+      deleteDatabaseOperationSettings = settings.deleteDatabaseOperationSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -669,7 +710,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
-              updateDatabaseSettings);
+              updateDatabaseSettings,
+              deleteDatabaseSettings);
     }
 
     private static Builder createDefault() {
@@ -678,7 +720,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultTransportChannelProvider());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -691,7 +732,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultHttpJsonTransportProviderBuilder().build());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultHttpJsonApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -761,6 +801,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       builder
           .updateDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .deleteDatabaseSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
 
@@ -894,6 +939,30 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               ProtoOperationTransformers.ResponseTransformer.create(Database.class))
           .setMetadataTransformer(
               ProtoOperationTransformers.MetadataTransformer.create(UpdateDatabaseMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeout(Duration.ZERO)
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
+          .deleteDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<DeleteDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(DeleteDatabaseMetadata.class))
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
@@ -1040,6 +1109,28 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings() {
       return updateDatabaseOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    public UnaryCallSettings.Builder<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+      return deleteDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    @BetaApi(
+        "The surface for use by generated code is not stable yet and may change in the future.")
+    public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+        deleteDatabaseOperationSettings() {
+      return deleteDatabaseOperationSettings;
+    }
+
+    /** Returns the endpoint set by the user or the the service's default endpoint. */
+    @Override
+    public String getEndpoint() {
+      if (super.getEndpoint() != null) {
+        return super.getEndpoint();
+      }
+      return getDefaultEndpoint();
     }
 
     @Override

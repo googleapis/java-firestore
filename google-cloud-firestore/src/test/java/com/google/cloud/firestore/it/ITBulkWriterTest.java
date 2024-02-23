@@ -48,7 +48,7 @@ public class ITBulkWriterTest extends ITBaseTest {
   @Rule public TestName testName = new TestName();
 
   @Before
-  public void before() {
+  public void before() throws Exception {
     super.before();
     randomColl =
         firestore.collection(

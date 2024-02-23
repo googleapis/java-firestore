@@ -137,7 +137,7 @@ public abstract class AggregateField {
 
   /**
    * Returns the field on which the aggregation takes place. Returns an empty string if there's no
-   * field (e.g. for count).
+   * field (this applies to count).
    */
   @Nonnull
   String getFieldPath() {
