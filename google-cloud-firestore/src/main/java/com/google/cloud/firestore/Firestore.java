@@ -287,6 +287,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
 
+  ApiFuture<PipelineResult> execute(Pipeline pipeline);
+
   /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This
    * method blocks until all channels are closed. Once this method is called, this Firestore client

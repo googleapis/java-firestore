@@ -408,6 +408,11 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return new FirestoreBundle.Builder(id);
   }
 
+  @Override
+  public ApiFuture<PipelineResult> execute(Pipeline pipeline) {
+    return null;
+  }
+
   /** Returns the name of the Firestore project associated with this client. */
   @Override
   public String getDatabaseName() {

@@ -53,8 +53,8 @@ sealed interface Expr {
 
   data class ExprAsAlias(val current: Expr, val alias: String) : Expr, Projectable
 
-  data class AggregateorTarget(val current: Function.Accumulator, val target: String) : Expr,
-                                                                                        Function.Accumulator
+  data class AggregatorTarget(val current: Function.Accumulator, val target: String) : Expr,
+                                                                                       Function.Accumulator
 
   sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
     interface FilterCondition {
@@ -68,7 +68,7 @@ sealed interface Expr {
     }
 
     interface Accumulator {
-      fun toField(target: String) = AggregateorTarget(this, target)
+      fun toField(target: String) = AggregatorTarget(this, target)
     }
 
     data class Equal internal constructor(val left: Expr, val right: Expr) :

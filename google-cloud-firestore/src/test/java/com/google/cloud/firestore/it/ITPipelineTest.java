@@ -25,7 +25,9 @@ import static com.google.cloud.firestore.pipeline.Expr.or;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.PaginatingPipeline;
 import com.google.cloud.firestore.Pipeline;
+import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.Expr.Constant;
 import com.google.cloud.firestore.pipeline.Expr.Field;
 import com.google.cloud.firestore.pipeline.Fields;
@@ -140,5 +142,20 @@ public class ITPipelineTest {
             Ordering.of(cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
                 Direction.DESC))
         .limit(100);
+  }
+
+  @Test
+  public void pagination() throws Exception {
+    PaginatingPipeline p = Pipeline.fromCollection("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")))
+        .paginate(100, Ordering.of(cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
+            Direction.DESC));
+
+    PipelineResult result = firestore.execute(p.firstPage()).get();
+    PipelineResult second = firestore.execute(p.startAfter(result)).get();
+    // potentially expensive but possible
+    PipelineResult page100 = firestore.execute(p.page(100)).get();
   }
 }

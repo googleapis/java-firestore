@@ -25,7 +25,7 @@ import com.google.cloud.firestore.pipeline.UnionWith
 import com.google.cloud.firestore.pipeline.Unnest
 
 class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Projectable) {
-  fun aggregate(vararg aggregator: Expr.AggregateorTarget): Pipeline {
+  fun aggregate(vararg aggregator: Expr.AggregatorTarget): Pipeline {
     // TODO: this.p.operations.add()
     return this.p
   }
@@ -49,6 +49,36 @@ class JoiningPipeline internal constructor(
   fun on(field: Fields): Pipeline {
     // TODO: this.p.operations.add()
     return left
+  }
+}
+
+class PaginatingPipeline internal constructor(
+  val p: Pipeline,
+  pageSize: Int,
+  orders: Array<out Ordering>
+) {
+  fun firstPage(): Pipeline {
+    return this.p
+  }
+
+  fun page(n:Int): Pipeline {
+    return this.p
+  }
+
+  fun startAt(result: PipelineResult): Pipeline {
+    return this.p
+  }
+
+  fun startAfter(result: PipelineResult): Pipeline {
+    return this.p
+  }
+
+  fun endAt(result: PipelineResult): Pipeline {
+    return this.p
+  }
+
+  fun endBefore(result: PipelineResult): Pipeline {
+    return this.p
   }
 }
 
@@ -180,7 +210,7 @@ class Pipeline {
     return GroupingPipeline(this /*TODO*/)
   }
 
-  fun aggregate(vararg aggregator: Expr.AggregateorTarget): Pipeline {
+  fun aggregate(vararg aggregator: Expr.AggregatorTarget): Pipeline {
     // operations.add(Group())
     // operations.add(aggregator)
     return this
@@ -242,8 +272,17 @@ class Pipeline {
     return this
   }
 
+  fun paginate(pageSize: Int, vararg orders: Ordering): PaginatingPipeline {
+    return PaginatingPipeline(this, pageSize, orders)
+  }
+
   fun rawOperation(name: String, params: Map<String, Any>? = null): Pipeline {
     operations.add(GenericOperation(name, params))
     return this
   }
+}
+
+// placeholder for now
+class PipelineResult {
+
 }
