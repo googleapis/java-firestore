@@ -701,4 +701,24 @@ public class ITTracingTest {
             .get(AttributeKey.stringKey("exception.stacktrace"))
             .startsWith("java.lang.Exception: My error message."));
   }
+
+  @Test
+  public void writeBatch() throws Exception {
+    WriteBatch batch = firestore.batch();
+    DocumentReference docRef = firestore.collection("foo").document();
+    batch.create(docRef, Collections.singletonMap("foo", "bar"));
+    batch.update(docRef, Collections.singletonMap("foo", "bar"));
+    batch.delete(docRef);
+    batch.commit().get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+    assertEquals(
+        3L,
+        getSpanByName(SPAN_NAME_BATCH_COMMIT)
+            .getAttributes()
+            .get(AttributeKey.longKey("gcp.firestore.numDocuments"))
+            .longValue());
+  }
 }
