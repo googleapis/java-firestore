@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
@@ -62,7 +63,9 @@ public class ITTracingTest {
   private static final String LIST_COLLECTIONS_RPC_NAME = "ListCollectionIds";
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
   private static final String RUN_QUERY_RPC_NAME = "RunQuery";
+  private static final String RUN_AGGREGATION_QUERY_RPC_NAME = "RunAggregationQuery";
   private static final String BEGIN_TRANSACTION_RPC_NAME = "BeginTransaction";
+  private static final String ROLLBACK_RPC_NAME = "Rollback";
 
   // We use an InMemorySpanExporter for testing which keeps all generated trace spans
   // in memory so that we can check their correctness.
@@ -562,5 +565,140 @@ public class ITTracingTest {
                 .build()));
     assertTrue(
         hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
+  }
+
+  @Test
+  public void transaction() throws Exception {
+    firestore
+        .runTransaction(
+            transaction -> {
+              Query q = firestore.collection("col").whereGreaterThan("bla", "");
+              DocumentReference d = firestore.collection("col").document("foo");
+              DocumentReference[] docList = {d, d};
+              // Document Query.
+              transaction.get(q).get();
+
+              // Aggregation Query.
+              transaction.get(q.count());
+
+              // Get multiple documents.
+              transaction.getAll(d, d).get();
+
+              // Commit 2 documents.
+              transaction.set(
+                  firestore.collection("foo").document("bar"),
+                  Collections.singletonMap("foo", "bar"));
+              transaction.set(
+                  firestore.collection("foo").document("bar2"),
+                  Collections.singletonMap("foo2", "bar2"));
+              return 0;
+            })
+        .get();
+
+    /*
+    Transaction.Run
+    |_ Transaction.Begin
+    |_ Transaction.Get.Query
+    |_ Transaction.Get.AggregateQuery
+    |_ Transaction.Get.Documents
+    |_ Transaction.Get.Documents
+    |_ Transaction.Get.Commit
+    */
+    List<SpanData> spans = prepareSpans();
+    assertEquals(11, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_BEGIN,
+        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_QUERY,
+        grpcSpanName(RUN_QUERY_RPC_NAME));
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+        grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
+        grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN, SPAN_NAME_TRANSACTION_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+
+    Attributes commitAttributes = getSpanByName(SPAN_NAME_TRANSACTION_COMMIT).getAttributes();
+    assertEquals(
+        2L, commitAttributes.get(AttributeKey.longKey("gcp.firestore.numDocuments")).longValue());
+
+    Attributes runTransactionAttributes = getSpanByName(SPAN_NAME_TRANSACTION_RUN).getAttributes();
+    assertEquals(
+        5L,
+        runTransactionAttributes
+            .get(AttributeKey.longKey("gcp.firestore.numAttemptsAllowed"))
+            .longValue());
+    assertEquals(
+        5L,
+        runTransactionAttributes
+            .get(AttributeKey.longKey("gcp.firestore.attemptsRemaining"))
+            .longValue());
+    assertEquals(
+        "READ_WRITE",
+        runTransactionAttributes.get(AttributeKey.stringKey("gcp.firestore.transactionType")));
+  }
+
+  @Test
+  public void transactionRollback() throws Exception {
+    String myErrorMessage = "My error message.";
+    try {
+      firestore
+          .runTransaction(
+              transaction -> {
+                if (true) {
+                  throw (new Exception(myErrorMessage));
+                }
+                return 0;
+              })
+          .get();
+    } catch (Exception e) {
+      // Catch and move on.
+    }
+
+    /*
+    Transaction.Run
+    |_ Transaction.Begin
+    |_ Transaction.Rollback
+    */
+    List<SpanData> spans = prepareSpans();
+    assertEquals(5, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_BEGIN,
+        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
+    assertSpanHierarchy(
+        SPAN_NAME_TRANSACTION_RUN, SPAN_NAME_TRANSACTION_ROLLBACK, grpcSpanName(ROLLBACK_RPC_NAME));
+
+    SpanData runTransactionSpanData = getSpanByName(SPAN_NAME_TRANSACTION_RUN);
+    assertEquals(StatusCode.ERROR, runTransactionSpanData.getStatus().getStatusCode());
+    assertEquals(1, runTransactionSpanData.getEvents().size());
+    assertEquals(
+        myErrorMessage,
+        runTransactionSpanData
+            .getEvents()
+            .get(0)
+            .getAttributes()
+            .get(AttributeKey.stringKey("exception.message")));
+    assertEquals(
+        "java.lang.Exception",
+        runTransactionSpanData
+            .getEvents()
+            .get(0)
+            .getAttributes()
+            .get(AttributeKey.stringKey("exception.type")));
+    assertTrue(
+        runTransactionSpanData
+            .getEvents()
+            .get(0)
+            .getAttributes()
+            .get(AttributeKey.stringKey("exception.stacktrace"))
+            .startsWith("java.lang.Exception: My error message."));
   }
 }
