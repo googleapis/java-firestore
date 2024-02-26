@@ -57,15 +57,7 @@ sealed interface Expr {
                                                                                        Function.Accumulator
 
   sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
-    interface FilterCondition {
-      infix fun and(other: FilterCondition) = And(listOf(this, other))
-      fun and(vararg other: FilterCondition) = And(listOf(this) + other.toList())
-
-      // Or and Not are restricted as a companion/static function
-      // infix fun or(other: Expr)= Function.Or(listOf(this, other))
-      // fun or(vararg other: Expr)= Function.Or(listOf(this) + other.toList())
-      // infix fun not(other: Expr)= Function.Not(this)
-    }
+    interface FilterCondition
 
     interface Accumulator {
       fun toField(target: String) = AggregatorTarget(this, target)

@@ -1,5 +1,6 @@
 package com.google.cloud.firestore
 
+import com.google.api.core.ApiFuture
 import com.google.cloud.firestore.pipeline.AddFields
 import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
@@ -124,6 +125,11 @@ class Pipeline {
 
     @JvmStatic
     fun fromDatabase(): Pipeline {
+      return Pipeline(Database())
+    }
+
+    @JvmStatic
+    fun fromDocuments(vararg doc:Any): Pipeline {
       return Pipeline(Database())
     }
   }
@@ -279,6 +285,11 @@ class Pipeline {
   fun rawOperation(name: String, params: Map<String, Any>? = null): Pipeline {
     operations.add(GenericOperation(name, params))
     return this
+  }
+
+  // alternative to db.execute, more fluent.
+  fun execute(db: Firestore): ApiFuture<PipelineResult>? {
+    return null
   }
 }
 
