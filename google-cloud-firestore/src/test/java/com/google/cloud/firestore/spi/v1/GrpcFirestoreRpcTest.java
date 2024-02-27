@@ -84,11 +84,18 @@ public class GrpcFirestoreRpcTest {
     Code.RESOURCE_EXHAUSTED, Code.UNAVAILABLE, Code.ABORTED
   };
 
+  private final FirestoreOptions firestoreOptionsWithoutOverride =
+      FirestoreOptions.newBuilder().setProjectId("test-project").build();
+
   @Test
   public void retrySettingsOverride() throws Exception {
     RetrySettings retrySettings = RetrySettings.newBuilder().setMaxAttempts(2).build();
-    GrpcFirestoreRpc grpcFirestoreRpc =
-        new GrpcFirestoreRpc(FirestoreOptions.newBuilder().setRetrySettings(retrySettings).build());
+    FirestoreOptions firestoreOptions =
+        FirestoreOptions.newBuilder()
+            .setProjectId("test-project")
+            .setRetrySettings(retrySettings)
+            .build();
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptions);
 
     CallableRetryData commit = getRetryData(grpcFirestoreRpc.commitCallable());
     assertThat(commit.retrySettings).isEqualTo(retrySettings);
@@ -142,7 +149,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void commitCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.commitCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings1);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes1);
@@ -150,7 +157,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void batchWriteCallableFollowsServiceConfigFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.batchWriteCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings5);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes5);
@@ -158,7 +165,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void batchGetDocumentsCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.batchGetDocumentsCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
@@ -166,7 +173,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void runQueryCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.runQueryCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
@@ -174,7 +181,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void runAggregationQueryCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.runAggregationQueryCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
@@ -182,7 +189,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void beginTransactionCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.beginTransactionCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
@@ -190,7 +197,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void rollbackCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.rollbackCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
@@ -198,7 +205,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void listCollectionIdsPagedCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.listCollectionIdsPagedCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
@@ -206,7 +213,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void partitionQueryPagedCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.partitionQueryPagedCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
@@ -214,7 +221,7 @@ public class GrpcFirestoreRpcTest {
 
   @Test
   public void listDocumentsPagedCallableFollowsServiceConfig() throws Exception {
-    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(FirestoreOptions.getDefaultInstance());
+    GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.listDocumentsPagedCallable());
     assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
     assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
