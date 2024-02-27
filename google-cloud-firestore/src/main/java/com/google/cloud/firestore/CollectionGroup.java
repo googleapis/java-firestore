@@ -21,6 +21,8 @@ import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -102,21 +104,32 @@ public class CollectionGroup extends Query {
     } else {
       PartitionQueryRequest request = buildRequest(desiredPartitionCount);
 
-      try {
-        return ApiFutures.transform(
-            rpcContext.sendRequest(request, rpcContext.getClient().partitionQueryPagedCallable()),
-            response -> {
-              final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
-              consumePartitions(
-                  response,
-                  queryPartition -> {
-                    partitions.add(queryPartition);
-                    return null;
-                  });
-              return partitions.build();
-            },
-            MoreExecutors.directExecutor());
+      TraceUtil.Span span =
+          rpcContext
+              .getFirestore()
+              .getOptions()
+              .getTraceUtil()
+              .startSpan(TraceUtil.SPAN_NAME_PARTITION_QUERY);
+      try (Scope ignored = span.makeCurrent()) {
+        ApiFuture<List<QueryPartition>> result =
+            ApiFutures.transform(
+                rpcContext.sendRequest(
+                    request, rpcContext.getClient().partitionQueryPagedCallable()),
+                response -> {
+                  final ImmutableList.Builder<QueryPartition> partitions = ImmutableList.builder();
+                  consumePartitions(
+                      response,
+                      queryPartition -> {
+                        partitions.add(queryPartition);
+                        return null;
+                      });
+                  return partitions.build();
+                },
+                MoreExecutors.directExecutor());
+        span.endAtFuture(result);
+        return result;
       } catch (ApiException exception) {
+        span.end(exception);
         throw FirestoreException.forApiException(exception);
       }
     }
