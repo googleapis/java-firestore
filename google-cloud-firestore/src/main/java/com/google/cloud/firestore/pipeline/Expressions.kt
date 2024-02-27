@@ -10,7 +10,7 @@ internal data class ListOfExprs(val conditions: List<Expr>) : Expr
 internal data class ListOfConditions(val conditions: List<Expr.Function.FilterCondition>) : Expr,
                                                                                             Expr.Function.FilterCondition
 
-data class Fields(val fs: List<Expr.Field>) {
+data class Fields(val fs: List<Expr.Field>) : Projectable {
   companion object {
     @JvmStatic
     fun of(vararg f: String): Fields {
@@ -23,7 +23,27 @@ sealed interface Expr {
   data class Constant internal constructor(val value: Any) : Expr {
     companion object {
       @JvmStatic
-      fun of(value: Any): Constant {
+      fun of(value: String): Constant {
+        return Constant(value)
+      }
+
+      @JvmStatic
+      fun of(value: Number): Constant {
+        return Constant(value)
+      }
+
+      @JvmStatic
+      fun <T> ofArray(value: Iterable<T>): Constant {
+        return Constant(value)
+      }
+
+      @JvmStatic
+      fun <T> ofMap(value: Map<String, T>): Constant {
+        return Constant(value)
+      }
+
+      @JvmStatic
+      fun ofVector(value: DoubleArray): Constant {
         return Constant(value)
       }
     }
@@ -158,10 +178,11 @@ sealed interface Expr {
   fun avg() = Function.Avg(this)
   fun count() = Function.Count(this)
   infix fun cosineDistance(other: Expr) = Function.CosineDistance(this, other)
-  infix fun cosineDistance(other: DoubleArray) = Function.CosineDistance(this, Constant.of(other))
+  infix fun cosineDistance(other: DoubleArray) =
+    Function.CosineDistance(this, Constant.ofVector(other))
   infix fun euclideanDistance(other: Expr) = Function.EuclideanDistance(this, other)
   infix fun euclideanDistance(other: DoubleArray) =
-    Function.EuclideanDistance(this, Constant.of(other))
+    Function.EuclideanDistance(this, Constant.ofVector(other))
 
   infix fun hasAncestor(ancestor: Expr) = Function.HasAncestor(this, ancestor)
 
@@ -170,6 +191,18 @@ sealed interface Expr {
   companion object {
     @JvmStatic
     fun equal(left: Expr, right: Expr) = Function.Equal(left, right)
+
+    // sugar, first argument is assumed to be a field.
+    @JvmStatic
+    fun equal(left: String, right: Expr) = Function.Equal(Field.of(left), right)
+
+    // sugar, first argument is assumed to be a field, and second argument is assumed to a simple
+    // scalar constant.
+    @JvmStatic
+    fun equal(left: String, right: String) = Function.Equal(Field.of(left), Constant.of(right))
+
+    @JvmStatic
+    fun equal(left: String, right: Number) = Function.Equal(Field.of(left), Constant.of(right))
 
     @JvmStatic
     fun notEqual(left: Expr, right: Expr) = Function.NotEqual(left, right)
@@ -186,6 +219,13 @@ sealed interface Expr {
     @JvmStatic
     fun lessThan(left: Expr, right: Expr) = Function.LessThan(left, right)
 
+    @JvmStatic
+    fun lessThan(left: String, right: String) =
+      Function.LessThan(Field.of(left), Constant.of(right))
+
+    @JvmStatic
+    fun lessThan(left: String, right: Number) =
+      Function.LessThan(Field.of(left), Constant.of(right))
     @JvmStatic
     fun lessThanOrEqual(left: Expr, right: Expr) = Function.LessThanOrEqual(left, right)
 
@@ -244,14 +284,14 @@ sealed interface Expr {
 
     @JvmStatic
     fun cosineDistance(expr: Expr, other: DoubleArray) =
-      Function.CosineDistance(expr, Constant.of(other))
+      Function.CosineDistance(expr, Constant.ofVector(other))
 
     @JvmStatic
     fun euclideanDistance(expr: Expr, other: Expr) = Function.EuclideanDistance(expr, other)
 
     @JvmStatic
     fun euclideanDistance(expr: Expr, other: DoubleArray) =
-      Function.EuclideanDistance(expr, Constant.of(other))
+      Function.EuclideanDistance(expr, Constant.ofVector(other))
 
     @JvmStatic
     fun hasAncestor(expr: Expr, ancestor: Expr) = Function.HasAncestor(expr, ancestor)

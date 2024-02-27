@@ -20,6 +20,8 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.pipeline.Expr.and;
 import static com.google.cloud.firestore.pipeline.Expr.avg;
 import static com.google.cloud.firestore.pipeline.Expr.cosineDistance;
+import static com.google.cloud.firestore.pipeline.Expr.equal;
+import static com.google.cloud.firestore.pipeline.Expr.lessThan;
 import static com.google.cloud.firestore.pipeline.Expr.not;
 import static com.google.cloud.firestore.pipeline.Expr.or;
 
@@ -60,6 +62,19 @@ public class ITPipelineTest {
             Constant.of("emptyValue").asAlias("emptyField"),
             Field.of("embedding").cosineDistance(new double[]{1, 2, 3.0}).asAlias("distance")
         );
+
+    // More compact
+    p = Pipeline.fromCollection("coll1")
+        .project(
+            Fields.of("foo", "bar", "baz"),
+            Constant.of(42).asAlias("emptyField")
+        );
+    p = Pipeline.fromCollection("coll1")
+        // basically an addField
+        .project(
+            Field.ofAll(),
+            Constant.of(42).asAlias("emptyField")
+        );
   }
 
   @Test
@@ -78,6 +93,13 @@ public class ITPipelineTest {
         .filter(Field.of("foo").equal(Constant.of(42)))
         .filter(or(Field.of("bar").lessThan(Constant.of(100)),
             Constant.of("value").equal(Field.of("key"))
+        ))
+        .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
+
+    p = Pipeline.fromCollectionGroup("coll1")
+        .filter(equal("foo", 42))
+        .filter(or(lessThan("bar", 100),
+            equal("key", Constant.of("value"))
         ))
         .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
   }
