@@ -135,6 +135,7 @@ public class OpenTelemetryOptionsTest {
             .build();
     firestore = firestoreOptions.getService();
     EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil).isNotNull();
     assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(myOpenTelemetrySdk);
   }
 
@@ -151,6 +152,7 @@ public class OpenTelemetryOptionsTest {
             .build();
     firestore = firestoreOptions.getService();
     EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil).isNotNull();
     assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
   }
 }

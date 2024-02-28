@@ -27,7 +27,10 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
-import io.opentelemetry.api.trace.*;
+import io.opentelemetry.api.trace.SpanBuilder;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -156,7 +159,9 @@ public class EnabledTraceUtil implements TraceUtil {
             } else if (value instanceof String) {
               attributesBuilder.put(key, (String) value);
             } else {
-              // OpenTelemetry APIs do not support any other type. Ignore this attribute.
+              // OpenTelemetry APIs do not support any other type.
+              throw new IllegalArgumentException(
+                  "Unknown attribute type:" + value.getClass().getSimpleName());
             }
           });
       span.addEvent(name, attributesBuilder.build());
