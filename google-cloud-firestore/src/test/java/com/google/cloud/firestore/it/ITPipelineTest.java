@@ -24,6 +24,8 @@ import static com.google.cloud.firestore.pipeline.Expr.equal;
 import static com.google.cloud.firestore.pipeline.Expr.lessThan;
 import static com.google.cloud.firestore.pipeline.Expr.not;
 import static com.google.cloud.firestore.pipeline.Expr.or;
+import static com.google.cloud.firestore.pipeline.Ordering.ascending;
+import static com.google.cloud.firestore.pipeline.Ordering.descending;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -164,6 +166,15 @@ public class ITPipelineTest {
             Ordering.of(cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
                 Direction.DESC))
         .limit(100);
+
+    // equivalent but more concise.
+    p = Pipeline.fromCollection("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")))
+        .sort(ascending(Field.of("rank")),
+            descending(cosineDistance(Field.of("embedding1"), Field.of("embedding2"))))
+        .limit(100);
   }
 
   @Test
@@ -179,5 +190,20 @@ public class ITPipelineTest {
     PipelineResult second = firestore.execute(p.startAfter(result)).get();
     // potentially expensive but possible
     PipelineResult page100 = firestore.execute(p.page(100)).get();
+  }
+
+  @Test
+  public void fluentAllTheWay() throws Exception {
+    PaginatingPipeline p = Pipeline.fromCollection("coll1")
+        .filter(Field.of("foo").inAny(
+            Constant.of(42),
+            Field.of("bar")))
+        .paginate(100, Ordering.of(cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
+            Direction.DESC));
+
+    PipelineResult result = p.firstPage().execute(firestore).get();
+    PipelineResult second = p.startAfter(result).execute(firestore).get();
+    // potentially expensive but possible
+    PipelineResult page100 = p.page(100).execute(firestore).get();
   }
 }

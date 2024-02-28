@@ -74,6 +74,7 @@ sealed interface Expr {
   data class ExprAsAlias(val current: Expr, val alias: String) : Expr, Projectable
 
   data class AggregatorTarget(val current: Function.Accumulator, val target: String) : Expr,
+                                                                                       Projectable,
                                                                                        Function.Accumulator
 
   sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {

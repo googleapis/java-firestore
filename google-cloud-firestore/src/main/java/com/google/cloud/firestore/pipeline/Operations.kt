@@ -94,6 +94,15 @@ data class Ordering(val expr: Expr, val dir: Direction = Direction.ASC) {
     fun of(expr: Expr): Ordering {
       return Ordering(expr, Direction.ASC)
     }
+
+    @JvmStatic
+    fun ascending(expr: Expr): Ordering {
+      return Ordering(expr, Direction.ASC)
+    }
+    @JvmStatic
+    fun descending(expr: Expr): Ordering {
+      return Ordering(expr, Direction.DESC)
+    }
   }
 }
 
