@@ -61,7 +61,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
-  @Nonnull private final FirestoreOpenTelemetryOptions openTelemetryOptions;
+  private final @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -235,10 +235,6 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         }
       }
 
-      if (this.openTelemetryOptions == null) {
-        this.setOpenTelemetryOptions(FirestoreOpenTelemetryOptions.newBuilder().build());
-      }
-
       // Override credentials and channel provider if we are using the emulator.
       if (emulatorHost == null) {
         emulatorHost = System.getenv(FIRESTORE_EMULATOR_SYSTEM_VARIABLE);
@@ -305,11 +301,12 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
 
-    if (builder.openTelemetryOptions == null) {
-      this.openTelemetryOptions = FirestoreOpenTelemetryOptions.newBuilder().build();
-    } else {
-      this.openTelemetryOptions = builder.openTelemetryOptions;
-    }
+    // FirestoreOptions must contain non-null open-telemetry options.
+    // If the builder doesn't have any open-telemetry options, use a default (disabled) one.
+    this.openTelemetryOptions =
+        builder.openTelemetryOptions != null
+            ? builder.openTelemetryOptions
+            : FirestoreOpenTelemetryOptions.newBuilder().build();
 
     this.databaseId =
         builder.databaseId != null

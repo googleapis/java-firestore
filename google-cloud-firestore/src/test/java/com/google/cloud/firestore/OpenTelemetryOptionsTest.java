@@ -21,7 +21,9 @@ import static com.google.common.truth.Truth.assertThat;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import javax.annotation.Nullable;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class OpenTelemetryOptionsTest {
   @Nullable private Firestore firestore;
