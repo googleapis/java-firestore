@@ -129,7 +129,12 @@ class Pipeline {
     }
 
     @JvmStatic
-    fun fromDocuments(vararg doc:Any): Pipeline {
+    fun fromDocuments(vararg docPath :String): Pipeline {
+      return Pipeline(Database())
+    }
+
+    @JvmStatic
+    fun fromData(vararg doc: Map<String, Map<String, Expr.Constant>>): Pipeline {
       return Pipeline(Database())
     }
   }
