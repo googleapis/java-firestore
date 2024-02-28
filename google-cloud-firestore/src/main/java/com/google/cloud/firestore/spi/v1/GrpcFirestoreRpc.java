@@ -74,7 +74,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GrpcFirestoreRpc implements FirestoreRpc {
 
-  final FirestoreStub firestoreStub;
+  private final FirestoreStub firestoreStub;
   private final ScheduledExecutorService executor;
   private final ExecutorFactory<ScheduledExecutorService> executorFactory;
   private final ClientContext clientContext;
