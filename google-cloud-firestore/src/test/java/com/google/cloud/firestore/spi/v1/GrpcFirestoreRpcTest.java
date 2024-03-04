@@ -22,70 +22,61 @@ import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.RetryAlgorithm;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.retrying.ScheduledRetryingExecutor;
+import com.google.api.gax.rpc.PagedCallSettings;
+import com.google.api.gax.rpc.ServerStreamingCallSettings;
 import com.google.api.gax.rpc.StatusCode.Code;
-import com.google.api.gax.tracing.TracedServerStreamingCallable;
-import com.google.api.gax.tracing.TracedUnaryCallable;
+import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
+import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
+import com.google.cloud.firestore.v1.stub.FirestoreStubSettings;
+import com.google.firestore.v1.BatchGetDocumentsRequest;
+import com.google.firestore.v1.BatchGetDocumentsResponse;
+import com.google.firestore.v1.BatchWriteRequest;
+import com.google.firestore.v1.BatchWriteResponse;
+import com.google.firestore.v1.BeginTransactionRequest;
+import com.google.firestore.v1.BeginTransactionResponse;
+import com.google.firestore.v1.CommitRequest;
+import com.google.firestore.v1.CommitResponse;
+import com.google.firestore.v1.ListDocumentsRequest;
+import com.google.firestore.v1.ListDocumentsResponse;
+import com.google.firestore.v1.PartitionQueryRequest;
+import com.google.firestore.v1.PartitionQueryResponse;
+import com.google.firestore.v1.RollbackRequest;
+import com.google.firestore.v1.RunAggregationQueryRequest;
+import com.google.firestore.v1.RunAggregationQueryResponse;
+import com.google.firestore.v1.RunQueryRequest;
+import com.google.firestore.v1.RunQueryResponse;
+import com.google.protobuf.Empty;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Set;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.threeten.bp.Duration;
 
 public class GrpcFirestoreRpcTest {
 
-  // From firestore_grpc_service_config.json
-  // This should be considered the source of truth.
-  // BIDI streams do not have retry settings applied, even though they exist in service config.
-
-  // Applies to CreateDocument, UpdateDocument and Commit
-  private final RetrySettings expectedRetrySettings1 =
-      retrySettingsWithTotalTimeout(Duration.ofSeconds(60))
-          .setMaxAttempts(5)
-          .setInitialRetryDelay(Duration.ofMillis(100))
-          .setMaxRetryDelay(Duration.ofSeconds(60))
-          .setRetryDelayMultiplier(1.3)
-          .build();
-  private final Code[] expectedRetryableCodes1 = {Code.RESOURCE_EXHAUSTED, Code.UNAVAILABLE};
-
-  // Applies to BatchGetDocuments, RunQuery, PartitionQuery and RunAggregationQuery
-  private final RetrySettings expectedRetrySettings2 =
-      retrySettingsWithTotalTimeout(Duration.ofSeconds(300))
-          .setMaxAttempts(5)
-          .setInitialRetryDelay(Duration.ofMillis(100))
-          .setMaxRetryDelay(Duration.ofSeconds(60))
-          .setRetryDelayMultiplier(1.3)
-          .build();
-  private final Code[] expectedRetryableCodes2 = {
-    Code.RESOURCE_EXHAUSTED, Code.UNAVAILABLE, Code.INTERNAL, Code.DEADLINE_EXCEEDED
-  };
-
-  // Applies to GetDocument, ListDocuments, DeleteDocument, BeginTransaction, Rollback and
-  // ListCollectionIds
-  private final RetrySettings expectedRetrySettings4 =
-      retrySettingsWithTotalTimeout(Duration.ofSeconds(60))
-          .setMaxAttempts(5)
-          .setInitialRetryDelay(Duration.ofMillis(100))
-          .setMaxRetryDelay(Duration.ofSeconds(60))
-          .setRetryDelayMultiplier(1.3)
-          .build();
-  private final Code[] expectedRetryableCodes4 = {
-    Code.RESOURCE_EXHAUSTED, Code.UNAVAILABLE, Code.INTERNAL, Code.DEADLINE_EXCEEDED
-  };
-
-  // Applies to BatchWrite
-  private final RetrySettings expectedRetrySettings5 =
-      retrySettingsWithTotalTimeout(Duration.ofSeconds(60))
-          .setMaxAttempts(5)
-          .setInitialRetryDelay(Duration.ofMillis(100))
-          .setMaxRetryDelay(Duration.ofSeconds(60))
-          .setRetryDelayMultiplier(1.3)
-          .build();
-  private final Code[] expectedRetryableCodes5 = {
-    Code.RESOURCE_EXHAUSTED, Code.UNAVAILABLE, Code.ABORTED
-  };
+  private static FirestoreStubSettings defaultStubSettings;
 
   private final FirestoreOptions firestoreOptionsWithoutOverride =
       FirestoreOptions.newBuilder().setProjectId("test-project").build();
+
+  @BeforeClass
+  public static void beforeClass() throws IOException {
+    defaultStubSettings = FirestoreStubSettings.newBuilder().build();
+  }
+
+  static <T> T getViaReflection(Object o, String fieldName)
+      throws NoSuchFieldException, IllegalAccessException {
+    return getViaReflection(o.getClass(), fieldName, o);
+  }
+
+  static <T> T getViaReflection(Class clazz, String fieldName, Object o)
+      throws NoSuchFieldException, IllegalAccessException {
+    Field field = clazz.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return (T) field.get(o);
+  }
 
   @Test
   public void retrySettingsOverride() throws Exception {
@@ -99,193 +90,208 @@ public class GrpcFirestoreRpcTest {
 
     CallableRetryData commit = getRetryData(grpcFirestoreRpc.commitCallable());
     assertThat(commit.retrySettings).isEqualTo(retrySettings);
-    assertThat(commit.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes1);
+    assertThat(commit.retryableCodes)
+        .containsExactlyElementsIn(defaultStubSettings.commitSettings().getRetryableCodes());
 
     CallableRetryData batchWrite = getRetryData(grpcFirestoreRpc.batchWriteCallable());
     assertThat(batchWrite.retrySettings).isEqualTo(retrySettings);
-    assertThat(batchWrite.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes5);
+    assertThat(batchWrite.retryableCodes)
+        .containsExactlyElementsIn(defaultStubSettings.batchWriteSettings().getRetryableCodes());
 
     CallableRetryData batchGetDocuments =
         getRetryData(grpcFirestoreRpc.batchGetDocumentsCallable());
     assertThat(batchGetDocuments.retrySettings).isEqualTo(retrySettings);
-    assertThat(batchGetDocuments.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    assertThat(batchGetDocuments.retryableCodes)
+        .containsExactlyElementsIn(
+            defaultStubSettings.batchGetDocumentsSettings().getRetryableCodes());
 
     CallableRetryData runQuery = getRetryData(grpcFirestoreRpc.runQueryCallable());
     assertThat(runQuery.retrySettings).isEqualTo(retrySettings);
-    assertThat(runQuery.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    assertThat(runQuery.retryableCodes)
+        .containsExactlyElementsIn(defaultStubSettings.runQuerySettings().getRetryableCodes());
 
     CallableRetryData runAggregationQuery =
         getRetryData(grpcFirestoreRpc.runAggregationQueryCallable());
     assertThat(runAggregationQuery.retrySettings).isEqualTo(retrySettings);
     assertThat(runAggregationQuery.retryableCodes)
-        .containsExactlyElementsIn(expectedRetryableCodes2);
+        .containsExactlyElementsIn(
+            defaultStubSettings.runAggregationQuerySettings().getRetryableCodes());
 
     CallableRetryData beginTransaction = getRetryData(grpcFirestoreRpc.beginTransactionCallable());
     assertThat(beginTransaction.retrySettings).isEqualTo(retrySettings);
-    assertThat(beginTransaction.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
+    assertThat(beginTransaction.retryableCodes)
+        .containsExactlyElementsIn(
+            defaultStubSettings.beginTransactionSettings().getRetryableCodes());
 
     CallableRetryData rollback = getRetryData(grpcFirestoreRpc.rollbackCallable());
     assertThat(rollback.retrySettings).isEqualTo(retrySettings);
-    assertThat(rollback.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
+    assertThat(rollback.retryableCodes)
+        .containsExactlyElementsIn(defaultStubSettings.rollbackSettings().getRetryableCodes());
 
     CallableRetryData listCollectionIdsPaged =
         getRetryData(grpcFirestoreRpc.listCollectionIdsPagedCallable());
     assertThat(listCollectionIdsPaged.retrySettings).isEqualTo(retrySettings);
     assertThat(listCollectionIdsPaged.retryableCodes)
-        .containsExactlyElementsIn(expectedRetryableCodes4);
+        .containsExactlyElementsIn(
+            defaultStubSettings.listCollectionIdsSettings().getRetryableCodes());
 
     CallableRetryData partitionQueryPaged =
         getRetryData(grpcFirestoreRpc.partitionQueryPagedCallable());
     assertThat(partitionQueryPaged.retrySettings).isEqualTo(retrySettings);
     assertThat(partitionQueryPaged.retryableCodes)
-        .containsExactlyElementsIn(expectedRetryableCodes2);
+        .containsExactlyElementsIn(
+            defaultStubSettings.partitionQuerySettings().getRetryableCodes());
 
     CallableRetryData listDocumentsPaged =
         getRetryData(grpcFirestoreRpc.listDocumentsPagedCallable());
     assertThat(listDocumentsPaged.retrySettings).isEqualTo(retrySettings);
     assertThat(listDocumentsPaged.retryableCodes)
-        .containsExactlyElementsIn(expectedRetryableCodes4);
+        .containsExactlyElementsIn(defaultStubSettings.listDocumentsSettings().getRetryableCodes());
+  }
+
+  private static RetrySettings withMaxAttempt5(RetrySettings retrySettings) {
+    return retrySettings.toBuilder().setMaxAttempts(5).build();
   }
 
   @Test
   public void commitCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.commitCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings1);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes1);
+    UnaryCallSettings<CommitRequest, CommitResponse> expectedSettings =
+        defaultStubSettings.commitSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
-  public void batchWriteCallableFollowsServiceConfigFollowsServiceConfig() throws Exception {
+  public void batchWriteCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.batchWriteCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings5);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes5);
+    UnaryCallSettings<BatchWriteRequest, BatchWriteResponse> expectedSettings =
+        defaultStubSettings.batchWriteSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void batchGetDocumentsCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.batchGetDocumentsCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    ServerStreamingCallSettings<BatchGetDocumentsRequest, BatchGetDocumentsResponse>
+        expectedSettings = defaultStubSettings.batchGetDocumentsSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void runQueryCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.runQueryCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> expectedSettings =
+        defaultStubSettings.runQuerySettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void runAggregationQueryCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.runAggregationQueryCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
+        expectedSettings = defaultStubSettings.runAggregationQuerySettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void beginTransactionCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.beginTransactionCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
+    UnaryCallSettings<BeginTransactionRequest, BeginTransactionResponse> expectedSettings =
+        defaultStubSettings.beginTransactionSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void rollbackCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.rollbackCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
+    UnaryCallSettings<RollbackRequest, Empty> expectedSettings =
+        defaultStubSettings.rollbackSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void listCollectionIdsPagedCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.listCollectionIdsPagedCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
+    PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+        expectedSettings = defaultStubSettings.listDocumentsSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void partitionQueryPagedCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.partitionQueryPagedCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings2);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes2);
+    PagedCallSettings<PartitionQueryRequest, PartitionQueryResponse, PartitionQueryPagedResponse>
+        expectedSettings = defaultStubSettings.partitionQuerySettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   @Test
   public void listDocumentsPagedCallableFollowsServiceConfig() throws Exception {
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptionsWithoutOverride);
     CallableRetryData actual = getRetryData(grpcFirestoreRpc.listDocumentsPagedCallable());
-    assertThat(actual.retrySettings).isEqualTo(expectedRetrySettings4);
-    assertThat(actual.retryableCodes).containsExactlyElementsIn(expectedRetryableCodes4);
-  }
-
-  private static RetrySettings.Builder retrySettingsWithTotalTimeout(Duration totalTimeout) {
-    return RetrySettings.newBuilder()
-        .setTotalTimeout(totalTimeout)
-        .setInitialRpcTimeout(totalTimeout)
-        .setMaxRpcTimeout(totalTimeout);
+    PagedCallSettings<ListDocumentsRequest, ListDocumentsResponse, ListDocumentsPagedResponse>
+        expectedSettings = defaultStubSettings.listDocumentsSettings();
+    assertThat(actual.retrySettings)
+        .isEqualTo(withMaxAttempt5(expectedSettings.getRetrySettings()));
+    assertThat(actual.retryableCodes)
+        .containsExactlyElementsIn(expectedSettings.getRetryableCodes());
   }
 
   private static CallableRetryData getRetryData(Object callable) throws Exception {
-
-    if (callable instanceof TracedServerStreamingCallable) {
-      Field innerCallable = TracedServerStreamingCallable.class.getDeclaredField("innerCallable");
-      innerCallable.setAccessible(true);
-      return getRetryData(innerCallable.get(callable));
-    }
-
-    if (callable instanceof TracedUnaryCallable) {
-      Field innerCallable = TracedUnaryCallable.class.getDeclaredField("innerCallable");
-      innerCallable.setAccessible(true);
-      return getRetryData(innerCallable.get(callable));
-    }
-
-    Class<?> aClass = callable.getClass();
-    String aClassName = aClass.getName();
+    String aClassName = callable.getClass().getName();
     switch (aClassName) {
+      case "com.google.api.gax.tracing.TracedUnaryCallable":
+      case "com.google.api.gax.tracing.TracedServerStreamingCallable":
+        return getRetryData(getViaReflection(callable, "innerCallable"));
       case "com.google.api.gax.rpc.UnaryCallable$1":
       case "com.google.api.gax.rpc.ServerStreamingCallable$1":
-        {
-          Field innerCallable = aClass.getDeclaredField("this$0");
-          innerCallable.setAccessible(true);
-          return getRetryData(innerCallable.get(callable));
-        }
+        return getRetryData(getViaReflection(callable, "this$0"));
       case "com.google.api.gax.rpc.RetryingCallable":
-        {
-          Field executor = aClass.getDeclaredField("executor");
-          executor.setAccessible(true);
-          Field innerCallable = aClass.getDeclaredField("callable");
-          innerCallable.setAccessible(true);
-
-          return new CallableRetryData(
-              getRetrySettings(executor.get(callable)),
-              getRetryableCodes(innerCallable.get(callable)));
-        }
+        return new CallableRetryData(
+            getRetrySettings(getViaReflection(callable, "executor")),
+            getRetryableCodes(getViaReflection(callable, "callable")));
       case "com.google.api.gax.rpc.RetryingServerStreamingCallable":
-        {
-          Field executor = aClass.getDeclaredField("executor");
-          executor.setAccessible(true);
-          Field innerCallable = aClass.getDeclaredField("innerCallable");
-          innerCallable.setAccessible(true);
-
-          return new CallableRetryData(
-              getRetrySettings(executor.get(callable)),
-              getRetryableCodes(innerCallable.get(callable)));
-        }
+        return new CallableRetryData(
+            getRetrySettings(getViaReflection(callable, "executor")),
+            getRetryableCodes(getViaReflection(callable, "innerCallable")));
       case "com.google.api.gax.rpc.PagedCallable":
-        {
-          Field innerCallable = aClass.getDeclaredField("callable");
-          innerCallable.setAccessible(true);
-          return getRetryData(innerCallable.get(callable));
-        }
+        return getRetryData(getViaReflection(callable, "callable"));
       default:
         throw new Exception("Unexpected class " + aClassName);
     }
@@ -293,50 +299,28 @@ public class GrpcFirestoreRpcTest {
 
   private static Set<Code> getRetryableCodes(Object o)
       throws NoSuchFieldException, IllegalAccessException {
-    Class<?> aClass = o.getClass();
-    String aClassName = aClass.getName();
-    switch (aClassName) {
+    switch (o.getClass().getName()) {
       case "com.google.api.gax.rpc.ServerStreamingCallable$1":
-        {
-          Field innerCallable = aClass.getDeclaredField("this$0");
-          innerCallable.setAccessible(true);
-          return getRetryableCodes(innerCallable.get(o));
-        }
+        return getRetryableCodes(getViaReflection(o, "this$0"));
       case "com.google.api.gax.rpc.WatchdogServerStreamingCallable":
-        {
-          Field innerCallable = aClass.getDeclaredField("inner");
-          innerCallable.setAccessible(true);
-          return getRetryableCodes(innerCallable.get(o));
-        }
+        return getRetryableCodes(getViaReflection(o, "inner"));
     }
-    Field exceptionFactory = aClass.getDeclaredField("exceptionFactory");
-    exceptionFactory.setAccessible(true);
-    Object exceptionFactoryObject = exceptionFactory.get(o);
-    Field retryableCodes = exceptionFactoryObject.getClass().getDeclaredField("retryableCodes");
-    retryableCodes.setAccessible(true);
-    return (Set<Code>) retryableCodes.get(exceptionFactoryObject);
+    Object exceptionFactory = getViaReflection(o, "exceptionFactory");
+    return getViaReflection(exceptionFactory, "retryableCodes");
   }
 
   private static RetrySettings getRetrySettings(Object o) throws Exception {
-    if (o instanceof ScheduledRetryingExecutor) {
-      Field retryAlgorithm = ScheduledRetryingExecutor.class.getDeclaredField("retryAlgorithm");
-      retryAlgorithm.setAccessible(true);
-      Object retryAlgorithmObject = retryAlgorithm.get(o);
-
-      Field timedAlgorithmWithContext =
-          RetryAlgorithm.class.getDeclaredField("timedAlgorithmWithContext");
-      timedAlgorithmWithContext.setAccessible(true);
-      Object exponentialRetryAlgorithm = timedAlgorithmWithContext.get(retryAlgorithmObject);
-
-      Field globalSettings = ExponentialRetryAlgorithm.class.getDeclaredField("globalSettings");
-      globalSettings.setAccessible(true);
-      return (RetrySettings) globalSettings.get(exponentialRetryAlgorithm);
-    }
-
-    Class<?> aClass = o.getClass();
-    String aClassName = aClass.getName();
-
+    String aClassName = o.getClass().getName();
     switch (aClassName) {
+      case "com.google.api.gax.retrying.ScheduledRetryingExecutor":
+        {
+          Object retryAlgorithm =
+              getViaReflection(ScheduledRetryingExecutor.class, "retryAlgorithm", o);
+          Object exponentialRetryAlgorithm =
+              getViaReflection(RetryAlgorithm.class, "timedAlgorithmWithContext", retryAlgorithm);
+          return getViaReflection(
+              ExponentialRetryAlgorithm.class, "globalSettings", exponentialRetryAlgorithm);
+        }
       default:
         throw new Exception("Unexpected class " + aClassName);
     }

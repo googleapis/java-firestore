@@ -132,6 +132,8 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
 
       // Override retry settings only if customer provides settings different from default.
       if (retrySettings.equals(ServiceOptions.getDefaultRetrySettings())) {
+        // We are manually setting `setMaxAttempts(5)` to follow
+        // the `firestore_grpc_service_config.json` configuration.
         // This code should be removed when following issue is fixed:
         // https://github.com/googleapis/sdk-platform-java/issues/2306
         firestoreBuilder.applyToAllUnaryMethods(
