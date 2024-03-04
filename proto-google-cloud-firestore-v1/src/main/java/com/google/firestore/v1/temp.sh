@@ -1,0 +1,21 @@
+cp FirestoreProto.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp PartitionQueryResponse.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp PartitionQueryResponseOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp QueryMode.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp QueryPlan.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp QueryPlanOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp QueryProfileProto.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp ResultSetStats.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp ResultSetStatsOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunAggregationQueryRequest.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunAggregationQueryRequestOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunAggregationQueryResponse.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunAggregationQueryResponseOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunQueryRequest.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunQueryRequestOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunQueryResponse.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp RunQueryResponseOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp StructuredQuery.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp Target.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+cp TargetOrBuilder.java /Users/ehsann/firebase/java-firestore/proto-google-cloud-firestore-v1/src/main/java/com/google/firestore/v1/
+

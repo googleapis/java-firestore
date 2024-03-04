@@ -56,8 +56,6 @@ import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
-import com.google.firestore.v1.QueryMode;
-import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
