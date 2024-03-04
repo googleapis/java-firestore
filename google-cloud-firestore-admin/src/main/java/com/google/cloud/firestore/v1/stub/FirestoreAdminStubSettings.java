@@ -999,8 +999,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createIndex. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateIndexRequest, Index, IndexOperationMetadata>
         createIndexOperationSettings() {
       return createIndexOperationSettings;
@@ -1034,8 +1032,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateField. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
         updateFieldOperationSettings() {
       return updateFieldOperationSettings;
@@ -1053,8 +1049,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to exportDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<
             ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
         exportDocumentsOperationSettings() {
@@ -1067,8 +1061,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to importDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return importDocumentsOperationSettings;
@@ -1080,8 +1072,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
         createDatabaseOperationSettings() {
       return createDatabaseOperationSettings;
@@ -1104,8 +1094,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings() {
       return updateDatabaseOperationSettings;
@@ -1117,8 +1105,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to deleteDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
         deleteDatabaseOperationSettings() {
       return deleteDatabaseOperationSettings;

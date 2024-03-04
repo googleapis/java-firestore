@@ -273,7 +273,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   }
 
   /** Returns a new REST builder for this class. */
-  @BetaApi
   public static Builder newHttpJsonBuilder() {
     return Builder.createHttpJsonDefault();
   }
@@ -315,7 +314,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return new Builder(FirestoreAdminStubSettings.newBuilder());
     }
 
-    @BetaApi
     private static Builder createHttpJsonDefault() {
       return new Builder(FirestoreAdminStubSettings.newHttpJsonBuilder());
     }
