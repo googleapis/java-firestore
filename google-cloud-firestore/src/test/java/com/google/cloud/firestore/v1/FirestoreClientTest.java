@@ -507,14 +507,9 @@ public class FirestoreClientTest {
             .setDocument(Document.newBuilder().build())
             .setReadTime(Timestamp.newBuilder().build())
             .setSkippedResults(880286183)
-            .setStats(ResultSetStats.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
-    RunQueryRequest request =
-        RunQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
-            .build();
+    RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -530,11 +525,7 @@ public class FirestoreClientTest {
   public void runQueryExceptionTest() throws Exception {
     StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
     mockFirestore.addException(exception);
-    RunQueryRequest request =
-        RunQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
-            .build();
+    RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -558,14 +549,10 @@ public class FirestoreClientTest {
             .setResult(AggregationResult.newBuilder().build())
             .setTransaction(ByteString.EMPTY)
             .setReadTime(Timestamp.newBuilder().build())
-            .setStats(ResultSetStats.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
     RunAggregationQueryRequest request =
-        RunAggregationQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
-            .build();
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -583,10 +570,7 @@ public class FirestoreClientTest {
     StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
     mockFirestore.addException(exception);
     RunAggregationQueryRequest request =
-        RunAggregationQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
-            .build();
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
 

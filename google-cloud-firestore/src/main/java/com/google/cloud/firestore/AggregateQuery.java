@@ -35,7 +35,6 @@ import com.google.firestore.v1.StructuredQuery;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -109,7 +108,8 @@ public class AggregateQuery {
 
   private void runQuery(
       AggregateQueryResponseDeliverer responseDeliverer, ExplainOptions explainOptions) {
-    RunAggregationQueryRequest request = toProto(responseDeliverer.getTransactionId());
+    RunAggregationQueryRequest request =
+        toProto(responseDeliverer.getTransactionId(), explainOptions);
     AggregateQueryResponseObserver responseObserver =
         new AggregateQueryResponseObserver(responseDeliverer, explainOptions);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
@@ -162,20 +162,29 @@ public class AggregateQuery {
     }
 
     void deliverResult(
-        @Nonnull Map<String, Value> serverData,
+        @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
       if (isExplainQuery) {
         if (isExplainFutureCompleted.compareAndSet(false, true)) {
+          // The server is required to provide ExplainMetrics for explain queries.
+          if (metrics == null) {
+            throw new RuntimeException("Did not receive any metrics for explain query.");
+          }
           AggregateQuerySnapshot snapshot =
-              new AggregateQuerySnapshot(
-                  AggregateQuery.this,
-                  readTime,
-                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
+              serverData == null
+                  ? null
+                  : new AggregateQuerySnapshot(
+                      AggregateQuery.this,
+                      readTime,
+                      convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
           explainFuture.set(new ExplainResults<>(metrics, snapshot));
         }
       } else {
         if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
+          if (serverData == null) {
+            throw new RuntimeException("Did not receive any aggregate query results.");
+          }
           aggregateQuerySnapshotFuture.set(
               new AggregateQuerySnapshot(
                   AggregateQuery.this,
@@ -205,8 +214,8 @@ public class AggregateQuery {
     @Nullable private final ExplainOptions explainOptions;
     private StreamController streamController;
     private Timestamp readTime = Timestamp.MAX_VALUE;
-    private Map<String, Value> aggregateFieldsMap = Collections.emptyMap();
-    private ExplainMetrics metrics;
+    @Nullable private Map<String, Value> aggregateFieldsMap = null;
+    @Nullable private ExplainMetrics metrics = null;
 
     AggregateQueryResponseObserver(
         AggregateQueryResponseDeliverer responseDeliverer,
@@ -230,16 +239,16 @@ public class AggregateQuery {
         aggregateFieldsMap = response.getResult().getAggregateFieldsMap();
       }
 
-      if (response.hasStats()) {
-        // create ExplainMetrics.
+      if (response.hasExplainMetrics()) {
+        metrics = new ExplainMetrics(response.getExplainMetrics());
       }
 
       if (explainOptions == null) {
         // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC,
         // meaning that `onResponse()` can be called multiple times, it _should_ only be called
-        // once in NORMAL mode. But even if it is called more than once, `responseDeliverer` will
-        // drop superfluous results. In modes other than NORMAL, there will be more than one
-        // response, and the last response will contain stats.
+        // once for non-explain queries. But even if it is called more than once,
+        // `responseDeliverer` will drop superfluous results. For explain queries, there will
+        // be more than one response, and the last response will contain the metrics.
         onComplete();
       }
     }
@@ -287,17 +296,22 @@ public class AggregateQuery {
    */
   @Nonnull
   public RunAggregationQueryRequest toProto() {
-    return toProto(null);
+    return toProto(/* transactionId= */ null, /* explainOptions= */ null);
   }
 
   @Nonnull
-  RunAggregationQueryRequest toProto(@Nullable final ByteString transactionId) {
+  RunAggregationQueryRequest toProto(
+      @Nullable final ByteString transactionId, @Nullable ExplainOptions explainOptions) {
     RunQueryRequest runQueryRequest = query.toProto();
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
     request.setParent(runQueryRequest.getParent());
     if (transactionId != null) {
       request.setTransaction(transactionId);
+    }
+
+    if (explainOptions != null) {
+      request.setExplainOptions(explainOptions.toProto());
     }
 
     StructuredAggregationQuery.Builder structuredAggregationQuery =

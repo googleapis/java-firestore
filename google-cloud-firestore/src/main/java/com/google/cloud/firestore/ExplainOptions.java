@@ -32,6 +32,12 @@ public abstract class ExplainOptions {
 
   public abstract Builder toBuilder();
 
+  public com.google.firestore.v1.ExplainOptions toProto() {
+    return com.google.firestore.v1.ExplainOptions.newBuilder()
+        .setAnalyze(this.getAnalyze())
+        .build();
+  }
+
   @AutoValue.Builder
   public abstract static class Builder {
     /**

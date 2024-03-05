@@ -23,9 +23,13 @@ public class ExplainMetrics {
   @Nonnull private final PlanSummary planSummary;
   @Nullable private final ExecutionStats executionStats;
 
-  ExplainMetrics(@Nonnull PlanSummary planSummary, @Nullable ExecutionStats executionStats) {
-    this.planSummary = planSummary;
-    this.executionStats = executionStats;
+  ExplainMetrics(@Nonnull com.google.firestore.v1.ExplainMetrics metrics) {
+    // ExplainMetrics is guaranteed to have a plan summary.
+    this.planSummary = new PlanSummary(metrics.getPlanSummary());
+
+    // Depending on explain options, metrics may or may not contain execution stats.
+    this.executionStats =
+        metrics.hasExecutionStats() ? new ExecutionStats(metrics.getExecutionStats()) : null;
   }
 
   /** Returns the information about the query plan. */
