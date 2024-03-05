@@ -1505,7 +1505,7 @@ public class Query {
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
-        /* queryMode= */ null);
+        /* explainOptions= */ null);
   }
 
   /**
@@ -1626,11 +1626,13 @@ public class Query {
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime,
-      @Nullable final QueryMode queryMode) {
+      @Nullable final ExplainOptions explainOptions) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
 
-    // TODO(ehsann): Set ExplainOptions
+    if (explainOptions != null) {
+      request.setExplainOptions(explainOptions.toProto());
+    }
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
@@ -1710,7 +1712,7 @@ public class Query {
                       startTimeNanos,
                       /* transactionId= */ null,
                       options.getRequireConsistency() ? cursor.getReadTime() : null,
-                      queryMode);
+                      explainOptions);
 
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
@@ -1739,10 +1741,9 @@ public class Query {
             // Do not retry EXPLAIN requests because it'd be executing
             // multiple queries. This means stats would have to be aggregated,
             // and that may not even make sense for many statistics.
-            // TODO(ehsann): Don't retry if you have explain options.
-            // if (!queryMode.equals(QueryMode.NORMAL)) {
-            //  return false;
-            // }
+            if (explainOptions != null) {
+              return false;
+            }
 
             Set<StatusCode.Code> retryableCodes =
                 FirestoreSettings.newBuilder().runQuerySettings().getRetryableCodes();
@@ -1779,8 +1780,8 @@ public class Query {
         new ApiStreamObserver<RunQueryResponse>() {
           @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
           Timestamp readTime;
-          PlanSummary plan;
-          ExecutionStats stats;
+
+          ExplainMetrics metrics;
 
           // The stream's onCompleted could be called more than once,
           // this flag makes sure only the first one is actually processed.
@@ -1804,8 +1805,8 @@ public class Query {
               readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
             }
 
-            if (runQueryResponse.hasStats()) {
-              // Get the Plan and ExecutionStats.
+            if (runQueryResponse.hasExplainMetrics()) {
+              metrics = new ExplainMetrics(runQueryResponse.getExplainMetrics());
             }
           }
 
@@ -1829,15 +1830,13 @@ public class Query {
                       : documentSnapshots;
               snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
             }
-
-            ExplainMetrics metrics = new ExplainMetrics(plan, stats);
             result.set(new ExplainResults<>(metrics, snapshot));
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
-        /* queryMode= */ null);
+        /* explainOptions= */ options);
 
     return result;
   }
@@ -1916,7 +1915,7 @@ public class Query {
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
         /* readTime= */ null,
-        /* queryMode= */ null);
+        /* explainOptions= */ null);
 
     return result;
   }

@@ -15,18 +15,24 @@
  */
 package com.google.cloud.firestore;
 
+import com.google.protobuf.Struct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
 /** A Plan contains information about the planning stage of a query. */
 public final class PlanSummary {
   private static final PlanSummary DEFAULT_INSTANCE =
-      new PlanSummary(com.google.firestore.v1.QueryPlan.getDefaultInstance());
+      new PlanSummary(com.google.firestore.v1.PlanSummary.getDefaultInstance());
 
-  private final Map<String, Object> indexesUsed;
+  private final List<Map<String, Object>> indexesUsed;
 
-  PlanSummary(com.google.firestore.v1.QueryPlan proto) {
-    this.indexesUsed = UserDataConverter.decodeStruct(proto.getPlanInfo());
+  PlanSummary(com.google.firestore.v1.PlanSummary proto) {
+    indexesUsed = new ArrayList<>();
+    for (Struct index : proto.getIndexesUsedList()) {
+      indexesUsed.add(UserDataConverter.decodeStruct(index));
+    }
   }
 
   static PlanSummary getDefaultInstance() {
@@ -37,7 +43,7 @@ public final class PlanSummary {
    * Returns the indexes used to serve the query.
    */
   @Nonnull
-  public Map<String, Object> getIndexesUsed() {
+  public List<Map<String, Object>> getIndexesUsed() {
     return this.indexesUsed;
   }
 }

@@ -23,6 +23,7 @@ import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -32,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -866,7 +868,6 @@ public class ITQueryTest extends ITBaseTest {
     checkQuerySnapshotContainsDocuments(query3WithCursor, "doc2", "doc3", "doc4");
   }
 
-  /*
   @Test
   public void testQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
@@ -880,7 +881,8 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    ExplainResults<QuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
+    ExplainResults<QuerySnapshot> explainResults =
+        query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
 
     @Nullable QuerySnapshot snapshot = explainResults.getSnapshot();
     assertThat(snapshot).isNull();
@@ -909,7 +911,8 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    ExplainResults<QuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
+    ExplainResults<QuerySnapshot> explainResults =
+        query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
 
     @Nullable QuerySnapshot snapshot = explainResults.getSnapshot();
     assertThat(snapshot).isNotNull();
@@ -926,8 +929,8 @@ public class ITQueryTest extends ITBaseTest {
     assertThat(stats).isNotNull();
     assertThat(stats.getDebugStats()).isNotEmpty();
     assertThat(stats.getBytesReturned()).isGreaterThan(0);
-    assertThat(stats.getReadOperations()).isGreaterThan(0);
-    assertThat(stats.getResultsReturned()).isGreaterThan(0);
+    assertThat(stats.getReadOperations()).isEqualTo(3);
+    assertThat(stats.getResultsReturned()).isEqualTo(3);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
   }
 
@@ -945,7 +948,8 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    ExplainResults<AggregateQuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
+    ExplainResults<AggregateQuerySnapshot> explainResults =
+        query.explain(ExplainOptions.builder().setAnalyze(false).build()).get();
 
     @Nullable AggregateQuerySnapshot snapshot = explainResults.getSnapshot();
     assertThat(snapshot).isNull();
@@ -975,7 +979,8 @@ public class ITQueryTest extends ITBaseTest {
 
     AggregateQuery query = collection.where(Filter.equalTo("a", 1)).orderBy("a").count();
 
-    ExplainResults<AggregateQuerySnapshot> explainResults = query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
+    ExplainResults<AggregateQuerySnapshot> explainResults =
+        query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
 
     @Nullable AggregateQuerySnapshot snapshot = explainResults.getSnapshot();
     assertThat(snapshot).isNotNull();
@@ -992,9 +997,8 @@ public class ITQueryTest extends ITBaseTest {
     assertThat(stats).isNotNull();
     assertThat(stats.getDebugStats()).isNotEmpty();
     assertThat(stats.getBytesReturned()).isGreaterThan(0);
-    assertThat(stats.getReadOperations()).isGreaterThan(0);
-    assertThat(stats.getResultsReturned()).isGreaterThan(0);
+    assertThat(stats.getReadOperations()).isEqualTo(1);
+    assertThat(stats.getResultsReturned()).isEqualTo(1);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
   }
-  */
 }

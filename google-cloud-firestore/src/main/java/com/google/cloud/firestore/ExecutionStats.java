@@ -20,32 +20,29 @@ import java.util.Map;
 
 /** A ExecutionStats contains information about the execution of a query. */
 public final class ExecutionStats {
-  final int resultsReturned;
-  final int bytesReturned;
+  final long resultsReturned;
+  final long bytesReturned;
   final Duration executionDuration;
-  final int readOperations;
+  final long readOperations;
   final Map<String, Object> debugStats;
 
-  ExecutionStats(
-      int resultsReturned,
-      int bytesReturned,
-      Duration executionDuration,
-      int readOperations,
-      Map<String, Object> debugStats) {
-    this.resultsReturned = resultsReturned;
-    this.bytesReturned = bytesReturned;
-    this.executionDuration = executionDuration;
-    this.readOperations = readOperations;
-    this.debugStats = debugStats;
+  ExecutionStats(com.google.firestore.v1.ExecutionStats proto) {
+    this.resultsReturned = proto.getResultsReturned();
+    this.bytesReturned = proto.getBytesReturned();
+    this.executionDuration =
+        Duration.ofSeconds(
+            proto.getExecutionDuration().getSeconds(), proto.getExecutionDuration().getNanos());
+    this.readOperations = proto.getReadOperations();
+    this.debugStats = UserDataConverter.decodeStruct(proto.getDebugStats());
   }
 
   /** Returns the number of query results. */
-  public int getResultsReturned() {
+  public long getResultsReturned() {
     return resultsReturned;
   }
 
   /** Returns the number of bytes that were returned as a result of the query. */
-  public int getBytesReturned() {
+  public long getBytesReturned() {
     return bytesReturned;
   }
 
@@ -56,7 +53,7 @@ public final class ExecutionStats {
   }
 
   /** Returns the number of read operations that occurred when executing the query. */
-  public int getReadOperations() {
+  public long getReadOperations() {
     return readOperations;
   }
 
