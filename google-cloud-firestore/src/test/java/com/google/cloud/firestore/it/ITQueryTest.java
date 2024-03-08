@@ -19,13 +19,18 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.primitives.Ints.asList;
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
+import com.google.api.core.SettableApiFuture;
+import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -974,6 +979,46 @@ public class ITQueryTest extends ITBaseTest {
     assertThat(stats.getReadOperations()).isGreaterThan(0);
     assertThat(stats.getResultsReturned()).isEqualTo(0);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
+  }
+
+  @Test
+  public void testExplainStream() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
+
+    final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc4", "doc5").iterator();
+
+    query.explainStream(
+        ExplainOptions.builder().setAnalyze(true).build(),
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {}
+        },
+        metricsFuture);
+
+    ExplainMetrics metrics = metricsFuture.get();
+    assertThat(metrics.getPlanSummary().getIndexesUsed().size()).isGreaterThan(0);
+    assertThat(metrics.getExecutionStats().getResultsReturned()).isEqualTo(3);
   }
 
   @Test
