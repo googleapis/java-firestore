@@ -947,6 +947,12 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query = collection.where(Filter.equalTo("a", 100)).orderBy("a");
+
+    // Regular query execution (get).
+    QuerySnapshot getSnapshot = query.get().get();
+    assertThat(getSnapshot.size()).isEqualTo(0);
+
+    // Explain.
     ExplainResults<QuerySnapshot> explainResults =
         query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
 
