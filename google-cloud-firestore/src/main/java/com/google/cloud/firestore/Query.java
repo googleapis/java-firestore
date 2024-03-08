@@ -1808,6 +1808,11 @@ public class Query {
 
             if (runQueryResponse.hasExplainMetrics()) {
               metrics = new ExplainMetrics(runQueryResponse.getExplainMetrics());
+              if (documentSnapshots == null && metrics.getExecutionStats() != null) {
+                // This indicates that the query was executed, but no documents
+                // had matched the query. Create an empty list.
+                documentSnapshots = new ArrayList<>();
+              }
             }
           }
 

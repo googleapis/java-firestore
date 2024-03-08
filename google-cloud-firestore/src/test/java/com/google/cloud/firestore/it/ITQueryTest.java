@@ -935,6 +935,42 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
+  public void testQueryProfileForQueryWithNoResultSet() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", asList(0)),
+            "doc2", map("b", asList(1)),
+            "doc3", map("a", 3, "b", asList(2, 7), "c", 10),
+            "doc4", map("a", 1, "b", asList(3, 7)),
+            "doc5", map("a", 1),
+            "doc6", map("a", 2, "c", 20));
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    Query query = collection.where(Filter.equalTo("a", 100)).orderBy("a");
+    ExplainResults<QuerySnapshot> explainResults =
+        query.explain(ExplainOptions.builder().setAnalyze(true).build()).get();
+
+    @Nullable QuerySnapshot snapshot = explainResults.getSnapshot();
+    assertThat(snapshot).isNotNull();
+    assertThat(snapshot.size()).isEqualTo(0);
+
+    ExplainMetrics metrics = explainResults.getMetrics();
+    assertThat(metrics).isNotNull();
+
+    PlanSummary planSummary = metrics.getPlanSummary();
+    assertThat(planSummary).isNotNull();
+    assertThat(planSummary.getIndexesUsed()).isNotEmpty();
+
+    ExecutionStats stats = metrics.getExecutionStats();
+    assertThat(stats).isNotNull();
+    assertThat(stats.getDebugStats()).isNotEmpty();
+    assertThat(stats.getBytesReturned()).isEqualTo(0);
+    assertThat(stats.getReadOperations()).isGreaterThan(0);
+    assertThat(stats.getResultsReturned()).isEqualTo(0);
+    assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
+  }
+
+  @Test
   public void testAggregateQueryPlan() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
