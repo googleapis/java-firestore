@@ -168,7 +168,7 @@ public class ITE2ETracingTest {
             .setView(ViewType.COMPLETE)
             .setFilter(
                 rootSpanName) // This filter returns 0 results. When this line is removed, the query
-                              // returns non-zero results
+            // returns non-zero results
             .build();
 
     // // Read back the traces
