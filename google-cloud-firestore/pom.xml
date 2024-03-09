@@ -226,6 +226,18 @@
       <version>1.29.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-trace</artifactId>
+      <version>0.15.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-logging</artifactId>
+      <version>1.29.0</version>
+      <scope>test</scope>
+    </dependency>
     <!-- END OpenTelemetry -->
   </dependencies>
 
