@@ -26,13 +26,10 @@ import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.devtools.cloudtrace.v1.ListTracesRequest;
 import com.google.devtools.cloudtrace.v1.ListTracesRequest.ViewType;
 import com.google.devtools.cloudtrace.v1.Trace;
-import com.google.protobuf.Timestamp;
-import com.google.protobuf.util.Timestamps;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
@@ -58,8 +55,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITE2ETracingTest {
 
-  private static final Logger logger =
-      Logger.getLogger(ITBaseTest.class.getName());
+  private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
 
   private static String rootSpanName;
 
@@ -79,8 +75,7 @@ public class ITE2ETracingTest {
 
   protected Firestore firestore;
 
-  @Rule
-  public TestName testName = new TestName();
+  @Rule public TestName testName = new TestName();
 
   @Before
   public void before() throws Exception {
@@ -89,16 +84,19 @@ public class ITE2ETracingTest {
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
 
     // TODO(jimit) Make it re-usable w/ InMemorySpanExporter
-    traceExporter = TraceExporter.createWithConfiguration(
-        TraceConfiguration.builder().setProjectId(PROJECT_ID).build());
+    traceExporter =
+        TraceExporter.createWithConfiguration(
+            TraceConfiguration.builder().setProjectId(PROJECT_ID).build());
 
-    openTelemetrySdk = OpenTelemetrySdk.builder()
-        .setTracerProvider(
-            SdkTracerProvider.builder()
-                .setResource(resource)
-                .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
-                .setSampler(Sampler.alwaysOn())
-                .build()).build();
+    openTelemetrySdk =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(
+                SdkTracerProvider.builder()
+                    .setResource(resource)
+                    .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
+                    .setSampler(Sampler.alwaysOn())
+                    .build())
+            .build();
 
     traceClient_v1 = TraceServiceClient.create();
 
@@ -108,7 +106,8 @@ public class ITE2ETracingTest {
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setOpenTelemetry(openTelemetrySdk)
-                    .setTracingEnabled(true).build());
+                    .setTracingEnabled(true)
+                    .build());
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
@@ -118,8 +117,8 @@ public class ITE2ETracingTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
     firestore = optionsBuilder.build().getService();
-    rootSpanName = String.format("%s%d", this.getClass().getSimpleName(),
-        System.currentTimeMillis());
+    rootSpanName =
+        String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
   }
 
   @After
@@ -133,8 +132,8 @@ public class ITE2ETracingTest {
   }
 
   void waitForTracesToComplete() throws Exception {
-    CompletableResultCode completableResultCode = openTelemetrySdk.getSdkTracerProvider()
-        .shutdown();
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().shutdown();
     completableResultCode.join(1000, TimeUnit.MILLISECONDS);
     // We need to call `firestore.close()` because that will also close the
     // gRPC channel and hence force the gRPC instrumentation library to flush
@@ -145,14 +144,12 @@ public class ITE2ETracingTest {
   @Test
   public void basicTraceTestWithRootSpan() throws Exception {
     // Build custom rootSpanName=ITE2ETracingTest<currenttimemillis>
-    rootSpanName = String.format("%s%d", this.getClass().getSimpleName(),
-        System.currentTimeMillis());
+    rootSpanName =
+        String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
     System.out.println("rootSpanName=" + rootSpanName);
 
-    Tracer tracer = firestore.getOptions()
-        .getOpenTelemetryOptions()
-        .getOpenTelemetry()
-        .getTracer("mytest");
+    Tracer tracer =
+        firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer("mytest");
 
     // Add the root span with the custom name
     Span span = tracer.spanBuilder(rootSpanName).startSpan();
@@ -161,16 +158,18 @@ public class ITE2ETracingTest {
     } finally {
       span.end();
     }
-    //Flush traces
+    // Flush traces
     waitForTracesToComplete();
 
     // Query the custom rootSpanName
-    ListTracesRequest listTracesRequest = ListTracesRequest.newBuilder()
-        .setProjectId(PROJECT_ID)
-        .setView(ViewType.COMPLETE)
-        .setFilter(
-            rootSpanName) // This filter returns 0 results. When this line is removed, the query returns non-zero results
-        .build();
+    ListTracesRequest listTracesRequest =
+        ListTracesRequest.newBuilder()
+            .setProjectId(PROJECT_ID)
+            .setView(ViewType.COMPLETE)
+            .setFilter(
+                rootSpanName) // This filter returns 0 results. When this line is removed, the query
+                              // returns non-zero results
+            .build();
 
     // // Read back the traces
     TraceServiceClient.ListTracesPagedResponse listTraceResponse =
