@@ -19,6 +19,7 @@ package com.google.cloud.firestore.it;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 
+import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -26,29 +27,30 @@ import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.devtools.cloudtrace.v1.ListTracesRequest;
-import com.google.devtools.cloudtrace.v1.ListTracesRequest.ViewType;
 import com.google.devtools.cloudtrace.v1.Trace;
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanContext;
+import io.opentelemetry.api.trace.TraceFlags;
+import io.opentelemetry.api.trace.TraceState;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-import java.util.List;
+import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -57,28 +59,35 @@ public class ITE2ETracingTest {
 
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
 
-  private static String rootSpanName;
-
-  // TODO(jimit) Generalize project ID
+  // TODO(jimit) Generalize project ID, accept from config
   private static final String PROJECT_ID = "jimit-test";
 
-  // We use an InMemorySpanExporter for testing which keeps all generated trace spans
-  // in memory so that we can check their correctness.
-  protected static InMemorySpanExporter inMemorySpanExporter = InMemorySpanExporter.create();
+  private static final int NUM_TRACE_ID_BYTES = 32;
 
-  protected static TraceExporter traceExporter;
+  private static final int NUM_SPAN_ID_BYTES = 16;
+
+  private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
+
+  private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
+
+  // Random int generator for trace ID and span ID
+  private static Random random;
+
+  private static TraceExporter traceExporter;
 
   // Required for reading back traces from Cloud Trace for validation
-  protected static TraceServiceClient traceClient_v1;
+  private static TraceServiceClient traceClient_v1;
+
+  private static String rootSpanName;
+  private static Tracer tracer;
+
   // Required to set custom-root span
-  protected static OpenTelemetrySdk openTelemetrySdk;
+  private static OpenTelemetrySdk openTelemetrySdk;
 
-  protected Firestore firestore;
+  private static Firestore firestore;
 
-  @Rule public TestName testName = new TestName();
-
-  @Before
-  public void before() throws Exception {
+  @BeforeClass
+  public static void setup() throws IOException {
     // Set up OTel SDK
     Resource resource =
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
@@ -117,24 +126,89 @@ public class ITE2ETracingTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
     firestore = optionsBuilder.build().getService();
+    Preconditions.checkNotNull(
+        firestore,
+        "Error instantiating Firestore. Check that the service account credentials " +
+            "were properly set.");
+    random = new Random();
+  }
+  @Before
+  public void before() throws Exception {
     rootSpanName =
         String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
+    tracer =
+        firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer(rootSpanName);
   }
 
   @After
   public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    traceClient_v1.close();
-    firestore.shutdown();
-    inMemorySpanExporter.reset();
+    rootSpanName = null;
+    tracer = null;
   }
 
-  void waitForTracesToComplete() throws Exception {
+  @AfterClass
+  public static void teardown() {
+    traceClient_v1.close();
+    firestore.shutdown();
+  }
+
+  // Generates a random 32-byte hex string
+  private String generateRandomHexString(int numBytes) {
+    StringBuffer newTraceId = new StringBuffer();
+    while (newTraceId.length() < numBytes) {
+      newTraceId.append(Integer.toHexString(random.nextInt()));
+    }
+    return newTraceId.substring(0, numBytes);
+  }
+
+  protected String generateNewTraceId() {
+    return generateRandomHexString(NUM_TRACE_ID_BYTES);
+  }
+
+  // Generates a random 16-byte hex string
+  protected String generateNewSpanId() {
+    return generateRandomHexString(NUM_SPAN_ID_BYTES);
+  }
+
+  // Cloud Trace indexes traces w/ eventual consistency, even when indexing traceId, therefore the
+  // test must retry a few times before the trace is available.
+  protected Trace getTraceWithRetry(String project, String traceId)
+      throws InterruptedException, RuntimeException {
+    int retryCount = 5;
+
+    while(retryCount-- > 0) {
+      try {
+        Trace t = traceClient_v1.getTrace(PROJECT_ID, traceId);
+        return t;
+      } catch(NotFoundException notFound) {
+        logger.warning("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+      }
+    }
+    throw new RuntimeException("Trace " + traceId + " for project " + project
+        + " not found in Cloud Trace.");
+  }
+
+  // Generates a new SpanContext w/ random traceId,spanId
+  protected SpanContext getNewSpanContext() {
+    String traceId = generateNewTraceId();
+    String spanId = generateNewSpanId();
+    logger.info("traceId=" + traceId + ", spanId=" + spanId);
+
+    SpanContext newCtx = SpanContext.create(
+        traceId,
+        spanId,
+        TraceFlags.getSampled(),
+        TraceState.getDefault());
+
+    return newCtx;
+  }
+
+  protected void waitForTracesToComplete() throws Exception {
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().shutdown();
-    completableResultCode.join(1000, TimeUnit.MILLISECONDS);
+    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+
     // We need to call `firestore.close()` because that will also close the
     // gRPC channel and hence force the gRPC instrumentation library to flush
     // its spans.
@@ -142,41 +216,27 @@ public class ITE2ETracingTest {
   }
 
   @Test
-  public void basicTraceTestWithRootSpan() throws Exception {
-    // Build custom rootSpanName=ITE2ETracingTest<currenttimemillis>
-    rootSpanName =
-        String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
-    System.out.println("rootSpanName=" + rootSpanName);
+  // Trace an Aggregation.Get request
+  public void basicTraceTestWithCustomRootSpan() throws Exception {
+    SpanContext newCtx = getNewSpanContext();
 
-    Tracer tracer =
-        firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer("mytest");
-
-    // Add the root span with the custom name
-    Span span = tracer.spanBuilder(rootSpanName).startSpan();
-    try (Scope ss = span.makeCurrent()) {
+    // Execute the DB operation in the context of the custom root span.
+    Span rootSpan = tracer.spanBuilder(rootSpanName)
+        .setParent(Context.root().with(Span.wrap(newCtx)))
+        .startSpan();
+    try (Scope ss = rootSpan.makeCurrent()) {
       firestore.collection("col").count().get().get();
     } finally {
-      span.end();
+      rootSpan.end();
     }
-    // Flush traces
+
+    // Ingest traces to Cloud Trace
     waitForTracesToComplete();
 
-    // Query the custom rootSpanName
-    ListTracesRequest listTracesRequest =
-        ListTracesRequest.newBuilder()
-            .setProjectId(PROJECT_ID)
-            .setView(ViewType.COMPLETE)
-            .setFilter(
-                rootSpanName) // This filter returns 0 results. When this line is removed, the query
-            // returns non-zero results
-            .build();
-
-    // // Read back the traces
-    TraceServiceClient.ListTracesPagedResponse listTraceResponse =
-        traceClient_v1.listTraces(listTracesRequest);
-
-    List<Trace> traceIdList = Lists.newArrayList(listTraceResponse.iterateAll());
-    assertEquals(1, traceIdList.size()); // THIS FAILS
-    System.out.println("trace:" + traceIdList.get(0));
+    String traceId = newCtx.getTraceId();
+    Trace t = getTraceWithRetry(PROJECT_ID, traceId);
+    assertEquals(t.getTraceId(), traceId);
+    assertEquals(t.getSpans(0).getName(),rootSpanName);
+    assertEquals(t.getSpans(1).getName(), "AggregationQuery.Get");
   }
 }
