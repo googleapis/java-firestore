@@ -105,6 +105,19 @@
       <artifactId>protobuf-java-util</artifactId>
     </dependency>
 
+    <!-- Google Cloud Ops -->
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-trace</artifactId>
+      <version>0.15.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-logging</artifactId>
+      <version>1.29.0</version>
+    </dependency>
+    <!-- END Google Cloud Ops -->
+
     <!-- OTEL -->
     <dependency>
       <groupId>io.opentelemetry.instrumentation</groupId>
