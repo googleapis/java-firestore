@@ -93,6 +93,9 @@ class PaginatingPipeline internal constructor(
  * applies a series of operations that are chained together, each operation takes the output from the last
  * operation (or the data source) and produces an output for the next operation (or as the final output of the pipeline).
  *
+ * NOTE: the chained operations are not a prescription of exactly how Firestore will execute the pipeline,
+ * instead Firestore only guarantee the result is the same as if the chained operations are executed in order.
+ *
  * Usage Examples:
  *
  * **1. Projecting Specific Fields and Renaming:**
