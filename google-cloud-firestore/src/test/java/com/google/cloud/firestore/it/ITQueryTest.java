@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.api.core.SettableApiFuture;
+import com.google.api.core.ApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
@@ -982,7 +982,35 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testExplainStream() throws Exception {
+  public void testExplainStreamWithoutAnalyze() throws Exception {
+    CollectionReference collection = testCollectionWithDocs(Collections.emptyMap());
+    Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
+
+    ApiFuture<ExplainMetrics> metricsFuture =
+        query.explainStream(
+            ExplainOptions.builder().setAnalyze(false).build(),
+            new ApiStreamObserver<DocumentSnapshot>() {
+              @Override
+              public void onNext(DocumentSnapshot documentSnapshot) {
+                fail("No DocumentSnapshot should be received because analyze option was disabled.");
+              }
+
+              @Override
+              public void onError(Throwable throwable) {
+                fail(throwable.getMessage());
+              }
+
+              @Override
+              public void onCompleted() {}
+            });
+
+    ExplainMetrics metrics = metricsFuture.get();
+    assertThat(metrics.getPlanSummary().getIndexesUsed().size()).isGreaterThan(0);
+    assertThat(metrics.getExecutionStats()).isNull();
+  }
+
+  @Test
+  public void testExplainStreamWithAnalyze() throws Exception {
     Map<String, Map<String, Object>> testDocs =
         map(
             "doc1", map("a", 1, "b", asList(0)),
@@ -995,29 +1023,29 @@ public class ITQueryTest extends ITBaseTest {
 
     Query query = collection.where(Filter.equalTo("a", 1)).orderBy("a");
 
-    final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
     final Iterator<String> iterator = Arrays.asList("doc1", "doc4", "doc5").iterator();
 
-    query.explainStream(
-        ExplainOptions.builder().setAnalyze(true).build(),
-        new ApiStreamObserver<DocumentSnapshot>() {
-          @Override
-          public void onNext(DocumentSnapshot documentSnapshot) {
-            assertEquals(iterator.next(), documentSnapshot.getId());
-          }
+    ApiFuture<ExplainMetrics> metricsFuture =
+        query.explainStream(
+            ExplainOptions.builder().setAnalyze(true).build(),
+            new ApiStreamObserver<DocumentSnapshot>() {
+              @Override
+              public void onNext(DocumentSnapshot documentSnapshot) {
+                assertEquals(iterator.next(), documentSnapshot.getId());
+              }
 
-          @Override
-          public void onError(Throwable throwable) {
-            fail();
-          }
+              @Override
+              public void onError(Throwable throwable) {
+                fail(throwable.getMessage());
+              }
 
-          @Override
-          public void onCompleted() {}
-        },
-        metricsFuture);
+              @Override
+              public void onCompleted() {}
+            });
 
     ExplainMetrics metrics = metricsFuture.get();
     assertThat(metrics.getPlanSummary().getIndexesUsed().size()).isGreaterThan(0);
+    assertThat(metrics.getExecutionStats()).isNotNull();
     assertThat(metrics.getExecutionStats().getResultsReturned()).isEqualTo(3);
   }
 
