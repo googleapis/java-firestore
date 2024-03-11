@@ -73,7 +73,7 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<AggregateQuerySnapshot> get() {
-    return get(null);
+    return get(null, null);
   }
 
   /**
@@ -89,29 +89,34 @@ public class AggregateQuery {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
             /* transactionId= */ null,
+            /* readTime= */ null,
             /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
-            /* isExplainQuery= */ true);
-    runQuery(responseDeliverer, options);
+            /* explainOptions= */ options);
+    runQuery(responseDeliverer);
     return responseDeliverer.getExplainResultsFuture();
   }
 
   @Nonnull
-  ApiFuture<AggregateQuerySnapshot> get(@Nullable final ByteString transactionId) {
+  ApiFuture<AggregateQuerySnapshot> get(
+      @Nullable final ByteString transactionId, @Nullable com.google.protobuf.Timestamp readTime) {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
             transactionId,
+            readTime,
             /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
-            /* isExplainQuery= */ false);
-    runQuery(responseDeliverer, /* explainOptions= */ null);
+            /* isExplainQuery= */ null);
+    runQuery(responseDeliverer);
     return responseDeliverer.getAggregateQuerySnapshotFuture();
   }
 
-  private void runQuery(
-      AggregateQueryResponseDeliverer responseDeliverer, ExplainOptions explainOptions) {
+  private void runQuery(AggregateQueryResponseDeliverer responseDeliverer) {
     RunAggregationQueryRequest request =
-        toProto(responseDeliverer.getTransactionId(), explainOptions);
+        toProto(
+            responseDeliverer.transactionId,
+            responseDeliverer.readTime,
+            responseDeliverer.explainOptions);
     AggregateQueryResponseObserver responseObserver =
-        new AggregateQueryResponseObserver(responseDeliverer, explainOptions);
+        new AggregateQueryResponseObserver(responseDeliverer);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
     query.rpcContext.streamRequest(request, responseObserver, callable);
@@ -128,8 +133,9 @@ public class AggregateQuery {
   private final class AggregateQueryResponseDeliverer {
 
     @Nullable private final ByteString transactionId;
+    @Nullable private final com.google.protobuf.Timestamp readTime;
     private final long startTimeNanos;
-    private final boolean isExplainQuery;
+    @Nullable private final ExplainOptions explainOptions;
     private final SettableApiFuture<AggregateQuerySnapshot> aggregateQuerySnapshotFuture =
         SettableApiFuture.create();
     private final SettableApiFuture<ExplainResults<AggregateQuerySnapshot>> explainFuture =
@@ -138,10 +144,14 @@ public class AggregateQuery {
     private final AtomicBoolean isExplainFutureCompleted = new AtomicBoolean(false);
 
     AggregateQueryResponseDeliverer(
-        @Nullable ByteString transactionId, long startTimeNanos, boolean isExplainQuery) {
+        @Nullable ByteString transactionId,
+        @Nullable com.google.protobuf.Timestamp readTime,
+        long startTimeNanos,
+        @Nullable ExplainOptions explainOptions) {
       this.transactionId = transactionId;
+      this.readTime = readTime;
       this.startTimeNanos = startTimeNanos;
-      this.isExplainQuery = isExplainQuery;
+      this.explainOptions = explainOptions;
     }
 
     ApiFuture<AggregateQuerySnapshot> getAggregateQuerySnapshotFuture() {
@@ -152,20 +162,11 @@ public class AggregateQuery {
       return explainFuture;
     }
 
-    @Nullable
-    ByteString getTransactionId() {
-      return transactionId;
-    }
-
-    long getStartTimeNanos() {
-      return startTimeNanos;
-    }
-
     void deliverResult(
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
-      if (isExplainQuery) {
+      if (explainOptions != null) {
         if (isExplainFutureCompleted.compareAndSet(false, true)) {
           // The server is required to provide ExplainMetrics for explain queries.
           if (metrics == null) {
@@ -195,7 +196,7 @@ public class AggregateQuery {
     }
 
     void deliverError(Throwable throwable) {
-      if (isExplainQuery) {
+      if (explainOptions != null) {
         if (isExplainFutureCompleted.compareAndSet(false, true)) {
           explainFuture.setException(throwable);
         }
@@ -211,17 +212,17 @@ public class AggregateQuery {
       implements ResponseObserver<RunAggregationQueryResponse> {
 
     private final AggregateQueryResponseDeliverer responseDeliverer;
-    @Nullable private final ExplainOptions explainOptions;
     private StreamController streamController;
     private Timestamp readTime = Timestamp.MAX_VALUE;
     @Nullable private Map<String, Value> aggregateFieldsMap = null;
     @Nullable private ExplainMetrics metrics = null;
 
-    AggregateQueryResponseObserver(
-        AggregateQueryResponseDeliverer responseDeliverer,
-        @Nullable ExplainOptions explainOptions) {
+    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
       this.responseDeliverer = responseDeliverer;
-      this.explainOptions = explainOptions;
+    }
+
+    private boolean isExplainQuery() {
+      return this.responseDeliverer.explainOptions != null;
     }
 
     @Override
@@ -243,7 +244,7 @@ public class AggregateQuery {
         metrics = new ExplainMetrics(response.getExplainMetrics());
       }
 
-      if (explainOptions == null) {
+      if (!isExplainQuery()) {
         // Deliver the result; even though the `RunAggregationQuery` RPC is a "streaming" RPC,
         // meaning that `onResponse()` can be called multiple times, it _should_ only be called
         // once for non-explain queries. But even if it is called more than once,
@@ -256,7 +257,7 @@ public class AggregateQuery {
     @Override
     public void onError(Throwable throwable) {
       if (shouldRetry(throwable)) {
-        runQuery(responseDeliverer, explainOptions);
+        runQuery(responseDeliverer);
       } else {
         responseDeliverer.deliverError(throwable);
       }
@@ -266,7 +267,7 @@ public class AggregateQuery {
       // Do not retry EXPLAIN requests because it'd be executing
       // multiple queries. This means stats would have to be aggregated,
       // and that may not even make sense for many statistics.
-      if (explainOptions != null) {
+      if (isExplainQuery()) {
         return false;
       }
 
@@ -274,8 +275,8 @@ public class AggregateQuery {
           FirestoreSettings.newBuilder().runAggregationQuerySettings().getRetryableCodes();
       return query.shouldRetryQuery(
           throwable,
-          responseDeliverer.getTransactionId(),
-          responseDeliverer.getStartTimeNanos(),
+          responseDeliverer.transactionId,
+          responseDeliverer.startTimeNanos,
           retryableCodes);
     }
 
@@ -296,18 +297,23 @@ public class AggregateQuery {
    */
   @Nonnull
   public RunAggregationQueryRequest toProto() {
-    return toProto(/* transactionId= */ null, /* explainOptions= */ null);
+    return toProto(/* transactionId= */ null, /* readTime= */ null, /* explainOptions= */ null);
   }
 
   @Nonnull
   RunAggregationQueryRequest toProto(
-      @Nullable final ByteString transactionId, @Nullable ExplainOptions explainOptions) {
+      @Nullable final ByteString transactionId,
+      @Nullable final com.google.protobuf.Timestamp readTime,
+      @Nullable ExplainOptions explainOptions) {
     RunQueryRequest runQueryRequest = query.toProto();
 
     RunAggregationQueryRequest.Builder request = RunAggregationQueryRequest.newBuilder();
     request.setParent(runQueryRequest.getParent());
     if (transactionId != null) {
       request.setTransaction(transactionId);
+    }
+    if (readTime != null) {
+      request.setReadTime(readTime);
     }
 
     if (explainOptions != null) {

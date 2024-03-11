@@ -86,6 +86,7 @@ import org.threeten.bp.Duration;
 @InternalExtensionOnly
 public class Query {
 
+  static final Comparator<QueryDocumentSnapshot> DOCUMENT_ID_COMPARATOR = Query::compareDocumentId;
   final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
 
@@ -93,13 +94,17 @@ public class Query {
 
   /** The direction of a sort. */
   public enum Direction {
-    ASCENDING(StructuredQuery.Direction.ASCENDING),
-    DESCENDING(StructuredQuery.Direction.DESCENDING);
+    ASCENDING(StructuredQuery.Direction.ASCENDING, DOCUMENT_ID_COMPARATOR),
+    DESCENDING(StructuredQuery.Direction.DESCENDING, DOCUMENT_ID_COMPARATOR.reversed());
 
     private final StructuredQuery.Direction direction;
+    private final Comparator<QueryDocumentSnapshot> documentIdComparator;
 
-    Direction(StructuredQuery.Direction direction) {
+    Direction(
+        StructuredQuery.Direction direction,
+        Comparator<QueryDocumentSnapshot> documentIdComparator) {
       this.direction = direction;
+      this.documentIdComparator = documentIdComparator;
     }
 
     StructuredQuery.Direction getDirection() {
@@ -325,7 +330,7 @@ public class Query {
     }
   }
 
-  static final class FieldOrder {
+  static final class FieldOrder implements Comparator<QueryDocumentSnapshot> {
     private final FieldReference fieldReference;
     private final Direction direction;
 
@@ -354,7 +359,27 @@ public class Query {
         return false;
       }
       FieldOrder filter = (FieldOrder) o;
-      return Objects.equals(toProto(), filter.toProto());
+      if (direction != filter.direction) {
+        return false;
+      }
+      return Objects.equals(fieldReference, filter.fieldReference);
+    }
+
+    public int compare(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
+      String path = fieldReference.getFieldPath();
+      if (FieldPath.isDocumentId(path)) {
+        return direction.documentIdComparator.compare(doc1, doc2);
+      }
+      FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+      Preconditions.checkState(
+          doc1.contains(fieldPath) && doc2.contains(fieldPath),
+          "Can only compare fields that exist in the DocumentSnapshot."
+              + " Please include the fields you are ordering on in your select() call.");
+      Value v1 = doc1.extractField(fieldPath);
+      Value v2 = doc2.extractField(fieldPath);
+
+      int cmp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
+      return (direction == Direction.ASCENDING) ? cmp : -cmp;
     }
   }
 
@@ -1190,12 +1215,12 @@ public class Query {
    */
   @Nonnull
   public Query select(FieldPath... fieldPaths) {
-    ImmutableList.Builder<FieldReference> fieldProjections = ImmutableList.builder();
-
     if (fieldPaths.length == 0) {
       fieldPaths = new FieldPath[] {FieldPath.DOCUMENT_ID};
     }
 
+    ImmutableList.Builder<FieldReference> fieldProjections =
+        ImmutableList.builderWithExpectedSize(fieldPaths.length);
     for (FieldPath path : fieldPaths) {
       FieldReference fieldReference =
           FieldReference.newBuilder().setFieldPath(path.getEncodedPath()).build();
@@ -1478,8 +1503,6 @@ public class Query {
 
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
-          boolean hasCompleted = false;
-
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
             if (runQueryResponse.hasDocument()) {
@@ -1498,8 +1521,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
             responseObserver.onCompleted();
           }
         },
@@ -1528,8 +1549,6 @@ public class Query {
     final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
-          boolean hasCompleted = false;
-
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
             if (runQueryResponse.hasDocument()) {
@@ -1553,8 +1572,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
             documentObserver.onCompleted();
             if (!metricsFuture.isDone()) {
               // This means the gRPC stream completed without any metrics.
@@ -1638,7 +1655,8 @@ public class Query {
       }
     }
 
-    ImmutableList.Builder<FieldOrder> fieldOrders = ImmutableList.builder();
+    ImmutableList.Builder<FieldOrder> fieldOrders =
+        ImmutableList.builderWithExpectedSize(structuredQuery.getOrderByCount());
     for (Order order : structuredQuery.getOrderByList()) {
       fieldOrders.add(
           new FieldOrder(order.getField(), Direction.valueOf(order.getDirection().name())));
@@ -1719,6 +1737,10 @@ public class Query {
           boolean firstResponse;
           int numDocuments;
 
+          // The stream's `onComplete()` could be called more than once,
+          // this flag makes sure only the first one is actually processed.
+          boolean hasCompleted = false;
+
           @Override
           public void onStart(StreamController streamController) {}
 
@@ -1785,6 +1807,9 @@ public class Query {
 
           @Override
           public void onComplete() {
+            if (hasCompleted) return;
+            hasCompleted = true;
+
             Tracing.getTracer()
                 .getCurrentSpan()
                 .addAnnotation(
@@ -1824,7 +1849,7 @@ public class Query {
    */
   @Nonnull
   public ApiFuture<QuerySnapshot> get() {
-    return get(null);
+    return get(null, null);
   }
 
   /**
@@ -1845,10 +1870,6 @@ public class Query {
           Timestamp readTime;
 
           ExplainMetrics metrics;
-
-          // The stream's onCompleted could be called more than once,
-          // this flag makes sure only the first one is actually processed.
-          boolean hasCompleted = false;
 
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
@@ -1885,9 +1906,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
-
             @Nullable QuerySnapshot snapshot = null;
             if (documentSnapshots != null) {
               // The results for limitToLast queries need to be flipped since we reversed the
@@ -1933,17 +1951,14 @@ public class Query {
     return Watch.forQuery(this).runWatch(executor, listener);
   }
 
-  ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
+  ApiFuture<QuerySnapshot> get(
+      @Nullable ByteString transactionId, @Nullable Timestamp requestReadTime) {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-          Timestamp readTime;
-
-          // The stream's onCompleted could be called more than once,
-          // this flag makes sure only the first one is actually processed.
-          boolean hasCompleted = false;
+          Timestamp responseReadTime;
 
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
@@ -1954,8 +1969,8 @@ public class Query {
                       rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
               documentSnapshots.add(documentSnapshot);
             }
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            if (responseReadTime == null) {
+              responseReadTime = Timestamp.fromProto(runQueryResponse.getReadTime());
             }
           }
 
@@ -1966,9 +1981,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
-
             // The results for limitToLast queries need to be flipped since we reversed the
             // ordering constraints before sending the query to the backend.
             List<QueryDocumentSnapshot> resultView =
@@ -1976,59 +1988,36 @@ public class Query {
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+                QuerySnapshot.withDocuments(Query.this, responseReadTime, resultView);
             result.set(querySnapshot);
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
-        /* readTime= */ null,
+        /* readTime= */ requestReadTime,
         /* explainOptions= */ null);
 
     return result;
   }
 
   Comparator<QueryDocumentSnapshot> comparator() {
-    return (doc1, doc2) -> {
-      // Add implicit sorting by name, using the last specified direction.
-      ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
-      Direction lastDirection =
-          fieldOrders.isEmpty()
-              ? Direction.ASCENDING
-              : fieldOrders.get(fieldOrders.size() - 1).direction;
+    Iterator<FieldOrder> iterator = options.getFieldOrders().iterator();
+    if (!iterator.hasNext()) {
+      return DOCUMENT_ID_COMPARATOR;
+    }
+    FieldOrder fieldOrder = iterator.next();
+    Comparator<QueryDocumentSnapshot> comparator = fieldOrder;
+    while (iterator.hasNext()) {
+      fieldOrder = iterator.next();
+      comparator = comparator.thenComparing(fieldOrder);
+    }
+    // Add implicit sorting by name, using the last specified direction.
+    Direction lastDirection = fieldOrder.direction;
+    return comparator.thenComparing(lastDirection.documentIdComparator);
+  }
 
-      List<FieldOrder> orderBys = new ArrayList<>(fieldOrders);
-      orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID.toProto(), lastDirection));
-
-      for (FieldOrder orderBy : orderBys) {
-        int comp;
-
-        String path = orderBy.fieldReference.getFieldPath();
-        if (FieldPath.isDocumentId(path)) {
-          comp =
-              doc1.getReference()
-                  .getResourcePath()
-                  .compareTo(doc2.getReference().getResourcePath());
-        } else {
-          FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
-          Preconditions.checkState(
-              doc1.contains(fieldPath) && doc2.contains(fieldPath),
-              "Can only compare fields that exist in the DocumentSnapshot."
-                  + " Please include the fields you are ordering on in your select() call.");
-          Value v1 = doc1.extractField(fieldPath);
-          Value v2 = doc2.extractField(fieldPath);
-
-          comp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
-        }
-
-        if (comp != 0) {
-          int direction = orderBy.direction.equals(Direction.ASCENDING) ? 1 : -1;
-          return direction * comp;
-        }
-      }
-
-      return 0;
-    };
+  private static int compareDocumentId(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
+    return doc1.getReference().getResourcePath().compareTo(doc2.getReference().getResourcePath());
   }
 
   /**
@@ -2036,7 +2025,8 @@ public class Query {
    * list.
    */
   private <T> ImmutableList<T> append(ImmutableList<T> existingList, T newElement) {
-    ImmutableList.Builder<T> builder = ImmutableList.builder();
+    ImmutableList.Builder<T> builder =
+        ImmutableList.builderWithExpectedSize(existingList.size() + 1);
     builder.addAll(existingList);
     builder.add(newElement);
     return builder.build();
@@ -2086,9 +2076,8 @@ public class Query {
    * <em>without actually downloading the documents</em>.
    *
    * <p>Using the returned query to count the documents is efficient because only the final count,
-   * not the documents' data, is downloaded. The returned query can even count the documents if the
-   * result set would be prohibitively large to download entirely (for example thousands of
-   * documents).
+   * not the documents' data, is downloaded. The returned query can count the documents in cases
+   * where the result set is prohibitively large to download entirely (thousands of documents).
    *
    * @return a query that counts the documents in the result set of this query.
    */
@@ -2098,13 +2087,13 @@ public class Query {
   }
 
   /**
-   * Calculates the specified aggregations over the documents in the result set of the given query,
-   * without actually downloading the documents.
+   * Calculates the specified aggregations over the documents in the result set of the given query
+   * <em>without actually downloading the documents</em>.
    *
-   * <p>Using this function to perform aggregations is efficient because only the final aggregation
-   * values, not the documents' data, is downloaded. This function can even perform aggregations of
-   * the documents if the result set would be prohibitively large to download entirely (for example
-   * thousands of documents).
+   * <p>Using the returned query to perform aggregations is efficient because only the final
+   * aggregation values, not the documents' data, is downloaded. The returned query can perform
+   * aggregations of the documents in cases where the result set is prohibitively large to download
+   * entirely (thousands of documents).
    *
    * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
    *     of this query.
