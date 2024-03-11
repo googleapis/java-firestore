@@ -165,7 +165,7 @@ sealed interface Expr {
   fun inAny(vararg other: Expr) = Function.In(this, other.toList())
   infix fun lessThan(other: Expr) = Function.LessThan(this, other)
   infix fun lessThanOrEqual(other: Expr) = Function.LessThanOrEqual(this, other)
-  fun notInAny(left: Expr, vararg other: Expr) = Function.NotIn(left, other.toList())
+  fun notInAny(vararg other: Expr) = Function.NotIn(this, other.toList())
 
 
   fun exists() = Function.Exists(this as Field)
