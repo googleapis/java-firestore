@@ -24,6 +24,7 @@ import com.google.cloud.Service;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import kotlin.collections.Iterator;
 
 /** Represents a Firestore Database and is the entry point for all Firestore operations */
 @InternalExtensionOnly
@@ -287,7 +288,7 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
 
-  ApiFuture<PipelineResult> execute(Pipeline pipeline);
+  ApiFuture<Iterator<PipelineResult>> execute(Pipeline pipeline);
 
   /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This
