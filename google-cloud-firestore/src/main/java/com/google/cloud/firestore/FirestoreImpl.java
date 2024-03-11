@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import kotlin.collections.Iterator;
 import org.threeten.bp.Duration;
 
 /**
@@ -409,7 +410,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   }
 
   @Override
-  public ApiFuture<PipelineResult> execute(Pipeline pipeline) {
+  public ApiFuture<Iterator<PipelineResult>> execute(Pipeline pipeline) {
     return null;
   }
 

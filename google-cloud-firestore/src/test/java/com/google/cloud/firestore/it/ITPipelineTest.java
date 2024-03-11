@@ -38,6 +38,7 @@ import com.google.cloud.firestore.pipeline.FindNearest.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.FindNearest.Similarity;
 import com.google.cloud.firestore.pipeline.Ordering;
 import com.google.cloud.firestore.pipeline.Ordering.Direction;
+import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -185,10 +186,10 @@ public class ITPipelineTest {
                     cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
                     Direction.DESC));
 
-    PipelineResult result = firestore.execute(p.firstPage()).get();
-    PipelineResult second = firestore.execute(p.startAfter(result)).get();
+    Iterator<PipelineResult> result = firestore.execute(p.firstPage()).get();
+    Iterator<PipelineResult> second = firestore.execute(p.startAfter(result.next())).get();
     // potentially expensive but possible
-    PipelineResult page100 = firestore.execute(p.page(100)).get();
+    Iterator<PipelineResult> page100 = firestore.execute(p.page(100)).get();
   }
 
   @Test
@@ -202,9 +203,9 @@ public class ITPipelineTest {
                     cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
                     Direction.DESC));
 
-    PipelineResult result = p.firstPage().execute(firestore).get();
-    PipelineResult second = p.startAfter(result).execute(firestore).get();
+    Iterator<PipelineResult> result = p.firstPage().execute(firestore).get();
+    Iterator<PipelineResult> second = p.startAfter(result.next()).execute(firestore).get();
     // potentially expensive but possible
-    PipelineResult page100 = p.page(100).execute(firestore).get();
+    Iterator<PipelineResult> page100 = p.page(100).execute(firestore).get();
   }
 }

@@ -85,6 +85,37 @@ class PaginatingPipeline internal constructor(
   }
 }
 
+/**
+ * The Pipeline class provides a flexible and expressive framework for building complex data transformation
+ * and query pipelines for Firestore.
+ *
+ * A pipeline takes data sources such as Firestore collections, collection groups, or even in-memory data, and
+ * applies a series of operations that are chained together, each operation takes the output from the last
+ * operation (or the data source) and produces an output for the next operation (or as the final output of the pipeline).
+ *
+ * Usage Examples:
+ *
+ * **1. Projecting Specific Fields and Renaming:**
+ * ```java
+ * Pipeline pipeline = Pipeline.fromCollection("users")
+ *     // Select 'name' and 'email' fields, create 'userAge' which is renamed from field 'age'.
+ *     .project(Fields.of("name", "email"), Field.of("age").asAlias("userAge"))
+ * ```
+ *
+ * **2. Filtering and Sorting:**
+ * ```java
+ * Pipeline pipeline = Pipeline.fromCollectionGroup("reviews")
+ *     .filter(Field.of("rating").greaterThan(Expr.Constant.of(3))) // High ratings
+ *     .sort(Ordering.of("timestamp").descending());
+ * ```
+ *
+ * **3. Aggregation with Grouping:**
+ * ```java
+ * Pipeline pipeline = Pipeline.fromCollection("orders")
+ *     .group(Field.of("customerId"))
+ *     .aggregate(count(Field.of("orderId")).asAlias("orderCount"));
+ * ```
+ */
 class Pipeline {
   internal val operations: MutableList<Operation> = mutableListOf()
   private var name: String
