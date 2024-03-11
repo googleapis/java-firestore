@@ -1509,31 +1509,28 @@ public class Query {
   }
 
   /**
-   * Executes the query and streams the results as a StreamObserver of DocumentSnapshots.
+   * Executes the query, streams the results as a StreamObserver of DocumentSnapshots, and returns
+   * an ApiFuture that will be resolved with the associated {@link ExplainMetrics}.
    *
    * @param options The options that configure the explain request.
    * @param documentObserver The observer to be notified every time a new document arrives.
-   * @param metricsObserver The observer to be notified when the explain metrics arrive.
    */
-  public void explainStream(
+  @Nonnull
+  public ApiFuture<ExplainMetrics> explainStream(
       @Nonnull ExplainOptions options,
-      @Nonnull ApiStreamObserver<DocumentSnapshot> documentObserver,
-      @Nonnull SettableApiFuture<ExplainMetrics> metricsObserver) {
+      @Nonnull ApiStreamObserver<DocumentSnapshot> documentObserver) {
     Preconditions.checkState(
         !LimitType.Last.equals(Query.this.options.getLimitType()),
         "Query results for queries that include limitToLast() constraints cannot be streamed. "
             + "Use Query.explain() instead.");
 
+    final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
     internalStream(
         new ApiStreamObserver<RunQueryResponse>() {
           boolean hasCompleted = false;
 
           @Override
           public void onNext(RunQueryResponse runQueryResponse) {
-            if (runQueryResponse.hasExplainMetrics()) {
-              metricsObserver.set(new ExplainMetrics(runQueryResponse.getExplainMetrics()));
-            }
-
             if (runQueryResponse.hasDocument()) {
               Document document = runQueryResponse.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -1541,12 +1538,16 @@ public class Query {
                       rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
               documentObserver.onNext(documentSnapshot);
             }
+
+            if (runQueryResponse.hasExplainMetrics()) {
+              metricsFuture.set(new ExplainMetrics(runQueryResponse.getExplainMetrics()));
+            }
           }
 
           @Override
           public void onError(Throwable throwable) {
+            metricsFuture.setException(throwable);
             documentObserver.onError(throwable);
-            metricsObserver.setException(throwable);
           }
 
           @Override
@@ -1554,12 +1555,19 @@ public class Query {
             if (hasCompleted) return;
             hasCompleted = true;
             documentObserver.onCompleted();
+            if (!metricsFuture.isDone()) {
+              // This means the gRPC stream completed without any metrics.
+              metricsFuture.setException(
+                  new RuntimeException("Did not receive any explain results."));
+            }
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
         /* explainOptions= */ options);
+
+    return metricsFuture;
   }
 
   /**
