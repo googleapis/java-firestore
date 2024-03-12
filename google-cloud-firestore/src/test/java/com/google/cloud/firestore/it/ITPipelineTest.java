@@ -18,11 +18,14 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.pipeline.Expr.and;
 import static com.google.cloud.firestore.pipeline.Expr.avg;
+import static com.google.cloud.firestore.pipeline.Expr.concat;
 import static com.google.cloud.firestore.pipeline.Expr.cosineDistance;
 import static com.google.cloud.firestore.pipeline.Expr.equal;
 import static com.google.cloud.firestore.pipeline.Expr.lessThan;
 import static com.google.cloud.firestore.pipeline.Expr.not;
 import static com.google.cloud.firestore.pipeline.Expr.or;
+import static com.google.cloud.firestore.pipeline.Expr.toLower;
+import static com.google.cloud.firestore.pipeline.Expr.trim;
 import static com.google.cloud.firestore.pipeline.Ordering.ascending;
 import static com.google.cloud.firestore.pipeline.Ordering.descending;
 
@@ -33,6 +36,7 @@ import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.Expr.Constant;
 import com.google.cloud.firestore.pipeline.Expr.Field;
+import com.google.cloud.firestore.pipeline.Expr.Function;
 import com.google.cloud.firestore.pipeline.Fields;
 import com.google.cloud.firestore.pipeline.FindNearest.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.FindNearest.Similarity;
@@ -207,5 +211,21 @@ public class ITPipelineTest {
     Iterator<PipelineResult> second = p.startAfter(result.next()).execute(firestore).get();
     // potentially expensive but possible
     Iterator<PipelineResult> page100 = p.page(100).execute(firestore).get();
+  }
+
+  @Test
+  public void functionComposition() throws Exception {
+    // A normalized value by joining the first and last name, triming surrounding whitespace and
+    // convert to lower case
+    Function normalized = concat(Field.of("first_name"), Constant.of(" "), Field.of("last_name"));
+    normalized = trim(normalized);
+    normalized = toLower(normalized);
+
+    Pipeline p =
+        Pipeline.fromCollection("users")
+            .filter(
+                or(
+                    normalized.equal(Constant.of("john smith")),
+                    normalized.equal(Constant.of("alice baker"))));
   }
 }

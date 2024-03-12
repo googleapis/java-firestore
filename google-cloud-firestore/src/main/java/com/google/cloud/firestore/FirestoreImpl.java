@@ -376,15 +376,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   @Override
   public <T> ApiFuture<T> runTransaction(
-      @Nonnull final Function<T> updateFunction,
-      @Nonnull TransactionOptions transactionOptions) {
+      @Nonnull final Function<T> updateFunction, @Nonnull TransactionOptions transactionOptions) {
     return runAsyncTransaction(new TransactionAsyncAdapter<>(updateFunction), transactionOptions);
   }
 
   @Nonnull
   @Override
-  public <T> ApiFuture<T> runAsyncTransaction(
-      @Nonnull final AsyncFunction<T> updateFunction) {
+  public <T> ApiFuture<T> runAsyncTransaction(@Nonnull final AsyncFunction<T> updateFunction) {
     return runAsyncTransaction(updateFunction, TransactionOptions.create());
   }
 
