@@ -262,6 +262,27 @@
         <!-- exclude file causing error generating doc -->
         <sourceFileExclude>com/google/cloud/firestore/v1/package-info.java</sourceFileExclude>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <sourceFileExcludes>
+                <exclude>${sourceFileExclude}</exclude>
+              </sourceFileExcludes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
