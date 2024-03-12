@@ -117,11 +117,11 @@ public final class BulkWriter implements AutoCloseable {
 
   /**
    * The default maximum number of pending operations that can be enqueued onto a BulkWriter
-   * instance. An operation is considered pending if BulkWriter has sent it via RPC and is awaiting
-   * the result. BulkWriter buffers additional writes after this many pending operations in order to
-   * avoiding going OOM.
+   * instance. An operation is considered in-flight if BulkWriter has sent it via RPC and is awaiting
+   * the result. BulkWriter buffers additional writes after this many in-flight operations in order to
+   * avoid going OOM.
    */
-  private static final int DEFAULT_MAXIMUM_PENDING_OPERATIONS_COUNT = 500;
+  static final int DEFAULT_MAXIMUM_IN_FLIGHT_OPERATIONS = 500;
 
   /**
    * The default jitter to apply to the exponential backoff used in retries. For example, a factor
@@ -168,10 +168,10 @@ public final class BulkWriter implements AutoCloseable {
   private final RateLimiter rateLimiter;
 
   /**
-   * The number of pending operations enqueued on this BulkWriter instance. An operation is
+   * The number of in-flight operations enqueued on this BulkWriter instance. An operation is
    * considered pending if BulkWriter has sent it via RPC and is awaiting the result.
    */
-  private AtomicInteger pendingOpsCount = new AtomicInteger();
+  private AtomicInteger inFlightCount = new AtomicInteger();
 
   /**
    * An array containing buffered BulkWriter operations after the maximum number of pending
@@ -180,10 +180,10 @@ public final class BulkWriter implements AutoCloseable {
   private final BlockingQueue<Runnable> bufferedOperations;
 
   /**
-   * The maximum number of pending operations that can be enqueued onto this BulkWriter instance.
-   * Once the this number of writes have been enqueued, subsequent writes are buffered.
+   * The maximum number of concurrent in-flight operations that can be sent by BulkWriter instance.
+   * Once this number of writes have been sent, subsequent writes are buffered.
    */
-  private int maxPendingOpCount = DEFAULT_MAXIMUM_PENDING_OPERATIONS_COUNT;
+  private int maxInFlight;
 
   /**
    * The batch that is currently used to schedule operations. Once this batch reaches maximum
@@ -234,10 +234,12 @@ public final class BulkWriter implements AutoCloseable {
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
     this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
-    if (options.getMaxPending() == null) {
+    this.maxInFlight = options.getMaxInFlightOps();
+    if (options.getMaxPendingOps() == null) {
       this.bufferedOperations = new LinkedBlockingQueue<>();
     } else {
-      this.bufferedOperations = new LinkedBlockingQueue<>(options.getMaxPending());
+      int maxBufferedOps = options.getMaxPendingOps() - options.getMaxInFlightOps();
+      this.bufferedOperations = new LinkedBlockingQueue<>(maxBufferedOps);
     }
 
     if (!options.getThrottlingEnabled()) {
@@ -629,7 +631,7 @@ public final class BulkWriter implements AutoCloseable {
 
     // Schedule the operation if the BulkWriter has fewer than the maximum number of allowed
     // pending operations, or add the operation to the buffer.
-    if (incrementPendingOpsIfLessThanMax()) {
+    if (incrementInFlightCountIfLessThanMax()) {
       synchronized (lock) {
         sendOperationLocked(enqueueOperationOnBatchCallback, operation);
       }
@@ -654,7 +656,7 @@ public final class BulkWriter implements AutoCloseable {
             result -> {
               // pendingOpsCount remains the same if a buffered operation is sent.
               if (!processNextBufferedOperation()) {
-                pendingOpsCount.decrementAndGet();
+                inFlightCount.decrementAndGet();
               }
               return ApiFutures.immediateFuture(result);
             },
@@ -666,7 +668,7 @@ public final class BulkWriter implements AutoCloseable {
         e -> {
           // pendingOpsCount remains the same if a buffered operation is sent.
           if (!processNextBufferedOperation()) {
-            pendingOpsCount.decrementAndGet();
+            inFlightCount.decrementAndGet();
           }
           throw e;
         },
@@ -685,14 +687,14 @@ public final class BulkWriter implements AutoCloseable {
   }
 
   /**
-   * Atomically increments pendingOpCount if less than `maxPendingOpCount`
+   * Atomically increments inFlightCount if less than `maxInFlight`
    *
    * @return boolean indicating whether increment occurred.
    */
-  private boolean incrementPendingOpsIfLessThanMax() {
-    int previousPendingOpsCount =
-        pendingOpsCount.getAndAccumulate(0, (v, x) -> v < maxPendingOpCount ? v + 1 : v);
-    return previousPendingOpsCount < maxPendingOpCount;
+  private boolean incrementInFlightCountIfLessThanMax() {
+    int previousInFlightCount =
+        inFlightCount.getAndAccumulate(0, (v, x) -> v < maxInFlight ? v + 1 : v);
+    return previousInFlightCount < maxInFlight;
   }
 
   /**
@@ -974,8 +976,8 @@ public final class BulkWriter implements AutoCloseable {
   }
 
   @VisibleForTesting
-  void setMaxPendingOpCount(int newMax) {
-    maxPendingOpCount = newMax;
+  void setMaxInFlight(int newMax) {
+    maxInFlight = newMax;
   }
 
   /**

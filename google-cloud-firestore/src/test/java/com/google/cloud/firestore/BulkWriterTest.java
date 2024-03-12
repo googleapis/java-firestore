@@ -128,6 +128,7 @@ public class BulkWriterTest {
   private DocumentReference doc1;
   private DocumentReference doc2;
   private DocumentReference doc3;
+  private DocumentReference doc4;
 
   private ScheduledExecutorService timeoutExecutor;
 
@@ -182,7 +183,8 @@ public class BulkWriterTest {
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
-    doc3 = firestoreMock.document("coll/doc2");
+    doc3 = firestoreMock.document("coll/doc3");
+    doc4 = firestoreMock.document("coll/doc4");
   }
 
   @After
@@ -471,7 +473,7 @@ public class BulkWriterTest {
         };
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
 
-    bulkWriter.setMaxPendingOpCount(3);
+    bulkWriter.setMaxInFlight(3);
     bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
     bulkWriter.set(firestoreMock.document("coll/doc3"), LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -1418,16 +1420,22 @@ public class BulkWriterTest {
   public void blocksWriteWhenBufferIsFull() throws Exception {
     BulkWriter bulkWriter =
         firestoreMock.bulkWriter(
-            BulkWriterOptions.builder().setMaxPending(1).setExecutor(timeoutExecutor).build());
+            BulkWriterOptions.builder()
+                .setMaxInFlightOps(1)
+                .setMaxPendingOps(2)
+                .setExecutor(timeoutExecutor)
+                .build());
 
     SettableApiFuture<BatchWriteResponse> response1 = SettableApiFuture.create();
     SettableApiFuture<BatchWriteResponse> response2 = SettableApiFuture.create();
     SettableApiFuture<BatchWriteResponse> response3 = SettableApiFuture.create();
+    SettableApiFuture<BatchWriteResponse> response4 = SettableApiFuture.create();
 
-    Mockito.doReturn(response1, response2, response3).when(firestoreMock).sendRequest(any(), any());
+    Mockito.doReturn(response1, response2, response3, response4)
+        .when(firestoreMock)
+        .sendRequest(any(), any());
 
     bulkWriter.setMaxBatchSize(1);
-    bulkWriter.setMaxPendingOpCount(1);
 
     // First call sent as part of batch immediately.
     ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
@@ -1441,13 +1449,15 @@ public class BulkWriterTest {
     // The buffer is full, so bulk writer is not ready to write.
     assertFalse(bulkWriter.isReady());
 
-    // Third call is blocked.
+    // Third call is blocked, fourth hasn't been attempted.
     AtomicReference<ApiFuture<WriteResult>> threadResult3 = new AtomicReference<>();
+    AtomicReference<ApiFuture<WriteResult>> threadResult4 = new AtomicReference<>();
     Thread thread =
         new Thread(
             () -> {
               try {
                 threadResult3.set(bulkWriter.set(doc3, LocalFirestoreHelper.SINGLE_FIELD_MAP));
+                threadResult4.set(bulkWriter.set(doc4, LocalFirestoreHelper.SINGLE_FIELD_MAP));
               } catch (Exception e) {
                 e.printStackTrace();
               }
@@ -1462,6 +1472,7 @@ public class BulkWriterTest {
 
     // Thread should not have received `ApiFuture<WriteResult>` yet.
     assertNull(threadResult3.get());
+    assertNull(threadResult4.get());
 
     // First call should not have returned a result yet.
     assertFalse(result1.isDone());
@@ -1471,10 +1482,11 @@ public class BulkWriterTest {
     response1.set(success(1));
     assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(1, 0)), result1.get());
 
-    // Thread should be unblocked, and therefore run to termination.
-    assertEquals(State.TERMINATED, threadStateAfterRunning(thread));
+    // Thread should be unblocked, run set method for doc3, then blocked again.
+    assertEquals(State.WAITING, threadStateAfterRunning(thread));
     ApiFuture<WriteResult> result3 = threadResult3.get();
     assertNotNull(result3);
+    assertNull(threadResult4.get());
 
     // Now two batches should have been sent.
     verify(firestoreMock, timeout(200).times(2)).sendRequest(any(), any());
@@ -1488,13 +1500,24 @@ public class BulkWriterTest {
     response2.set(success(2));
     assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(2, 0)), result2.get());
 
+    // Thread should be unblocked, run set method for doc4, then terminate.
+    assertEquals(State.TERMINATED, threadStateAfterRunning(thread));
+    ApiFuture<WriteResult> result4 = threadResult4.get();
+    assertNotNull(result4);
+
     // Now three batches should have been sent.
     verify(firestoreMock, timeout(200).times(3)).sendRequest(any(), any());
     assertFalse(result3.isDone());
+    assertFalse(result4.isDone());
 
-    // Complete thirs call, and verify response.
+    // Complete third call, and verify response.
     response3.set(success(3));
     assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(3, 0)), result3.get());
+    assertFalse(result4.isDone());
+
+    // Complete fourth call, and verify response.
+    response4.set(success(4));
+    assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(4, 0)), result4.get());
   }
 
   private static State threadStateAfterRunning(Thread thread) throws InterruptedException {
