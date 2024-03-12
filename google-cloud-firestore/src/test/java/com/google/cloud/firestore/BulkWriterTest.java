@@ -1489,7 +1489,7 @@ public class BulkWriterTest {
     assertNull(threadResult4.get());
 
     // Now two batches should have been sent.
-    verify(firestoreMock, timeout(200).times(2)).sendRequest(any(), any());
+    verify(firestoreMock, timeout(VERIFY_TIMEOUT_MS).times(2)).sendRequest(any(), any());
     assertFalse(result2.isDone());
     assertFalse(result3.isDone());
 
@@ -1506,7 +1506,7 @@ public class BulkWriterTest {
     assertNotNull(result4);
 
     // Now three batches should have been sent.
-    verify(firestoreMock, timeout(200).times(3)).sendRequest(any(), any());
+    verify(firestoreMock, timeout(VERIFY_TIMEOUT_MS).times(3)).sendRequest(any(), any());
     assertFalse(result3.isDone());
     assertFalse(result4.isDone());
 
