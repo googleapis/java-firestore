@@ -24,6 +24,9 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.set;
 import static com.google.cloud.firestore.LocalFirestoreHelper.update;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
@@ -45,6 +48,7 @@ import com.google.firestore.v1.Write;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.rpc.Code;
 import io.grpc.Status;
+import java.lang.Thread.State;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,6 +60,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import org.junit.After;
 import org.junit.Assert;
@@ -94,8 +99,9 @@ public class BulkWriterTest {
               new IllegalStateException("Mock batchWrite failed in test"),
               GrpcStatusCode.of(Status.Code.RESOURCE_EXHAUSTED),
               true));
+  public static final int VERIFY_TIMEOUT_MS = 200;
 
-  @Rule public Timeout timeout = new Timeout(2, TimeUnit.SECONDS);
+  @Rule public Timeout timeout = new Timeout(2, TimeUnit.HOURS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
@@ -121,14 +127,19 @@ public class BulkWriterTest {
   private BulkWriter bulkWriter;
   private DocumentReference doc1;
   private DocumentReference doc2;
+  private DocumentReference doc3;
 
   private ScheduledExecutorService timeoutExecutor;
 
   public static ApiFuture<BatchWriteResponse> successResponse(int updateTimeSeconds) {
+    return ApiFutures.immediateFuture(success(updateTimeSeconds));
+  }
+
+  private static BatchWriteResponse success(int updateTimeSeconds) {
     BatchWriteResponse.Builder response = BatchWriteResponse.newBuilder();
     response.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(updateTimeSeconds).build();
     response.addStatusBuilder().build();
-    return ApiFutures.immediateFuture(response.build());
+    return response.build();
   }
 
   public static ApiFuture<BatchWriteResponse> failedResponse(int code) {
@@ -171,6 +182,7 @@ public class BulkWriterTest {
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setExecutor(timeoutExecutor).build());
     doc1 = firestoreMock.document("coll/doc1");
     doc2 = firestoreMock.document("coll/doc2");
+    doc3 = firestoreMock.document("coll/doc2");
   }
 
   @After
@@ -1400,5 +1412,97 @@ public class BulkWriterTest {
         firestoreMock.bulkWriter(BulkWriterOptions.builder().setThrottlingEnabled(false).build());
     assertEquals(bulkWriter.getRateLimiter().getInitialCapacity(), Integer.MAX_VALUE);
     assertEquals(bulkWriter.getRateLimiter().getMaximumRate(), Integer.MAX_VALUE);
+  }
+
+  @Test
+  public void blocksWriteWhenBufferIsFull() throws Exception {
+    BulkWriter bulkWriter =
+        firestoreMock.bulkWriter(
+            BulkWriterOptions.builder().setMaxPending(1).setExecutor(timeoutExecutor).build());
+
+    SettableApiFuture<BatchWriteResponse> response1 = SettableApiFuture.create();
+    SettableApiFuture<BatchWriteResponse> response2 = SettableApiFuture.create();
+    SettableApiFuture<BatchWriteResponse> response3 = SettableApiFuture.create();
+
+    Mockito.doReturn(response1, response2, response3).when(firestoreMock).sendRequest(any(), any());
+
+    bulkWriter.setMaxBatchSize(1);
+    bulkWriter.setMaxPendingOpCount(1);
+
+    // First call sent as part of batch immediately.
+    ApiFuture<WriteResult> result1 = bulkWriter.set(doc1, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+
+    // The buffer is not full, so bulk writer is ready to receive more writes.
+    assertTrue(bulkWriter.isReady());
+
+    // Second call is buffered.
+    ApiFuture<WriteResult> result2 = bulkWriter.set(doc2, LocalFirestoreHelper.SINGLE_FIELD_MAP);
+
+    // The buffer is full, so bulk writer is not ready to write.
+    assertFalse(bulkWriter.isReady());
+
+    // Third call is blocked.
+    AtomicReference<ApiFuture<WriteResult>> threadResult3 = new AtomicReference<>();
+    Thread thread =
+        new Thread(
+            () -> {
+              try {
+                threadResult3.set(bulkWriter.set(doc3, LocalFirestoreHelper.SINGLE_FIELD_MAP));
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            });
+    thread.start();
+
+    // Only one batch should have been sent, since everything else is buffered or blocked.
+    verify(firestoreMock, timeout(VERIFY_TIMEOUT_MS).times(1)).sendRequest(any(), any());
+
+    // Expect thread to be waiting because blocked by adding write to buffer.
+    assertEquals(State.WAITING, threadStateAfterRunning(thread));
+
+    // Thread should not have received `ApiFuture<WriteResult>` yet.
+    assertNull(threadResult3.get());
+
+    // First call should not have returned a result yet.
+    assertFalse(result1.isDone());
+    assertFalse(result2.isDone());
+
+    // Complete first call, and verify calls 2 and 3 make progress.
+    response1.set(success(1));
+    assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(1, 0)), result1.get());
+
+    // Thread should be unblocked, and therefore run to termination.
+    assertEquals(State.TERMINATED, threadStateAfterRunning(thread));
+    ApiFuture<WriteResult> result3 = threadResult3.get();
+    assertNotNull(result3);
+
+    // Now two batches should have been sent.
+    verify(firestoreMock, timeout(200).times(2)).sendRequest(any(), any());
+    assertFalse(result2.isDone());
+    assertFalse(result3.isDone());
+
+    // Buffer should still be full
+    assertFalse(bulkWriter.isReady());
+
+    // Complete second call, and verify third call makes progress.
+    response2.set(success(2));
+    assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(2, 0)), result2.get());
+
+    // Now three batches should have been sent.
+    verify(firestoreMock, timeout(200).times(3)).sendRequest(any(), any());
+    assertFalse(result3.isDone());
+
+    // Complete thirs call, and verify response.
+    response3.set(success(3));
+    assertEquals(new WriteResult(Timestamp.ofTimeSecondsAndNanos(3, 0)), result3.get());
+  }
+
+  private static State threadStateAfterRunning(Thread thread) throws InterruptedException {
+    State state = thread.getState();
+    while (state == State.RUNNABLE) {
+      Thread.sleep(1);
+      state = thread.getState();
+    }
+    return state;
   }
 }

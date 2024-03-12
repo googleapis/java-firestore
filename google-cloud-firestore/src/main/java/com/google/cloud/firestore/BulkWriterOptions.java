@@ -57,11 +57,20 @@ public abstract class BulkWriterOptions {
   @Nullable
   public abstract ScheduledExecutorService getExecutor();
 
+  /**
+   * Limit on the total number of mutations in-memory.
+   *
+   * @return The maximum number of operations that will be queued.
+   */
+  @Nullable
+  abstract Integer getMaxPending();
+
   public static Builder builder() {
     return new AutoValue_BulkWriterOptions.Builder()
         .setMaxOpsPerSecond(null)
         .setInitialOpsPerSecond(null)
         .setThrottlingEnabled(true)
+        .setMaxPending(null)
         .setExecutor(null);
   }
 
@@ -120,6 +129,13 @@ public abstract class BulkWriterOptions {
      * @param executor The executor to schedule BulkWriter operations on.
      */
     public abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
+
+    /**
+     * Limit on the total number of mutations in-memory.
+     *
+     * @return The maximum number of operations that will be queued.
+     */
+    abstract Builder setMaxPending(@Nullable Integer maxPending);
 
     public abstract BulkWriterOptions autoBuild();
 
