@@ -21,10 +21,10 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import kotlin.collections.Iterator;
 
 /** Represents a Firestore Database and is the entry point for all Firestore operations */
 @InternalExtensionOnly
