@@ -182,12 +182,14 @@ public abstract class BulkWriterOptions {
 
       if (maxInFlightOps < 1) {
         throw FirestoreException.forInvalidArgument(
-            "Value for argument 'maxInFlightOps' must be greater than 1, but was :" + maxInFlightOps);
+            "Value for argument 'maxInFlightOps' must be greater than 1, but was :"
+                + maxInFlightOps);
       }
 
       if (maxPendingOps != null && maxInFlightOps > maxPendingOps) {
         throw FirestoreException.forInvalidArgument(
-            "Value for argument 'maxPendingOps' must be greater than `maxInFlightOps`, but was :" + maxPendingOps);
+            "Value for argument 'maxPendingOps' must be greater than `maxInFlightOps`, but was :"
+                + maxPendingOps);
       }
 
       return options;

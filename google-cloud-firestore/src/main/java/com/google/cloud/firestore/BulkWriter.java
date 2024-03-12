@@ -117,9 +117,9 @@ public final class BulkWriter implements AutoCloseable {
 
   /**
    * The default maximum number of pending operations that can be enqueued onto a BulkWriter
-   * instance. An operation is considered in-flight if BulkWriter has sent it via RPC and is awaiting
-   * the result. BulkWriter buffers additional writes after this many in-flight operations in order to
-   * avoid going OOM.
+   * instance. An operation is considered in-flight if BulkWriter has sent it via RPC and is
+   * awaiting the result. BulkWriter buffers additional writes after this many in-flight operations
+   * in order to avoid going OOM.
    */
   static final int DEFAULT_MAXIMUM_IN_FLIGHT_OPERATIONS = 500;
 
