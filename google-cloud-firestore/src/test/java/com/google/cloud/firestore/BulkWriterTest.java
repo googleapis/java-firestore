@@ -101,7 +101,7 @@ public class BulkWriterTest {
               true));
   public static final int VERIFY_TIMEOUT_MS = 200;
 
-  @Rule public Timeout timeout = new Timeout(2, TimeUnit.HOURS);
+  @Rule public Timeout timeout = new Timeout(2, TimeUnit.SECONDS);
 
   @Spy private final FirestoreRpc firestoreRpc = Mockito.mock(FirestoreRpc.class);
 
