@@ -136,4 +136,45 @@ public interface RunAggregationQueryResponseOrBuilder
    * <code>.google.protobuf.Timestamp read_time = 3;</code>
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunAggregationQueryRequest.explain_options][google.firestore.v1.RunAggregationQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 10;</code>
+   *
+   * @return Whether the explainMetrics field is set.
+   */
+  boolean hasExplainMetrics();
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunAggregationQueryRequest.explain_options][google.firestore.v1.RunAggregationQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 10;</code>
+   *
+   * @return The explainMetrics.
+   */
+  com.google.firestore.v1.ExplainMetrics getExplainMetrics();
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunAggregationQueryRequest.explain_options][google.firestore.v1.RunAggregationQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 10;</code>
+   */
+  com.google.firestore.v1.ExplainMetricsOrBuilder getExplainMetricsOrBuilder();
 }

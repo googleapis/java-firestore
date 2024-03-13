@@ -170,5 +170,46 @@ public interface RunQueryResponseOrBuilder
    */
   boolean getDone();
 
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunQueryRequest.explain_options][google.firestore.v1.RunQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 11;</code>
+   *
+   * @return Whether the explainMetrics field is set.
+   */
+  boolean hasExplainMetrics();
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunQueryRequest.explain_options][google.firestore.v1.RunQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 11;</code>
+   *
+   * @return The explainMetrics.
+   */
+  com.google.firestore.v1.ExplainMetrics getExplainMetrics();
+  /**
+   *
+   *
+   * <pre>
+   * Query explain metrics. This is only present when the
+   * [RunQueryRequest.explain_options][google.firestore.v1.RunQueryRequest.explain_options]
+   * is provided, and it is sent only once with the last response in the stream.
+   * </pre>
+   *
+   * <code>.google.firestore.v1.ExplainMetrics explain_metrics = 11;</code>
+   */
+  com.google.firestore.v1.ExplainMetricsOrBuilder getExplainMetricsOrBuilder();
+
   com.google.firestore.v1.RunQueryResponse.ContinuationSelectorCase getContinuationSelectorCase();
 }

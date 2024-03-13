@@ -215,6 +215,50 @@ public interface RunAggregationQueryRequestOrBuilder
    */
   com.google.protobuf.TimestampOrBuilder getReadTimeOrBuilder();
 
+  /**
+   *
+   *
+   * <pre>
+   * Optional. Explain options for the query. If set, additional query
+   * statistics will be returned. If not, only query results will be returned.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.ExplainOptions explain_options = 8 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   *
+   * @return Whether the explainOptions field is set.
+   */
+  boolean hasExplainOptions();
+  /**
+   *
+   *
+   * <pre>
+   * Optional. Explain options for the query. If set, additional query
+   * statistics will be returned. If not, only query results will be returned.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.ExplainOptions explain_options = 8 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   *
+   * @return The explainOptions.
+   */
+  com.google.firestore.v1.ExplainOptions getExplainOptions();
+  /**
+   *
+   *
+   * <pre>
+   * Optional. Explain options for the query. If set, additional query
+   * statistics will be returned. If not, only query results will be returned.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.ExplainOptions explain_options = 8 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   */
+  com.google.firestore.v1.ExplainOptionsOrBuilder getExplainOptionsOrBuilder();
+
   com.google.firestore.v1.RunAggregationQueryRequest.QueryTypeCase getQueryTypeCase();
 
   com.google.firestore.v1.RunAggregationQueryRequest.ConsistencySelectorCase
