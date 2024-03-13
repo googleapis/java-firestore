@@ -176,7 +176,6 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    * @see <a href=https://cloud.google.com/firestore/docs/best-practices#ramping_up_traffic>Ramping
    *     up traffic</a>
    */
-  @BetaApi
   @Nonnull
   BulkWriter bulkWriter();
 
@@ -189,7 +188,6 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    *     up traffic</a>
    * @param options An options object to configure BulkWriter.
    */
-  @BetaApi
   @Nonnull
   BulkWriter bulkWriter(BulkWriterOptions options);
 

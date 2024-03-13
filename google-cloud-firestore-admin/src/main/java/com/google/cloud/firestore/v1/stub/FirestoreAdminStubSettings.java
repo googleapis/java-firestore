@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -403,6 +403,21 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
   }
 
+  /** Returns the endpoint set by the user or the the service's default endpoint. */
+  @Override
+  public String getEndpoint() {
+    if (super.getEndpoint() != null) {
+      return super.getEndpoint();
+    }
+    return getDefaultEndpoint();
+  }
+
+  /** Returns the default service name. */
+  @Override
+  public String getServiceName() {
+    return "firestore";
+  }
+
   /** Returns a builder for the default ExecutorProvider for this service. */
   public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder() {
     return InstantiatingExecutorProvider.newBuilder();
@@ -447,7 +462,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return defaultGrpcTransportProviderBuilder().build();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -456,7 +470,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -707,7 +720,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultTransportChannelProvider());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -720,7 +732,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultHttpJsonTransportProviderBuilder().build());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultHttpJsonApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -988,8 +999,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createIndex. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateIndexRequest, Index, IndexOperationMetadata>
         createIndexOperationSettings() {
       return createIndexOperationSettings;
@@ -1023,8 +1032,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateField. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
         updateFieldOperationSettings() {
       return updateFieldOperationSettings;
@@ -1042,8 +1049,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to exportDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<
             ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
         exportDocumentsOperationSettings() {
@@ -1056,8 +1061,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to importDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return importDocumentsOperationSettings;
@@ -1069,8 +1072,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
         createDatabaseOperationSettings() {
       return createDatabaseOperationSettings;
@@ -1093,8 +1094,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings() {
       return updateDatabaseOperationSettings;
@@ -1106,11 +1105,18 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to deleteDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
         deleteDatabaseOperationSettings() {
       return deleteDatabaseOperationSettings;
+    }
+
+    /** Returns the endpoint set by the user or the the service's default endpoint. */
+    @Override
+    public String getEndpoint() {
+      if (super.getEndpoint() != null) {
+        return super.getEndpoint();
+      }
+      return getDefaultEndpoint();
     }
 
     @Override
