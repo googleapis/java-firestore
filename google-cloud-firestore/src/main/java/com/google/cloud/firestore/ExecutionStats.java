@@ -21,14 +21,12 @@ import java.util.Map;
 /** A ExecutionStats contains information about the execution of a query. */
 public final class ExecutionStats {
   final long resultsReturned;
-  final long bytesReturned;
   final Duration executionDuration;
   final long readOperations;
   final Map<String, Object> debugStats;
 
   ExecutionStats(com.google.firestore.v1.ExecutionStats proto) {
     this.resultsReturned = proto.getResultsReturned();
-    this.bytesReturned = proto.getBytesReturned();
     this.executionDuration =
         Duration.ofSeconds(
             proto.getExecutionDuration().getSeconds(), proto.getExecutionDuration().getNanos());
@@ -39,11 +37,6 @@ public final class ExecutionStats {
   /** Returns the number of query results. */
   public long getResultsReturned() {
     return resultsReturned;
-  }
-
-  /** Returns the number of bytes that were returned as a result of the query. */
-  public long getBytesReturned() {
-    return bytesReturned;
   }
 
   /** Returns the total execution time of the query. */

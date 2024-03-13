@@ -933,7 +933,6 @@ public class ITQueryTest extends ITBaseTest {
     ExecutionStats stats = metrics.getExecutionStats();
     assertThat(stats).isNotNull();
     assertThat(stats.getDebugStats()).isNotEmpty();
-    assertThat(stats.getBytesReturned()).isGreaterThan(0);
     assertThat(stats.getReadOperations()).isEqualTo(3);
     assertThat(stats.getResultsReturned()).isEqualTo(3);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
@@ -975,7 +974,6 @@ public class ITQueryTest extends ITBaseTest {
     ExecutionStats stats = metrics.getExecutionStats();
     assertThat(stats).isNotNull();
     assertThat(stats.getDebugStats()).isNotEmpty();
-    assertThat(stats.getBytesReturned()).isEqualTo(0);
     assertThat(stats.getReadOperations()).isGreaterThan(0);
     assertThat(stats.getResultsReturned()).isEqualTo(0);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
@@ -1111,7 +1109,6 @@ public class ITQueryTest extends ITBaseTest {
     ExecutionStats stats = metrics.getExecutionStats();
     assertThat(stats).isNotNull();
     assertThat(stats.getDebugStats()).isNotEmpty();
-    assertThat(stats.getBytesReturned()).isGreaterThan(0);
     assertThat(stats.getReadOperations()).isEqualTo(1);
     assertThat(stats.getResultsReturned()).isEqualTo(1);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
