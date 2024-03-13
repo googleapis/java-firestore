@@ -184,6 +184,7 @@ sealed interface Expr {
   fun avg() = Function.Avg(this)
   fun count() = Function.Count(this)
 
+  fun concatWith(vararg expr: Expr) = Function.Concat(listOf(this) + expr.toList())
   fun toLower() = Function.Count(this)
   fun trim() = Function.Count(this)
 
