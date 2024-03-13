@@ -648,6 +648,15 @@ public final class BulkWriter implements AutoCloseable {
         Thread.currentThread().interrupt();
         return ApiFutures.immediateFailedFuture(exception);
       }
+
+      // If another operation completed during buffering, then we can process the next buffered
+      // operation now. This overcomes the small chance that an in-flight operation completes
+      // before another operation has been added to buffer.
+      if (incrementInFlightCountIfLessThanMax()) {
+        if (!processNextBufferedOperation()) {
+          inFlightCount.decrementAndGet();
+        }
+      }
     }
 
     ApiFuture<WriteResult> processedOperationFuture =
