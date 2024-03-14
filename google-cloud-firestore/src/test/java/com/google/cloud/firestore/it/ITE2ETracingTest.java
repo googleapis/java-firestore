@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +66,8 @@ public class ITE2ETracingTest {
 
   private static final int NUM_SPAN_ID_BYTES = 16;
 
+  private static final int GET_TRACE_RETRY_COUNT = 5;
+
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
   private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
@@ -128,10 +130,11 @@ public class ITE2ETracingTest {
     firestore = optionsBuilder.build().getService();
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials " +
-            "were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials "
+            + "were properly set.");
     random = new Random();
   }
+
   @Before
   public void before() throws Exception {
     rootSpanName =
@@ -148,6 +151,10 @@ public class ITE2ETracingTest {
 
   @AfterClass
   public static void teardown() {
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().shutdown();
+    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+
     traceClient_v1.close();
     firestore.shutdown();
   }
@@ -174,19 +181,19 @@ public class ITE2ETracingTest {
   // test must retry a few times before the trace is available.
   protected Trace getTraceWithRetry(String project, String traceId)
       throws InterruptedException, RuntimeException {
-    int retryCount = 5;
+    int retryCount = GET_TRACE_RETRY_COUNT;
 
-    while(retryCount-- > 0) {
+    while (retryCount-- > 0) {
       try {
-        Trace t = traceClient_v1.getTrace(PROJECT_ID, traceId);
+        Trace t = traceClient_v1.getTrace(project, traceId);
         return t;
-      } catch(NotFoundException notFound) {
+      } catch (NotFoundException notFound) {
         logger.warning("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
         Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
       }
     }
-    throw new RuntimeException("Trace " + traceId + " for project " + project
-        + " not found in Cloud Trace.");
+    throw new RuntimeException(
+        "Trace " + traceId + " for project " + project + " not found in Cloud Trace.");
   }
 
   // Generates a new SpanContext w/ random traceId,spanId
@@ -195,19 +202,12 @@ public class ITE2ETracingTest {
     String spanId = generateNewSpanId();
     logger.info("traceId=" + traceId + ", spanId=" + spanId);
 
-    SpanContext newCtx = SpanContext.create(
-        traceId,
-        spanId,
-        TraceFlags.getSampled(),
-        TraceState.getDefault());
-
-    return newCtx;
+    return SpanContext.create(traceId, spanId, TraceFlags.getSampled(), TraceState.getDefault());
   }
 
   protected void waitForTracesToComplete() throws Exception {
     CompletableResultCode completableResultCode =
-        openTelemetrySdk.getSdkTracerProvider().shutdown();
-    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+        openTelemetrySdk.getSdkTracerProvider().forceFlush();
 
     // We need to call `firestore.close()` because that will also close the
     // gRPC channel and hence force the gRPC instrumentation library to flush
@@ -222,8 +222,8 @@ public class ITE2ETracingTest {
 
     // Execute the DB operation in the context of the custom root span.
     Span rootSpan = tracer.spanBuilder(rootSpanName)
-        .setParent(Context.root().with(Span.wrap(newCtx)))
-        .startSpan();
+			  .setParent(Context.root().with(Span.wrap(newCtx)))
+	                  .startSpan();
     try (Scope ss = rootSpan.makeCurrent()) {
       firestore.collection("col").count().get().get();
     } finally {
