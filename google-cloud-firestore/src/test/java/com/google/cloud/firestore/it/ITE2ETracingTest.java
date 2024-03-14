@@ -221,9 +221,11 @@ public class ITE2ETracingTest {
     SpanContext newCtx = getNewSpanContext();
 
     // Execute the DB operation in the context of the custom root span.
-    Span rootSpan = tracer.spanBuilder(rootSpanName)
-			  .setParent(Context.root().with(Span.wrap(newCtx)))
-	                  .startSpan();
+    Span rootSpan =
+        tracer
+            .spanBuilder(rootSpanName)
+            .setParent(Context.root().with(Span.wrap(newCtx)))
+            .startSpan();
     try (Scope ss = rootSpan.makeCurrent()) {
       firestore.collection("col").count().get().get();
     } finally {
@@ -236,7 +238,7 @@ public class ITE2ETracingTest {
     String traceId = newCtx.getTraceId();
     Trace t = getTraceWithRetry(PROJECT_ID, traceId);
     assertEquals(t.getTraceId(), traceId);
-    assertEquals(t.getSpans(0).getName(),rootSpanName);
+    assertEquals(t.getSpans(0).getName(), rootSpanName);
     assertEquals(t.getSpans(1).getName(), "AggregationQuery.Get");
   }
 }
