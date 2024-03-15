@@ -60,6 +60,16 @@ sealed interface Expr {
       fun ofAll(): AllFields {
         return AllFields()
       }
+
+      @JvmStatic
+      fun fromPipeline(pipeline: Pipeline, path: String): Field {
+        return Field(path)
+      }
+
+      @JvmStatic
+      fun allFromPipeline(pipeline: Pipeline): AllFields {
+        return AllFields()
+      }
     }
   }
 
@@ -145,6 +155,11 @@ sealed interface Expr {
     data class Avg(val value: Expr) : Function("avg", mapOf("value" to value)), Accumulator
     data class Count(val value: Expr) : Function("count", mapOf("value" to value)), Accumulator
 
+    // String manipulation
+    data class Concat(val value: List<Expr>) : Function("concat", mapOf("value" to ListOfExprs(value)))
+    data class Trim(val value: Expr) : Function("trim", mapOf("value" to value))
+    data class ToLower(val value: Expr) : Function("toLower", mapOf("value" to value))
+
     data class CosineDistance(val vector1: Expr, val vector2: Expr) :
       Function("cosine_distance", mapOf("vector1" to vector1, "vector2" to vector2))
 
@@ -165,7 +180,7 @@ sealed interface Expr {
   fun inAny(vararg other: Expr) = Function.In(this, other.toList())
   infix fun lessThan(other: Expr) = Function.LessThan(this, other)
   infix fun lessThanOrEqual(other: Expr) = Function.LessThanOrEqual(this, other)
-  fun notInAny(left: Expr, vararg other: Expr) = Function.NotIn(left, other.toList())
+  fun notInAny(vararg other: Expr) = Function.NotIn(this, other.toList())
 
 
   fun exists() = Function.Exists(this as Field)
@@ -178,6 +193,11 @@ sealed interface Expr {
   fun sum() = Function.Sum(this)
   fun avg() = Function.Avg(this)
   fun count() = Function.Count(this)
+
+  fun concatWith(vararg expr: Expr) = Function.Concat(listOf(this) + expr.toList())
+  fun toLower() = Function.Count(this)
+  fun trim() = Function.Count(this)
+
   infix fun cosineDistance(other: Expr) = Function.CosineDistance(this, other)
   infix fun cosineDistance(other: DoubleArray) =
     Function.CosineDistance(this, Constant.ofVector(other))
@@ -279,6 +299,13 @@ sealed interface Expr {
 
     @JvmStatic
     fun count(expr: Expr) = Function.Count(expr)
+
+    @JvmStatic
+    fun concat(vararg expr: Expr) = Function.Concat(expr.toList())
+    @JvmStatic
+    fun trim(expr: Expr) = Function.Trim(expr)
+    @JvmStatic
+    fun toLower(expr: Expr) = Function.ToLower(expr)
 
     @JvmStatic
     fun cosineDistance(expr: Expr, other: Expr) = Function.CosineDistance(expr, other)
