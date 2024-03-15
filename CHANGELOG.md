@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.19.1](https://github.com/googleapis/java-firestore/compare/v3.19.0...v3.19.1) (2024-03-15)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.28.0 ([#1612](https://github.com/googleapis/java-firestore/issues/1612)) ([06fa74e](https://github.com/googleapis/java-firestore/commit/06fa74e5fbaf1bbc74ab8d220356ad2c6ab4b7ac))
+
 ## [3.19.0](https://github.com/googleapis/java-firestore/compare/v3.18.0...v3.19.0) (2024-03-15)
 
 
