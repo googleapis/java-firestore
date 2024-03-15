@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.19.0](https://github.com/googleapis/java-firestore/compare/v3.18.0...v3.19.0) (2024-03-15)
+
+
+### Features
+
+* A new message `Backup` is added ([#1611](https://github.com/googleapis/java-firestore/issues/1611)) ([434a55b](https://github.com/googleapis/java-firestore/commit/434a55b478fc617c2ec892a30d3eb1ce027ac54f))
+* Add ExplainMetrics field to RunAggregationQueryResponse ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainMetrics field to RunQueryResponse ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainOptions field to RunAggregationQueryRequest ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainOptions field to RunQueryRequest ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add new types ExplainOptions, ExplainMetrics, PlanSummary, ExecutionStats ([#1608](https://github.com/googleapis/java-firestore/issues/1608)) ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+
+
+### Bug Fixes
+
+* Update DocFX profile ([#1603](https://github.com/googleapis/java-firestore/issues/1603)) ([0a2eb16](https://github.com/googleapis/java-firestore/commit/0a2eb1640e1d4fb13d05bc489ace5a773a0b9a78))
+
 ## [3.18.0](https://github.com/googleapis/java-firestore/compare/v3.17.1...v3.18.0) (2024-03-04)
 
 
