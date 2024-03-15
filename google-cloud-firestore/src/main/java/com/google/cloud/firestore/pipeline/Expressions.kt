@@ -60,6 +60,16 @@ sealed interface Expr {
       fun ofAll(): AllFields {
         return AllFields()
       }
+
+      @JvmStatic
+      fun fromPipeline(pipeline: Pipeline, path: String): Field {
+        return Field(path)
+      }
+
+      @JvmStatic
+      fun allFromPipeline(pipeline: Pipeline): AllFields {
+        return AllFields()
+      }
     }
   }
 

@@ -148,14 +148,15 @@ public class ITPipelineTest {
             .innerJoin(p)
             .on(
                 and(
-                    Field.of("foo").equal(p.fieldOf("bar")),
-                    p.fieldOf("requirement").greaterThan(Field.of("distance"))));
+                    Field.of("foo").equal(Field.fromPipeline(p, "bar")),
+                    Field.fromPipeline(p, "requirement").greaterThan(Field.of("distance"))));
 
     Pipeline another =
         Pipeline.fromCollection("users")
             .innerJoin(p)
             .on(Fields.of("foo", "bar"))
-            .project(Field.ofAll().withPrefix("left"), p.fieldOfAll().withPrefix("right"));
+            .project(
+                Field.ofAll().withPrefix("left"), Field.allFromPipeline(p).withPrefix("right"));
   }
 
   @Test

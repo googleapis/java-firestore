@@ -174,15 +174,6 @@ class Pipeline {
       return Pipeline(Database())
     }
   }
-
-  fun fieldOf(name: String): Field {
-    return Field(name, this)
-  }
-
-  fun fieldOfAll(): AllFields {
-    return AllFields(this)
-  }
-
   // Fluent API
 
   fun withName(name: String) {
