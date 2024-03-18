@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
@@ -75,6 +76,8 @@ public class ITE2ETracingTest extends ITBaseTest {
   private static final String SERVICE = "google.firestore.v1.Firestore/";
 
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
+
+  private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -342,7 +345,22 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void collectionListDocuments() throws Exception {
+  public void collectionListDocumentsTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").listDocuments();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
   }
 
   public void docRefCreate() throws Exception {
