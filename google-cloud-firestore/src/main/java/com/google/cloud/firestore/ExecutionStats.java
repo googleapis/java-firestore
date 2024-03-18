@@ -40,7 +40,6 @@ public final class ExecutionStats {
   }
 
   /** Returns the total execution time of the query. */
-  // API Review Note: uses java.time.Duration
   public Duration getExecutionDuration() {
     return executionDuration;
   }

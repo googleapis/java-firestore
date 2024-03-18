@@ -18,7 +18,7 @@ package com.google.cloud.firestore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** ExplainResults contains information about planning and execution of a query. */
+/** ExplainMetrics contains information about planning and execution of a query. */
 public class ExplainMetrics {
   @Nonnull private final PlanSummary planSummary;
   @Nullable private final ExecutionStats executionStats;

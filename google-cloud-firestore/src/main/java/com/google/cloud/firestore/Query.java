@@ -1732,7 +1732,6 @@ public class Query {
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
-          Timestamp readTime;
           boolean firstResponse;
           int numDocuments;
 
@@ -1764,10 +1763,6 @@ public class Query {
                   QueryDocumentSnapshot.fromDocument(
                       rpcContext, Timestamp.fromProto(response.getReadTime()), document);
               lastReceivedDocument.set(documentSnapshot);
-            }
-
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
             }
 
             if (response.getDone()) {
@@ -1867,7 +1862,6 @@ public class Query {
         new ApiStreamObserver<RunQueryResponse>() {
           @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
           Timestamp readTime;
-
           ExplainMetrics metrics;
 
           @Override

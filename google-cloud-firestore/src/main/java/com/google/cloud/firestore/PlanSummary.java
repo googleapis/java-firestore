@@ -23,9 +23,6 @@ import javax.annotation.Nonnull;
 
 /** A Plan contains information about the planning stage of a query. */
 public final class PlanSummary {
-  private static final PlanSummary DEFAULT_INSTANCE =
-      new PlanSummary(com.google.firestore.v1.PlanSummary.getDefaultInstance());
-
   private final List<Map<String, Object>> indexesUsed;
 
   PlanSummary(com.google.firestore.v1.PlanSummary proto) {
@@ -33,10 +30,6 @@ public final class PlanSummary {
     for (Struct index : proto.getIndexesUsedList()) {
       indexesUsed.add(UserDataConverter.decodeStruct(index));
     }
-  }
-
-  static PlanSummary getDefaultInstance() {
-    return DEFAULT_INSTANCE;
   }
 
   /*

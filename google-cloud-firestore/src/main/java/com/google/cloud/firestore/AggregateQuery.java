@@ -104,7 +104,7 @@ public class AggregateQuery {
             transactionId,
             readTime,
             /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
-            /* isExplainQuery= */ null);
+            /* explainOptions= */ null);
     runQuery(responseDeliverer);
     return responseDeliverer.getAggregateQuerySnapshotFuture();
   }
