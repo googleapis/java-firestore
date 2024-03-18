@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertNull;
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
+import com.google.cloud.firestore.CollectionGroup;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -78,7 +80,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final int NUM_SPAN_ID_BYTES = 16;
 
-  private static final int GET_TRACE_RETRY_COUNT = 10;
+  private static final int GET_TRACE_RETRY_COUNT = 15;
 
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
@@ -319,8 +321,24 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void partitionQuery() throws Exception {
+  public void partitionQueryTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
 
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      CollectionGroup collectionGroup = firestore.collectionGroup("col");
+      collectionGroup.getPartitions(3).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_PARTITION_QUERY,
+        grpcSpanName(SPAN_NAME_PARTITION_QUERY));
   }
 
   @Test
